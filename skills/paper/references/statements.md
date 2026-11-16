@@ -9,7 +9,7 @@ The draft writer reads this page to write the six statements of a paper: author 
 - A gap of a statement is written once, after the statement, as an `itemize` list of lines `[GAP: <the fact the statement lacks>]`, one line for each. The statement's sentences are written without those facts, so that each reads whole, and no gap stands inside a sentence.
 - A sentence that cannot stand without a missing fact is replaced by a line of that list that names the fact.
 - A fact the public record holds is looked up before it is a gap.
-  - A dataset the materials name with its version gets its DOI from `lookup.py resolve` on the DOI, the title or the name that the materials or the `.bib` give, and then `lookup.py bibtex '<DOI>'` on the DOI the record prints.
+  - A dataset the materials name with its version gets its DOI from `lookup.py resolve` on the DOI, the title or the name that the materials or the `.bib` give, and then `lookup.py bibtex '<DOI>'` on the DOI the record prints. A `{?}` in the entry `bibtex` prints is replaced as `SKILL.md`, Rules, says.
   - The agent writes that DOI only when the materials name it, or when the BibTeX entry's version or URL names the version the materials name. Otherwise the DOI is a gap, and its line names the lookups tried.
   - A release tag or a version of the project's code comes from the materials: a README, a `CITATION.cff`, or the tags that `config.md` records in its Notes, which the session read at intake with `git -C '<project folder>' tag --list`. With none, it is a gap.
   - A fact that only the authors hold, such as a grant number, a funder's role or a contribution, stays a gap.

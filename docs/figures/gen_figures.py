@@ -1270,7 +1270,12 @@ def paper_full_graph() -> Graph:
         ),
         Node("G", "Literature strategist: the sections with no source", "maybe"),
         Node("PL2", "Planner: assigns what was found", "maybe"),
-        Node("OA", "Outline approval", "stop"),
+        Node(
+            "PW",
+            "Planner, fresh: rewrites each argument with two or more weak-argument signs",
+            "maybe",
+        ),
+        Node("OA", "Outline approval: each rewritten argument before and after", "stop"),
         Node("W", "Draft writer"),
         Node(
             "WM",
@@ -1298,7 +1303,8 @@ def paper_full_graph() -> Graph:
             "sentences only",
             "maybe",
         ),
-        Node("SD", "The draft review does not pass", "stop"),
+        Node("SJ", "The draft review rejects the draft: each Critical issue classed, a roadmap", "stop"),
+        Node("SD", "The draft review does not pass: no answer recommended", "stop"),
         Node("RF", "Draft writer: reference fix", "maybe"),
         Node("SR", "A reference that cannot be confirmed", "stop"),
         Node("CF", "Draft writer: compile fix", "maybe"),
@@ -1311,6 +1317,7 @@ def paper_full_graph() -> Graph:
         Node(
             "AN", "Draft writer: the anonymous copy, for a double-blind venue", "maybe"
         ),
+        Node("FT", "Formatter: the DOCX and Markdown targets you named", "maybe"),
     )
     edges = (
         Edge("I", "L"),
@@ -1321,6 +1328,8 @@ def paper_full_graph() -> Graph:
         Edge("PL", "SQ"),
         Edge("SQ", "PL", "a fresh start with your answer", "back"),
         Edge("PL", "OA"),
+        Edge("PL", "PW", "two or more weak-argument signs"),
+        Edge("PW", "OA"),
         Edge("G", "PL2"),
         Edge("G", "G", "search passes, max 8: end at 3 of 5 incl. few new, or pass 4 with none", "back"),
         Edge("PL2", "OA"),
@@ -1332,7 +1341,7 @@ def paper_full_graph() -> Graph:
         Edge("W", "WM"),
         Edge("WM", "C"),
         Edge("V", "C"),
-        Edge("C", "SC", "a claim or a reference fails"),
+        Edge("C", "SC", "after every claim is judged: each claim not held, or a reference that fails"),
         Edge("C", "SS"),
         Edge("SS", "C", "a fresh start, once", "back"),
         Edge("C", "C2"),
@@ -1341,7 +1350,12 @@ def paper_full_graph() -> Graph:
         Edge("P", "WR", "Minor or Major: round 2, once", "dotted"),
         Edge("WR", "IC"),
         Edge("IC", "P", "", "back"),
-        Edge("P", "SD", "Reject in round 1, or after round 2 a score under 6.5 with a Critical issue open"),
+        Edge("P", "SJ", "Reject in round 1"),
+        Edge("SJ", "WR", "fixable: a Major Revision pass, after you confirm", "dotted"),
+        Edge("SJ", "PL", "structural: back to the outline, after you confirm", "back"),
+        Edge("SJ", "I", "fundamental: back to intake, after you confirm", "back"),
+        Edge("P", "SD", "after round 2: a score under 6.5 with a Critical issue open"),
+        Edge("SD", "P", "revise by hand, or a lower venue: a fresh review", "back"),
         Edge(
             "SD",
             "PL",
@@ -1349,7 +1363,7 @@ def paper_full_graph() -> Graph:
             "back",
         ),
         Edge("P", "RF"),
-        Edge("SD", "RF", "accept, the recommendation"),
+        Edge("SD", "RF", "accept"),
         Edge("RF", "SR", "strict: a reference still fails"),
         Edge("RF", "CF"),
         Edge("CF", "WG"),
@@ -1361,6 +1375,8 @@ def paper_full_graph() -> Graph:
         Edge("PR", "CF2"),
         Edge("RP", "AN"),
         Edge("CF2", "AN"),
+        Edge("RP", "FT"),
+        Edge("CF2", "FT"),
     )
     return _graph(nodes, edges)
 
@@ -1430,7 +1446,7 @@ def paper_revision_graph() -> Graph:
         Edge("LS", "W"),
         Edge("V", "W"),
         Edge("W", "C"),
-        Edge("C", "SC", "a claim or a reference fails"),
+        Edge("C", "SC", "after every claim is judged: each claim not held, or a reference that fails"),
         Edge("C", "SS"),
         Edge("SS", "C", "a fresh start, once", "back"),
         Edge("C", "C2"),
@@ -1559,7 +1575,7 @@ def paper_disclosure_graph() -> Graph:
 def paper_plan_graph() -> Graph:
     nodes = (
         Node("I", "Intake: you confirm", "stop"),
-        Node("M", "Socratic mentor: started once, resumed with each answer"),
+        Node("M", "Socratic mentor: given each answer, resumed or started fresh"),
         Node(
             "Q",
             "The mentor's question: each answer; offers after 8 rounds on a chapter "

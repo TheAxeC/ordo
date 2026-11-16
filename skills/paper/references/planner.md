@@ -1,6 +1,6 @@
 # Planner
 
-The planner agent reads this page to choose the structure of the paper, write its outline and build its argument, in one start. The session resumes its latest start by a second message for the review of an expanded revision whose root cause is structural or one of originality. It writes `outline.md` and `arguments.md` in the run folder, and `structure-options.md` when the user disagrees with the structure. In plan mode it also writes `stress-test.md` and `chapter-plan.md` ("Plan mode"). It changes no other file. The draft writer and the visualization agent follow the outline, the draft writer follows the argument, and the user approves both at the stop "The outline's approval" before either runs. In outline-only mode the files are the result of the run.
+The planner agent reads this page to choose the structure of the paper, write its outline and build its argument. The session gives it each later input, such as the user's changes, a rewrite of weak arguments or the review of an expanded revision, resumed with a second message or started fresh with the files it wrote before (`SKILL.md`, Steps 8). It writes `outline.md` and `arguments.md` in the run folder, and `structure-options.md` when the user disagrees with the structure. In plan mode it also writes `stress-test.md` and `chapter-plan.md` ("Plan mode"). It changes no other file. The draft writer and the visualization agent follow the outline, the draft writer follows the argument, and the user approves both at the stop "The outline's approval" before either runs. In outline-only mode the files are the result of the run.
 
 ## What the agent reads
 
@@ -15,7 +15,7 @@ The planner agent reads this page to choose the structure of the paper, write it
 - The user's answer about the structure, the structure the user chose from `structure-options.md` or insists on, when the session gives them.
 - In plan mode: `chapter-summaries.md` and `insights.md` for the outline, `arguments.md` with the mentor's question and the user's answer for an evaluation, and every file of the run for the chapter plan ("Plan mode").
 - In full mode given a plan run: that run's `chapter-plan.md`, `insights.md`, `dialogue.md`, `outline.md` and `arguments.md` ("Full mode given a plan run").
-- At its resumption for an expanded revision: the last `review-<r>.md` of the draft review, whose root cause is structural or one of originality, with the issues it names. Also `outline.md` and `arguments.md` as it wrote them before. It writes both files again, changing the parts the issues name, and the overview states what changed and which issue each change answers.
+- For an expanded revision: the last `review-<r>.md` of the draft review, whose root cause is structural or one of originality, with the issues it names. Also `outline.md` and `arguments.md` as it wrote them before. It writes both files again, changing the parts the issues name, and the overview states what changed and which issue each change answers.
 
 Where an input is missing:
 
@@ -464,7 +464,9 @@ The agent checks each core argument for these signs:
 - A counter-argument that is stronger than the paper's own argument.
 
 - Two or more signs in a core argument stop the drafting.
-- The agent lists those signs under "Weak-argument signs" with the argument they belong to, and the session shows them to the user at the stop "The outline's approval".
+- The agent lists those signs under "Weak-argument signs" with the argument they belong to.
+- Before the stop "The outline's approval" is shown, the session starts the planner again as a fresh agent for each such argument, given `arguments.md`, `outline.md`, `review.md` and the signs (`SKILL.md`, full mode, item 6). The planner rewrites the argument in `arguments.md` to answer each sign: evidence from `review.md` or the materials for an appeal to authority or a hasty generalization, a defined term, the confound controlled or the claim weakened to a correlation, the counter-argument answered as "Counter-arguments and rebuttals" says.
+- It keeps the argument as it was under "Before the rewrite" in `arguments.md`, beside the rewritten one, and lists the signs left after the rewrite under "Weak-argument signs". The session shows both, and the signs left, at the stop.
 - One sign is noted in the argument strength assessment and does not stop the drafting.
 - No sign found is written as "No weak-argument signs."
 
@@ -549,6 +551,9 @@ The agent checks each core argument for these signs:
 ### Weak-argument signs
 <The signs found, or "No weak-argument signs.">
 
+### Before the rewrite
+<Each argument that had two or more signs, as it stood before the rewrite, with its signs. Only after a rewrite.>
+
 ### Notes for the draft writer
 <Guidance on tone, hedging language and emphasis.>
 ```
@@ -579,7 +584,7 @@ The agent checks both files against these before it writes them, and corrects wh
 
 ## Plan mode
 
-In plan mode the session starts the planner as a fresh agent, each time for one task named in the prompt. It starts the planner once for the outline from the chapter summaries, once for each stress-test answer, and once for the chapter plan. It starts it again for the outline when the user changes the last summary at its confirmation, and again for the chapter plan after the dialogue on the conditions of the gate that are not met. The planner changes no manuscript file and runs no patch script.
+In plan mode the session starts the planner as a fresh agent for each task named in the prompt: the outline from the chapter summaries, each stress-test answer, and the chapter plan. It starts it again for the outline when the user changes the last summary at its confirmation, and again for the chapter plan after the dialogue on the conditions of the gate that are not met. The planner changes no manuscript file and runs no patch script.
 
 ### The outline from the chapter summaries
 

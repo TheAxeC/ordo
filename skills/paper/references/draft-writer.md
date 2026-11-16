@@ -145,7 +145,7 @@ A paragraph moves in this order, and each part is one sentence where it can be:
 | A source whose view differs from the paper's | "While Smith~\cite{smith2024} argued X, this paper contends Y because ...". |
 | A source the agent has not read, known from a citing source | "<Original> (as cited in~\cite{citing})". The paper has at most 3 of these. |
 
-- A factual claim has at least one citation. A claim with none is rewritten with hedging language, or marked `[GAP: citation needed]`.
+- A factual claim has at least one citation. A claim with none is first looked for in the run's annotated bibliography (`review.md`) and in `refs.bib`: a source whose annotation or saved text holds the claim is cited for it. Only a claim no source holds is rewritten with hedging language, or marked `[GAP: citation needed]`.
 - A source cited for an event or a result is one that existed before it. The agent identifies the date of each cited document and of each event from the year of the entry in the `.bib` or the literature report.
 - A sentence that says one event led to, enabled or superseded another has the date of the first before the date of the second. If the dates are absent from the `.bib` and the report, the agent hedges the sentence or leaves the claim unwritten.
 - A sentence with a present-tense or relative-time word such as "currently", "the latest" or "recently" is anchored to a date or a version: "as of <year>" or "the <year> edition".
@@ -459,7 +459,7 @@ An item or an issue that says a sentence describes the handling of the data diff
 The patch with the id `reference-fix` answers the lines of the reference checks that the session gives: a `missing:` line, or a `check-urls` line that fails the status rules of `references/citation-compliance.md`, "DOI and URL".
 
 - A `missing:` line whose key is a typing slip of an existing key, with the same author and year, is corrected in the `.tex`.
-- A `missing:` line for a source that `review.md` or `refs.bib` of the run holds is answered by adding, after the last block of the `.bib`, the entry that `lookup.py bibtex` prints on standard output. For a preprint with a published version, the entry is the one `references/latex-template.md`, "The `.bib` entry forms", gives, with the one web search for its venue's page that section allows.
+- A `missing:` line for a source that `review.md` or `refs.bib` of the run holds is answered by adding, after the last block of the `.bib`, the entry that `lookup.py bibtex` prints on standard output. For a preprint with a published version, the entry is the one `references/latex-template.md`, "The `.bib` entry forms", gives, with the one web search for its venue's page that section allows. A `{?}` in the entry `bibtex` prints is replaced as `SKILL.md`, Rules, says.
 - A `check-urls` line is answered as "The `.bib` entries" and "DOI and URL" of `references/citation-compliance.md` say: the identifier is corrected when `lookup.py resolve` gives a record that is certain.
 - A line the agent cannot answer is left unchanged and named in its report with the lookups tried.
 - A line that holds "title not checked" is no line of the fix.

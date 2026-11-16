@@ -147,7 +147,7 @@ A `longtable` column never has a bare width such as `p{0.25\linewidth}`, which i
 
 The agent writes an entry from `lookup.py bibtex` when the call prints one, as the bullets below say, and otherwise in the forms that follow them. A title is in sentence case, and a journal in title case.
 
-- The entry is what `bibtex` prints on standard output. Its lines on standard error are notes, and the entry never holds them.
+- The entry is what `bibtex` prints on standard output. Its lines on standard error are notes, and the entry never holds them. A `{?}` in the entry `bibtex` prints is replaced as `SKILL.md`, Rules, says.
 - For an arXiv ID whose published version an index names by its DOI, `bibtex` prints the published version's entry.
 - When `bibtex` prints the line "published in <venue> (<type>) per Semantic Scholar" for a source, the entry is the one `lookup.py bibtex '<arXiv ID>' --page '<url>'` prints. The `<url>` is that source's page at the venue the line names.
   - An address of that page the agent already holds (the `.bib` entry's `url`, `review.md` beside the key, or the reference text) is tried first, with no search.

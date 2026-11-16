@@ -2,7 +2,7 @@
 
 The peer reviewer agent reads this page to run the draft review of full mode and the one review of the draft-review call. In revision mode it reads it to turn the comments file, the instructions text or its own review into numbered items, and to read each item's change again. In full and revision mode it also reads each patch pass after the first citation check, as "Numbers and data handling" and "The reading of the findings pass" say. It changes no manuscript file, reads the project's result files with `grep`, `awk`, `wc` and `sed -n`, and runs no script. It writes `review-<r>.md` in the run folder for a draft review, with `<r>` the number of the review in the run, and `items.md` in revision mode.
 
-The reviews of a run are numbered in order. A full run's first pass holds `review-1.md` as draft review round 1 and `review-2.md` as draft review round 2. A pass that an expanded revision starts ("The second draft review round") holds `review-3.md` and `review-4.md` as its rounds 1 and 2, and so on. The draft-review call writes `review-1.md` and has one round.
+The reviews of a run are numbered in order. A full run's first pass holds `review-1.md` as draft review round 1 and `review-2.md` as draft review round 2. A pass that an expanded revision starts ("The second draft review round") holds the next two numbers as its rounds 1 and 2, such as `review-3.md` and `review-4.md`. A review after the user's hand edit or against a new venue is a draft review round 2 that takes the next number. The draft-review call writes `review-1.md` and has one round.
 
 ## What the agent reads
 
@@ -167,10 +167,10 @@ In full and revision mode the agent checks each number the draft states against 
 | 8.0 to 10.0 | Accept | The run goes on. |
 | 6.5 to 7.9 | Minor Revision | The draft goes back to the draft writer, and the second draft review round reads it again. |
 | 4.0 to 6.4 | Major Revision | The draft goes back to the draft writer, and the second draft review round reads it again. A second return follows only as "The second draft review round" says. |
-| 1.0 to 3.9 | Reject | In draft review round 1, the run stops for the user at the stop "The draft review does not pass". |
+| 1.0 to 3.9 | Reject | In draft review round 1, the run stops for the user at the stop "The draft review rejects the draft", with what "A rejection in draft review round 1" adds. |
 
-- The table gives the verdict of draft review round 1. A verdict Reject in draft review round 1 is the stop.
-- After draft review round 2 the rule of "The second draft review round" decides what follows, whatever the verdict, Reject included.
+- The table gives the verdict of draft review round 1. A verdict Reject in draft review round 1 is the stop "The draft review rejects the draft".
+- After draft review round 2 the rule of "The second draft review round" decides what follows, by the overall score and the Critical issues.
 
 ### The process
 
@@ -271,6 +271,17 @@ In full and revision mode the agent checks each number the draft states against 
 - The agent states each issue and the verdict directly and does not pad them with repeated qualifiers or apologetic framing. It keeps every material uncertainty and limit.
 - An issue, its evidence and its suggested fix are written in the manuscript's own terms, since the draft writer receives them as corrections. The issue quotes the passage. It names no file, script, command, code identifier or exit code as the cause or as the fix, as `references/draft-writer.md` gives under "The text carries no software wording".
 
+### A rejection in draft review round 1
+
+A verdict Reject in draft review round 1 is the stop "The draft review rejects the draft" (SKILL.md, full item 10). The agent adds to `review-1.md` a section "Rejection" that holds:
+
+- Each Critical issue by its number, with its class:
+  - fixable: writing, formatting or a minor gap in the logic, which a Major Revision pass of the draft writer answers.
+  - structural: the architecture of the argument needs reorganizing, which the return to the outline answers.
+  - fundamental: the research question cannot be answered or the data are insufficient, which the return to intake, the research question and the materials answers.
+- The revision roadmap: for each Critical issue, the step it returns to and the work that answers it, in the order the work is done.
+- The report recommends the return of each class as the list above gives it, and the session revises nothing before the user confirms one.
+
 ### The second draft review round
 
 The second draft review round re-reads the revised sections and what the first draft review round flagged.
@@ -283,22 +294,22 @@ The second draft review round re-reads the revised sections and what the first d
 - It reads the numbers and the data-handling descriptions the patches wrote, as "Numbers and data handling" says. It also reads the `citation-report-<nn>.md` of those patches.
 - It reads each sentence that answers an issue about the data handling. The sentence must state what the files hold and its effect on the results, or state what the files hold with a `[GAP: the effect of <what the files hold> on <result>]` after it. A sentence that only deletes or softens the description leaves the issue open.
 - It re-scores only the dimensions that changed, and updates the overall score and the verdict.
-- After draft review round 2 the overall score alone decides what follows, whatever the verdict, Reject included:
+- After draft review round 2, full item 11 of SKILL.md decides what follows from the overall score and the Critical issues:
   - a score of 6.5 or more: the run goes on, and the issues that remain go to the final message as acknowledged limitations.
   - a score below 6.5 with every Critical issue resolved: the run goes on, with the issues that remain as acknowledged limitations.
   - a score below 6.5 with a Critical issue unresolved: the run stops at the stop "The draft review does not pass". A description of the data handling that the result files contradict is such an issue.
 - No writer pass follows draft review round 2.
-- The agent adds the likely root cause to the report at the stop, and the step the session returns to if the user asks for an expanded revision:
+- For a score below 6.5 with a Critical issue unresolved the agent adds the root cause to the report, and the step the session returns to if the user asks for an expanded revision:
   - a structural problem, for which the outline needs rework, and the run returns to the outline.
   - insufficient evidence, for which the literature or the data need supplementing, and the run returns to the literature.
   - a writing problem, for which the sections need rewriting, and the run returns to the sections.
-  - an originality problem, for which the contribution needs repositioning, and the run returns to the outline.
-- The agent adds the estimate of the additional work for the expanded revision: Moderate, Significant or Major Rework. It adds nothing for the other answers.
-- The stop offers three answers, and its recommendation is accept:
-  - accept with the issues as acknowledged limitations.
-  - an expanded revision that runs again from the step the root cause names in the same run folder, made only when the user chooses it. The pass it starts is reviewed as a new draft review round 1 and round 2, and its reviews are numbered on.
-  - end the run.
-- A verdict Reject in draft review round 1 reaches the same stop, with the same three answers.
+  - an originality problem, for which the contribution needs repositioning, and the run returns to the outline, where the contribution is positioned.
+- For the same review the agent adds the estimate of the additional work of an expanded revision: Moderate, Significant or Major Rework.
+- It lists each Critical issue left unresolved by its number, so that the user can revise by hand or choose a lower venue.
+- The stop offers each of its five answers once: revise by hand and resubmit, lower the venue, accept with the issues as acknowledged limitations, an expanded revision, and end the run.
+- The report recommends none of the answers of the stop.
+- The pass an expanded revision starts is reviewed as a new draft review round 1 and round 2, and its reviews are numbered on.
+- A review after the user's hand edit, or against the new venue the user named, is a draft review round 2 of the same pass, given the last review: it reads the draft as it stands against the Venue row of `config.md`, scores it and writes the next `review-<r>.md`.
 - The draft goes back to the draft writer once after draft review round 1 of a pass, with the ids `D<r>-<m>` of that review.
 
 ### The draft-review call

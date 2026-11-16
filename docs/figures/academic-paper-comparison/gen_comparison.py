@@ -431,12 +431,18 @@ def paper_full_detailed() -> gf.Graph:
         ),
         N(
             "LG",
-            "Literature strategist, resumed: the sections that need literature and have no "
-            "source [AD1]",
+            "Literature strategist, resumed or fresh: the sections that need literature "
+            "and have no source [AD1, BR]",
             "ruled",
         ),
         N("PG", "Planner again: assigns what was found [AD1]", "ruled"),
-        N("OA", "Outline approval", "stop"),
+        N(
+            "PW",
+            "Planner, fresh: rewrites each argument with two or more weak-argument signs "
+            "[The simulation in step 5.F]",
+            "ruled",
+        ),
+        N("OA", "Outline approval: each rewritten argument before and after [The simulation in step 5.F]", "stop"),
         N(
             "SO",
             "Planner: asks what is wrong with the structure, writes 2 alternatives; your "
@@ -465,11 +471,16 @@ def paper_full_detailed() -> gf.Graph:
         N(
             "CA",
             "Citation compliance agent, after the draft and before round 1: reads each "
-            "cited source, checks the claims not to make, lists the claims off the list of "
-            "intended claims [AF, AI2, AV7]",
+            "cited source, judges every claim, checks the claims not to make and the "
+            "intended claims [AF, AI2, AV7, The simulation in step 5.F]",
             "ruled",
         ),
-        N("S2", "A claim the run cannot support [AF]", "stop"),
+        N(
+            "S2",
+            "A claim the run cannot support: every claim not held in one list, a source "
+            "not read apart [AF, The simulation in step 5.F]",
+            "stop",
+        ),
         N(
             "ST",
             "The citation style to confirm: more than half the entries fail the same "
@@ -486,8 +497,15 @@ def paper_full_detailed() -> gf.Graph:
         ),
         N(
             "NP",
-            "The draft review does not pass: accept, the recommendation; an expanded "
-            "revision by root cause, only when you choose it; or end [AD3, 5.C (3)]",
+            "The draft review does not pass, no answer recommended: the root cause and "
+            "its estimate; revise by hand, a lower venue, accept, an expanded revision "
+            "by root cause, or end [AD3, BR]",
+            "stop",
+        ),
+        N(
+            "RJ",
+            "The draft review rejects the draft: each Critical issue fixable, structural "
+            "or fundamental, a roadmap; nothing revised before you confirm [BR]",
             "stop",
         ),
         N("W1", "Draft writer: round 1 issues, a patch [C]", "ruled"),
@@ -516,6 +534,12 @@ def paper_full_detailed() -> gf.Graph:
             "Session: compile in a copy, no formatter; the engine is the first that "
             "applies of a % !TEX program line, the class table, the venue's template, "
             "XeLaTeX [M, AV11] [4.A R2-6]",
+            "ruled",
+        ),
+        N(
+            "PD",
+            "Session: the PDF of the compile copied to main.pdf beside main.tex "
+            "[The simulation in step 5.F]",
             "ruled",
         ),
         N("CF", "Draft writer: compile-fix, once [M]", "ruled"),
@@ -550,11 +574,18 @@ def paper_full_detailed() -> gf.Graph:
             "Draft writer: the anonymous copy, when the venue is double-blind [AV9]",
             "ruled",
         ),
+        N(
+            "FT",
+            "Formatter: the DOCX and Markdown targets of Target formats, after the last "
+            "compile [The simulation in step 5.F]",
+            "ruled_maybe",
+        ),
     )
     floating = (
         N(
             "PS",
-            "At every patch: a structural patch, a patch that does not apply, a script "
+            "At every patch: a structural patch, a patch that does not apply (retry as "
+            "often as you ask, write it again in full, or leave it [BR]), a script "
             "failed [C]",
             "stop",
         ),
@@ -577,6 +608,8 @@ def paper_full_detailed() -> gf.Graph:
         E("PL", "SQ", "a part of the question has no result [BI]"),
         E("SQ", "PL", "a fresh start with your answer", "back"),
         E("PL", "OA"),
+        E("PL", "PW", "two or more weak-argument signs [The simulation in step 5.F]"),
+        E("PW", "OA"),
         E("LG", "PG"),
         E("PG", "OA"),
         E("OA", "PL", "you ask for changes, until you approve [R]", "back"),
@@ -589,7 +622,7 @@ def paper_full_detailed() -> gf.Graph:
         E("DM", "SC"),
         E("VZ", "SC"),
         E("SC", "CA"),
-        E("CA", "S2", "a claim the source does not hold [AF]"),
+        E("CA", "S2", "after every claim: each claim not held, each source not read [AF, The simulation in step 5.F]"),
         E(
             "CA",
             "SS",
@@ -609,11 +642,15 @@ def paper_full_detailed() -> gf.Graph:
             "back",
         ),
         E("NP", "RC", "accept: the issues left become limitations [5.C (3)]"),
-        E("R1", "NP", "Reject"),
+        E("R1", "RJ", "Reject"),
+        E("RJ", "W1", "fixable: a Major Revision pass, after you confirm [BR]"),
+        E("RJ", "PL", "structural: back to the outline, after you confirm [BR]", "back"),
+        E("RJ", "I", "fundamental: back to intake, after you confirm [BR]", "back"),
         E("R1", "W1", "Minor or Major"),
         E("W1", "IC"),
         E("IC", "R2", "round 2, the last", "dotted"),
-        E("R2", "NP", "a score under 6.5 with a Critical issue unresolved [5.C (3)]"),
+        E("R2", "NP", "a score under 6.5 with a Critical issue unresolved [5.C (3), BR]"),
+        E("NP", "R2", "by hand, or a lower venue [BR]", "back"),
         E("R2", "RC", "otherwise: the rest become limitations [U]"),
         E("R1", "RC", "Accept"),
         E("RC", "RF", "a failure"),
@@ -622,7 +659,9 @@ def paper_full_detailed() -> gf.Graph:
         E("RC", "CP"),
         E("RC2", "CP"),
         E("CP", "CF", "fails, or a layout fault [M]"),
+        E("CP", "PD", "it compiles"),
         E("CF", "CP2"),
+        E("CP2", "PD", "it compiles"),
         E("CP", "WR"),
         E("CP2", "WR"),
         E("WR", "FM"),
@@ -637,6 +676,8 @@ def paper_full_detailed() -> gf.Graph:
         E("WA", "IC2"),
         E("IC2", "RG"),
         E("RG", "AC"),
+        E("FM", "FT", "a DOCX or Markdown target [The simulation in step 5.F]"),
+        E("RG", "FT"),
     )
     return _g(nodes, edges, floating, WIDE_WIDTH)
 
@@ -711,7 +752,12 @@ def paper_revision_detailed() -> gf.Graph:
             "ruled",
         ),
         N("AP", "Script: apply the patch", "script"),
-        N("D1", "A patch that does not apply", "stop"),
+        N(
+            "D1",
+            "A patch that does not apply: retry as often as you ask, write it again in "
+            "full, or leave it [BR]",
+            "stop",
+        ),
         N("D2", "A structural patch", "stop"),
         N(
             "CA",
@@ -720,7 +766,12 @@ def paper_revision_detailed() -> gf.Graph:
             "[AF, AI2, AV7]",
             "ruled",
         ),
-        N("S2", "A claim the run cannot support [AF]", "stop"),
+        N(
+            "S2",
+            "A claim the run cannot support: every claim not held in one list, a source "
+            "not read apart [AF, The simulation in step 5.F]",
+            "stop",
+        ),
         N(
             "ST",
             "The citation style to confirm: more than half the entries fail the same "
@@ -766,6 +817,12 @@ def paper_revision_detailed() -> gf.Graph:
             "Session: compile in a copy; the engine is the first that applies of a "
             "% !TEX program line, the class table, the venue's template, XeLaTeX "
             "[D46, AV11] [4.A R2-6]",
+            "ruled",
+        ),
+        N(
+            "PD",
+            "Session: the PDF of the compile copied to <main>.pdf beside the main .tex "
+            "[The simulation in step 5.F]",
             "ruled",
         ),
         N("CF", "Draft writer: compile-fix, once [M]", "ruled"),
@@ -830,11 +887,11 @@ def paper_revision_detailed() -> gf.Graph:
         E("VZ", "AN"),
         E("AN", "DW"),
         E("DW", "AP"),
-        E("AP", "DW", "rejected: the writer emits the patch once more", "back"),
+        E("AP", "DW", "rejected: the role writes the patch again, resumed or fresh", "back"),
         E("AP", "D1", "a second rejection"),
         E("AP", "D2", "exit 3, structural"),
         E("AP", "CA"),
-        E("CA", "S2", "a claim the source does not hold [AF]"),
+        E("CA", "S2", "after every claim: each claim not held, each source not read [AF, The simulation in step 5.F]"),
         E(
             "CA",
             "SS",
@@ -857,7 +914,9 @@ def paper_revision_detailed() -> gf.Graph:
         E("RC3", "SS", "strict: a reference still fails [O]"),
         E("RC3", "CP"),
         E("CP", "CF", "fails, or a layout fault [M]"),
+        E("CP", "PD", "it compiles"),
         E("CF", "CP2"),
+        E("CP2", "PD", "it compiles"),
         E("CP", "WR"),
         E("CP2", "WR"),
         E("WR", "FM"),
@@ -897,9 +956,16 @@ def paper_lit_review_detailed() -> gf.Graph:
         ),
         N(
             "LS",
-            "Literature strategist, once: review.md, refs.bib, a .bib patch when a .tex is "
+            "Literature strategist: review.md, refs.bib, a .bib patch when a .tex is "
             "given; a list over 50 entries shows its first 20 and last 5; it does not start "
             "without a research question [D48, D2, AD11, AV15, AV16]",
+            "ruled",
+        ),
+        N(
+            "LG",
+            "The gates: a search for each part of the question; a short count widened by "
+            "5 years, then by unused indexes; up to 3 currency passes; a synthesis by "
+            "part [The simulation in step 5.F]",
             "ruled",
         ),
         N(
@@ -924,7 +990,8 @@ def paper_lit_review_detailed() -> gf.Graph:
     floating = (
         N(
             "PS",
-            "At every patch: a structural patch, a patch that does not apply, a script "
+            "At every patch: a structural patch, a patch that does not apply (retry as "
+            "often as you ask, write it again in full, or leave it [BR]), a script "
             "failed [C]",
             "stop",
         ),
@@ -938,7 +1005,8 @@ def paper_lit_review_detailed() -> gf.Graph:
         E("I", "I", "you change it, until you confirm [R]", "back"),
         E("I", "LS"),
         E("LS", "LS", "search passes, max 8: end at 3 of 5 incl. few new, or pass 4 with none [BI]", "back"),
-        E("LS", "LC"),
+        E("LS", "LG"),
+        E("LG", "LC"),
         E("LC", "SR"),
         E("SR", "X", "no .tex"),
         E("SR", "AP", ".tex given"),
@@ -1002,8 +1070,8 @@ def paper_outline_only_detailed() -> gf.Graph:
         ),
         N(
             "LG",
-            "Literature strategist, resumed: the sections that need literature and have no "
-            "source [AD1]",
+            "Literature strategist, resumed or fresh: the sections that need literature "
+            "and have no source [AD1, BR]",
             "ruled",
         ),
         N("PG", "Planner again: assigns what was found [AD1]", "ruled"),
@@ -1365,7 +1433,7 @@ def paper_plan_detailed() -> gf.Graph:
         ),
         N(
             "M",
-            "Socratic mentor, started once and resumed with each answer; Step 0 refers a "
+            "Socratic mentor, given each answer, resumed or started fresh; Step 0 refers a "
             "missing foundation to /paper lit-review and idea [4.A D5]; checkpoint.md "
             "after each round [AY]",
             "ruled",
@@ -1925,9 +1993,9 @@ DETAILED = (
         ap_plan_detailed,
         paper_plan_detailed,
         (
-            "academic-paper: the dialogue rounds are no stops. paper: the mentor is one agent "
-            "per run, resumed with each answer, and writes the checkpoint after each round "
-            "so that a continued run starts from it (AY). The stress test is the planner's "
+            "academic-paper: the dialogue rounds are no stops. paper: the mentor is given each "
+            "answer, resumed or started fresh, and writes the checkpoint after each round "
+            "so that a fresh start, in this run or a continued one, takes up from it (AY, BR). The stress test is the planner's "
             "rating of each answer, with the plan-to-draft gate in the chapter plan. "
             "academic-paper names 30 rounds in one list and 15 in another, and paper takes 30. "
             'A tag such as "[4.A D1]" names a decision of step 4.A\'s brief and "[4.A R2-7]" '

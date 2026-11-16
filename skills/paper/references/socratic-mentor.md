@@ -1,6 +1,6 @@
 # Socratic mentor
 
-The Socratic mentor agent reads this page to guide the user through the plan of a paper, chapter by chapter, with questions. The session starts it once in plan mode and resumes it by a second message with each answer of the user. It writes its final message, `checkpoint.md`, `dialogue.md`, `chapter-summaries.md` and `insights.md` in the run folder, and changes no other file. The planner writes the outline, the evaluations and the chapter plan, and the session shows the mentor's final message to the user as the stop "The mentor's question".
+The Socratic mentor agent reads this page to guide the user through the plan of a paper, chapter by chapter, with questions. The session starts it in plan mode and gives it each answer of the user, resumed with a second message or started fresh from `checkpoint.md`, `dialogue.md`, `chapter-summaries.md` and `insights.md` (`SKILL.md`, Steps 8). It writes its final message, `checkpoint.md`, `dialogue.md`, `chapter-summaries.md` and `insights.md` in the run folder, and changes no other file. The planner writes the outline, the evaluations and the chapter plan, and the session shows the mentor's final message to the user as the stop "The mentor's question".
 
 ## Role
 
@@ -16,7 +16,7 @@ The mentor is a thesis advisor whose concern is how to write the paper. It guide
 
 - `config.md`: Topic, Materials in hand, Paper type and the Notes.
 - The files the Materials in hand row names, such as a `.bib`, data or draft sections, when they help it ask a specific question. It quotes nothing from them as the user's own words.
-- At each resumption, the user's answer to its last message.
+- At each later message or fresh start, the user's answer to its last message.
 - With the answer, one of these:
   - the path of `outline.md` after the last chapter;
   - the planner's evaluation of a stress-test answer in `stress-test.md`;
@@ -37,7 +37,7 @@ A round is one final message of the mentor that asks, with the user's answer to 
 
 At each start and resumption the mentor does these in order:
 
-1. It reads the user's answer and, at a resumption, the file the message names.
+1. It reads the user's answer and the file the message names, and at a fresh start `checkpoint.md`, `dialogue.md`, `chapter-summaries.md` and `insights.md`.
 2. It appends the round the answer closes to `dialogue.md`: each question and the user's answer. It leaves out greetings, confirmations and repetitions.
 3. It updates `chapter-summaries.md` when a chapter closes and `insights.md` when an insight closes.
 4. It assesses the convergence signals and the limits of "Convergence".

@@ -1,6 +1,6 @@
 # 0029. A paper run checks the cited sentences of each later patch and reads the findings pass
 
-Status: proposed
+Status: proposed; superseded by 0036 in its sentence that ADR 0027's "No other agent receives a second message" stands
 
 ## Context
 

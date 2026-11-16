@@ -1,6 +1,6 @@
 # Literature strategist
 
-The literature strategist agent reads this page to design the search, screen the sources and write the review. It writes `review.md` and `refs.bib` in the run folder, and `screened-<list>.txt` for each list of the screened `.bib` block that holds more than 50 entries. Besides the texts `lookup.py fetch` writes and the texts and pages it saves with `curl` into the run's temporary folder, it changes no other file. When the session gives it the block manifest of a manuscript `.bib`, it also writes the patch that adds the new entries, as `references/patch-file.md` gives. It does all of this in one start. The session resumes the same agent by a second message in four cases. They are a change the user makes at the stop "The sources' review", the sections of the outline that have no source, the review of an expanded revision whose root cause is insufficient evidence, and a patch the script rejected. In revision mode the session starts it for the items that call for a new reference.
+The literature strategist agent reads this page to design the search, screen the sources and write the review. It writes `review.md` and `refs.bib` in the run folder, and `screened-<list>.txt` for each list of the screened `.bib` block that holds more than 50 entries. Besides the texts `lookup.py fetch` writes and the texts and pages it saves with `curl` into the run's temporary folder, it changes no other file. When the session gives it the block manifest of a manuscript `.bib`, it also writes the patch that adds the new entries, as `references/patch-file.md` gives. Later inputs reach it as a change the user makes at the stop "The sources' review", the sections of the outline that have no source, the review of an expanded revision whose root cause is insufficient evidence, and a patch the script rejected. The session gives it each such input, resumed with a second message or started fresh with the files it wrote before in the run (`SKILL.md`, Steps 8). In revision mode the session starts it for the items that call for a new reference.
 
 ## What the agent reads
 
@@ -13,8 +13,8 @@ The literature strategist agent reads this page to design the search, screen the
 - The run's temporary folder, which the session gives, for the texts `lookup.py fetch` writes and the texts and pages the agent saves ("Reading a candidate").
 - `references/citation-compliance.md`, "Looking a reference up": how a line of `resolve` is read, and how a year and a venue are confirmed.
 - In full mode given an earlier plan run, that run's `chapter-plan.md` and `insights.md` ("Starting from a plan run").
-- At its resumption for the sections without a source: the sections of `outline.md` marked "needs literature", with their purpose, content summary and arguments. Also the files the agent wrote before when it ran in this run.
-- At its resumption for an expanded revision: the last `review-<r>.md` of the draft review, whose root cause is insufficient evidence, with the claims it names as lacking support. Also the files the agent wrote before in this run.
+- For the sections without a source: the sections of `outline.md` marked "needs literature", with their purpose, content summary and arguments. Also the files the agent wrote before when it ran in this run.
+- For an expanded revision: the last `review-<r>.md` of the draft review, whose root cause is insufficient evidence, with the claims it names as lacking support. Also the files the agent wrote before in this run.
 
 Where an input is missing:
 
@@ -30,11 +30,21 @@ Where an input is missing:
 - A research question that is vague gets two or three possible search directions listed in the report, and the session returns them to the user.
 - A discipline that is too broad, such as "social science", gets a narrower sub-field suggested in the report.
 
+## The parts of the research question
+
+Before the search design the agent writes in `review.md`, under "The parts of the research question", the parts of the research question: the sub-questions it asks, each in one sentence. A question on lesion sets, image registration and their clinical evidence has three parts.
+
+- A question that asks one thing has one part, and its part is the question.
+- Each part has its own search string, built from its concepts as "The search design" says, beside the combined string of the whole question.
+- The search record names each part with the searches run for it and the sources it found.
+- The matrix coverage gate holds for each part as for each theme ("Source counts and gates").
+- The synthesis has one part for each part of the question ("The synthesis").
+
 ## The search design
 
-- Extract two to four primary concepts from the research question.
+- Extract two to four primary concepts from the research question, and from each of its parts.
 - List the secondary concepts, the synonyms and the discipline's terms for each.
-- Combine them in a search string of this form:
+- Combine them in a search string of this form, one for the whole question and one for each part:
 
 ```
 ("concept A" OR "synonym A1") AND ("concept B" OR "synonym B1") AND ("concept C") NOT ("exclusion term")
@@ -50,7 +60,7 @@ Filters: peer-reviewed, [year range], [language]
 
 ## The databases
 
-The agent selects two or three primary databases for each field the Discipline row names, from the rows of this table, as academic-paper's layer 1 does. The column "Reached by" gives the way the agent searches each one, chosen by what the database offers without a sign-in, a payment or a bot check. An address in the table shows the parameters its interface takes, and each value is sent percent-encoded, as the last bullet of this section says. PubMed's language goes into the term, as `AND english[la]`.
+The agent selects two or three primary databases for each field the Discipline row names, from the rows of this table. academic-paper selects two or three by discipline. This page selects them for each field, so a topic across fields is searched in each field's databases (ADR 0036). The column "Reached by" gives the way the agent searches each one, chosen by what the database offers without a sign-in, a payment or a bot check. An address in the table shows the parameters its interface takes, and each value is sent percent-encoded, as the last bullet of this section says. PubMed's language goes into the term, as `AND english[la]`.
 
 | Field | Database | Reached by |
 |---|---|---|
@@ -143,10 +153,18 @@ Screened from the manuscript's .bib:
 
 | Layer | Made with | Decision |
 |---|---|---|
-| 1. Boolean search | The search string with the primary concepts, on each database "The databases" selects, through the way its table gives. | Under 20 records: relax the search by removing the NOT term and widening the year range. Over 500 records: tighten it with qualifiers or a narrower year range. |
-| 2. Citation chaining | `lookup.py refs <DOI>`, or a database's own reference links (PubMed's `elink.fcgi?dbfrom=pubmed&linkname=pubmed_pubmed_refs&id=<PMID>`, Europe PMC's `https://www.ebi.ac.uk/europepmc/webservices/rest/MED/<PMID>/references?format=json`), for each of the 5 to 10 core papers of layer 1. | A work that appears in the references of 3 or more core papers is marked "must include". |
-| 3. Forward tracking | `lookup.py cited-by <DOI>`, or a database's own citing links (PubMed's `elink.fcgi?dbfrom=pubmed&linkname=pubmed_pubmed_citedin&id=<PMID>`, Europe PMC's `.../MED/<PMID>/citations?format=json`), for each foundational work of layer 2. | Prefer the citing works of the last 3 years. A foundational work with no citing work in the last 3 years is marked "possibly outdated". |
+| 1. Boolean search | Each search string, the whole question's and each part's, on each database "The databases" selects, through the way its table gives. | Under 20 records: relax the search by removing the NOT term and widening the year range. Over 500 records: tighten it with qualifiers or a narrower year range. |
+| 2. Citation chaining | `lookup.py refs <DOI>`, or a database's own reference links (PubMed's `elink.fcgi?dbfrom=pubmed&linkname=pubmed_pubmed_refs&id=<PMID>`, Europe PMC's `https://www.ebi.ac.uk/europepmc/webservices/rest/MED/<PMID>/references?format=json`), or OpenCitations' references of a DOI, for each of the 5 to 10 core papers of layer 1. | A work that appears in the references of 3 or more core papers is marked "must include". |
+| 3. Forward tracking | `lookup.py cited-by <DOI>`, or a database's own citing links (PubMed's `elink.fcgi?dbfrom=pubmed&linkname=pubmed_pubmed_citedin&id=<PMID>`, Europe PMC's `.../MED/<PMID>/citations?format=json`), and OpenCitations' index, for each foundational work of layer 2. | Prefer the citing works of the last 3 years. A foundational work with no citing work in the last 3 years is marked "possibly outdated". |
 | 4. Semantic search | Semantic Scholar's search, `https://api.semanticscholar.org/graph/v1/paper/search?query=<research question>&fields=title,year,externalIds&limit=100`, or `lookup.py search '<research question>' --limit 100`, with the research question as a sentence. | Results that overlap layers 1 to 3 by more than 80 percent mean the search is saturated. |
+
+- Layer 3 also names Scopus "Cited by", and layer 4 also names Connected Papers, the tools academic-paper uses there. Both are "Not reached", and the search record names each with its reason. OpenCitations' index, which needs no key and no sign-in, is the open source of layer 3's citing works in place of Scopus "Cited by":
+
+| Layer | Tool | Reached by |
+|---|---|---|
+| 3. Forward tracking | Scopus "Cited by" | Not reached: `https://www.scopus.com` answers an automated request with a bot check (status 403, the page "Attention Required!"), its API needs a key, and its citing lists a subscription. |
+| 2 and 3 | OpenCitations | Its index: the citing works of a DOI from `https://api.opencitations.net/index/v2/citations/doi:<DOI>` and its references from `https://api.opencitations.net/index/v2/references/doi:<DOI>`, saved with `curl -sS -o '<file>' '<address>'` into the temporary folder, each value one argument in single quotes. Each record's `citing` or `cited` field names the work by its DOI, which `lookup.py resolve` then looks up. |
+| 4. Semantic search | Connected Papers | Not reached: `https://www.connectedpapers.com` answers with a page of scripts that holds no title of a related work, and its graph comes only from a browser that runs those scripts. |
 
 - The record count of layer 1's decision is, for each search, the total its interface reports, such as PubMed's `count` or ERIC's `numFound`.
 - A database reached only by a web search reports no total, and its search is recorded with "no count". Layer 1's decision for it rests on the number of distinct records the agent took from its web searches: under 20, it relaxes the search, as for any other search.
@@ -249,14 +267,18 @@ The review passes only when every gate holds:
 | Search documented | The databases with their interfaces, the search strings, the filters applied in each query, the counts and the criteria are recorded. | Complete the record. |
 | Source count | The minimum for the paper type is met. | Run one more pass of layers 2 to 4. |
 | Annotations | Every included source has an annotation. | Write the missing ones. |
-| Matrix coverage | Every theme has at least 3 sources. | Search again for the weak themes. |
+| Matrix coverage | Every theme, and every part of the research question, has at least 3 sources. | Search again for the weak themes and parts. |
 | Research gaps | At least 2 specific, actionable gaps. | Analyze the matrix again. |
 | Peer-reviewed share | At least 70 percent of the sources are peer-reviewed. | Replace non-academic sources. |
-| Currency | At least 50 percent of the sources are from the last 5 years, unless the topic is historical. | Search for the last 3 years and check preprints, tagged as preprints. |
+| Currency | At least 50 percent of the sources are from the last 5 years, unless the topic is historical. | Run the currency passes the bullets below give. |
 
-- A failed gate is handled once, as its row says. The bullets below say what follows when it still fails.
+- A failed gate other than the source count and the currency is handled once, as its row says. The bullets below say what follows when it still fails, and what the source count and the currency take.
 - Under a profile other than `unknown_user_defined` the two share gates relax and never tighten. Preprints count toward the peer-reviewed share under `cs_ml`. A canonical or older text does not count against the currency share under `humanities_interpretive`. The thresholds stay as they are.
-- When the source count stays short after the extra pass, the agent widens the year range by 5 years and then states "limited literature available" in the report.
+- When the source count stays short after the extra pass of layers 2 to 4, the agent widens the year range by 5 years and runs layers 1 to 4 again over it.
+- When it is still short, the agent adds each index the search has not used that it reaches without a sign-in, a key, a payment or a bot check: OpenAlex, Europe PMC, Crossref, arXiv, DBLP when it answers without a bot check, and Semantic Scholar. It searches each with the search strings, through `lookup.py search` or the index's own interface.
+- Only when the count is still short does the agent state "limited literature available" in the report, naming the widening of the years and each index added, with the sources each added. The search record names them too.
+- When the currency share is below its threshold, the agent runs a currency pass: it searches the last 3 years in each database and index the search used, with each search string, and screens what it finds. A preprint it keeps is labelled as "Preprints and published versions" says.
+- The currency passes end when the share is met, or when a pass adds no new eligible source, and at most 3 run. A share still below the threshold is then named in the report as not met, with each pass and the sources it added.
 - When theme coverage stays uneven, the agent suggests different theme divisions.
 - When quality stays low, the agent replaces the sources with a score of 7 or less where it can and states the limitation in their annotations.
 - A gate that still fails after these actions is named in the report as not met, and the review goes on.
@@ -329,12 +351,15 @@ Distribution advisory:
 
 ## The synthesis
 
-- The synthesis has one paragraph group per theme of the matrix, and each paragraph states what the included sources show on that theme, where they agree and where they disagree.
+- The synthesis is organised by the parts of the research question: one part of the synthesis for each part, with the themes of the matrix that answer it under it as paragraph groups. Each paragraph states what the included sources show on that theme, where they agree and where they disagree.
+- Each part of the synthesis says what the literature shows on its part of the question, and where nothing was found, naming the searches that found nothing.
 - Each claim cites its sources as `[@key]`, with the key of the source's entry in `refs.bib`.
+- Each citation rests on the annotation of a source read in the run. Before it writes a cited sentence, the agent checks that the source's annotation or saved text holds what the sentence attributes to it.
+- A survey is cited as a survey: a study the survey reports is cited by its own entry when the agent has read it, and otherwise the sentence says that the survey reports the study, as in "a survey reports one study of electronic health records [@key]".
 - The synthesis claims only what an annotation supports.
 - In lit-review mode the synthesis has the structure of a review paper, so that the draft of a review can be written from it.
-  - It opens with the topic and its rationale, and the scope and boundaries (what is included and excluded, the period, the disciplines, the geographies). It then gives the review methodology (the search, the criteria and the number of sources) and a preview of the themes.
-  - It has one part for each of 3 to 5 themes of the matrix. Each part has a paragraph group for each sub-theme and a summary of what the literature says on the theme.
+  - It opens with the topic and its rationale, and the scope and boundaries (what is included and excluded, the period, the disciplines, the geographies). It then gives the review methodology (the search, the criteria and the number of sources) and a preview of the parts of the question and their themes.
+  - It has one part for each part of the research question, and under it a paragraph group for each of its themes and a summary of what the literature says on that part.
   - It continues with the cross-cutting synthesis: the convergent findings, the divergent findings and the debates, and the methods that dominate or are underused.
   - It ends with the gaps (3 to 5, the ones "The gaps" lists), a proposed research agenda, the key takeaways and the implications for practice or policy.
 
@@ -342,6 +367,7 @@ Distribution advisory:
 
 - A source the agent finds by any interface or web search is included only after `lookup.py resolve` prints a record that matches it, resolved by its DOI, else its arXiv ID, else its title with `--year <year>`. A source for which no index prints such a record is listed under "No entry written", as a bullet below says, and is not cited.
 - One BibTeX entry per included source comes from `lookup.py bibtex '<DOI or arXiv ID>'`, written to `refs.bib` in the run folder as the script printed it on standard output, which holds the entry alone. The lines it prints on standard error are notes for the agent, and the bullet "The notes of `bibtex`" below gives the rule for each.
+- The entry `bibtex` prints is ASCII. A character it has no ASCII form for is written `{?}` with a warning line, and the agent replaces each `{?}` and names it in its report, as `SKILL.md`, Rules, says.
 - One blank line stands between entries, so that each entry is a block of its own.
 - The entry is not typed from memory.
 - For an arXiv ID whose published version an index names by its DOI, `bibtex` prints the published version's entry from doi.org in place of the `@misc` entry of the preprint.
@@ -370,11 +396,17 @@ Distribution advisory:
   - Any other source whose key equals an existing key gets the key with the first unused letter appended: `a`, then `b`.
 - `refs.bib` holds the new entries only. The patch that adds them to the manuscript's `.bib` inserts them after its last block, and its operations name the id `lit-review` in `roadmap_item_ids` in lit-review mode, the id `full` in full mode, and the ids of the items they answer in revision mode.
 
+### Preprints and published versions
+
+- A source is labelled a preprint, in its annotation's Type, in `review.md` and in the synthesis, only after its published version was looked for: `lookup.py resolve` on its title, on its arXiv ID, and on the DOI an index names for it, where one does.
+- A source whose published version one of these finds is cited as published, with the entry `lookup.py bibtex` prints for it, and is never labelled a preprint.
+- A source none of them finds a published version for is labelled a preprint, and `review.md` names the lookups run.
+
 ## The report
 
 `review.md` has these sections in this order:
 
-1. Search strategy: the screened `.bib` block when there is a `.bib`, the search record of "The search design" with the databases left out or not reached, each pass with the sources it added, the conditions that held when the search ended, the criteria and the profile.
+1. Search strategy: the screened `.bib` block when there is a `.bib`, the parts of the research question, the search record of "The search design" with the databases left out or not reached, each pass with the sources it added, the conditions that held when the search ended, the criteria and the profile.
 2. Distribution advisory: the advisory blocks, or "No distribution advisory triggered."
 3. Screening results: the initial hits, the number after title and abstract screening, the number after full-text assessment and the final included sources, and for each candidate that stayed unread the lookups tried and whether it was included or excluded.
 4. Annotated bibliography.
@@ -390,17 +422,17 @@ Distribution advisory:
 
 ## The sources' review
 
-The session shows the user the sources `review.md` includes, and the user may add or remove sources. The session then resumes this agent with the change as a second message, and the agent updates `review.md`, `refs.bib` and its patch.
+The session shows the user the sources `review.md` includes, and the user may add or remove sources. The session then gives the agent the change, resumed with a second message or started fresh with the files it wrote before, and the agent updates `review.md`, `refs.bib` and its patch.
 
 - An added source is looked up with `lookup.py resolve`, annotated, entered in the matrix and given its entry by `lookup.py bibtex`, like an included source. The entry is run with `lookup.py resolve --entry`, as "The BibTeX entries" says. The annotation is marked "added by the user", and the source is not screened out.
 - A removed source leaves the annotated bibliography, the matrix, `refs.bib` and the patch, and the synthesis is rewritten where it cited the source.
 - The agent changes nothing else in the files, and it starts no new search.
 - A source the user adds that has neither a DOI nor an arXiv ID gets its entry from the record `lookup.py resolve '<title>'` prints for it, as "The BibTeX entries" says. Only a source for which no index prints a record is listed under "No entry written".
-- A rejected patch is answered the same way: the session resumes the agent with the rejection as printed, and the agent writes one new patch.
+- A rejected patch is answered the same way: the session gives the agent the rejection as printed, resumed or started fresh, and the agent writes a new patch.
 
 ## The sections without a source
 
-After the planner's outline, the session resumes the agent when the outline marks sections "needs literature". In full mode it starts the agent fresh instead when the sources came from earlier lit-review outputs that the intake took and this run's agent never ran.
+After the planner's outline, the session gives the agent the sections the outline marks "needs literature", resumed or started fresh with the files it wrote before. In full mode it starts the agent fresh when the sources came from earlier lit-review outputs that the intake took and this run's agent never ran.
 
 - The agent reads the marked sections and runs the search of "The search design" and "The four searches" for each, under the search's end of "The four searches". It screens the records under the criteria above.
 - It adds the sources it includes to `review.md`, `refs.bib` and the patch, with annotations and matrix rows, under the rules of "The BibTeX entries". It removes none.
@@ -412,13 +444,13 @@ After the planner's outline, the session resumes the agent when the outline mark
 In full mode, intake may take an earlier plan run's outputs (`references/intake.md`, "Earlier outputs"). The agent is then also given that run's `chapter-plan.md` and `insights.md`.
 
 - The seeds are the references the chapter plan names under "Seeds for the literature strategist" and the keywords of the evidence in `insights.md`. The agent looks each seed up with `lookup.py` and screens it under the criteria above like any source.
-- The seeds are added to the search string's concepts and synonyms. The full search of "The search design" and "The four searches" still runs, and no source is taken without screening.
+- The seeds are added to the search strings' concepts and synonyms. The full search of "The search design" and "The four searches" still runs, and no source is taken without screening.
 - A seed that no index returns is named in the report with the searches made, and is not added to `refs.bib`.
 - The research question is the one of `config.md`, which the plan run's `thesis_statement` insight informed.
 
 ## An expanded revision
 
-The user may choose an expanded revision at the stop "The draft review does not pass" when the review names insufficient evidence as the root cause. The session then resumes the agent with the review as a second message.
+The user may choose an expanded revision at the stop "The draft review does not pass" when the review names insufficient evidence as the root cause. The session then gives the agent the review, resumed or started fresh with the files it wrote before.
 
 - The agent reads the claims the review names as lacking support, and runs the search of "The search design" and "The four searches" for each, under the search's end of "The four searches". It screens the records under the criteria above.
 - It adds the sources it includes to `review.md`, `refs.bib` and the patch, with annotations and matrix rows, under the rules of "The BibTeX entries". It removes none.

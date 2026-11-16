@@ -32,7 +32,7 @@ The modes are full, outline-only, revision, abstract-only, lit-review, citation-
 | Policy anchor | In disclosure mode, the policy anchor the author targets in place of a venue: `prisma-trAIce`, `icmje`, `nature`, `ieee`, or "none". | disclosure |
 | Venue limits | The venue's limits the user states. | full, outline-only, revision, abstract-only, draft-review, figures, format-convert |
 | Cover letter | For a journal venue: the article type (Research Article, Review Article or Brief Communication), the editor's name when known, the reason the paper fits the journal in one sentence, suggested reviewers and excluded reviewers with a reason, each optional. | full, format-convert |
-| Target formats | One or more of `docx`, `pdf`, `markdown` and `latex`, a citation style of the table below, or a venue. A request that names no target takes Markdown, and the confirmation shows it. A target outside these, such as HTML or Harvard, is asked again with the supported targets listed. A `.bib` given takes one citation style and the targets `docx` and `markdown` only, and is asked again otherwise. | format-convert |
+| Target formats | One or more of `docx`, `pdf`, `markdown` and `latex`, a citation style of the table below, or a venue. In format-convert a request that names no target takes Markdown, and the confirmation shows it. A target outside these, such as HTML or Harvard, is asked again with the supported targets listed. A `.bib` given takes one citation style and the targets `docx` and `markdown` only, and is asked again otherwise. In full mode the row takes only `docx`, `pdf`, `markdown` and `latex`: every full run makes `latex` and `pdf`, a request that names no other target makes those two alone, and each other target is made after the last compile (SKILL.md, Steps 14). | full, format-convert |
 | Format profile | For a target of DOCX, PDF or LaTeX only, the user's layout values: body font and size, caption font, placement and alignment, line spacing (single, 1.5, double or a fixed number of points), margins in centimetres, and table borders (three-line, full grid or none). The session never infers a value. A declined question writes no row, and a value outside this form is asked again. | format-convert |
 | Citation style | One style of the table below. For Chicago in format-convert, the form is asked too: notes and bibliography, or author-date. | full, revision, citation-check, figures, format-convert |
 | Length | The target word count. | full, outline-only |
@@ -78,6 +78,7 @@ The modes are full, outline-only, revision, abstract-only, lit-review, citation-
 - The main `.tex` and the files it inputs stand among them only when a target is `latex`, a citation style other than the manuscript's, or a venue. With only `docx`, `markdown` and `pdf` targets, they stay as they were.
 - The confirmation names an output file that already stands beside the main `.tex` as replaced. An output whose path equals the input's, such as a `.docx` given with the target `docx`, takes `<name>-2.<extension>`, and the confirmation shows that path.
 - The input manuscript is never replaced.
+- In full and revision mode the confirmation names `<main>.pdf` beside the main `.tex`, and in full mode each output of the row Target formats beside `main.tex`, an existing one as replaced.
 
 ## Paper type and length
 

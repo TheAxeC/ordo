@@ -1,6 +1,6 @@
 # 0032. The literature strategist finds and reads sources where academic-paper does, and lookup.py checks every reference it keeps
 
-Status: proposed
+Status: proposed; superseded by 0036 in its choice of databases by discipline, now for each field, and in its consequence that the strategist's search reaches what academic-paper's reaches
 
 ## Context
 

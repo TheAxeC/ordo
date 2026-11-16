@@ -294,7 +294,9 @@ The agent splits the claim into its atomic sub-claims and judges each one agains
 | AMBIGUOUS | The passage is related and neither supports nor contradicts the claim. | MINOR | Drift | The source studies the same population with a different measure. |
 
 - A claim marked "Drift" gets suggested wording in the report and no patch.
-- A claim marked "Not held" is marked Critical, stops the check, and the session raises the stop "A claim the run cannot support" for it.
+- A claim marked "Not held" is marked Critical, and the check goes on to every other claim. The report lists every claim marked "Not held" under "Claims the run cannot support".
+- After the agent has judged every claim, the session raises one stop "A claim the run cannot support" that lists them all. A claim marked UNVERIFIABLE_ACCESS is shown at that stop apart from the claims a read source does not hold, as "not read", with each address tried and its status.
+- This page judges every claim before the stop. academic-paper stops the check at the first claim not in its source; the user here rules on every such claim at once (ADR 0036).
 - An ambiguous passage is not forced into UNVERIFIABLE. The issue asks for wording that the passage supports, or for a more exact locator.
 - A source that holds the claim at another place than the page, section or table the manuscript names is a wrong locator. It is a MEDIUM issue, kept apart from a claim the source does not hold, and the issue gives the right locator.
 - A number from a different column or measure of the right table is a MAJOR_DISTORTION. The issue names both measures and gives the source's own figure for the measure the sentence names.
@@ -339,7 +341,7 @@ The checks of this section run in addition to the ones above when the Discipline
 | Clinical boundary | Human review and intended use | The text frames its output as research, evidence synthesis or tool evaluation | The text becomes patient-specific diagnosis, treatment, triage or a deployment instruction |
 
 - A failed row of the first five checks takes the verdict of "Judging a claim" that fits it, with the severity and the case that table gives.
-- A failed clinical boundary row is a SERIOUS issue of the case "A claim the source does not hold". The session raises the stop "A claim the run cannot support" for it.
+- A failed clinical boundary row is a SERIOUS issue of the case "A claim the source does not hold". It is listed in the one stop "A claim the run cannot support" with the other claims, as "Judging a claim" says.
 - The report ends a clinical paper's claims with this line: "This is research, evidence synthesis, or documentation support only. It is not patient-specific diagnosis, treatment, triage, or clinical decision support."
 
 ### Claims against the list
@@ -422,7 +424,7 @@ The Earlier papers row lists papers the authors published before, each as a path
 - The report states that the retraction check covers the notices Crossref lists, and that Crossref's own record of a source can lack a notice that a publisher has issued. It names every source with a notice line.
 
 - A retracted source is replaced by a patch when a candidate from `lookup.py search` holds the claim. The agent fetches the candidate, reads its passage as "Reading the source" says, and copies the passage line into the report. The patch adds the candidate's entry to the `.bib` from the standard output of `lookup.py bibtex`, and rewrites the `\cite` of each sentence that cited the retracted source.
-  - For an arXiv ID whose published version an index names by its DOI, `bibtex` prints the published version's entry.
+  - For an arXiv ID whose published version an index names by its DOI, `bibtex` prints the published version's entry. A `{?}` in the entry `bibtex` prints is replaced as `SKILL.md`, Rules, says.
   - When `bibtex` prints the line "published in <venue> (<type>) per Semantic Scholar", the entry is the one `lookup.py bibtex '<arXiv ID>' --page '<url>'` prints for the candidate's page at that venue. An address of that page the agent already holds (the reference text, or a `url` it was given) is tried first, with no search. Without one, or when `--page` refuses the address held, the agent may run one web search to find the candidate's page at the venue the line names, and runs no second search.
   - The page is never read through WebFetch, and the agent passes no sign-in, payment or bot check.
   - Without a page, or when `--page` refuses it, the entry is the `@misc` entry, and the report names the key with the "published in" line as printed.
@@ -472,7 +474,8 @@ In full and revision modes, a patch that adds or changes a cited sentence after 
 - It writes `citation-report-<nn>.md` in the run folder, where `<nn>` is the number of the patch. The file has the form of `citation-report.md`, and its Summary, Claims and Passage lines cover those sentences only.
 - Before it reports, it runs `lookup.py quote-check '<citation-report-<nn>.md>' '<the .bib>' '<temporary folder>'`, as "Reading the source" says.
 - Its patches carry ids `C<m>`, with `<m>` the number of the issue in its own report, and the session applies them as it applies the patches of the first check.
-- A claim that its source does not hold, or a source it cannot read, is the stop "A claim the run cannot support", as in the first check.
+- A claim that its source does not hold, or a source it cannot read, is the stop "A claim the run cannot support", as in the first check, raised once with every such claim of the report.
+- A hand edit of the answer "revise by hand and resubmit" (`SKILL.md`, full item 11) is checked the same way. The agent is given the output of `diff 'main-before-<r>.tex' 'main.tex'` in place of the patch file, checks the cited sentences of each paragraph that output shows changed, and writes `citation-report-edit-<r>.md` in the form of `citation-report-<nn>.md`.
 - The peer reviewer's next reading takes the report with the patch's changes.
 
 ## The file
@@ -519,6 +522,16 @@ In full and revision modes, a patch that adds or changes a cited sentence after 
 | # | Claim | Source | Section | Verdict | Detail |
 |---|---|---|---|---|---|
 | 1 | Accuracy rose by 15.2 percent | smith2024 | Results | VERIFIED | p. 14, table 2 |
+
+### Claims the run cannot support
+| # | Claim | Source | Verdict | What is missing |
+|---|---|---|---|---|
+| 4 | Accuracy rose by 15.2 percent | jones2021 | UNVERIFIABLE | The source does not discuss accuracy |
+
+### Sources not read
+| # | Claim | Source | Address tried | Status |
+|---|---|---|---|---|
+| 1 | The method was adopted in 12 hospitals | lee2019 | https://doi.org/10.1000/abc | 403 https://publisher.example/article |
 
 ### Corrections made
 | # | Location | Error | Correction |

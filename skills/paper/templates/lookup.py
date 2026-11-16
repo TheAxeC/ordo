@@ -35,6 +35,8 @@ Commands:
 - When doi.org gives no entry for that DOI, bibtex prints the @misc entry below and "published DOI <doi>: doi.org <reason>" (the reason "left out, <reason>", "HTTP <status>", or "HTTP 200, not a BibTeX entry"), and exits 0. When Crossref, OpenAlex and Semantic Scholar are all left out for a published DOI, it prints the @misc entry and one line "<index>: left out, <reason>" for each, and exits 0. A published DOI no index holds prints "published DOI <doi>: not found", with a left-out line for each index left out, and one whose record is below 0.70 prints "published DOI <doi>: title ratio <r> against <index>, below 0.70"; the next published DOI is then tried.
 - Otherwise bibtex prints the @misc entry of the arXiv record, keyed arxiv_<id> with each character other than a letter or digit written _, with eprint and archivePrefix = {arXiv}, each run of whitespace in the title and the authors made one space, and the braces of a value removed when they are not balanced, and exits 0. When Semantic Scholar's publicationVenue is of the type conference or journal and neither its name nor an alternate name contains arxiv in any case, it also prints "published in <venue name> (<type>) per Semantic Scholar, with no DOI named by Semantic Scholar or OpenAlex: lookup.py bibtex <arXiv ID> --page <the venue's page of the work>", the clause ending "whose record matches the title" when a published DOI was named and none was taken. Semantic Scholar or OpenAlex left out is printed "<index>: left out, <reason>", so that the published version is known not to have been checked there. With arXiv left out or not found and no published DOI taken, bibtex prints "arXiv: left out, <reason>" or "arXiv: not found" and exits 1.
 - bibtex <arXiv ID> --page <url> prints the entry of the published version built from the venue's page at <url>. It asks arXiv and Semantic Scholar as above, and reads the page. The entry is @inproceedings with booktitle when Semantic Scholar's publicationVenue is of the type conference or the page has citation_conference_title, else @article with journal. The venue is citation_conference_title, else citation_journal_title. The entry holds title, author (the citation_author tags joined by and), the venue, year, volume and pages (citation_firstpage and citation_lastpage joined by two hyphens, as BibTeX writes a range, or the first page alone) when present, url (the page's address after redirects), eprint and archivePrefix = {arXiv}, keyed as the @misc entry is, each value made one line with its braces removed when they are not balanced. It refuses, printing "page <url>: <reason>" and exiting 1 with no entry, for a page that cannot be read ("not an http or https URL", "the page is on <host>", "no answer (...)", "HTTP <status>"), that has no citation_title ("no citation_title tag") or no year ("no year tag"), or whose citation_title has a title ratio below 0.70 against the title of the arXiv record, else of the Semantic Scholar record ("citation_title ratio <r>"). With neither record it prints the arXiv line and "page <url>: no record of arXiv <id> to compare its title with", and exits 1.
+- Every entry bibtex prints, the one doi.org gives, the @misc entry and the entry of a venue's page, is ASCII. Each value is put in NFC first. A letter with one combining mark is its accent command around the base letter: acute {\'e}, grave {\`e}, circumflex {\^e}, diaeresis {\"o}, tilde {\~n}, cedilla {\c{c}}, caron {\v{c}}, ring {\r{a}}, macron {\=a}, dot above {\.z}, breve {\u{g}}, ogonek {\k{a}}, double acute {\H{o}}, with the dotless forms on i and j ({\'\i}). The sharp s, o with a stroke, l with a stroke and the ligatures ae and oe are {\ss}, {\o}, {\O}, {\l}, {\L}, {\ae}, {\AE}, {\oe} and {\OE}. A Greek letter that has a LaTeX command is that command in braced math, {$\alpha$} or {$\Gamma$}. The hyphens U+2010 and U+2011 are -, the en dash --, the em dash ---, the minus sign {$-$}, the single curly quotes ` and ', the double curly quotes `` and '', the no-break space ~, the ellipsis \ldots{}, and the signs registered, copyright, trade mark, degree, times, plus-minus, less-or-equal and greater-or-equal \textregistered{}, \textcopyright{}, \texttrademark{}, \textdegree{}, {$\times$}, {$\pm$}, {$\leq$} and {$\geq$}. The url and doi fields are not converted: each character in them that is not ASCII is percent-encoded as UTF-8. The key keeps ASCII only: a letter with a diacritic becomes its base letter, and any other character that is not ASCII is dropped. A value that is already ASCII, a LaTeX command, braces or math included, is printed unchanged. Any other character is written {?}, and bibtex prints "warning: <key>: no ASCII form for U+<hex>, written {?}" on standard error for each, <hex> in upper case with at least four digits; the entry is printed and the exit status is as for any printed entry.
+- The title ratio, which resolve, resolve --entry, bibtex and the title check of check-urls compare by, first writes each form above that holds a letter back as its character and puts the title in NFC, so that a converted entry has the ratio of the original. A form of punctuation alone is dropped by the comparison as its character is.
 - cite-keys reads the keys the .tex cites (see "The keys a .tex cites") and the keys of the .bib. It prints "missing: <key>" for each cited key the .bib lacks, in the order the keys first occur in the .tex, then "unused: <key>" for each .bib entry no cited key names, in the order of the .bib. It prints nothing when every cited key has an entry and every entry is cited.
 - check-urls reads the keys the .tex cites and the .bib. For each cited key it prints the HTTP status, after redirects, of the key's doi (as https://doi.org/<doi>), else its eprint (as https://arxiv.org/abs/<id>), else its url. A cited key with none of the three is printed as "no identifier", a cited key the .bib lacks as "no entry in <the .bib's file name>", and a URL that gives no answer as "failed, <reason>". A .tex that cites no key prints "the .tex cites no key".
 - check-urls also checks the title of a key whose entry has a doi. The doi is stripped to the bare DOI and percent-encoded as resolve does, and the entry's title is compared, by the title ratio of resolve, with the title of the first record the doi resolves to. The indexes are asked in the order Crossref, OpenAlex, Semantic Scholar, and the next one is asked when an index answers "not found" or is left out. The line of the key then ends with ", ratio <r> against <index>", the ratio written as resolve writes it, followed by ", DOI_MISMATCH" when the ratio is below 0.70. It ends with ", doi not found in Crossref, OpenAlex or Semantic Scholar" when each of the three answered "not found", and with ", title not checked: <index> left out, <reason>" when no index gave a record and one or more was left out, one clause for each index left out, the clauses separated by "; ". A key whose URL gave no answer gets the same ending after its "failed, <reason>". A key with a doi costs up to three requests more than its status request.
@@ -142,6 +144,7 @@ import subprocess
 import sys
 import tempfile
 import time
+import unicodedata
 import urllib.error
 import urllib.parse
 import urllib.request
@@ -233,6 +236,34 @@ UTF8_BOM = b"\xef\xbb\xbf"
 XML_ENCODING = re.compile(rb"<\?xml[^>]*?encoding\s*=\s*[\"']([A-Za-z0-9._-]+)", re.IGNORECASE)
 META_CHARSET = re.compile(rb"<meta[^>]*?charset\s*=\s*[\"']?([A-Za-z0-9._-]+)", re.IGNORECASE)
 
+# The LaTeX form of each character bibtex writes in ASCII, by code point. An accented letter that is not here is written by ACCENTS.
+LATEX_FORMS = {
+    0x00DF: r"{\ss}", 0x00F8: r"{\o}", 0x00D8: r"{\O}", 0x0142: r"{\l}", 0x0141: r"{\L}",
+    0x00E6: r"{\ae}", 0x00C6: r"{\AE}", 0x0153: r"{\oe}", 0x0152: r"{\OE}",
+    0x03B1: r"{$\alpha$}", 0x03B2: r"{$\beta$}", 0x03B3: r"{$\gamma$}", 0x03B4: r"{$\delta$}", 0x03B5: r"{$\varepsilon$}", 0x03F5: r"{$\epsilon$}",
+    0x03B6: r"{$\zeta$}", 0x03B7: r"{$\eta$}", 0x03B8: r"{$\theta$}", 0x03D1: r"{$\vartheta$}", 0x03B9: r"{$\iota$}", 0x03BA: r"{$\kappa$}",
+    0x03BB: r"{$\lambda$}", 0x03BC: r"{$\mu$}", 0x03BD: r"{$\nu$}", 0x03BE: r"{$\xi$}", 0x03C0: r"{$\pi$}", 0x03C1: r"{$\rho$}",
+    0x03C2: r"{$\varsigma$}", 0x03C3: r"{$\sigma$}", 0x03C4: r"{$\tau$}", 0x03C5: r"{$\upsilon$}", 0x03C6: r"{$\varphi$}", 0x03D5: r"{$\phi$}",
+    0x03C7: r"{$\chi$}", 0x03C8: r"{$\psi$}", 0x03C9: r"{$\omega$}",
+    0x0393: r"{$\Gamma$}", 0x0394: r"{$\Delta$}", 0x0398: r"{$\Theta$}", 0x039B: r"{$\Lambda$}", 0x039E: r"{$\Xi$}", 0x03A0: r"{$\Pi$}",
+    0x03A3: r"{$\Sigma$}", 0x03A5: r"{$\Upsilon$}", 0x03A6: r"{$\Phi$}", 0x03A8: r"{$\Psi$}", 0x03A9: r"{$\Omega$}",
+    0x2010: "-", 0x2011: "-", 0x2013: "--", 0x2014: "---", 0x2212: "{$-$}", 0x2018: "`", 0x2019: "'", 0x201C: "``", 0x201D: "''",
+    0x00A0: "~", 0x2026: r"\ldots{}", 0x00AE: r"\textregistered{}", 0x00A9: r"\textcopyright{}", 0x2122: r"\texttrademark{}",
+    0x00B0: r"\textdegree{}", 0x00D7: r"{$\times$}", 0x00B1: r"{$\pm$}", 0x2264: r"{$\leq$}", 0x2265: r"{$\geq$}",
+}
+# The accent command of each combining mark, by code point: a symbol is written {\'e}, a letter {\c{c}}.
+ACCENTS = {
+    0x0301: "'", 0x0300: "`", 0x0302: "^", 0x0308: '"', 0x0303: "~", 0x0327: "c", 0x030C: "v",
+    0x030A: "r", 0x0304: "=", 0x0307: ".", 0x0306: "u", 0x0328: "k", 0x030B: "H",
+}
+LATEX_ACCENT = re.compile(r"\{\\(?:([`'^\"~=.])(\\[ij]|[A-Za-z])|([cvrukH])\{(\\[ij]|[A-Za-z])\})\}")
+# The forms that hold a letter, mapped back to their character before a title is compared; a form of punctuation alone is dropped by the comparison as its character is.
+LATEX_LETTERS = {form: chr(point) for point, form in LATEX_FORMS.items() if re.search(r"[A-Za-z]", form)}
+LATEX_LETTER = re.compile("|".join(re.escape(form) for form in sorted(LATEX_LETTERS, key=len, reverse=True)))
+URL_FIELDS = ("url", "doi")
+ENTRY_HEAD = re.compile(r"\s*@\w+\s*[{(]")
+FIELD_GAP = re.compile(r"[ \t\r\n,]*")
+FIELD_NAME = re.compile(r"([A-Za-z][\w\-:.]*)\s*=")
 
 class UsageError(Exception):
     """A call the script cannot read: the message is printed after "error: " (or whole, when it starts "usage:")."""
@@ -313,7 +344,7 @@ def collapse_spaces(text):
 
 
 def normalise_title(title):
-    title = re.sub(r"[^\w ]|_", "", (title or "").lower())
+    title = re.sub(r"[^\w ]|_", "", unicodedata.normalize("NFC", from_latex(title or "")).lower())
     return re.sub(r" +", " ", title).strip()
 
 
@@ -887,6 +918,74 @@ def bibtex_value(text):
     if depth != 0:
         text = text.replace("{", "").replace("}", "")
     return text
+
+def latex_form(character):
+    """The ASCII form of a character that is not ASCII: its form in LATEX_FORMS, else, for an ASCII letter with one combining mark of ACCENTS, the accent command around the letter, dotless on i and j; None otherwise."""
+    if ord(character) in LATEX_FORMS:
+        return LATEX_FORMS[ord(character)]
+    decomposed = unicodedata.normalize("NFD", character)
+    if len(decomposed) != 2 or ord(decomposed[1]) not in ACCENTS or not (decomposed[0].isascii() and decomposed[0].isalpha()):
+        return None
+    letter, accent = decomposed[0], ACCENTS[ord(decomposed[1])]
+    if letter in "ij":
+        letter = "\\" + letter
+    return "{\\%s{%s}}" % (accent, letter) if accent.isalpha() else "{\\%s%s}" % (accent, letter)
+
+
+def latex_ascii(text, unknown):
+    """text put in NFC, with each character that is not ASCII written in its LaTeX form, or {?} where it has none; each such character is appended to unknown."""
+    written = []
+    for character in unicodedata.normalize("NFC", text):
+        form = character if character.isascii() else latex_form(character)
+        if form is None:
+            unknown.append(character)
+            form = "{?}"
+        written.append(form)
+    return "".join(written)
+
+
+def url_ascii(text):
+    """text put in NFC, with each character that is not ASCII percent-encoded as UTF-8."""
+    return "".join(character if character.isascii() else urllib.parse.quote(character, safe="") for character in unicodedata.normalize("NFC", text))
+
+
+def key_ascii(key):
+    """The key in ASCII: a letter with a diacritic becomes its base letter, and any other character that is not ASCII is dropped."""
+    return "".join(character for character in unicodedata.normalize("NFD", key) if character.isascii())
+
+
+def from_latex(text):
+    """text with each LaTeX form of ascii_entry that holds a letter written back as its character, so that a converted title compares as the original."""
+
+    def accented(match):
+        accent, letter = (match.group(1), match.group(2)) if match.group(1) else (match.group(3), match.group(4))
+        mark = next(point for point, command in ACCENTS.items() if command == accent)
+        return unicodedata.normalize("NFC", letter.lstrip("\\") + chr(mark))
+
+    return LATEX_LETTER.sub(lambda match: LATEX_LETTERS[match.group()], LATEX_ACCENT.sub(accented, text))
+
+
+def ascii_entry(entry, notes):
+    """The entry bibtex prints, in ASCII: the key by key_ascii, a url or doi field by url_ascii and every other part by latex_ascii. Each character written {?} adds a warning to notes."""
+    unknown = []
+    head = ENTRY_HEAD.match(entry)
+    comma = entry.find(",", head.end()) if head else -1
+    if comma < 0:
+        written, key, i = [], "", 0
+    else:
+        key = key_ascii(entry[head.end():comma]).strip()
+        written, i = [entry[:head.end()], key_ascii(entry[head.end():comma])], comma
+    while True:
+        name = FIELD_NAME.match(entry, FIELD_GAP.match(entry, i).end())
+        if not name:
+            written.append(latex_ascii(entry[i:], unknown))
+            break
+        _, end = read_bib_value(entry, name.end())
+        value = entry[name.end():end]
+        written.append(entry[i:name.end()] + (url_ascii(value) if name.group(1).lower() in URL_FIELDS else latex_ascii(value, unknown)))
+        i = end
+    notes.extend(f"warning: {key}: no ASCII form for U+{ord(character):04X}, written {{?}}" for character in unknown)
+    return "".join(written)
 
 
 def arxiv_key(arxiv_id):
@@ -1785,7 +1884,15 @@ def venue_page_entry(client, identifier, url, out, notes):
 
 
 def run_bibtex(client, arguments, out, notes):
-    """bibtex: the entry goes to out, which main prints on standard output, and every other line to notes, which it prints on standard error."""
+    """bibtex: the entry goes to out in ASCII (ascii_entry), which main prints on standard output, and every other line to notes, which it prints on standard error."""
+    entries = []
+    status = bibtex_lookup(client, arguments, entries, notes)
+    out.extend(ascii_entry(entry, notes) for entry in entries)
+    return status
+
+
+def bibtex_lookup(client, arguments, out, notes):
+    """The entry of bibtex as doi.org, the arXiv record or the venue's page gives it, before ascii_entry."""
     positional, options = parse_options(arguments, ("--page",), "bibtex")
     expect_arguments(positional, 1, "bibtex", "<DOI | arXiv ID> [--page <url>]")
     identifier = require_identifier(positional[0])

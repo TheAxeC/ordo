@@ -46,3 +46,14 @@ The ids are:
 | `full` | The literature strategist | The entries that full mode adds to an existing `refs.bib` |
 
 - An id may stand in more than one patch of a run folder. Each patch has its own number (SKILL.md, Steps 9), and an id names what the patch answers. The second use of `disclosure` in full mode is therefore a patch of its own. It is written against the manifest of the file as it stands after the first patches.
+
+## A patch over every block
+
+When the user answers "write the change again in full" at the stop "A patch that does not apply" (SKILL.md, Steps 10), the agent writes the whole file again as one patch over every block of the manifest the session gives it.
+
+- The patch has one op for each block of the manifest, in the manifest's order, and no block is left without an op.
+- A block the file keeps, changed or not, takes a `replace_block` op whose `new_text` is the block as the file should read.
+- A block the change removes takes a `delete_block` op.
+- Text the change adds between two blocks goes into the `new_text` of the block before it.
+- Each op names the ids of the change in `roadmap_item_ids`, the ids of the patch that did not apply.
+- The patch is structural, and the session applies it with `--acknowledge-structural`, since the user's answer is the confirmation of the full rewrite.

@@ -2,7 +2,7 @@
 
 The visualization agent reads this page to decide which figures a paper needs, to draw them from the project's data, to check them, to write the trace of each and to place them in the manuscript. It writes the scripts and the images in `figures/` of the run folder, and the trace in `figures.md`. In full mode and in the figures call it also writes the patch that places the figures. It changes no other manuscript file. Under the permission "the project's figure script edited and run" it also changes the script and the files the script writes. Those lie outside the run folder, as "The files outside the run folder" says. Under the permission "a copy in the run folder" it changes nothing outside the run folder.
 
-The agent is started once. It starts in full mode beside the first draft, in revision mode when an item calls for a figure change, and in the figures call on an existing manuscript. The session resumes the same agent with a second message in two cases. The first is in full mode after the draft writer has ended, when the agent writes its placement patch as "The placement patch" says. The second is when the script rejects a patch. The figures call starts the agent once and has no resumption for placement.
+The agent starts in full mode beside the first draft, in revision mode when an item calls for a figure change, and in the figures call on an existing manuscript. Later inputs reach it in full mode after the draft writer has ended, when it writes its placement patch as "The placement patch" says, and when the script rejects a patch. The session gives it each such input, resumed with a second message or started fresh with `figures.md` and the images it drew (`SKILL.md`, Steps 8). In the figures call the agent writes its placement patch in the same start.
 
 ## What the agent reads
 
@@ -13,7 +13,7 @@ The agent is started once. It starts in full mode beside the first draft, in rev
 - In revision mode, the permission intake gave in the row Figure changes: the project's figure script edited and run, or a copy of it in the run folder. The agent works within that permission and changes nothing else.
 - In the figures call, the main `.tex` for the Results section, and the manifest of the `.tex` and the path of the patch, which the session gives. Also the permission of the row Figure changes. The call has no `outline.md`, no `arguments.md` and no `items.md`.
 - No `.tex` exists when the agent first runs in full mode, since the draft writer writes the first draft at the same time. Check 9 then compares the plotted values with the data file and with the numbers `arguments.md` states, and the trace lists under "Claims in the manuscript" the claims of `arguments.md` that lean on the figure, each by its sub-argument number.
-- At its resumption, the manifest of `main.tex` and the path of the patch it writes, which the session gives.
+- For its placement patch, the manifest of `main.tex` and the path of the patch it writes, which the session gives.
 - The names of the files in the manuscript's folder and in its `figures/` folder, which the session puts in the prompt.
 - The language of the scripts is Python, unless the Notes of `config.md` ask for R.
 
@@ -622,7 +622,7 @@ A full-page landscape figure, with `\usepackage{pdflscape}` in the preamble:
 
 ## The placement patch
 
-In full mode the first draft holds a marker where each planned figure goes and no figure environment. The marker is the line `% FIGURE: <label>`, standing alone between blank lines. After the draft writer has ended, the session copies the images into the manuscript's `figures/` folder, anchorizes `main.tex` and resumes the agent with a second message that holds the manifest and the path of the patch.
+In full mode the first draft holds a marker where each planned figure goes and no figure environment. The marker is the line `% FIGURE: <label>`, standing alone between blank lines. After the draft writer has ended, the session copies the images into the manuscript's `figures/` folder, anchorizes `main.tex` and gives the agent the manifest and the path of the patch, resumed or started fresh with `figures.md`.
 
 - The patch has the id `figures`, as `references/patch-file.md` gives, and the form of that page.
 - The marker is a block of its own, so the patch has one `replace_block` op for each figure drawn. The op replaces the marker block with the environment of the figure from `figures.md`, with the image name that `figures.md` gives under "Names".
@@ -634,7 +634,7 @@ In full mode the first draft holds a marker where each planned figure goes and n
 
 ## The figures call
 
-The figures call starts the agent once on an existing manuscript, with no outline and no marker.
+The figures call starts the agent on an existing manuscript, with no outline and no marker.
 
 - The agent finds the quantitative results of the Results section that a figure would show better than a sentence or a table. It applies "Whether to draw a figure" to each. It draws them from the data that Materials in hand names.
 - A result whose data the agent cannot find is listed under "Not drawn" with the missing file.
