@@ -52,7 +52,10 @@ dispatch:                    # or the block /spec writes (a list when .agents/pl
   report: .scratch/5-paper/agents/reviews/5.D-report.md
   brief_check: ".scratch/5-paper/agents/reviews/5.D-brief-check.md (a3bcb2c9675a51b1b, claude-opus-5-5, 250925 tokens, 64 tool uses, 12 minutes)"
   session_id: ad07bceb720d13047 (claude-opus-5-5)
-  round: 0
+  builder_usage: 93893 tokens, 99 tool uses, 23 minutes
+  reviewer_report: ".scratch/5-paper/agents/reviews/5.D-refuter.md (ac1e8e9f877e754eb, claude-opus-5-5, 259082 tokens, 47 tool uses, 9 minutes)"
+  round: 1
+  round_1: sent 2026-11-16, brief .scratch/5-paper/agents/briefs/5.D-round-1.md, snapshot .agents/worktrees/5-paper-5.D-round-1
   landing: not-started
 ```
 
@@ -65,6 +68,7 @@ A finding that is neither closed in the repair rounds nor fixed at landing is an
 
 ## Closed items (the log of what was raised and how it ended; no report carries it)
 
+- 2026-11-16: Open item BM, the venue page of a published arXiv paper for the roles other than the strategist: closed by the user, (a), ruling The venue page of a published arXiv paper, ADR 0034; carried in step 5.D's repair round 1.
 - 2026-11-16: Open item BL, step 5.D's clash with ADR 0027: closed by the user, no strategist per strand, ADR 0027 stands; the ruling The third repair of paper rewritten to academic-paper equivalence, booked in plan.md's Rulings.
 
 - 2026-11-16: Open item BK, the call on the lit-review comparison of step 5.A's check: ruled (a), a loss, by the user, booked in plan.md's Rulings.
