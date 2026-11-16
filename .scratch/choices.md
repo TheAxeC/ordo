@@ -597,3 +597,25 @@ step 5.F, brief check findings 29, 30 and 52: a one-section patch rarely exits 3
 Taken: (a)
 Booked: `.scratch/5-paper/agents/briefs/5.F.md` "Decisions taken in this brief" 3
 Builds on it: step 5.F
+
+## C121. The form of a with a ring in step 5.F (2026-11-16)
+
+step 5.F, handed back by its builder at the first run: item 5 gives U+00E5 two forms, `{\r{a}}` by the ring rule and `{\aa}` in its list of letters.
+  - (a) The ring rule, `{\r{a}}` and `{\r{A}}`; `{\aa}` and `{\AA}` leave the table. Pro: one rule per character; case T11 stands. Con: none for compiling, both forms print the same letter.
+  - (b) `{\aa}` first. Pro: the conventional form. Con: two rules reach one character.
+  - Recommendation: (a). The lazy option was none: both cost the same.
+
+Taken: (a)
+Booked: `.scratch/5-paper/agents/briefs/5.F-cases.md` 1
+Builds on it: step 5.F
+
+## C122. The stop after draft review round 2 in step 5.F (2026-11-16)
+
+step 5.F, review finding S1 and S2: the builder made every Major Revision or Reject verdict after round 2 a stop, which removes academic-paper's branch "Overall Score < 6.5 BUT all Critical resolved -> Accept with remaining issues" (`agents/peer_reviewer_agent.md:427`), since every score below 6.5 carries one of those verdicts.
+  - (a) Keep the branch: below 6.5 with every Critical issue resolved goes on; the stop comes only with a Critical issue unresolved and offers the answers of both of academic-paper's lists once. Pro: every branch of academic-paper's text is reachable; an unattended run is not halted where academic-paper goes on. Con: the root-cause stop needs a Critical issue open.
+  - (b) The verdict rule as built. Pro: none that academic-paper's text supports. Con: the explicit branch at :427 becomes dead.
+  - Recommendation: (a). The lazy option was (b), keeping what was built.
+
+Taken: (a)
+Booked: `.scratch/5-paper/agents/briefs/5.F-cases.md` 3
+Builds on it: step 5.F
