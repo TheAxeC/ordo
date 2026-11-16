@@ -43,7 +43,6 @@ The modes are full, outline-only, revision, abstract-only, lit-review, citation-
 | DOI checking | Strict or mark-only. | full, revision, citation-check, lit-review |
 | Instructions | A comments file, instructions as text, or none. | revision |
 | New references | Whether the run may add references that the manuscript's `.bib` lacks. | revision |
-| Numbers from saved results | Whether the run may compute numbers from the project's saved results, and from which files. | revision |
 | Figure changes | Whether the run may change figures, and whether it may edit and run the project's figure script or only a copy of it in the run folder. | revision, figures |
 | Authors | One row per author: name, affiliation, ORCID and whether the author is the corresponding author. | full, revision, citation-check, disclosure, format-convert when the formatter writes a cover letter |
 | Contributions | For each author, the CRediT roles of `references/statements.md` taken, each marked Lead or Supporting. | full, disclosure |
@@ -63,7 +62,8 @@ The modes are full, outline-only, revision, abstract-only, lit-review, citation-
 - A mode that gives a main `.tex` reads the language, the venue and the citation style from it when it states them, and asks only for what it does not state.
 - The mode of the call is the row "Mode" of `config.md`, and it is not asked.
 - The session does not ask a question whose row the mode does not use.
-- The permission rows New references and Numbers from saved results are asked one question per row, in revision only. Figure changes is asked in revision and in the figures call. Full mode's roles draw figures and compute from the materials by their pages.
+- The permission row New references is asked in revision only. Figure changes is asked in revision and in the figures call. Full mode's roles draw figures by their pages.
+- In full and revision mode the draft writer computes a number from the project's saved result files by its page, with no permission row (`references/draft-writer.md`, "The anti-leakage rule").
 - The rows Claims not to make, Earlier papers and Internal only are read by the agents that run in the modes listed against them. A mode that does not list a row records no value, and the agent reads it as "none" or "no".
 - The row Internal only is shown at the intake confirmation with its value. A value "yes" is shown as "the manuscript is marked internal only and may present a negative result". It is "yes" only when the user's request or an answer here asks for an internal record.
 - The row Existing main.tex is shown at the intake confirmation, and the run does not go on until the user confirms the record that holds it.
@@ -265,6 +265,7 @@ In disclosure mode the session reads the records of earlier runs, to mark each c
 - A call by plain request, and a call with an argument in words, add two rows. Request holds the request as the user wrote it. Taken from the request lists each argument taken and the words it was taken from.
 - The session writes the path it found in the Arguments row.
 - A section "Notes" holds a requirement or preference the user gave that fits no row.
+- The Notes also hold the effort the roles run at (SKILL.md, Steps 4) and each served model identifier other than the one the runner's model list gave (SKILL.md, Steps 8).
 - An instruction the user gives, at intake or later in the run, not to stop for a choice whose recommendation the run would take is recorded in the Notes. The stops of SKILL.md "Stops" stay as they are, except that the stop "A research question the materials do not answer" then takes its second option, as that table says.
 - A section "Decisions" holds the user's answer at each stop and each choice the run took by its goal with its reason, appended by the session.
 - The record is shown to the user whole, and the run goes on when the user confirms it.

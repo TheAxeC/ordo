@@ -1237,9 +1237,10 @@ def _single(
 
 
 STOPS_NOT_DRAWN = (
-    "Not drawn, since they hold in every mode: at every agent start, a model other than "
-    "the configured one stops the run; at every patch, a structural patch, a patch that "
-    "does not apply or a failed script stops it."
+    "Not drawn, since they hold in every mode: at every agent start, a model of another "
+    "family than the configured one stops the run, and a newer model of the same family "
+    "goes on and is named in the final message; at every patch, a structural patch, a "
+    "patch that does not apply or a failed script stops it."
 )
 
 
@@ -1273,7 +1274,7 @@ def paper_full_graph() -> Graph:
         Node("W", "Draft writer"),
         Node(
             "WM",
-            "Draft writer once more: the model identifier, when the model list gave none",
+            "Draft writer once more: the model identifier, when the model list gave none or the served one differs",
             "maybe",
         ),
         Node("V", "Visualization, with data", "maybe"),
@@ -1548,7 +1549,7 @@ def paper_disclosure_graph() -> Graph:
         Node("W", "Draft writer: the statements"),
         Node(
             "W2",
-            "Draft writer once more: the model identifier, when the model list gave none",
+            "Draft writer once more: the model identifier, when the model list gave none or the served one differs",
             "maybe",
         ),
     )

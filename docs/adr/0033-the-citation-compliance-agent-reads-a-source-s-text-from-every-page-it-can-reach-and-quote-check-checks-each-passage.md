@@ -8,7 +8,7 @@ ADR 0024 decides that each claim the citation compliance agent judges rests on a
 
 ## Decision
 
-The citation compliance agent, in full, revision and citation-check mode, reads each cited source's text from every page and file it can reach without a login, a payment or a bot check: the file `lookup.py fetch` writes first, then PMC, Europe PMC, the DOI's landing page and the venue's page. Each page is saved with `curl` into the run's temporary folder, and `lookup.py` makes its text as `fetch` makes it, so that `quote-check` reads it. No text is read through WebFetch. The passage line, its locator and `quote-check` stay as ADR 0024 decides, and a source of which only the abstract was read still supports only what the abstract says. This supersedes ADR 0024 in the part that makes `lookup.py fetch` the only way the text is obtained.
+The citation compliance agent, in full, revision and citation-check mode, reads each cited source's text from every page and file it can reach without a login, a payment or a bot check: the file `lookup.py fetch` writes first, then PMC, Europe PMC, the DOI's landing page and the venue's page. Each page is saved with `curl` into the run's temporary folder, and `lookup.py` makes its text as `fetch` makes it, so that `quote-check` reads it. No text is read through WebFetch. The passage line, its locator and `quote-check` stay as ADR 0024 decides, and a source of which only the abstract was read still supports only what the abstract says. This supersedes ADR 0024 in the part that makes `lookup.py fetch` the only way the text is obtained. It also supersedes ADR 0017 in the part that makes `lookup.py` the only way the citation compliance agent reads a source's text.
 
 ## Alternatives rejected
 

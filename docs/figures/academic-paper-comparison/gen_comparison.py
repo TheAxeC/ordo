@@ -63,8 +63,9 @@ STAGE_GAP = 16
 
 APNOTE = (
     "Scripts and the session's own steps are left out. Not drawn because they are the same in "
-    "every mode of paper: at every agent start, a model other than the configured one stops "
-    "the run (D47); at every patch, a structural patch, a patch that does not apply or a "
+    "every mode of paper: at every agent start, a model of another family than the configured "
+    "one stops the run (D47), and a newer model of the same family goes on and is named in the "
+    "final message; at every patch, a structural patch, a patch that does not apply or a "
     "failed script stops it (a ruling of plan 5)."
 )
 
@@ -451,7 +452,7 @@ def paper_full_detailed() -> gf.Graph:
         ),
         N(
             "DM",
-            "Draft writer once more: the model identifier, when the list gave none [N]",
+            "Draft writer once more: the model identifier, when the list gave none [N] or the served one differs",
             "ruled",
         ),
         N(
@@ -1265,9 +1266,9 @@ def paper_disclosure_detailed() -> gf.Graph:
         N("VL", "the venue listed?", "choice"),
         N(
             "MI",
-            "Session: the identifier the runner's model list gives for opus, such as "
-            "claude-opus-5-5, or the model the first agent was served when the list gives "
-            "none [N, 5.C (6)]",
+            "Session: the opus identifier of the model list, such as claude-opus-5-5, "
+            "else the first agent's served model [N, 5.C (6)]; the draft writer's served "
+            "identifier when it differs",
             "ruled",
         ),
         N(
@@ -1278,7 +1279,7 @@ def paper_disclosure_detailed() -> gf.Graph:
         ),
         N(
             "DW2",
-            "Draft writer once more: the model identifier, when the list gave none [N]",
+            "Draft writer once more: the model identifier, when the list gave none [N] or the served one differs",
             "ruled",
         ),
         N("X", "Statements and placement"),

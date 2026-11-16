@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-r"""Make every reference lookup of the paper skill, on the Python standard library alone.
+r"""Make every reference lookup of the paper skill, and the text of a page or PDF it saved, on the Python standard library alone.
 
 Usage:
 
@@ -14,6 +14,7 @@ Usage:
     lookup.py check-urls <main.tex> <file.bib>
     lookup.py fetch <DOI | arXiv ID | Semantic Scholar ID | OpenAlex ID> <folder> <key> [--page <url>]
     lookup.py quote-check <citation report> <file.bib> <folder>
+    lookup.py text [--abstract] <file> <folder> <key>
 
 Every command prints plain text for a person, one line per record or result, and never JSON. bibtex prints the entry alone on standard output and every other line on standard error, so that its standard output can be copied into a .bib as it is.
 
@@ -24,6 +25,7 @@ Identifiers. A DOI may be written as a bare DOI (10.xxxx/...), as https://doi.or
 Commands:
 
 - resolve queries Crossref, OpenAlex, Semantic Scholar and arXiv and prints one line per index. For a title, each index's search gives candidates; a candidate matches at a title ratio of 0.70 or more, and of the matching candidates those whose year equals --year are preferred when there are any, and the one with the highest ratio is taken. For a DOI or an arXiv ID, the first record found, in the order Crossref, OpenAlex, Semantic Scholar, arXiv, is the reference, each other record's title is compared with it, and a record below 0.70 is printed with DOI_MISMATCH. For a title, arXiv is searched for the title as a phrase (ti:"<title>"). For a DOI or an arXiv ID, arXiv is queried only when the input holds an arXiv ID. The year is read only for a title. A line reads "<index>: ratio <r>: <title> | <authors> | <year> | <venue> | doi ... | arXiv ... | OpenAlex ... | Semantic Scholar ... | open access ...", or "<index>: not found", or "<index>: left out, <reason>". For a DOI or an arXiv ID, the Crossref record of the work lists in its updated-by field the notices that update the work (Crossref's update types are listed in its schema). Each notice of the type retraction, partial_retraction or expression_of_concern is printed on a line of its own after the Crossref line: "Crossref notice: <type> | <date> | doi <the notice's DOI> | source <publisher or retraction-watch>". The date is the notice's date-time cut to the day, else its date-parts joined with a hyphen. A notice of any other type, such as a correction, is not printed, and a work whose record lists no such notice gets no line. A title prints no notice, since the search record does not carry the field. The notices come from the record resolve already fetches and cost no further request.
+- resolve prints "pmcid: <PMCID>" on a line of its own after the OpenAlex line, for a DOI, an arXiv ID or a title, when the OpenAlex record names a PMCID in its ids field (read as the PMC followed by digits that ends ids.pmcid). A record that names none gets no such line. The PMCID comes from the record resolve already fetches and costs no further request.
 - resolve --entry <file.bib> <key> reads the entry <key> of the .bib, resolves it, and prints the lines resolve prints for the input it resolves by, then one last line that says whether a record confirms the entry. The key is matched exactly, and the first entry of a key that two entries share is read. Field names are read in any case. The input is the entry's doi, else its arXiv ID (its eprint field when its archivePrefix field is arXiv, else the ID of an arxiv.org/abs/ URL in its url field), else its title, resolved with --year set to the entry's year. A doi field that is not a DOI counts as absent, and a doi of the form 10.48550/arXiv.<id> is read as the DOI and as the arXiv ID. The last line is "<key>: CONFIRMED against <index>, ratio <r>, year <year>" for the first record, in the order Crossref, OpenAlex, Semantic Scholar, arXiv, whose title ratio against the entry's title is 0.70 or more and whose year equals the entry's year. For a title, the record of an index is its chosen candidate. When no record agrees it is "<key>: NOT_CONFIRMED against <index>, ratio <r>, year <year>, entry year <year>" with the values of the first record printed, a record with no year written "year none", and "<key>: NOT_CONFIRMED, no record" when no index printed a record. --entry takes no --year, and no other argument.
 - resolve --entry also reads the venue's page of an entry that no record confirms, when the entry's type is not @misc, it has no DOI (a doi field that is a DOI, an arXiv DOI included), it is resolved by its arXiv ID, and its url field is an address of a page that can be read (the paragraph on a venue's page above). The entry is then confirmed when the page's citation_title has a title ratio of 0.70 or more against the entry's title, the page's year equals the entry's year, and a record of the arXiv ID has a title ratio of 0.70 or more against the entry's title. The last line is then "<key>: CONFIRMED against <index>, ratio <r>, year <record year>; year <entry year> found on <url>", for the first such record in the order Crossref, OpenAlex, Semantic Scholar, arXiv. Otherwise the line NOT_CONFIRMED stays and ends, for the first that applies in this order, with "; <url>: <reason>" for a page that gives no answer or a status other than 2xx, "; <url>: no citation_title tag", "; <url>: no year tag", "; <url>: citation_title ratio <r>" or "; <url>: year <y> on the page"; a page that passes these and no record of the arXiv ID whose title agrees leaves the line as it is. A url on doi.org or arXiv, or a page that redirects there, is not read and leaves the line as it is. Every other entry is resolved and confirmed with no page read.
 - search prints the records of the four indexes' searches, --limit per index (20 by default, at most 100), merged when they share a DOI (compared lowercased), an arXiv ID (version dropped) or a Semantic Scholar ID. A merged record keeps the fields of the record with more fields filled, and the other record fills its empty fields. The query goes to Crossref and Semantic Scholar as given, to OpenAlex with each ? and * replaced by a space (OpenAlex reads them as wildcards and answers HTTP 400), and to arXiv in arXiv's own syntax: each word as all:<word>, a quoted phrase as all:"<phrase>", AND and OR kept, NOT written ANDNOT, parentheses kept, and two terms with no operator between them joined by AND. An operator word is read only in capitals. An operator that follows an operator replaces it, and an operator with no term before it or after it is dropped. When the parentheses do not balance, all of them are dropped, and a pair with no term inside is dropped. Every other character is dropped. Crossref ranks by relevance and reads no operator, and arXiv has no search by a sentence: a sentence is read as its words joined by AND, and arXiv can answer "not found" for it. After the records, an index that answered with no record is printed "<index>: not found" and an index that is left out "<index>: left out, <reason>".
@@ -38,6 +40,7 @@ Commands:
 - check-urls also checks the title of a key whose entry has a doi. The doi is stripped to the bare DOI and percent-encoded as resolve does, and the entry's title is compared, by the title ratio of resolve, with the title of the first record the doi resolves to. The indexes are asked in the order Crossref, OpenAlex, Semantic Scholar, and the next one is asked when an index answers "not found" or is left out. The line of the key then ends with ", ratio <r> against <index>", the ratio written as resolve writes it, followed by ", DOI_MISMATCH" when the ratio is below 0.70. It ends with ", doi not found in Crossref, OpenAlex or Semantic Scholar" when each of the three answered "not found", and with ", title not checked: <index> left out, <reason>" when no index gave a record and one or more was left out, one clause for each index left out, the clauses separated by "; ". A key whose URL gave no answer gets the same ending after its "failed, <reason>". A key with a doi costs up to three requests more than its status request.
 - fetch writes the full text of a source into <folder>, named from <key> with each / and : written _ (<stem>). It tries, in order, https://arxiv.org/html/<id> and https://arxiv.org/pdf/<id> when the input holds an arXiv ID, the open_access.oa_url of OpenAlex and the openAccessPdf.url of Semantic Scholar. HTML counts only from arxiv.org/html. From every other source only a body starting %PDF- counts. With --page <url>, fetch first reads the venue's page at <url> and tries the PDF its citation_pdf_url names, as an address joined to the page's address after redirects, printing "page <url>: citation_pdf_url <address>", or "page <url>: <reason>" for a page that cannot be read or "page <url>: no citation_pdf_url tag"; when that gives no full text it goes on as without --page. The first that counts is written as <stem>.html or <stem>.pdf, and its text as <stem>.txt, by pdftotext (called with its arguments as a list) for a PDF, with the tags removed by html.parser and the text of script and style elements left out for HTML. A PDF whose text pdftotext cannot make or makes empty counts as no text and is removed, and the next URL is tried. When no full text is found, the abstract the indexes return (the arXiv summary, else the Semantic Scholar abstract, else the OpenAlex abstract_inverted_index put back in word order) is written as <stem>.abstract.txt. Given a Semantic Scholar ID (40 hexadecimal digits) or an OpenAlex ID (W...), fetch asks only the index the ID belongs to for the work's record. When the record gives a DOI, or else an arXiv ID, fetch goes on as for that input. Otherwise it tries the record's open-access URL, and when no full text is found it writes that index's abstract as <stem>.abstract.txt. fetch prints each lookup and each URL tried with its status, and exits 1 when no full text was found.
 - quote-check reads the citation report, the .bib and the texts in <folder>. For each passage line "> [@<key>, <locator>]: "<passage>"" of the report it prints found or not found ("not found, no <file>" when the text file is missing); the passage is the text between the first " after "]: " and the last " of the line. It looks the passage up in <folder>/<stem>.txt, or in <folder>/<stem>.abstract.txt when the locator is abstract. Both texts are normalised first: every hyphen at a line end is removed with its line break, every hyphen between two letters is removed, then each run of whitespace becomes one space. A passage is found when the normalised passage occurs in the normalised text, and an empty passage is never found. A line that starts "> [@" and does not have the form of a passage line is printed as malformed. It also prints each cited key with no passage line ("no passage"), each cited key the .bib lacks ("no entry") and each cited key with neither <stem>.txt nor <stem>.abstract.txt in the folder ("no text"). A report that cites no key prints "the citation report cites no key".
+- text writes the text of a saved HTML, XML or PDF file <file> into <folder> as <stem>.txt, <stem> made from <key> as fetch makes it, so that quote-check reads a passage in it. With --abstract it writes <stem>.abstract.txt in place of <stem>.txt, for a page that holds only the source's abstract, so that quote-check reads a passage with the locator abstract in it; every other rule below is the same, with <stem>.abstract.txt for <stem>.txt. A body whose first character other than a UTF-8 byte order mark and blank text is < is HTML or XML: it is decoded as UTF-8 after a byte order mark, else by the charset that an XML declaration's encoding or the first meta tag naming a charset declares, else as UTF-8, a byte that does not decode being replaced, and its text is made as fetch makes the text of an HTML copy. A body starting %PDF- is a PDF: pdftotext is run on the file's absolute path, called with its arguments as a list and the timeout fetch uses. The text is written to a temporary file of <folder> and linked to <stem>.txt only when it holds text other than whitespace, so that no <stem>.txt is left otherwise and an existing one is never replaced; the written file is read back and compared with the text. It prints "<stem>.txt: <n> characters from <file>", <n> being the characters of the text, and exits 0. A text that is empty, or a PDF for which pdftotext exits non-zero or times out, prints "<file>: no text" and exits 1, writing nothing. text makes no request and reads and writes no cache.
 
 A citation in a citation report is [@<key>, <locator>] or [@<a>; @<b>, <locator>]. A line that is a passage line contributes the key of its leading citation only; the passage is not searched for citations.
 
@@ -97,11 +100,12 @@ Reads:
 - For bibtex --page, resolve --entry and fetch --page: the venue's page at the url given or the entry's url, and for fetch --page the PDF its citation_pdf_url names. A venue's page is not paced and not stored.
 - For resolve --entry: the .bib. For cite-keys and check-urls: the main .tex, each file it inputs or includes, and the .bib. For quote-check: the citation report, the .bib, <folder>/<stem>.txt and <folder>/<stem>.abstract.txt.
 - For fetch: the program pdftotext, which it runs on the PDF it wrote.
+- For text: <file>, and the program pdftotext, which it runs on <file> when it is a PDF.
 - For every request to a paced host: its lock file (ordo-lookup-crossref, ordo-lookup-openalex, ordo-lookup-semanticscholar or ordo-lookup-arxiv) in the temporary folder.
 - For every request to an API host: the host's skip file ordo-lookup-skip-<name>, with -key appended when the host's credential is set, in the temporary folder.
 - For resolve, search, refs and cited-by: the files of the cache folder.
 
-Writes: fetch writes <stem>.html, <stem>.pdf, <stem>.txt and <stem>.abstract.txt inside <folder>. Every request to a paced host writes the time it ended to the host's lock file in the temporary folder, when it could open the file. It creates the file with mode 600 when it is absent. A 429 that names more than 60 seconds, from an API host, writes that host's skip file in the temporary folder, with mode 600. resolve, search, refs and cited-by write the cache entries with mode 600 in the cache folder, which they make with mode 700, making any missing parent folder with the default mode. At their first store they remove the old entries and temporary files of that folder. Nothing else is written.
+Writes: fetch writes <stem>.html, <stem>.pdf, <stem>.txt and <stem>.abstract.txt inside <folder>. text writes <stem>.txt, or with --abstract <stem>.abstract.txt, inside <folder>, with mode 600, through a temporary file of that folder that it removes. Every request to a paced host writes the time it ended to the host's lock file in the temporary folder, when it could open the file. It creates the file with mode 600 when it is absent. A 429 that names more than 60 seconds, from an API host, writes that host's skip file in the temporary folder, with mode 600. resolve, search, refs and cited-by write the cache entries with mode 600 in the cache folder, which they make with mode 700, making any missing parent folder with the default mode. At their first store they remove the old entries and temporary files of that folder. Nothing else is written.
 
 Errors, each printed as one line on standard error:
 
@@ -113,11 +117,15 @@ Errors, each printed as one line on standard error:
 - "error: <value> is not a DOI or an arXiv ID", for bibtex.
 - "error: --page needs an arXiv ID", for bibtex --page given a DOI that is not of the form 10.48550/arXiv.<id>.
 - "error: <value> is not a DOI, an arXiv ID, a Semantic Scholar ID or an OpenAlex ID", for refs, cited-by and fetch.
-- "error: the key is empty", for fetch.
-- "error: <folder>: not a folder", for fetch and quote-check.
-- "error: <path>: <reason>", for a .tex, an \input or \include file, a .bib (the one of resolve --entry included) or a citation report that cannot be read (the reason is the operating system's, or "not valid UTF-8"), and for a file fetch cannot write. The path of an \input or \include file is the main file's folder joined with the name, with .tex added when the name has no extension.
+- "error: the key is empty", for fetch and text.
+- "error: <folder>: not a folder", for fetch, quote-check and text.
+- "error: <folder>/<stem>.txt exists", for text, when <stem>.txt exists as a file or as a link, a dangling link included; with --abstract the same for <stem>.abstract.txt.
+- "error: <file>: not an HTML, XML or PDF file", for text given a body that is neither, an empty file included.
+- "error: pdftotext not found", for text given a PDF when pdftotext is not installed.
+- "error: <folder>/<stem>.txt: the text read back differs from the text made", for text, which then removes the file.
+- "error: <path>: <reason>", for a .tex, an \input or \include file, a .bib (the one of resolve --entry included), a citation report or the file of text that cannot be read (the reason is the operating system's, or "not valid UTF-8"), and for a file fetch or text cannot write. The path of an \input or \include file is the main file's folder joined with the name, with .tex added when the name has no extension.
 
-Exit status: 0 when the command ran and found nothing to fail; 1 when resolve --entry printed NOT_CONFIRMED, when bibtex got no BibTeX entry (bibtex --page refusing the page included), when cite-keys printed a line, when check-urls or quote-check found a failure (a URL not ending in a 2xx status or giving no answer, a key printed as having no identifier, no entry, no passage or no text, a title flagged DOI_MISMATCH, a doi not found, a title not checked, a passage not found, a malformed passage line), or when fetch found no full text; 2 for a call it cannot read (every error line above).
+Exit status: 0 when the command ran and found nothing to fail; 1 when resolve --entry printed NOT_CONFIRMED, when bibtex got no BibTeX entry (bibtex --page refusing the page included), when cite-keys printed a line, when check-urls or quote-check found a failure (a URL not ending in a 2xx status or giving no answer, a key printed as having no identifier, no entry, no passage or no text, a title flagged DOI_MISMATCH, a doi not found, a title not checked, a passage not found, a malformed passage line), when fetch found no full text, or when text printed "no text"; 2 for a call it cannot read (every error line above).
 """
 
 import datetime
@@ -155,6 +163,7 @@ CACHE_AGE = 30 * 86400
 TEMPORARY_AGE = 86400
 TEMPORARY_PREFIX = "tmp."
 TIMEOUT = 30
+PDFTOTEXT_TIMEOUT = 120
 MAX_REDIRECTS = 10
 TITLE_CANDIDATES = 5
 DEFAULT_LIMIT = 20
@@ -176,7 +185,7 @@ USER_AGENT = "lookup.py (the paper skill of Ordo)"
 ATOM = "{http://www.w3.org/2005/Atom}"
 ARXIV_ATOM = "{http://arxiv.org/schemas/atom}"
 S2_FIELDS = "paperId,title,authors,year,venue,externalIds,openAccessPdf"
-OPENALEX_FIELDS = "id,title,authorships,publication_year,primary_location,doi,open_access"
+OPENALEX_FIELDS = "id,title,authorships,publication_year,primary_location,doi,open_access,ids"
 CROSSREF_FIELDS = "DOI,title,author,issued,container-title"
 # The fields bibtex asks of an arXiv ID's record to find its published version, in requests of their own, so that the requests of the other commands and their cached replies stay as they are.
 S2_PUBLISHED_FIELDS = "paperId,title,externalIds,publicationVenue"
@@ -217,7 +226,12 @@ TEX_CALL = re.compile(
     r"\\(?:input|include)(?![A-Za-z@])\s*\{(?P<name>[^}]*)\}"
     r"|\\(?!nocite(?![A-Za-z]))[A-Za-z]*[Cc]ite[A-Za-z]*\*?(?:\s*\[[^\]]*\])*\s*\{(?P<keys>[^}]*)\}"
 )
-COMMANDS = ("resolve", "search", "refs", "cited-by", "bibtex", "cite-keys", "check-urls", "fetch", "quote-check")
+COMMANDS = ("resolve", "search", "refs", "cited-by", "bibtex", "cite-keys", "check-urls", "fetch", "quote-check", "text")
+PMCID = re.compile(r"(PMC\d+)/?$")
+UTF8_BOM = b"\xef\xbb\xbf"
+# The charset a saved page declares: an XML declaration's encoding, else the first meta tag that names a charset.
+XML_ENCODING = re.compile(rb"<\?xml[^>]*?encoding\s*=\s*[\"']([A-Za-z0-9._-]+)", re.IGNORECASE)
+META_CHARSET = re.compile(rb"<meta[^>]*?charset\s*=\s*[\"']?([A-Za-z0-9._-]+)", re.IGNORECASE)
 
 
 class UsageError(Exception):
@@ -246,6 +260,7 @@ class Record:
     abstract: str = ""
     indexes: list = field(default_factory=list)
     notices: list = field(default_factory=list)
+    pmcid: str = ""
 
 
 @dataclass
@@ -425,6 +440,7 @@ def parse_crossref_search(text):
 def parse_openalex_work_object(work):
     source = (work.get("primary_location") or {}).get("source") or {}
     oa_url = (work.get("open_access") or {}).get("oa_url")
+    pmcid = PMCID.search((work.get("ids") or {}).get("pmcid") or "")
     return normalise_record(
         Record(
             title=collapse_spaces(work.get("title") or work.get("display_name")),
@@ -436,6 +452,7 @@ def parse_openalex_work_object(work):
             oa_urls=[oa_url] if oa_url else [],
             abstract=abstract_from_inverted_index(work.get("abstract_inverted_index")),
             indexes=["OpenAlex"],
+            pmcid=pmcid.group(1) if pmcid else "",
         )
     )
 
@@ -620,6 +637,11 @@ def format_record(record):
     return " | ".join(part for part in parts if part)
 
 
+def pmcid_lines(record):
+    """The line that names the PMCID of a record of resolve, when the record holds one."""
+    return [f"pmcid: {record.pmcid}"] if record.pmcid else []
+
+
 def title_lines(outcomes, chosen):
     """The lines of resolve for a title, given the Outcome of each index and its chosen candidate, a (ratio, Record) pair or None."""
     lines = []
@@ -630,6 +652,7 @@ def title_lines(outcomes, chosen):
             lines.append(f"{name}: not found")
         else:
             lines.append(f"{name}: ratio {pair[0]:.2f}: {format_record(pair[1])}")
+            lines.extend(pmcid_lines(pair[1]))
     return lines
 
 
@@ -647,6 +670,7 @@ def identifier_lines(outcomes):
             flag = " DOI_MISMATCH," if ratio < MATCH_THRESHOLD else ""
             lines.append(f"{name}:{flag} ratio {ratio:.2f}: {format_record(record)}")
             lines.extend(record.notices)
+            lines.extend(pmcid_lines(record))
     return lines
 
 
@@ -1888,7 +1912,7 @@ class FetchRun:
         """The text pdftotext makes of the PDF, written to <stem>.txt; the reason when there is none."""
         text_path = self.base + ".txt"
         try:
-            done = subprocess.run(["pdftotext", pdf_path, text_path], capture_output=True, timeout=120, check=False)
+            done = subprocess.run(["pdftotext", pdf_path, text_path], capture_output=True, timeout=PDFTOTEXT_TIMEOUT, check=False)
         except FileNotFoundError:
             return "pdftotext not found"
         except subprocess.TimeoutExpired:
@@ -2024,6 +2048,106 @@ def fetch_identifier(run, client, identifier):
     return run.abstract(abstracts + [s2, openalex])
 
 
+def saved_kind(body):
+    """"markup" for an HTML or XML body (its first character other than a byte order mark and blank text is <), "pdf" for a body starting %PDF-, and "" for any other."""
+    if body.startswith(UTF8_BOM):
+        body = body[len(UTF8_BOM):]
+    if body.lstrip().startswith(b"<"):
+        return "markup"
+    return "pdf" if is_pdf(body) else ""
+
+
+def page_text(body):
+    """A saved HTML or XML body as text: UTF-8 after a byte order mark, else the charset the body declares, else UTF-8, with replacement."""
+    if body.startswith(UTF8_BOM):
+        return body[len(UTF8_BOM):].decode("utf-8", errors="replace")
+    declared = XML_ENCODING.search(body) or META_CHARSET.search(body)
+    try:
+        return body.decode(declared.group(1).decode("ascii") if declared else "utf-8", errors="replace")
+    except LookupError:
+        return body.decode("utf-8", errors="replace")
+
+
+def pdf_to_text(path, output):
+    """True when pdftotext wrote the text of the PDF at path to output, False when it exited non-zero or timed out. UsageError when pdftotext is not installed.
+    The PDF goes to pdftotext as its absolute path, so a name that starts with - is never read as an option."""
+    try:
+        done = subprocess.run(["pdftotext", os.path.abspath(path), output], capture_output=True, timeout=PDFTOTEXT_TIMEOUT, check=False)
+    except FileNotFoundError:
+        raise UsageError("pdftotext not found") from None
+    except subprocess.TimeoutExpired:
+        return False
+    return done.returncode == 0
+
+
+def run_text(client, arguments, out):
+    """Write the text of a saved HTML, XML or PDF file as <folder>/<stem>.txt, or with --abstract as <folder>/<stem>.abstract.txt. It makes no request, so the client goes unused."""
+    # --abstract takes no value, so it is taken out before the options that take one are parsed.
+    end = arguments.index("--") if "--" in arguments else len(arguments)
+    abstract = "--abstract" in arguments[:end]
+    arguments = [argument for argument in arguments[:end] if argument != "--abstract"] + arguments[end:]
+    positional, _ = parse_options(arguments, (), "text")
+    expect_arguments(positional, 3, "text", "[--abstract] <file> <folder> <key>")
+    path, folder, key = positional
+    if not key.strip():
+        raise UsageError("the key is empty")
+    if not os.path.isdir(folder):
+        raise UsageError(f"{folder}: not a folder")
+    target = os.path.join(folder, file_stem(key) + (".abstract.txt" if abstract else ".txt"))
+    # A link counts as existing, a dangling one included, so that no text is written through it.
+    if os.path.lexists(target):
+        raise UsageError(f"{target} exists")
+    try:
+        with open(path, "rb") as handle:
+            body = handle.read()
+    except OSError as error:
+        raise UsageError(f"{path}: {error.strerror or error}") from None
+    kind = saved_kind(body)
+    if not kind:
+        raise UsageError(f"{path}: not an HTML, XML or PDF file")
+    try:
+        descriptor, temporary = tempfile.mkstemp(prefix=TEMPORARY_PREFIX, suffix=".txt", dir=os.path.abspath(folder))
+        os.close(descriptor)
+    except OSError as error:
+        raise UsageError(f"{folder}: {error.strerror or error}") from None
+    try:
+        if kind == "pdf":
+            text = ""
+            if pdf_to_text(path, temporary):
+                with open(temporary, encoding="utf-8", errors="replace") as handle:
+                    text = handle.read()
+        else:
+            text = html_to_text(page_text(body))
+            try:
+                with open(temporary, "w", encoding="utf-8") as handle:
+                    handle.write(text)
+            except OSError as error:
+                raise UsageError(f"{target}: {error.strerror or error}") from None
+        if not text.strip():
+            out.append(f"{path}: no text")
+            return 1
+        # A link fails when the target exists, so a text that appeared since the check above is never replaced.
+        try:
+            os.link(temporary, target)
+        except FileExistsError:
+            raise UsageError(f"{target} exists") from None
+        except OSError as error:
+            raise UsageError(f"{target}: {error.strerror or error}") from None
+    finally:
+        try:
+            os.remove(temporary)
+        except OSError:
+            pass
+    # The text is read back, so a text on disk that differs from the one made is refused and removed.
+    with open(target, encoding="utf-8", errors="replace") as handle:
+        written = handle.read()
+    if written != text:
+        os.remove(target)
+        raise UsageError(f"{target}: the text read back differs from the text made")
+    out.append(f"{os.path.basename(target)}: {len(text)} characters from {path}")
+    return 0
+
+
 HANDLERS = {
     "resolve": run_resolve,
     "search": run_search,
@@ -2031,6 +2155,7 @@ HANDLERS = {
     "check-urls": run_check_urls,
     "fetch": run_fetch,
     "quote-check": run_quote_check,
+    "text": run_text,
 }
 
 

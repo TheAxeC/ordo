@@ -9,6 +9,7 @@ The draft writer reads this page to write the AI disclosure statement of a paper
 - The venue and, for a venue this page does not list, the policy text the user pasted.
 - The Policy anchor row of `config.md`, in disclosure mode: one of `prisma-trAIce`, `icmje`, `nature`, `ieee`, or "none".
 - The model identifier that the session gives in the prompt, in full mode and in disclosure mode alike. It is the identifier that the runner's model list gives for opus, the model the skill's roles run on, at the run's start, such as `claude-opus-5-5`. When the list gives none, it is the model the runner served to the first agent of the run. The session first checks that this model is an opus model.
+- When the runner served the draft writer that wrote the statement an identifier other than the listed one, the identifier is that served one, which the session gives in a start with the id `disclosure`.
 
 ## Categories of AI use
 
@@ -45,7 +46,7 @@ The draft writer reads this page to write the AI disclosure statement of a paper
 - The categories are matched against the venue's requirements. A category the venue requires disclosed but the answer marks uncertain is a mismatch, and the report names it.
 - The statement is one paragraph in the venue's preferred voice (person and tense) with the venue's required phrasing elements, such as "the authors take full responsibility for the content".
 - The paragraph names the tool and the version, never "AI tools" alone, and names the categories marked used.
-- The model identifier is the one the prompt gives, written in full, never one written from memory or from the agent's runtime. Without one the statement is written without it, and the list of gaps after the statement holds the line `[GAP: model identifier]`. The report lists it. When the draft writer is the first agent of the run and the list gave none, the session starts it again with the id `disclosure` and the served model. That start writes the identifier into the statement and removes the line. The line stays only when the runner gives no served model.
+- The model identifier is the one the prompt gives, written in full, never one written from memory or from the agent's runtime. Without one the statement is written without it, and the list of gaps after the statement holds the line `[GAP: model identifier]`. The report lists it. When the draft writer is the first agent of the run and the list gave none, the session starts it again with the id `disclosure` and the served model. That start writes the identifier into the statement and removes the line. The line stays only when the runner gives no served model. When the draft writer was served an identifier other than the one its prompt gave, the session starts it again with the id `disclosure` and the served identifier, and that start writes the served identifier into the statement in place of the listed one.
 - It describes the human oversight: who reviewed what, and at which stages.
 - It states the limits of the tool that matter for the content, such as a possible hallucination.
 - Where the policy asks for the statement in more than one place, such as the Methods and the cover letter, each place gets its own text.

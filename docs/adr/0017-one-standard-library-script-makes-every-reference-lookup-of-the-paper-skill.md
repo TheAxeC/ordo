@@ -1,6 +1,6 @@
 # 0017. One standard-library script makes every reference lookup of the paper skill
 
-Status: proposed; superseded by 0032 in the part that makes `search`, `refs`, `cited-by` and `fetch` the only way the literature strategist finds and reads sources, and by 0034 in the part that makes `lookup.py` the only way the draft writer, the formatter and the citation compliance agent find a venue page
+Status: proposed; superseded by 0032 in the part that makes `search`, `refs`, `cited-by` and `fetch` the only way the literature strategist finds and reads sources, and by 0034 in the part that makes `lookup.py` the only way the draft writer, the formatter and the citation compliance agent find a venue page, and by 0033 in the part that makes `lookup.py` the only way the citation compliance agent reads a source's text
 
 ## Context
 

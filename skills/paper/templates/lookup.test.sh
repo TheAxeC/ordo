@@ -1,5 +1,5 @@
 #!/bin/sh
-# Offline proof of the parts of lookup.py that compute facts without the network: title matching, the choice among candidates, the DOI mismatch flag, record merging, passage lines, passage normalisation, abstract reassembly, the arXiv query syntax, the OpenAlex query text, the arXiv spacing across processes, the arXiv turn of every request to an arXiv host, the refusal of a URL other than http and https, an index whose body does not parse, the not found lines, the file name made from a key, the DOI in a URL, the PDF and arXiv HTML tests, the credentials each host gets, the URL check-urls requests, the BibTeX of an arXiv record, the BibTeX body test, the text of an HTML page, fetch given an OpenAlex ID or a Semantic Scholar ID (the record asked of that ID's index alone, a record with a DOI fetched as that DOI, and a record with neither its open-access URL tried and that index's abstract written), the keys a .tex cites with the commands of natbib and biblatex and the files it inputs, the output of cite-keys, the title check of check-urls against the record a doi resolves to, the error line for an input file that does not exist, the .bib check-urls names and the .bib quote-check reads, both the one named on the command line, the refusal of the one-argument form of check-urls and of the two-argument form of quote-check, the retraction and expression-of-concern notice lines of resolve, and resolve --entry: the entry read from a .bib (a doi or DOI field, a space before the @, the first of two entries with one key), the input it resolves by (its doi, else its arXiv ID, else its title with its year), the verdict line that confirms the entry by the first record whose title and year agree and prints NOT_CONFIRMED for a year or a title that differs, a record with no year and an entry no index holds, its exit status, the one-line error and exit status 2 for a call or an entry it cannot read, and resolve without --entry printing what it printed. It proves the published version of an arXiv ID: bibtex printing the entry alone on standard output and every other line on standard error, the entry doi.org gives for a published DOI that Semantic Scholar or OpenAlex names and whose record's title agrees, the @misc entry with its reason for a DOI whose title is below 0.70, a doi.org that gives no entry and every index left out, the line that names a conference or journal of Semantic Scholar with no DOI and none for an arXiv venue or another type, bibtex --page building the @inproceedings entry from the citation tags of a PMLR or NeurIPS page and refusing a page with no title tag, no year tag, a title below 0.70, a 404, a redirect to arXiv or doi.org or a file URL, resolve --entry confirming an entry on its venue page and naming the reason it does not, with no page read for an @misc entry, an entry with a doi, an entry a record confirms or a url on arXiv or doi.org, fetch --page reading the PDF a page names before arxiv.org, and the URLs resolve, search, refs, cited-by and fetch request, which stay the keys of the cache. It also proves the pacing of each index across processes (the gap of each host with and without its credential, a redirect that takes the turn of the host it goes to, doi.org that takes none, a lock file that holds inf or nan), a 429 waited out by the Retry-After it names in each form it can take, the 429 that names more than 60 seconds left out at once with its reason and the skip file of its host (named by host and credential, mode 600, capped at 86400 seconds, ignored when it holds no time, read by a request that no cached reply answers, and never written for a host that is not an API host), the reasons bibtex prints for a 429, the host a reason names when the 429 is met on a redirect hop, and the reply cache of resolve, search, refs and cited-by (a reply sent once for the same URL in one process and in another, the replies that are not stored, the 30 days, the pruning, no credential in any file, a cache folder that cannot be made or written, an entry that cannot be used, the cache folder under XDG_CACHE_HOME or under HOME, the modes of its files). Every case runs on scratch temporary, cache and home folders set before lookup is imported, with time.sleep and time.time stubbed together as one clock where a wait is checked. Response bodies are recorded below in the shapes the indexes answer. Prints a last line starting PASS: and exits 0, or prints a line starting FAIL: and exits 1.
+# Offline proof of the parts of lookup.py that compute facts without the network: title matching, the choice among candidates, the DOI mismatch flag, record merging, passage lines, passage normalisation, abstract reassembly, the arXiv query syntax, the OpenAlex query text, the arXiv spacing across processes, the arXiv turn of every request to an arXiv host, the refusal of a URL other than http and https, an index whose body does not parse, the not found lines, the file name made from a key, the DOI in a URL, the PDF and arXiv HTML tests, the credentials each host gets, the URL check-urls requests, the BibTeX of an arXiv record, the BibTeX body test, the text of an HTML page, fetch given an OpenAlex ID or a Semantic Scholar ID (the record asked of that ID's index alone, a record with a DOI fetched as that DOI, and a record with neither its open-access URL tried and that index's abstract written), the keys a .tex cites with the commands of natbib and biblatex and the files it inputs, the output of cite-keys, the title check of check-urls against the record a doi resolves to, the error line for an input file that does not exist, the .bib check-urls names and the .bib quote-check reads, both the one named on the command line, the refusal of the one-argument form of check-urls and of the two-argument form of quote-check, the retraction and expression-of-concern notice lines of resolve, and resolve --entry: the entry read from a .bib (a doi or DOI field, a space before the @, the first of two entries with one key), the input it resolves by (its doi, else its arXiv ID, else its title with its year), the verdict line that confirms the entry by the first record whose title and year agree and prints NOT_CONFIRMED for a year or a title that differs, a record with no year and an entry no index holds, its exit status, the one-line error and exit status 2 for a call or an entry it cannot read, and resolve without --entry printing what it printed. It proves the published version of an arXiv ID: bibtex printing the entry alone on standard output and every other line on standard error, the entry doi.org gives for a published DOI that Semantic Scholar or OpenAlex names and whose record's title agrees, the @misc entry with its reason for a DOI whose title is below 0.70, a doi.org that gives no entry and every index left out, the line that names a conference or journal of Semantic Scholar with no DOI and none for an arXiv venue or another type, bibtex --page building the @inproceedings entry from the citation tags of a PMLR or NeurIPS page and refusing a page with no title tag, no year tag, a title below 0.70, a 404, a redirect to arXiv or doi.org or a file URL, resolve --entry confirming an entry on its venue page and naming the reason it does not, with no page read for an @misc entry, an entry with a doi, an entry a record confirms or a url on arXiv or doi.org, fetch --page reading the PDF a page names before arxiv.org, the URLs resolve, search, refs, cited-by and fetch request, which stay the keys of the cache, the line of resolve that names the PMCID an OpenAlex record holds, and text: the text of a saved PMC page, Europe PMC body and PDF written as <stem>.txt and found by quote-check, the text of a page that holds only the abstract written by text --abstract as <stem>.abstract.txt and found by quote-check with the locator abstract, a declared charset, a byte order mark and an XML declaration before the root, pdftotext given one absolute path through a stand-in written on PATH, its failure and its absence, and the refusal of an existing or linked <stem>.txt or <stem>.abstract.txt, of a body that is neither HTML or XML nor a PDF, of a missing file, an empty key and a folder that is not a folder. It also proves the pacing of each index across processes (the gap of each host with and without its credential, a redirect that takes the turn of the host it goes to, doi.org that takes none, a lock file that holds inf or nan), a 429 waited out by the Retry-After it names in each form it can take, the 429 that names more than 60 seconds left out at once with its reason and the skip file of its host (named by host and credential, mode 600, capped at 86400 seconds, ignored when it holds no time, read by a request that no cached reply answers, and never written for a host that is not an API host), the reasons bibtex prints for a 429, the host a reason names when the 429 is met on a redirect hop, and the reply cache of resolve, search, refs and cited-by (a reply sent once for the same URL in one process and in another, the replies that are not stored, the 30 days, the pruning, no credential in any file, a cache folder that cannot be made or written, an entry that cannot be used, the cache folder under XDG_CACHE_HOME or under HOME, the modes of its files). Every case runs on scratch temporary, cache and home folders set before lookup is imported, with time.sleep and time.time stubbed together as one clock where a wait is checked. Response bodies are recorded below in the shapes the indexes answer. Prints a last line starting PASS: and exits 0, or prints a line starting FAIL: and exits 1.
 set -u
 
 here=$(cd "$(dirname "$0")" && pwd)
@@ -1640,7 +1640,7 @@ with attempt("W1"):
 
 # The URLs resolve, search, refs, cited-by and fetch request for an arXiv ID and a DOI, which are the keys of the reply cache. Every host answers 404.
 S2_SELECT = "paperId,title,authors,year,venue,externalIds,openAccessPdf"
-OPENALEX_SELECT = "id,title,authorships,publication_year,primary_location,doi,open_access"
+OPENALEX_SELECT = "id,title,authorships,publication_year,primary_location,doi,open_access,ids"
 EXPECTED_URLS = (
     (["resolve", SET_ID], [
         "https://api.crossref.org/works/10.48550/arXiv.1810.00825",
@@ -1655,7 +1655,7 @@ EXPECTED_URLS = (
     ]),
     (["search", "set transformer"], [
         "https://api.crossref.org/works?query.bibliographic=set+transformer&rows=20&select=DOI%2Ctitle%2Cauthor%2Cissued%2Ccontainer-title",
-        "https://api.openalex.org/works?search=set+transformer&per_page=20&select=id%2Ctitle%2Cauthorships%2Cpublication_year%2Cprimary_location%2Cdoi%2Copen_access",
+        "https://api.openalex.org/works?search=set+transformer&per_page=20&select=id%2Ctitle%2Cauthorships%2Cpublication_year%2Cprimary_location%2Cdoi%2Copen_access%2Cids",
         "https://api.semanticscholar.org/graph/v1/paper/search?query=set+transformer&limit=20&fields=paperId%2Ctitle%2Cauthors%2Cyear%2Cvenue%2CexternalIds%2CopenAccessPdf",
         "https://export.arxiv.org/api/query?search_query=all%3Aset+AND+all%3Atransformer&max_results=20",
     ]),
@@ -1688,6 +1688,237 @@ for arguments, expected in EXPECTED_URLS:
             run_main([folder if argument == "FOLDER" else argument for argument in arguments], script)
         check("U1 the URLs of " + " ".join(arguments), script.urls == expected, repr(script.urls))
 
+# X: text writes the text of a saved HTML, XML or PDF file as <folder>/<stem>.txt, or with --abstract as <folder>/<stem>.abstract.txt, with a pdftotext stand-in on PATH where a PDF is read.
+text_work = tempfile.mkdtemp()
+atexit.register(shutil.rmtree, text_work, True)
+text_numbers = itertools.count(1)
+# The stand-in's folder and kind are written into it, since $0 can be the bare name the program was found by.
+STAND_IN = """#!/bin/sh
+printf '%%s\\n' "$@" > '%s/arguments'
+case '%s' in
+    fails) exit 1 ;;
+    empty) : > "$2" ;;
+    *) printf 'the text of the PDF\\n' > "$2" ;;
+esac
+"""
+
+
+def stand_in(kind):
+    """A folder holding a pdftotext stand-in that writes its arguments to the file arguments beside it, and then writes a text (kind writes), nothing (empty) or exits 1 (fails)."""
+    folder = os.path.join(text_work, "bin-%d" % next(text_numbers), kind)
+    os.makedirs(folder)
+    path = os.path.join(folder, "pdftotext")
+    with open(path, "w") as handle:
+        handle.write(STAND_IN % (folder, kind))
+    os.chmod(path, 0o755)
+    return folder
+
+
+def text_case(body, name="page.html"):
+    """(the saved file, an empty folder for the text) in a new scratch folder."""
+    case = os.path.join(text_work, "case-%d" % next(text_numbers))
+    os.makedirs(os.path.join(case, "texts"))
+    path = os.path.join(case, name)
+    with open(path, "wb") as handle:
+        handle.write(body)
+    return path, os.path.join(case, "texts")
+
+
+def run_text(arguments, path_folder=None, cwd=None):
+    """(exit status, standard output lines, standard error lines) of lookup.py text, with PATH holding path_folder alone when one is given."""
+    environment = dict(os.environ)
+    if path_folder is not None:
+        environment["PATH"] = path_folder
+    done = subprocess.run([sys.executable, "-B", "-I", os.path.join(sys.argv[1], "lookup.py"), "text"] + arguments, env=environment, cwd=cwd or text_work, capture_output=True, text=True)
+    return done.returncode, done.stdout.splitlines(), done.stderr.splitlines()
+
+
+def text_of(folder, name):
+    path = os.path.join(folder, name)
+    return read_text(path) if os.path.exists(path) else None
+
+
+PMC_PAGE = b"""<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><title>Lesion mapping</title>
+<style>p { color: red; }</style><script>var tracker = "read this";</script></head>
+<body><article><section><h2>Results</h2><p>Lesion size predicted the deficit in</p><p>the acute phase.</p></section></article></body></html>
+"""
+
+# X1: a PMC article page: tags removed, no script or style text, a passage split across two p elements, and the line that names the text.
+with attempt("X1"):
+    page, folder = text_case(PMC_PAGE)
+    status, out, err = run_text([page, folder, "smith2020"])
+    text = text_of(folder, "smith2020.txt")
+    check("X1 text of a PMC page", status == 0 and text == "Lesion mapping\nResults\nLesion size predicted the deficit in\nthe acute phase.\n" and out == ["smith2020.txt: %d characters from %s" % (len(text), page)] and err == [], repr((status, out, err, text)))
+
+    # X2: quote-check finds a passage of that page in the text text wrote.
+    report = os.path.join(os.path.dirname(folder), "citation-report.md")
+    with open(report, "w") as handle:
+        handle.write('Claim [@smith2020, p. 4].\n\n> [@smith2020, p. 4]: "Lesion size predicted the deficit in the acute phase."\n')
+    bib = os.path.join(os.path.dirname(folder), "refs.bib")
+    with open(bib, "w") as handle:
+        handle.write("@article{smith2020, title={Lesion mapping}}\n")
+    status, lines = run_in_process(lookup.run_quote_check, [report, bib, folder])
+    check("X2 quote-check finds the passage in the text text wrote", status == 0 and "line 3: smith2020, p. 4: found" in lines, repr((status, lines)))
+
+# X3: a Europe PMC fullTextXML body.
+with attempt("X3"):
+    xml = b"<article><front><article-meta><title-group><article-title>Lesion mapping</article-title></title-group></article-meta></front><body><sec><title>Results</title><p>The first paragraph of the results.</p><p>The second paragraph.</p></sec></body></article>"
+    page, folder = text_case(xml, "europepmc.xml")
+    status, out, err = run_text([page, folder, "smith2020"])
+    text = text_of(folder, "smith2020.txt") or ""
+    check("X3 text of a fullTextXML body", status == 0 and "The first paragraph of the results.\n" in text and "The second paragraph.\n" in text, repr((status, out, err, text)))
+
+# X4: a PDF is read by pdftotext, given the file's absolute path and an output path as a list of two arguments, and its text is <stem>.txt.
+with attempt("X4"):
+    page, folder = text_case(b"%PDF-1.4\n%recorded body\n", "paper.pdf")
+    tool = stand_in("writes")
+    status, out, err = run_text([page, folder, "smith2020"], tool)
+    arguments = read_text(os.path.join(tool, "arguments")).splitlines() if os.path.exists(os.path.join(tool, "arguments")) else []
+    check("X4 text of a PDF", status == 0 and text_of(folder, "smith2020.txt") == "the text of the PDF\n" and out == ["smith2020.txt: 20 characters from %s" % page] and listing(folder) == ["smith2020.txt"], repr((status, out, err, listing(folder))))
+    check("X4 pdftotext gets the absolute path and one output path", len(arguments) == 2 and arguments[0] == os.path.abspath(page) and os.path.dirname(arguments[1]) == os.path.abspath(folder), repr(arguments))
+
+# X5: the stem of a key is made as fetch makes it.
+with attempt("X5"):
+    page, folder = text_case(PMC_PAGE)
+    status, out, err = run_text([page, folder, "doi:10.1000/x:y"])
+    check("X5 the stem of doi:10.1000/x:y", status == 0 and listing(folder) == ["doi_10.1000_x_y.txt"] and out[:1] and out[0].startswith("doi_10.1000_x_y.txt: "), repr((status, out, err, listing(folder))))
+
+# X6: a <stem>.txt that exists is refused and kept.
+with attempt("X6"):
+    page, folder = text_case(PMC_PAGE)
+    with open(os.path.join(folder, "smith2020.txt"), "w") as handle:
+        handle.write("the text a passage was quoted from\n")
+    result = run_text([page, folder, "smith2020"])
+    check("X6 an existing text is refused", result == (2, [], ["error: %s exists" % os.path.join(folder, "smith2020.txt")]) and text_of(folder, "smith2020.txt") == "the text a passage was quoted from\n" and listing(folder) == ["smith2020.txt"], repr((result, listing(folder))))
+
+# X7: a JSON body and an empty file are neither HTML or XML nor a PDF.
+with attempt("X7"):
+    for body in (b'{"a": 1}', b""):
+        page, folder = text_case(body, "reply.json")
+        result = run_text([page, folder, "smith2020"])
+        check("X7 refused: %r" % body, result == (2, [], ["error: %s: not an HTML, XML or PDF file" % page]) and listing(folder) == [], repr((result, listing(folder))))
+
+# X8: a file that does not exist.
+with attempt("X8"):
+    page, folder = text_case(PMC_PAGE)
+    missing = page + ".missing"
+    result = run_text([missing, folder, "smith2020"])
+    check("X8 a missing file", result == (2, [], ["error: %s: No such file or directory" % missing]) and listing(folder) == [], repr(result))
+
+# X9: an HTML page with no text.
+with attempt("X9"):
+    page, folder = text_case(b"<html><head><script>var x = 1;</script></head><body><div></div></body></html>")
+    result = run_text([page, folder, "smith2020"])
+    check("X9 a page with no text", result == (1, ["%s: no text" % page], []) and listing(folder) == [], repr((result, listing(folder))))
+
+# X10: an empty key, and a folder that is not a folder.
+with attempt("X10"):
+    page, folder = text_case(PMC_PAGE)
+    result = run_text([page, folder, ""])
+    check("X10 an empty key", result == (2, [], ["error: the key is empty"]) and listing(folder) == [], repr(result))
+    result = run_text([page, page, "smith2020"])
+    check("X10 a folder that is a file", result == (2, [], ["error: %s: not a folder" % page]), repr(result))
+
+# X11: lookup.py with no argument lists text among the commands.
+with attempt("X11"):
+    status, out, err = command([])
+    listed = err[1].split(": ", 1)[1].split(", ") if len(err) > 1 and ": " in err[1] else []
+    check("X11 the command list names text", status == 2 and "text" in listed, repr((status, out, err)))
+
+# X12: a Windows-1252 page that declares its charset.
+with attempt("X12"):
+    page, folder = text_case(b'<html><head><meta charset="windows-1252"></head><body><p>caf\xe9 au lait</p></body></html>')
+    status, out, err = run_text([page, folder, "smith2020"])
+    check("X12 a Windows-1252 page", status == 0 and text_of(folder, "smith2020.txt") == "caf\u00e9 au lait\n", repr((status, out, err, text_of(folder, "smith2020.txt"))))
+
+# X13: a byte order mark, and an XML declaration and a DOCTYPE after blank text, before the root.
+with attempt("X13"):
+    for body, wanted in (
+        (b"\xef\xbb\xbf<html><body><p>Text after a byte order mark.</p></body></html>", "Text after a byte order mark.\n"),
+        (b'\n  <?xml version="1.0"?>\n<!DOCTYPE article PUBLIC "-//NLM//DTD JATS (Z39.96) Journal Archiving DTD v1.2//EN" "JATS-archivearticle1.dtd">\n<article><body><sec><p>Text after a declaration.</p></sec></body></article>', "Text after a declaration.\n"),
+    ):
+        page, folder = text_case(body)
+        status, out, err = run_text([page, folder, "smith2020"])
+        check("X13 read as HTML or XML: %r" % body[:12], status == 0 and text_of(folder, "smith2020.txt") == wanted, repr((status, out, err, text_of(folder, "smith2020.txt"))))
+
+# X14: a pdftotext that exits 1 or writes nothing leaves no text and no temporary file; no pdftotext on PATH is an error.
+with attempt("X14"):
+    for kind in ("fails", "empty"):
+        page, folder = text_case(b"%PDF-1.4\n", "paper.pdf")
+        result = run_text([page, folder, "smith2020"], stand_in(kind))
+        check("X14 pdftotext %s" % kind, result == (1, ["%s: no text" % page], []) and listing(folder) == [], repr((result, listing(folder))))
+    page, folder = text_case(b"%PDF-1.4\n", "paper.pdf")
+    empty_path = os.path.join(text_work, "no-programs-%d" % next(text_numbers))
+    os.makedirs(empty_path)
+    result = run_text([page, folder, "smith2020"], empty_path)
+    check("X14 no pdftotext", result == (2, [], ["error: pdftotext not found"]) and listing(folder) == [], repr((result, listing(folder))))
+
+# X15: a PDF whose path holds a space and a single quote, and one named -layout.pdf given relative to the working directory, reach pdftotext as one absolute path.
+with attempt("X15"):
+    for name in ("it's a paper.pdf", "-layout.pdf"):
+        page, folder = text_case(b"%PDF-1.4\n", name)
+        tool = stand_in("writes")
+        status, out, err = run_text([name, folder, "smith2020"], tool, cwd=os.path.dirname(page))
+        arguments = read_text(os.path.join(tool, "arguments")).splitlines() if os.path.exists(os.path.join(tool, "arguments")) else []
+        check("X15 one absolute path for %s" % name, status == 0 and arguments[:1] == [os.path.realpath(page)] and len(arguments) == 2 and text_of(folder, "smith2020.txt") == "the text of the PDF\n", repr((status, out, err, arguments)))
+
+# X16: a <stem>.txt that is a dangling link is refused, and nothing is written through it.
+with attempt("X16"):
+    page, folder = text_case(PMC_PAGE)
+    target = os.path.join(os.path.dirname(folder), "outside.txt")
+    os.symlink(target, os.path.join(folder, "smith2020.txt"))
+    result = run_text([page, folder, "smith2020"])
+    check("X16 a dangling link is refused", result == (2, [], ["error: %s exists" % os.path.join(folder, "smith2020.txt")]) and not os.path.exists(target) and os.path.islink(os.path.join(folder, "smith2020.txt")), repr((result, os.path.exists(target))))
+
+# X17: two keys with one stem: the second is refused.
+with attempt("X17"):
+    page, folder = text_case(PMC_PAGE)
+    first = run_text([page, folder, "a/b"])
+    other, _ = text_case(b"<html><body><p>Another page.</p></body></html>")
+    second = run_text([other, folder, "a:b"])
+    check("X17 the second key of one stem", first[0] == 0 and second == (2, [], ["error: %s exists" % os.path.join(folder, "a_b.txt")]) and "Lesion size" in (text_of(folder, "a_b.txt") or ""), repr((first, second)))
+
+# X18: resolve prints the PMCID OpenAlex names after the OpenAlex line, and no pmcid line for a record that names none.
+with attempt("X18"):
+    work_with_ids = {"id": "https://openalex.org/W1", "title": "Estimating mutual information", "doi": "https://doi.org/10.1103/physreve.69.066138", "publication_year": 2004, "authorships": [], "primary_location": {"source": {"display_name": "Physical Review E"}}, "open_access": {"oa_url": None}, "ids": {"openalex": "https://openalex.org/W1", "doi": "https://doi.org/10.1103/physreve.69.066138", "pmcid": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC1234567"}}
+    lines = plain_resolve([("api.openalex.org", stub_reply(200, json.dumps(work_with_ids)))], "10.1103/PhysRevE.69.066138")
+    openalex_at = next((number for number, line in enumerate(lines) if line.startswith("OpenAlex: ")), None)
+    check("X18 the pmcid line follows the OpenAlex line", openalex_at is not None and lines[openalex_at + 1:openalex_at + 2] == ["pmcid: PMC1234567"] and sum(line.startswith("pmcid:") for line in lines) == 1, repr(lines))
+    del work_with_ids["ids"]["pmcid"]
+    lines = plain_resolve([("api.openalex.org", stub_reply(200, json.dumps(work_with_ids)))], "10.1103/PhysRevE.69.066138")
+    check("X18 no pmcid line for a record without one", any(line.startswith("OpenAlex: ") for line in lines) and not any(line.startswith("pmcid") for line in lines), repr(lines))
+
+
+ABSTRACT_PAGE = b"""<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><title>Lesion mapping</title></head>
+<body><section class="abstract"><h2>Abstract</h2><p>Lesion size predicted the deficit in the acute phase.</p></section></body></html>
+"""
+
+# X19: text --abstract writes the text of a saved page that holds only the abstract as <stem>.abstract.txt and no <stem>.txt, and quote-check finds a passage with the locator abstract in it.
+with attempt("X19"):
+    page, folder = text_case(ABSTRACT_PAGE)
+    status, out, err = run_text(["--abstract", page, folder, "smith2020"])
+    text = text_of(folder, "smith2020.abstract.txt")
+    check("X19 text --abstract of an abstract page", status == 0 and listing(folder) == ["smith2020.abstract.txt"] and text is not None and "Lesion size predicted the deficit in the acute phase.\n" in text and out == ["smith2020.abstract.txt: %d characters from %s" % (len(text), page)] and err == [], repr((status, out, err, listing(folder), text)))
+    report = os.path.join(os.path.dirname(folder), "citation-report.md")
+    with open(report, "w") as handle:
+        handle.write('Claim [@smith2020, abstract].\n\n> [@smith2020, abstract]: "Lesion size predicted the deficit in the acute phase."\n')
+    bib = os.path.join(os.path.dirname(folder), "refs.bib")
+    with open(bib, "w") as handle:
+        handle.write("@article{smith2020, title={Lesion mapping}}\n")
+    status, lines = run_in_process(lookup.run_quote_check, [report, bib, folder])
+    check("X19 quote-check finds the abstract passage in the file text --abstract wrote", status == 0 and "line 3: smith2020, abstract: found" in lines, repr((status, lines)))
+
+# X20: text --abstract refuses a <stem>.abstract.txt that exists, keeps it and writes nothing.
+with attempt("X20"):
+    page, folder = text_case(ABSTRACT_PAGE)
+    with open(os.path.join(folder, "smith2020.abstract.txt"), "w") as handle:
+        handle.write("the abstract fetch wrote\n")
+    status, out, err = run_text(["--abstract", page, folder, "smith2020"])
+    target = os.path.join(folder, "smith2020.abstract.txt")
+    check("X20 an existing abstract text is refused", status == 2 and err == ["error: %s exists" % target] and listing(folder) == ["smith2020.abstract.txt"] and text_of(folder, "smith2020.abstract.txt") == "the abstract fetch wrote\n", repr((status, out, err, listing(folder))))
+
 
 for failure in failures:
     print(failure)
@@ -1702,4 +1933,4 @@ if [ "$status" -ne 0 ]; then
     exit 1
 fi
 
-echo "PASS: lookup.py parses recorded bodies, matches titles, merges records, reads passage lines, finds passages, rebuilds abstracts, writes arXiv and OpenAlex queries, paces every arXiv request across processes, requests only http and https URLs, leaves out an index whose body does not parse, prints not found, names files, URLs and credentials safely, reads BibTeX and HTML, fetches a source by an OpenAlex ID or a Semantic Scholar ID through the record of that ID's index, reads the keys a .tex cites with the commands of natbib and biblatex and the files it inputs and prints the keys the .bib lacks and the entries no key cites, compares the title of a key with a doi with the record the doi resolves to and names an index that was left out, reports an input file that does not exist, reads the .bib named on the command line in check-urls and quote-check, refuses the one-argument check-urls and the two-argument quote-check, prints the retraction and expression-of-concern notices of a Crossref record and none for a correction, an erratum or a work without a notice, and resolves an entry of a .bib by its doi, its arXiv ID or its title and prints a verdict that CONFIRMED or NOT_CONFIRMED the entry with exit status 0 or 1, refuses a call or an entry it cannot read with exit status 2, and leaves the output of resolve without --entry as it was, gives the published version of an arXiv ID the entry doi.org gives for its published DOI or the line that names its venue, builds and refuses the entry of a venue's page, confirms an entry on its venue's page, fetches the PDF a venue's page names, keeps the URLs of the other commands, paces every API host across processes, waits out a 429 by its Retry-After, leaves a 429 that names more than 60 seconds out at once with its reason, names the host of a redirect hop that met it, and writes the skip file of the host, and caches the index replies of resolve, search, refs and cited-by on disk for 30 days"
+echo "PASS: lookup.py parses recorded bodies, matches titles, merges records, reads passage lines, finds passages, rebuilds abstracts, writes arXiv and OpenAlex queries, paces every arXiv request across processes, requests only http and https URLs, leaves out an index whose body does not parse, prints not found, names files, URLs and credentials safely, reads BibTeX and HTML, fetches a source by an OpenAlex ID or a Semantic Scholar ID through the record of that ID's index, reads the keys a .tex cites with the commands of natbib and biblatex and the files it inputs and prints the keys the .bib lacks and the entries no key cites, compares the title of a key with a doi with the record the doi resolves to and names an index that was left out, reports an input file that does not exist, reads the .bib named on the command line in check-urls and quote-check, refuses the one-argument check-urls and the two-argument quote-check, prints the retraction and expression-of-concern notices of a Crossref record and none for a correction, an erratum or a work without a notice, and resolves an entry of a .bib by its doi, its arXiv ID or its title and prints a verdict that CONFIRMED or NOT_CONFIRMED the entry with exit status 0 or 1, refuses a call or an entry it cannot read with exit status 2, and leaves the output of resolve without --entry as it was, gives the published version of an arXiv ID the entry doi.org gives for its published DOI or the line that names its venue, builds and refuses the entry of a venue's page, confirms an entry on its venue's page, fetches the PDF a venue's page names, keeps the URLs of the other commands, paces every API host across processes, waits out a 429 by its Retry-After, leaves a 429 that names more than 60 seconds out at once with its reason, names the host of a redirect hop that met it, and writes the skip file of the host, caches the index replies of resolve, search, refs and cited-by on disk for 30 days, prints the PMCID an OpenAlex record names, and writes with text the text of a saved HTML, XML or PDF file as <stem>.txt, or with text --abstract as <stem>.abstract.txt, and refuses to replace one"

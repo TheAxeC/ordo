@@ -154,7 +154,7 @@ The agent writes an entry from `lookup.py bibtex` when the call prints one, as t
   - Without such an address, or when `--page` refuses the address held, the agent may run one web search to find that source's page at the venue the line names. It passes the address it finds to `--page` and runs no second search.
   - The page is never read through WebFetch, and the agent passes no sign-in, payment or bot check.
 - Without a page, or when `--page` refuses it, the entry is the `@misc` entry, and the agent's report names the key with the "published in" line as printed.
-- Every other lookup of the draft writer, the formatter and the citation compliance agent is made with `lookup.py`.
+- Every other lookup of the draft writer, the formatter and the citation compliance agent is made with `lookup.py`. The citation compliance agent also saves a cited source's pages with `curl`, as `references/citation-compliance.md`, "Reading the source", says.
 
 ```bibtex
 @article{Smith2024,

@@ -43,26 +43,13 @@ repair_reviewer: claude:sonnet  # the model the run of /refute over a repair rou
 
 ```yaml
 dispatch:                    # or the block /spec writes (a list when .agents/plan.yaml's workers_at_once is above 1). /spec writes the entry at the end of its preflight with step and `landing: preparing`, writes `"running: <agent id>"` into brief_check while the brief-check agent runs, base after its preparation commit and worktree before it creates the worktree, and fills the entry at its Steps 9, so that it holds: step, executor, worker, worktree (<worktree_root>/<slug>-<step>), base, launched, report (the builder's report, at the path the brief names), brief_check (the brief check's report path, with the agent's id, its served model, tokens, tool uses and time, or `none, a small text step` for a small text step), landing, round. `landing` is `preparing` while /spec runs, then `not-started`, `cherry-picking` while /land cherry-picks, and `backed-out` after a red line took the step back out of main. The orchestrator adds session_id, the builder's agent id followed by the model the runner served it (<agent id> (<served model>)), as soon as the builder is dispatched and its model read, builders_before (the agent id and served model of each builder it replaced, as <agent id> (<served model>, stopped) or <agent id> (<served model>, dead), one after another), builder_usage (the builder's tokens, tool uses and time from its completion notice) beside report when the builder's report is saved, and reviewer_report (the refuter report's path, with each reviewer's agent id, served model, tokens, tool uses and time, or, for a reviewer stopped for another model, its agent id, served model and stopped) at the review. A value that holds `: ` (brief_check while its agent runs, builder_usage after a repair round, reviewer_report after a run over a round) is written in double quotes, so the block stays valid YAML. A diagnosis agent has no key here: the session that starts it writes its id and role into plan.md's Agents section, as the diagnose skill's Rules say. A step dispatched while another in flight, of this plan or of another open plan, names a file its brief also names carries shared_paths: each shared file, the other step's plan and step, and why the merge at landing is simple, as plan-orchestration's "Two steps in flight" says; with no shared file the key is left out.
-- step: 5.E
-  base: 95713fe6365fd1d2b1df1a89d06a20f025ab1a3c
-  worktree: .agents/worktrees/5-paper-5.E
-  executor: agent
-  worker: claude:opus
-  launched: 2026-11-16 17:47
-  report: .scratch/5-paper/agents/reviews/5.E-report.md
-  builder_usage: "first run to the hand-back: 273339 tokens, 43 tool uses, 6m 25s; after the cases ruling: 112276 tokens, 96 tool uses, 19m 19s"
-  round: 1
-  session_id: a76ced56165fb80e7 (claude-opus-5-5)
-  brief_check: ".scratch/5-paper/agents/reviews/5.E-brief-check.md (a01f7b4934a871684, claude-opus-5-5, 247004 tokens, 65 tool uses, 9m 12s)"
-  reviewer_report: ".scratch/5-paper/agents/reviews/5.E-refuter.md (af881fa06079a1e72, claude-opus-5-5, 240639 tokens, 53 tool uses, 9m 6s)"
-  landing: not-started
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled or, under `self_rule: on`, until the orchestrator closes it as `plan-orchestration`'s `references/self-rule.md`, "Closing an open item", says)
 
 A finding that is neither closed in the repair rounds nor fixed at landing is an open item here, and goes where `plan-orchestration`'s "What earns a step of its own" says; what is settled belongs in the closed list.
 
-
+- BQ (2026-11-16): the lit-review comparison on `v8.4.0-rc.6` (`agents/reviews/5.D-check-blind-comparison.md`): academic-paper's output won with both judges, in both orders. The user's call on it under the ruling The check after the third repair. Ruled so far: Open item BL reopened (a), the one-start rule of the literature strategist removed, not yet carried by a step since the user has not given the go; an audit of every other rule of `paper` that departs from academic-paper while its record claims equivalence is running. No comparison runs again after step 5.E (the user).
 
 
 ## Closed items (the log of what was raised and how it ended; no report carries it)
@@ -136,7 +123,7 @@ A finding that is neither closed in the repair rounds nor fixed at landing is an
 
 ## Current position (rewritten before every step commit of this plan)
 
-- 2026-11-16. Step 5.D, the tenth of 12 steps, the third repair of paper, landed and booked in `plan.md` ("Step 5.D, the third repair of paper"); the landing report is `agents/reviews/5.D-landing.md`.
-- Next: an rc tagged and pinned and the lit-review comparison run again (ruling The check after the third repair), then step 5.E, the fourth repair of paper, prepared on main.
+- 2026-11-16. Step 5.E, the eleventh of 12 steps, the fourth repair of paper, landed and booked in `plan.md` ("Step 5.E, the fourth repair of paper"); the landing report is `agents/reviews/5.E-landing.md`.
+- Next: open item BQ; step 6, the closing, waits for the user's go. No comparison runs again after step 5.E (the user).
 - The two check runs of the rebuilt skill (revision, copy `cr4b`, session ce6db165-ecf5-4128-96cc-b05d5b5b37d3; full, copy `fr5`, session 0b6daf08-9d97-45d9-9ecd-f743566be6fd) are stopped, and resume only when Axel asks.
 - Step 5.A's check, on Axel's go (2026-11-16): `v8.4.0-rc.4` tagged on f3531a7 and pinned; one `curl` per index answered 200. The lit-review `paper` side ran in `gate5a/lit-review-1` of the session's scratchpad (session 5b815d8b-6616-4994-af1b-61091e2f57c2, claude-opus-5-5, 111 min, $16.80 by `total_cost_usd`): 81 entries, every annotation "abstract not read", 2 entries from 2022 or later (step 5's run: none unread, 44 from 2022 or later). Not judged. The revision, full and disclosure sides have not started.

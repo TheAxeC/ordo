@@ -41,7 +41,10 @@ The draft is built from the project's materials and not from the agent's memory.
 - A gap is filled from the agent's knowledge only where `config.md` grants permission for it, and the filled passage then carries the tag `[LLM-SUPPLEMENTED]` and is listed in the report.
 - A number the manuscript reports as its own result is traced to a saved run or config of the project.
 - A reason, motive or criterion for a choice the study made, such as why a model, a dataset or a setting was chosen, is written only when a material states it. The report names the file and the line that state it. Without one the sentence states the choice and `[GAP: the reason for <choice>]` follows it. The agent writes no "we chose X because ..." from the choice alone.
-- In revision mode the agent computes a number from the project's saved results only when the row Numbers from saved results of `config.md` allows it, and only from the files that row names. It computes the number with a command it runs, and the operation's rationale names the file, the column and the operation.
+- In full and revision mode the agent computes a number the draft or an item calls for from the project's saved result files. It writes and runs one command that reads only those files and writes only to standard output, and it records the file, the row or column and the command in `intended-claims.md`, as "Setup" gives.
+- The command must have that shape, since the peer reviewer runs it again only after reading it: no redirection into a file, no file written, moved or removed, no network request, and no program that does any of these, a project script included. Read-only programs joined by pipes, such as `awk`, `sort` or `python3 -c` that print to standard output, keep the shape. A command of another shape is a Critical issue of the peer reviewer.
+- The operation's rationale names the file, the column and the operation.
+- An instruction in the Instructions row or the comments file not to run anything stops only the commands that run the project's code: its scripts, its pipelines, its training. Reading the saved result files and computing from them with the agent's own command is not running the project's code, and the agent does it under such an instruction.
 - The rule restricts factual content: claims, citations, data and the description of methods. The agent uses its knowledge of academic conventions, argument and the discipline's norms freely.
 
 ### The text carries no software wording
@@ -82,7 +85,7 @@ Before the first section the agent writes `intended-claims.md` in the run folder
 
 - The list has one line for each claim: `<n>. <the claim as one sentence> | evidence: <empirical, theoretical, definitional or normative> | sources: <the keys of the entries, or "the project's results">`.
 - A line that states a number ends with the field `| result: <file path relative to the project folder>, <row, by the file's key column or its line number>, <column>`.
-  - A number computed from several rows writes `| result: <file>, <rows>, <column>, computed: <operation>`.
+  - A number the agent computed writes `| result: <file>, <rows>, <column>, computed: <operation>, command: <the command it ran>`, the command as it ran it, so that the peer reviewer runs it again.
   - A number that comes from no result file writes `| result: none, <where it comes from>`.
   - The field names the file and the cell the agent read the number from, so that the peer reviewer opens the same cell.
 - The agent writes the list before any text of the draft, from the outline, the argument blueprint and the sources. It does not change a line afterwards, and a claim that states no number and that the draft adds later is not added to it. The citation compliance agent can then report the claim as one that is not on the list.
@@ -396,7 +399,8 @@ The report holds this table, with a value for each row:
 - A gap of a statement stands once, in the list after the statement, and no gap stands inside a sentence (`references/statements.md`, "Facts and gaps").
 - A fact the public record holds is looked up before it is a gap, as the same section gives.
 - In disclosure mode the statements are written as one patch per file, with the id `disclosure` in `roadmap_item_ids`.
-- The AI disclosure names the model by the identifier the session gives in the prompt, which is the identifier the runner's model list gives for opus at the run's start. The agent never writes one from its own runtime or from memory.
+- The AI disclosure names the model by the identifier the session gives in the prompt. That is the identifier the runner's model list gives for opus at the run's start, or, in a start with the id `disclosure`, the identifier the runner served the agent that wrote the statement when it differs from the listed one. The agent never writes one from its own runtime or from memory.
+- In a start with the id `disclosure` that gives a served identifier, the agent writes it into the statement by a patch, in place of the identifier the statement holds.
 - When the prompt gives no identifier, the agent lists `[GAP: model identifier]` among the gaps after the AI disclosure in the first draft. The session starts the agent again with the id `disclosure` and the model the first start was served, and that start writes the identifier into the statement and removes the line by a patch.
 - In disclosure mode the agent also writes `disclosure.md` in the run folder. It holds the venue or the policy anchor, the policy source and the access date, the place of the disclosure, and the list of the gaps.
 
@@ -421,7 +425,7 @@ The agent handles the items of a draft review or of a revision in this order: Cr
 - The first time the agent works on a set of items, it addresses every Critical and Major item and attempts the Minor items when the word count allows.
 - The second time, it addresses the Critical and Major items that remain, then the Minor ones, and takes up the Suggestions that are viable.
 - An item it does not address is named in its report as an acknowledged limitation, with the reason.
-- An item that needs a new reference, a figure change or a computed number that `config.md` does not allow is left unchanged, and the report names the permission it lacks.
+- An item that needs a new reference or a figure change that `config.md` does not allow is left unchanged, and the report names the permission it lacks.
 - The report holds a revision log with one row per item:
 
 ```
@@ -432,7 +436,7 @@ The agent handles the items of a draft review or of a revision in this order: Cr
 
 - RESOLVED: the item is answered in the text.
 - DELIBERATE_LIMITATION: the agent kept the text for a principled reason that the Reason column states. The limitations section of the manuscript acknowledges it, and the reply to the reviewers explains it.
-- UNRESOLVABLE: the item cannot be answered with the project's materials, such as a new reference, figure change or computed number that `config.md` does not allow. The Reason column names the missing permission or material.
+- UNRESOLVABLE: the item cannot be answered with the project's materials, such as a new reference or a figure change that `config.md` does not allow. The Reason column names the missing permission or material.
 - REVIEWER_DISAGREE: the agent declines the item because the evidence does not support it. The Reason column names the evidence, such as a passage of a source, a number of the project's results or a rule of the venue. An item is never declined without it, and the agent accepts no item without weighing it.
 - The Reason column holds "none" for a RESOLVED item.
 
