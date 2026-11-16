@@ -542,3 +542,58 @@ Taken: (a)
 Booked: `.scratch/5-paper/agents/briefs/5.E-cases.md` 1
 Builds on it: step 5.E
 
+
+## C116. The fix caps in step 5.F (2026-11-16)
+
+step 5.F, brief check finding 17: the ruling Open item BR keeps "the one-try caps on fix attempts that end at a stop", and three of the four caps end in the final message, not at a stop.
+  - (a) Keep all four as they are. Pro: they bound a fix, never how often an agent may start, which is what the ruling removes; each failure left is still named. Con: a compile or citation failure after one fix reaches the final message without a further try.
+  - (b) Turn each into a stop that offers another try. Pro: the user decides each time. Con: more stops in a run that the ruling did not ask for.
+  - Recommendation: (a). The lazy option was neither; (b) adds stops the ruling did not name.
+
+Taken: (a)
+Booked: `.scratch/5-paper/agents/briefs/5.F.md` "Decisions taken in this brief" 4
+Builds on it: step 5.F
+
+## C117. The count of the currency passes in step 5.F (2026-11-16)
+
+step 5.F, brief check finding 22: "until the share is met or a pass adds nothing" is a repeat with no count, which `docs/dev/skill-layout.md` "Writing for an agent" forbids.
+  - (a) At most 3 passes over the last 3 years. Pro: a count, and three passes cover each database and index again. Con: a share still short after three is reported as not met.
+  - (b) At most 1. Pro: cheapest. Con: the rc.6 run's 45 percent would likely stay short.
+  - Recommendation: (a). The lazy option was (b).
+
+Taken: (a)
+Booked: `.scratch/5-paper/agents/briefs/5.F.md` "Decisions taken in this brief" 5
+Builds on it: step 5.F
+
+## C118. The parts of the research question in step 5.F (2026-11-16)
+
+step 5.F, brief check under "The question": the search concepts of the strategist's page are terms of a search string, not the parts of the question the judges meant.
+  - (a) The strategist writes the question's sub-questions in `review.md`, each searched and each a part of the synthesis. Pro: matches the judges' "three parts of the research question". Con: one more record in `review.md`.
+  - (b) Use the search concepts as the parts. Pro: no new record. Con: a synthesis by search terms misses the judges' point.
+  - Recommendation: (a). The lazy option was (b).
+
+Taken: (a)
+Booked: `.scratch/5-paper/agents/briefs/5.F.md` "Decisions taken in this brief" 6
+Builds on it: step 5.F
+
+## C119. A character with no ASCII form in step 5.F (2026-11-16)
+
+step 5.F, brief check findings 32 to 45: exit 2 with nothing printed left the caller no entry to finish, and broke `lookup.py`'s exit scheme.
+  - (a) Print the entry with `{?}` for the character, a warning line, exit 0; the caller writes that one character. Pro: the entry still comes from the script; the exit scheme holds. Con: the caller must act on a warning.
+  - (b) Exit 2 with nothing printed. Pro: nothing unchecked is printed. Con: the source loses its entry or is typed from memory.
+  - Recommendation: (a). The lazy option was (b).
+
+Taken: (a)
+Booked: `.scratch/5-paper/agents/briefs/5.F.md` "Decisions taken in this brief" 7
+Builds on it: step 5.F
+
+## C120. The change written again in full in step 5.F (2026-11-16)
+
+step 5.F, brief check findings 29, 30 and 52: a one-section patch rarely exits 3, so "confirmed at the stop A structural patch" was unreachable, and AP's full re-emission is of the whole draft.
+  - (a) The whole file written again as one patch over every block; choosing it at the stop is the confirmation; applied with `--acknowledge-structural`. Pro: AP's full re-emission; reachable. Con: the largest patch a run can write.
+  - (b) One section rewritten. Pro: smaller. Con: not AP's escalation, and the confirmation stop is not reached.
+  - Recommendation: (a). The lazy option was (b).
+
+Taken: (a)
+Booked: `.scratch/5-paper/agents/briefs/5.F.md` "Decisions taken in this brief" 3
+Builds on it: step 5.F
