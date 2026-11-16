@@ -455,7 +455,7 @@ An item or an issue that says a sentence describes the handling of the data diff
 The patch with the id `reference-fix` answers the lines of the reference checks that the session gives: a `missing:` line, or a `check-urls` line that fails the status rules of `references/citation-compliance.md`, "DOI and URL".
 
 - A `missing:` line whose key is a typing slip of an existing key, with the same author and year, is corrected in the `.tex`.
-- A `missing:` line for a source that `review.md` or `refs.bib` of the run holds is answered by adding the entry that `lookup.py bibtex` prints, after the last block of the `.bib`.
+- A `missing:` line for a source that `review.md` or `refs.bib` of the run holds is answered by adding, after the last block of the `.bib`, the entry that `lookup.py bibtex` prints on standard output. For a preprint with a published version, the entry is the one `references/latex-template.md`, "The `.bib` entry forms", gives, with the one web search for its venue's page that section allows.
 - A `check-urls` line is answered as "The `.bib` entries" and "DOI and URL" of `references/citation-compliance.md` say: the identifier is corrected when `lookup.py resolve` gives a record that is certain.
 - A line the agent cannot answer is left unchanged and named in its report with the lookups tried.
 - A line that holds "title not checked" is no line of the fix.

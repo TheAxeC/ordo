@@ -8,7 +8,7 @@ The citation compliance agent reads this page to check the citations of the manu
 - In full and revision modes, `intended-claims.md` of the run folder, the list the draft writer wrote before its first text.
 - The main `.tex` and the files it inputs, and the `.bib`.
 - The output of `lookup.py cite-keys` and of `lookup.py check-urls`, which the session runs and puts in the prompt.
-- The path of the temporary folder for fetched texts, which the session gives. The agent runs `lookup.py resolve`, `search`, `fetch`, `bibtex` and `quote-check`.
+- The path of the temporary folder for fetched texts, which the session gives. The agent runs `lookup.py resolve`, `search`, `fetch`, `bibtex` and `quote-check`. After a "published in" line of `bibtex`, it may also run the one web search for the venue's page that "Retractions" gives.
 - At its second start, the lines of `cite-keys`, `check-urls` and `quote-check` that fail after its first corrections, which the session gives. The second start is a fresh agent, and it answers those lines only.
 
 A missing input is handled as follows:
@@ -135,7 +135,8 @@ The agent counts, over the cited entries, how many fail each deterministic check
 - A book chapter is looked up by its own title and by its book. The authors, the chapter title, the book and the page range must agree with one record, since a real book with an invented chapter is a common pattern.
 - Entries that share authors or have similar titles are each verified as a distinct real publication.
 - An index line `left out, <reason>` confirms nothing, neither a field nor a year nor a venue.
-- The venue and the year of an entry are taken from an index that printed a record.
+- The venue and the year of an entry are taken from an index that printed a record, or, for an entry that `resolve --entry` confirmed on its venue's page (a last line ending "; year <year> found on <url>"), from that page's tags.
+- Such an entry names the published version of an arXiv preprint, and the indexes hold the preprint's year. The year found on the page is the entry's year, and the preprint's year in the records is not a year error.
 - An entry whose year or venue only a left-out index could have given is resolved again by its DOI or its arXiv ID, which reaches Crossref and OpenAlex.
 - Each lookup goes in the trail of the report with its command, the line used, the indexes whose line matched and the fields confirmed. A reference with no trail entry is not verified, and the report is not valid.
 - The trail's "Indexes that matched" column is the list of indexes whose line agreed with the entry. The report's summary counts the references that only arXiv matched (a preprint server) and the references that no index matched. It lists their keys, so the final message can name them.
@@ -174,6 +175,7 @@ The agent compares a VERIFIED reference with its record item by item and lists e
 | MEDIUM | An omitted co-author, a title imprecision, a page number error. |
 | MINOR | A dead URL when the other information is correct, a formatting difference. |
 
+- A year error is judged against the year "Looking a reference up" takes for the entry, which for an entry confirmed on its venue's page is the year found on that page.
 - A difference with one right answer in the record is corrected by a patch.
 - A SERIOUS difference that the record does not settle is flagged as unconfirmed.
 
@@ -222,11 +224,12 @@ The screen runs on each journal or proceedings that a cited entry names. It flag
 Each cited sentence of the manuscript rests on a passage that the agent reads in this run from the source's full text. In every mode the agent checks every cited sentence so.
 
 1. The agent runs `lookup.py fetch '<DOI or arXiv ID>' '<temporary folder>' '<key>'`, where the key is the entry's key in the `.bib`.
+   - For an entry with a venue `url`, as `resolve --entry` reads one (a type other than `@misc`, no `doi`, an arXiv ID, and a `url` that is an http or https address on a host other than doi.org and arXiv), the agent adds `--page '<url>'`. `fetch` then tries first the PDF that the page's `citation_pdf_url` names, so that the passage of a citation of the published version is read in the published version.
 2. The call prints each lookup and each URL it tried with its status.
 3. It writes the full text as `<stem>.txt` in the temporary folder. The stem is the key with each `/` and `:` written `_`.
 4. When no full text is found and an index gives an abstract, the call writes `<stem>.abstract.txt` and exits 1. When there is neither, it prints "no full text and no abstract" and exits 1.
 5. The agent reads a PDF with the Read tool, as many pages as the claim needs. It reads an HTML copy as the text of `<stem>.txt`.
-6. The agent does not read a source through WebFetch, whose output is a model's processing of the page. It does not use a web search to find a source's text.
+6. The agent does not read a source through WebFetch, whose output is a model's processing of the page. It does not use a web search to find a source's text, and its one web search is the search for a venue's page that "Retractions" gives.
 7. The agent finds the passage that holds the claim and copies it, as one line, into the report as a passage line:
 
 ```
@@ -392,7 +395,11 @@ The Earlier papers row lists papers the authors published before. The agent read
 - A source looked up by title has no notice lines, since the search record does not carry them. The agent runs `lookup.py resolve '<doi>'` for the DOI of the verified record, and reads the notices from that call.
 - The report states that the retraction check covers the notices Crossref lists, and that Crossref's own record of a source can lack a notice that a publisher has issued. It names every source with a notice line.
 
-- A retracted source is replaced by a patch when a candidate from `lookup.py search` holds the claim. The agent fetches the candidate, reads its passage as "Reading the source" says, and copies the passage line into the report. The patch adds the candidate's entry to the `.bib` from `lookup.py bibtex` and rewrites the `\cite` of each sentence that cited the retracted source.
+- A retracted source is replaced by a patch when a candidate from `lookup.py search` holds the claim. The agent fetches the candidate, reads its passage as "Reading the source" says, and copies the passage line into the report. The patch adds the candidate's entry to the `.bib` from the standard output of `lookup.py bibtex`, and rewrites the `\cite` of each sentence that cited the retracted source.
+  - For an arXiv ID whose published version an index names by its DOI, `bibtex` prints the published version's entry.
+  - When `bibtex` prints the line "published in <venue> (<type>) per Semantic Scholar", the entry is the one `lookup.py bibtex '<arXiv ID>' --page '<url>'` prints for the candidate's page at that venue. An address of that page the agent already holds (the reference text, or a `url` it was given) is tried first, with no search. Without one, or when `--page` refuses the address held, the agent may run one web search to find the candidate's page at the venue the line names, and runs no second search.
+  - The page is never read through WebFetch, and the agent passes no sign-in, payment or bot check.
+  - Without a page, or when `--page` refuses it, the entry is the `@misc` entry, and the report names the key with the "published in" line as printed.
 - A candidate whose passage does not hold the claim is not a replacement.
 - When no candidate holds the claim, the agent flags the source as an issue `C<m>` marked "needs the user", with the retraction as the record shows it and up to 3 candidates, each with its record line. It writes no patch, and the session lists the issue in the final message.
 - A source cited to discuss the retraction itself is flagged with the suggested note "[Retracted]" after it. A source where only other results were retracted is flagged with the suggested note "[Partial retraction; cited findings unaffected]". The agent changes neither by a patch.

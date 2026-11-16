@@ -12,7 +12,7 @@ The formatter agent reads this page to prepare a LaTeX manuscript for a target f
 - The latest `citation-report.md` and `review-<r>.md` beside the manuscript, when they stand.
 - The template in the Materials in hand row, when the user holds one, and `references/latex-template.md`.
 - `references/draft-writer.md`, "The cover letter", when the venue is a journal and no `cover-letter.tex` stands beside the manuscript.
-- `lookup.py` with the commands `resolve` and `bibtex`, for the entries of a `refs.bib` it writes (SKILL.md, "Agent prompts").
+- `lookup.py` with the commands `resolve` and `bibtex` (also as `bibtex <arXiv ID> --page <url>`), for the entries of a `refs.bib` it writes (SKILL.md, "Agent prompts"). After a "published in" line of `bibtex`, it also runs the one web search for a venue's page that `references/latex-template.md`, "The `.bib` entry forms", allows.
 
 A limit, a requirement or a layout value that no row of `config.md` and no template holds is never filled from the agent's memory of the venue, its website or its name. The report says that it was not stated.
 
@@ -174,7 +174,7 @@ The numbers and the list come from the compile of the conversion copy before the
 The session made the `.tex` from the input. The `.tex` holds the reference list as text and the citations as the input wrote them. It names its figures by relative paths in `figures/`.
 
 - The formatter writes `refs.bib` beside the new `.tex`, once, and never over an existing file. When a `refs.bib` stands there, it writes `refs-2.bib`, the `.tex` names that file, and the report names it.
-- It makes each entry from the reference text. It runs `lookup.py resolve` for the reference, and with a DOI or an arXiv ID `lookup.py bibtex`.
+- It makes each entry from the reference text. It runs `lookup.py resolve` for the reference, and with a DOI or an arXiv ID `lookup.py bibtex`, whose standard output is the entry. For a preprint with a published version, the entry is the one `references/latex-template.md`, "The `.bib` entry forms", gives, with the one web search for its venue's page that section allows.
 - An entry that neither command gives is written from the reference text as the formatter reads it, and the report lists it under "Entries written from the reference text". No entry is dropped.
 - The `format-convert` patch gives each citation of the text a cite command with the entry's key, names the `.bib`, and removes the reference list held as text.
 - The patch changes no wording of the text.

@@ -145,7 +145,16 @@ A `longtable` column never has a bare width such as `p{0.25\linewidth}`, which i
 
 ## The `.bib` entry forms
 
-The agent writes an entry from `lookup.py bibtex` when the call prints one, and otherwise in these forms. A title is in sentence case, and a journal in title case.
+The agent writes an entry from `lookup.py bibtex` when the call prints one, as the bullets below say, and otherwise in the forms that follow them. A title is in sentence case, and a journal in title case.
+
+- The entry is what `bibtex` prints on standard output. Its lines on standard error are notes, and the entry never holds them.
+- For an arXiv ID whose published version an index names by its DOI, `bibtex` prints the published version's entry.
+- When `bibtex` prints the line "published in <venue> (<type>) per Semantic Scholar" for a source, the entry is the one `lookup.py bibtex '<arXiv ID>' --page '<url>'` prints. The `<url>` is that source's page at the venue the line names.
+  - An address of that page the agent already holds (the `.bib` entry's `url`, `review.md` beside the key, or the reference text) is tried first, with no search.
+  - Without such an address, or when `--page` refuses the address held, the agent may run one web search to find that source's page at the venue the line names. It passes the address it finds to `--page` and runs no second search.
+  - The page is never read through WebFetch, and the agent passes no sign-in, payment or bot check.
+- Without a page, or when `--page` refuses it, the entry is the `@misc` entry, and the agent's report names the key with the "published in" line as printed.
+- Every other lookup of the draft writer, the formatter and the citation compliance agent is made with `lookup.py`.
 
 ```bibtex
 @article{Smith2024,
