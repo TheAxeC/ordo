@@ -68,6 +68,8 @@ A finding that is neither closed in the repair rounds nor fixed at landing is an
 
 ## Closed items (the log of what was raised and how it ended; no report carries it)
 
+- 2026-11-16: Open item BN, paper's refusal without the effort agents: closed by the user, (a), the default agent with the effort named; booked for step 5.E.
+- 2026-11-16: Open item BO, entry 5's Goal on lookup.py: closed by the user, (a), the Goal reworded in docs/roadmap.md and plan.md.
 - 2026-11-16: Open item BM, the venue page of a published arXiv paper for the roles other than the strategist: closed by the user, (a), ruling The venue page of a published arXiv paper, ADR 0034; carried in step 5.D's repair round 1.
 - 2026-11-16: Open item BL, step 5.D's clash with ADR 0027: closed by the user, no strategist per strand, ADR 0027 stands; the ruling The third repair of paper rewritten to academic-paper equivalence, booked in plan.md's Rulings.
 
