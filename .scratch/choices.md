@@ -641,3 +641,15 @@ plan 5, before step 5.H's brief: the check (`.scratch/5-paper/agents/reviews/5.H
 Taken: (a)
 Booked: `.scratch/5-paper/plan.md` Rulings, Open item BT
 Builds on it: step 5.H
+
+## C125. Where the run's process records go in step 5.H (2026-11-18)
+
+step 5.H, the ruling BS item (2) says tool names and run records stay in the run record and out of the review. The rc.8 judges counted against `paper` the commands and process notes in `review.md` (judges 1 and 2: "`the lookup script search`", "node 4 of the screening tree", "Read from: the abstract `lookup.py fetch` wrote"). A new file of the run folder is a user-visible shape.
+  - (a) `review.md`'s search record keeps per search the database, the string, the filters, the date, the count and the records taken, which make the search reproducible; the commands, script names, request addresses, reply statuses, lookup notes and file names go to `search-log.md` in the run folder (a theme run: `search-log-theme-<k>.md`), named once in `review.md` and listed in the final message; "Read from" gives the address of the text. Pro: the review reads as a review and stays reproducible; nothing of the record is lost. Con: one more file in the run folder.
+  - (b) Everything in `review.md`, as now. Pro: one file. Con: the judged defect stays.
+  - (c) The process records in `config.md`, the run record intake writes. Pro: no new file. Con: `config.md` holds the intake answers and decisions that a continued run reads; hundreds of log lines bury them.
+  - Recommendation: (a). The lazy option was (b), which changes nothing.
+
+Taken: (a)
+Booked: `.scratch/5-paper/plan.md` Rulings, Open item BU
+Builds on it: step 5.H
