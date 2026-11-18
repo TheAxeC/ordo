@@ -653,3 +653,27 @@ step 5.H, the ruling BS item (2) says tool names and run records stay in the run
 Taken: (a)
 Booked: `.scratch/5-paper/plan.md` Rulings, Open item BU
 Builds on it: step 5.H
+
+## C126. A renamed later version that no index links to its preprint, in step 5.I (2026-11-18)
+
+step 5.I, item (2) of the ruling The examples, the renamed versions and the gap chaining asks that a published version under a new title be accepted when an index links it to the preprint, so that rc.8's Thual TMLR version is cited as published. No index links the two: `curl` of Semantic Scholar's `paper/ARXIV:2312.06467` printed the preprint's title and the venue arXiv.org; its search on the TMLR title printed a separate record (3fdb5ff93c2afc62736f3f93b8ef986fd64b1a92) with no arXiv ID; OpenAlex's search found no TMLR record. The TMLR page lists nine authors against the preprint's seven.
+  - (a) A later version no index links to the preprint is a work of its own: confirmed by `lookup.py resolve` on its title, cited with the entry `lookup.py bibtex --page <url>` builds from its venue's page (accepted when an index's record found by the page's `citation_title` has a title ratio of 0.70 or more and the page's year), the preprint named as its earlier version in the annotation. A version an index links keeps the existing route. Pro: the review cites the published work, which the judges asked for, and every entry still rests on an index record. Con: a change to `lookup.py` with its tests.
+  - (b) Only the index-linked route the ruling names. Pro: no script change. Con: Thual stays a preprint, the judged defect stays.
+  - (c) Accept the venue page against the preprint's title at a lower ratio. Pro: small change. Con: a ratio of 0.42 accepts unrelated papers, and the entry would claim the preprint's eprint for a paper with other authors.
+  - Recommendation: (a). The lazy option was (b).
+
+Taken: (a), replaced by C127
+Booked: `.scratch/5-paper/plan.md` Rulings, Open item BV
+Builds on it: nothing; C127 replaces it
+
+## C127. The renamed later version cited from the record resolve prints, in step 5.I (2026-11-18), replacing C126
+
+The brief check of step 5.I (`.scratch/5-paper/agents/reviews/5.I-brief-check.md`, "7. ADRs") found that C126's new `lookup.py bibtex --page <url>` form, with no arXiv ID, contradicts ADR 0032, whose decision says "an entry for a source with neither identifier is written from the record `resolve` prints". The TMLR version of Thual et al. has neither identifier (Semantic Scholar record 3fdb5ff93c2afc62736f3f93b8ef986fd64b1a92 holds only DBLP and CorpusId), and rc.8 found it by forward tracking (`review-theme-4.md:192` of the rc.8 run).
+  - (a) C126 as taken, with a new ADR superseding that clause of ADR 0032. Pro: the entry carries the venue page's fields. Con: a rule clash with an ADR, which waits for the user, and a new script form with about a dozen untested inputs the check listed.
+  - (b) The later version is a work of its own, included when `resolve` on its title prints a matching record, its entry written from that record as `literature-strategist.md` already says for a source with neither identifier, confirmed by `resolve --entry`, its Type naming the preprint as its earlier version; no script change. Pro: follows ADR 0032, cites the published work, and every entry rests on an index record. Con: the entry has no page range from the venue page (TMLR gives none).
+  - (c) Keep the preprint. Con: the defect the judges named stays.
+  - Recommendation: (b). The lazy option was (c).
+
+Taken: (b)
+Booked: `.scratch/5-paper/plan.md` Rulings, Open item BW
+Builds on it: step 5.I
