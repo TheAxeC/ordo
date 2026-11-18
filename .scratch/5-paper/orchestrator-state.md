@@ -50,9 +50,11 @@ dispatch:                    # or the block /spec writes (a list when .agents/pl
   worker: claude:opus
   launched: 2026-11-18 10:22
   report: .scratch/5-paper/agents/reviews/5.H-report.md
-  round: 0
+  builder_usage: 168092 tokens, 226 tool uses, 24m 32s
+  round: 1
   session_id: ab9c6ed9efd028591 (claude-opus-5-5)
   brief_check: ".scratch/5-paper/agents/reviews/5.H-brief-check.md (aab13f6a3da9ec560, claude-opus-5-5, 243565 tokens, 67 tool uses, 10m 48s)"
+  reviewer_report: .scratch/5-paper/agents/reviews/5.H-refuter.md (a21e2d3f3c6d67e92, claude-opus-5-5, 296232 tokens, 58 tool uses, 10m 17s)
   landing: not-started
 ```
 
