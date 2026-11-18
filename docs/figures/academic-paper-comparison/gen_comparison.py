@@ -393,12 +393,14 @@ def ap_full_detailed() -> gf.Graph:
     return _g(nodes, edges, width=WIDE_WIDTH)
 
 
-THEME_TAG = "[The theme search]"
-EXAMPLES_TAG = "[Examples ruling]"
-LATER_VERSION = "a later version under another title cited as published [BW]"
-EXAMPLES_NOTE = (
-    '"[Examples ruling]" is the ruling The examples, the renamed versions and the gap chaining.'
+AP_TAG = "[The academic-paper strategist]"
+AP_NOTE = (
+    '"[The academic-paper strategist]" is the ruling of plan 5 that makes the literature '
+    "strategist academic-paper's page and its search the run academic-paper's own "
+    "lit-review made: the theme runs, the identifier check and the merge run."
 )
+SEARCH_ROUNDS = "search rounds: end at any 3 of 5 conditions, or after 4 rounds when none holds"
+CONFIRMED = f"each included source confirmed by a live lookup, an unconfirmed one excluded and listed {AP_TAG}"
 
 
 def theme_search_nodes() -> tuple[gf.Node, ...]:
@@ -406,51 +408,45 @@ def theme_search_nodes() -> tuple[gf.Node, ...]:
     return (
         N(
             "THS",
-            "Session: the search themes, one per research community, each with its "
-            f"strands and target count, in config.md Decisions {THEME_TAG} [BX]",
+            "Session: the search themes, clusters of the method areas, each with its "
+            f"scope and target range, in config.md Decisions {AP_TAG}",
             "choice",
         ),
         N(
             "T1",
-            "Literature strategist, theme run: search theme 1, its own theme-1/ folder, "
-            f"review-theme-1.md and refs-theme-1.bib {THEME_TAG}",
+            "Literature strategist, theme run: search theme 1, review-theme-1.md and "
+            f"refs-theme-1.bib; {CONFIRMED}",
             "ruled_maybe",
         ),
         N(
             "T2",
-            "Literature strategist, theme runs: each other search theme, all at once, "
-            f"each in its own folder {THEME_TAG}",
+            f"Literature strategist, theme runs: each other search theme, all at once {AP_TAG}",
             "ruled_maybe",
         ),
         N(
             "TM",
-            "Literature strategist, merge run, fresh: one entry per work, the criteria "
-            "again, chaining from the theme runs' core papers, each pair of themes, the "
-            f"gates; review.md, refs.bib {THEME_TAG}",
+            "Literature strategist, merge run, fresh: the duplicates removed, the report "
+            f"over the merged set, the gates computed; review.md, refs.bib {AP_TAG}",
             "ruled_maybe",
         ),
     )
 
 
-def theme_search_edges(single: str, after: str) -> tuple[gf.Edge, ...]:
-    """The arrows from the division to the single strategist or the theme runs and the merge run."""
-    passes = f"search passes, max 8, its target count to reach {THEME_TAG} [BX]"
+def theme_search_edges(single: str, after: str, check: str = "") -> tuple[gf.Edge, ...]:
+    """The arrows from the division to the single strategist or the theme runs and the merge run, through the identifier check when one is named."""
+    to_merge = (
+        (E("T1", check), E("T2", check), E(check, "TM", "after theme runs"))
+        if check
+        else (E("T1", "TM"), E("T2", "TM"))
+    )
     return (
-        E("THS", single, f"one search theme {THEME_TAG}"),
-        E("THS", "T1", f"two search themes or more {THEME_TAG}"),
+        E("THS", single, f"one search theme {AP_TAG}"),
+        E("THS", "T1", f"two search themes or more {AP_TAG}"),
         E("THS", "T2"),
-        E("T1", "T1", passes, "back"),
-        E("T2", "T2", passes, "back"),
-        E("T1", "TM"),
-        E("T2", "TM"),
-        E("TM", "TM", f"chaining rounds, max 8: until the citation loop closes {THEME_TAG}", "back"),
-        E(
-            "TM",
-            "T2",
-            "a theme report numbers the parts otherwise: that theme run resumed once, "
-            "then the merge run again [BS]",
-            "back",
-        ),
+        E("T1", "T1", SEARCH_ROUNDS, "back"),
+        E("T2", "T2", SEARCH_ROUNDS, "back"),
+        *to_merge,
+        E("TM", "TM", "a quality gate fails: a search by the failure handling strategies", "back"),
         E("TM", after),
     )
 
@@ -474,14 +470,12 @@ def paper_full_detailed() -> gf.Graph:
         ),
         N(
             "LC",
-            "Each entry confirmed against an index with resolve --entry: corrected once, "
-            f"else left out of refs.bib and named [BI]; {LATER_VERSION}",
+            f"The strategist, one search theme: {CONFIRMED}",
             "ruled",
         ),
         N(
             "SR",
-            "You review the sources: add or remove, optional [J]; after theme runs, each "
-            f"search theme with its count {THEME_TAG}",
+            "You review the sources: add or remove, optional [J]",
             "stop",
         ),
         N(
@@ -500,8 +494,7 @@ def paper_full_detailed() -> gf.Graph:
         N(
             "LG",
             "Literature strategist, resumed or fresh: the sections that need literature "
-            "and have no source [AD1, BR]; the merge run's after theme runs "
-            f"{THEME_TAG}",
+            f"and have no source [AD1, BR]; the merge run's after theme runs {AP_TAG}",
             "ruled",
         ),
         N("PG", "Planner again: assigns what was found [AD1]", "ruled"),
@@ -669,8 +662,8 @@ def paper_full_detailed() -> gf.Graph:
         E("I", "Q"),
         E("Q", "THS", "no, the default"),
         E("Q", "PL", "yes"),
-        *theme_search_edges("LS", "LC"),
-        E("LS", "LS", "search passes, max 8: end at 3 of 5 incl. few new, or pass 4 with none [BI]", "back"),
+        *theme_search_edges("LS", "SR"),
+        E("LS", "LS", SEARCH_ROUNDS, "back"),
         E("LS", "LC"),
         E("LC", "SR"),
         E("SR", "PL"),
@@ -804,8 +797,8 @@ def paper_revision_detailed() -> gf.Graph:
         N("IA", "You approve the items: drop or add, no patch before [AA]", "stop"),
         N(
             "LS",
-            "Literature strategist: a .bib patch, each entry confirmed against an index "
-            f"[Stops of paper, BI]; {LATER_VERSION}",
+            "Literature strategist: a .bib patch for the items that need a new reference "
+            f"[Stops of paper]; {CONFIRMED}",
             "ruled",
         ),
         N(
@@ -953,7 +946,7 @@ def paper_revision_detailed() -> gf.Graph:
         E("IT", "LS", "an item needs a new reference, intake allows it"),
         E("IT", "VZ", "an item needs a figure change, intake allows it"),
         E("IT", "AN"),
-        E("LS", "LS", "search passes, max 8", "back"),
+        E("LS", "LS", SEARCH_ROUNDS, "back"),
         E("LS", "AN"),
         E("VZ", "AN"),
         E("AN", "DW"),
@@ -1034,41 +1027,36 @@ def paper_lit_review_detailed() -> gf.Graph:
             "ruled_maybe",
         ),
         N(
-            "LG",
-            "The gates: a search for each part of the question; a short count widened by "
-            "5 years, then by unused indexes; up to 3 currency passes; a synthesis by "
-            "part [The simulation in step 5.F]",
+            "LC",
+            f"The strategist, one search theme: {CONFIRMED}",
             "ruled",
         ),
         N(
-            "LC",
-            "An unread candidate looked up again before it is dropped; each entry "
-            "confirmed against an index with resolve --entry: corrected once, else left "
-            f"out of refs.bib and named [BI]; {LATER_VERSION}",
+            "SC",
+            "Script, run by the session: lookup.py resolve on each entry's DOI or arXiv ID, "
+            "once, and the proceedings page of an entry with neither read, into checks.md "
+            f"{AP_TAG}",
+            "script",
+        ),
+        N(
+            "LV",
+            "Literature strategist, resumed with checks.md: the differing titles resolved; "
+            f"strict: a failing identifier corrected or removed, once [O] {AP_TAG}",
             "ruled",
         ),
         N(
             "SR",
-            "You review the sources: add or remove, optional [J]; after theme runs, each "
-            f"search theme with its count {THEME_TAG}",
+            "You review the sources: add or remove, optional [J]",
             "stop",
         ),
         N(
-            "SC",
-            "Script, run by the session: resolve --entry on every entry of refs.bib before "
-            "the patch; the count it confirmed in the final message "
-            f"{EXAMPLES_TAG}",
+            "RC",
+            "Script, run by the session: lookup.py resolve again on each corrected "
+            f"or added entry's DOI or arXiv ID, into checks.md [O] {AP_TAG}",
             "script",
         ),
+        N("RS", "A reference that cannot be confirmed [O]", "stop"),
         N("AP", "Script: apply the .bib patch [D48]", "script"),
-        N("RC", "Script: reference checks [D48]", "script"),
-        N("RF", "Draft writer: reference-fix, once [K]", "ruled"),
-        N(
-            "RC2",
-            "Script: reference checks again, failures left named [K]",
-            "script",
-        ),
-        N("SS", "A reference that cannot be confirmed [O]", "stop"),
         N("X", "End"),
     )
     floating = (
@@ -1088,22 +1076,17 @@ def paper_lit_review_detailed() -> gf.Graph:
     edges = (
         E("I", "I", "you change it, until you confirm [R]", "back"),
         E("I", "THS"),
-        *theme_search_edges("LS", "LG"),
-        E("LS", "LS", "search passes, max 8: end at 3 of 5 incl. few new, or pass 4 with none [BI]", "back"),
-        E("LS", "LG"),
-        E("LG", "LC"),
-        E("LC", "SR"),
-        E("SR", "SC"),
-        E("SC", "LS", "an entry not confirmed: corrected or taken out, once", "back"),
-        E("SC", "TM", "after theme runs: the merge run's strategist", "back"),
-        E("SC", "X", "no .tex"),
-        E("SC", "AP", ".tex given"),
-        E("AP", "RC"),
-        E("RC", "RF", "a failure"),
-        E("RF", "RC2"),
-        E("RC2", "SS", "strict: a reference still fails [O]"),
-        E("RC", "X"),
-        E("RC2", "X"),
+        *theme_search_edges("LS", "SR", "SC"),
+        E("LS", "LS", SEARCH_ROUNDS, "back"),
+        E("LS", "LC"),
+        E("LC", "SC"),
+        E("SC", "LV", "one search theme"),
+        E("LV", "SR"),
+        E("SR", "RC"),
+        E("RC", "RS", "strict: an identifier still fails"),
+        E("RC", "X", "no .tex"),
+        E("RC", "AP", ".tex given"),
+        E("AP", "X"),
     )
     return _g(nodes, edges, floating, WIDE_WIDTH)
 
@@ -1146,14 +1129,12 @@ def paper_outline_only_detailed() -> gf.Graph:
         ),
         N(
             "LC",
-            "Each entry confirmed against an index with resolve --entry: corrected once, "
-            f"else left out of refs.bib and named [BI]; {LATER_VERSION}",
+            f"The strategist, one search theme: {CONFIRMED}",
             "ruled",
         ),
         N(
             "SR",
-            "You review the sources: add or remove, optional [J]; after theme runs, each "
-            f"search theme with its count {THEME_TAG}",
+            "You review the sources: add or remove, optional [J]",
             "stop",
         ),
         N(
@@ -1165,8 +1146,7 @@ def paper_outline_only_detailed() -> gf.Graph:
         N(
             "LG",
             "Literature strategist, resumed or fresh: the sections that need literature "
-            "and have no source [AD1, BR]; the merge run's after theme runs "
-            f"{THEME_TAG}",
+            f"and have no source [AD1, BR]; the merge run's after theme runs {AP_TAG}",
             "ruled",
         ),
         N("PG", "Planner again: assigns what was found [AD1]", "ruled"),
@@ -1189,8 +1169,8 @@ def paper_outline_only_detailed() -> gf.Graph:
     edges = (
         E("I", "I", "you change it, until you confirm [R]", "back"),
         E("I", "THS"),
-        *theme_search_edges("LS", "LC"),
-        E("LS", "LS", "search passes, max 8: end at 3 of 5 incl. few new, or pass 4 with none [BI]", "back"),
+        *theme_search_edges("LS", "SR"),
+        E("LS", "LS", SEARCH_ROUNDS, "back"),
         E("LS", "LC"),
         E("LC", "SR"),
         E("SR", "PL"),
@@ -2049,7 +2029,7 @@ DETAILED = (
         "lit-review",
         ap_lit_review_detailed,
         paper_lit_review_detailed,
-        ("academic-paper: no cycle, no reference check, no manuscript changed. " + EXAMPLES_NOTE),
+        ("academic-paper: no cycle, no reference check, no manuscript changed. " + AP_NOTE),
     ),
     (
         "outline-only",

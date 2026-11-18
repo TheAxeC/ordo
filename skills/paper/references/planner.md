@@ -5,7 +5,7 @@ The planner agent reads this page to choose the structure of the paper, write it
 ## What the agent reads
 
 - `config.md`: Paper type, Length, Discipline, Research question, Parts of the research question, Venue, Venue limits, Materials in hand, Internal only and the Notes.
-- `review.md` of the literature strategist: the literature matrix with its part columns and its topical themes, the gaps with the parts they concern, and the annotations with their part fields, stance and potential use.
+- `review.md` of the literature strategist: the literature matrix with its themes, method and quality, the identified gaps, the annotations with their stance and potential use, and the recommended sources by paper section.
 - The manuscript's `.bib` or `refs.bib`, when no `review.md` exists: its entries are the sources to assign.
 - A section of the project that already holds draft text, when the Materials in hand row lists existing draft sections.
 - The project's own results that the Materials in hand row names.
@@ -163,7 +163,7 @@ n+2. Cross-cutting synthesis
    Divergent findings: results that conflict on the same question, under the same assumptions
    Methodological observations: the methods that dominate and the ones that are underused
 n+3. Research gaps and future directions
-   Identified gaps: the gaps of the review, each with the parts it concerns
+   Identified gaps: the gaps of the review, as the review writes them
    Proposed research agenda: what to investigate and with which methods
 n+4. Conclusion
    Key takeaways: the 3 to 5 most important insights
@@ -318,7 +318,7 @@ The allocation takes the paper type's column of the table, scaled to the total w
 
 - The abstract figure is a planning figure, and it is not counted in the total. The finished abstract follows `references/draft-writer.md`, "The abstract and the keywords".
 - In the Conference Paper and IMRaD skeletons the Experiments and Results sections together take the share of "Analysis or results". The agent splits it by what the paper needs.
-- For Literature Review each section of a part takes its base share times the share of the sources on its part, the sources whose field for that part is not "not addressed", times an adjustment factor. A question of one part takes the same for each section of a theme, with the share of the sources on that theme. The factor is 1.1 when the average quality score of the sources is 12 or more, and 0.9 when it is 8 or less.
+- For Literature Review each section of a part takes its base share times the share of the sources on its part, the sources marked in the columns of the literature matrix for the themes that answer the part, times an adjustment factor. A question of one part takes the same for each section of a theme, with the share of the sources on that theme. The factor is 1.1 when the average quality score of the sources is 12 or more, and 0.9 when it is 8 or less.
 - The sum of the section word counts deviates by at most 5 percent from the total. If it deviates more, the agent trims the largest section or adds to the smallest in proportion.
 - No section has fewer than 200 words, and the agent suggests merging a section that would.
 - A section above 35 percent of the total is split into two sections, or part of its content moves to the adjacent sections.
@@ -643,7 +643,7 @@ In plan mode the session starts the planner as a fresh agent for each task named
 | The research question is final | Yes or No |
 ```
 
-- The section "Seeds for the literature strategist" lists each reference and keyword once. `references/literature-strategist-plan-run.md`, "Starting from a plan run", reads that section.
+- The section "Seeds for the literature strategist" lists each reference and keyword once. The literature strategist reads that section when a run starts it after a plan run (SKILL.md, full mode item 1).
 - A research question is final when `insights.md` holds the thesis statement and the user confirmed it in the dialogue, with no open question on it.
 - A condition that is not met is listed with what the mentor must still ask about it. The planner never marks a condition met that the files do not show.
 - Done when `chapter-plan.md` holds a section for each chapter, the seeds and the gate with each condition marked.

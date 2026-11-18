@@ -24,8 +24,8 @@ The modes are full, outline-only, revision, abstract-only, lit-review, citation-
 |---|---|---|
 | Topic | What the paper is about. In plan mode the topic may be as rough as a field or an idea. | full, outline-only, lit-review, plan |
 | Research question | The question or thesis statement the paper answers, written in full. The literature strategist does not start without one, so full, outline-only and lit-review modes do not go on until the user gives one. A topic is never taken as the question. | full, outline-only, lit-review |
-| Parts of the research question | Not asked. The session fills the row from the Research question, as "The parts of the research question" below says, and shows it at the intake confirmation, where the user may correct it. | full, outline-only, lit-review |
-| Paper type | One type of the table below. A manuscript's type is proposed from the manuscript. When the user names none, the type is chosen by the table "Paper type and length" and shown with the reason. In plan mode the row is a structure preference: IMRaD, Literature Review, another of the six types, or "not sure", and "not sure" leaves the structure to the dialogue. In format-convert the type decides the layout of a conference paper, a policy brief and a thesis chapter (`references/formatter.md`, "The paper type"). | full, outline-only, revision, abstract-only, citation-check, draft-review, plan, format-convert |
+| Parts of the research question | Not asked. The session fills the row from the Research question, as "The parts of the research question" below says, and shows it at the intake confirmation, where the user may correct it. | full, outline-only |
+| Paper type | One type of the table below. A manuscript's type is proposed from the manuscript. When the user names none, the type is chosen by the table "Paper type and length" and shown with the reason. In plan mode the row is a structure preference: IMRaD, Literature Review, another of the six types, or "not sure", and "not sure" leaves the structure to the dialogue. In format-convert the type decides the layout of a conference paper, a policy brief and a thesis chapter (`references/formatter.md`, "The paper type"). | full, outline-only, revision, abstract-only, lit-review, citation-check, draft-review, plan, format-convert |
 | Discipline | The discipline and its sub-field. | full, outline-only, revision, abstract-only, lit-review, citation-check |
 | Language | The language of the paper. | full, outline-only, revision, abstract-only, lit-review, disclosure |
 | Venue | The target journal or conference, "General", or "no venue yet", which keeps the generic AI disclosure statement. In format-convert a venue is a target: the formatter applies its template and required elements. | full, outline-only, revision, abstract-only, disclosure, draft-review, figures, format-convert |
@@ -51,7 +51,7 @@ The modes are full, outline-only, revision, abstract-only, lit-review, citation-
 | Conflicts of interest | Each conflict, or "none". | full, disclosure |
 | Data availability | Open (repository and URL or DOI), restricted (source), on request, or no new data. | full, disclosure |
 | Human or patient data | Whether the study used any, and then the approving board, the approval number, the consent obtained and the de-identification applied. | full, disclosure, format-convert when the formatter writes a cover letter |
-| AI use | Whether any AI was used, each category of `references/ai-disclosure.md` marked used, not used or uncertain, and the tools with their versions. In disclosure mode the categories come pre-marked from the records of "Disclosure records". | full, outline-only, revision, lit-review, disclosure, format-convert when the formatter writes a cover letter |
+| AI use | Whether any AI was used, each category of `references/ai-disclosure.md` marked used, not used or uncertain, and the tools with their versions. In disclosure mode the categories come pre-marked from the records of "Disclosure records". | full, outline-only, revision, disclosure, format-convert when the formatter writes a cover letter |
 | Style profile | Three or more past papers or writing samples, or none. | full, revision, abstract-only |
 | Claims not to make | The claims the paper must not make, each as a sentence, or "none". | full, revision, abstract-only, citation-check, draft-review |
 | Earlier papers | The authors' earlier papers that the paper may repeat passages of, each as a path, a DOI or a citation, or "none". | full, revision, citation-check |
@@ -83,13 +83,12 @@ The modes are full, outline-only, revision, abstract-only, lit-review, citation-
 
 ## The parts of the research question
 
-In full, outline-only and lit-review mode the session splits the Research question into its parts once the user has given it, and writes them in the row "Parts of the research question" before the intake confirmation. Every start of the literature strategist uses them as recorded, and the planner reads them (`references/literature-strategist.md`, "The parts of the research question").
+In full and outline-only mode the session splits the Research question into its parts once the user has given it, and writes them in the row "Parts of the research question" before the intake confirmation. The planner reads them (`references/planner.md`).
 
 - A part is a sub-question of the research question, written in one sentence. A question that asks one thing has one part, and its part is the question.
 - The parts are numbered once, P1 to Pn, in the order the question asks them, and the number stays with the part for the whole run.
-- Each part has a short closed list of the answers a source can give on it, the last of them "other", such as "lists the failing tests / gives a hint written from the student's code / shows a model solution / gives a grade alone / asks the student a question / other".
-- The row holds one line for each part: `P<n>: <the sub-question>. Answers: <answer> / <answer> / ... / other`.
-- The session takes the parts and their answers from the words of the question and adds no part the question does not ask.
+- The row holds one line for each part: `P<n>: <the sub-question>`.
+- The session takes the parts from the words of the question and adds no part the question does not ask.
 - The user may correct the parts at the intake confirmation, like any row. A correction changes the row, and the parts stand as corrected for the whole run.
 - Revision mode writes no row: its items stand in place of the parts.
 
@@ -167,6 +166,7 @@ In full, outline-only and lit-review mode the session splits the Research questi
 
 - `unknown_user_defined` is the default and the fallback.
 - The user confirms the profile. The session may suggest one from the discipline or from a research report in the materials, and never sets one the user did not confirm.
+- The guidance of each field is held in a profile: Social Science (mixed methods common) and Policy (expert panels valued, the context deciding) in `general_social_science`, Technology (industry reports admitted, since peer review lags the field) in `cs_ml`, and Humanities (primary sources, where evidence means something else) in `humanities_interpretive`. Medicine and Health, and Education, have no profile yet: they map to the reserved `clinical` and `education`, and a run in them screens under the neutral `unknown_user_defined`.
 - A profile the user asks for that is none of the four is recorded as `unknown_user_defined (requested: <profile>)`. The session tells the user that no profile exists for it yet. The reserved profiles are `clinical`, `wet_lab`, `materials_physics`, `legal_case_based` and `education`, and each gets this answer.
 - Some runs start no literature strategist: a full run with the search skipped, or a revision that does not allow new references. Such a run records `unknown_user_defined` without asking, with the line "this run skips literature screening, so a profile has no reader".
 - A research report or an annotated bibliography in the materials does not skip the question, since the strategist still screens its sources.
@@ -221,6 +221,7 @@ Format-convert marks two more, asked in that mode only:
 - **Mark-only** is the default. A reference that still fails after its fix is marked in `checks.md` and named in the final message, and the run goes on.
 - **Strict** treats a reference that still fails after its fix as a reference that cannot be confirmed, which stops the run at the stop "A reference that cannot be confirmed".
 - In citation-check mode there is no fix before the check, and a citation whose exact DOI or arXiv ID provably fails lookup is that stop at once under strict.
+- In lit-review mode the fix is the strategist's correction of the entry, and an identifier fails only when it provably fails lookup (SKILL.md, lit-review items 2 and 5).
 - Mark-only suits fields that cite reports, standards or grey literature, where real but unindexed citations are common.
 - Strict suits fields that cite by DOI.
 - No answer records mark-only.
@@ -283,5 +284,5 @@ In disclosure mode the session reads the records of earlier runs, to mark each c
 - An instruction the user gives, at intake or later in the run, not to stop for a choice whose recommendation the run would take is recorded in the Notes. The stops of SKILL.md "Stops" stay as they are, except that the stop "A research question the materials do not answer" then takes its second option, as that table says.
 - A section "Decisions" holds the user's answer at each stop and each choice the run took by its goal with its reason, appended by the session.
 - In full, outline-only and lit-review mode "Decisions" also holds the search themes of the literature search, which the session writes before the first start of the literature strategist (SKILL.md, Steps 8, the theme search).
-- At the stop "The sources' review" the session appends one line to "Decisions" that says whether the user answered the stop or the stop was taken as a recorded decision, with the change the user gave, if any. The line of the review's AI disclosure is written from it (`references/ai-disclosure.md`, "The line of a review").
+- At the stop "The sources' review" the session appends one line to "Decisions" that says whether the user answered the stop or the stop was taken as a recorded decision, with the change the user gave, if any.
 - The record is shown to the user whole, and the run goes on when the user confirms it.

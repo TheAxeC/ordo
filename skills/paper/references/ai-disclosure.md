@@ -174,23 +174,6 @@ Each table lists the fields the anchor addresses, with the strength of its wordi
 - AI-generated data is labelled as AI-generated.
 - A claim is never supported by AI-generated content cited as its source.
 
-## The line of a review
-
-The literature strategist writes one line at the end of `review.md`, under the heading "AI disclosure". It writes the line from the AI use row of `config.md`, the categories above and the line of `config.md` "Decisions" on the stop "The sources' review".
-
-- The line says the review was produced with AI-assisted research tools, and names the tool and the version the AI use row gives.
-- It names the categories the review involved that the row marks used: research assistance for the search and the annotated bibliography, and drafting assistance for the synthesis.
-- It says that a person reviewed the sources the review includes only when the line of "Decisions" says that the user answered the stop "The sources' review" in the run.
-- Otherwise it says that no person has reviewed the review: before that stop, and when the stop was taken as a recorded decision under the user's instruction not to stop.
-- It says that the authors who use the review are responsible for what they take from it.
-- It claims no oversight, no check, no audit and no verification that did not take place in the run.
-- An answer of no AI in the AI use row contradicts a review the strategist wrote. No line is written then, and the report names the contradiction.
-- The venues' policies below govern the statement of a manuscript. They do not govern this line.
-
-```
-AI disclosure: This review was produced with AI-assisted research tools (<tool and version>). The AI took part in <the categories involved>. <A person reviewed the sources the review includes. | No person has reviewed the review.> The authors who use this review are responsible for what they take from it.
-```
-
 ## Venue policies
 
 Each entry gives the policy as recorded on the access date. The user verifies it against the venue's page before submission.

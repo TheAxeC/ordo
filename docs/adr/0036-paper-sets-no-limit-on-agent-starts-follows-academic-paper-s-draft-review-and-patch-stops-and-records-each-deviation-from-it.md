@@ -1,6 +1,6 @@
 # 0036. Paper sets no limit on agent starts, follows academic-paper's draft-review and patch stops, and records each deviation from it
 
-Status: proposed; superseded by 0037 in its sentence that the session decides when to start a role agent fresh and how many run at once, for the literature strategist's search for the review in full, outline-only and lit-review mode; refined by 0040 in its deviation on ASCII entries, which the literature strategist carries to the entries it writes itself
+Status: proposed; superseded by 0037 in its sentence that the session decides when to start a role agent fresh and how many run at once, for the literature strategist's search for the review in full, outline-only and lit-review mode; refined by 0040 in its deviation on ASCII entries, which the literature strategist carries to the entries it writes itself; superseded by the ruling The academic-paper strategist of plan 5 in its deviations for the literature strategist: the databases for each field, the layer-3 and layer-4 sources named "Not reached" with OpenCitations in their place, the question split into parts with a string each, each synthesis sentence checked against its annotation, the preprint label after `lookup.py resolve`, the widening by 5 years and the currency passes, and the ASCII entries as far as the strategist writes them
 
 ## Context
 

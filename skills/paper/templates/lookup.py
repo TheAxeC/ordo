@@ -4,10 +4,7 @@ r"""Make every reference lookup of the paper skill, and the text of a page or PD
 Usage:
 
     lookup.py resolve <DOI | arXiv ID | title> [--year <year>]
-    lookup.py resolve --entry <file.bib> <key>
-    lookup.py search <query> [--limit <n>]
-    lookup.py refs <DOI | arXiv ID | Semantic Scholar ID | OpenAlex ID>
-    lookup.py cited-by <DOI | arXiv ID | Semantic Scholar ID | OpenAlex ID>
+    lookup.py search <query>
     lookup.py bibtex <DOI | arXiv ID>
     lookup.py bibtex <arXiv ID> --page <url>
     lookup.py cite-keys <main.tex> <file.bib>
@@ -26,17 +23,14 @@ Commands:
 
 - resolve queries Crossref, OpenAlex, Semantic Scholar and arXiv and prints one line per index. For a title, each index's search gives candidates; a candidate matches at a title ratio of 0.70 or more, and of the matching candidates those whose year equals --year are preferred when there are any, and the one with the highest ratio is taken. For a DOI or an arXiv ID, the first record found, in the order Crossref, OpenAlex, Semantic Scholar, arXiv, is the reference, each other record's title is compared with it, and a record below 0.70 is printed with DOI_MISMATCH. For a title, arXiv is searched for the title as a phrase (ti:"<title>"). For a DOI or an arXiv ID, arXiv is queried only when the input holds an arXiv ID. The year is read only for a title. A line reads "<index>: ratio <r>: <title> | <authors> | <year> | <venue> | vol <volume> | no <issue> | pages <pages> | doi ... | arXiv ... | OpenAlex ... | Semantic Scholar ... | open access ...", each part left out when the record has none, or "<index>: not found", or "<index>: left out, <reason>". <authors> is every author of the record, joined by ", ". The volume, the issue and the pages are Crossref's volume, issue and page, OpenAlex's biblio (volume, issue, first_page and last_page) and Semantic Scholar's journal (volume and pages); arXiv gives none. A page range is written with two hyphens, as BibTeX writes one, and a first page alone stays alone. For a DOI or an arXiv ID, the Crossref record of the work lists in its updated-by field the notices that update the work (Crossref's update types are listed in its schema). Each notice of the type retraction, partial_retraction or expression_of_concern is printed on a line of its own after the Crossref line: "Crossref notice: <type> | <date> | doi <the notice's DOI> | source <publisher or retraction-watch>". The date is the notice's date-time cut to the day, else its date-parts joined with a hyphen. A notice of any other type, such as a correction, is not printed, and a work whose record lists no such notice gets no line. A title prints no notice, since the search record does not carry the field. The notices come from the record resolve already fetches and cost no further request.
 - resolve prints "pmcid: <PMCID>" on a line of its own after the OpenAlex line, for a DOI, an arXiv ID or a title, when the OpenAlex record names a PMCID in its ids field (read as the PMC followed by digits that ends ids.pmcid). A record that names none gets no such line. The PMCID comes from the record resolve already fetches and costs no further request.
-- resolve --entry <file.bib> <key> reads the entry <key> of the .bib, resolves it, and prints the lines resolve prints for the input it resolves by, then one last line that says whether a record confirms the entry. The key is matched exactly, and the first entry of a key that two entries share is read. Field names are read in any case. The input is the entry's doi, else its arXiv ID (its eprint field when its archivePrefix field is arXiv, else the ID of an arxiv.org/abs/ URL in its url field), else its title, resolved with --year set to the entry's year. A doi field that is not a DOI counts as absent, and a doi of the form 10.48550/arXiv.<id> is read as the DOI and as the arXiv ID. The last line is "<key>: CONFIRMED against <index>, ratio <r>, year <year>" for the first record, in the order Crossref, OpenAlex, Semantic Scholar, arXiv, whose title ratio against the entry's title is 0.70 or more and whose year equals the entry's year. For a title, the record of an index is its chosen candidate. When no record agrees it is "<key>: NOT_CONFIRMED against <index>, ratio <r>, year <year>, entry year <year>" with the values of the first record printed, a record with no year written "year none", and "<key>: NOT_CONFIRMED, no record" when no index printed a record. --entry takes no --year, and no other argument.
-- resolve --entry also reads the venue's page of an entry that no record confirms, when the entry's type is not @misc, it has no DOI (a doi field that is a DOI, an arXiv DOI included), it is resolved by its arXiv ID, and its url field is an address of a page that can be read (the paragraph on a venue's page above). The entry is then confirmed when the page's citation_title has a title ratio of 0.70 or more against the entry's title, the page's year equals the entry's year, and a record of the arXiv ID has a title ratio of 0.70 or more against the entry's title. The last line is then "<key>: CONFIRMED against <index>, ratio <r>, year <record year>; year <entry year> found on <url>", for the first such record in the order Crossref, OpenAlex, Semantic Scholar, arXiv. Otherwise the line NOT_CONFIRMED stays and ends, for the first that applies in this order, with "; <url>: <reason>" for a page that gives no answer or a status other than 2xx, "; <url>: no citation_title tag", "; <url>: no year tag", "; <url>: citation_title ratio <r>" or "; <url>: year <y> on the page"; a page that passes these and no record of the arXiv ID whose title agrees leaves the line as it is. A url on doi.org or arXiv, or a page that redirects there, is not read and leaves the line as it is. Every other entry is resolved and confirmed with no page read.
-- search prints the records of the four indexes' searches, --limit per index (20 by default, at most 100), merged when they share a DOI (compared lowercased), an arXiv ID (version dropped) or a Semantic Scholar ID. A merged record keeps the fields of the record with more fields filled, counted without the volume, the issue and the pages, and the other record fills its empty fields, the volume, the issue and the pages among them. A record is printed "[<indexes>] <title> | <authors> | ..." with the parts of a line of resolve, except that <authors> is the first three authors, followed by " et al." when the record has more. The query goes to Crossref and Semantic Scholar as given, to OpenAlex with each ? and * replaced by a space (OpenAlex reads them as wildcards and answers HTTP 400), and to arXiv in arXiv's own syntax: each word as all:<word>, a quoted phrase as all:"<phrase>", AND and OR kept, NOT written ANDNOT, parentheses kept, and two terms with no operator between them joined by AND. An operator word is read only in capitals. An operator that follows an operator replaces it, and an operator with no term before it or after it is dropped. When the parentheses do not balance, all of them are dropped, and a pair with no term inside is dropped. Every other character is dropped. Crossref ranks by relevance and reads no operator, and arXiv has no search by a sentence: a sentence is read as its words joined by AND, and arXiv can answer "not found" for it. After the records, an index that answered with no record is printed "<index>: not found" and an index that is left out "<index>: left out, <reason>".
-- refs and cited-by print the references of a work or the works that cite it, from Semantic Scholar and OpenAlex, at most 100 per index. They merge the records of one work as search does, and print each merged record on one line as search does, with the first three authors and " et al."; a line "<index>: first 100, more exist" says when an index holds more. Crossref and arXiv are not asked. An index that answered with no record is printed "<index>: not found", and an index that is left out "<index>: left out, <reason>". An OpenAlex ID (W...) is read by OpenAlex only and a Semantic Scholar ID (40 hexadecimal digits) by Semantic Scholar only, and the other index is printed as left out with that reason.
+- search prints the records of the four indexes' searches, at most 20 per index, merged when they share a DOI (compared lowercased), an arXiv ID (version dropped) or a Semantic Scholar ID. A merged record keeps the fields of the record with more fields filled, counted without the volume, the issue and the pages, and the other record fills its empty fields, the volume, the issue and the pages among them. A record is printed "[<indexes>] <title> | <authors> | ..." with the parts of a line of resolve, except that <authors> is the first three authors, followed by " et al." when the record has more. The query goes to Crossref and Semantic Scholar as given, to OpenAlex with each ? and * replaced by a space (OpenAlex reads them as wildcards and answers HTTP 400), and to arXiv in arXiv's own syntax: each word as all:<word>, a quoted phrase as all:"<phrase>", AND and OR kept, NOT written ANDNOT, parentheses kept, and two terms with no operator between them joined by AND. An operator word is read only in capitals. An operator that follows an operator replaces it, and an operator with no term before it or after it is dropped. When the parentheses do not balance, all of them are dropped, and a pair with no term inside is dropped. Every other character is dropped. Crossref ranks by relevance and reads no operator, and arXiv has no search by a sentence: a sentence is read as its words joined by AND, and arXiv can answer "not found" for it. After the records, an index that answered with no record is printed "<index>: not found" and an index that is left out "<index>: left out, <reason>".
 - bibtex prints the BibTeX entry https://doi.org/<doi> returns for Accept: application/x-bibtex when its first character other than whitespace is @, as it is given. When doi.org gives none it prints "doi.org: left out, <reason>" or "doi.org: <reason>, not a BibTeX entry" and exits 1.
 - bibtex for an arXiv ID, or a DOI 10.48550/arXiv.<id>, gives the entry of the published version when an index names one. It asks arXiv for the record, Semantic Scholar for paper/ARXIV:<id> with the fields paperId, title, externalIds and publicationVenue, and OpenAlex for works/doi:10.48550/arXiv.<id> with id, title, doi and locations. A published DOI is a DOI not of the form 10.48550/arXiv.<id> that Semantic Scholar names in externalIds.DOI, that OpenAlex names in doi, or that a doi.org landing_page_url of an OpenAlex location names, taken in that order, each once. Each published DOI is resolved as resolve resolves a DOI, in Crossref, OpenAlex and Semantic Scholar, and its first record found is compared with the title of the arXiv record (of the Semantic Scholar record, else of the OpenAlex record, when arXiv gave none). For the first published DOI whose record has a title ratio of 0.70 or more, bibtex prints the entry doi.org gives for that DOI, as for a DOI, and exits 0.
 - When doi.org gives no entry for that DOI, bibtex prints the @misc entry below and "published DOI <doi>: doi.org <reason>" (the reason "left out, <reason>", "HTTP <status>", or "HTTP 200, not a BibTeX entry"), and exits 0. When Crossref, OpenAlex and Semantic Scholar are all left out for a published DOI, it prints the @misc entry and one line "<index>: left out, <reason>" for each, and exits 0. A published DOI no index holds prints "published DOI <doi>: not found", with a left-out line for each index left out, and one whose record is below 0.70 prints "published DOI <doi>: title ratio <r> against <index>, below 0.70"; the next published DOI is then tried.
 - Otherwise bibtex prints the @misc entry of the arXiv record, keyed arxiv_<id> with each character other than a letter or digit written _, with eprint and archivePrefix = {arXiv}, each run of whitespace in the title and the authors made one space, and the braces of a value removed when they are not balanced, and exits 0. When Semantic Scholar's publicationVenue is of the type conference or journal and neither its name nor an alternate name contains arxiv in any case, it also prints "published in <venue name> (<type>) per Semantic Scholar, with no DOI named by Semantic Scholar or OpenAlex: lookup.py bibtex <arXiv ID> --page <the venue's page of the work>", the clause ending "whose record matches the title" when a published DOI was named and none was taken. Semantic Scholar or OpenAlex left out is printed "<index>: left out, <reason>", so that the published version is known not to have been checked there. With arXiv left out or not found and no published DOI taken, bibtex prints "arXiv: left out, <reason>" or "arXiv: not found" and exits 1.
 - bibtex <arXiv ID> --page <url> prints the entry of the published version built from the venue's page at <url>. It asks arXiv and Semantic Scholar as above, and reads the page. The entry is @inproceedings with booktitle when Semantic Scholar's publicationVenue is of the type conference or the page has citation_conference_title, else @article with journal. The venue is citation_conference_title, else citation_journal_title. The entry holds title, author (the citation_author tags joined by and), the venue, year, volume and pages (citation_firstpage and citation_lastpage joined by two hyphens, as BibTeX writes a range, or the first page alone) when present, url (the page's address after redirects), eprint and archivePrefix = {arXiv}, keyed as the @misc entry is, each value made one line with its braces removed when they are not balanced. It refuses, printing "page <url>: <reason>" and exiting 1 with no entry, for a page that cannot be read ("not an http or https URL", "the page is on <host>", "no answer (...)", "HTTP <status>"), that has no citation_title ("no citation_title tag") or no year ("no year tag"), or whose citation_title has a title ratio below 0.70 against the title of the arXiv record, else of the Semantic Scholar record ("citation_title ratio <r>"). With neither record it prints the arXiv line and "page <url>: no record of arXiv <id> to compare its title with", and exits 1.
 - Every entry bibtex prints, the one doi.org gives, the @misc entry and the entry of a venue's page, is ASCII. Each value is put in NFC first. A letter with one combining mark is its accent command around the base letter: acute {\'e}, grave {\`e}, circumflex {\^e}, diaeresis {\"o}, tilde {\~n}, cedilla {\c{c}}, caron {\v{c}}, ring {\r{a}}, macron {\=a}, dot above {\.z}, breve {\u{g}}, ogonek {\k{a}}, double acute {\H{o}}, with the dotless forms on i and j ({\'\i}). The sharp s, o with a stroke, l with a stroke and the ligatures ae and oe are {\ss}, {\o}, {\O}, {\l}, {\L}, {\ae}, {\AE}, {\oe} and {\OE}. A Greek letter that has a LaTeX command is that command in braced math, {$\alpha$} or {$\Gamma$}. The hyphens U+2010 and U+2011 are -, the en dash --, the em dash ---, the minus sign {$-$}, the single curly quotes ` and ', the double curly quotes `` and '', the no-break space ~, the ellipsis \ldots{}, and the signs registered, copyright, trade mark, degree, times, plus-minus, less-or-equal and greater-or-equal \textregistered{}, \textcopyright{}, \texttrademark{}, \textdegree{}, {$\times$}, {$\pm$}, {$\leq$} and {$\geq$}. The url and doi fields are not converted: each character in them that is not ASCII is percent-encoded as UTF-8. The key keeps ASCII only: a letter with a diacritic becomes its base letter, and any other character that is not ASCII is dropped. A value that is already ASCII, a LaTeX command, braces or math included, is printed unchanged. Any other character is written {?}, and bibtex prints "warning: <key>: no ASCII form for U+<hex>, written {?}" on standard error for each, <hex> in upper case with at least four digits; the entry is printed and the exit status is as for any printed entry.
-- The title ratio, which resolve, resolve --entry, bibtex and the title check of check-urls compare by, first writes each form above that holds a letter back as its character and puts the title in NFC, so that a converted entry has the ratio of the original. A form of punctuation alone is dropped by the comparison as its character is.
+- The title ratio, which resolve, bibtex and the title check of check-urls compare by, first writes each form above that holds a letter back as its character and puts the title in NFC, so that a converted entry has the ratio of the original. A form of punctuation alone is dropped by the comparison as its character is.
 - cite-keys reads the keys the .tex cites (see "The keys a .tex cites") and the keys of the .bib. It prints "missing: <key>" for each cited key the .bib lacks, in the order the keys first occur in the .tex, then "unused: <key>" for each .bib entry no cited key names, in the order of the .bib. It prints nothing when every cited key has an entry and every entry is cited.
 - check-urls reads the keys the .tex cites and the .bib. For each cited key it prints the HTTP status, after redirects, of the key's doi (as https://doi.org/<doi>), else its eprint (as https://arxiv.org/abs/<id>), else its url. A cited key with none of the three is printed as "no identifier", a cited key the .bib lacks as "no entry in <the .bib's file name>", and a URL that gives no answer as "failed, <reason>". A .tex that cites no key prints "the .tex cites no key".
 - check-urls also checks the title of a key whose entry has a doi. The doi is stripped to the bare DOI and percent-encoded as resolve does, and the entry's title is compared, by the title ratio of resolve, with the title of the first record the doi resolves to. The indexes are asked in the order Crossref, OpenAlex, Semantic Scholar, and the next one is asked when an index answers "not found" or is left out. The line of the key then ends with ", ratio <r> against <index>", the ratio written as resolve writes it, followed by ", DOI_MISMATCH" when the ratio is below 0.70. It ends with ", doi not found in Crossref, OpenAlex or Semantic Scholar" when each of the three answered "not found", and with ", title not checked: <index> left out, <reason>" when no index gave a record and one or more was left out, one clause for each index left out, the clauses separated by "; ". A key whose URL gave no answer gets the same ending after its "failed, <reason>". A key with a doi costs up to three requests more than its status request.
@@ -81,8 +75,8 @@ Pacing and failures:
 - fetch prints the reason of a 429 for the URL it tried, and bibtex prints "doi.org: <reason>, not a BibTeX entry" on standard error.
 - A redirect can lead to another host than that of the URL the call was given. A long 429 or a skip met on that host gives the reason "HTTP 429 at <host>, retry after <n> s", which names it. On the URL's own host the reason stays "HTTP 429, retry after <n> s".
 - check-urls prints the status 429 for a key's URL, and "failed, <reason>" for a URL whose request a skip prevented. It names the reason for an index of its title check.
-- resolve (resolve --entry included), search, refs and cited-by store each reply that an API host answers with status 200 and a body the script parses. A 200 that parses to no result is stored too.
-- A stored reply is used for 30 days. The same URL asked again by any lookup.py process of these four commands sends no request.
+- resolve and search store each reply that an API host answers with status 200 and a body the script parses. A 200 that parses to no result is stored too.
+- A stored reply is used for 30 days. The same URL asked again by any lookup.py process of these two commands sends no request.
 - Nothing else is stored: no other status, no body that does not parse, no other host.
 - bibtex, check-urls and fetch neither read nor write the cache, so a BibTeX entry, a title check and an abstract come from the replies of the run.
 - The cache is the folder ordo-lookup under XDG_CACHE_HOME when that is an absolute path, else under ~/.cache. It is made with mode 700. When the home folder cannot be resolved to an absolute path and XDG_CACHE_HOME is not absolute, the cache is off for the run.
@@ -99,35 +93,33 @@ Reads:
 - The environment variables XDG_CACHE_HOME and HOME, which place the cache folder.
 - The header Retry-After of a 429 reply.
 - The indexes at https://api.crossref.org, https://api.openalex.org, https://api.semanticscholar.org/graph/v1 and https://export.arxiv.org, https://doi.org, https://arxiv.org, and each URL an index returns for an open-access copy.
-- For bibtex --page, resolve --entry and fetch --page: the venue's page at the url given or the entry's url, and for fetch --page the PDF its citation_pdf_url names. A venue's page is not paced and not stored.
-- For resolve --entry: the .bib. For cite-keys and check-urls: the main .tex, each file it inputs or includes, and the .bib. For quote-check: the citation report, the .bib, <folder>/<stem>.txt and <folder>/<stem>.abstract.txt.
+- For bibtex --page and fetch --page: the venue's page at the url given or the entry's url, and for fetch --page the PDF its citation_pdf_url names. A venue's page is not paced and not stored.
+- For cite-keys and check-urls: the main .tex, each file it inputs or includes, and the .bib. For quote-check: the citation report, the .bib, <folder>/<stem>.txt and <folder>/<stem>.abstract.txt.
 - For fetch: the program pdftotext, which it runs on the PDF it wrote.
 - For text: <file>, and the program pdftotext, which it runs on <file> when it is a PDF.
 - For every request to a paced host: its lock file (ordo-lookup-crossref, ordo-lookup-openalex, ordo-lookup-semanticscholar or ordo-lookup-arxiv) in the temporary folder.
 - For every request to an API host: the host's skip file ordo-lookup-skip-<name>, with -key appended when the host's credential is set, in the temporary folder.
-- For resolve, search, refs and cited-by: the files of the cache folder.
+- For resolve and search: the files of the cache folder.
 
-Writes: fetch writes <stem>.html, <stem>.pdf, <stem>.txt and <stem>.abstract.txt inside <folder>. text writes <stem>.txt, or with --abstract <stem>.abstract.txt, inside <folder>, with mode 600, through a temporary file of that folder that it removes. Every request to a paced host writes the time it ended to the host's lock file in the temporary folder, when it could open the file. It creates the file with mode 600 when it is absent. A 429 that names more than 60 seconds, from an API host, writes that host's skip file in the temporary folder, with mode 600. resolve, search, refs and cited-by write the cache entries with mode 600 in the cache folder, which they make with mode 700, making any missing parent folder with the default mode. At their first store they remove the old entries and temporary files of that folder. Nothing else is written.
+Writes: fetch writes <stem>.html, <stem>.pdf, <stem>.txt and <stem>.abstract.txt inside <folder>. text writes <stem>.txt, or with --abstract <stem>.abstract.txt, inside <folder>, with mode 600, through a temporary file of that folder that it removes. Every request to a paced host writes the time it ended to the host's lock file in the temporary folder, when it could open the file. It creates the file with mode 600 when it is absent. A 429 that names more than 60 seconds, from an API host, writes that host's skip file in the temporary folder, with mode 600. resolve and search write the cache entries with mode 600 in the cache folder, which they make with mode 700, making any missing parent folder with the default mode. At their first store they remove the old entries and temporary files of that folder. Nothing else is written.
 
 Errors, each printed as one line on standard error:
 
 - "usage: lookup.py <command> ..." followed by the command list, for no command or an unknown command.
 - "error: <command> takes <arguments>", for a wrong count of arguments.
-- "error: --entry cannot be used with --year" and "error: --entry takes <file.bib> <key>", for resolve --entry with --year, with fewer or more than the two values, or after another argument.
-- "error: the key holds a line break", "error: <key>: the .bib has no entry with this key", "error: <key>: the entry has no title", "error: <key>: the entry has no year" and "error: <key>: the year of the entry is not four digits", for resolve --entry.
-- "error: unknown option <option>", "error: <command> needs a value after <option>", "error: --year needs a four-digit year" and "error: --limit needs a whole number from 1 to 100".
+- "error: unknown option <option>", "error: <command> needs a value after <option>" and "error: --year needs a four-digit year".
 - "error: <value> is not a DOI or an arXiv ID", for bibtex.
 - "error: --page needs an arXiv ID", for bibtex --page given a DOI that is not of the form 10.48550/arXiv.<id>.
-- "error: <value> is not a DOI, an arXiv ID, a Semantic Scholar ID or an OpenAlex ID", for refs, cited-by and fetch.
+- "error: <value> is not a DOI, an arXiv ID, a Semantic Scholar ID or an OpenAlex ID", for fetch.
 - "error: the key is empty", for fetch and text.
 - "error: <folder>: not a folder", for fetch, quote-check and text.
 - "error: <folder>/<stem>.txt exists", for text, when <stem>.txt exists as a file or as a link, a dangling link included; with --abstract the same for <stem>.abstract.txt.
 - "error: <file>: not an HTML, XML or PDF file", for text given a body that is neither, an empty file included.
 - "error: pdftotext not found", for text given a PDF when pdftotext is not installed.
 - "error: <folder>/<stem>.txt: the text read back differs from the text made", for text, which then removes the file.
-- "error: <path>: <reason>", for a .tex, an \input or \include file, a .bib (the one of resolve --entry included), a citation report or the file of text that cannot be read (the reason is the operating system's, or "not valid UTF-8"), and for a file fetch or text cannot write. The path of an \input or \include file is the main file's folder joined with the name, with .tex added when the name has no extension.
+- "error: <path>: <reason>", for a .tex, an \input or \include file, a .bib, a citation report or the file of text that cannot be read (the reason is the operating system's, or "not valid UTF-8"), and for a file fetch or text cannot write. The path of an \input or \include file is the main file's folder joined with the name, with .tex added when the name has no extension.
 
-Exit status: 0 when the command ran and found nothing to fail; 1 when resolve --entry printed NOT_CONFIRMED, when bibtex got no BibTeX entry (bibtex --page refusing the page included), when cite-keys printed a line, when check-urls or quote-check found a failure (a URL not ending in a 2xx status or giving no answer, a key printed as having no identifier, no entry, no passage or no text, a title flagged DOI_MISMATCH, a doi not found, a title not checked, a passage not found, a malformed passage line), when fetch found no full text, or when text printed "no text"; 2 for a call it cannot read (every error line above).
+Exit status: 0 when the command ran and found nothing to fail; 1 when bibtex got no BibTeX entry (bibtex --page refusing the page included), when cite-keys printed a line, when check-urls or quote-check found a failure (a URL not ending in a 2xx status or giving no answer, a key printed as having no identifier, no entry, no passage or no text, a title flagged DOI_MISMATCH, a doi not found, a title not checked, a passage not found, a malformed passage line), when fetch found no full text, or when text printed "no text"; 2 for a call it cannot read (every error line above).
 """
 
 import datetime
@@ -169,10 +161,7 @@ TIMEOUT = 30
 PDFTOTEXT_TIMEOUT = 120
 MAX_REDIRECTS = 10
 TITLE_CANDIDATES = 5
-DEFAULT_LIMIT = 20
-MAX_LIMIT = 100
-REFERENCE_PAGE = 100
-OPENALEX_BATCH = 50
+SEARCH_LIMIT = 20
 INDEX_NAMES = ("Crossref", "OpenAlex", "Semantic Scholar", "arXiv")
 ARXIV_HOSTS = ("arxiv.org", "export.arxiv.org", "www.arxiv.org")
 # host: (name, seconds from the end of one request to the start of the next, the same when the host's credential is set). The arXiv hosts are paced by arxiv_turn.
@@ -183,7 +172,7 @@ PACED_HOSTS = {
 }
 # The hosts of the four indexes with the name of each in the skip files: a 429 from one of them that asks a long wait is written to its skip file, and its 200 replies are cached.
 API_HOSTS = {**{host: name for host, (name, _, _) in PACED_HOSTS.items()}, "export.arxiv.org": "arxiv"}
-CACHED_COMMANDS = ("resolve", "search", "refs", "cited-by")
+CACHED_COMMANDS = ("resolve", "search")
 USER_AGENT = "lookup.py (the paper skill of Ordo)"
 ATOM = "{http://www.w3.org/2005/Atom}"
 ARXIV_ATOM = "{http://arxiv.org/schemas/atom}"
@@ -199,7 +188,7 @@ PAGE_EXCLUDED_HOSTS = ("doi.org", "dx.doi.org", "www.doi.org", "arxiv.org", "www
 PAGE_ACCEPT = "text/html,application/xhtml+xml;q=0.9,*/*;q=0.8"
 VENUE_PAGE = "<the venue's page of the work>"
 NOTICE_TYPES = ("retraction", "partial_retraction", "expression_of_concern")
-# The fields of a Record that search, refs and cited-by count to choose the record kept when two records merge.
+# The fields of a Record that search counts to choose the record kept when two records merge.
 COUNTED_FIELDS = ("title", "authors", "year", "venue", "doi", "arxiv_id", "openalex_id", "s2_id", "oa_urls", "abstract")
 # The fields the record kept takes from the other record when its own is empty.
 RECORD_FIELDS = ("title", "authors", "year", "venue", "volume", "issue", "pages", "doi", "arxiv_id", "openalex_id", "s2_id", "oa_urls", "abstract")
@@ -215,8 +204,6 @@ OPENALEX_ID = re.compile(r"^W\d+$")
 CITATION = re.compile(r"\[(@[^\[\]]*)\]")
 PASSAGE_LEAD = re.compile(r"^>\s*\[@([^,;\]\s]+),\s*([^\]]+)\]:\s")
 PASSAGE_START = re.compile(r"^>\s*\[@")
-ARXIV_ABSTRACT_URL = re.compile(r"arxiv\.org/abs/([^\s?#]+?)/?(?:[?#]|\s|$)", re.IGNORECASE)
-LINE_BREAK = re.compile("[\\n\\r\\v\\f\\x1c-\\x1e\\x85\\u2028\\u2029]")
 PARSE_ERRORS = (ValueError, KeyError, TypeError, AttributeError, IndexError, ET.ParseError)
 BLOCK_TAGS = frozenset(
     (
@@ -233,7 +220,7 @@ TEX_CALL = re.compile(
     r"\\(?:input|include)(?![A-Za-z@])\s*\{(?P<name>[^}]*)\}"
     r"|\\(?!nocite(?![A-Za-z]))[A-Za-z]*[Cc]ite[A-Za-z]*\*?(?:\s*\[[^\]]*\])*\s*\{(?P<keys>[^}]*)\}"
 )
-COMMANDS = ("resolve", "search", "refs", "cited-by", "bibtex", "cite-keys", "check-urls", "fetch", "quote-check", "text")
+COMMANDS = ("resolve", "search", "bibtex", "cite-keys", "check-urls", "fetch", "quote-check", "text")
 PMCID = re.compile(r"(PMC\d+)/?$")
 UTF8_BOM = b"\xef\xbb\xbf"
 # The charset a saved page declares: an XML declaration's encoding, else the first meta tag that names a charset.
@@ -307,7 +294,6 @@ class Outcome:
 
     records: list = field(default_factory=list)
     left_out: str = ""
-    more: bool = False
 
 
 @dataclass
@@ -521,26 +507,6 @@ def parse_openalex_search(text):
     return [parse_openalex_work_object(work) for work in json.loads(text)["results"]]
 
 
-def referenced_ids(body):
-    return [url.rsplit("/", 1)[-1] for url in body.get("referenced_works") or []]
-
-
-def parse_openalex_work_links(text):
-    """(OpenAlex ID, OpenAlex IDs of the referenced works) of a work."""
-    body = json.loads(text)
-    return body["id"].rstrip("/").rsplit("/", 1)[-1], referenced_ids(body)
-
-
-def parse_openalex_referenced(text):
-    return referenced_ids(json.loads(text))
-
-
-def parse_openalex_citing(text):
-    """(the works that cite a work, whether more than one page of them exist)."""
-    body = json.loads(text)
-    return [parse_openalex_work_object(work) for work in body["results"]], body["meta"]["count"] > REFERENCE_PAGE
-
-
 def parse_s2_paper_object(paper):
     external = paper.get("externalIds") or {}
     oa_url = (paper.get("openAccessPdf") or {}).get("url")
@@ -569,17 +535,6 @@ def parse_s2_paper(text):
 
 def parse_s2_search(text):
     return [parse_s2_paper_object(paper) for paper in json.loads(text).get("data") or []]
-
-
-def parse_s2_links(key):
-    """The parser of a references (key "citedPaper") or citations (key "citingPaper") answer, with whether more pages exist."""
-
-    def parse(text):
-        body = json.loads(text)
-        records = [parse_s2_paper_object(item[key]) for item in body.get("data") or [] if item.get(key)]
-        return records, body.get("next") is not None
-
-    return parse
 
 
 def parse_s2_published(text):
@@ -681,7 +636,7 @@ def choose_candidate(records, query, year):
 
 
 def format_record(record, every_author=False):
-    """The record as one line. resolve lists every author (every_author), so that an entry can be written from its line; search, refs and cited-by list the first three and " et al."."""
+    """The record as one line. resolve lists every author (every_author), so that an entry can be written from its line; search lists the first three and " et al."."""
     if every_author:
         authors = ", ".join(record.authors)
     else:
@@ -744,14 +699,12 @@ def identifier_lines(outcomes):
 
 
 def merged_lines(named):
-    """The lines of search, refs and cited-by for named, a list of (index name, Outcome) of the indexes that were asked."""
+    """The lines of search for named, a list of (index name, Outcome) of the indexes that were asked."""
     records = merge_records([record for _, outcome in named for record in outcome.records])
     lines = [f"[{', '.join(record.indexes)}] {format_record(record)}" for record in records]
     for name, outcome in named:
         if outcome.left_out:
             lines.append(f"{name}: left out, {outcome.left_out}")
-        elif outcome.more:
-            lines.append(f"{name}: first {REFERENCE_PAGE}, more exist")
         elif not outcome.records:
             lines.append(f"{name}: not found")
     return lines
@@ -884,8 +837,8 @@ def read_bib_value(text, i):
         return "".join(parts), i
 
 
-def parse_bib(text, types=None):
-    """The entries of a BibTeX file as {key: {field name in lower case: value}}; the first entry of a key is kept. types, when given, is filled with {key: entry type in lower case}."""
+def parse_bib(text):
+    """The entries of a BibTeX file as {key: {field name in lower case: value}}; the first entry of a key is kept."""
     entries = {}
     start = re.compile(r"@(\w+)\s*([{(])")
     position = 0
@@ -915,8 +868,6 @@ def parse_bib(text, types=None):
                 break
             value, i = read_bib_value(text, name.end())
             fields[name.group(1).lower()] = value
-        if key not in entries and types is not None:
-            types[key] = match.group(1).lower()
         entries.setdefault(key, fields)
         position = i
 
@@ -1426,8 +1377,6 @@ def outcome_of(call):
         found = call()
     except LeftOut as reason:
         return Outcome(left_out=str(reason))
-    if isinstance(found, tuple):
-        return Outcome(found[0], more=found[1])
     if found is None:
         return Outcome()
     return Outcome(found if isinstance(found, list) else [found])
@@ -1563,44 +1512,6 @@ def searches(client, query, limit, phrase):
     ]
 
 
-def openalex_batch(client, work_ids):
-    ids = "|".join(work_ids)
-    params = urllib.parse.urlencode({"filter": "openalex:" + ids, "per_page": len(work_ids), "select": OPENALEX_FIELDS})
-    return get_parsed(client, f"https://api.openalex.org/works?{params}", parse_openalex_search)
-
-
-def linked_openalex(client, text, identifier, citing):
-    """The works that cite the input (citing) or that it references, from OpenAlex."""
-    if OPENALEX_ID.match(text):
-        work_id, referenced = text, None
-    else:
-        url = f"https://api.openalex.org/works/doi:{quote_doi(identifier.doi)}?select=id,referenced_works"
-        found = get_parsed(client, url, parse_openalex_work_links)
-        if found is None:
-            return []
-        work_id, referenced = found
-    if citing:
-        params = urllib.parse.urlencode({"filter": "cites:" + work_id, "per_page": REFERENCE_PAGE, "select": OPENALEX_FIELDS})
-        found = get_parsed(client, f"https://api.openalex.org/works?{params}", parse_openalex_citing)
-        return [] if found is None else found
-    if referenced is None:
-        referenced = get_parsed(client, f"https://api.openalex.org/works/{work_id}?select=id,referenced_works", parse_openalex_referenced)
-        if referenced is None:
-            return []
-    records = []
-    for start in range(0, min(len(referenced), REFERENCE_PAGE), OPENALEX_BATCH):
-        records += openalex_batch(client, referenced[start:min(start + OPENALEX_BATCH, REFERENCE_PAGE)]) or []
-    return records, len(referenced) > REFERENCE_PAGE
-
-
-def linked_s2(client, text, identifier, citing):
-    path = text if S2_ID.match(text) else s2_path(identifier)
-    kind, key = ("citations", "citingPaper") if citing else ("references", "citedPaper")
-    params = urllib.parse.urlencode({"fields": S2_FIELDS, "limit": REFERENCE_PAGE})
-    url = f"https://api.semanticscholar.org/graph/v1/paper/{path}/{kind}?{params}"
-    return get_parsed(client, url, parse_s2_links(key)) or []
-
-
 # The commands.
 
 
@@ -1652,148 +1563,29 @@ def read_text_file(path):
 
 
 def resolve_input(client, identifier, year):
-    """(the lines resolve prints, the record each index printed in INDEX_NAMES order or None) for a classified input. The year is 0 when none is given."""
+    """The lines resolve prints for a classified input. The year is 0 when none is given."""
     if identifier.kind == "title":
         outcomes = searches(client, identifier.text, TITLE_CANDIDATES, True)
         chosen = [None if outcome.left_out else choose_candidate(outcome.records, identifier.text, year) for outcome in outcomes]
-        return title_lines(outcomes, chosen), [pair[1] if pair else None for pair in chosen]
+        return title_lines(outcomes, chosen)
     outcomes = [lookup_crossref(client, identifier), lookup_openalex(client, identifier), lookup_s2(client, identifier), lookup_arxiv(client, identifier)]
-    return identifier_lines(outcomes), [None if outcome.left_out or not outcome.records else outcome.records[0] for outcome in outcomes]
-
-
-def entry_identifier(fields, title):
-    """What a .bib entry resolves by: its DOI, else its arXiv ID, else its title. A doi field that is not a DOI is absent."""
-    identifier = classify(fields.get("doi", ""))
-    if identifier.kind == "doi":
-        return identifier
-    eprint = classify(fields.get("eprint", ""))
-    if eprint.kind == "arxiv" and fields.get("archiveprefix", "").strip().lower() == "arxiv":
-        return eprint
-    abstract_url = ARXIV_ABSTRACT_URL.search(fields.get("url", ""))
-    if abstract_url and is_arxiv_id(abstract_url.group(1)):
-        return classify(abstract_url.group(1))
-    return Identifier("title", title)
-
-
-def entry_verdict(key, title, year, records):
-    """The last line of resolve --entry and whether it confirms the entry: the first record whose title and year agree with the entry's."""
-    printed = [(name, record) for name, record in zip(INDEX_NAMES, records) if record is not None]
-    for name, record in printed:
-        ratio = title_ratio(title, record.title)
-        if ratio >= MATCH_THRESHOLD and record.year == year:
-            return f"{key}: CONFIRMED against {name}, ratio {ratio:.2f}, year {record.year}", True
-    if not printed:
-        return f"{key}: NOT_CONFIRMED, no record", False
-    name, record = printed[0]
-    record_year = record.year if record.year else "none"
-    return f"{key}: NOT_CONFIRMED against {name}, ratio {title_ratio(title, record.title):.2f}, year {record_year}, entry year {year}", False
-
-
-def page_applies(kind, fields, identifier):
-    """Whether resolve --entry reads the venue's page an entry names when no record confirms it: an entry whose type is not @misc, that holds no DOI and an arXiv ID,
-    and whose url is an http or https address on a host other than those of PAGE_EXCLUDED_HOSTS."""
-    parts = urllib.parse.urlsplit(fields.get("url", "").strip())
-    return kind != "misc" and identifier.kind == "arxiv" and parts.scheme in ("http", "https") and (parts.hostname or "") not in PAGE_EXCLUDED_HOSTS
-
-
-def page_verdict(client, key, title, year, records, url, verdict):
-    """The last line of resolve --entry and whether it confirms the entry, for an entry whose venue's page is read: confirmed when the page's citation_title has a ratio of 0.70 or more
-    against the entry's title, the page's year equals the entry's year and a record of the arXiv ID has a ratio of 0.70 or more against the entry's title. verdict is the line without the page."""
-    try:
-        tags, _ = read_page(client, url)
-    except ExcludedPage:
-        return verdict, False
-    except LeftOut as reason:
-        return f"{verdict}; {url}: {reason}", False
-    page_title = first_tag(tags, "citation_title")
-    if not page_title:
-        return f"{verdict}; {url}: no citation_title tag", False
-    page_year_found = page_year(tags)
-    if page_year_found is None:
-        return f"{verdict}; {url}: no year tag", False
-    ratio = title_ratio(title, page_title)
-    if ratio < MATCH_THRESHOLD:
-        return f"{verdict}; {url}: citation_title ratio {ratio:.2f}", False
-    if page_year_found != year:
-        return f"{verdict}; {url}: year {page_year_found} on the page", False
-    for name, record in zip(INDEX_NAMES, records):
-        if record is not None and title_ratio(title, record.title) >= MATCH_THRESHOLD:
-            record_year = record.year if record.year else "none"
-            return f"{key}: CONFIRMED against {name}, ratio {title_ratio(title, record.title):.2f}, year {record_year}; year {year} found on {url}", True
-    return verdict, False
-
-
-def run_resolve_entry(client, arguments, out):
-    position = arguments.index("--entry")
-    if "--year" in arguments:
-        raise UsageError("--entry cannot be used with --year")
-    if position != 0 or len(arguments) != 3:
-        raise UsageError("--entry takes <file.bib> <key>")
-    bib_path, key = arguments[1], arguments[2]
-    if LINE_BREAK.search(key):
-        raise UsageError("the key holds a line break")
-    types = {}
-    fields = parse_bib(read_text_file(bib_path), types).get(key)
-    if fields is None:
-        raise UsageError(f"{key}: the .bib has no entry with this key")
-    title = collapse_spaces(fields.get("title", ""))
-    if not title:
-        raise UsageError(f"{key}: the entry has no title")
-    year = fields.get("year", "").strip()
-    if not year:
-        raise UsageError(f"{key}: the entry has no year")
-    if not re.fullmatch(r"\d{4}", year):
-        raise UsageError(f"{key}: the year of the entry is not four digits")
-    identifier = entry_identifier(fields, title)
-    lines, records = resolve_input(client, identifier, int(year))
-    verdict, confirmed = entry_verdict(key, title, int(year), records)
-    if not confirmed and page_applies(types[key], fields, identifier):
-        verdict, confirmed = page_verdict(client, key, title, int(year), records, fields["url"].strip(), verdict)
-    out.extend(lines)
-    out.append(verdict)
-    return 0 if confirmed else 1
+    return identifier_lines(outcomes)
 
 
 def run_resolve(client, arguments, out):
-    if "--entry" in arguments:
-        return run_resolve_entry(client, arguments, out)
     positional, options = parse_options(arguments, ("--year",), "resolve")
     expect_arguments(positional, 1, "resolve", "<DOI | arXiv ID | title> [--year <year>]")
     year = options.get("--year", "")
     if year and not re.fullmatch(r"\d{4}", year):
         raise UsageError("--year needs a four-digit year")
-    lines, _ = resolve_input(client, classify(positional[0]), int(year) if year else 0)
-    out.extend(lines)
+    out.extend(resolve_input(client, classify(positional[0]), int(year) if year else 0))
     return 0
 
 
 def run_search(client, arguments, out):
-    positional, options = parse_options(arguments, ("--limit",), "search")
-    expect_arguments(positional, 1, "search", "<query> [--limit <n>]")
-    limit = options.get("--limit", str(DEFAULT_LIMIT))
-    if not (limit.isdigit() and 1 <= int(limit) <= MAX_LIMIT):
-        raise UsageError(f"--limit needs a whole number from 1 to {MAX_LIMIT}")
-    out.extend(merged_lines(list(zip(INDEX_NAMES, searches(client, positional[0], int(limit), False)))))
-    return 0
-
-
-def run_links(client, arguments, out, command):
-    positional, _ = parse_options(arguments, (), command)
-    expect_arguments(positional, 1, command, "<DOI | arXiv ID | Semantic Scholar ID | OpenAlex ID>")
-    text = positional[0].strip()
-    identifier = require_identifier(text, with_ids=True)
-    citing = command == "cited-by"
-    s2_text = text if S2_ID.match(text) else ""
-    openalex_text = text if OPENALEX_ID.match(text) else ""
-    if openalex_text:
-        s2_outcome = Outcome(left_out="the input is an OpenAlex ID")
-    else:
-        s2_outcome = outcome_of(lambda: linked_s2(client, s2_text, identifier, citing))
-    if s2_text:
-        openalex_outcome = Outcome(left_out="the input is a Semantic Scholar ID")
-    else:
-        openalex_outcome = outcome_of(lambda: linked_openalex(client, openalex_text, identifier, citing))
-    out.extend(merged_lines([("OpenAlex", openalex_outcome), ("Semantic Scholar", s2_outcome)]))
+    positional, _ = parse_options(arguments, (), "search")
+    expect_arguments(positional, 1, "search", "<query>")
+    out.extend(merged_lines(list(zip(INDEX_NAMES, searches(client, positional[0], SEARCH_LIMIT, False)))))
     return 0
 
 
@@ -2306,8 +2098,6 @@ HANDLERS = {
 
 def run_command(client, command, arguments, out, notes):
     """The exit status of one command; out is printed on standard output and notes, which only bibtex writes, on standard error."""
-    if command in ("refs", "cited-by"):
-        return run_links(client, arguments, out, command)
     if command == "bibtex":
         return run_bibtex(client, arguments, out, notes)
     return HANDLERS[command](client, arguments, out)

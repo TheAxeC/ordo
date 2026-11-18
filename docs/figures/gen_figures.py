@@ -1257,12 +1257,12 @@ THEME_RUN_FIRST = "Literature strategist, theme run: search theme 1"
 THEME_RUN_REST = "Literature strategist, theme runs: each other search theme, all at once"
 MERGE_RUN = (
     "Literature strategist, merge run, after the theme runs: removes the duplicates, "
-    "searches across the search themes, writes the one review"
+    "runs the quality gates over the merged set, writes the one review"
 )
 THEME_EDGE = "two search themes or more, unless you skip the search"
-MERGE_LOOP = "chaining rounds, max 8: until the citation loop closes"
-THEME_LOOP = "search passes, max 8, its target count to reach"
-MERGE_REFUSAL = "a theme report numbers the parts otherwise: that theme run resumed once"
+MERGE_LOOP = "a quality gate fails: a search by the failure handling strategies"
+SEARCH_LOOP = "search rounds: 3 of 5 stopping rules, or 4 rounds with none"
+CONFIRMED = "each source confirmed by a live lookup"
 
 
 def paper_full_graph() -> Graph:
@@ -1270,7 +1270,7 @@ def paper_full_graph() -> Graph:
         Node("I", "Intake: you confirm", "stop"),
         Node(
             "L",
-            "Literature strategist, unless you skip it; each entry checked against an index",
+            "Literature strategist, unless you skip it; " + CONFIRMED,
             "maybe",
         ),
         Node("T1", THEME_RUN_FIRST, "maybe"),
@@ -1339,13 +1339,12 @@ def paper_full_graph() -> Graph:
         Edge("I", "T1", THEME_EDGE),
         Edge("I", "T2"),
         Edge("L", "LR"),
-        Edge("L", "L", "search passes, max 8: end at 3 of 5 incl. few new, or pass 4 with none", "back"),
-        Edge("T1", "T1", THEME_LOOP, "back"),
-        Edge("T2", "T2", THEME_LOOP, "back"),
+        Edge("L", "L", SEARCH_LOOP, "back"),
+        Edge("T1", "T1", SEARCH_LOOP, "back"),
+        Edge("T2", "T2", SEARCH_LOOP, "back"),
         Edge("T1", "M"),
         Edge("T2", "M"),
         Edge("M", "M", MERGE_LOOP, "back"),
-        Edge("M", "T2", MERGE_REFUSAL, "back"),
         Edge("M", "LR"),
         Edge("LR", "PL"),
         Edge("PL", "G", "a section has no source"),
@@ -1355,7 +1354,7 @@ def paper_full_graph() -> Graph:
         Edge("PL", "PW", "two or more weak-argument signs"),
         Edge("PW", "OA"),
         Edge("G", "PL2"),
-        Edge("G", "G", "search passes, max 8: end at 3 of 5 incl. few new, or pass 4 with none", "back"),
+        Edge("G", "G", SEARCH_LOOP, "back"),
         Edge("PL2", "OA"),
         Edge("OA", "PL", "changes or another structure, no cap", "back"),
         Edge("OA", "W"),
@@ -1463,7 +1462,7 @@ def paper_revision_graph() -> Graph:
         Edge("SQ", "W", "your answer, instructions given"),
         Edge("IA", "W"),
         Edge("P", "LS"),
-        Edge("LS", "LS", "search passes, max 8: end at 3 of 5 incl. few new, or pass 4 with none", "back"),
+        Edge("LS", "LS", SEARCH_LOOP, "back"),
         Edge("P", "V"),
         Edge("V", "V", "checks the rendered figure, up to 2 fixes, optional", "back"),
         Edge("P", "W"),
@@ -1498,33 +1497,35 @@ def paper_revision_graph() -> Graph:
 def paper_lit_review_graph() -> Graph:
     nodes = (
         Node("I", "Intake: you confirm", "stop"),
-        Node("L", "Literature strategist: each entry checked against an index", "maybe"),
+        Node("L", "Literature strategist: " + CONFIRMED, "maybe"),
         Node("T1", THEME_RUN_FIRST, "maybe"),
         Node("T2", THEME_RUN_REST, "maybe"),
+        Node("SC", "Session: each DOI or arXiv ID resolved once, the proceedings page of an entry with neither read", "script"),
+        Node("L2", "Literature strategist, resumed with the identifier check: titles resolved, strict: a failing identifier corrected or removed", "maybe"),
         Node("M", MERGE_RUN, "maybe"),
         Node("LR", "You review the sources, optional", "stop"),
-        Node("SC", "Session: each entry of refs.bib checked against an index again", "script"),
-        Node("RF", "Draft writer: reference fix, when a .tex is given", "maybe"),
-        Node("SD", "A reference that cannot be confirmed", "stop"),
+        Node("RC", "Session: each corrected or added entry's DOI or arXiv ID resolved again", "script"),
+        Node("SR", "A reference that cannot be confirmed", "stop"),
+        Node("PA", "Script: the entries added to the .bib, when a .tex is given", "script"),
     )
     edges = (
         Edge("I", "L", "one search theme"),
         Edge("I", "T1", "two search themes or more"),
         Edge("I", "T2"),
-        Edge("L", "LR"),
-        Edge("L", "L", "search passes, max 8: end at 3 of 5 incl. few new, or pass 4 with none", "back"),
-        Edge("T1", "T1", THEME_LOOP, "back"),
-        Edge("T2", "T2", THEME_LOOP, "back"),
-        Edge("T1", "M"),
-        Edge("T2", "M"),
+        Edge("L", "L", SEARCH_LOOP, "back"),
+        Edge("T1", "T1", SEARCH_LOOP, "back"),
+        Edge("T2", "T2", SEARCH_LOOP, "back"),
+        Edge("L", "SC"),
+        Edge("T1", "SC"),
+        Edge("T2", "SC"),
+        Edge("SC", "L2", "one search theme"),
+        Edge("SC", "M", "after theme runs: the same work, in the merge run"),
         Edge("M", "M", MERGE_LOOP, "back"),
-        Edge("M", "T2", MERGE_REFUSAL, "back"),
+        Edge("L2", "LR"),
         Edge("M", "LR"),
-        Edge("LR", "SC"),
-        Edge("SC", "L", "an entry not confirmed: the strategist corrects it or takes it out, once", "back"),
-        Edge("SC", "M", "after theme runs: the merge run's strategist", "back"),
-        Edge("SC", "RF"),
-        Edge("RF", "SD", "strict: a reference still fails"),
+        Edge("LR", "RC"),
+        Edge("RC", "SR", "strict: an identifier still fails"),
+        Edge("RC", "PA"),
     )
     return _graph(nodes, edges)
 
@@ -1532,7 +1533,7 @@ def paper_lit_review_graph() -> Graph:
 def paper_outline_only_graph() -> Graph:
     nodes = (
         Node("I", "Intake: you confirm", "stop"),
-        Node("L", "Literature strategist: each entry checked against an index", "maybe"),
+        Node("L", "Literature strategist: " + CONFIRMED, "maybe"),
         Node("T1", THEME_RUN_FIRST, "maybe"),
         Node("T2", THEME_RUN_REST, "maybe"),
         Node("M", MERGE_RUN, "maybe"),
@@ -1547,19 +1548,18 @@ def paper_outline_only_graph() -> Graph:
         Edge("I", "T1", "two search themes or more"),
         Edge("I", "T2"),
         Edge("L", "LR"),
-        Edge("L", "L", "search passes, max 8: end at 3 of 5 incl. few new, or pass 4 with none", "back"),
-        Edge("T1", "T1", THEME_LOOP, "back"),
-        Edge("T2", "T2", THEME_LOOP, "back"),
+        Edge("L", "L", SEARCH_LOOP, "back"),
+        Edge("T1", "T1", SEARCH_LOOP, "back"),
+        Edge("T2", "T2", SEARCH_LOOP, "back"),
         Edge("T1", "M"),
         Edge("T2", "M"),
         Edge("M", "M", MERGE_LOOP, "back"),
-        Edge("M", "T2", MERGE_REFUSAL, "back"),
         Edge("M", "LR"),
         Edge("LR", "PL"),
         Edge("PL", "G", "a section has no source"),
         Edge("PL", "OA"),
         Edge("G", "PL2"),
-        Edge("G", "G", "search passes, max 8: end at 3 of 5 incl. few new, or pass 4 with none", "back"),
+        Edge("G", "G", SEARCH_LOOP, "back"),
         Edge("PL2", "OA"),
         Edge("OA", "PL", "changes or another structure, no cap", "back"),
     )

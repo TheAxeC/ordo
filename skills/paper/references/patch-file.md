@@ -36,7 +36,7 @@ The ids are:
 | `D<r>-<m>` | The draft writer | Issue `m` of the review numbered `r`, such as `D1-2` for issue 2 of `review-1.md` |
 | `C<m>` | The citation compliance agent | Issue `m` of the citation report, in full, revision and citation-check mode, and issue `m` of a `citation-report-<nn>.md` for the patch with the number `<nn>` |
 | `figures` | The visualization agent | The placement of each planned figure at its marker `% FIGURE: <label>` in full mode, and in the figures call the insertion of each figure after the block that discusses its result |
-| `reference-fix` | The draft writer | The lines of the reference checks that fail after the last writer pass of full, lit-review and revision |
+| `reference-fix` | The draft writer | The lines of the reference checks that fail after the last writer pass of full and revision |
 | `compile-fix` | The draft writer | The compile lines of a failed compile or a layout fault |
 | `abstract-only` | The draft writer | The abstract and the keywords of abstract-only mode |
 | `disclosure` | The draft writer | The statements of disclosure mode, and in full mode the AI disclosure that a second start of the draft writer rewrites to put the model identifier in the statement and remove the line `[GAP: model identifier]` |

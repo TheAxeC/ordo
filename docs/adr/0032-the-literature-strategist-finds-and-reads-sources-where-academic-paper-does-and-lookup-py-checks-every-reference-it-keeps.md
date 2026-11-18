@@ -1,6 +1,6 @@
 # 0032. The literature strategist finds and reads sources where academic-paper does, and lookup.py checks every reference it keeps
 
-Status: proposed; superseded by 0036 in its choice of databases by discipline, now for each field, and in its consequence that the strategist's search reaches what academic-paper's reaches; superseded by 0040 in its part that `bibtex` writes each `refs.bib` entry of the literature strategist that it can give, which the strategist now writes from the record `resolve` prints
+Status: proposed; superseded by 0036 in its choice of databases by discipline, now for each field, and in its consequence that the strategist's search reaches what academic-paper's reaches; superseded by 0040 in its part that `bibtex` writes each `refs.bib` entry of the literature strategist that it can give, which the strategist now writes from the record `resolve` prints; superseded by the ruling The academic-paper strategist of plan 5 in its decision that every reference the literature strategist keeps is checked with `lookup.py`, which the strategist no longer runs
 
 ## Context
 

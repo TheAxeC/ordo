@@ -1,5 +1,5 @@
 #!/bin/sh
-# Offline proof of the parts of lookup.py that compute facts without the network: title matching, the choice among candidates, the DOI mismatch flag, record merging, passage lines, passage normalisation, abstract reassembly, the arXiv query syntax, the OpenAlex query text, the arXiv spacing across processes, the arXiv turn of every request to an arXiv host, the refusal of a URL other than http and https, an index whose body does not parse, the not found lines, the file name made from a key, the DOI in a URL, the PDF and arXiv HTML tests, the credentials each host gets, the URL check-urls requests, the BibTeX of an arXiv record, the BibTeX body test, the text of an HTML page, fetch given an OpenAlex ID or a Semantic Scholar ID (the record asked of that ID's index alone, a record with a DOI fetched as that DOI, and a record with neither its open-access URL tried and that index's abstract written), the keys a .tex cites with the commands of natbib and biblatex and the files it inputs, the output of cite-keys, the title check of check-urls against the record a doi resolves to, the error line for an input file that does not exist, the .bib check-urls names and the .bib quote-check reads, both the one named on the command line, the refusal of the one-argument form of check-urls and of the two-argument form of quote-check, the retraction and expression-of-concern notice lines of resolve, and resolve --entry: the entry read from a .bib (a doi or DOI field, a space before the @, the first of two entries with one key), the input it resolves by (its doi, else its arXiv ID, else its title with its year), the verdict line that confirms the entry by the first record whose title and year agree and prints NOT_CONFIRMED for a year or a title that differs, a record with no year and an entry no index holds, its exit status, the one-line error and exit status 2 for a call or an entry it cannot read, and resolve without --entry printing what it printed. It proves the published version of an arXiv ID: bibtex printing the entry alone on standard output and every other line on standard error, the entry doi.org gives for a published DOI that Semantic Scholar or OpenAlex names and whose record's title agrees, the @misc entry with its reason for a DOI whose title is below 0.70, a doi.org that gives no entry and every index left out, the line that names a conference or journal of Semantic Scholar with no DOI and none for an arXiv venue or another type, bibtex --page building the @inproceedings entry from the citation tags of a PMLR or NeurIPS page and refusing a page with no title tag, no year tag, a title below 0.70, a 404, a redirect to arXiv or doi.org or a file URL, resolve --entry confirming an entry on its venue page and naming the reason it does not, with no page read for an @misc entry, an entry with a doi, an entry a record confirms or a url on arXiv or doi.org, fetch --page reading the PDF a page names before arxiv.org, the URLs resolve, search, refs, cited-by and fetch request, which stay the keys of the cache, the line of resolve that names the PMCID an OpenAlex record holds, the line of resolve for a DOI and for a title with every author of the record and the volume, the issue and the pages that Crossref, OpenAlex and Semantic Scholar give, in their place before the identifiers, the verdict of resolve --entry as its last line, a record of search with three authors and " et al.", a merged record that takes the volume of the other, and text: the text of a saved PMC page, Europe PMC body and PDF written as <stem>.txt and found by quote-check, the text of a page that holds only the abstract written by text --abstract as <stem>.abstract.txt and found by quote-check with the locator abstract, a declared charset, a byte order mark and an XML declaration before the root, pdftotext given one absolute path through a stand-in written on PATH, its failure and its absence, and the refusal of an existing or linked <stem>.txt or <stem>.abstract.txt, of a body that is neither HTML or XML nor a PDF, of a missing file, an empty key and a folder that is not a folder. It proves that bibtex prints every entry in ASCII by each of its three builders (the doi.org entry, the @misc entry of an arXiv record and the entry of a venue's page): an accented letter as its accent command, also from a decomposed letter, the letters, Greek letters and signs of the table in their LaTeX forms, an en dash as two hyphens, a character with no form as {?} with its warning line and exit status 0, an ASCII value unchanged, the key in ASCII and a url percent-encoded, and that resolve --entry and the title check of check-urls give a converted entry the verdict and ratio of the original. It also proves the pacing of each index across processes (the gap of each host with and without its credential, a redirect that takes the turn of the host it goes to, doi.org that takes none, a lock file that holds inf or nan), a 429 waited out by the Retry-After it names in each form it can take, the 429 that names more than 60 seconds left out at once with its reason and the skip file of its host (named by host and credential, mode 600, capped at 86400 seconds, ignored when it holds no time, read by a request that no cached reply answers, and never written for a host that is not an API host), the reasons bibtex prints for a 429, the host a reason names when the 429 is met on a redirect hop, and the reply cache of resolve, search, refs and cited-by (a reply sent once for the same URL in one process and in another, the replies that are not stored, the 30 days, the pruning, no credential in any file, a cache folder that cannot be made or written, an entry that cannot be used, the cache folder under XDG_CACHE_HOME or under HOME, the modes of its files). Every case runs on scratch temporary, cache and home folders set before lookup is imported, with time.sleep and time.time stubbed together as one clock where a wait is checked. Response bodies are recorded below in the shapes the indexes answer. Prints a last line starting PASS: and exits 0, or prints a line starting FAIL: and exits 1.
+# Offline proof of the parts of lookup.py that compute facts without the network: title matching, the choice among candidates, the DOI mismatch flag, record merging, passage lines, passage normalisation, abstract reassembly, the arXiv query syntax, the OpenAlex query text, the arXiv spacing across processes, the arXiv turn of every request to an arXiv host, the refusal of a URL other than http and https, an index whose body does not parse, the not found lines, the file name made from a key, the DOI in a URL, the PDF and arXiv HTML tests, the credentials each host gets, the URL check-urls requests, the BibTeX of an arXiv record, the BibTeX body test, the text of an HTML page, fetch given an OpenAlex ID or a Semantic Scholar ID (the record asked of that ID's index alone, a record with a DOI fetched as that DOI, and a record with neither its open-access URL tried and that index's abstract written), the keys a .tex cites with the commands of natbib and biblatex and the files it inputs, the output of cite-keys, the title check of check-urls against the record a doi resolves to, the error line for an input file that does not exist, the .bib check-urls names and the .bib quote-check reads, both the one named on the command line, the refusal of the one-argument form of check-urls and of the two-argument form of quote-check, the retraction and expression-of-concern notice lines of resolve, and resolve of a title preferring the candidate of the year given. It proves the published version of an arXiv ID: bibtex printing the entry alone on standard output and every other line on standard error, the entry doi.org gives for a published DOI that Semantic Scholar or OpenAlex names and whose record's title agrees, the @misc entry with its reason for a DOI whose title is below 0.70, a doi.org that gives no entry and every index left out, the line that names a conference or journal of Semantic Scholar with no DOI and none for an arXiv venue or another type, bibtex --page building the @inproceedings entry from the citation tags of a PMLR or NeurIPS page and refusing a page with no title tag, no year tag, a title below 0.70, a 404, a redirect to arXiv or doi.org or a file URL, fetch --page reading the PDF a page names before arxiv.org, the URLs resolve, search and fetch request, which stay the keys of the cache, the line of resolve that names the PMCID an OpenAlex record holds, the line of resolve for a DOI and for a title with every author of the record and the volume, the issue and the pages that Crossref, OpenAlex and Semantic Scholar give, in their place before the identifiers, a record of search with three authors and " et al.", a merged record that takes the volume of the other, and text: the text of a saved PMC page, Europe PMC body and PDF written as <stem>.txt and found by quote-check, the text of a page that holds only the abstract written by text --abstract as <stem>.abstract.txt and found by quote-check with the locator abstract, a declared charset, a byte order mark and an XML declaration before the root, pdftotext given one absolute path through a stand-in written on PATH, its failure and its absence, and the refusal of an existing or linked <stem>.txt or <stem>.abstract.txt, of a body that is neither HTML or XML nor a PDF, of a missing file, an empty key and a folder that is not a folder. It proves that bibtex prints every entry in ASCII by each of its three builders (the doi.org entry, the @misc entry of an arXiv record and the entry of a venue's page): an accented letter as its accent command, also from a decomposed letter, the letters, Greek letters and signs of the table in their LaTeX forms, an en dash as two hyphens, a character with no form as {?} with its warning line and exit status 0, an ASCII value unchanged, the key in ASCII and a url percent-encoded, and that the title check of check-urls gives a converted entry the verdict and ratio of the original. It also proves the pacing of each index across processes (the gap of each host with and without its credential, a redirect that takes the turn of the host it goes to, doi.org that takes none, a lock file that holds inf or nan), a 429 waited out by the Retry-After it names in each form it can take, the 429 that names more than 60 seconds left out at once with its reason and the skip file of its host (named by host and credential, mode 600, capped at 86400 seconds, ignored when it holds no time, read by a request that no cached reply answers, and never written for a host that is not an API host), the reasons bibtex prints for a 429, the host a reason names when the 429 is met on a redirect hop, and the reply cache of resolve and search (a reply sent once for the same URL in one process and in another, the replies that are not stored, the 30 days, the pruning, no credential in any file, a cache folder that cannot be made or written, an entry that cannot be used, the cache folder under XDG_CACHE_HOME or under HOME, the modes of its files). Every case runs on scratch temporary, cache and home folders set before lookup is imported, with time.sleep and time.time stubbed together as one clock where a wait is checked. Response bodies are recorded below in the shapes the indexes answer. Prints a last line starting PASS: and exits 0, or prints a line starting FAIL: and exits 1.
 set -u
 
 here=$(cd "$(dirname "$0")" && pwd)
@@ -258,7 +258,7 @@ for url in ("file:///etc/hosts", "https://redirect.example/?to=file:///etc/hosts
 lookup.arxiv_turn, lookup.Client.send = real_turn, real_send
 
 
-# A body that does not parse leaves one index out and keeps the other's records.
+# A client that answers each URL holding one of its parts with that part's reply.
 class StubClient:
     cache = None
 
@@ -276,21 +276,7 @@ def stub_reply(status, body, content_type="application/json"):
     return lookup.Reply(status, body.encode("utf-8"), "https://example.org/", content_type)
 
 
-S2_CITATIONS = '{"data":[{"citingPaper":{"paperId":"abc","title":"A citing paper","year":2020}}],"next":null}'
 HTML_BODY = "<html><body>Maintenance</body></html>"
-unparsed = "OpenAlex: left out, HTTP 200, the body does not parse"
-for command, kind in (("cited-by", "citingPaper"), ("refs", "citedPaper")):
-    lines = []
-    status = lookup.run_links(StubClient([("openalex.org", stub_reply(200, HTML_BODY, "text/html")), ("semanticscholar.org", stub_reply(200, S2_CITATIONS.replace("citingPaper", kind)))]), ["10.1103/PhysRevE.69.066138"], lines, command)
-    check("body that does not parse, " + command + ": exit status", status == 0, repr(lines))
-    check("body that does not parse, " + command + ": OpenAlex left out", unparsed in lines, repr(lines))
-    check("body that does not parse, " + command + ": Semantic Scholar records stay", any(line.startswith("[Semantic Scholar] A citing paper") for line in lines), repr(lines))
-lines = []
-lookup.run_links(StubClient([("openalex.org", stub_reply(200, '{"results":[{"title":"No id"}],"meta":{"count":1}}'))]), ["W123"], lines, "cited-by")
-check("body without a key the script reads", unparsed in lines, repr(lines))
-lines = []
-lookup.run_links(StubClient([("openalex.org", stub_reply(200, '{"id":"https://openalex.org/W1","referenced_works":[1,2]}'))]), ["10.1103/PhysRevE.69.066138"], lines, "refs")
-check("a referenced work that is no URL", unparsed in lines, repr(lines))
 
 # Not found lines for the indexes that answered with no record.
 asked = [("Crossref", lookup.Outcome([crossref])), ("OpenAlex", lookup.Outcome()), ("Semantic Scholar", lookup.Outcome(left_out="HTTP 429 after 3 retries")), ("arXiv", lookup.Outcome())]
@@ -298,8 +284,6 @@ lines = lookup.merged_lines(asked)
 check("not found: an index with no record", "OpenAlex: not found" in lines and "arXiv: not found" in lines, repr(lines))
 check("not found: an index with records has no line", "Crossref: not found" not in lines and not any(line.startswith("Crossref:") for line in lines), repr(lines))
 check("not found: an index left out names its reason", "Semantic Scholar: left out, HTTP 429 after 3 retries" in lines, repr(lines))
-lines = lookup.merged_lines([("OpenAlex", lookup.Outcome()), ("Semantic Scholar", lookup.Outcome([s2], more=True))])
-check("not found: only the indexes asked have a line", lines[-2:] == ["OpenAlex: not found", "Semantic Scholar: first 100, more exist"] and not any("Crossref" in line or "arXiv:" in line for line in lines), repr(lines))
 
 # T8: the retraction and expression-of-concern notices Crossref lists in the "updated-by" field of the work's own record (recorded body of a retracted work, shortened).
 CROSSREF_RETRACTED_BODY = """{"status":"ok","message-type":"work","message":{"DOI":"10.1016/s0140-6736(97)11096-0","type":"journal-article",
@@ -555,17 +539,12 @@ check("L6 exit status", status == 1, repr((status, lines)))
 result = run_in_process(lookup.run_quote_check, [record, texts])
 check("L6 two arguments", result == ("error: quote-check takes <citation report> <file.bib> <folder>", []), repr(result))
 
-# E: resolve --entry reads one entry of a .bib, resolves it as resolve resolves its identifier or title, and ends with a verdict line.
+# E: resolve of a title prints one line per index, and of the matching candidates prefers the one of the year given.
 def crossref_work(doi, title, year=None):
     message = {"DOI": doi, "title": [title], "author": [{"given": "A", "family": "Author"}], "container-title": ["A Journal"]}
     if year:
         message["issued"] = {"date-parts": [[year]]}
     return stub_reply(200, json.dumps({"status": "ok", "message": message}))
-
-
-def openalex_work(doi, title, year):
-    work = {"id": "https://openalex.org/W1", "title": title, "doi": "https://doi.org/" + doi, "publication_year": year, "authorships": [], "primary_location": {"source": {"display_name": "A Journal"}}, "open_access": {"oa_url": None}}
-    return stub_reply(200, json.dumps(work))
 
 
 def crossref_hits(*hits):
@@ -581,133 +560,17 @@ def openalex_hits(*hits):
 EVERYTHING_ELSE = ("", NOT_FOUND)
 
 
-def entry_bib(key="k", title="Estimating mutual information", year="2004", **fields):
-    lines = ["@article{%s," % key, "  title = {%s}," % title, "  year = {%s}," % year] if year is not None else ["@article{%s," % key, "  title = {%s}," % title]
-    lines += ["  %s = {%s}," % pair for pair in fields.items()]
-    return "\n".join(lines) + "\n}\n"
-
-
-def entry_run(bib_text, key, replies):
-    path = put("e/refs.bib", bib_text)
-    client = RecordingClient(replies + [EVERYTHING_ELSE])
-    lines = []
-    try:
-        status = lookup.run_resolve(client, ["--entry", path, key], lines)
-    except lookup.UsageError as error:
-        status = "error: " + str(error)
-    return status, lines, client.requested
-
-
 def plain_resolve(replies, argument, *options):
     lines = []
     lookup.run_resolve(RecordingClient(replies + [EVERYTHING_ELSE]), [argument, *options], lines)
     return lines
 
 
-# E1: the verdict of a DOI whose Crossref record agrees, after the lines resolve prints for the DOI.
-shannon_replies = [("api.crossref.org", crossref_work("10.1002/j.1538-7305.1948.tb01338.x", "A Mathematical Theory of Communication", 1948))]
-result = entry_run(entry_bib("Shannon_1948", "A Mathematical Theory of Communication", "1948", doi="10.1002/j.1538-7305.1948.tb01338.x"), "Shannon_1948", shannon_replies)
-check("E1 the verdict line", result[0] == 0 and result[1][-1:] == ["Shannon_1948: CONFIRMED against Crossref, ratio 1.00, year 1948"], repr(result))
-check("E1 the lines resolve prints come first", result[1][:-1] == plain_resolve(shannon_replies, "10.1002/j.1538-7305.1948.tb01338.x") and len(result[1]) == 5, repr(result))
-
-# E2: Crossref's record lacks the subtitle (ratio below 0.70) and OpenAlex's record has it, so the first record that agrees is OpenAlex's.
-long_title = "XGBoost: A Scalable Tree Boosting System"
-chen_replies = [("api.crossref.org", crossref_work("10.1145/2939672.2939785", "XGBoost", 2016)), ("api.openalex.org", openalex_work("10.1145/2939672.2939785", long_title, 2016))]
-result = entry_run(entry_bib("Chen_2016", long_title, "2016", doi="10.1145/2939672.2939785"), "Chen_2016", chen_replies)
-check("E2 the first record that agrees", result[0] == 0 and result[1][-1] == "Chen_2016: CONFIRMED against OpenAlex, ratio 1.00, year 2016", repr(result))
-
-# E3: the title agrees in every record and the year does not.
-result = entry_run(entry_bib("Entry_2018", "Estimating mutual information", "2018", doi="10.1103/PhysRevE.69.066138"), "Entry_2018", [("api.crossref.org", crossref_work("10.1103/PhysRevE.69.066138", "Estimating mutual information", 2019)), ("api.openalex.org", openalex_work("10.1103/PhysRevE.69.066138", "Estimating mutual information", 2019))])
-check("E3 the year differs", result[0] == 1 and result[1][-1] == "Entry_2018: NOT_CONFIRMED against Crossref, ratio 1.00, year 2019, entry year 2018", repr(result))
-
-# E4: every record's title is below 0.70, and the verdict gives the first record's ratio.
-other = "A survey of protein folding kinetics"
-result = entry_run(entry_bib("k", "Estimating mutual information", "2004", doi="10.1103/PhysRevE.69.066138"), "k", [("api.crossref.org", crossref_work("10.1103/PhysRevE.69.066138", other, 2004)), ("api.openalex.org", openalex_work("10.1103/PhysRevE.69.066138", "Another unrelated title", 2004))])
-check("E4 the titles differ", result[0] == 1 and result[1][-1] == "k: NOT_CONFIRMED against Crossref, ratio 0.34, year 2004, entry year 2004", repr(result))
-
-# E5: an entry with an eprint and archivePrefix arXiv is resolved by its arXiv ID, never by its title.
-arxiv_title = "A study of the estimation of mutual information"
-result = entry_run(entry_bib("a", arxiv_title, "2025", eprint="2511.18945", archivePrefix="arXiv"), "a", [("api.crossref.org", NOT_FOUND), ("api.openalex.org", openalex_work("10.48550/arXiv.2511.18945", arxiv_title, 2025)), ("export.arxiv.org", stub_reply(200, ARXIV_FEED))])
-check("E5 the verdict", result[0] == 0 and result[1][-1] == "a: CONFIRMED against OpenAlex, ratio 1.00, year 2025", repr(result))
-check("E5 asked by the arXiv ID", any(url.startswith("https://export.arxiv.org/api/query?id_list=2511.18945") for url in result[2]) and not any("query.bibliographic" in url or "search=" in url for url in result[2]), repr(result[2]))
-
-# E6: an entry with neither is resolved by its title, with its year given.
 title = "Neural estimation of mutual information"
 near = "Neural estimation of mutual information bounds"
-result = entry_run(entry_bib("t", title, "2019"), "t", [("api.crossref.org", crossref_hits((near, 2018))), ("api.openalex.org", openalex_hits((title, 2019)))])
-check("E6 a later index agrees", result[0] == 0 and result[1][-1] == "t: CONFIRMED against OpenAlex, ratio 1.00, year 2019", repr(result))
-result = entry_run(entry_bib("t", title, "2019"), "t", [("api.crossref.org", crossref_hits((near, 2018))), ("api.openalex.org", openalex_hits((title, 2020)))])
-check("E6 no index agrees", result[0] == 1 and result[1][-1] == "t: NOT_CONFIRMED against Crossref, ratio 0.92, year 2018, entry year 2019", repr(result))
-result = entry_run(entry_bib("t", title, "2019"), "t", [("api.crossref.org", crossref_hits((title, 2018), (near, 2019)))])
-check("E6 the candidate of the entry's year is preferred", result[0] == 0 and result[1][-1] == "t: CONFIRMED against Crossref, ratio 0.92, year 2019", repr(result))
-
-# E7: the field written DOI and a space before @ are read.
-spaced = " @article{k,\n  title={Estimating mutual information},\n  DOI={10.1103/PhysRevE.69.066138},\n  year={2004}}\n"
-result = entry_run(spaced, "k", [("api.crossref.org", crossref_work("10.1103/PhysRevE.69.066138", "Estimating mutual information", 2004))])
-check("E7 the DOI field in capitals", result[0] == 0 and result[1][-1] == "k: CONFIRMED against Crossref, ratio 1.00, year 2004" and result[2][0] == "https://api.crossref.org/works/10.1103/PhysRevE.69.066138", repr(result))
-
-# E8: a doi field that is no DOI counts as absent, so the arXiv ID is used.
-result = entry_run(entry_bib("a", arxiv_title, "2025", doi="not available", eprint="2511.18945", archivePrefix="arXiv"), "a", [("api.crossref.org", NOT_FOUND), ("api.openalex.org", openalex_work("10.48550/arXiv.2511.18945", arxiv_title, 2025))])
-check("E8 the arXiv ID is used", result[0] == 0 and result[1][-1] == "a: CONFIRMED against OpenAlex, ratio 1.00, year 2025" and "https://api.crossref.org/works/10.48550/arXiv.2511.18945" in result[2], repr(result))
-result = entry_run(entry_bib("a", arxiv_title, "2025", url="https://arxiv.org/abs/2511.18945v2"), "a", [("api.crossref.org", NOT_FOUND), ("api.openalex.org", openalex_work("10.48550/arXiv.2511.18945", arxiv_title, 2025))])
-check("E8 the arXiv ID of the url", result[0] == 0 and "https://api.crossref.org/works/10.48550/arXiv.2511.18945" in result[2] and not any("query.bibliographic" in url for url in result[2]), repr(result))
-result = entry_run(entry_bib("a", arxiv_title, "2025", doi="10.48550/arXiv.2511.18945"), "a", [("api.crossref.org", NOT_FOUND), ("api.openalex.org", openalex_work("10.48550/arXiv.2511.18945", arxiv_title, 2025))])
-check("E8 the arXiv DOI", result[0] == 0 and result[1][-1] == "a: CONFIRMED against OpenAlex, ratio 1.00, year 2025", repr(result))
-
-# E9: a record with no year is printed as year none and is never a confirmation.
-result = entry_run(entry_bib("k", "Estimating mutual information", "2004", doi="10.1103/PhysRevE.69.066138"), "k", [("api.crossref.org", crossref_work("10.1103/PhysRevE.69.066138", "Estimating mutual information"))])
-check("E9 a record with no year", result[0] == 1 and result[1][-1] == "k: NOT_CONFIRMED against Crossref, ratio 1.00, year none, entry year 2004", repr(result))
-
-# E10: no index prints a record.
-result = entry_run(entry_bib("k", "Estimating mutual information", "2004", doi="10.1103/PhysRevE.69.066138"), "k", [])
-check("E10 every index answers not found", result[0] == 1 and result[1][-1] == "k: NOT_CONFIRMED, no record", repr(result))
-result = entry_run(entry_bib("k", "Estimating mutual information", "2004"), "k", [("api.crossref.org", RATE_LIMITED), ("api.openalex.org", OUTAGE), ("api.semanticscholar.org", RATE_LIMITED), ("export.arxiv.org", OUTAGE)])
-check("E10 every index left out", result[0] == 1 and result[1][-1] == "k: NOT_CONFIRMED, no record" and result[1][0] == "Crossref: left out, HTTP 429 after 3 retries", repr(result))
-
-# E11: a call or an entry that cannot be read is one error line and exit status 2, before any request.
-def entry_error(arguments, bib_text="@article{k, title={T}, year={2004}, doi={10.1000/x}}\n"):
-    path = put("e/refs.bib", bib_text)
-    return command(["resolve"] + [path if argument == "BIB" else argument for argument in arguments])
-
-
-def expected_error(message):
-    return (2, [], ["error: " + message])
-
-
-check("E11 a key the .bib lacks", entry_error(["--entry", "BIB", "nokey"]) == expected_error("nokey: the .bib has no entry with this key"), repr(entry_error(["--entry", "BIB", "nokey"])))
-check("E11 a key that differs in case", entry_error(["--entry", "BIB", "K"]) == expected_error("K: the .bib has no entry with this key"), repr(entry_error(["--entry", "BIB", "K"])))
-check("E11 a key with a line break", entry_error(["--entry", "BIB", "k\nx"]) == expected_error("the key holds a line break"), repr(entry_error(["--entry", "BIB", "k\nx"])))
-result = command(["resolve", "--entry", os.path.join(work, "e", "absent.bib"), "k"])
-check("E11 a .bib that does not exist", result == (2, [], ["error: %s: No such file or directory" % os.path.join(work, "e", "absent.bib")]), repr(result))
-with open(os.path.join(work, "e", "latin.bib"), "wb") as handle:
-    handle.write(b"@article{k, title={T\xe9}, year={2004}}\n")
-result = command(["resolve", "--entry", os.path.join(work, "e", "latin.bib"), "k"])
-check("E11 a .bib that is not UTF-8", result == (2, [], ["error: %s: not valid UTF-8" % os.path.join(work, "e", "latin.bib")]), repr(result))
-result = entry_error(["--entry", "BIB", "k"], "@article{k, year={2004}}\n")
-check("E11 an entry with no title", result == expected_error("k: the entry has no title"), repr(result))
-result = entry_error(["--entry", "BIB", "k"], "@article{k, title={T}}\n")
-check("E11 an entry with no year", result == expected_error("k: the entry has no year"), repr(result))
-result = entry_error(["--entry", "BIB", "k"], "@article{k, title={T}, year={2009a}}\n")
-check("E11 a year that is not four digits", result == expected_error("k: the year of the entry is not four digits"), repr(result))
-result = entry_error(["--entry", "BIB", "k", "--year", "2004"])
-check("E11 --entry with --year", result == expected_error("--entry cannot be used with --year"), repr(result))
-result = entry_error(["--entry", "BIB"])
-check("E11 --entry with one value", result == expected_error("--entry takes <file.bib> <key>"), repr(result))
-result = entry_error(["--entry", "BIB", "k", "extra"])
-check("E11 --entry with another positional argument", result == expected_error("--entry takes <file.bib> <key>"), repr(result))
-result = entry_error(["10.1000/x", "--entry", "BIB", "k"])
-check("E11 --entry after a positional argument", result == expected_error("--entry takes <file.bib> <key>"), repr(result))
-
-# E12: resolve without --entry prints what it printed before.
 title_replies = [("api.crossref.org", crossref_hits((near, 2018), (title, 2019))), ("api.openalex.org", openalex_hits((title, 2019)))]
 lines = plain_resolve(title_replies, title, "--year", "2019")
-check("E12 resolve of a title", len(lines) == 4 and lines[0].startswith("Crossref: ratio 1.00: Neural estimation of mutual information |") and lines[1].startswith("OpenAlex: ratio 1.00: Neural estimation of mutual information |") and lines[2:] == ["Semantic Scholar: not found", "arXiv: not found"], repr(lines))
-check("E12 resolve of a DOI has no verdict line", not any("CONFIRMED" in line for line in plain_resolve(shannon_replies, "10.1002/j.1538-7305.1948.tb01338.x")))
-
-# E13: of two entries with one key, the first is resolved.
-duplicate = "@article{dup, title={First title}, year={2001}, doi={10.1000/first}}\n@article{dup, title={Second title}, year={2002}, doi={10.1000/second}}\n"
-result = entry_run(duplicate, "dup", [("api.crossref.org/works/10.1000/first", crossref_work("10.1000/first", "First title", 2001)), ("api.crossref.org/works/10.1000/second", crossref_work("10.1000/second", "Second title", 2002))])
-check("E13 the first entry", result[0] == 0 and result[1][-1] == "dup: CONFIRMED against Crossref, ratio 1.00, year 2001" and not any("second" in url for url in result[2]), repr(result))
+check("E1 resolve of a title", len(lines) == 4 and lines[0].startswith("Crossref: ratio 1.00: Neural estimation of mutual information |") and lines[1].startswith("OpenAlex: ratio 1.00: Neural estimation of mutual information |") and lines[2:] == ["Semantic Scholar: not found", "arXiv: not found"], repr(lines))
 
 
 # Pacing, 429 handling and the reply cache. Each case runs on a new scratch temporary folder and cache folder. Where a wait is checked, time.sleep and time.time are
@@ -1585,83 +1448,11 @@ with attempt("A7"):
 with attempt("A8"):
     original_title = "\u03b1-stable estimates of mutual information in caf\u00e9s"
     converted_title = r"{$\alpha$}-stable estimates of mutual information in caf{\'e}s"
-    replies = [("api.crossref.org", crossref_work("10.1103/PhysRevE.69.066138", original_title, 2004))]
-    converted = entry_run(entry_bib("k", converted_title, "2004", doi="10.1103/PhysRevE.69.066138"), "k", replies)
-    original = entry_run(entry_bib("k", original_title, "2004", doi="10.1103/PhysRevE.69.066138"), "k", replies)
-    check("A8 resolve --entry reads a converted entry as the original: the same verdict and ratio", converted[:2] == original[:2] and original[1][-1:] == ["k: CONFIRMED against Crossref, ratio 1.00, year 2004"], repr((converted, original)))
     check_replies = [DOI_REPLY, ("api.crossref.org", crossref_work("10.1103/PhysRevE.69.066138", original_title, 2004))]
     converted = check_urls_of("@article{k, title={%s}, doi={10.1103/PhysRevE.69.066138}}\n" % converted_title, check_replies)
     original = check_urls_of("@article{k, title={%s}, doi={10.1103/PhysRevE.69.066138}}\n" % original_title, check_replies)
     check("A8 the title check of check-urls reads a converted entry as the original", converted[:2] == original[:2] and original[0] == 0, repr((converted, original)))
 
-
-def openalex_arxiv_record(year=2018, title=ICML_TITLE):
-    """OpenAlex's answer for works/doi:10.48550/arXiv.1811.03804 with the fields resolve asks."""
-    return says(200, json.dumps({"id": "https://openalex.org/W2899790086", "title": title, "doi": "https://doi.org/10.48550/arxiv.1811.03804", "publication_year": year, "authorships": [], "primary_location": {"source": {"display_name": "arXiv (Cornell University)"}}, "open_access": {"oa_url": None}}))
-
-
-def page_entry(kind="inproceedings", title=ICML_TITLE, year="2019", url=PMLR_URL, **extra):
-    fields = {"title": title, "booktitle": "International Conference on Machine Learning", "year": year, "url": url, "eprint": ICML_ID, "archivePrefix": "arXiv", **extra}
-    return "@%s{arxiv_1811_03804,\n" % kind + ",\n".join("  %s = {%s}" % pair for pair in fields.items()) + "\n}\n"
-
-
-def entry_main(bib_text, replies):
-    """(exit status, standard output lines, URLs asked) of lookup.py resolve --entry on the key arxiv_1811_03804, answered from replies, on a new scratch folder."""
-    scratch_case()
-    path = put("g/refs.bib", bib_text)
-    script = Script(replies)
-    with fake_clock():
-        status, lines, _ = run_main(["resolve", "--entry", path, "arxiv_1811_03804"], script)
-    return status, lines, script.urls
-
-
-ARXIV_RECORDS = {CROSSREF: [says(404)], OPENALEX: [openalex_arxiv_record()], SEMANTIC_SCHOLAR: [says(404)], ARXIV: [says(200, ICML_FEED)]}
-ENTRY_2019 = "arxiv_1811_03804: NOT_CONFIRMED against OpenAlex, ratio 1.00, year 2018, entry year 2019"
-
-with attempt("G1"):
-    result = entry_main(page_entry(), {**ARXIV_RECORDS, PMLR_HOST: [page_reply(PMLR_PAGE)]})
-    check("G1 an entry confirmed on its venue page", result[0] == 0 and result[1][-1] == "arxiv_1811_03804: CONFIRMED against OpenAlex, ratio 1.00, year 2018; year 2019 found on " + PMLR_URL, repr(result))
-with attempt("G2"):
-    page = PMLR_PAGE.replace("2019/05/24", "2018/05/24")
-    result = entry_main(page_entry(), {**ARXIV_RECORDS, PMLR_HOST: [page_reply(page)]})
-    check("G2 a year tag that differs from the entry's year", result[0] == 1 and result[1][-1] == ENTRY_2019 + "; " + PMLR_URL + ": year 2018 on the page", repr(result))
-with attempt("G3"):
-    page = "<html><head><title>" + ICML_TITLE + "</title></head><body><p>" + ICML_TITLE + ", 2017, 2018, 2019, 2020.</p></body></html>"
-    result = entry_main(page_entry(), {**ARXIV_RECORDS, PMLR_HOST: [page_reply(page)]})
-    check("G3 a page with the title and years in its text and no citation tags", result[0] == 1 and result[1][-1] == ENTRY_2019 + "; " + PMLR_URL + ": no citation_title tag", repr(result))
-with attempt("G4"):
-    result = entry_main(page_entry(), {**ARXIV_RECORDS, PMLR_HOST: [says(404)]})
-    check("G4 a page that answers 404", result[0] == 1 and result[1][-1] == ENTRY_2019 + "; " + PMLR_URL + ": HTTP 404", repr(result))
-with attempt("G5"):
-    page = PMLR_PAGE.replace('content="Gradient Descent Finds Global Minima of Deep Neural Networks"', 'content="GRADIENT DESCENT finds global minima of deep neural networks"')
-    result = entry_main(page_entry(title="{G}radient {D}escent Finds Global Minima of Deep Neural Networks"), {**ARXIV_RECORDS, PMLR_HOST: [page_reply(page)]})
-    check("G5 braces in the entry's title and another capitalisation on the page", result[0] == 0 and result[1][-1] == "arxiv_1811_03804: CONFIRMED against OpenAlex, ratio 1.00, year 2018; year 2019 found on " + PMLR_URL, repr(result))
-with attempt("G6"):
-    for url, extra in (
-        ("file:///etc/passwd", {}),
-        ("ftp://proceedings.mlr.press/v97/du19c.html", {}),
-        ("https://arxiv.org/abs/1811.03804", {}),
-        ("https://export.arxiv.org/abs/1811.03804", {}),
-        ("https://doi.org/10.48550/arXiv.1811.03804", {}),
-        (PMLR_URL, {PMLR_HOST: [says(302, Location="https://arxiv.org/abs/1811.03804")], "arxiv.org": [page_reply(PMLR_PAGE)]}),
-    ):
-        result = entry_main(page_entry(url=url), {**ARXIV_RECORDS, **extra})
-        check("G6 a url whose page is not read: " + url + (" redirected to arxiv.org" if extra else ""), result[0] == 1 and result[1][-1] == ENTRY_2019, repr(result))
-        if not extra:
-            check("G6 no request to the url " + url, url not in result[2], repr(result[2]))
-with attempt("G7"):
-    replies = {CROSSREF: [crossref_published()], OPENALEX: [says(404)], SEMANTIC_SCHOLAR: [says(404)], ARXIV: [says(200, ICML_FEED)], PMLR_HOST: [page_reply(PMLR_PAGE)]}
-    result = entry_main(page_entry(year="2018", doi=PUBLISHED_DOI), replies)
-    check("G7 an entry with a doi is resolved by its DOI and no page is read", result[0] == 1 and result[1][-1] == "arxiv_1811_03804: NOT_CONFIRMED against Crossref, ratio 1.00, year 2019, entry year 2018" and result[2][0] == "https://api.crossref.org/works/" + PUBLISHED_DOI and not any(PMLR_HOST in url for url in result[2]), repr(result))
-with attempt("G8"):
-    pdf_url = "https://proceedings.neurips.cc/paper_files/paper/2017/file/3f5ee243547dee91fbd053c1c4a845aa-Paper.pdf"
-    result = entry_main(page_entry(url=pdf_url), {**ARXIV_RECORDS, "proceedings.neurips.cc": [says(200, "%PDF-1.4\n%binary\n", Content_Type="application/pdf")]})
-    check("G8 a PDF as the url", result[0] == 1 and result[1][-1] == ENTRY_2019 + "; " + pdf_url + ": no citation_title tag", repr(result))
-with attempt("G9"):
-    result = entry_main(page_entry(kind="misc", year="2018"), {**ARXIV_RECORDS, PMLR_HOST: [page_reply(PMLR_PAGE)]})
-    check("G9 an @misc entry that a record confirms: CONFIRMED as before, no page read", result[0] == 0 and result[1][-1] == "arxiv_1811_03804: CONFIRMED against OpenAlex, ratio 1.00, year 2018" and not any(PMLR_HOST in url for url in result[2]), repr(result))
-    result = entry_main(page_entry(kind="inproceedings", year="2018"), {**ARXIV_RECORDS, PMLR_HOST: [page_reply(PMLR_PAGE)]})
-    check("G9 an @inproceedings entry whose year a record equals: CONFIRMED as before, no page read", result[0] == 0 and result[1][-1] == "arxiv_1811_03804: CONFIRMED against OpenAlex, ratio 1.00, year 2018" and not any(PMLR_HOST in url for url in result[2]), repr(result))
 
 with attempt("W1"):
     scratch_case()
@@ -1689,7 +1480,7 @@ with attempt("W1"):
     finally:
         lookup.FetchRun.pdf_text = real_pdf_text
 
-# The URLs resolve, search, refs, cited-by and fetch request for an arXiv ID and a DOI, which are the keys of the reply cache. Every host answers 404.
+# The URLs resolve, search and fetch request for an arXiv ID and a DOI, which are the keys of the reply cache. Every host answers 404.
 S2_SELECT = "paperId,title,authors,year,venue,externalIds,openAccessPdf,journal"
 OPENALEX_SELECT = "id,title,authorships,publication_year,primary_location,doi,open_access,ids,biblio"
 EXPECTED_URLS = (
@@ -1709,14 +1500,6 @@ EXPECTED_URLS = (
         "https://api.openalex.org/works?search=gradient+descent&per_page=20&select=id%2Ctitle%2Cauthorships%2Cpublication_year%2Cprimary_location%2Cdoi%2Copen_access%2Cids%2Cbiblio",
         "https://api.semanticscholar.org/graph/v1/paper/search?query=gradient+descent&limit=20&fields=paperId%2Ctitle%2Cauthors%2Cyear%2Cvenue%2CexternalIds%2CopenAccessPdf%2Cjournal",
         "https://export.arxiv.org/api/query?search_query=all%3Agradient+AND+all%3Adescent&max_results=20",
-    ]),
-    (["refs", ICML_ID], [
-        "https://api.semanticscholar.org/graph/v1/paper/ARXIV:1811.03804/references?fields=paperId%2Ctitle%2Cauthors%2Cyear%2Cvenue%2CexternalIds%2CopenAccessPdf%2Cjournal&limit=100",
-        "https://api.openalex.org/works/doi:10.48550/arXiv.1811.03804?select=id,referenced_works",
-    ]),
-    (["cited-by", "10.1002/j.1538-7305.1948.tb01338.x"], [
-        "https://api.semanticscholar.org/graph/v1/paper/DOI:10.1002/j.1538-7305.1948.tb01338.x/citations?fields=paperId%2Ctitle%2Cauthors%2Cyear%2Cvenue%2CexternalIds%2CopenAccessPdf%2Cjournal&limit=100",
-        "https://api.openalex.org/works/doi:10.1002/j.1538-7305.1948.tb01338.x?select=id,referenced_works",
     ]),
     (["fetch", ICML_ID, "FOLDER", "k"], [
         "https://arxiv.org/html/1811.03804",
@@ -2040,12 +1823,6 @@ with attempt("B6"):
     lines = lookup.identifier_lines([lookup.Outcome([record]), lookup.Outcome(), lookup.Outcome(), lookup.Outcome()])
     check("B6 the order of the parts", lines[0] == "Crossref: ratio 1.00: T | A B | 2004 | V | vol 12 | no 3 | pages 101--118 | doi 10.1000/x | arXiv 2001.00001 | OpenAlex W1 | Semantic Scholar S | open access https://example.org/a.pdf", repr(lines))
 
-# B7 and B8: resolve --entry on a record with five authors and every part prints the verdict as its last line, and its record line lists every author.
-with attempt("B7"):
-    result = entry_run(entry_bib("Sorting_2004", FULL_TITLE, "2004", doi=FULL_DOI), "Sorting_2004", [crossref_full(volume="12", issue="3", page="101-118")])
-    check("B7 the verdict is the last line of resolve --entry", result[0] == 0 and result[1][-1] == "Sorting_2004: CONFIRMED against Crossref, ratio 1.00, year 2004", repr(result))
-    check("B8 every author on the record line of resolve --entry", " | " + FIVE_NAMES + " | " in result[1][0], repr(result))
-
 # B9: a record of search keeps three authors and " et al.".
 with attempt("B9"):
     search_items = [{"DOI": FULL_DOI, "title": [FULL_TITLE], "author": [{"given": given, "family": family} for given, family in FIVE_AUTHORS], "issued": {"date-parts": [[2004]]}, "container-title": ["Journal of Sorting"]}]
@@ -2077,4 +1854,4 @@ if [ "$status" -ne 0 ]; then
     exit 1
 fi
 
-echo "PASS: lookup.py parses recorded bodies, matches titles, merges records, reads passage lines, finds passages, rebuilds abstracts, writes arXiv and OpenAlex queries, paces every arXiv request across processes, requests only http and https URLs, leaves out an index whose body does not parse, prints not found, names files, URLs and credentials safely, reads BibTeX and HTML, fetches a source by an OpenAlex ID or a Semantic Scholar ID through the record of that ID's index, reads the keys a .tex cites with the commands of natbib and biblatex and the files it inputs and prints the keys the .bib lacks and the entries no key cites, compares the title of a key with a doi with the record the doi resolves to and names an index that was left out, reports an input file that does not exist, reads the .bib named on the command line in check-urls and quote-check, refuses the one-argument check-urls and the two-argument quote-check, prints the retraction and expression-of-concern notices of a Crossref record and none for a correction, an erratum or a work without a notice, and resolves an entry of a .bib by its doi, its arXiv ID or its title and prints a verdict that CONFIRMED or NOT_CONFIRMED the entry with exit status 0 or 1, refuses a call or an entry it cannot read with exit status 2, and leaves the output of resolve without --entry as it was, gives the published version of an arXiv ID the entry doi.org gives for its published DOI or the line that names its venue, builds and refuses the entry of a venue's page, confirms an entry on its venue's page, fetches the PDF a venue's page names, writes every bibtex entry in ASCII and compares a converted title as the original, keeps the URLs of the other commands, paces every API host across processes, waits out a 429 by its Retry-After, leaves a 429 that names more than 60 seconds out at once with its reason, names the host of a redirect hop that met it, and writes the skip file of the host, caches the index replies of resolve, search, refs and cited-by on disk for 30 days, prints the PMCID an OpenAlex record names, prints every author and the volume, the issue and the pages of a record of resolve and three authors of a record of search, and writes with text the text of a saved HTML, XML or PDF file as <stem>.txt, or with text --abstract as <stem>.abstract.txt, and refuses to replace one"
+echo "PASS: lookup.py parses recorded bodies, matches titles, merges records, reads passage lines, finds passages, rebuilds abstracts, writes arXiv and OpenAlex queries, paces every arXiv request across processes, requests only http and https URLs, leaves out an index whose body does not parse, prints not found, names files, URLs and credentials safely, reads BibTeX and HTML, fetches a source by an OpenAlex ID or a Semantic Scholar ID through the record of that ID's index, reads the keys a .tex cites with the commands of natbib and biblatex and the files it inputs and prints the keys the .bib lacks and the entries no key cites, compares the title of a key with a doi with the record the doi resolves to and names an index that was left out, reports an input file that does not exist, reads the .bib named on the command line in check-urls and quote-check, refuses the one-argument check-urls and the two-argument quote-check, prints the retraction and expression-of-concern notices of a Crossref record and none for a correction, an erratum or a work without a notice, prefers the candidate of the year given for a title, gives the published version of an arXiv ID the entry doi.org gives for its published DOI or the line that names its venue, builds and refuses the entry of a venue's page, fetches the PDF a venue's page names, writes every bibtex entry in ASCII and compares a converted title as the original, keeps the URLs of the other commands, paces every API host across processes, waits out a 429 by its Retry-After, leaves a 429 that names more than 60 seconds out at once with its reason, names the host of a redirect hop that met it, and writes the skip file of the host, caches the index replies of resolve and search on disk for 30 days, prints the PMCID an OpenAlex record names, prints every author and the volume, the issue and the pages of a record of resolve and three authors of a record of search, and writes with text the text of a saved HTML, XML or PDF file as <stem>.txt, or with text --abstract as <stem>.abstract.txt, and refuses to replace one"

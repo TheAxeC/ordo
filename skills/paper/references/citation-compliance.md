@@ -135,8 +135,8 @@ The agent counts, over the cited entries, how many fail each deterministic check
 - A book chapter is looked up by its own title and by its book. The authors, the chapter title, the book and the page range must agree with one record, since a real book with an invented chapter is a common pattern.
 - Entries that share authors or have similar titles are each verified as a distinct real publication.
 - An index line `left out, <reason>` confirms nothing, neither a field nor a year nor a venue.
-- The venue and the year of an entry are taken from an index that printed a record, or, for an entry that `resolve --entry` confirmed on its venue's page (a last line ending "; year <year> found on <url>"), from that page's tags.
-- Such an entry names the published version of an arXiv preprint, and the indexes hold the preprint's year. The year found on the page is the entry's year, and the preprint's year in the records is not a year error.
+- The venue and the year of an entry are taken from an index that printed a record, or, for an entry `lookup.py bibtex '<arXiv ID>' --page '<url>'` built (an `@inproceedings` or `@article` entry with `eprint`, `archivePrefix = {arXiv}` and the venue page's `url`), from that page.
+- Such an entry names the published version of an arXiv preprint, and the indexes hold the preprint's year. The year of the venue's page is the entry's year, and the preprint's year in the records is not a year error.
 - An entry whose year or venue only a left-out index could have given is resolved again by its DOI or its arXiv ID, which reaches Crossref and OpenAlex.
 - Each lookup goes in the trail of the report with its command, the line used, the indexes whose line matched and the fields confirmed. A reference with no trail entry is not verified, and the report is not valid.
 - The trail's "Indexes that matched" column is the list of indexes whose line agreed with the entry. The report's summary counts the references that only arXiv matched (a preprint server) and the references that no index matched. It lists their keys, so the final message can name them.
@@ -175,7 +175,7 @@ The agent compares a VERIFIED reference with its record item by item and lists e
 | MEDIUM | An omitted co-author, a title imprecision, a page number error. |
 | MINOR | A dead URL when the other information is correct, a formatting difference. |
 
-- A year error is judged against the year "Looking a reference up" takes for the entry, which for an entry confirmed on its venue's page is the year found on that page.
+- A year error is judged against the year "Looking a reference up" takes for the entry, which for an entry built from its venue's page is the year of that page.
 - A difference with one right answer in the record is corrected by a patch.
 - A SERIOUS difference that the record does not settle is flagged as unconfirmed.
 
@@ -226,7 +226,7 @@ Each cited sentence of the manuscript rests on a passage that the agent reads in
 The agent reads a source's text from the first of these ways that gives its full text, tried in this order:
 
 1. The file `lookup.py fetch` writes. The agent runs `lookup.py fetch '<DOI or arXiv ID>' '<temporary folder>' '<key>'`, where the key is the entry's key in the `.bib`.
-   - For an entry with a venue `url`, as `resolve --entry` reads one (a type other than `@misc`, no `doi`, an arXiv ID, and a `url` that is an http or https address on a host other than doi.org and arXiv), the agent adds `--page '<url>'`. `fetch` then tries first the PDF that the page's `citation_pdf_url` names, so that the passage of a citation of the published version is read in the published version.
+   - For an entry with a venue `url` (a type other than `@misc`, no `doi`, an arXiv ID, and a `url` that is an http or https address on a host other than doi.org and arXiv), the agent adds `--page '<url>'`. `fetch` then tries first the PDF that the page's `citation_pdf_url` names, so that the passage of a citation of the published version is read in the published version.
    - The call prints each lookup and each URL it tried with its status.
    - It writes the full text as `<stem>.txt` in the temporary folder. The stem is the key with each `/` and `:` written `_`.
    - When no full text is found and an index gives an abstract, the call writes `<stem>.abstract.txt` and exits 1. When there is neither, it prints "no full text and no abstract" and exits 1.
