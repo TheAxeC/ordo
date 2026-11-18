@@ -94,7 +94,7 @@ CAPTION_SIZE = 10
 NOTE_SIZE = 11
 MARGIN = 16
 MIN_NODE_HEIGHT = 34
-MAX_NODE_LINES = 7
+MAX_NODE_LINES = 8
 MAX_LABEL_LINES = 5
 LABEL_WIDTH = 150
 LOOP_LABEL_WIDTH = 104
@@ -1260,8 +1260,8 @@ MERGE_RUN = (
     "searches across the search themes, writes the one review"
 )
 THEME_EDGE = "two search themes or more, unless you skip the search"
-MERGE_LOOP = "chaining rounds, max 8: until the citation loop closes"
-THEME_LOOP = "search passes, max 8, its range as the target"
+MERGE_LOOP = "chaining rounds, max 8: until the citation loop closes; then gap chaining once"
+THEME_LOOP = "search passes, max 8, its range as the target; then gap chaining once"
 MERGE_REFUSAL = "a theme report numbers the parts otherwise: that theme run resumed once"
 
 
@@ -1270,7 +1270,7 @@ def paper_full_graph() -> Graph:
         Node("I", "Intake: you confirm", "stop"),
         Node(
             "L",
-            "Literature strategist, unless you skip it; each entry checked against an index",
+            "Literature strategist, unless you skip it; each entry checked against an index; gap chaining after the passes",
             "maybe",
         ),
         Node("T1", THEME_RUN_FIRST, "maybe"),
@@ -1283,7 +1283,7 @@ def paper_full_graph() -> Graph:
             "A research question the materials do not answer, when a part has no result",
             "stop",
         ),
-        Node("G", "Literature strategist: the sections with no source", "maybe"),
+        Node("G", "Literature strategist: the sections with no source; gap chaining after the passes", "maybe"),
         Node("PL2", "Planner: assigns what was found", "maybe"),
         Node(
             "PW",
@@ -1419,7 +1419,7 @@ def paper_revision_graph() -> Graph:
             "stop",
         ),
         Node("IA", "You approve the items, with no instructions", "stop"),
-        Node("LS", "Literature strategist, for a new reference", "maybe"),
+        Node("LS", "Literature strategist, for a new reference; gap chaining after the passes", "maybe"),
         Node("V", "Visualization, for a figure", "maybe"),
         Node("W", "Draft writer: a patch per item"),
         Node("C", "Citation compliance"),
@@ -1498,11 +1498,12 @@ def paper_revision_graph() -> Graph:
 def paper_lit_review_graph() -> Graph:
     nodes = (
         Node("I", "Intake: you confirm", "stop"),
-        Node("L", "Literature strategist: each entry checked against an index", "maybe"),
+        Node("L", "Literature strategist: each entry checked against an index; gap chaining after the passes", "maybe"),
         Node("T1", THEME_RUN_FIRST, "maybe"),
         Node("T2", THEME_RUN_REST, "maybe"),
         Node("M", MERGE_RUN, "maybe"),
         Node("LR", "You review the sources, optional", "stop"),
+        Node("SC", "Session: each entry of refs.bib checked against an index again", "script"),
         Node("RF", "Draft writer: reference fix, when a .tex is given", "maybe"),
         Node("SD", "A reference that cannot be confirmed", "stop"),
     )
@@ -1519,7 +1520,10 @@ def paper_lit_review_graph() -> Graph:
         Edge("M", "M", MERGE_LOOP, "back"),
         Edge("M", "T2", MERGE_REFUSAL, "back"),
         Edge("M", "LR"),
-        Edge("LR", "RF"),
+        Edge("LR", "SC"),
+        Edge("SC", "L", "an entry not confirmed: the strategist corrects it or takes it out, once", "back"),
+        Edge("SC", "M", "after theme runs: the merge run's strategist", "back"),
+        Edge("SC", "RF"),
         Edge("RF", "SD", "strict: a reference still fails"),
     )
     return _graph(nodes, edges)
@@ -1528,13 +1532,13 @@ def paper_lit_review_graph() -> Graph:
 def paper_outline_only_graph() -> Graph:
     nodes = (
         Node("I", "Intake: you confirm", "stop"),
-        Node("L", "Literature strategist: each entry checked against an index", "maybe"),
+        Node("L", "Literature strategist: each entry checked against an index; gap chaining after the passes", "maybe"),
         Node("T1", THEME_RUN_FIRST, "maybe"),
         Node("T2", THEME_RUN_REST, "maybe"),
         Node("M", MERGE_RUN, "maybe"),
         Node("LR", "You review the sources, optional", "stop"),
         Node("PL", "Planner: outline and argument map"),
-        Node("G", "Literature strategist: the sections with no source", "maybe"),
+        Node("G", "Literature strategist: the sections with no source; gap chaining after the passes", "maybe"),
         Node("PL2", "Planner: assigns what was found", "maybe"),
         Node("OA", "Outline approval", "stop"),
     )

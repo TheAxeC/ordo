@@ -494,7 +494,7 @@ result = check_urls_of(DOI_ENTRY, [DOI_REPLY, CROSSREF_REPLY], text="No citation
 check("L5 a .tex that cites no key", result[:2] == (0, ["the .tex cites no key"]), repr(result))
 
 # L5a: an arXiv doi that Crossref does not hold is compared with the record OpenAlex holds.
-arxiv_doi = "10.48550/arXiv.2601.21830"
+arxiv_doi = "10.48550/arXiv.2511.18945"
 result = check_urls_of("@misc{k, title={Estimating mutual information}, doi={%s}}\n" % arxiv_doi, [("https://doi.org/", stub_reply(200, "")), ("api.crossref.org", NOT_FOUND), ("api.openalex.org", stub_reply(200, OPENALEX_BODY))])
 check("L5a the ratio against OpenAlex", result[:2] == (0, [f"k: 200 https://doi.org/{arxiv_doi}, ratio 1.00 against OpenAlex"]), repr(result))
 check("L5a Semantic Scholar is not asked", not any("semanticscholar" in url for url in result[2]), repr(result[2]))
@@ -605,16 +605,16 @@ def plain_resolve(replies, argument, *options):
 
 
 # E1: the verdict of a DOI whose Crossref record agrees, after the lines resolve prints for the DOI.
-kolda_replies = [("api.crossref.org", crossref_work("10.1137/07070111x", "Tensor Decompositions and Applications", 2009))]
-result = entry_run(entry_bib("Kolda_2009", "Tensor Decompositions and Applications", "2009", doi="10.1137/07070111x"), "Kolda_2009", kolda_replies)
-check("E1 the verdict line", result[0] == 0 and result[1][-1:] == ["Kolda_2009: CONFIRMED against Crossref, ratio 1.00, year 2009"], repr(result))
-check("E1 the lines resolve prints come first", result[1][:-1] == plain_resolve(kolda_replies, "10.1137/07070111x") and len(result[1]) == 5, repr(result))
+shannon_replies = [("api.crossref.org", crossref_work("10.1002/j.1538-7305.1948.tb01338.x", "A Mathematical Theory of Communication", 1948))]
+result = entry_run(entry_bib("Shannon_1948", "A Mathematical Theory of Communication", "1948", doi="10.1002/j.1538-7305.1948.tb01338.x"), "Shannon_1948", shannon_replies)
+check("E1 the verdict line", result[0] == 0 and result[1][-1:] == ["Shannon_1948: CONFIRMED against Crossref, ratio 1.00, year 1948"], repr(result))
+check("E1 the lines resolve prints come first", result[1][:-1] == plain_resolve(shannon_replies, "10.1002/j.1538-7305.1948.tb01338.x") and len(result[1]) == 5, repr(result))
 
 # E2: Crossref's record lacks the subtitle (ratio below 0.70) and OpenAlex's record has it, so the first record that agrees is OpenAlex's.
-long_title = "Wasserstein barycentric coordinates: histogram regression using optimal transport"
-bonneel_replies = [("api.crossref.org", crossref_work("10.1145/2897824.2925918", "Wasserstein barycentric coordinates", 2016)), ("api.openalex.org", openalex_work("10.1145/2897824.2925918", long_title, 2016))]
-result = entry_run(entry_bib("Bonneel_2016", long_title, "2016", doi="10.1145/2897824.2925918"), "Bonneel_2016", bonneel_replies)
-check("E2 the first record that agrees", result[0] == 0 and result[1][-1] == "Bonneel_2016: CONFIRMED against OpenAlex, ratio 1.00, year 2016", repr(result))
+long_title = "XGBoost: A Scalable Tree Boosting System"
+chen_replies = [("api.crossref.org", crossref_work("10.1145/2939672.2939785", "XGBoost", 2016)), ("api.openalex.org", openalex_work("10.1145/2939672.2939785", long_title, 2016))]
+result = entry_run(entry_bib("Chen_2016", long_title, "2016", doi="10.1145/2939672.2939785"), "Chen_2016", chen_replies)
+check("E2 the first record that agrees", result[0] == 0 and result[1][-1] == "Chen_2016: CONFIRMED against OpenAlex, ratio 1.00, year 2016", repr(result))
 
 # E3: the title agrees in every record and the year does not.
 result = entry_run(entry_bib("Entry_2018", "Estimating mutual information", "2018", doi="10.1103/PhysRevE.69.066138"), "Entry_2018", [("api.crossref.org", crossref_work("10.1103/PhysRevE.69.066138", "Estimating mutual information", 2019)), ("api.openalex.org", openalex_work("10.1103/PhysRevE.69.066138", "Estimating mutual information", 2019))])
@@ -702,7 +702,7 @@ check("E11 --entry after a positional argument", result == expected_error("--ent
 title_replies = [("api.crossref.org", crossref_hits((near, 2018), (title, 2019))), ("api.openalex.org", openalex_hits((title, 2019)))]
 lines = plain_resolve(title_replies, title, "--year", "2019")
 check("E12 resolve of a title", len(lines) == 4 and lines[0].startswith("Crossref: ratio 1.00: Neural estimation of mutual information |") and lines[1].startswith("OpenAlex: ratio 1.00: Neural estimation of mutual information |") and lines[2:] == ["Semantic Scholar: not found", "arXiv: not found"], repr(lines))
-check("E12 resolve of a DOI has no verdict line", not any("CONFIRMED" in line for line in plain_resolve(kolda_replies, "10.1137/07070111x")))
+check("E12 resolve of a DOI has no verdict line", not any("CONFIRMED" in line for line in plain_resolve(shannon_replies, "10.1002/j.1538-7305.1948.tb01338.x")))
 
 # E13: of two entries with one key, the first is resolved.
 duplicate = "@article{dup, title={First title}, year={2001}, doi={10.1000/first}}\n@article{dup, title={Second title}, year={2002}, doi={10.1000/second}}\n"
@@ -1364,48 +1364,47 @@ for case, given, record_url, replies, oa_url, abstract in (
         check(f"{case} with neither: the URL tried is printed", any(line.startswith(f"tried {oa_url}: ") for line in lines), repr(lines))
 
 
-# The published version of an arXiv ID. The bodies are recorded from the answers for Set Transformer (arXiv 1810.00825, ICML 2019) and Deep Sets (arXiv 1703.06114, NeurIPS 2017), shortened.
-SET_ID = "1810.00825"
-SET_TITLE = "Set Transformer: A Framework for Attention-based Permutation-Invariant Neural Networks"
-SET_FEED = """<?xml version="1.0" encoding="UTF-8"?>
+# The published version of an arXiv ID. The bodies are recorded from the answers for Gradient Descent Finds Global Minima of Deep Neural Networks (arXiv 1811.03804, ICML 2019) and Attention Is All You Need (arXiv 1706.03762, NeurIPS 2017), shortened. PUBLISHED_DOI, PUBLISHED_ENTRY and the body of crossref_published are made up, since the ICML paper has no published DOI of its own.
+ICML_ID = "1811.03804"
+ICML_TITLE = "Gradient Descent Finds Global Minima of Deep Neural Networks"
+ICML_FEED = """<?xml version="1.0" encoding="UTF-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom" xmlns:arxiv="http://arxiv.org/schemas/atom">
-<entry><id>http://arxiv.org/abs/1810.00825v3</id><published>2018-10-01T15:41:04Z</published>
-<title>Set Transformer: A Framework for Attention-based
-  Permutation-Invariant Neural Networks</title>
-<summary>Many machine learning tasks are defined on sets of instances.</summary>
-<author><name>Juho Lee</name></author><author><name>Yoonho Lee</name></author><author><name>Jungtaek Kim</name></author>
-<author><name>Adam R. Kosiorek</name></author><author><name>Seungjin Choi</name></author><author><name>Yee Whye Teh</name></author></entry></feed>"""
-SET_MISC = [
-    "@misc{arxiv_1810_00825,",
-    "  title = {" + SET_TITLE + "},",
-    "  author = {Juho Lee and Yoonho Lee and Jungtaek Kim and Adam R. Kosiorek and Seungjin Choi and Yee Whye Teh},",
+<entry><id>http://arxiv.org/abs/1811.03804v4</id><published>2018-11-09T07:39:59Z</published>
+<title>Gradient Descent Finds Global Minima of Deep Neural Networks</title>
+<summary>Gradient descent finds a global minimum in training deep neural networks despite the objective function being non-convex.</summary>
+<author><name>Simon S. Du</name></author><author><name>Jason D. Lee</name></author><author><name>Haochuan Li</name></author>
+<author><name>Liwei Wang</name></author><author><name>Xiyu Zhai</name></author></entry></feed>"""
+ICML_MISC = [
+    "@misc{arxiv_1811_03804,",
+    "  title = {" + ICML_TITLE + "},",
+    "  author = {Simon S. Du and Jason D. Lee and Haochuan Li and Liwei Wang and Xiyu Zhai},",
     "  year = {2018},",
-    "  eprint = {1810.00825},",
+    "  eprint = {1811.03804},",
     "  archivePrefix = {arXiv}",
     "}",
 ]
 ICML_VENUE = {"id": "fc0a208c-acb7-47dc-a0d4-af8190e21d29", "name": "International Conference on Machine Learning", "type": "conference", "alternate_names": ["ICML", "Int Conf Mach Learn"]}
 
 
-def s2_published(doi="10.48550/arXiv.1810.00825", venue=ICML_VENUE, title=SET_TITLE, year=2018):
+def s2_published(doi="10.48550/arXiv.1811.03804", venue=ICML_VENUE, title=ICML_TITLE, year=2018, paper_id="03e7e8663c69e691be6b6403b1eb1bbf593d31f2", arxiv_id=ICML_ID, corpus_id=53250419):
     """Semantic Scholar's answer for paper/ARXIV:<id> with the fields of the published version."""
-    paper = {"paperId": "9d1bb2bbbb4ab0ed5b8a1d4ae0d0b4c4b8f4a6c1", "title": title, "year": year, "externalIds": {"ArXiv": SET_ID, "DOI": doi, "CorpusId": 52964848}}
+    paper = {"paperId": paper_id, "title": title, "year": year, "externalIds": {"ArXiv": arxiv_id, "DOI": doi, "CorpusId": corpus_id}}
     if venue is not ...:
         paper["publicationVenue"] = venue
     return says(200, json.dumps(paper))
 
 
-def openalex_published(doi="https://doi.org/10.48550/arxiv.1810.00825", landing=()):
+def openalex_published(doi="https://doi.org/10.48550/arxiv.1811.03804", landing=()):
     """OpenAlex's answer for works/doi:10.48550/arXiv.<id> with the fields of the published version."""
-    locations = [{"landing_page_url": "http://arxiv.org/abs/1810.00825", "doi": None}] + [{"landing_page_url": url, "doi": None} for url in landing]
-    return says(200, json.dumps({"id": "https://openalex.org/W2894384847", "title": SET_TITLE, "doi": doi, "locations": locations}))
+    locations = [{"landing_page_url": "http://arxiv.org/abs/1811.03804", "doi": None}] + [{"landing_page_url": url, "doi": None} for url in landing]
+    return says(200, json.dumps({"id": "https://openalex.org/W2899790086", "title": ICML_TITLE, "doi": doi, "locations": locations}))
 
 
 PUBLISHED_DOI = "10.1109/x.2020.1"
-PUBLISHED_ENTRY = "@inproceedings{Lee_2019, title={Set Transformer: A Framework for Attention-based Permutation-Invariant Neural Networks}, booktitle={Proceedings of X}, year={2019}}"
+PUBLISHED_ENTRY = "@inproceedings{Du_2019, title={Gradient Descent Finds Global Minima of Deep Neural Networks}, booktitle={Proceedings of X}, year={2019}}"
 
 
-def crossref_published(title=SET_TITLE):
+def crossref_published(title=ICML_TITLE):
     return says(200, json.dumps({"status": "ok", "message": {"DOI": PUBLISHED_DOI, "title": [title], "issued": {"date-parts": [[2019]]}, "container-title": ["Proceedings of X"]}}))
 
 
@@ -1418,97 +1417,101 @@ def bibtex_main(arguments, replies):
     return status, lines, err.splitlines(), script.urls
 
 
-VENUE_LINE = "published in International Conference on Machine Learning (conference) per Semantic Scholar, with no DOI named by Semantic Scholar or OpenAlex: lookup.py bibtex 1810.00825 --page <the venue's page of the work>"
+VENUE_LINE = "published in International Conference on Machine Learning (conference) per Semantic Scholar, with no DOI named by Semantic Scholar or OpenAlex: lookup.py bibtex 1811.03804 --page <the venue's page of the work>"
 
 with attempt("V1"):
-    result = bibtex_main([SET_ID], {ARXIV: [says(200, SET_FEED)], SEMANTIC_SCHOLAR: [s2_published()], OPENALEX: [openalex_published()]})
-    check("V1 a conference named by Semantic Scholar with no published DOI: the @misc entry and the published in line", result[:3] == (0, SET_MISC, [VENUE_LINE]), repr(result))
+    result = bibtex_main([ICML_ID], {ARXIV: [says(200, ICML_FEED)], SEMANTIC_SCHOLAR: [s2_published()], OPENALEX: [openalex_published()]})
+    check("V1 a conference named by Semantic Scholar with no published DOI: the @misc entry and the published in line", result[:3] == (0, ICML_MISC, [VENUE_LINE]), repr(result))
 with attempt("V1b"):
-    result = bibtex_main(["10.48550/arXiv.1810.00825"], {ARXIV: [says(200, SET_FEED)], SEMANTIC_SCHOLAR: [s2_published()], OPENALEX: [openalex_published()]})
-    check("V1b the arXiv DOI is read as its arXiv ID", result[:3] == (0, SET_MISC, [VENUE_LINE]), repr(result))
+    result = bibtex_main(["10.48550/arXiv.1811.03804"], {ARXIV: [says(200, ICML_FEED)], SEMANTIC_SCHOLAR: [s2_published()], OPENALEX: [openalex_published()]})
+    check("V1b the arXiv DOI is read as its arXiv ID", result[:3] == (0, ICML_MISC, [VENUE_LINE]), repr(result))
 with attempt("V2"):
-    replies = {ARXIV: [says(200, SET_FEED)], SEMANTIC_SCHOLAR: [s2_published(doi=PUBLISHED_DOI), says(404)], OPENALEX: [openalex_published(), says(404)], CROSSREF: [crossref_published()], "doi.org": [says(200, PUBLISHED_ENTRY, Content_Type="application/x-bibtex")]}
-    result = bibtex_main([SET_ID], replies)
+    replies = {ARXIV: [says(200, ICML_FEED)], SEMANTIC_SCHOLAR: [s2_published(doi=PUBLISHED_DOI), says(404)], OPENALEX: [openalex_published(), says(404)], CROSSREF: [crossref_published()], "doi.org": [says(200, PUBLISHED_ENTRY, Content_Type="application/x-bibtex")]}
+    result = bibtex_main([ICML_ID], replies)
     check("V2 a published DOI named by Semantic Scholar whose record matches: the entry doi.org gives", result[:3] == (0, [PUBLISHED_ENTRY], []), repr(result))
     check("V2 the entry is asked of doi.org for the published DOI", "https://doi.org/" + PUBLISHED_DOI in result[3], repr(result[3]))
 with attempt("V3"):
-    replies = {ARXIV: [says(200, SET_FEED)], SEMANTIC_SCHOLAR: [s2_published(doi=PUBLISHED_DOI, venue=...), says(404)], OPENALEX: [openalex_published(), says(404)], CROSSREF: [crossref_published("A survey of protein folding kinetics")], "doi.org": [says(200, PUBLISHED_ENTRY)]}
-    result = bibtex_main([SET_ID], replies)
-    check("V3 a published DOI whose record's title is below 0.70: the @misc entry and no request to doi.org", result[0] == 0 and result[1] == SET_MISC and not any("doi.org" in url for url in result[3]), repr(result))
+    replies = {ARXIV: [says(200, ICML_FEED)], SEMANTIC_SCHOLAR: [s2_published(doi=PUBLISHED_DOI, venue=...), says(404)], OPENALEX: [openalex_published(), says(404)], CROSSREF: [crossref_published("A survey of protein folding kinetics")], "doi.org": [says(200, PUBLISHED_ENTRY)]}
+    result = bibtex_main([ICML_ID], replies)
+    check("V3 a published DOI whose record's title is below 0.70: the @misc entry and no request to doi.org", result[0] == 0 and result[1] == ICML_MISC and not any("doi.org" in url for url in result[3]), repr(result))
 with attempt("V4"):
     for name, openalex in (("doi", openalex_published(doi="https://doi.org/" + PUBLISHED_DOI)), ("landing page", openalex_published(landing=["https://doi.org/" + PUBLISHED_DOI]))):
-        replies = {ARXIV: [says(200, SET_FEED)], SEMANTIC_SCHOLAR: [s2_published(venue=...), says(404)], OPENALEX: [openalex, says(404)], CROSSREF: [crossref_published()], "doi.org": [says(200, PUBLISHED_ENTRY)]}
-        result = bibtex_main([SET_ID], replies)
+        replies = {ARXIV: [says(200, ICML_FEED)], SEMANTIC_SCHOLAR: [s2_published(venue=...), says(404)], OPENALEX: [openalex, says(404)], CROSSREF: [crossref_published()], "doi.org": [says(200, PUBLISHED_ENTRY)]}
+        result = bibtex_main([ICML_ID], replies)
         check("V4 a published DOI named by OpenAlex's " + name + ": the entry doi.org gives", result[:3] == (0, [PUBLISHED_ENTRY], []), repr(result))
 with attempt("V5"):
-    replies = {ARXIV: [says(200, SET_FEED)], SEMANTIC_SCHOLAR: [s2_published(doi=PUBLISHED_DOI), says(404)], OPENALEX: [openalex_published(), says(404)], CROSSREF: [crossref_published()], "doi.org": [says(404)]}
-    result = bibtex_main([SET_ID], replies)
-    check("V5 doi.org answers 404 for the published DOI: the @misc entry and the reason", result[:3] == (0, SET_MISC, ["published DOI 10.1109/x.2020.1: doi.org HTTP 404"]), repr(result))
+    replies = {ARXIV: [says(200, ICML_FEED)], SEMANTIC_SCHOLAR: [s2_published(doi=PUBLISHED_DOI), says(404)], OPENALEX: [openalex_published(), says(404)], CROSSREF: [crossref_published()], "doi.org": [says(404)]}
+    result = bibtex_main([ICML_ID], replies)
+    check("V5 doi.org answers 404 for the published DOI: the @misc entry and the reason", result[:3] == (0, ICML_MISC, ["published DOI 10.1109/x.2020.1: doi.org HTTP 404"]), repr(result))
 with attempt("V6"):
-    replies = {ARXIV: [says(200, SET_FEED)], SEMANTIC_SCHOLAR: [s2_published(doi=PUBLISHED_DOI), says(500)], OPENALEX: [openalex_published(), says(500)], CROSSREF: [says(429)], "doi.org": [says(200, PUBLISHED_ENTRY)]}
-    result = bibtex_main([SET_ID], replies)
-    check("V6 every index left out for the published DOI's record: the @misc entry and one line per index", result[:3] == (0, SET_MISC, ["Crossref: left out, HTTP 429 after 3 retries", "OpenAlex: left out, HTTP 500", "Semantic Scholar: left out, HTTP 500"]), repr(result))
+    replies = {ARXIV: [says(200, ICML_FEED)], SEMANTIC_SCHOLAR: [s2_published(doi=PUBLISHED_DOI), says(500)], OPENALEX: [openalex_published(), says(500)], CROSSREF: [says(429)], "doi.org": [says(200, PUBLISHED_ENTRY)]}
+    result = bibtex_main([ICML_ID], replies)
+    check("V6 every index left out for the published DOI's record: the @misc entry and one line per index", result[:3] == (0, ICML_MISC, ["Crossref: left out, HTTP 429 after 3 retries", "OpenAlex: left out, HTTP 500", "Semantic Scholar: left out, HTTP 500"]), repr(result))
 with attempt("V7"):
     replies = {ARXIV: [says(429)], SEMANTIC_SCHOLAR: [s2_published(doi=PUBLISHED_DOI), says(404)], OPENALEX: [openalex_published(), says(404)], CROSSREF: [crossref_published()], "doi.org": [says(200, PUBLISHED_ENTRY)]}
-    result = bibtex_main([SET_ID], replies)
+    result = bibtex_main([ICML_ID], replies)
     check("V7 arXiv left out: the published DOI's record is compared with Semantic Scholar's title", result[0] == 0 and result[1] == [PUBLISHED_ENTRY], repr(result))
     replies = {ARXIV: [says(429)], SEMANTIC_SCHOLAR: [s2_published(venue=...)], OPENALEX: [openalex_published()]}
-    result = bibtex_main([SET_ID], replies)
+    result = bibtex_main([ICML_ID], replies)
     check("V7 arXiv left out and no published DOI: exit status 1 and the arXiv line", result[0] == 1 and result[1] == [] and result[2] == ["arXiv: left out, HTTP 429 after 3 retries"], repr(result))
 with attempt("V8"):
     for name, venue in (("named arXiv.org", {"name": "arXiv.org", "type": "journal", "alternate_names": ["ArXiv"]}), ("an alternate name ArXiv", {"name": "e-prints", "type": "journal", "alternate_names": ["ArXiv"]}), ("of type null", {"name": "International Conference on Machine Learning", "type": None}), ("of no type", {"name": "International Conference on Machine Learning"}), ("of another type", {"name": "International Conference on Machine Learning", "type": "repository"})):
-        result = bibtex_main([SET_ID], {ARXIV: [says(200, SET_FEED)], SEMANTIC_SCHOLAR: [s2_published(venue=venue)], OPENALEX: [openalex_published()]})
-        check("V8 a venue " + name + ": no published in line", result[:3] == (0, SET_MISC, []), repr(result))
+        result = bibtex_main([ICML_ID], {ARXIV: [says(200, ICML_FEED)], SEMANTIC_SCHOLAR: [s2_published(venue=venue)], OPENALEX: [openalex_published()]})
+        check("V8 a venue " + name + ": no published in line", result[:3] == (0, ICML_MISC, []), repr(result))
 with attempt("V9"):
-    result = bibtex_main([SET_ID], {ARXIV: [says(200, SET_FEED)], SEMANTIC_SCHOLAR: [s2_published(venue=...)], OPENALEX: [openalex_published()]})
-    check("V9 no published DOI and no venue: the @misc entry as it was, nothing on standard error", result[:3] == (0, SET_MISC, []), repr(result))
+    result = bibtex_main([ICML_ID], {ARXIV: [says(200, ICML_FEED)], SEMANTIC_SCHOLAR: [s2_published(venue=...)], OPENALEX: [openalex_published()]})
+    check("V9 no published DOI and no venue: the @misc entry as it was, nothing on standard error", result[:3] == (0, ICML_MISC, []), repr(result))
 with attempt("V10"):
-    result = bibtex_main([SET_ID], {ARXIV: [says(200, SET_FEED)], SEMANTIC_SCHOLAR: [says(429)], OPENALEX: [openalex_published()]})
-    check("V10 Semantic Scholar left out: the @misc entry and its line", result[:3] == (0, SET_MISC, ["Semantic Scholar: left out, HTTP 429 after 3 retries"]), repr(result))
+    result = bibtex_main([ICML_ID], {ARXIV: [says(200, ICML_FEED)], SEMANTIC_SCHOLAR: [says(429)], OPENALEX: [openalex_published()]})
+    check("V10 Semantic Scholar left out: the @misc entry and its line", result[:3] == (0, ICML_MISC, ["Semantic Scholar: left out, HTTP 429 after 3 retries"]), repr(result))
 with attempt("V11"):
     result = bibtex_main(["10.1000/xyz"], {"doi.org": [says(200, " @article{k, title={T}}\n", Content_Type="application/x-bibtex")]})
     check("V11 bibtex of a DOI that is not an arXiv DOI asks doi.org alone and prints its entry", result == (0, [" @article{k, title={T}}"], [], ["https://doi.org/10.1000/xyz"]), repr(result))
 
-PMLR_URL = "https://proceedings.mlr.press/v97/lee19d.html"
+PMLR_URL = "https://proceedings.mlr.press/v97/du19c.html"
 PMLR_PAGE = """<!DOCTYPE html><html><head>
 <meta name="citation_publisher" content="PMLR"/>
-<meta name="citation_title" content="Set Transformer: A Framework for Attention-based Permutation-Invariant Neural Networks"/>
-<meta name="citation_pdf_url" content="http://proceedings.mlr.press/v97/lee19d/lee19d.pdf">
-<meta name="citation_firstpage" content="3744">
-<meta name="citation_lastpage" content="3753">
-<meta name="citation_author" content="Juho Lee">
-<meta name="citation_author" content="Yoonho Lee">
-<meta name="citation_author" content="Jungtaek Kim">
-<meta name="citation_author" content="Adam Kosiorek">
-<meta name="citation_author" content="Seungjin Choi">
-<meta name="citation_author" content="Yee Whye Teh">
+<meta name="citation_title" content="Gradient Descent Finds Global Minima of Deep Neural Networks"/>
+<meta name="citation_pdf_url" content="http://proceedings.mlr.press/v97/du19c/du19c.pdf">
+<meta name="citation_firstpage" content="1675">
+<meta name="citation_lastpage" content="1685">
+<meta name="citation_author" content="Simon Du">
+<meta name="citation_author" content="Jason Lee">
+<meta name="citation_author" content="Haochuan Li">
+<meta name="citation_author" content="Liwei Wang">
+<meta name="citation_author" content="Xiyu Zhai">
 <meta name="citation_publication_date" content="2019/05/24">
 <meta name="citation_conference_title" content="International Conference on Machine Learning"/>
-</head><body><h1>Set Transformer</h1><p>Proceedings of the 36th International Conference on Machine Learning, PMLR 97:3744-3753, 2019.</p></body></html>"""
+</head><body><h1>Gradient Descent Finds Global Minima of Deep Neural Networks</h1><p>Proceedings of the 36th International Conference on Machine Learning, PMLR 97:1675-1685, 2019.</p></body></html>"""
 PMLR_HOST = "proceedings.mlr.press"
-SET_INPROCEEDINGS = [
-    "@inproceedings{arxiv_1810_00825,",
-    "  title = {" + SET_TITLE + "},",
-    "  author = {Juho Lee and Yoonho Lee and Jungtaek Kim and Adam Kosiorek and Seungjin Choi and Yee Whye Teh},",
+ICML_INPROCEEDINGS = [
+    "@inproceedings{arxiv_1811_03804,",
+    "  title = {" + ICML_TITLE + "},",
+    "  author = {Simon Du and Jason Lee and Haochuan Li and Liwei Wang and Xiyu Zhai},",
     "  booktitle = {International Conference on Machine Learning},",
     "  year = {2019},",
-    "  pages = {3744--3753},",
+    "  pages = {1675--1685},",
     "  url = {" + PMLR_URL + "},",
-    "  eprint = {1810.00825},",
+    "  eprint = {1811.03804},",
     "  archivePrefix = {arXiv}",
     "}",
 ]
-SETS_FEED = SET_FEED.replace("1810.00825v3", "1703.06114v3").replace("2018-10-01", "2017-03-10").replace("""Set Transformer: A Framework for Attention-based
-  Permutation-Invariant Neural Networks""", "Deep Sets")
-NEURIPS_URL = "https://proceedings.neurips.cc/paper_files/paper/2017/hash/f22e4747da1aa27e363d86d40ff442fe-Abstract.html"
-NEURIPS_PAGE = """<html><head><meta name="citation_title" content="Deep Sets">
-<meta name="citation_author" content="Zaheer, Manzil">
-<meta name="citation_author" content="Kottur, Satwik">
+NEURIPS_FEED = """<?xml version="1.0" encoding="UTF-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xmlns:arxiv="http://arxiv.org/schemas/atom">
+<entry><id>http://arxiv.org/abs/1706.03762v7</id><published>2017-06-12T17:57:34Z</published>
+<title>Attention Is All You Need</title>
+<summary>The dominant sequence transduction models are based on complex recurrent or convolutional neural networks in an encoder-decoder configuration.</summary>
+<author><name>Ashish Vaswani</name></author><author><name>Noam Shazeer</name></author><author><name>Niki Parmar</name></author><author><name>Jakob Uszkoreit</name></author>
+<author><name>Llion Jones</name></author><author><name>Aidan N. Gomez</name></author><author><name>Lukasz Kaiser</name></author><author><name>Illia Polosukhin</name></author></entry></feed>"""
+NEURIPS_URL = "https://proceedings.neurips.cc/paper_files/paper/2017/hash/3f5ee243547dee91fbd053c1c4a845aa-Abstract.html"
+NEURIPS_PAGE = """<html><head><meta name="citation_title" content="Attention is All you Need">
+<meta name="citation_author" content="Vaswani, Ashish">
+<meta name="citation_author" content="Shazeer, Noam">
 <meta name="citation_journal_title" content="Advances in Neural Information Processing Systems">
 <meta name="citation_volume" content="30">
-<meta name="citation_pdf_url" content="https://proceedings.neurips.cc/paper_files/paper/2017/file/f22e4747da1aa27e363d86d40ff442fe-Paper.pdf">
+<meta name="citation_pdf_url" content="https://proceedings.neurips.cc/paper_files/paper/2017/file/3f5ee243547dee91fbd053c1c4a845aa-Paper.pdf">
 <meta name="citation_publication_date" content="2017"></head><body></body></html>"""
-NEURIPS_VENUE = {"name": "Neural Information Processing Systems", "type": "conference", "alternate_names": ["NeurIPS", "NIPS"]}
+NEURIPS_VENUE = {"id": "d9720b90-d60b-48bc-9df8-87a30b9a60dd", "name": "Neural Information Processing Systems", "type": "conference", "alternate_names": ["Neural Inf Process Syst", "NeurIPS", "NIPS"]}
 
 
 def page_reply(page):
@@ -1516,32 +1519,32 @@ def page_reply(page):
 
 
 with attempt("V12"):
-    result = bibtex_main([SET_ID, "--page", PMLR_URL], {ARXIV: [says(200, SET_FEED)], SEMANTIC_SCHOLAR: [s2_published()], PMLR_HOST: [page_reply(PMLR_PAGE)]})
-    check("V12 --page on the PMLR page: the @inproceedings entry of the published version", result[:3] == (0, SET_INPROCEEDINGS, []), repr(result))
+    result = bibtex_main([ICML_ID, "--page", PMLR_URL], {ARXIV: [says(200, ICML_FEED)], SEMANTIC_SCHOLAR: [s2_published()], PMLR_HOST: [page_reply(PMLR_PAGE)]})
+    check("V12 --page on the PMLR page: the @inproceedings entry of the published version", result[:3] == (0, ICML_INPROCEEDINGS, []), repr(result))
 with attempt("V13"):
-    replies = {ARXIV: [says(200, SETS_FEED)], SEMANTIC_SCHOLAR: [s2_published(venue=NEURIPS_VENUE, title="Deep Sets", year=2017)], "proceedings.neurips.cc": [page_reply(NEURIPS_PAGE)]}
-    result = bibtex_main(["1703.06114", "--page", NEURIPS_URL], replies)
-    check("V13 --page on the NeurIPS page with a conference named by Semantic Scholar: @inproceedings with the journal title as booktitle", result[0] == 0 and result[1][:1] == ["@inproceedings{arxiv_1703_06114,"] and "  booktitle = {Advances in Neural Information Processing Systems}," in result[1] and "  year = {2017}," in result[1] and "  volume = {30}," in result[1] and not any(line.startswith("  journal") for line in result[1]), repr(result))
+    replies = {ARXIV: [says(200, NEURIPS_FEED)], SEMANTIC_SCHOLAR: [s2_published(doi="10.48550/arXiv.1706.03762", venue=NEURIPS_VENUE, title="Attention is All you Need", year=2017, paper_id="204e3073870fae3d05bcbc2f6a8e263d9b72e776", arxiv_id="1706.03762", corpus_id=13756489)], "proceedings.neurips.cc": [page_reply(NEURIPS_PAGE)]}
+    result = bibtex_main(["1706.03762", "--page", NEURIPS_URL], replies)
+    check("V13 --page on the NeurIPS page with a conference named by Semantic Scholar: @inproceedings with the journal title as booktitle", result[0] == 0 and result[1][:1] == ["@inproceedings{arxiv_1706_03762,"] and "  booktitle = {Advances in Neural Information Processing Systems}," in result[1] and "  year = {2017}," in result[1] and "  volume = {30}," in result[1] and not any(line.startswith("  journal") for line in result[1]), repr(result))
 with attempt("V14"):
-    no_title = PMLR_PAGE.replace('<meta name="citation_title" content="Set Transformer: A Framework for Attention-based Permutation-Invariant Neural Networks"/>', "")
+    no_title = PMLR_PAGE.replace('<meta name="citation_title" content="Gradient Descent Finds Global Minima of Deep Neural Networks"/>', "")
     no_year = PMLR_PAGE.replace('<meta name="citation_publication_date" content="2019/05/24">', "")
-    other = PMLR_PAGE.replace("Set Transformer: A Framework for Attention-based Permutation-Invariant Neural Networks", "A survey of protein folding kinetics")
+    other = PMLR_PAGE.replace("Gradient Descent Finds Global Minima of Deep Neural Networks", "A survey of protein folding kinetics")
     for name, url, replies, reason in (
         ("no citation_title", PMLR_URL, {PMLR_HOST: [page_reply(no_title)]}, "no citation_title tag"),
         ("no year tag", PMLR_URL, {PMLR_HOST: [page_reply(no_year)]}, "no year tag"),
-        ("a citation_title below 0.70", PMLR_URL, {PMLR_HOST: [page_reply(other)]}, "citation_title ratio %.2f" % lookup.title_ratio(SET_TITLE, "A survey of protein folding kinetics")),
+        ("a citation_title below 0.70", PMLR_URL, {PMLR_HOST: [page_reply(other)]}, "citation_title ratio %.2f" % lookup.title_ratio(ICML_TITLE, "A survey of protein folding kinetics")),
         ("a 404", PMLR_URL, {PMLR_HOST: [says(404)]}, "HTTP 404"),
-        ("a redirect to arxiv.org", PMLR_URL, {PMLR_HOST: [says(302, Location="https://arxiv.org/abs/1810.00825")], "arxiv.org": [page_reply(PMLR_PAGE)]}, "the page is on arxiv.org"),
-        ("a redirect to doi.org", PMLR_URL, {PMLR_HOST: [says(302, Location="https://doi.org/10.48550/arXiv.1810.00825")], "doi.org": [page_reply(PMLR_PAGE)]}, "the page is on doi.org"),
+        ("a redirect to arxiv.org", PMLR_URL, {PMLR_HOST: [says(302, Location="https://arxiv.org/abs/1811.03804")], "arxiv.org": [page_reply(PMLR_PAGE)]}, "the page is on arxiv.org"),
+        ("a redirect to doi.org", PMLR_URL, {PMLR_HOST: [says(302, Location="https://doi.org/10.48550/arXiv.1811.03804")], "doi.org": [page_reply(PMLR_PAGE)]}, "the page is on doi.org"),
         ("file:///etc/passwd", "file:///etc/passwd", {}, "not an http or https URL"),
     ):
-        replies = {ARXIV: [says(200, SET_FEED)], SEMANTIC_SCHOLAR: [s2_published()], **replies}
-        result = bibtex_main([SET_ID, "--page", url], replies)
+        replies = {ARXIV: [says(200, ICML_FEED)], SEMANTIC_SCHOLAR: [s2_published()], **replies}
+        result = bibtex_main([ICML_ID, "--page", url], replies)
         check("V14 --page refuses a page with " + name, result[0] == 1 and result[1] == [] and result[2][-1:] == [f"page {url}: {reason}"], repr(result))
 with attempt("V15"):
-    page = PMLR_PAGE.replace('content="Juho Lee"', 'content="Juho Lee}, note = {injected"').replace('content="3744"', 'content="3744\n}"')
-    result = bibtex_main([SET_ID, "--page", PMLR_URL], {ARXIV: [says(200, SET_FEED)], SEMANTIC_SCHOLAR: [s2_published()], PMLR_HOST: [page_reply(page)]})
-    check("V15 a tag whose braces do not balance cannot end its field: its braces are removed", result[0] == 0 and "  author = {Juho Lee, note = injected and Yoonho Lee and Jungtaek Kim and Adam Kosiorek and Seungjin Choi and Yee Whye Teh}," in result[1] and "  pages = {3744 --3753}," in result[1] and not any(line.startswith("  note") for line in result[1]), repr(result))
+    page = PMLR_PAGE.replace('content="Simon Du"', 'content="Simon Du}, note = {injected"').replace('content="1675"', 'content="1675\n}"')
+    result = bibtex_main([ICML_ID, "--page", PMLR_URL], {ARXIV: [says(200, ICML_FEED)], SEMANTIC_SCHOLAR: [s2_published()], PMLR_HOST: [page_reply(page)]})
+    check("V15 a tag whose braces do not balance cannot end its field: its braces are removed", result[0] == 0 and "  author = {Simon Du, note = injected and Jason Lee and Haochuan Li and Liwei Wang and Xiyu Zhai}," in result[1] and "  pages = {1675 --1685}," in result[1] and not any(line.startswith("  note") for line in result[1]), repr(result))
 
 
 # A: every entry bibtex prints is ASCII, by each of its three builders. The bodies hold their characters as escapes, so this file stays ASCII.
@@ -1572,13 +1575,13 @@ with attempt("A5"):
     result = doi_bibtex("@article{M\u00f6ller_2020, title={T}, url={https://example.org/caf\u00e9}, DOI={10.1000/xyz}, year={2020}}")
     check("A5 the key keeps the base letter and the url is percent-encoded", result[:3] == (0, ["@article{Moller_2020, title={T}, url={https://example.org/caf%C3%A9}, DOI={10.1000/xyz}, year={2020}}"], []), repr(result))
 with attempt("A6"):
-    page = PMLR_PAGE.replace('content="Juho Lee"', 'content="Ren\u00e9 Lee"')
-    result = bibtex_main([SET_ID, "--page", PMLR_URL], {ARXIV: [says(200, SET_FEED)], SEMANTIC_SCHOLAR: [s2_published()], PMLR_HOST: [page_reply(page)]})
-    check("A6 bibtex --page writes an accented author of the page's tags as its accent command", result[0] == 0 and r"  author = {Ren{\'e} Lee and Yoonho Lee and Jungtaek Kim and Adam Kosiorek and Seungjin Choi and Yee Whye Teh}," in result[1] and is_ascii(result[1]), repr(result))
+    page = PMLR_PAGE.replace('content="Simon Du"', 'content="Ren\u00e9 Du"')
+    result = bibtex_main([ICML_ID, "--page", PMLR_URL], {ARXIV: [says(200, ICML_FEED)], SEMANTIC_SCHOLAR: [s2_published()], PMLR_HOST: [page_reply(page)]})
+    check("A6 bibtex --page writes an accented author of the page's tags as its accent command", result[0] == 0 and r"  author = {Ren{\'e} Du and Jason Lee and Haochuan Li and Liwei Wang and Xiyu Zhai}," in result[1] and is_ascii(result[1]), repr(result))
 with attempt("A7"):
-    feed = SET_FEED.replace("<name>Juho Lee</name>", "<name>J\u00f6rg Lee</name>")
-    result = bibtex_main([SET_ID], {ARXIV: [says(200, feed)], SEMANTIC_SCHOLAR: [s2_published(venue=...)], OPENALEX: [openalex_published()]})
-    check("A7 the @misc entry of an arXiv record writes an accented author as its accent command", result[0] == 0 and r'  author = {J{\"o}rg Lee and Yoonho Lee and Jungtaek Kim and Adam R. Kosiorek and Seungjin Choi and Yee Whye Teh},' in result[1] and is_ascii(result[1]), repr(result))
+    feed = ICML_FEED.replace("<name>Simon S. Du</name>", "<name>J\u00f6rg S. Du</name>")
+    result = bibtex_main([ICML_ID], {ARXIV: [says(200, feed)], SEMANTIC_SCHOLAR: [s2_published(venue=...)], OPENALEX: [openalex_published()]})
+    check("A7 the @misc entry of an arXiv record writes an accented author as its accent command", result[0] == 0 and r'  author = {J{\"o}rg S. Du and Jason D. Lee and Haochuan Li and Liwei Wang and Xiyu Zhai},' in result[1] and is_ascii(result[1]), repr(result))
 with attempt("A8"):
     original_title = "\u03b1-stable estimates of mutual information in caf\u00e9s"
     converted_title = r"{$\alpha$}-stable estimates of mutual information in caf{\'e}s"
@@ -1592,73 +1595,73 @@ with attempt("A8"):
     check("A8 the title check of check-urls reads a converted entry as the original", converted[:2] == original[:2] and original[0] == 0, repr((converted, original)))
 
 
-def openalex_arxiv_record(year=2018, title=SET_TITLE):
-    """OpenAlex's answer for works/doi:10.48550/arXiv.1810.00825 with the fields resolve asks."""
-    return says(200, json.dumps({"id": "https://openalex.org/W2894384847", "title": title, "doi": "https://doi.org/10.48550/arxiv.1810.00825", "publication_year": year, "authorships": [], "primary_location": {"source": {"display_name": "arXiv (Cornell University)"}}, "open_access": {"oa_url": None}}))
+def openalex_arxiv_record(year=2018, title=ICML_TITLE):
+    """OpenAlex's answer for works/doi:10.48550/arXiv.1811.03804 with the fields resolve asks."""
+    return says(200, json.dumps({"id": "https://openalex.org/W2899790086", "title": title, "doi": "https://doi.org/10.48550/arxiv.1811.03804", "publication_year": year, "authorships": [], "primary_location": {"source": {"display_name": "arXiv (Cornell University)"}}, "open_access": {"oa_url": None}}))
 
 
-def page_entry(kind="inproceedings", title=SET_TITLE, year="2019", url=PMLR_URL, **extra):
-    fields = {"title": title, "booktitle": "International Conference on Machine Learning", "year": year, "url": url, "eprint": SET_ID, "archivePrefix": "arXiv", **extra}
-    return "@%s{arxiv_1810_00825,\n" % kind + ",\n".join("  %s = {%s}" % pair for pair in fields.items()) + "\n}\n"
+def page_entry(kind="inproceedings", title=ICML_TITLE, year="2019", url=PMLR_URL, **extra):
+    fields = {"title": title, "booktitle": "International Conference on Machine Learning", "year": year, "url": url, "eprint": ICML_ID, "archivePrefix": "arXiv", **extra}
+    return "@%s{arxiv_1811_03804,\n" % kind + ",\n".join("  %s = {%s}" % pair for pair in fields.items()) + "\n}\n"
 
 
 def entry_main(bib_text, replies):
-    """(exit status, standard output lines, URLs asked) of lookup.py resolve --entry on the key arxiv_1810_00825, answered from replies, on a new scratch folder."""
+    """(exit status, standard output lines, URLs asked) of lookup.py resolve --entry on the key arxiv_1811_03804, answered from replies, on a new scratch folder."""
     scratch_case()
     path = put("g/refs.bib", bib_text)
     script = Script(replies)
     with fake_clock():
-        status, lines, _ = run_main(["resolve", "--entry", path, "arxiv_1810_00825"], script)
+        status, lines, _ = run_main(["resolve", "--entry", path, "arxiv_1811_03804"], script)
     return status, lines, script.urls
 
 
-ARXIV_RECORDS = {CROSSREF: [says(404)], OPENALEX: [openalex_arxiv_record()], SEMANTIC_SCHOLAR: [says(404)], ARXIV: [says(200, SET_FEED)]}
-ENTRY_2019 = "arxiv_1810_00825: NOT_CONFIRMED against OpenAlex, ratio 1.00, year 2018, entry year 2019"
+ARXIV_RECORDS = {CROSSREF: [says(404)], OPENALEX: [openalex_arxiv_record()], SEMANTIC_SCHOLAR: [says(404)], ARXIV: [says(200, ICML_FEED)]}
+ENTRY_2019 = "arxiv_1811_03804: NOT_CONFIRMED against OpenAlex, ratio 1.00, year 2018, entry year 2019"
 
 with attempt("G1"):
     result = entry_main(page_entry(), {**ARXIV_RECORDS, PMLR_HOST: [page_reply(PMLR_PAGE)]})
-    check("G1 an entry confirmed on its venue page", result[0] == 0 and result[1][-1] == "arxiv_1810_00825: CONFIRMED against OpenAlex, ratio 1.00, year 2018; year 2019 found on " + PMLR_URL, repr(result))
+    check("G1 an entry confirmed on its venue page", result[0] == 0 and result[1][-1] == "arxiv_1811_03804: CONFIRMED against OpenAlex, ratio 1.00, year 2018; year 2019 found on " + PMLR_URL, repr(result))
 with attempt("G2"):
     page = PMLR_PAGE.replace("2019/05/24", "2018/05/24")
     result = entry_main(page_entry(), {**ARXIV_RECORDS, PMLR_HOST: [page_reply(page)]})
     check("G2 a year tag that differs from the entry's year", result[0] == 1 and result[1][-1] == ENTRY_2019 + "; " + PMLR_URL + ": year 2018 on the page", repr(result))
 with attempt("G3"):
-    page = "<html><head><title>" + SET_TITLE + "</title></head><body><p>" + SET_TITLE + ", 2017, 2018, 2019, 2020.</p></body></html>"
+    page = "<html><head><title>" + ICML_TITLE + "</title></head><body><p>" + ICML_TITLE + ", 2017, 2018, 2019, 2020.</p></body></html>"
     result = entry_main(page_entry(), {**ARXIV_RECORDS, PMLR_HOST: [page_reply(page)]})
     check("G3 a page with the title and years in its text and no citation tags", result[0] == 1 and result[1][-1] == ENTRY_2019 + "; " + PMLR_URL + ": no citation_title tag", repr(result))
 with attempt("G4"):
     result = entry_main(page_entry(), {**ARXIV_RECORDS, PMLR_HOST: [says(404)]})
     check("G4 a page that answers 404", result[0] == 1 and result[1][-1] == ENTRY_2019 + "; " + PMLR_URL + ": HTTP 404", repr(result))
 with attempt("G5"):
-    page = PMLR_PAGE.replace('content="Set Transformer: A Framework for Attention-based Permutation-Invariant Neural Networks"', 'content="SET TRANSFORMER: a framework for attention-based permutation-invariant neural networks"')
-    result = entry_main(page_entry(title="{S}et {T}ransformer: A Framework for Attention-based Permutation-Invariant Neural Networks"), {**ARXIV_RECORDS, PMLR_HOST: [page_reply(page)]})
-    check("G5 braces in the entry's title and another capitalisation on the page", result[0] == 0 and result[1][-1] == "arxiv_1810_00825: CONFIRMED against OpenAlex, ratio 1.00, year 2018; year 2019 found on " + PMLR_URL, repr(result))
+    page = PMLR_PAGE.replace('content="Gradient Descent Finds Global Minima of Deep Neural Networks"', 'content="GRADIENT DESCENT finds global minima of deep neural networks"')
+    result = entry_main(page_entry(title="{G}radient {D}escent Finds Global Minima of Deep Neural Networks"), {**ARXIV_RECORDS, PMLR_HOST: [page_reply(page)]})
+    check("G5 braces in the entry's title and another capitalisation on the page", result[0] == 0 and result[1][-1] == "arxiv_1811_03804: CONFIRMED against OpenAlex, ratio 1.00, year 2018; year 2019 found on " + PMLR_URL, repr(result))
 with attempt("G6"):
     for url, extra in (
         ("file:///etc/passwd", {}),
-        ("ftp://proceedings.mlr.press/v97/lee19d.html", {}),
-        ("https://arxiv.org/abs/1810.00825", {}),
-        ("https://export.arxiv.org/abs/1810.00825", {}),
-        ("https://doi.org/10.48550/arXiv.1810.00825", {}),
-        (PMLR_URL, {PMLR_HOST: [says(302, Location="https://arxiv.org/abs/1810.00825")], "arxiv.org": [page_reply(PMLR_PAGE)]}),
+        ("ftp://proceedings.mlr.press/v97/du19c.html", {}),
+        ("https://arxiv.org/abs/1811.03804", {}),
+        ("https://export.arxiv.org/abs/1811.03804", {}),
+        ("https://doi.org/10.48550/arXiv.1811.03804", {}),
+        (PMLR_URL, {PMLR_HOST: [says(302, Location="https://arxiv.org/abs/1811.03804")], "arxiv.org": [page_reply(PMLR_PAGE)]}),
     ):
         result = entry_main(page_entry(url=url), {**ARXIV_RECORDS, **extra})
         check("G6 a url whose page is not read: " + url + (" redirected to arxiv.org" if extra else ""), result[0] == 1 and result[1][-1] == ENTRY_2019, repr(result))
         if not extra:
             check("G6 no request to the url " + url, url not in result[2], repr(result[2]))
 with attempt("G7"):
-    replies = {CROSSREF: [crossref_published()], OPENALEX: [says(404)], SEMANTIC_SCHOLAR: [says(404)], ARXIV: [says(200, SET_FEED)], PMLR_HOST: [page_reply(PMLR_PAGE)]}
+    replies = {CROSSREF: [crossref_published()], OPENALEX: [says(404)], SEMANTIC_SCHOLAR: [says(404)], ARXIV: [says(200, ICML_FEED)], PMLR_HOST: [page_reply(PMLR_PAGE)]}
     result = entry_main(page_entry(year="2018", doi=PUBLISHED_DOI), replies)
-    check("G7 an entry with a doi is resolved by its DOI and no page is read", result[0] == 1 and result[1][-1] == "arxiv_1810_00825: NOT_CONFIRMED against Crossref, ratio 1.00, year 2019, entry year 2018" and result[2][0] == "https://api.crossref.org/works/" + PUBLISHED_DOI and not any(PMLR_HOST in url for url in result[2]), repr(result))
+    check("G7 an entry with a doi is resolved by its DOI and no page is read", result[0] == 1 and result[1][-1] == "arxiv_1811_03804: NOT_CONFIRMED against Crossref, ratio 1.00, year 2019, entry year 2018" and result[2][0] == "https://api.crossref.org/works/" + PUBLISHED_DOI and not any(PMLR_HOST in url for url in result[2]), repr(result))
 with attempt("G8"):
-    pdf_url = "https://proceedings.neurips.cc/paper_files/paper/2017/file/f22e4747da1aa27e363d86d40ff442fe-Paper.pdf"
+    pdf_url = "https://proceedings.neurips.cc/paper_files/paper/2017/file/3f5ee243547dee91fbd053c1c4a845aa-Paper.pdf"
     result = entry_main(page_entry(url=pdf_url), {**ARXIV_RECORDS, "proceedings.neurips.cc": [says(200, "%PDF-1.4\n%binary\n", Content_Type="application/pdf")]})
     check("G8 a PDF as the url", result[0] == 1 and result[1][-1] == ENTRY_2019 + "; " + pdf_url + ": no citation_title tag", repr(result))
 with attempt("G9"):
     result = entry_main(page_entry(kind="misc", year="2018"), {**ARXIV_RECORDS, PMLR_HOST: [page_reply(PMLR_PAGE)]})
-    check("G9 an @misc entry that a record confirms: CONFIRMED as before, no page read", result[0] == 0 and result[1][-1] == "arxiv_1810_00825: CONFIRMED against OpenAlex, ratio 1.00, year 2018" and not any(PMLR_HOST in url for url in result[2]), repr(result))
+    check("G9 an @misc entry that a record confirms: CONFIRMED as before, no page read", result[0] == 0 and result[1][-1] == "arxiv_1811_03804: CONFIRMED against OpenAlex, ratio 1.00, year 2018" and not any(PMLR_HOST in url for url in result[2]), repr(result))
     result = entry_main(page_entry(kind="inproceedings", year="2018"), {**ARXIV_RECORDS, PMLR_HOST: [page_reply(PMLR_PAGE)]})
-    check("G9 an @inproceedings entry whose year a record equals: CONFIRMED as before, no page read", result[0] == 0 and result[1][-1] == "arxiv_1810_00825: CONFIRMED against OpenAlex, ratio 1.00, year 2018" and not any(PMLR_HOST in url for url in result[2]), repr(result))
+    check("G9 an @inproceedings entry whose year a record equals: CONFIRMED as before, no page read", result[0] == 0 and result[1][-1] == "arxiv_1811_03804: CONFIRMED against OpenAlex, ratio 1.00, year 2018" and not any(PMLR_HOST in url for url in result[2]), repr(result))
 
 with attempt("W1"):
     scratch_case()
@@ -1672,16 +1675,16 @@ with attempt("W1"):
 
     lookup.FetchRun.pdf_text = recorded_pdf_text
     try:
-        script = Script({PMLR_HOST: [page_reply(PMLR_PAGE), says(200, "%PDF-1.4 pmlr")], ARXIV: [says(200, SET_FEED)]})
+        script = Script({PMLR_HOST: [page_reply(PMLR_PAGE), says(200, "%PDF-1.4 pmlr")], ARXIV: [says(200, ICML_FEED)]})
         with fake_clock():
-            status, lines, err = run_main(["fetch", SET_ID, folder, "arxiv_1810_00825", "--page", PMLR_URL], script)
-        check("W1 fetch --page reads the PDF the page's citation_pdf_url names, before arxiv.org", status == 0 and script.urls[:2] == [PMLR_URL, "http://proceedings.mlr.press/v97/lee19d/lee19d.pdf"] and not any("arxiv.org/" in url for url in script.urls) and read_text(os.path.join(folder, "arxiv_1810_00825.txt")) == "the text of the PMLR PDF\n", repr((status, lines, err, script.urls)))
+            status, lines, err = run_main(["fetch", ICML_ID, folder, "arxiv_1811_03804", "--page", PMLR_URL], script)
+        check("W1 fetch --page reads the PDF the page's citation_pdf_url names, before arxiv.org", status == 0 and script.urls[:2] == [PMLR_URL, "http://proceedings.mlr.press/v97/du19c/du19c.pdf"] and not any("arxiv.org/" in url for url in script.urls) and read_text(os.path.join(folder, "arxiv_1811_03804.txt")) == "the text of the PMLR PDF\n", repr((status, lines, err, script.urls)))
         script = Script({PMLR_HOST: [says(404)]})
         with fake_clock():
-            status, lines, err = run_main(["fetch", SET_ID, folder, "other", "--page", PMLR_URL], script)
+            status, lines, err = run_main(["fetch", ICML_ID, folder, "other", "--page", PMLR_URL], script)
         plain = Script({})
         with fake_clock():
-            run_main(["fetch", SET_ID, folder, "plain"], plain)
+            run_main(["fetch", ICML_ID, folder, "plain"], plain)
         check("W1 with the page failing, fetch goes on as without --page", script.urls[:1] == [PMLR_URL] and script.urls[1:] == plain.urls and status == 1, repr((status, lines, script.urls, plain.urls)))
     finally:
         lookup.FetchRun.pdf_text = real_pdf_text
@@ -1690,41 +1693,41 @@ with attempt("W1"):
 S2_SELECT = "paperId,title,authors,year,venue,externalIds,openAccessPdf"
 OPENALEX_SELECT = "id,title,authorships,publication_year,primary_location,doi,open_access,ids"
 EXPECTED_URLS = (
-    (["resolve", SET_ID], [
-        "https://api.crossref.org/works/10.48550/arXiv.1810.00825",
-        "https://api.openalex.org/works/doi:10.48550/arXiv.1810.00825?select=" + OPENALEX_SELECT,
-        "https://api.semanticscholar.org/graph/v1/paper/ARXIV:1810.00825?fields=" + S2_SELECT,
-        "https://export.arxiv.org/api/query?id_list=1810.00825",
+    (["resolve", ICML_ID], [
+        "https://api.crossref.org/works/10.48550/arXiv.1811.03804",
+        "https://api.openalex.org/works/doi:10.48550/arXiv.1811.03804?select=" + OPENALEX_SELECT,
+        "https://api.semanticscholar.org/graph/v1/paper/ARXIV:1811.03804?fields=" + S2_SELECT,
+        "https://export.arxiv.org/api/query?id_list=1811.03804",
     ]),
-    (["resolve", "10.1137/07070111x"], [
-        "https://api.crossref.org/works/10.1137/07070111x",
-        "https://api.openalex.org/works/doi:10.1137/07070111x?select=" + OPENALEX_SELECT,
-        "https://api.semanticscholar.org/graph/v1/paper/DOI:10.1137/07070111x?fields=" + S2_SELECT,
+    (["resolve", "10.1002/j.1538-7305.1948.tb01338.x"], [
+        "https://api.crossref.org/works/10.1002/j.1538-7305.1948.tb01338.x",
+        "https://api.openalex.org/works/doi:10.1002/j.1538-7305.1948.tb01338.x?select=" + OPENALEX_SELECT,
+        "https://api.semanticscholar.org/graph/v1/paper/DOI:10.1002/j.1538-7305.1948.tb01338.x?fields=" + S2_SELECT,
     ]),
-    (["search", "set transformer"], [
-        "https://api.crossref.org/works?query.bibliographic=set+transformer&rows=20&select=DOI%2Ctitle%2Cauthor%2Cissued%2Ccontainer-title",
-        "https://api.openalex.org/works?search=set+transformer&per_page=20&select=id%2Ctitle%2Cauthorships%2Cpublication_year%2Cprimary_location%2Cdoi%2Copen_access%2Cids",
-        "https://api.semanticscholar.org/graph/v1/paper/search?query=set+transformer&limit=20&fields=paperId%2Ctitle%2Cauthors%2Cyear%2Cvenue%2CexternalIds%2CopenAccessPdf",
-        "https://export.arxiv.org/api/query?search_query=all%3Aset+AND+all%3Atransformer&max_results=20",
+    (["search", "gradient descent"], [
+        "https://api.crossref.org/works?query.bibliographic=gradient+descent&rows=20&select=DOI%2Ctitle%2Cauthor%2Cissued%2Ccontainer-title",
+        "https://api.openalex.org/works?search=gradient+descent&per_page=20&select=id%2Ctitle%2Cauthorships%2Cpublication_year%2Cprimary_location%2Cdoi%2Copen_access%2Cids",
+        "https://api.semanticscholar.org/graph/v1/paper/search?query=gradient+descent&limit=20&fields=paperId%2Ctitle%2Cauthors%2Cyear%2Cvenue%2CexternalIds%2CopenAccessPdf",
+        "https://export.arxiv.org/api/query?search_query=all%3Agradient+AND+all%3Adescent&max_results=20",
     ]),
-    (["refs", SET_ID], [
-        "https://api.semanticscholar.org/graph/v1/paper/ARXIV:1810.00825/references?fields=paperId%2Ctitle%2Cauthors%2Cyear%2Cvenue%2CexternalIds%2CopenAccessPdf&limit=100",
-        "https://api.openalex.org/works/doi:10.48550/arXiv.1810.00825?select=id,referenced_works",
+    (["refs", ICML_ID], [
+        "https://api.semanticscholar.org/graph/v1/paper/ARXIV:1811.03804/references?fields=paperId%2Ctitle%2Cauthors%2Cyear%2Cvenue%2CexternalIds%2CopenAccessPdf&limit=100",
+        "https://api.openalex.org/works/doi:10.48550/arXiv.1811.03804?select=id,referenced_works",
     ]),
-    (["cited-by", "10.1137/07070111x"], [
-        "https://api.semanticscholar.org/graph/v1/paper/DOI:10.1137/07070111x/citations?fields=paperId%2Ctitle%2Cauthors%2Cyear%2Cvenue%2CexternalIds%2CopenAccessPdf&limit=100",
-        "https://api.openalex.org/works/doi:10.1137/07070111x?select=id,referenced_works",
+    (["cited-by", "10.1002/j.1538-7305.1948.tb01338.x"], [
+        "https://api.semanticscholar.org/graph/v1/paper/DOI:10.1002/j.1538-7305.1948.tb01338.x/citations?fields=paperId%2Ctitle%2Cauthors%2Cyear%2Cvenue%2CexternalIds%2CopenAccessPdf&limit=100",
+        "https://api.openalex.org/works/doi:10.1002/j.1538-7305.1948.tb01338.x?select=id,referenced_works",
     ]),
-    (["fetch", SET_ID, "FOLDER", "k"], [
-        "https://arxiv.org/html/1810.00825",
-        "https://arxiv.org/pdf/1810.00825",
-        "https://api.openalex.org/works/doi:10.48550/arXiv.1810.00825?select=" + OPENALEX_SELECT + ",abstract_inverted_index",
-        "https://api.semanticscholar.org/graph/v1/paper/ARXIV:1810.00825?fields=" + S2_SELECT + ",abstract",
-        "https://export.arxiv.org/api/query?id_list=1810.00825",
+    (["fetch", ICML_ID, "FOLDER", "k"], [
+        "https://arxiv.org/html/1811.03804",
+        "https://arxiv.org/pdf/1811.03804",
+        "https://api.openalex.org/works/doi:10.48550/arXiv.1811.03804?select=" + OPENALEX_SELECT + ",abstract_inverted_index",
+        "https://api.semanticscholar.org/graph/v1/paper/ARXIV:1811.03804?fields=" + S2_SELECT + ",abstract",
+        "https://export.arxiv.org/api/query?id_list=1811.03804",
     ]),
-    (["fetch", "10.1137/07070111x", "FOLDER", "k"], [
-        "https://api.openalex.org/works/doi:10.1137/07070111x?select=" + OPENALEX_SELECT + ",abstract_inverted_index",
-        "https://api.semanticscholar.org/graph/v1/paper/DOI:10.1137/07070111x?fields=" + S2_SELECT + ",abstract",
+    (["fetch", "10.1002/j.1538-7305.1948.tb01338.x", "FOLDER", "k"], [
+        "https://api.openalex.org/works/doi:10.1002/j.1538-7305.1948.tb01338.x?select=" + OPENALEX_SELECT + ",abstract_inverted_index",
+        "https://api.semanticscholar.org/graph/v1/paper/DOI:10.1002/j.1538-7305.1948.tb01338.x?fields=" + S2_SELECT + ",abstract",
     ]),
 )
 for arguments, expected in EXPECTED_URLS:
@@ -1787,9 +1790,9 @@ def text_of(folder, name):
 
 
 PMC_PAGE = b"""<!DOCTYPE html>
-<html lang="en"><head><meta charset="utf-8"><title>Lesion mapping</title>
+<html lang="en"><head><meta charset="utf-8"><title>Soil carbon after tillage</title>
 <style>p { color: red; }</style><script>var tracker = "read this";</script></head>
-<body><article><section><h2>Results</h2><p>Lesion size predicted the deficit in</p><p>the acute phase.</p></section></article></body></html>
+<body><article><section><h2>Results</h2><p>Tillage depth predicted the carbon loss in</p><p>the first season.</p></section></article></body></html>
 """
 
 # X1: a PMC article page: tags removed, no script or style text, a passage split across two p elements, and the line that names the text.
@@ -1797,21 +1800,21 @@ with attempt("X1"):
     page, folder = text_case(PMC_PAGE)
     status, out, err = run_text([page, folder, "smith2020"])
     text = text_of(folder, "smith2020.txt")
-    check("X1 text of a PMC page", status == 0 and text == "Lesion mapping\nResults\nLesion size predicted the deficit in\nthe acute phase.\n" and out == ["smith2020.txt: %d characters from %s" % (len(text), page)] and err == [], repr((status, out, err, text)))
+    check("X1 text of a PMC page", status == 0 and text == "Soil carbon after tillage\nResults\nTillage depth predicted the carbon loss in\nthe first season.\n" and out == ["smith2020.txt: %d characters from %s" % (len(text), page)] and err == [], repr((status, out, err, text)))
 
     # X2: quote-check finds a passage of that page in the text text wrote.
     report = os.path.join(os.path.dirname(folder), "citation-report.md")
     with open(report, "w") as handle:
-        handle.write('Claim [@smith2020, p. 4].\n\n> [@smith2020, p. 4]: "Lesion size predicted the deficit in the acute phase."\n')
+        handle.write('Claim [@smith2020, p. 4].\n\n> [@smith2020, p. 4]: "Tillage depth predicted the carbon loss in the first season."\n')
     bib = os.path.join(os.path.dirname(folder), "refs.bib")
     with open(bib, "w") as handle:
-        handle.write("@article{smith2020, title={Lesion mapping}}\n")
+        handle.write("@article{smith2020, title={Soil carbon after tillage}}\n")
     status, lines = run_in_process(lookup.run_quote_check, [report, bib, folder])
     check("X2 quote-check finds the passage in the text text wrote", status == 0 and "line 3: smith2020, p. 4: found" in lines, repr((status, lines)))
 
 # X3: a Europe PMC fullTextXML body.
 with attempt("X3"):
-    xml = b"<article><front><article-meta><title-group><article-title>Lesion mapping</article-title></title-group></article-meta></front><body><sec><title>Results</title><p>The first paragraph of the results.</p><p>The second paragraph.</p></sec></body></article>"
+    xml = b"<article><front><article-meta><title-group><article-title>Soil carbon after tillage</article-title></title-group></article-meta></front><body><sec><title>Results</title><p>The first paragraph of the results.</p><p>The second paragraph.</p></sec></body></article>"
     page, folder = text_case(xml, "europepmc.xml")
     status, out, err = run_text([page, folder, "smith2020"])
     text = text_of(folder, "smith2020.txt") or ""
@@ -1925,7 +1928,7 @@ with attempt("X17"):
     first = run_text([page, folder, "a/b"])
     other, _ = text_case(b"<html><body><p>Another page.</p></body></html>")
     second = run_text([other, folder, "a:b"])
-    check("X17 the second key of one stem", first[0] == 0 and second == (2, [], ["error: %s exists" % os.path.join(folder, "a_b.txt")]) and "Lesion size" in (text_of(folder, "a_b.txt") or ""), repr((first, second)))
+    check("X17 the second key of one stem", first[0] == 0 and second == (2, [], ["error: %s exists" % os.path.join(folder, "a_b.txt")]) and "Tillage depth" in (text_of(folder, "a_b.txt") or ""), repr((first, second)))
 
 # X18: resolve prints the PMCID OpenAlex names after the OpenAlex line, and no pmcid line for a record that names none.
 with attempt("X18"):
@@ -1939,8 +1942,8 @@ with attempt("X18"):
 
 
 ABSTRACT_PAGE = b"""<!DOCTYPE html>
-<html lang="en"><head><meta charset="utf-8"><title>Lesion mapping</title></head>
-<body><section class="abstract"><h2>Abstract</h2><p>Lesion size predicted the deficit in the acute phase.</p></section></body></html>
+<html lang="en"><head><meta charset="utf-8"><title>Soil carbon after tillage</title></head>
+<body><section class="abstract"><h2>Abstract</h2><p>Tillage depth predicted the carbon loss in the first season.</p></section></body></html>
 """
 
 # X19: text --abstract writes the text of a saved page that holds only the abstract as <stem>.abstract.txt and no <stem>.txt, and quote-check finds a passage with the locator abstract in it.
@@ -1948,13 +1951,13 @@ with attempt("X19"):
     page, folder = text_case(ABSTRACT_PAGE)
     status, out, err = run_text(["--abstract", page, folder, "smith2020"])
     text = text_of(folder, "smith2020.abstract.txt")
-    check("X19 text --abstract of an abstract page", status == 0 and listing(folder) == ["smith2020.abstract.txt"] and text is not None and "Lesion size predicted the deficit in the acute phase.\n" in text and out == ["smith2020.abstract.txt: %d characters from %s" % (len(text), page)] and err == [], repr((status, out, err, listing(folder), text)))
+    check("X19 text --abstract of an abstract page", status == 0 and listing(folder) == ["smith2020.abstract.txt"] and text is not None and "Tillage depth predicted the carbon loss in the first season.\n" in text and out == ["smith2020.abstract.txt: %d characters from %s" % (len(text), page)] and err == [], repr((status, out, err, listing(folder), text)))
     report = os.path.join(os.path.dirname(folder), "citation-report.md")
     with open(report, "w") as handle:
-        handle.write('Claim [@smith2020, abstract].\n\n> [@smith2020, abstract]: "Lesion size predicted the deficit in the acute phase."\n')
+        handle.write('Claim [@smith2020, abstract].\n\n> [@smith2020, abstract]: "Tillage depth predicted the carbon loss in the first season."\n')
     bib = os.path.join(os.path.dirname(folder), "refs.bib")
     with open(bib, "w") as handle:
-        handle.write("@article{smith2020, title={Lesion mapping}}\n")
+        handle.write("@article{smith2020, title={Soil carbon after tillage}}\n")
     status, lines = run_in_process(lookup.run_quote_check, [report, bib, folder])
     check("X19 quote-check finds the abstract passage in the file text --abstract wrote", status == 0 and "line 3: smith2020, abstract: found" in lines, repr((status, lines)))
 

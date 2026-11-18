@@ -11,7 +11,7 @@ The literature strategist agent reads this page at a start that writes the synth
 - Each section of a part ends with a sentence that names the searches that found nothing for that part, by their numbers in the search record with their database and count, or says that every search for the part found sources.
 - Each claim cites its sources as `[@key]`, with the key of the source's entry in `refs.bib`.
 - Each citation rests on the annotation of a source read in the run. Before it writes a cited sentence, the agent checks that the source's annotation or saved text holds what the sentence attributes to it.
-- A survey is cited as a survey: a study the survey reports is cited by its own entry when the agent has read it, and otherwise the sentence says that the survey reports the study, as in "a survey reports one study of electronic health records [@key]".
+- A survey is cited as a survey: a study the survey reports is cited by its own entry when the agent has read it, and otherwise the sentence says that the survey reports the study, as in "a survey reports one study of irrigation scheduling [@key]".
 - The synthesis claims only what an annotation supports.
 - A sentence may name what the absence of a work listed under "No entry written" leaves open, as the gaps and the limitations do.
 - In lit-review mode the synthesis has the structure of a review paper.

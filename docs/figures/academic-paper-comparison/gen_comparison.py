@@ -394,6 +394,12 @@ def ap_full_detailed() -> gf.Graph:
 
 
 THEME_TAG = "[The theme search]"
+EXAMPLES_TAG = "[Examples ruling]"
+GAP_CHAINING = f"gap chaining once after the passes {EXAMPLES_TAG}"
+LATER_VERSION = "a later version under another title cited as published [BW]"
+EXAMPLES_NOTE = (
+    '"[Examples ruling]" is the ruling The examples, the renamed versions and the gap chaining.'
+)
 
 
 def theme_search_nodes() -> tuple[gf.Node, ...]:
@@ -408,20 +414,21 @@ def theme_search_nodes() -> tuple[gf.Node, ...]:
         N(
             "T1",
             "Literature strategist, theme run: search theme 1, its own theme-1/ folder, "
-            f"review-theme-1.md and refs-theme-1.bib {THEME_TAG}",
+            f"review-theme-1.md and refs-theme-1.bib {THEME_TAG}; {GAP_CHAINING}",
             "ruled_maybe",
         ),
         N(
             "T2",
             "Literature strategist, theme runs: each other search theme, all at once, "
-            f"each in its own folder {THEME_TAG}",
+            f"each in its own folder {THEME_TAG}; {GAP_CHAINING}",
             "ruled_maybe",
         ),
         N(
             "TM",
             "Literature strategist, merge run, fresh: one entry per work, the criteria "
-            "again, the cut sources, chaining from the theme runs' core papers, each pair of "
-            f"search themes, the gates; one review.md, refs.bib {THEME_TAG}",
+            "again, the cut sources, chaining from the theme runs' core papers, then gap "
+            f"chaining {EXAMPLES_TAG}, each pair of themes, the gates; review.md, refs.bib "
+            f"{THEME_TAG}",
             "ruled_maybe",
         ),
     )
@@ -464,13 +471,13 @@ def paper_full_detailed() -> gf.Graph:
         N(
             "LS",
             "Literature strategist: screens your sources, searches for what they miss; a "
-            "list over 50 entries shows its first 20 and last 5 [J, AV16]",
+            f"list over 50 entries shows its first 20 and last 5 [J, AV16]; {GAP_CHAINING}",
             "ruled_maybe",
         ),
         N(
             "LC",
             "Each entry confirmed against an index with resolve --entry: corrected once, "
-            "else left out of refs.bib and named [BI]",
+            f"else left out of refs.bib and named [BI]; {LATER_VERSION}",
             "ruled",
         ),
         N(
@@ -496,7 +503,7 @@ def paper_full_detailed() -> gf.Graph:
             "LG",
             "Literature strategist, resumed or fresh: the sections that need literature "
             "and have no source [AD1, BR]; the merge run's after theme runs "
-            f"{THEME_TAG}",
+            f"{THEME_TAG}; {GAP_CHAINING}",
             "ruled",
         ),
         N("PG", "Planner again: assigns what was found [AD1]", "ruled"),
@@ -800,7 +807,7 @@ def paper_revision_detailed() -> gf.Graph:
         N(
             "LS",
             "Literature strategist: a .bib patch, each entry confirmed against an index "
-            "[Stops of paper, BI]",
+            f"[Stops of paper, BI]; {LATER_VERSION}",
             "ruled",
         ),
         N(
@@ -948,6 +955,7 @@ def paper_revision_detailed() -> gf.Graph:
         E("IT", "LS", "an item needs a new reference, intake allows it"),
         E("IT", "VZ", "an item needs a figure change, intake allows it"),
         E("IT", "AN"),
+        E("LS", "LS", f"search passes, max 8, then gap chaining once {EXAMPLES_TAG}", "back"),
         E("LS", "AN"),
         E("VZ", "AN"),
         E("AN", "DW"),
@@ -1024,7 +1032,8 @@ def paper_lit_review_detailed() -> gf.Graph:
             "LS",
             "Literature strategist: review.md, refs.bib, a .bib patch when a .tex is "
             "given; a list over 50 entries shows its first 20 and last 5; it does not start "
-            "without a research question [D48, D2, AD11, AV15, AV16]",
+            f"without a research question [D48, D2, AD11, AV15, AV16]; then gap chaining "
+            f"{EXAMPLES_TAG}",
             "ruled_maybe",
         ),
         N(
@@ -1038,7 +1047,7 @@ def paper_lit_review_detailed() -> gf.Graph:
             "LC",
             "An unread candidate looked up again before it is dropped; each entry "
             "confirmed against an index with resolve --entry: corrected once, else left "
-            "out of refs.bib and named [BI]",
+            f"out of refs.bib and named [BI]; {LATER_VERSION}",
             "ruled",
         ),
         N(
@@ -1046,6 +1055,13 @@ def paper_lit_review_detailed() -> gf.Graph:
             "You review the sources: add or remove, optional [J]; after theme runs, each "
             f"search theme with its count {THEME_TAG}",
             "stop",
+        ),
+        N(
+            "SC",
+            "Script, run by the session: resolve --entry on every entry of refs.bib before "
+            "the patch; the count it confirmed in the final message "
+            f"{EXAMPLES_TAG}",
+            "script",
         ),
         N("AP", "Script: apply the .bib patch [D48]", "script"),
         N("RC", "Script: reference checks [D48]", "script"),
@@ -1080,8 +1096,11 @@ def paper_lit_review_detailed() -> gf.Graph:
         E("LS", "LG"),
         E("LG", "LC"),
         E("LC", "SR"),
-        E("SR", "X", "no .tex"),
-        E("SR", "AP", ".tex given"),
+        E("SR", "SC"),
+        E("SC", "LS", "an entry not confirmed: corrected or taken out, once", "back"),
+        E("SC", "TM", "after theme runs: the merge run's strategist", "back"),
+        E("SC", "X", "no .tex"),
+        E("SC", "AP", ".tex given"),
         E("AP", "RC"),
         E("RC", "RF", "a failure"),
         E("RF", "RC2"),
@@ -1125,13 +1144,13 @@ def paper_outline_only_detailed() -> gf.Graph:
         N(
             "LS",
             "Literature strategist, for one search theme; the search always runs, and it "
-            "does not start without a research question [J, AV15]",
+            f"does not start without a research question [J, AV15]; {GAP_CHAINING}",
             "ruled_maybe",
         ),
         N(
             "LC",
             "Each entry confirmed against an index with resolve --entry: corrected once, "
-            "else left out of refs.bib and named [BI]",
+            f"else left out of refs.bib and named [BI]; {LATER_VERSION}",
             "ruled",
         ),
         N(
@@ -1150,7 +1169,7 @@ def paper_outline_only_detailed() -> gf.Graph:
             "LG",
             "Literature strategist, resumed or fresh: the sections that need literature "
             "and have no source [AD1, BR]; the merge run's after theme runs "
-            f"{THEME_TAG}",
+            f"{THEME_TAG}; {GAP_CHAINING}",
             "ruled",
         ),
         N("PG", "Planner again: assigns what was found [AD1]", "ruled"),
@@ -2013,7 +2032,7 @@ DETAILED = (
         (
             "No RAISE check (V) and no hard gate: what the hard gate refuses is handled by K and "
             "O. academic-paper's conversion to DOCX and Markdown is paper's format-convert mode "
-            '(D3, D25). "[4.A R2-6]" is a ruling of step 4.A\'s second repair round.'
+            '(D3, D25). "[4.A R2-6]" is a ruling of step 4.A\'s second repair round. ' + EXAMPLES_NOTE
         ),
     ),
     (
@@ -2026,20 +2045,20 @@ DETAILED = (
             'agent for it, while the intake page\'s mode list names it. paper: "The stops of paper" '
             "is a ruling of plan 5. paper has no full re-emission: a structural patch is "
             'acknowledged or narrowed once (a ruling of plan 5). "[4.A R2-6]" is a ruling of '
-            "step 4.A's second repair round."
+            "step 4.A's second repair round. " + EXAMPLES_NOTE
         ),
     ),
     (
         "lit-review",
         ap_lit_review_detailed,
         paper_lit_review_detailed,
-        ("academic-paper: no cycle, no reference check, no manuscript changed."),
+        ("academic-paper: no cycle, no reference check, no manuscript changed. " + EXAMPLES_NOTE),
     ),
     (
         "outline-only",
         ap_outline_only_detailed,
         paper_outline_only_detailed,
-        ("academic-paper: no argument builder."),
+        ("academic-paper: no argument builder. " + EXAMPLES_NOTE),
     ),
     (
         "abstract-only",

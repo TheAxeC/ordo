@@ -99,7 +99,7 @@ The agent selects two or three primary databases for each field the Discipline r
 | General | Scopus | As in the CS/Engineering row. |
 
 - A field is read under the row that holds it: computer science, machine learning and engineering under CS/Engineering, medicine, medical imaging and the clinical fields under Medicine.
-- A Discipline row that names more than one field, or a field and the field it is applied in, takes the rows of each field it names. "Machine learning, with medical image analysis as the application setting" takes the CS/Engineering rows and the Medicine rows, so PubMed is searched.
+- A Discipline row that names more than one field, or a field and the field it is applied in, takes the rows of each field it names. "Computer science, with secondary education as the application setting" takes the CS/Engineering rows and the Education rows, so ERIC is searched.
 - A Discipline row the table does not hold takes the General row. An empty Discipline row takes the General row with the search broadened, as "Where an input is missing" says.
 - The agent never signs in, never passes a bot check or a CAPTCHA, never pays, and never uses a key the environment does not hold. A database that answers with a sign-in page, a bot check or a challenge page, such as DBLP's "Making sure you're not a bot!" or OpenReview's "Challenge verification required", is reached by a web search limited to its site, or named in the search record as not reached with that reason.
 - A key the environment holds for an interface, such as `NCBI_API_KEY` for PubMed's E-utilities (`&api_key=<key>`), is used. Its value is written `<REDACTED>` in every line of the search log and of the report, the request address included.
@@ -140,6 +140,7 @@ The domain evidence profile of `config.md` decides which evidence types the crit
 - The search record of layer 1 has one row for each pair of a string and a database, and a pair that did not run has its row with the reason. A database reached by a web search limited to its site gets one web search for each string.
 - A search under 20 records is relaxed, its NOT term removed and its year range widened, and run again. Its record holds both runs with their counts. A search still under 20 records after one relaxation is kept, with both counts.
 - The core papers of layer 1 are 5 to 10 in all, and the search record names them. A later pass chains only from the core papers it adds, so that the run's core papers stay at 10 or fewer.
+- After the passes have ended, layer 2 runs once more from the works closest to each gap and to each thin part, as "The gap chaining" ("The gaps") says.
 - Layer 4 runs `lookup.py search` with `--limit 100`, never lower.
 - After layer 4 the search record gives its overlap: the records of layer 4 that layers 1 to 3 had found, over the records of layer 4, as a percentage.
 - OpenCitations' index gives the citing works of a DOI from `https://api.opencitations.net/index/v2/citations/doi:<DOI>` and its references from `https://api.opencitations.net/index/v2/references/doi:<DOI>`. Each record's `citing` or `cited` field names a work by its DOI, which `lookup.py resolve` then looks up.
@@ -307,7 +308,7 @@ Each included source has this annotation, with one part field for each recorded 
 ```
 | Source | P1 | P2 | Theme 1 | Theme 2 | Method | Quality |
 |---|---|---|---|---|---|---|
-| Author1 (Year) | registration to common space | GAP | main | x | Quant | High |
+| Author1 (Year) | lists the failing tests | GAP | main | x | Quant | High |
 ```
 
 ## The gaps
@@ -318,6 +319,13 @@ The agent checks every part, P1 to Pn, for a gap, and lists at least 2 gaps that
 - Each gap says its kind: an under-researched area (a topic that sources mention and none studies), a methodological gap (a method that is missing, such as no qualitative studies), a population gap (an understudied context or population), a temporal gap (a lack of recent data), a geographical gap (research limited to certain regions), or another kind it names.
 - Each gap names at least one search run for it that found nothing: the string or its number in the search record, the database and the record count. Where no such search was run, the agent runs one aimed at the gap before it writes the gap, and adds it to the search record.
 - Each gap names the matrix evidence on each side of it: the keys of the works that come closest to it, and the count of works in each of the parts or themes it lies between.
+- **The gap chaining.** Before the agent writes a gap, it chains backward from the works that come closest to it, with layer 2's commands: `lookup.py refs` or a database's own reference links ("The four searches").
+  - A part with fewer included sources than the smallest count among the other parts, a thin part, is chained from the same way, from the included sources that bear on it.
+  - The seeds are at most 3 for each gap or thin part, chosen from the keys of the works that come closest to it, the keys the bullet above makes the gap name.
+  - The works the seeds cite are screened as layer 2's candidates are, through "Screening".
+  - The gap chaining runs once, after the search's passes have ended. It is no pass: it does not count toward the cap of 8 passes, the end conditions are not tested again after it, and its seeds are not core papers.
+  - A work it finds that closes the gap is included, read and annotated as any included source. The gap is then not written, or it is written narrower, with the new work among its evidence.
+  - The search record names each gap chaining: the gap or part, its seed keys, the count of works screened and the keys it added.
 - Under a profile that surfaces critical gaps ("Criteria"), the agent reads every annotation for them and lists each one it finds as a gap marked critical, with the keys of the sources that show it. Under `cs_ml` these are non-reproducible results, such as a result given without the code, the data or the settings to repeat it, and benchmark cherry-picking, such as a result on benchmarks the authors chose alone. When the annotations show none of a profile's kinds, section 6 says so in one sentence for each kind.
 
 ## The distribution advisory
@@ -349,11 +357,13 @@ Distribution advisory:
 - One blank line stands between entries. The agent writes each entry followed by one blank line, and after its last write it checks with `grep -n -B1 '^@' '<run folder>/refs.bib'` that each line starting with `@` is the first line of the file or follows a blank line.
 - For an arXiv ID for which `bibtex` printed the line "published in <venue> (<type>) per Semantic Scholar", the agent finds the paper's page at the venue (the proceedings site, the ACL Anthology, the publisher) by a search, and writes the entry that `lookup.py bibtex '<arXiv ID>' --page '<url>'` prints, in place of the `@misc` entry.
   - `review.md` names the page beside the key.
-  - When no page is reached, as for a paper whose only page is on OpenReview, which answers with a challenge page, or when `--page` refuses the page, the `@misc` entry stays. Its annotation's Type names the venue Semantic Scholar gave, with "published version not confirmed". `review.md` names the pages tried, and the search log the reason `--page` printed.
+  - When `--page` refuses the page with a title ratio below 0.70, the published work may carry another title. The agent then looks for it as "A later version under another title" ("Preprints and published versions") says, before the `@misc` entry stays.
+  - When no page is reached, as for a paper whose only page is on OpenReview, which answers with a challenge page, or when `--page` refuses the page and no later version under another title is found, the `@misc` entry stays. Its annotation's Type names the venue Semantic Scholar gave, with "published version not confirmed". `review.md` names the pages tried, and the search log the reason `--page` printed.
 - The notes of `bibtex` are handled as follows. The search log holds each note as printed, beside its key.
   - "Semantic Scholar: left out, <reason>" or "OpenAlex: left out, <reason>", and "Crossref: left out, <reason>" among a published DOI's lines: the published version was not checked through that index. When the reason names a wait of 60 seconds or less, the agent runs the same `bibtex` call again once after that wait. Otherwise, or when the second call leaves the index out again, `review.md` names the key with "published version not checked" and the index, and the annotation's Type says the same.
   - "published DOI <doi>: doi.org <reason>", "published DOI <doi>: not found" and "published DOI <doi>: title ratio <r> against <index>, below 0.70": `review.md` names the key with "published version not confirmed" and the published DOI.
   - "arXiv: left out, <reason>", with no entry and exit status 1: the source has no entry from `bibtex`, and the next bullet applies.
+  - "page <url>: citation_title ratio <r>", printed by `bibtex --page`: the venue's page carries a title below 0.70 of the preprint's, and the agent looks for a later version under another title ("Preprints and published versions") before the `@misc` entry stays.
 - A source with neither a DOI nor an arXiv ID, or one for which `lookup.py bibtex` gets no entry, gets its entry from the record `lookup.py resolve '<title>'` prints for it.
   - The entry takes the title, the authors, the year, the venue and the record's open-access URL or index page from the printed line.
   - Its type is `@inproceedings` for a proceedings volume, `@article` for a journal and `@misc` otherwise.
@@ -364,12 +374,20 @@ Distribution advisory:
   - An entry that prints `CONFIRMED` stays.
   - An entry that prints `NOT_CONFIRMED` is resolved again once by its other identifiers (its DOI, its arXiv ID, its title with its year), and it is corrected from a record that confirms it. The agent runs `resolve --entry` on the corrected entry.
   - An entry still not confirmed is taken out of `refs.bib` and out of the synthesis. It is listed in `review.md` under "No entry written" with the reason in words, the search log holds its line as printed, and the report names it with its line.
+- In lit-review mode the session runs `resolve --entry` on every entry of `refs.bib` again (`SKILL.md`, lit-review item 3). A key it gives back with the line it printed is corrected, or taken out of `refs.bib`, the synthesis and the patch, as the bullets above say, and a key it gives back a second time is taken out.
 
 ### Preprints and published versions
 
 - A source is labelled a preprint, in its annotation's Type, in `review.md` and in the synthesis, only after its published version was looked for: `lookup.py resolve` on its title, on its arXiv ID, and on the DOI an index names for it, where one does.
 - A source whose published version one of these finds is cited as published, with the entry `lookup.py bibtex` prints for it, and is never labelled a preprint.
-- A source none of them finds a published version for is labelled a preprint, and `review.md` names the lookups run in words, such as "Crossref, OpenAlex and arXiv found no published version", as "The search log" says.
+- A source none of them finds a published version for, and for which no later version under another title is found as the next bullets say, is labelled a preprint. `review.md` names the lookups run in words, such as "Crossref, OpenAlex and arXiv found no published version", as "The search log" says.
+- **A later version under another title.** The agent also looks for a later version of each preprint that carries another title: a work that the preprint's forward tracking (`lookup.py cited-by`), a title search or a venue an index names brings up, with the preprint's first author, a year at or after the preprint's, and a title or abstract that states the same contribution.
+- A later version that an index links to the preprint, by the DOI an index names for it or by a record of the preprint's arXiv ID that names a venue, keeps the route of the bullets above and of "The BibTeX entries".
+- A later version that no index links to the preprint is a source of its own. It is included when `lookup.py resolve '<its title>' --year <year>` prints a record that matches it.
+  - Its entry is written from that record, as "The BibTeX entries" says for a source with neither a DOI nor an arXiv ID. A record that names a DOI gives the entry `lookup.py bibtex '<DOI>'` prints, as for every source with a DOI.
+  - `resolve --entry` confirms its entry as it confirms every entry ("The BibTeX entries").
+  - Its annotation's Type names the preprint, by its arXiv ID, as its earlier version, such as "Journal article; earlier version arXiv 2001.00001".
+  - The preprint gets no entry of its own, unless the run cites a passage that only the preprint holds. Then each of the two has its entry, and each annotation names the other.
 
 ## The report
 

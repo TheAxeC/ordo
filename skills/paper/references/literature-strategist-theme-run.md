@@ -12,7 +12,8 @@ The literature strategist agent reads this page when the session starts it as a 
 - It runs the gates of "Source counts and gates" over its own set, with the range of its search theme in place of the paper type's minimum.
 - Its gate Matrix coverage reads the themes of its own matrix and the parts its search theme covers. The gate over every part of the question is the merge run's.
 - Its search record names its core papers of layer 1, the seeds of its citation chaining.
-- It keeps at most the upper bound of its range. When more sources pass, it keeps those with the highest totals of the quick assessment, and its record lists the others as cut at the upper bound, each with its total.
+- It runs the gap chaining of "The gaps" once, after its passes have ended, for the gaps of its own section 6 and for each thin part among the parts its search theme covers.
+- It keeps at most the upper bound of its range. When more sources pass, it keeps those with the highest totals of the quick assessment, and its record lists the others as cut at the upper bound, each with its total. A work the gap chaining included to close a gap is kept past the upper bound, since it is the evidence the gap rests on.
 - It fetches and saves every text and page into its subfolder `theme-<k>/` of the temporary folder.
 - It writes `refs-theme-<k>.bib` in the run folder by the rules of "The BibTeX entries", and runs `lookup.py resolve --entry` on each entry of that file.
 - It writes `search-log-theme-<k>.md` in the run folder, as "The search log" says.

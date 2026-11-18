@@ -14,6 +14,7 @@ The agent is given `config.md`, every `review-theme-<k>.md`, `refs-theme-<k>.bib
 - It applies the criteria to every source again, as the screening of one set.
 - It judges each source a theme run cut at its upper bound on merit.
 - It chains backward and tracks forward, layers 2 and 3 of "The four searches", from the core papers that every theme run's search record names. Each round counts as a pass, and the rounds end when condition 4 holds, or after pass 8 with a "search limitation" in the report.
+- After its rounds have ended, it runs the gap chaining of "The gaps" once for the gaps it writes over the whole set and for each thin part of the merged set, and records it as "The gaps" says.
 - It searches each pair of search themes that the research question joins, where the methods of one community meet the subject of another, with a search string built from the concepts of both. Each pair search has its row in the search record, with its database, its string, its filters, its date and its count, and its interface in the search log.
 - It runs the gates of "Source counts and gates" over the whole set, with the paper type's minimum and the gate Matrix coverage over every part of the research question.
 - Its gaps carry each critical gap of a theme run's section 6 whose sources stay in the merged set, with those sources' keys, beside the gaps it finds over the whole set.

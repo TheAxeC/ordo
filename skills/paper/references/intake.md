@@ -87,7 +87,7 @@ In full, outline-only and lit-review mode the session splits the Research questi
 
 - A part is a sub-question of the research question, written in one sentence. A question that asks one thing has one part, and its part is the question.
 - The parts are numbered once, P1 to Pn, in the order the question asks them, and the number stays with the part for the whole run.
-- Each part has a short closed list of the answers a source can give on it, the last of them "other", such as "assumes an aligned mode / registration to a common space / a learned template or barycenter / a transport coupling / permutation invariance / other".
+- Each part has a short closed list of the answers a source can give on it, the last of them "other", such as "lists the failing tests / gives a hint written from the student's code / shows a model solution / gives a grade alone / asks the student a question / other".
 - The row holds one line for each part: `P<n>: <the sub-question>. Answers: <answer> / <answer> / ... / other`.
 - The session takes the parts and their answers from the words of the question and adds no part the question does not ask.
 - The user may correct the parts at the intake confirmation, like any row. A correction changes the row, and the parts stand as corrected for the whole run.
