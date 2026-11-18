@@ -630,3 +630,14 @@ step 5.G, brief check, judged point on decision 2: the brief gave each theme run
 Taken: (a)
 Booked: `.scratch/5-paper/agents/briefs/5.G.md` "Decisions taken in this brief" 2
 Builds on it: step 5.G
+
+## C124. The branch of the ruling The rule-by-rule check (2026-11-18)
+
+plan 5, before step 5.H's brief: the check (`.scratch/5-paper/agents/reviews/5.H-rule-check.md`) counted 384 rules, 40 dropped by at least one agent, 67 drops; drops as a share of followed plus dropped: session 2.5 percent, theme runs 5.7 to 12.2 percent, merge run 11.3 percent. Dropping does not grow toward the end of the strategist page or late in the run; it clusters in the page's search and reading sections (lines 102 to 304). The ruling says that when the check shows rules dropped, 5.H cuts what one agent loads at once, and when it shows few dropped, 5.H stays as the ruling BS says.
+  - (a) The branch for rules dropped: a theme run and the merge run each load only the sections of the strategist page they use (each theme run met about 65 rules of the page it never reached), and each dropped rule of the check's section 4 is a case of 5.H, rewritten so the agent meets it where it applies it, or reworded to what the run is to do where following it does not change the review. Pro: the ruling's condition is met; it removes from each agent's load the sections it never uses, at no cost to the review; it treats the 40 dropped rules, several of which the judges counted (the synthesis naming no empty search, LS:356; the full text not tried, LS:195 and LS:205). Con: the check does not show that length by position causes the drops, so the cut is not proven to help; it adds a step of structure to keep.
+  - (b) The branch for few dropped: 5.H as the ruling BS says, the dropped rules left as they are. Pro: the check shows no growth of dropping with page position or run time. Con: 40 rules stay dropped, the judged ones among them; reads the ruling's condition against its words.
+  - Recommendation: (a). The lazy option was (b), which costs less and leaves the 40 dropped rules as they are.
+
+Taken: (a)
+Booked: `.scratch/5-paper/plan.md` Rulings, Open item BT
+Builds on it: step 5.H
