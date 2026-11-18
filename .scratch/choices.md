@@ -677,3 +677,15 @@ The brief check of step 5.I (`.scratch/5-paper/agents/reviews/5.I-brief-check.md
 Taken: (b)
 Booked: `.scratch/5-paper/plan.md` Rulings, Open item BW
 Builds on it: step 5.I
+
+## C128. The record an entry is written from, in step 5.J (2026-11-18)
+
+The brief check of step 5.J (`.scratch/5-paper/agents/reviews/5.J-brief-check.md`, "3. Premises") found that `lookup.py resolve` prints three authors and "et al." and no volume, number or pages (`skills/paper/templates/lookup.py:656-657`), while item (4) of ruling Open item BX has the strategist write each entry from the record it confirmed.
+  - (a) `resolve` prints every author and the volume, the issue and the pages the index gives; `search`, `refs` and `cited-by` keep three authors. Pro: the record holds the fields an entry needs, at no extra request, since the indexes already return them for a field list one word longer. Con: a change to `lookup.py` and its tests in this step.
+  - (b) The strategist reads each work's own page for its authors, volume and pages. Pro: no script change. Con: one more fetch per source, the cost ruling BX removes, and a page that cannot be read leaves the entry short.
+  - (c) Entries keep three authors and no pages. Con: an entry with "and others" for every work with more than three authors, a defect all four rc.9 judges marked.
+  - Recommendation: (a). The lazy option was (c).
+
+Taken: (a)
+Booked: `.scratch/5-paper/plan.md` Rulings, Open item BY
+Builds on it: step 5.J
