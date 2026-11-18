@@ -49,11 +49,12 @@ dispatch:                    # or the block /spec writes (a list when .agents/pl
 
 A finding that is neither closed in the repair rounds nor fixed at landing is an open item here, and goes where `plan-orchestration`'s "What earns a step of its own" says; what is settled belongs in the closed list.
 
-- BQ (2026-11-16): the lit-review comparison on `v8.4.0-rc.6` (`agents/reviews/5.D-check-blind-comparison.md`): academic-paper's output won with both judges, in both orders. The user's call on it under the ruling The check after the third repair. Ruled so far: Open item BL reopened (a), Open item BR, The databases per field and The simulation in step 5.F, all carried by step 5.F, landed. No comparison is rerun straight after step 5.E; a rerun follows the step that carries the changes (the user), so the lit-review comparison runs again on a release candidate with step 5.F.
+none
 
 
 ## Closed items (the log of what was raised and how it ended; no report carries it)
 
+- 2026-11-18: Open item BQ, the user's call on the lit-review comparison on `v8.4.0-rc.6`: closed by the user, replaced by Open item BS and the rc.9 comparison of its item (4).
 - 2026-11-18: Open item BV, how a renamed later version is cited when no index links it to the preprint (step 5.I, item (2) of the ruling The examples, the renamed versions and the gap chaining): closed under self-rule, C126.
 - 2026-11-18: Open item BW, the renamed later version cited from the record `resolve` prints, which follows ADR 0032, in place of BV's new `bibtex --page` form (step 5.I, brief check): closed under self-rule, C127, replacing C126.
 - 2026-11-18: Open item BU, where the run's process records go once tool names leave the review (step 5.H, a user-visible file of the run folder): closed under self-rule, C125.
@@ -137,6 +138,6 @@ A finding that is neither closed in the repair rounds nor fixed at landing is an
 - 2026-11-18. Step 5.H, the fourteenth of 15 steps, the question's shape in paper, landed and booked in `plan.md` ("Step 5.H, the question's shape in paper"); the landing report is `agents/reviews/5.H-landing.md`.
 - 2026-11-18. Step 5.I, the fifteenth of 16 steps, the examples, the renamed versions and the gap chaining in paper, landed and booked in `plan.md` ("Step 5.I, the examples, the renamed versions and the gap chaining in paper"); the landing report is `agents/reviews/5.I-landing.md`.
 - `v8.4.0-rc.9` tagged on c031f05 and pinned (`utils/pin.sh`, "pinned: v8.4.0-rc.9 (c031f05), 16 skills linked").
-- Next: ruling BS item (4), the lit-review comparison on `v8.4.0-rc.9` (about 2 h, about $70), which waits for Axel's go; step 6, the closing, only once every comparison of the gate wins.
+- Next: ruling BS item (4), the lit-review comparison on `v8.4.0-rc.9` (about 2 h, about $70), started with the user's go on 2026-11-18; step 6, the closing, only once every comparison of the gate wins.
 - The two check runs of the rebuilt skill (revision, copy `cr4b`, session ce6db165-ecf5-4128-96cc-b05d5b5b37d3; full, copy `fr5`, session 0b6daf08-9d97-45d9-9ecd-f743566be6fd) are stopped, and resume only when Axel asks.
 - Step 5.A's check, on Axel's go (2026-11-16): `v8.4.0-rc.4` tagged on f3531a7 and pinned; one `curl` per index answered 200. The lit-review `paper` side ran in `gate5a/lit-review-1` of the session's scratchpad (session 5b815d8b-6616-4994-af1b-61091e2f57c2, claude-opus-5-5, 111 min, $16.80 by `total_cost_usd`): 81 entries, every annotation "abstract not read", 2 entries from 2022 or later (step 5's run: none unread, 44 from 2022 or later). Not judged. The revision, full and disclosure sides have not started.
