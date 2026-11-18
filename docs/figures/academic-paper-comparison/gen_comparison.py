@@ -439,6 +439,13 @@ def theme_search_edges(single: str, after: str) -> tuple[gf.Edge, ...]:
         E("T1", "TM"),
         E("T2", "TM"),
         E("TM", "TM", f"chaining rounds, max 8: until the citation loop closes {THEME_TAG}", "back"),
+        E(
+            "TM",
+            "T2",
+            "a theme report numbers the parts otherwise: that theme run resumed once, "
+            "then the merge run again [BS]",
+            "back",
+        ),
         E("TM", after),
     )
 

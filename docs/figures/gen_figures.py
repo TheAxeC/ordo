@@ -1262,6 +1262,7 @@ MERGE_RUN = (
 THEME_EDGE = "two search themes or more, unless you skip the search"
 MERGE_LOOP = "chaining rounds, max 8: until the citation loop closes"
 THEME_LOOP = "search passes, max 8, its range as the target"
+MERGE_REFUSAL = "a theme report numbers the parts otherwise: that theme run resumed once"
 
 
 def paper_full_graph() -> Graph:
@@ -1344,6 +1345,7 @@ def paper_full_graph() -> Graph:
         Edge("T1", "M"),
         Edge("T2", "M"),
         Edge("M", "M", MERGE_LOOP, "back"),
+        Edge("M", "T2", MERGE_REFUSAL, "back"),
         Edge("M", "LR"),
         Edge("LR", "PL"),
         Edge("PL", "G", "a section has no source"),
@@ -1515,6 +1517,7 @@ def paper_lit_review_graph() -> Graph:
         Edge("T1", "M"),
         Edge("T2", "M"),
         Edge("M", "M", MERGE_LOOP, "back"),
+        Edge("M", "T2", MERGE_REFUSAL, "back"),
         Edge("M", "LR"),
         Edge("LR", "RF"),
         Edge("RF", "SD", "strict: a reference still fails"),
@@ -1546,6 +1549,7 @@ def paper_outline_only_graph() -> Graph:
         Edge("T1", "M"),
         Edge("T2", "M"),
         Edge("M", "M", MERGE_LOOP, "back"),
+        Edge("M", "T2", MERGE_REFUSAL, "back"),
         Edge("M", "LR"),
         Edge("LR", "PL"),
         Edge("PL", "G", "a section has no source"),

@@ -4,8 +4,8 @@ The planner agent reads this page to choose the structure of the paper, write it
 
 ## What the agent reads
 
-- `config.md`: Paper type, Length, Discipline, Research question, Venue, Venue limits, Materials in hand, Internal only and the Notes.
-- `review.md` of the literature strategist: the literature matrix, the gaps and the annotations with their stance and potential use.
+- `config.md`: Paper type, Length, Discipline, Research question, Parts of the research question, Venue, Venue limits, Materials in hand, Internal only and the Notes.
+- `review.md` of the literature strategist: the literature matrix with its part columns and its topical themes, the gaps with the parts they concern, and the annotations with their part fields, stance and potential use.
 - The manuscript's `.bib` or `refs.bib`, when no `review.md` exists: its entries are the sources to assign.
 - A section of the project that already holds draft text, when the Materials in hand row lists existing draft sections.
 - The project's own results that the Materials in hand row names.
@@ -87,7 +87,7 @@ Abstract (150 words) and keywords
    1.2 Research question: the specific question or questions
    1.3 Contribution: one paragraph that states specifically what is new
 2. Related work
-   2.1 The key prior approaches, each with its most relevant studies
+   2.1 The key prior approaches, each with its most relevant studies, in the order of the parts of the research question they answer
    2.2 The gap this paper addresses, ending the section
 3. Method
    3.1 The approach and why it was chosen
@@ -122,7 +122,7 @@ Abstract (250 words) and keywords (5 to 7)
    1.5 Significance
 2. Related work
    2.1 Theoretical framework
-   2.2 One subsection per theme of the literature matrix
+   2.2 One subsection per part of the research question, P1 to Pn, with the matrix's topical themes that answer it under it
    2.3 Summary and conceptual framework
 3. Method
    3.1 Research design
@@ -154,24 +154,26 @@ Abstract (250 words) and keywords
    1.1 Topic and rationale: why the review is needed and why now
    1.2 Scope and boundaries: what is included and excluded, the period, the disciplines, the geographies
    1.3 Review methodology: the search strategy, the databases, the criteria and the number of sources
-   1.4 Organization of the review: a preview of the thematic structure
-2. to 4. One section per theme of the literature matrix (a review keeps 3 to 5)
-   x.1 and x.2 One subsection per sub-theme, each of 2 or 3 paragraphs with citations
-   x.3 Summary of the theme: what the literature collectively says
-5. Cross-cutting synthesis
-   5.1 Convergent findings: what the themes agree on
-   5.2 Divergent findings and debates: where researchers disagree
-   5.3 Methodological observations: the methods that dominate and the ones that are underused
-6. Research gaps and future directions
-   6.1 Identified gaps: 3 to 5 specific gaps in the literature
-   6.2 Proposed research agenda: what to investigate and with which methods
-7. Conclusion
-   7.1 Key takeaways: the 3 to 5 most important insights
-   7.2 Implications for practice and policy
+   1.4 Organization of the review: a preview of the parts of the question and their themes
+2. to n+1. One section per part of the research question, P1 to Pn
+   x.1 and x.2 One subsection per topical theme of the literature matrix that answers the part, each of 2 or 3 paragraphs with citations
+   x.3 Summary of the part: what the literature collectively says on it
+n+2. Cross-cutting synthesis
+   Convergent findings: what the parts and their themes agree on
+   Divergent findings: results that conflict on the same question, under the same assumptions
+   Methodological observations: the methods that dominate and the ones that are underused
+n+3. Research gaps and future directions
+   Identified gaps: the gaps of the review, each with the parts it concerns
+   Proposed research agenda: what to investigate and with which methods
+n+4. Conclusion
+   Key takeaways: the 3 to 5 most important insights
+   Implications for practice and policy
 AI disclosure, references
 ```
 
-- The thematic sections take the share of "Thematic sections" in the allocation table, and sections 5 and 6 take "Synthesis and gaps".
+- `n` is the number of parts that `config.md` records. A question of one part, whose part is the question, takes one section per topical theme of the matrix in its place, and a review keeps 3 to 5 such sections.
+- The sections of the parts take the share of "Sections of the parts" in the allocation table, and the cross-cutting synthesis and the gaps take "Synthesis and gaps".
+- The subsections of the cross-cutting synthesis, the gaps and the conclusion are numbered under their section, as `n+2.1`.
 
 ### The Theoretical skeleton
 
@@ -304,11 +306,11 @@ The allocation takes the paper type's column of the table, scaled to the total w
 |---|---|---|---|---|---|---|
 | Abstract | 250 fixed | 250 fixed | 250 fixed | 250 fixed | none | 150 fixed |
 | Introduction | 15% | 10% | 12% | 12% | 10% | 15% |
-| Literature or background | 25% | spread over the themes | 20% | 15% | 15% | 20% |
+| Literature or background | 25% | spread over the parts | 20% | 15% | 15% | 20% |
 | Framework or method | 15% | none | 30% | 10% | none | 15% |
 | Analysis or results | 20% | none | 25% | 30% | 30% | 25% |
 | Discussion | 20% | none | none | 20% | none | 20% |
-| Thematic sections | none | 60%, equally divided | none | none | none | none |
+| Sections of the parts | none | 60%, equally divided | none | none | none | none |
 | Synthesis and gaps | none | 15% | none | none | none | none |
 | Recommendations | none | none | none | none | 30% | none |
 | Conclusion | 5% | 10% | 8% | 8% | 10% | 5% |
@@ -316,7 +318,7 @@ The allocation takes the paper type's column of the table, scaled to the total w
 
 - The abstract figure is a planning figure, and it is not counted in the total. The finished abstract follows `references/draft-writer.md`, "The abstract and the keywords".
 - In the Conference Paper and IMRaD skeletons the Experiments and Results sections together take the share of "Analysis or results". The agent splits it by what the paper needs.
-- For Literature Review each thematic section takes its base share times the share of the sources on its theme, times an adjustment factor. The factor is 1.1 when the average quality score of the sources is 12 or more, and 0.9 when it is 8 or less.
+- For Literature Review each section of a part takes its base share times the share of the sources on its part, the sources whose field for that part is not "not addressed", times an adjustment factor. A question of one part takes the same for each section of a theme, with the share of the sources on that theme. The factor is 1.1 when the average quality score of the sources is 12 or more, and 0.9 when it is 8 or less.
 - The sum of the section word counts deviates by at most 5 percent from the total. If it deviates more, the agent trims the largest section or adds to the smallest in proportion.
 - No section has fewer than 200 words, and the agent suggests merging a section that would.
 - A section above 35 percent of the total is split into two sections, or part of its content moves to the adjacent sections.
@@ -339,7 +341,7 @@ The map assigns the sources to sections in a table of this form:
 - A methodology section or a section of original analysis may need no external source.
 - A summary in the existing draft that mentions an argument with no source in the matrix is marked "needs literature supplementation".
 - A literature matrix with fewer than 3 themes is reported with a suggestion to split a theme or search again.
-- A matrix with more than 6 themes is reported with a suggestion to merge similar themes, and a literature review keeps 3 to 5 thematic sections.
+- A matrix with more than 6 themes is reported with a suggestion to merge similar themes, and a literature review keeps 3 to 5 themes under its parts.
 
 ### The planned figures
 
@@ -358,10 +360,10 @@ The evidence map ends with a table of the figures the outline plans, in this for
 
 ### The parts of the question without a result
 
-In full mode the agent checks each part of the Research question against the project's own results that the Materials in hand row names. A part is a clause of the question that asks for a result, such as a comparison, an effect or a measure.
+In full mode the agent checks each part of the research question, P1 to Pn as the row "Parts of the research question" of `config.md` records them, against the project's own results that the Materials in hand row names. It splits the question no further, and it names each part by its number and its sentence. A part asks for a result when it asks for a comparison, an effect or a measure.
 
 - A part has no result the run may use when no result file answers it, or when the files that exist answer another setting than the one the part names. An example is a script that the project runs with another data source than the question names.
-- The agent names each such part in `outline.md` under "Parts without a result". It gives the files and lines that show the missing result.
+- The agent names each such part in `outline.md` under "Parts without a result", by its number and its sentence, as "P2: <the sub-question>". It gives the files and lines that show the missing result.
 - It also says what would answer the part as concretely as the materials allow, such as the scripts to run again with the setting the part names and the files they write.
 - The agent does not narrow the question, drop the part or replace it by another one. The session raises the stop "A research question the materials do not answer", and the user decides.
 - Started again with the user's answer, the agent follows it. When the answer is that the question is kept, the outline keeps the part, and the section the part belongs to holds `[GAP: <result>, from <what fills it>]` in the place of each missing result. When the answer is that the question is narrowed, the agent plans for the narrowed question the user gave. When the user supplied results, the agent plans from them.
@@ -432,7 +434,7 @@ The flow maps the argument section by section onto the outline:
 
 ```
 Introduction: problem, gap, purpose, research question
-Related work: context, theme 1, theme 2, theme 3, gap confirmed
+Related work: context, P1 with its themes, P2 with its themes, gap confirmed
 Method: approach justified, data described, analysis explained
 Results: result 1 (supports sub-argument 1), result 2 (supports sub-argument 2)
 Discussion: interpretation, comparison with the literature, counter-arguments addressed
@@ -571,7 +573,7 @@ The agent checks both files against these before it writes them, and corrects wh
 | Evidence | Every source is assigned to a section. |
 | Transitions | Every pair of adjacent sections has a transition. |
 | Headings | They stay within 5 levels. |
-| The research question | Each aspect of the question has a section, and an aspect with none gets a section or a change to an existing one. A part with no result is listed under "Parts without a result", and the question is kept as the user set it. |
+| The research question | Each part of the question, P1 to Pn of `config.md`, has a section or a subsection where the paper type's structure allows one, and otherwise a named place in a section; a part with none gets one or a change to an existing section. A part with no result is listed under "Parts without a result", and the question is kept as the user set it. |
 | Figures | Every planned figure has a unique label, a section and data. |
 | The thesis | It is clear, specific and arguable. |
 | Sub-arguments | At least 3 support the thesis, and every claim has at least one cited evidence source. |
@@ -641,7 +643,7 @@ In plan mode the session starts the planner as a fresh agent for each task named
 | The research question is final | Yes or No |
 ```
 
-- The section "Seeds for the literature strategist" lists each reference and keyword once. `references/literature-strategist.md`, "Starting from a plan run", reads that section.
+- The section "Seeds for the literature strategist" lists each reference and keyword once. `references/literature-strategist-plan-run.md`, "Starting from a plan run", reads that section.
 - A research question is final when `insights.md` holds the thesis statement and the user confirmed it in the dialogue, with no open question on it.
 - A condition that is not met is listed with what the mentor must still ask about it. The planner never marks a condition met that the files do not show.
 - Done when `chapter-plan.md` holds a section for each chapter, the seeds and the gate with each condition marked.

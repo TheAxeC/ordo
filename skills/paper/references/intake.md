@@ -24,6 +24,7 @@ The modes are full, outline-only, revision, abstract-only, lit-review, citation-
 |---|---|---|
 | Topic | What the paper is about. In plan mode the topic may be as rough as a field or an idea. | full, outline-only, lit-review, plan |
 | Research question | The question or thesis statement the paper answers, written in full. The literature strategist does not start without one, so full, outline-only and lit-review modes do not go on until the user gives one. A topic is never taken as the question. | full, outline-only, lit-review |
+| Parts of the research question | Not asked. The session fills the row from the Research question, as "The parts of the research question" below says, and shows it at the intake confirmation, where the user may correct it. | full, outline-only, lit-review |
 | Paper type | One type of the table below. A manuscript's type is proposed from the manuscript. When the user names none, the type is chosen by the table "Paper type and length" and shown with the reason. In plan mode the row is a structure preference: IMRaD, Literature Review, another of the six types, or "not sure", and "not sure" leaves the structure to the dialogue. In format-convert the type decides the layout of a conference paper, a policy brief and a thesis chapter (`references/formatter.md`, "The paper type"). | full, outline-only, revision, abstract-only, citation-check, draft-review, plan, format-convert |
 | Discipline | The discipline and its sub-field. | full, outline-only, revision, abstract-only, lit-review, citation-check |
 | Language | The language of the paper. | full, outline-only, revision, abstract-only, lit-review, disclosure |
@@ -79,6 +80,18 @@ The modes are full, outline-only, revision, abstract-only, lit-review, citation-
 - The confirmation names an output file that already stands beside the main `.tex` as replaced. An output whose path equals the input's, such as a `.docx` given with the target `docx`, takes `<name>-2.<extension>`, and the confirmation shows that path.
 - The input manuscript is never replaced.
 - In full and revision mode the confirmation names `<main>.pdf` beside the main `.tex`, and in full mode each output of the row Target formats beside `main.tex`, an existing one as replaced.
+
+## The parts of the research question
+
+In full, outline-only and lit-review mode the session splits the Research question into its parts once the user has given it, and writes them in the row "Parts of the research question" before the intake confirmation. Every start of the literature strategist uses them as recorded, and the planner reads them (`references/literature-strategist.md`, "The parts of the research question").
+
+- A part is a sub-question of the research question, written in one sentence. A question that asks one thing has one part, and its part is the question.
+- The parts are numbered once, P1 to Pn, in the order the question asks them, and the number stays with the part for the whole run.
+- Each part has a short closed list of the answers a source can give on it, the last of them "other", such as "assumes an aligned mode / registration to a common space / a learned template or barycenter / a transport coupling / permutation invariance / other".
+- The row holds one line for each part: `P<n>: <the sub-question>. Answers: <answer> / <answer> / ... / other`.
+- The session takes the parts and their answers from the words of the question and adds no part the question does not ask.
+- The user may correct the parts at the intake confirmation, like any row. A correction changes the row, and the parts stand as corrected for the whole run.
+- Revision mode writes no row: its items stand in place of the parts.
 
 ## Paper type and length
 
@@ -261,7 +274,7 @@ In disclosure mode the session reads the records of earlier runs, to mark each c
 
 ## The record
 
-`config.md` is a table with the columns Parameter and Value. Its first row is Mode and its second row is Arguments with the absolute path of each argument. One row follows for each row name of the table "Questions, marked by mode" that the mode asked, in that order.
+`config.md` is a table with the columns Parameter and Value. Its first row is Mode and its second row is Arguments with the absolute path of each argument. One row follows for each row name of the table "Questions, marked by mode" that the mode asked or the session filled, in that order.
 
 - A call by plain request, and a call with an argument in words, add two rows. Request holds the request as the user wrote it. Taken from the request lists each argument taken and the words it was taken from.
 - The session writes the path it found in the Arguments row.
@@ -270,4 +283,5 @@ In disclosure mode the session reads the records of earlier runs, to mark each c
 - An instruction the user gives, at intake or later in the run, not to stop for a choice whose recommendation the run would take is recorded in the Notes. The stops of SKILL.md "Stops" stay as they are, except that the stop "A research question the materials do not answer" then takes its second option, as that table says.
 - A section "Decisions" holds the user's answer at each stop and each choice the run took by its goal with its reason, appended by the session.
 - In full, outline-only and lit-review mode "Decisions" also holds the search themes of the literature search, which the session writes before the first start of the literature strategist (SKILL.md, Steps 8, the theme search).
+- At the stop "The sources' review" the session appends one line to "Decisions" that says whether the user answered the stop or the stop was taken as a recorded decision, with the change the user gave, if any. The line of the review's AI disclosure is written from it (`references/ai-disclosure.md`, "The line of a review").
 - The record is shown to the user whole, and the run goes on when the user confirms it.

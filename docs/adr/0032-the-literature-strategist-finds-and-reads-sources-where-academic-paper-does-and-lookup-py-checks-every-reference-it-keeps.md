@@ -17,4 +17,4 @@ The literature strategist finds and reads its sources where academic-paper's lit
 
 ## Consequences
 
-The strategist's search reaches what academic-paper's reaches, and every kept reference still carries a `CONFIRMED` line from the script. `lookup.py search`, `refs`, `cited-by` and `fetch` stay available to the strategist among its means. The search log in `review.md` names each database, interface, string, date and count, whatever the interface. The strategist page, `SKILL.md`'s role table and `docs/dev/scripts.md` say so.
+The strategist's search reaches what academic-paper's reaches, and every kept reference still carries a `CONFIRMED` line from the script. `lookup.py search`, `refs`, `cited-by` and `fetch` stay available to the strategist among its means. The search record in `review.md` names each database, string, filter, date and count, whatever the interface, and `search-log.md` in the run folder names each interface, as the request address with its query or the command. The strategist page, `SKILL.md`'s role table and `docs/dev/scripts.md` say so.
