@@ -126,7 +126,7 @@ The agent counts, over the cited entries, how many fail each deterministic check
 
 - Every cited entry is looked up with `lookup.py resolve`, whatever the agent remembers of it. A reference that feels familiar is looked up like any other.
 - With a DOI or an arXiv ID the call is `lookup.py resolve '<identifier>'`. Without one it is `lookup.py resolve '<title>' --year <year>`.
-- The call prints one line per index: Crossref, OpenAlex, Semantic Scholar and arXiv. A line holds a ratio, the title, the authors, the year, the venue and the identifiers, or it says "not found", or it says "left out" with the reason.
+- The call prints one line per index: Crossref, OpenAlex, Semantic Scholar and arXiv. A line holds a ratio, the title, every author, the year, the venue, the volume, the issue and the pages the index gives, and the identifiers, or it says "not found", or it says "left out" with the reason.
 - For a DOI, the arXiv line says that the input has no arXiv ID. That line is not an outage.
 - A ratio of 0.70 is the least a record needs to be a candidate. A candidate with a similar title can still be another publication, so the agent compares the record with the entry field by field.
 - A line that ends in `DOI_MISMATCH` is a record whose title differs from the first record the call found. The indexes disagree about the identifier, and the agent reads both titles.

@@ -1,6 +1,6 @@
 # 0039. Paper cites a renamed later version as published, confirms every lit-review entry in the session, and chains from the works closest to each gap
 
-Status: proposed
+Status: proposed; superseded by 0040 in its sentence on a `bibtex --page` refusal, since the strategist no longer runs `bibtex --page`, and in its third item, the gap chaining
 
 ## Context
 

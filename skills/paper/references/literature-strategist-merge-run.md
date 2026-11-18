@@ -11,14 +11,13 @@ The agent is given `config.md`, every `review-theme-<k>.md`, `refs-theme-<k>.bib
 - It removes the duplicates. A work that two theme runs kept, by its DOI, its arXiv ID or its title, gets one entry and one key in `refs.bib`.
 - Its annotation is the fuller of the two, with what the other adds.
 - Its matrix adds the column Search theme, which names for each row the search themes whose theme runs kept the source, or "merge run" for a source the merge run found.
-- It applies the criteria to every source again, as the screening of one set.
-- It judges each source a theme run cut at its upper bound on merit.
+- It applies the criteria to every source again, as the screening of one set, and keeps every source that passes them.
 - It chains backward and tracks forward, layers 2 and 3 of "The four searches", from the core papers that every theme run's search record names. Each round counts as a pass, and the rounds end when condition 4 holds, or after pass 8 with a "search limitation" in the report.
-- After its rounds have ended, it runs the gap chaining of "The gaps" once for the gaps it writes over the whole set and for each thin part of the merged set, and records it as "The gaps" says.
 - It searches each pair of search themes that the research question joins, where the methods of one community meet the subject of another, with a search string built from the concepts of both. Each pair search has its row in the search record, with its database, its string, its filters, its date and its count, and its interface in the search log.
+- It reads the named items of every search theme in `config.md`, and its search record names each named item with no source in the merged set.
 - It runs the gates of "Source counts and gates" over the whole set, with the paper type's minimum and the gate Matrix coverage over every part of the research question.
 - Its gaps carry each critical gap of a theme run's section 6 whose sources stay in the merged set, with those sources' keys, beside the gaps it finds over the whole set.
-- It writes `refs.bib` by copying each kept entry whole, as its `refs-theme-<k>.bib` holds it, or as `lookup.py bibtex` prints it for a source the merge run found. It changes a copied entry only as "The BibTeX entries" allows.
+- It writes `refs.bib` by copying each kept entry whole, as its `refs-theme-<k>.bib` holds it, and writes the entry of a source the merge run found as "The BibTeX entries" says. It changes a copied entry only to append a key's letter, to correct a defect "The BibTeX entries" names, or to correct an entry `NOT_CONFIRMED`.
 - It runs `lookup.py resolve --entry refs.bib <key>` on every entry of the merged `refs.bib`, the copied entries included, as "The BibTeX entries" says, before the synthesis cites it.
 - Its `screened-<list>.txt` files cover the whole set.
 - Its `search-log.md` opens with the name of each theme run's `search-log-theme-<k>.md`, which stays in the run folder, and then holds the merge run's own log.

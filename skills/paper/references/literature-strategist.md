@@ -41,6 +41,14 @@ The row "Parts of the research question" of `config.md` holds the parts: each a 
 - Each part has its own search string, built from its concepts as "The search design" says, beside the combined string of the whole question. Two parts that share concepts still get one string each.
 - The search record names each part by its number, with the searches run for it and the sources it found.
 
+## The named items
+
+The named items are the literatures, the method families and the pipeline steps the request names, each in the request's own words, as `config.md` records them under "Decisions" (`SKILL.md`, Steps 8). A single strategist is given every named item, and a theme run those of its search theme.
+
+- The agent searches each named item it is given by name, with at least one search string in which the item's name stands, beside the strings of the parts.
+- The search record names each named item with the sources it kept for it, or with the searches that found none.
+- A named item with no source is checked as a gap ("The gaps").
+
 ## The search design
 
 - Name two to four primary concepts for the whole research question, and two to four for each part. A concept beyond the fourth is written as a secondary concept or a synonym of the primary concept it is closest to.
@@ -113,13 +121,18 @@ The agent selects two or three primary databases for each field the Discipline r
 | Publication type | Peer-reviewed journals, books, conference proceedings | Blog posts and news articles, unless they are primary data |
 | Date range | The last 10 years by default, and seminal works | Outdated work, unless historically relevant |
 | Language | The language the Language row gives | Other languages, unless the source is key |
-| Relevance | Directly addresses the research question | Tangentially related |
+| Relevance | Addresses at least one recorded part of the research question | Addresses no recorded part |
+
+- A source addresses a part when it bears on what the part asks: as a method for it, as the way it handles what the part asks, or as a pipeline step or a literature the request names. A source that addresses one part addresses the research question.
+- The date range is the only time limit on which sources are kept, applied at node 2 of the screening tree: the last 10 years and seminal works, or the range the user gives in `config.md`.
+- The widening by 5 years for a short source count ("Source counts and gates") and the widened years of a relaxed search ("The four searches") widen that range for node 2, for the rest of the search.
+- A currency pass over the last 3 years adds sources and excludes none.
 
 The domain evidence profile of `config.md` decides which evidence types the criteria admit, and it never changes which databases are searched.
 
 - The profile is one of the four values of `references/intake.md`, "The evidence profile". A row `unknown_user_defined (requested: <profile>)` is read as `unknown_user_defined`, and the report says that no profile exists yet for the requested domain. A row that is absent, holds a value outside the four, or holds a name of the four with a `(requested: ...)` suffix is read as `unknown_user_defined`, and the report says the row could not be read.
 - A profile whose discipline differs from the Discipline row, such as `cs_ml` with a Humanities discipline, is used for admission and the Discipline row for the search terms, and the report says that the two differ. `general_social_science` fits Social Science and Policy, `cs_ml` Computer Science, Engineering and Technology, and `humanities_interpretive` Humanities. `unknown_user_defined` and an absent row never give this warning.
-- Three gates hold under every profile: the source is relevant (its abstract addresses the research question), its methodology has no fatal design flaw, and it is not predatory or fabricated.
+- Three gates hold under every profile: the source is relevant (its abstract addresses at least one recorded part of the research question), its methodology has no fatal design flaw, and it is not predatory or fabricated.
 - A profile only relaxes the peer-review requirement, the publication type, the currency window and the provenance expectation. Whatever `unknown_user_defined` admits stays admitted, and the agent combines the two by union.
 - Each source a profile admits is tagged by its evidence type.
 - `general_social_science` admits expert-panel reports and context-dependent policy analyses, and surfaces a finding generalized from a single context and weak external validity as critical gaps ("The gaps").
@@ -132,7 +145,7 @@ The domain evidence profile of `config.md` decides which evidence types the crit
 
 | Layer | Made with | Decision |
 |---|---|---|
-| 1. Boolean search | Each search string on each database "The databases" selects. | Under 20 records: relax the search, as the bullets below say. Over 500 records: tighten it with qualifiers or a narrower year range. |
+| 1. Boolean search | Each search string on each database "The databases" selects. | Under 20 records: relax the search, as the bullets below say. Over 500 records: tighten it with qualifiers, or split it into one string per recorded part. |
 | 2. Citation chaining | `lookup.py refs <DOI>`, or a database's own reference links (PubMed's `elink.fcgi?dbfrom=pubmed&linkname=pubmed_pubmed_refs&id=<PMID>`, Europe PMC's `https://www.ebi.ac.uk/europepmc/webservices/rest/MED/<PMID>/references?format=json`), or OpenCitations' references of a DOI, for each of the 5 to 10 core papers of layer 1. | A work that appears in the references of 3 or more core papers is marked "must include". |
 | 3. Forward tracking | `lookup.py cited-by <DOI>`, or a database's own citing links (PubMed's `elink.fcgi?dbfrom=pubmed&linkname=pubmed_pubmed_citedin&id=<PMID>`, Europe PMC's `.../MED/<PMID>/citations?format=json`), and OpenCitations' index, for each foundational work of layer 2. | Prefer the citing works of the last 3 years. A foundational work with no citing work in the last 3 years is marked "possibly outdated". |
 | 4. Semantic search | Semantic Scholar's search, `https://api.semanticscholar.org/graph/v1/paper/search?query=<research question>&fields=title,year,externalIds&limit=100`, or `lookup.py search '<research question>' --limit 100`, with the research question as a sentence. | Results that overlap layers 1 to 3 by more than 80 percent mean the search is saturated. |
@@ -140,7 +153,6 @@ The domain evidence profile of `config.md` decides which evidence types the crit
 - The search record of layer 1 has one row for each pair of a string and a database, and a pair that did not run has its row with the reason. A database reached by a web search limited to its site gets one web search for each string.
 - A search under 20 records is relaxed, its NOT term removed and its year range widened, and run again. Its record holds both runs with their counts. A search still under 20 records after one relaxation is kept, with both counts.
 - The core papers of layer 1 are 5 to 10 in all, and the search record names them. A later pass chains only from the core papers it adds, so that the run's core papers stay at 10 or fewer.
-- After the passes have ended, layer 2 runs once more from the works closest to each gap and to each thin part, as "The gap chaining" ("The gaps") says.
 - Layer 4 runs `lookup.py search` with `--limit 100`, never lower.
 - After layer 4 the search record gives its overlap: the records of layer 4 that layers 1 to 3 had found, over the records of layer 4, as a percentage.
 - OpenCitations' index gives the citing works of a DOI from `https://api.opencitations.net/index/v2/citations/doi:<DOI>` and its references from `https://api.opencitations.net/index/v2/references/doi:<DOI>`. Each record's `citing` or `cited` field names a work by its DOI, which `lookup.py resolve` then looks up.
@@ -153,7 +165,7 @@ The domain evidence profile of `config.md` decides which evidence types the crit
 
 | # | Condition | Assessment |
 |---|---|---|
-| 1 | The source count meets the target. | The minimum of the source-count table is reached, or for a theme run the lower bound of its range (`references/literature-strategist-theme-run.md`). |
+| 1 | The source count meets the target. | The minimum of the source-count table is reached, or for a theme run the target count of its search theme (`references/literature-strategist-theme-run.md`). |
 | 2 | The latest pass added little that is new. | It added fewer than 10 percent of the existing sources. |
 | 3 | Every theme is saturated. | Every theme of the literature matrix has at least 3 sources. |
 | 4 | The citation loop closes. | Citation chaining finds no cited work that is not yet collected. |
@@ -168,12 +180,11 @@ The domain evidence profile of `config.md` decides which evidence types the crit
 
 Records that share a DOI or an arXiv ID are one source, and duplicates are removed before screening. Screening has two stages.
 
-- **Title and abstract.** Each record is tagged Include, Exclude or Maybe against the criteria. The stage keeps 30 to 50 candidates. When more than 50 records are tagged Include or Maybe, it keeps the 50 that bear on the most parts and then those with the highest citation count, and the record lists the others as cut at this stage, each with its reason. When fewer than 30 are, it keeps them all.
+- **Title and abstract.** Each record is tagged Include, Exclude or Maybe against the criteria, and every record tagged Include or Maybe goes to the stage "Full-text assessment".
 - **Full-text assessment.** Every Include and Maybe candidate goes to this stage, and the stage ends with each one included or excluded, none left Maybe or left to another run.
   - The abstract and key sections of each are read for relevance, quality and strength of evidence.
   - A candidate for which its ways give the abstract and no text is assessed from the abstract, once every way has been tried for the text.
   - A candidate for which they give no abstract is the case "A candidate that cannot be read", and it is not included.
-  - The stage ends on 15 to 30 final sources, a number that varies by paper type.
 
 - **Reading a candidate.** The agent reads a candidate's abstract, for the stage "Title and abstract", or its text, for the stage "Full-text assessment", from the first of these ways that gives it, tried in this order:
   1. The file `lookup.py fetch` writes for it.
@@ -207,7 +218,7 @@ Records that share a DOI or an arXiv ID are one source, and duplicates are remov
 
 A candidate source passes this tree in order. A "no" ends it at Exclude unless the node says otherwise.
 
-1. Is it peer-reviewed? If not, it is included as grey literature when it is a government report or white paper that addresses the research question directly. Otherwise it goes on only when the profile admits it, tagged by its evidence type, and it still passes the nodes below.
+1. Is it peer-reviewed? If not, it is included as grey literature when it is a government report or white paper that addresses at least one recorded part of the research question. Otherwise it goes on only when the profile admits it, tagged by its evidence type, and it still passes the nodes below.
 2. Is it within the time range? If not, it is included as a seminal work when it is a foundational work of the field cited more than 100 times, counted from the `cited-by` listing. Otherwise it is excluded.
 3. Does its abstract, read as "Reading a candidate" says or from its `.bib` entry's `abstract` field, address at least one part of the research question? If not, it is excluded.
 4. Is its methodology reliable, with a reasonable sample size and no obvious design flaw? If that cannot be determined, it is tagged Maybe and goes to the full-text stage. If it is not reliable, it is excluded, unless it is an important opposing viewpoint. Otherwise it is included.
@@ -218,16 +229,19 @@ Each included source is scored on five items from 1 to 3 points:
 |---|---|---|---|
 | Venue ranking | Q1 or Q2 journal, or SSCI-indexed | Q3 journal or well-known conference | Q4 journal or unranked |
 | Methodological rigor | Well-designed and statistically sound | Reasonable design with minor flaws | Obvious design problems |
-| Relevance to the research question | Addresses the core question | Addresses partial aspects | Provides background only |
+| Relevance to the research question | Answers what one or more recorded parts ask | Bears on a recorded part without answering it | Provides background only |
 | Citation count | In the top 25 percent for works of the same age | Near the median | Below the median |
 | Evidence quality | Sufficient original data | Secondary data that is reliable | Weak or missing evidence |
 
-- The citation count is read, never judged: the agent saves the source's OpenAlex record with `curl` into the temporary folder, from `https://api.openalex.org/works/doi:<DOI>?select=cited_by_count,cited_by_percentile_year` (or `works/<OpenAlex ID>` for a source with no DOI), and reads its `cited_by_percentile_year`, the rank of its count among all works of its publication year. A `min` of 75 or more takes 3 points, a `max` below 50 takes 1 point, and any other range 2 points. The annotation's Quality gives the count and the range.
-- A source OpenAlex holds no record or no range for is ranked among the run's included sources of the same age, those published in the same year as the source or one year before or after it, by the count of its `lookup.py cited-by` listing: the top quarter takes 3 points, below the median 1 point, the others 2 points. Among fewer than 4 such sources, itself counted, it takes 2 points. Its Quality names the way used.
+- The citation count is read, never judged, and the agent runs no lookup for this item. The count is the number of records of a `lookup.py cited-by` listing the run already saved for the source, at layer 3 or at the seminal test of node 2 of the screening tree.
+- A source with such a listing is ranked by its count among the run's included sources of the same age that have one, those published in the same year as the source or one year before or after it: the top quarter takes 3 points, below the median 1 point, the others 2 points.
+- A source ranked among fewer than 4 such sources, itself counted, takes 2 points.
+- The annotation's Quality gives the count.
+- A source with no saved `cited-by` listing takes 2 points, and the annotation's Quality says "citation count not looked up".
 - The total gives the band, which the annotation's Quality writes with the total in parentheses, as "High (12)", and the matrix's Quality column writes alone.
 - A total of 12 or more is High quality, and the source is assigned to a core section.
 - A total of 8 to 11 is Medium quality, and the source is assigned to a supporting section.
-- A total of 7 or less is Low quality, and the source is used only when no alternative exists.
+- A total of 7 or less is Low quality, and the source stays, with its limitation stated in its annotation.
 - Under a profile other than `unknown_user_defined` a source passes the quick assessment when it meets the total or meets the profile's evidence-type expectation on the venue-ranking item alone. The other four items stay in force.
 
 ## Source counts and gates
@@ -256,8 +270,8 @@ The review passes only when every gate holds:
 | Source count | The minimum for the paper type is met. | Run one more pass of layers 2 to 4. |
 | Annotations | Every included source has an annotation. | Write the missing ones. |
 | Matrix coverage | Every theme, and every part of the research question, has at least 3 sources. | Search again for the weak themes and parts. |
-| Research gaps | At least 2 specific, actionable gaps, and every part checked for a gap ("The gaps"). | Analyze the matrix again. |
-| Peer-reviewed share | At least 70 percent of the sources are peer-reviewed. | Replace non-academic sources. |
+| Research gaps | At least 2 specific, actionable gaps, and every part and every named item with no source checked for a gap ("The gaps"). | Analyze the matrix again. |
+| Peer-reviewed share | At least 70 percent of the sources are peer-reviewed. | Search again for peer-reviewed sources on the parts the non-academic sources cover, and keep the non-academic sources. |
 | Currency | At least 50 percent of the sources are from the last 5 years, the current year and the 4 years before it, unless the topic is historical. | Run the currency passes the bullets below give. |
 
 - A failed gate other than the source count and the currency is handled once, as its row says.
@@ -270,7 +284,8 @@ The review passes only when every gate holds:
 - After each currency pass the agent counts the share again. While the share is below the threshold and the last pass added a new eligible source, the next pass runs, up to 3 passes. The record names each pass with the sources it added and the share after it.
 - A share still below the threshold after the third pass, or after a pass that added no new eligible source, is named in the report as not met.
 - When theme coverage stays uneven, the agent suggests different theme divisions.
-- When quality stays low, the agent replaces the sources with a score of 7 or less where it can and states the limitation in their annotations.
+- When quality stays low, the agent keeps the sources with a score of 7 or less and states the limitation in their annotations.
+- When quality stays low, the agent adds a source with a higher score on the same part where a search finds one.
 - A gate that still fails after these actions is named in the report as not met, and the review goes on.
 
 ## The annotated bibliography
@@ -313,19 +328,12 @@ Each included source has this annotation, with one part field for each recorded 
 
 ## The gaps
 
-The agent checks every part, P1 to Pn, for a gap, and lists at least 2 gaps that are specific and actionable.
+The agent checks every part, P1 to Pn, and every named item with no source ("The named items") for a gap, and lists at least 2 gaps that are specific and actionable.
 
-- Each gap names the part or parts it concerns, by number. A part with no gap is named in section 6 with one sentence on why the sources leave no gap on it.
+- Each gap names the part or parts it concerns, by number, and a gap on a named item names the item. A part with no gap is named in section 6 with one sentence on why the sources leave no gap on it.
 - Each gap says its kind: an under-researched area (a topic that sources mention and none studies), a methodological gap (a method that is missing, such as no qualitative studies), a population gap (an understudied context or population), a temporal gap (a lack of recent data), a geographical gap (research limited to certain regions), or another kind it names.
 - Each gap names at least one search run for it that found nothing: the string or its number in the search record, the database and the record count. Where no such search was run, the agent runs one aimed at the gap before it writes the gap, and adds it to the search record.
 - Each gap names the matrix evidence on each side of it: the keys of the works that come closest to it, and the count of works in each of the parts or themes it lies between.
-- **The gap chaining.** Before the agent writes a gap, it chains backward from the works that come closest to it, with layer 2's commands: `lookup.py refs` or a database's own reference links ("The four searches").
-  - A part with fewer included sources than the smallest count among the other parts, a thin part, is chained from the same way, from the included sources that bear on it.
-  - The seeds are at most 3 for each gap or thin part, chosen from the keys of the works that come closest to it, the keys the bullet above makes the gap name.
-  - The works the seeds cite are screened as layer 2's candidates are, through "Screening".
-  - The gap chaining runs once, after the search's passes have ended. It is no pass: it does not count toward the cap of 8 passes, the end conditions are not tested again after it, and its seeds are not core papers.
-  - A work it finds that closes the gap is included, read and annotated as any included source. The gap is then not written, or it is written narrower, with the new work among its evidence.
-  - The search record names each gap chaining: the gap or part, its seed keys, the count of works screened and the keys it added.
 - Under a profile that surfaces critical gaps ("Criteria"), the agent reads every annotation for them and lists each one it finds as a gap marked critical, with the keys of the sources that show it. Under `cs_ml` these are non-reproducible results, such as a result given without the code, the data or the settings to repeat it, and benchmark cherry-picking, such as a result on benchmarks the authors chose alone. When the annotations show none of a profile's kinds, section 6 says so in one sentence for each kind.
 
 ## The distribution advisory
@@ -351,22 +359,25 @@ Distribution advisory:
 ## The BibTeX entries
 
 - A source the agent finds by any interface or web search is included only after `lookup.py resolve` prints a record that matches it, resolved by its DOI, else its arXiv ID, else its title with `--year <year>`.
-- One BibTeX entry per included source comes from `lookup.py bibtex '<DOI or arXiv ID>'`, written to `refs.bib` in the run folder as the script printed it on standard output. Its lines on standard error are notes, handled as "The notes of `bibtex`" below says.
-- The agent changes an entry `bibtex` printed only to replace a `{?}`, to append a key's letter, or to correct an entry `NOT_CONFIRMED` from a record that confirms it, each named in its report. It writes no entry from a page's citation block, a page's tags or memory, and it edits no field by hand. An entry the bullets below make from the record `resolve` prints is the one other way an entry is written.
-- A character `bibtex` has no ASCII form for is written `{?}` with a warning line, and the agent replaces each `{?}` and names it in its report.
+- The agent writes one BibTeX entry per included source to `refs.bib` in the run folder, from the record `resolve` printed for it. A field that record lacks is taken from another index's record of the work on the lines `resolve` printed, or from the work's own page, saved and read as "Reading a candidate" says.
+- The entry's type is `@article` for a journal, `@inproceedings` for a proceedings volume and `@misc` otherwise.
+- The entry holds each of these fields that the record gives:
+  - `author`, every author of the record, joined by `and`;
+  - `title`;
+  - the venue, as `journal` in an `@article` and as `booktitle` in an `@inproceedings`;
+  - `year`;
+  - `volume`, `number` (the issue) and `pages`, as the record's line gives them after the venue;
+  - `doi`;
+  - `eprint`, with `archivePrefix = {arXiv}`, for an arXiv ID;
+  - `url`: for a source with neither a DOI nor an arXiv ID the record's open-access URL or index page, and for a published preprint with no DOI the address of its venue's page ("Preprints and published versions").
+- The key is the first author's family name and the year, as `Family_2004`, in ASCII letters, digits and `_`. A key the file already holds gets the first unused letter appended: `a`, then `b`.
+- The agent corrects each defect the record prints, and the search log names each correction beside the key:
+  - an HTML entity is written as its character, `&amp;` as `\&`, and `&lt;`, `&gt;` and `&quot;` as `<`, `>` and `"`;
+  - an empty author name, such as the name after a last `and` that holds nothing, is dropped;
+  - "and others" in place of named authors is replaced by the names another index's record or the work's own page gives. When none names them, "and others" stays, and section 10 of `review.md` names the key.
+- A character outside ASCII is written in its LaTeX form, such as `{\"o}` for an o with a diaeresis or `{$\alpha$}` for alpha, so that the entry compiles under pdfLaTeX and `bibtex` alike.
+- The agent writes no entry from a page's citation block or from memory.
 - One blank line stands between entries. The agent writes each entry followed by one blank line, and after its last write it checks with `grep -n -B1 '^@' '<run folder>/refs.bib'` that each line starting with `@` is the first line of the file or follows a blank line.
-- For an arXiv ID for which `bibtex` printed the line "published in <venue> (<type>) per Semantic Scholar", the agent finds the paper's page at the venue (the proceedings site, the ACL Anthology, the publisher) by a search, and writes the entry that `lookup.py bibtex '<arXiv ID>' --page '<url>'` prints, in place of the `@misc` entry.
-  - `review.md` names the page beside the key.
-  - When `--page` refuses the page with a title ratio below 0.70, the published work may carry another title. The agent then looks for it as "A later version under another title" ("Preprints and published versions") says, before the `@misc` entry stays.
-  - When no page is reached, as for a paper whose only page is on OpenReview, which answers with a challenge page, or when `--page` refuses the page and no later version under another title is found, the `@misc` entry stays. Its annotation's Type names the venue Semantic Scholar gave, with "published version not confirmed". `review.md` names the pages tried, and the search log the reason `--page` printed.
-- The notes of `bibtex` are handled as follows. The search log holds each note as printed, beside its key.
-  - "Semantic Scholar: left out, <reason>" or "OpenAlex: left out, <reason>", and "Crossref: left out, <reason>" among a published DOI's lines: the published version was not checked through that index. When the reason names a wait of 60 seconds or less, the agent runs the same `bibtex` call again once after that wait. Otherwise, or when the second call leaves the index out again, `review.md` names the key with "published version not checked" and the index, and the annotation's Type says the same.
-  - "published DOI <doi>: doi.org <reason>", "published DOI <doi>: not found" and "published DOI <doi>: title ratio <r> against <index>, below 0.70": `review.md` names the key with "published version not confirmed" and the published DOI.
-  - "arXiv: left out, <reason>", with no entry and exit status 1: the source has no entry from `bibtex`, and the next bullet applies.
-  - "page <url>: citation_title ratio <r>", printed by `bibtex --page`: the venue's page carries a title below 0.70 of the preprint's, and the agent looks for a later version under another title ("Preprints and published versions") before the `@misc` entry stays.
-- A source with neither a DOI nor an arXiv ID, or one for which `lookup.py bibtex` gets no entry, gets its entry from the record `lookup.py resolve '<title>'` prints for it.
-  - The entry takes the title, the authors, the year, the venue and the record's open-access URL or index page from the printed line.
-  - Its type is `@inproceedings` for a proceedings volume, `@article` for a journal and `@misc` otherwise.
 - A source for which no index prints a record gets no entry and no citation, also when a readable copy of it was found. It is listed in `review.md` under "No entry written" with the reason in words and, for a work the search needed, the copy's address or the searches for one, and it is named in the gaps or the limitations it affects and in the report.
 - How the venue and the year of an entry are confirmed, and how an entry whose year or venue only a left-out index could have given is resolved again, is in `references/citation-compliance.md`, "Looking a reference up".
 - An entry that no answering index confirms is named in the report and in `review.md` with the indexes that were left out.
@@ -379,12 +390,16 @@ Distribution advisory:
 ### Preprints and published versions
 
 - A source is labelled a preprint, in its annotation's Type, in `review.md` and in the synthesis, only after its published version was looked for: `lookup.py resolve` on its title, on its arXiv ID, and on the DOI an index names for it, where one does.
-- A source whose published version one of these finds is cited as published, with the entry `lookup.py bibtex` prints for it, and is never labelled a preprint.
+- A source whose published version one of these finds is cited as published, with its entry written from the published version's record, and is never labelled a preprint.
+- A record of the arXiv ID that names a conference or a journal as its venue, with no DOI, gives the entry of the published version as the venue's page states it. The agent finds the work's page at the venue (the proceedings site, the ACL Anthology, the publisher) by a web search, saves and reads it as "Reading a candidate" says, and writes the entry with the page's address as its `url`.
+  - `review.md` names the page beside the key.
+  - `resolve --entry` reads that page for the entry's year. When it prints `NOT_CONFIRMED` with a `citation_title` ratio below 0.70, the published work may carry another title, and the agent looks for it as "A later version under another title" says, before the `@misc` entry of the preprint stays.
+  - When no page of the venue is reached, as for a paper whose only page is on OpenReview, which answers with a challenge page, or when no later version under another title is found, the `@misc` entry of the preprint stays. Its annotation's Type names the venue the record gave, with "published version not confirmed", `review.md` names the pages tried, and the search log the line `resolve --entry` printed.
 - A source none of them finds a published version for, and for which no later version under another title is found as the next bullets say, is labelled a preprint. `review.md` names the lookups run in words, such as "Crossref, OpenAlex and arXiv found no published version", as "The search log" says.
 - **A later version under another title.** The agent also looks for a later version of each preprint that carries another title: a work that the preprint's forward tracking (`lookup.py cited-by`), a title search or a venue an index names brings up, with the preprint's first author, a year at or after the preprint's, and a title or abstract that states the same contribution.
 - A later version that an index links to the preprint, by the DOI an index names for it or by a record of the preprint's arXiv ID that names a venue, keeps the route of the bullets above and of "The BibTeX entries".
 - A later version that no index links to the preprint is a source of its own. It is included when `lookup.py resolve '<its title>' --year <year>` prints a record that matches it.
-  - Its entry is written from that record, as "The BibTeX entries" says for a source with neither a DOI nor an arXiv ID. A record that names a DOI gives the entry `lookup.py bibtex '<DOI>'` prints, as for every source with a DOI.
+  - Its entry is written from that record, as "The BibTeX entries" says.
   - `resolve --entry` confirms its entry as it confirms every entry ("The BibTeX entries").
   - Its annotation's Type names the preprint, by its arXiv ID, as its earlier version, such as "Journal article; earlier version arXiv 2001.00001".
   - The preprint gets no entry of its own, unless the run cites a passage that only the preprint holds. Then each of the two has its entry, and each annotation names the other.

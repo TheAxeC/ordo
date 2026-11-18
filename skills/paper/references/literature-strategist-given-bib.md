@@ -39,7 +39,7 @@ Screened from the manuscript's .bib:
 ## The entries against the `.bib`
 
 - The rules apply in this order to each included source.
-  - A source whose DOI or whose arXiv ID is already in the `.bib`, either one, gets no new entry and is marked "already in the .bib" in the annotation. A `.bib` that holds the `@misc` entry of an arXiv ID (its `eprint`, an `arxiv.org/abs/` address in its `url`, or a DOI `10.48550/arXiv.<id>`) so holds the work whose published entry `bibtex` now gives.
+  - A source whose DOI or whose arXiv ID is already in the `.bib`, either one, gets no new entry and is marked "already in the .bib" in the annotation. A `.bib` that holds the `@misc` entry of an arXiv ID (its `eprint`, an `arxiv.org/abs/` address in its `url`, or a DOI `10.48550/arXiv.<id>`) so holds the work whose published version the agent now finds.
   - Any other source whose key equals an existing key gets the key with the first unused letter appended: `a`, then `b`.
 - `refs.bib` holds the new entries only.
 - A start given the `.bib` with its block manifest writes the patch that adds the new entries, as `references/patch-file.md` gives. The patch inserts them after the `.bib`'s last block, and its operations name the id `lit-review` in `roadmap_item_ids` in lit-review mode, the id `full` in full mode, and the ids of the items they answer in revision mode.

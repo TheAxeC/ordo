@@ -1,6 +1,6 @@
 # 0037. Paper searches a request across research communities with one literature strategist per search theme and a merge run
 
-Status: proposed
+Status: proposed; superseded by 0040 in each search theme's source-count range, now a target count with no upper bound, and in the merge run's own search of the sources the theme runs cut at their upper bound, judged on merit
 
 ## Context
 

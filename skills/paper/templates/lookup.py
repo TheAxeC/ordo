@@ -24,12 +24,12 @@ Identifiers. A DOI may be written as a bare DOI (10.xxxx/...), as https://doi.or
 
 Commands:
 
-- resolve queries Crossref, OpenAlex, Semantic Scholar and arXiv and prints one line per index. For a title, each index's search gives candidates; a candidate matches at a title ratio of 0.70 or more, and of the matching candidates those whose year equals --year are preferred when there are any, and the one with the highest ratio is taken. For a DOI or an arXiv ID, the first record found, in the order Crossref, OpenAlex, Semantic Scholar, arXiv, is the reference, each other record's title is compared with it, and a record below 0.70 is printed with DOI_MISMATCH. For a title, arXiv is searched for the title as a phrase (ti:"<title>"). For a DOI or an arXiv ID, arXiv is queried only when the input holds an arXiv ID. The year is read only for a title. A line reads "<index>: ratio <r>: <title> | <authors> | <year> | <venue> | doi ... | arXiv ... | OpenAlex ... | Semantic Scholar ... | open access ...", or "<index>: not found", or "<index>: left out, <reason>". For a DOI or an arXiv ID, the Crossref record of the work lists in its updated-by field the notices that update the work (Crossref's update types are listed in its schema). Each notice of the type retraction, partial_retraction or expression_of_concern is printed on a line of its own after the Crossref line: "Crossref notice: <type> | <date> | doi <the notice's DOI> | source <publisher or retraction-watch>". The date is the notice's date-time cut to the day, else its date-parts joined with a hyphen. A notice of any other type, such as a correction, is not printed, and a work whose record lists no such notice gets no line. A title prints no notice, since the search record does not carry the field. The notices come from the record resolve already fetches and cost no further request.
+- resolve queries Crossref, OpenAlex, Semantic Scholar and arXiv and prints one line per index. For a title, each index's search gives candidates; a candidate matches at a title ratio of 0.70 or more, and of the matching candidates those whose year equals --year are preferred when there are any, and the one with the highest ratio is taken. For a DOI or an arXiv ID, the first record found, in the order Crossref, OpenAlex, Semantic Scholar, arXiv, is the reference, each other record's title is compared with it, and a record below 0.70 is printed with DOI_MISMATCH. For a title, arXiv is searched for the title as a phrase (ti:"<title>"). For a DOI or an arXiv ID, arXiv is queried only when the input holds an arXiv ID. The year is read only for a title. A line reads "<index>: ratio <r>: <title> | <authors> | <year> | <venue> | vol <volume> | no <issue> | pages <pages> | doi ... | arXiv ... | OpenAlex ... | Semantic Scholar ... | open access ...", each part left out when the record has none, or "<index>: not found", or "<index>: left out, <reason>". <authors> is every author of the record, joined by ", ". The volume, the issue and the pages are Crossref's volume, issue and page, OpenAlex's biblio (volume, issue, first_page and last_page) and Semantic Scholar's journal (volume and pages); arXiv gives none. A page range is written with two hyphens, as BibTeX writes one, and a first page alone stays alone. For a DOI or an arXiv ID, the Crossref record of the work lists in its updated-by field the notices that update the work (Crossref's update types are listed in its schema). Each notice of the type retraction, partial_retraction or expression_of_concern is printed on a line of its own after the Crossref line: "Crossref notice: <type> | <date> | doi <the notice's DOI> | source <publisher or retraction-watch>". The date is the notice's date-time cut to the day, else its date-parts joined with a hyphen. A notice of any other type, such as a correction, is not printed, and a work whose record lists no such notice gets no line. A title prints no notice, since the search record does not carry the field. The notices come from the record resolve already fetches and cost no further request.
 - resolve prints "pmcid: <PMCID>" on a line of its own after the OpenAlex line, for a DOI, an arXiv ID or a title, when the OpenAlex record names a PMCID in its ids field (read as the PMC followed by digits that ends ids.pmcid). A record that names none gets no such line. The PMCID comes from the record resolve already fetches and costs no further request.
 - resolve --entry <file.bib> <key> reads the entry <key> of the .bib, resolves it, and prints the lines resolve prints for the input it resolves by, then one last line that says whether a record confirms the entry. The key is matched exactly, and the first entry of a key that two entries share is read. Field names are read in any case. The input is the entry's doi, else its arXiv ID (its eprint field when its archivePrefix field is arXiv, else the ID of an arxiv.org/abs/ URL in its url field), else its title, resolved with --year set to the entry's year. A doi field that is not a DOI counts as absent, and a doi of the form 10.48550/arXiv.<id> is read as the DOI and as the arXiv ID. The last line is "<key>: CONFIRMED against <index>, ratio <r>, year <year>" for the first record, in the order Crossref, OpenAlex, Semantic Scholar, arXiv, whose title ratio against the entry's title is 0.70 or more and whose year equals the entry's year. For a title, the record of an index is its chosen candidate. When no record agrees it is "<key>: NOT_CONFIRMED against <index>, ratio <r>, year <year>, entry year <year>" with the values of the first record printed, a record with no year written "year none", and "<key>: NOT_CONFIRMED, no record" when no index printed a record. --entry takes no --year, and no other argument.
 - resolve --entry also reads the venue's page of an entry that no record confirms, when the entry's type is not @misc, it has no DOI (a doi field that is a DOI, an arXiv DOI included), it is resolved by its arXiv ID, and its url field is an address of a page that can be read (the paragraph on a venue's page above). The entry is then confirmed when the page's citation_title has a title ratio of 0.70 or more against the entry's title, the page's year equals the entry's year, and a record of the arXiv ID has a title ratio of 0.70 or more against the entry's title. The last line is then "<key>: CONFIRMED against <index>, ratio <r>, year <record year>; year <entry year> found on <url>", for the first such record in the order Crossref, OpenAlex, Semantic Scholar, arXiv. Otherwise the line NOT_CONFIRMED stays and ends, for the first that applies in this order, with "; <url>: <reason>" for a page that gives no answer or a status other than 2xx, "; <url>: no citation_title tag", "; <url>: no year tag", "; <url>: citation_title ratio <r>" or "; <url>: year <y> on the page"; a page that passes these and no record of the arXiv ID whose title agrees leaves the line as it is. A url on doi.org or arXiv, or a page that redirects there, is not read and leaves the line as it is. Every other entry is resolved and confirmed with no page read.
-- search prints the records of the four indexes' searches, --limit per index (20 by default, at most 100), merged when they share a DOI (compared lowercased), an arXiv ID (version dropped) or a Semantic Scholar ID. A merged record keeps the fields of the record with more fields filled, and the other record fills its empty fields. The query goes to Crossref and Semantic Scholar as given, to OpenAlex with each ? and * replaced by a space (OpenAlex reads them as wildcards and answers HTTP 400), and to arXiv in arXiv's own syntax: each word as all:<word>, a quoted phrase as all:"<phrase>", AND and OR kept, NOT written ANDNOT, parentheses kept, and two terms with no operator between them joined by AND. An operator word is read only in capitals. An operator that follows an operator replaces it, and an operator with no term before it or after it is dropped. When the parentheses do not balance, all of them are dropped, and a pair with no term inside is dropped. Every other character is dropped. Crossref ranks by relevance and reads no operator, and arXiv has no search by a sentence: a sentence is read as its words joined by AND, and arXiv can answer "not found" for it. After the records, an index that answered with no record is printed "<index>: not found" and an index that is left out "<index>: left out, <reason>".
-- refs and cited-by print the references of a work or the works that cite it, from Semantic Scholar and OpenAlex, merged as search merges, at most 100 per index; a line "<index>: first 100, more exist" says when an index holds more. Crossref and arXiv are not asked. An index that answered with no record is printed "<index>: not found", and an index that is left out "<index>: left out, <reason>". An OpenAlex ID (W...) is read by OpenAlex only and a Semantic Scholar ID (40 hexadecimal digits) by Semantic Scholar only, and the other index is printed as left out with that reason.
+- search prints the records of the four indexes' searches, --limit per index (20 by default, at most 100), merged when they share a DOI (compared lowercased), an arXiv ID (version dropped) or a Semantic Scholar ID. A merged record keeps the fields of the record with more fields filled, counted without the volume, the issue and the pages, and the other record fills its empty fields, the volume, the issue and the pages among them. A record is printed "[<indexes>] <title> | <authors> | ..." with the parts of a line of resolve, except that <authors> is the first three authors, followed by " et al." when the record has more. The query goes to Crossref and Semantic Scholar as given, to OpenAlex with each ? and * replaced by a space (OpenAlex reads them as wildcards and answers HTTP 400), and to arXiv in arXiv's own syntax: each word as all:<word>, a quoted phrase as all:"<phrase>", AND and OR kept, NOT written ANDNOT, parentheses kept, and two terms with no operator between them joined by AND. An operator word is read only in capitals. An operator that follows an operator replaces it, and an operator with no term before it or after it is dropped. When the parentheses do not balance, all of them are dropped, and a pair with no term inside is dropped. Every other character is dropped. Crossref ranks by relevance and reads no operator, and arXiv has no search by a sentence: a sentence is read as its words joined by AND, and arXiv can answer "not found" for it. After the records, an index that answered with no record is printed "<index>: not found" and an index that is left out "<index>: left out, <reason>".
+- refs and cited-by print the references of a work or the works that cite it, from Semantic Scholar and OpenAlex, at most 100 per index. They merge the records of one work as search does, and print each merged record on one line as search does, with the first three authors and " et al."; a line "<index>: first 100, more exist" says when an index holds more. Crossref and arXiv are not asked. An index that answered with no record is printed "<index>: not found", and an index that is left out "<index>: left out, <reason>". An OpenAlex ID (W...) is read by OpenAlex only and a Semantic Scholar ID (40 hexadecimal digits) by Semantic Scholar only, and the other index is printed as left out with that reason.
 - bibtex prints the BibTeX entry https://doi.org/<doi> returns for Accept: application/x-bibtex when its first character other than whitespace is @, as it is given. When doi.org gives none it prints "doi.org: left out, <reason>" or "doi.org: <reason>, not a BibTeX entry" and exits 1.
 - bibtex for an arXiv ID, or a DOI 10.48550/arXiv.<id>, gives the entry of the published version when an index names one. It asks arXiv for the record, Semantic Scholar for paper/ARXIV:<id> with the fields paperId, title, externalIds and publicationVenue, and OpenAlex for works/doi:10.48550/arXiv.<id> with id, title, doi and locations. A published DOI is a DOI not of the form 10.48550/arXiv.<id> that Semantic Scholar names in externalIds.DOI, that OpenAlex names in doi, or that a doi.org landing_page_url of an OpenAlex location names, taken in that order, each once. Each published DOI is resolved as resolve resolves a DOI, in Crossref, OpenAlex and Semantic Scholar, and its first record found is compared with the title of the arXiv record (of the Semantic Scholar record, else of the OpenAlex record, when arXiv gave none). For the first published DOI whose record has a title ratio of 0.70 or more, bibtex prints the entry doi.org gives for that DOI, as for a DOI, and exits 0.
 - When doi.org gives no entry for that DOI, bibtex prints the @misc entry below and "published DOI <doi>: doi.org <reason>" (the reason "left out, <reason>", "HTTP <status>", or "HTTP 200, not a BibTeX entry"), and exits 0. When Crossref, OpenAlex and Semantic Scholar are all left out for a published DOI, it prints the @misc entry and one line "<index>: left out, <reason>" for each, and exits 0. A published DOI no index holds prints "published DOI <doi>: not found", with a left-out line for each index left out, and one whose record is below 0.70 prints "published DOI <doi>: title ratio <r> against <index>, below 0.70"; the next published DOI is then tried.
@@ -187,9 +187,9 @@ CACHED_COMMANDS = ("resolve", "search", "refs", "cited-by")
 USER_AGENT = "lookup.py (the paper skill of Ordo)"
 ATOM = "{http://www.w3.org/2005/Atom}"
 ARXIV_ATOM = "{http://arxiv.org/schemas/atom}"
-S2_FIELDS = "paperId,title,authors,year,venue,externalIds,openAccessPdf"
-OPENALEX_FIELDS = "id,title,authorships,publication_year,primary_location,doi,open_access,ids"
-CROSSREF_FIELDS = "DOI,title,author,issued,container-title"
+S2_FIELDS = "paperId,title,authors,year,venue,externalIds,openAccessPdf,journal"
+OPENALEX_FIELDS = "id,title,authorships,publication_year,primary_location,doi,open_access,ids,biblio"
+CROSSREF_FIELDS = "DOI,title,author,issued,container-title,volume,issue,page"
 # The fields bibtex asks of an arXiv ID's record to find its published version, in requests of their own, so that the requests of the other commands and their cached replies stay as they are.
 S2_PUBLISHED_FIELDS = "paperId,title,externalIds,publicationVenue"
 OPENALEX_PUBLISHED_FIELDS = "id,title,doi,locations"
@@ -199,6 +199,10 @@ PAGE_EXCLUDED_HOSTS = ("doi.org", "dx.doi.org", "www.doi.org", "arxiv.org", "www
 PAGE_ACCEPT = "text/html,application/xhtml+xml;q=0.9,*/*;q=0.8"
 VENUE_PAGE = "<the venue's page of the work>"
 NOTICE_TYPES = ("retraction", "partial_retraction", "expression_of_concern")
+# The fields of a Record that search, refs and cited-by count to choose the record kept when two records merge.
+COUNTED_FIELDS = ("title", "authors", "year", "venue", "doi", "arxiv_id", "openalex_id", "s2_id", "oa_urls", "abstract")
+# The fields the record kept takes from the other record when its own is empty.
+RECORD_FIELDS = ("title", "authors", "year", "venue", "volume", "issue", "pages", "doi", "arxiv_id", "openalex_id", "s2_id", "oa_urls", "abstract")
 
 DOI_PREFIX = re.compile(r"^(?:https?://(?:dx\.)?doi\.org/|doi:)", re.IGNORECASE)
 DOI_PATTERN = re.compile(r"^10\.\d{4,9}/\S+$")
@@ -283,6 +287,9 @@ class Record:
     authors: list = field(default_factory=list)
     year: int = 0
     venue: str = ""
+    volume: str = ""
+    issue: str = ""
+    pages: str = ""
     doi: str = ""
     arxiv_id: str = ""
     openalex_id: str = ""
@@ -409,6 +416,16 @@ def normalise_record(record):
 # Parsing the bodies the indexes answer.
 
 
+def index_value(value):
+    """The text of a volume, an issue or a page an index gives, "" for a field that is null or absent."""
+    return "" if value is None else collapse_spaces(str(value))
+
+
+def page_range(pages):
+    """A page range written with two hyphens, as BibTeX writes one; a single page stays as it is."""
+    return re.sub(r"\s*-+\s*", "--", index_value(pages))
+
+
 def abstract_from_inverted_index(index):
     words = {}
     for word, positions in (index or {}).items():
@@ -453,6 +470,9 @@ def parse_crossref_item(item):
             authors=[name for name in names if name],
             year=issued[0] if issued and isinstance(issued[0], int) else 0,
             venue=collapse_spaces((item.get("container-title") or [""])[0]),
+            volume=index_value(item.get("volume")),
+            issue=index_value(item.get("issue")),
+            pages=page_range(item.get("page")),
             doi=item.get("DOI") or "",
             indexes=["Crossref"],
             notices=crossref_notices(item),
@@ -472,12 +492,17 @@ def parse_openalex_work_object(work):
     source = (work.get("primary_location") or {}).get("source") or {}
     oa_url = (work.get("open_access") or {}).get("oa_url")
     pmcid = PMCID.search((work.get("ids") or {}).get("pmcid") or "")
+    biblio = work.get("biblio") or {}
+    first_page, last_page = index_value(biblio.get("first_page")), index_value(biblio.get("last_page"))
     return normalise_record(
         Record(
             title=collapse_spaces(work.get("title") or work.get("display_name")),
             authors=[collapse_spaces(a["author"]["display_name"]) for a in work.get("authorships") or []],
             year=work.get("publication_year") or 0,
             venue=collapse_spaces(source.get("display_name")),
+            volume=index_value(biblio.get("volume")),
+            issue=index_value(biblio.get("issue")),
+            pages=f"{first_page}--{last_page}" if first_page and last_page else first_page,
             doi=strip_doi(work.get("doi") or ""),
             openalex_id=work["id"].rstrip("/").rsplit("/", 1)[-1],
             oa_urls=[oa_url] if oa_url else [],
@@ -519,12 +544,15 @@ def parse_openalex_citing(text):
 def parse_s2_paper_object(paper):
     external = paper.get("externalIds") or {}
     oa_url = (paper.get("openAccessPdf") or {}).get("url")
+    journal = paper.get("journal") or {}
     return normalise_record(
         Record(
             title=collapse_spaces(paper.get("title")),
             authors=[collapse_spaces(a.get("name")) for a in paper.get("authors") or [] if a.get("name")],
             year=paper.get("year") or 0,
             venue=collapse_spaces(paper.get("venue")),
+            volume=index_value(journal.get("volume")),
+            pages=page_range(journal.get("pages")),
             doi=external.get("DOI") or "",
             arxiv_id=external.get("ArXiv") or "",
             s2_id=paper["paperId"],
@@ -600,7 +628,7 @@ def parse_arxiv_feed(text):
 
 
 def filled_count(record):
-    return sum(1 for name in ("title", "authors", "year", "venue", "doi", "arxiv_id", "openalex_id", "s2_id", "oa_urls", "abstract") if getattr(record, name))
+    return sum(1 for name in COUNTED_FIELDS if getattr(record, name))
 
 
 def record_keys(record):
@@ -617,7 +645,7 @@ def record_keys(record):
 def combine_records(first, second):
     base, other = (first, second) if filled_count(first) >= filled_count(second) else (second, first)
     merged = replace(base, authors=list(base.authors), oa_urls=list(base.oa_urls), indexes=list(first.indexes))
-    for name in ("title", "authors", "year", "venue", "doi", "arxiv_id", "openalex_id", "s2_id", "oa_urls", "abstract"):
+    for name in RECORD_FIELDS:
         if not getattr(merged, name):
             setattr(merged, name, getattr(other, name))
     merged.indexes += [index for index in second.indexes if index not in merged.indexes]
@@ -652,9 +680,19 @@ def choose_candidate(records, query, year):
     return max(matching, key=lambda pair: pair[0]) if matching else None
 
 
-def format_record(record):
-    authors = ", ".join(record.authors[:3]) + (" et al." if len(record.authors) > 3 else "")
+def format_record(record, every_author=False):
+    """The record as one line. resolve lists every author (every_author), so that an entry can be written from its line; search, refs and cited-by list the first three and " et al."."""
+    if every_author:
+        authors = ", ".join(record.authors)
+    else:
+        authors = ", ".join(record.authors[:3]) + (" et al." if len(record.authors) > 3 else "")
     parts = [record.title, authors, str(record.year) if record.year else "", record.venue]
+    if record.volume:
+        parts.append("vol " + record.volume)
+    if record.issue:
+        parts.append("no " + record.issue)
+    if record.pages:
+        parts.append("pages " + record.pages)
     if record.doi:
         parts.append("doi " + record.doi)
     if record.arxiv_id:
@@ -682,7 +720,7 @@ def title_lines(outcomes, chosen):
         elif pair is None:
             lines.append(f"{name}: not found")
         else:
-            lines.append(f"{name}: ratio {pair[0]:.2f}: {format_record(pair[1])}")
+            lines.append(f"{name}: ratio {pair[0]:.2f}: {format_record(pair[1], every_author=True)}")
             lines.extend(pmcid_lines(pair[1]))
     return lines
 
@@ -699,7 +737,7 @@ def identifier_lines(outcomes):
             record = outcome.records[0]
             ratio = title_ratio(reference.title, record.title)
             flag = " DOI_MISMATCH," if ratio < MATCH_THRESHOLD else ""
-            lines.append(f"{name}:{flag} ratio {ratio:.2f}: {format_record(record)}")
+            lines.append(f"{name}:{flag} ratio {ratio:.2f}: {format_record(record, every_author=True)}")
             lines.extend(record.notices)
             lines.extend(pmcid_lines(record))
     return lines
