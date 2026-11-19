@@ -1257,10 +1257,11 @@ THEME_RUN_FIRST = "Literature strategist, theme run: search theme 1"
 THEME_RUN_REST = "Literature strategist, theme runs: each other search theme, all at once"
 MERGE_RUN = (
     "Literature strategist, merge run, after the theme runs: removes the duplicates, "
-    "runs the quality gates over the merged set, writes the one review"
+    "assesses the sources the theme runs hand on, searches where the search themes meet, "
+    "runs the quality gates, writes the one review"
 )
 THEME_EDGE = "two search themes or more, unless you skip the search"
-MERGE_LOOP = "a quality gate fails: a search by the failure handling strategies"
+MERGE_LOOP = "an open citation loop: a backward and a forward round; a failed gate: a search"
 SEARCH_LOOP = "search rounds: 3 of 5 stopping rules, or 4 rounds with none"
 CONFIRMED = "each source confirmed by a live lookup"
 

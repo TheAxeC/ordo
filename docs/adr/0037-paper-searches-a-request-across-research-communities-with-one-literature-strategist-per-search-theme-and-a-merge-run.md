@@ -1,6 +1,6 @@
 # 0037. Paper searches a request across research communities with one literature strategist per search theme and a merge run
 
-Status: proposed; superseded by 0040 in each search theme's source-count range, now a target count with no upper bound, and in the merge run's own search of the sources the theme runs cut at their upper bound, judged on merit; superseded by the ruling The academic-paper strategist of plan 5 in the division into one search theme per research community, now clusters of method areas, the merge run's own search, the parts it maps and refuses on, and the search-log files
+Status: proposed; superseded by 0040 in each search theme's source-count range and in the merge run's own search of the sources the theme runs cut at their upper bound, both parts of 0040 that the ruling The academic-paper strategist of plan 5 supersedes in turn; superseded by the ruling The academic-paper strategist of plan 5 in the division into one search theme per research community, now clusters of method areas, the parts it maps and refuses on, and the search-log files; restored by the ruling Open item CA of plan 5 in the merge run's own search, in the form that ruling gives it: every source the theme runs hand on judged on merit, one backward and one forward chaining round where a theme run reports its citation loop open, and the searches where the search themes meet, while 0037's chaining until the citation loop closes, from the core papers that every theme run names, and its search for each pair of search themes stay superseded
 
 ## Context
 

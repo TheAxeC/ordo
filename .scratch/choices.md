@@ -702,3 +702,16 @@ The brief check of step 5.M (`.scratch/5-paper/agents/reviews/5.M-brief-check.md
 Taken: (1)(a), (2)(a), (3)(a)
 Booked: `.scratch/5-paper/agents/briefs/5.M.md`, Decisions 4, 5 and 6
 Builds on it: step 5.M
+
+## C130. Findings S2 and S3 of the review of step 5.M, taken into repair round 1 (2026-11-19)
+
+The review of step 5.M (`.scratch/5-paper/agents/reviews/5.M-refuter.md`, 1. Spec, S2 and S3) found two rules outside the brief's items that the merge run as ruling CA wants it depends on.
+
+- (1) S2: the merge run's list gains the theme run's rules on recording every query it runs with the count the tool returned, and on writing each entry it adds from the record it confirmed. They trace to academic-paper step 5's merge prompt (HONESTY: "every query you run is recorded with tool, date and the count the tool actually returned; never estimate a count"; "its identifier is copied from that record") and to ADR 0040's part in force.
+- (2) S3: the theme run's list gains a rule that its report names each source it left out with its reason, a source left out to hold its target among them, and each lead it names for the merge run. It traces to academic-paper step 5's theme prompt ("a list of excluded-at-full-text sources with reasons"; FINAL REPLY "anything you could not do and why").
+- Options: (a) both taken into repair round 1. Pro: without them the merge run's additions carry estimated counts and entries written from memory, and a theme run that hands nothing on leaves the merge run nothing to assess, as at rc.12. Con: the step's text grows past its brief's items. (b) Booked as a later step. Con: rc.13 would test a merge run whose inputs and records are not academic-paper's.
+- Recommendation: (a). The lazy option was (b).
+
+Taken: (a)
+Booked: `.scratch/5-paper/agents/reviews/5.M-refuter.md` (to be closed under "Closed" after the round)
+Builds on it: step 5.M, repair round 1

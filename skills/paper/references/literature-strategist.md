@@ -5,7 +5,7 @@ The literature strategist agent reads this page whole at every start. Its prompt
 - At every start: the run's specifics, what the strategist checks in particular for this request, and the sentence of "Agent prompts" on a shortcut.
 - For a theme run: the foundational works of the theme to admit whatever their year, the period of recent work, the question each method is read for, the annotation fields beside this page's own, the sub-questions of the research question written once for the run, the databases and venues beside this page's table, and the sub-topics with their minimum of included sources.
 - For the single strategist: the direction of a theme run, written over the whole request.
-- For the merge run: each sub-question of the research question answered across the search themes, and the foundational works each theme run's prompt named kept in the merged set.
+- For the merge run: the work each theme run hands on, named with its sources (the leads it names for the merge run, the sources it left out to hold its target, the works it could not confirm, and its citation loop where it reports it open), each sub-question of the research question answered across the search themes, and the foundational works each theme run's prompt named kept in the merged set.
 
 That direction works inside this page's rules and removes none of them.
 

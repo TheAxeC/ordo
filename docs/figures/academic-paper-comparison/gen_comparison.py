@@ -397,7 +397,9 @@ AP_TAG = "[The academic-paper strategist]"
 AP_NOTE = (
     '"[The academic-paper strategist]" is the ruling of plan 5 that makes the literature '
     "strategist academic-paper's page and its search the run academic-paper's own "
-    "lit-review made: the theme runs, the identifier check and the merge run."
+    "lit-review made: the theme runs and the identifier check. "
+    '"[CA]" is the ruling Open item CA of plan 5, which makes the merge run do the work the '
+    "theme runs hand on."
 )
 SEARCH_ROUNDS = "search rounds: end at any 3 of 5 conditions, or after 4 rounds when none holds"
 CONFIRMED = f"each included source confirmed by a live lookup, an unconfirmed one excluded and listed {AP_TAG}"
@@ -425,8 +427,9 @@ def theme_search_nodes() -> tuple[gf.Node, ...]:
         ),
         N(
             "TM",
-            "Literature strategist, merge run, fresh: the duplicates removed, the report "
-            f"over the merged set, the gates computed; review.md, refs.bib {AP_TAG}",
+            "Literature strategist, merge run, fresh: the duplicates removed, each source the "
+            "theme runs hand on assessed, the searches where the search themes meet, the report "
+            "over the merged set, the gates computed; review.md, refs.bib [CA]",
             "ruled_maybe",
         ),
     )
@@ -446,7 +449,7 @@ def theme_search_edges(single: str, after: str, check: str = "") -> tuple[gf.Edg
         E("T1", "T1", SEARCH_ROUNDS, "back"),
         E("T2", "T2", SEARCH_ROUNDS, "back"),
         *to_merge,
-        E("TM", "TM", "a quality gate fails: a search by the failure handling strategies", "back"),
+        E("TM", "TM", gf.MERGE_LOOP, "back"),
         E("TM", after),
     )
 

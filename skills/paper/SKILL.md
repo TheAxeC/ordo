@@ -153,11 +153,14 @@ The five scripts are run as `python3 '<this skill's folder>/templates/<script>'`
      - The session writes the search themes in `config.md` under "Decisions", numbered in order, with the reason for the division. The division is a choice of the session and no stop.
      - Each search theme has its name, its scope and its target range, written "Target: <a> to <b> included sources".
      - The scope names the method areas of the request the search theme covers and the literatures the request names in them.
+     - For each step or method the request names that the search theme covers, the scope also names the work that measures how it fails.
+     - For each such step or method, the scope also names the methods that stand in its place or build on it for the same question.
      - The scope also names each neighbouring area that another search theme covers: a source of that area is included only when it is central to this search theme's own scope, and is flagged as an overlap.
      - With one search theme, the session starts one strategist as the mode's item says, the single strategist of "The prompts of a literature search" (Agent prompts), and no merge run follows.
      - With two search themes or more, the session starts one strategist per search theme, all at once: the theme runs. Each is given what the mode's item gives the strategist, and its search theme with its number `<k>`, its scope and its target range. Its prompt carries the rules and the additions of a theme run.
      - Each theme run writes `review-theme-<k>.md` and `refs-theme-<k>.bib` in the run folder, and no `review.md`, `refs.bib` or patch.
-     - When every theme run has ended, the session starts one more strategist, fresh: the merge run. In lit-review mode the identifier check (lit-review item 2) runs first. The merge run is given `config.md`, every `review-theme-<k>.md` and `refs-theme-<k>.bib`, in lit-review mode `checks.md` with the identifier check, the sources given and, where the mode's item gives one, the `.bib` with its manifest (Steps 9). Its prompt carries the rules and the additions of the merge run.
+     - When every theme run has ended, the session reads each theme run's final message and its `review-theme-<k>.md` whole, for the work the theme run hands on to the merge run ("The prompts of a literature search").
+     - The session then starts one more strategist, fresh: the merge run. In lit-review mode the identifier check (lit-review item 2) runs first. The merge run is given `config.md`, every `review-theme-<k>.md` and `refs-theme-<k>.bib`, in lit-review mode `checks.md` with the identifier check, the sources given and, where the mode's item gives one, the `.bib` with its manifest (Steps 9). Its prompt carries the rules and the additions of the merge run.
      - The merge run writes the files the mode's item names for the strategist: `review.md`, `refs.bib`, the files of "Reading a given source list" of its page for a given list, and, where a manifest is given, the patch with the mode's id.
    - Right after the start, read the agent's id and the model the runner served it, from the runner's record of the agent as the `plan-orchestration` skill's "Launching a builder" says.
    - A served model of the family of the agent's own model goes on, a newer version than the identifier of Steps 4 included. The family is opus for a role and sonnet for the formatter, and a model is of a family when its identifier names it, as `claude-opus-5-6` names opus.
@@ -526,7 +529,7 @@ Stops this mode can reach: the mode to run (only for a plain request), an unfini
    - Done when `review.md` and `refs.bib` exist and the strategist has ended after reading `checks.md`.
 4. Raise the stop "The sources' review" as item 2 of full mode says.
    - Done when the user has gone on.
-5. Run the identifier check of item 2 again, before the patch, on two kinds of entry of `refs.bib`: each entry the strategist corrected after a failing identifier, and each entry added at the sources' review. Write each run into `checks.md`.
+5. Run the identifier check of item 2 again, before the patch, on three kinds of entry of `refs.bib`: each entry the strategist corrected after a failing identifier, each entry the merge run added, and each entry added at the sources' review. Write each run into `checks.md`.
    - Under strict, an identifier that still provably fails is the stop "A reference that cannot be confirmed".
    - Under mark-only, each identifier that fails is named in the final message (Steps 14).
    - Done when `checks.md` holds a run for each such entry that has a DOI, an arXiv ID or a `url`, and under strict no entry is left failing.
@@ -849,7 +852,7 @@ The prompt of a theme run carries these rules:
 - The search theme's scope, as `config.md` records it under "Decisions".
 - The 4-layer search of its page, made with WebSearch and WebFetch, and the stopping rules of its page, naming the conditions met.
 - The screening of its page, Phase A and Phase B with the decision tree, under the domain evidence profile of `config.md`, with the count at each stage.
-- Every query actually run, with the count it returned. A count not observed is never written, and a tool that returns no count is recorded as returning none.
+- Every query actually run, with the tool, the date and the count the tool returned. A count not observed is never written, and a tool that returns no count is recorded as returning none.
 - The target range of its search theme: "Target <a> to <b> included sources for this theme. Quality over quantity."
 - Every included source confirmed to exist by a live lookup in the run (its landing page, the resolution of its DOI at `https://doi.org/<doi>`, its arXiv abstract page or its official proceedings page), with its DOI or arXiv ID recorded exactly. No source is taken from memory without that lookup.
 - A source it cannot confirm is excluded and listed under "unconfirmed, excluded".
@@ -857,7 +860,9 @@ The prompt of a theme run carries these rules:
 - `refs-theme-<k>.bib` with one entry per included source, every field taken from the confirmed landing page, and the field `doi`, or `eprint` with `archivePrefix`, filled.
 - A section "theme notes": what the theme's literature shows as a whole, and what was looked for and not found, which the merge run uses for the gaps.
 - No literature matrix across the themes, no research gaps, no skew advisory and no table of recommended sources, which the merge run writes over every theme.
-- `review-theme-<k>.md` holds the search strategy, the queries run, the screening counts, the annotated bibliography, the list "unconfirmed, excluded" and the theme notes.
+- `review-theme-<k>.md` names each source the theme run left out, with its reason, a source left out to hold its target among them.
+- `review-theme-<k>.md` names each lead the theme run hands the merge run: a source of a neighbouring area it did not include, and a search it could not run or finish, with the reason.
+- `review-theme-<k>.md` also holds the search strategy, the queries run, the screening counts, the annotated bibliography, the list "unconfirmed, excluded" and the theme notes.
 
 These rules are the minimum. To a theme run's prompt the session adds, from the request and the search theme, in its own words:
 
@@ -876,21 +881,48 @@ The prompt of the merge run carries these rules:
 - In lit-review mode each title the identifier check prints that differs from its entry's is resolved, with the version-of-record title and venue decided for `refs.bib` and each decision recorded (lit-review item 3).
 - The report is written in the output format of its page over the merged set.
 - In lit-review mode the report adds a section "Synthesis Analysis" that answers the research question across the search themes from the literature matrix. Each claim cites included sources by key, and the section holds no introduction, outline or abstract.
-- The quality gates of its page run over the merged set with computed numbers. Where a gate fails, the merge run applies the failure handling strategies of its page itself, such as a search for a weak theme, with a live lookup of each source it adds, and then reports the gate's result. It makes no other search.
+- Every source a theme run hands on is assessed on its merits, with a live lookup as a theme run makes one.
+- A source handed on is a lead the theme run names for the merge run, a source it left out to hold its target, a work it could not confirm, or a work its open citation loop leaves.
+- The merged set has no target per search theme, so a source a theme run left out to hold its target is judged as any other source handed on.
+- Each source handed on is included or excluded, with its reason.
+- The report lists each source handed on with its decision and its reason.
+- Where a theme run reports its citation loop open, the merge run runs one backward-chaining round over the merged core set.
+- Where a theme run reports its citation loop open, the merge run also runs one forward-tracking round over the last three years.
+- The merge run screens what each chaining round returns.
+- After those rounds the report names the merged core set they chained from and says whether the citation loop closes.
+- The merge run searches the intersections of the search themes that the research question joins, and screens what those searches return.
+- Every query the merge run actually runs is recorded as the theme run's rule on queries says.
+- Each source the merge run adds is confirmed by a live lookup, with its DOI or arXiv ID recorded exactly as the page it read gives it.
+- Each entry the merge run adds to `refs.bib` has every field taken from the record it confirmed.
+- The report names each source the merge run adds as added.
+- The quality gates of its page run over the merged set with computed numbers, after the work of the rules above. Where a gate fails, the merge run applies the failure handling strategies of its page itself, such as a search for a weak theme, with a live lookup of each source it adds, and then reports the gate's result.
 - `refs.bib` holds one entry per included work, with no character outside ASCII (an accent as its LaTeX command), its `doi` or `eprint` and `archivePrefix` fields kept, and a `url` for an entry with neither.
 - Every key the report cites stands in `refs.bib`, and every entry of `refs.bib` is cited in the report.
 - Given the `.bib` with its manifest, the patch that adds, after the `.bib`'s last block, each entry of `refs.bib` whose key, DOI or arXiv ID the `.bib` does not hold.
 
-To the merge run's prompt the session adds the run's specifics and what the merge checks in particular for this request:
+To the merge run's prompt the session adds the run's specifics, the work each theme run hands on and what the merge checks in particular for this request:
 
+- The work each theme run hands on, named with its sources from the session's reading of the theme runs (Steps 8).
+- That work is the leads it names for the merge run, the sources it left out to hold its target, the works it could not confirm, and its citation loop where it reports it open.
 - Each sub-question the research question asks is answered across the search themes.
 - The foundational works each theme run's prompt named are kept in the merged set.
 
-The single strategist of a search with one search theme follows its page whole over the whole request. It writes `review.md` in the output format of its page, with no theme notes, and `refs.bib` in place of `refs-theme-<k>.bib`. Its prompt carries the rules of the theme run's list and of the merge run's list, with four left out:
+The single strategist of a search with one search theme follows its page whole over the whole request. It writes `review.md` in the output format of its page, with no theme notes, and `refs.bib` in place of `refs-theme-<k>.bib`. Its prompt carries the rules of the theme run's list and of the merge run's list, with fifteen left out:
 - the theme notes;
 - the rule of no matrix, gaps, skew advisory or recommended sources;
+- the sources left out that `review-theme-<k>.md` names;
+- the leads that `review-theme-<k>.md` names;
 - the contents of `review-theme-<k>.md`;
-- the removal of duplicates across search themes.
+- the removal of duplicates across search themes;
+- the assessment of every source a theme run hands on;
+- the merged set with no target per search theme;
+- the decision with its reason on each source handed on;
+- the report's list of the sources handed on;
+- the backward-chaining round where a theme run reports its citation loop open, its page's stopping rule on the citation loop staying its own;
+- the forward-tracking round where a theme run reports its citation loop open;
+- the screening of what the chaining rounds return;
+- the report of the merged core set and of whether that citation loop closes;
+- the search of the intersections of the search themes.
 
 The session adds to the single strategist's prompt the additions of a theme run, written over the whole request, its sub-topics being those of the whole request.
 
