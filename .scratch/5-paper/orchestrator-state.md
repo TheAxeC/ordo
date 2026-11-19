@@ -49,15 +49,11 @@ dispatch:                    # or the block /spec writes (a list when .agents/pl
 
 A finding that is neither closed in the repair rounds nor fixed at landing is an open item here, and goes where `plan-orchestration`'s "What earns a step of its own" says; what is settled belongs in the closed list.
 
-- Open item CC (2026-11-19), step 5.N, a script no ruling approved: the builder of step 5.N wrote `b5n/longsent.py` in the session's scratch folder, which lists each sentence of more than 20 words that the step adds or changes, and its report's check 5 rests on that list. The round-2 review (`agents/reviews/5.N-refuter.md`, "Repair round 2, refuted", Spec 1 and 2) found the script unapproved, and found that the builder read the prose standard's "under roughly 20 words unless the mechanism needs more" (`skills/repo-setup/templates/docs/dev/prose-standard.md:64`) as up to 25 words, which leaves 91 sentences of 21 to 25 words and 46 over 25 in the landed text, among them `skills/paper/SKILL.md:174`. Nothing the script produced is used until you rule.
-  - (a) Approve the script as a counting helper, since it computes a fact (the words of each sentence), and have each sentence it lists read and split where its mechanism does not need the length, as a step of this plan on top of 5.N. Pro: the length rule is met over the whole lit-review path, and the list that finds the sentences is exact. Con: one more step, about the size of a repair round.
-  - (b) Approve the script and accept up to 25 words as "roughly 20". Pro: nothing more to do. Con: 91 sentences stay longer than the standard asks without a reason the mechanism gives; this is the lazy option.
-  - (c) Drop the script and its list, and find the long sentences by reading the changed text, then split them as in (a). Pro: no script outside a ruling. Con: the same work as (a) with a less exact way to find the sentences.
-  - Recommendation: (a). The count is a fact a script computes exactly, and the rule is met by reading each listed sentence.
-
+none
 
 ## Closed items (the log of what was raised and how it ended; no report carries it)
 
+- 2026-11-19: Open item CC, the unapproved helper `b5n/longsent.py` and the reading of "roughly 20": ruled (b) by the user, booked in plan.md's Rulings; no step added.
 - 2026-11-19: Open item CB, `lookup.py` in the plan's goal and gate: ruled (a) by the user, booked in plan.md's Rulings; step 5.N's line tagged (ruling CB).
 - 2026-11-19: Open item CA: ruled (a) by the user, booked in plan.md's Rulings; step 5.M booked.
 
@@ -166,7 +162,7 @@ A finding that is neither closed in the repair rounds nor fixed at landing is an
 - 2026-11-19. The lit-review comparison on `v8.4.0-rc.13`, on the user's go: the `paper` side runs in `gate5g/lit-review-rc13` of the session's scratchpad (a clone of input commit e5fc1da), with step 5's request and answer and the cache and temporary folders under `gate5g/`. The run was stopped on 2026-11-19 before it finished, on the user's word, with no judges and no verdict.
 - 2026-11-19. `/spec 5 5.N` ran its brief check (`agents/reviews/5.N-brief-check.md`) and stopped on open item CB.
 - 2026-11-19. The user ruled open item CB (a).
-- 2026-11-19. Step 5.N, the twentieth of 21 steps, paper's lit-review rewritten from academic-paper 3.2.0, landed and booked in `plan.md` ("Step 5.N, paper's lit-review rewritten from academic-paper 3.2.0"); the landing report is `agents/reviews/5.N-landing.md`. Open item CC waits on the user.
-- Next: open item CC; then the tag and pin of the next release candidate and the lit-review comparison on it, on the user's go; the other modes' steps on the user's go.
+- 2026-11-19. Step 5.N, the twentieth of 21 steps, paper's lit-review rewritten from academic-paper 3.2.0, landed and booked in `plan.md` ("Step 5.N, paper's lit-review rewritten from academic-paper 3.2.0"); the landing report is `agents/reviews/5.N-landing.md`. Open item CC ruled (b) by the user.
+- Next: the tag and pin of the next release candidate and the lit-review comparison on it, on the user's go; the other modes' steps on the user's go.
 - The two check runs of the rebuilt skill (revision, copy `cr4b`, session ce6db165-ecf5-4128-96cc-b05d5b5b37d3; full, copy `fr5`, session 0b6daf08-9d97-45d9-9ecd-f743566be6fd) are stopped, and resume only when Axel asks.
 - Step 5.A's check, on Axel's go (2026-11-16): `v8.4.0-rc.4` tagged on f3531a7 and pinned; one `curl` per index answered 200. The lit-review `paper` side ran in `gate5a/lit-review-1` of the session's scratchpad (session 5b815d8b-6616-4994-af1b-61091e2f57c2, claude-opus-5-5, 111 min, $16.80 by `total_cost_usd`): 81 entries, every annotation "abstract not read", 2 entries from 2022 or later (step 5's run: none unread, 44 from 2022 or later). Not judged. The revision, full and disclosure sides have not started.
