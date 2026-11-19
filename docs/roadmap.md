@@ -153,13 +153,6 @@ Status: `[ ]` open, `[~]` in progress, `[x]` done (its gate ran and passed, with
 - Gate: one real run on a topic you name over at least two sessions, the second reading the first's records and scheduling its retrieval practice, reviewed by you; a blind comparison as `docs/dev/blind-comparison.md` says against mattpocock's `teach` on the same topic, wins or ties; the plan's ledger lists every deviation from the design of mattpocock's `teach`, each with its reason and the ruling that approved it, and nothing else differs, checked by reading both skills.
 - Waits on: 2.D, for the layout rules and the blind-comparison protocol.
 
-## 22.A Blind comparisons of the plan skills
-
-- Status: [ ]
-- Goal: `refute`, `plan`, `plan-orchestration` and `session-retro` each hold up against the skill that does the same job elsewhere, compared blind; a skill that loses is changed until it wins or ties.
-- Gate: four blind comparisons as `docs/dev/blind-comparison.md` says, each a win or a tie by your call: `refute` against mattpocock's `code-review` on step 9a of plan 2.E (its brief `.scratch/2-e-grill/agents/briefs/9a.md` and the diff `.scratch/2-e-grill/agents/reviews/9a-round-0.diff`); `plan` against superpowers' `writing-plans` on entry 3 on the tree at 7e984dd; `plan-orchestration` against superpowers' `subagent-driven-development` on the plan of entry 21 as `/plan` opened it, each side on its own copy of the tree at the opening commit; `session-retro` against mattpocock's `retro` on the sessions of plan 2.E.
-- Waits on: 2.E, for step 14b's judge's input; 2.H, for `session-retro`; 21, for the plan `plan-orchestration` runs on.
-
 ## 23. Pruning pass
 
 - Status: [ ]
@@ -202,6 +195,7 @@ Status: `[ ]` open, `[~]` in progress, `[x]` done (its gate ran and passed, with
 
 <!-- - <n>. <title>: <the reason> -->
 
+- 22.A. Blind comparisons of the plan skills: dropped, since the plan skills are shown by real use, having built oculus and ordo, so blind comparisons of them add nothing the user needs.
 - 15.A. Rebuild-later rows: dropped, since entry 5 builds its 8 rows for paper and entry 6 its 3 rows for paper-review, so each row is built in the plan that rebuilds its skill, before that skill's comparison with its source.
 - 9. literature: dropped, since it rebuilt deep-research, which the user does not use, and a run took about four hours; its search moves to entry 5, from academic-paper's lit-review mode and literature strategist, with `lookup.py` and its test as at 0074728.
 - 3.A. Landing checks the brief and the review: dropped, since it is a script that polices the orchestrator: whether a step is ready to land is judged by reading its reports (`/land`, the Stops row "The step not ready"), and under the rule "scripts compute facts; judgment is read" no script gates that judgment.
