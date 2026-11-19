@@ -34,6 +34,13 @@ Status: `[ ]` open, `[~]` in progress, `[x]` done (its gate ran and passed, with
 - Gate: `utils/pin.test.sh` passes with a case for a tag in the grouped layout and one for a tag in the layout before it; `utils/pin.sh <tag>` on a tag of this change links each of the 16 skills by its name, and `utils/pin.sh` with no tag then reports every link resolving to a folder that holds `SKILL.md`; `npx skills add <checkout of the tag> --list` lists the 16 skills; the README's copy loop, run from a clone of the tag into a scratch folder, leaves the 16 skill folders, each with its `SKILL.md`; `git ls-files -z -- ':!.scratch' | xargs -0 perl -ne 'print "$ARGV:$.: $_" if m{(?<![\w./~\$-])skills/(?!(orchestration|ordo|code|academic)/)[a-z]}; close ARGV if eof'`, which prints each line outside the ledgers that names a folder under `skills/` outside the four groups, prints nothing; the verify list of `docs/dev/building.md` passes on main.
 - Waits on: 5, whose step 4 rewrites `skills/paper/` and the coverage rows that name it.
 
+## 5.B plan.yaml found by a search order
+
+- Status: [ ]
+- Goal: The skills find `plan.yaml` by a search order: the folder named in the call, then `.scratch/`, then `docs/`, then `.agents/`, each of the last three at the repository root, and the first file found is the one used. Every path in a `plan.yaml` is read relative to the folder that holds it; a `plan.yaml` that names no `worktree_root` uses `.agents/worktrees` at the repository root; `land.sh` and `check_config.py` are given the path of the file the skill found and open no other.
+- Gate: `sh skills/ordo-init/templates/check_config.test.sh` passes with a case for a `plan.yaml` in a named folder, in `.scratch/`, in `docs/` and in `.agents/`, each alone, a case with two of them present in which the earlier in the order is read, and a case in which a nested file's relative `ledger_root` resolves under that file's folder; `sh skills/land/templates/land.test.sh` passes with a case in which the `plan.yaml` sits in a project folder, the landing reads its `ledger_root` from that file and the step's worktree is under the repository root's `.agents/worktrees`; one real run on a scratch repository whose only `plan.yaml` sits in a project folder, in which `/plan` opens a plan whose ledger is under that folder and `/land` lands one step of it, reviewed by you; every line `git grep -n -F '.agents/plan.yaml' -- ':!.scratch'` prints, read by you, states the search order or names the file it found; the verify list of `docs/dev/building.md` passes on main.
+- Waits on: 5.A, which moves every skill folder whose text this entry changes.
+
 ## 6. paper-review
 
 - Status: [ ]
