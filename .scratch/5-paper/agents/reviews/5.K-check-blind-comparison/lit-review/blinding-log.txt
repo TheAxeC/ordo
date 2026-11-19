@@ -1,0 +1,75 @@
+text: final-message.md: 1 x /paper-runs/lit-review-2026-11-19// -> 'run/'
+text: final-message.md: 3 x /review-theme-/ -> 'theme-report-'
+text: final-message.md: 2 x /refs-theme-/ -> 'theme-refs-'
+text: final-message.md: 4 x /config\.md/ -> 'settings.md'
+text: final-message.md: 1 x /lookup\.py/ -> 'the lookup script'
+text: final-message.md: 1 x /ordo-medium/ -> 'an agent at medium effort'
+text: final-message.md: 1 x /search theme/ -> 'theme'
+text: final-message.md: 1 x /[Ll]iterature strategists/ -> 'search agents'
+text: final-message.md: 1 x /strategist/ -> 'search agent'
+text: final-message.md: 1 x /lit-review/ -> 'literature review'
+read as UTF-8: run/checks.md
+text: run/checks.md: 163 x /'?/Users/axelfaes/\.claude/skills/paper/templates/lookup\.py'?/ -> 'lookup'
+text: run/checks.md: 4 x /refs-theme-/ -> 'theme-refs-'
+text: run/checks.md: 1 x /lookup\.py/ -> 'the lookup script'
+text: run/checks.md: 1 x /the strategist/ -> 'the search agent'
+text: run/checks.md: 1 x /lit-review/ -> 'literature review'
+path: run/config.md -> run/settings.md
+text: run/settings.md: 1 x /- The roles run as the effort agent `ordo-medium` \(listed by the runner; `printenv CLAUDE_CODE_EFFORT_LEVEL` exited 1\)\. Opus identifier from the runner's model list: `claude-opus-5-5`\./ -> "- Model of the role agents: opus, identifier `claude-opus-5-5` from the runner's model list; agent effort medium."
+text: run/settings.md: 1 x /- Prose standard: `/Users/axelfaes/\.claude/skills/repo-setup/templates/docs/dev/prose-standard\.md` \(the repository has no `docs/dev/prose-standard\.md`\)\./ -> '- Prose standard: the default prose standard (the repository has no `docs/dev/prose-standard.md`).'
+text: run/settings.md: 1 x /The skill admits such an entry/ -> 'The instructions admit such an entry'
+text: run/settings.md: 1 x /an identifier rule the skill does not impose/ -> 'an identifier rule the instructions do not impose'
+text: run/settings.md: 1 x /paper-runs// -> 'run/'
+text: run/settings.md: 2 x /config\.md/ -> 'settings.md'
+text: run/settings.md: 1 x /ordo-medium/ -> 'an agent at medium effort'
+text: run/settings.md: 1 x /[Ss]earch themes/ -> 'themes'
+text: run/settings.md: 1 x /\blit-review mode\b/ -> 'literature review'
+text: run/settings.md: 1 x /\| Mode \| lit-review \|/ -> '| Task | literature review |'
+text: run/settings.md: 2 x /lit-review/ -> 'literature review'
+text: run/final.md: 1 x /paper-runs/lit-review-2026-11-19// -> 'run/'
+text: run/final.md: 3 x /review-theme-/ -> 'theme-report-'
+text: run/final.md: 2 x /refs-theme-/ -> 'theme-refs-'
+text: run/final.md: 4 x /config\.md/ -> 'settings.md'
+text: run/final.md: 1 x /lookup\.py/ -> 'the lookup script'
+text: run/final.md: 1 x /ordo-medium/ -> 'an agent at medium effort'
+text: run/final.md: 1 x /search theme/ -> 'theme'
+text: run/final.md: 1 x /[Ll]iterature strategists/ -> 'search agents'
+text: run/final.md: 1 x /strategist/ -> 'search agent'
+text: run/final.md: 1 x /lit-review/ -> 'literature review'
+path: run/refs-theme-1.bib -> run/theme-refs-1.bib
+path: run/refs-theme-2.bib -> run/theme-refs-2.bib
+path: run/refs-theme-3.bib -> run/theme-refs-3.bib
+text: run/theme-refs-3.bib: 1 x /Search theme/ -> 'Theme'
+path: run/refs-theme-4.bib -> run/theme-refs-4.bib
+text: run/refs.bib: 1 x /the lit-review/ -> 'the literature review'
+text: run/refs.bib: 1 x /lit-review/ -> 'literature review'
+path: run/review-theme-1.md -> run/theme-report-1.md
+read as UTF-8: run/theme-report-1.md
+text: run/theme-report-1.md: 3 x /config\.md/ -> 'settings.md'
+text: run/theme-report-1.md: 1 x /the strategist/ -> 'the search agent'
+text: run/theme-report-1.md: 1 x /the lit-review/ -> 'the literature review'
+text: run/theme-report-1.md: 1 x /lit-review/ -> 'literature review'
+path: run/review-theme-2.md -> run/theme-report-2.md
+read as UTF-8: run/theme-report-2.md
+text: run/theme-report-2.md: 1 x /`/paper lit-review`/ -> 'this literature review'
+text: run/theme-report-2.md: 3 x /config\.md/ -> 'settings.md'
+path: run/review-theme-3.md -> run/theme-report-3.md
+read as UTF-8: run/theme-report-3.md
+text: run/theme-report-3.md: 2 x /config\.md/ -> 'settings.md'
+text: run/theme-report-3.md: 1 x /search theme/ -> 'theme'
+text: run/theme-report-3.md: 3 x /the strategist/ -> 'the search agent'
+path: run/review-theme-4.md -> run/theme-report-4.md
+text: run/theme-report-4.md: 3 x /config\.md/ -> 'settings.md'
+read as UTF-8: run/review.md
+text: run/review.md: 5 x /config\.md/ -> 'settings.md'
+text: run/review.md: 1 x /the lit-review/ -> 'the literature review'
+text: run/review.md: 1 x /lit-review/ -> 'literature review'
+== paper
+text: source-022.txt: 1 x (?^:/Users/axelfaes/\.claude/projects/\S*)
+text: source-031.txt: 8 x (?^:/Users/axelfaes/)
+text: source-058.txt: 1 x (?^:/private/tmp/claude-502/-private-tmp-claude-502\S*)
+text: source-058.txt: 1 x (?^:/private/tmp/claude-502/[^\s`'"]*?/gate5e/lit-review-rc11)
+text: source-061.txt: 8 x (?^:/Users/axelfaes/)
+text: source-098.txt: 4 x (?^:/Users/axelfaes/)
+text: source-109.txt: 12 x (?^:/Users/axelfaes/)
+text: source-116.txt: 1 x (?^:/Users/axelfaes/\.claude/projects/\S*)
