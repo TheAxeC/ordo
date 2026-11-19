@@ -3,7 +3,7 @@ stage: exploring
 tier: personal
 lead: [axel-faes]
 status:
-  chips: []
+  chips: [active-project]
 eli5: "A set of agent skills for Claude Code that turn a multi-step change into a plan: each step gets a written brief, is built in its own git worktree, is reviewed by a fresh reviewer, and reaches the main branch only after its checks pass."
 next: "Continuing with 2.F"
 links: []
