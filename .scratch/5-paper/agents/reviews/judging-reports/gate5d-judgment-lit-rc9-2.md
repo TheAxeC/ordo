@@ -19,14 +19,14 @@
 ## Critical failures of A
 
 1. **Lesion segmentation is barely covered, though the request names it.** A grep of `run/refs.bib` for nnU-Net, U-Net, VoxelMorph, LDDMM, N-PLS and Chizat finds nothing.
-   - In `review.md` §7 P3 (line 1842), segmentation gets one sentence citing Gillies_2016 ("call segmentation its most critical step").
+   - In `review.md` <section sign>7 P3 (line 1842), segmentation gets one sentence citing Gillies_2016 ("call segmentation its most critical step").
    - The matrix shows onSEG for only 7 sources (line 1777).
 2. **Tensor PLS is thin.** HOPLS (`Qibin_Zhao_2013`) is the only PLS source. There is no N-PLS, envelope PLS or sparse higher-order PLS, though "multilinear and tensor partial least squares" is the first topic named.
 3. **Transport tools are thin.**
    - Missing: unbalanced transport (its only "unbalanced" entry is the application paper Qahqaie_2026), Sinkhorn divergences, and GW dictionaries (Vincent-Cuaz 2021).
    - Registration is represented by AVANTS_2008 alone (line 1836).
 4. **The synthesis is short and partly padded.**
-   - §7 is about ten paragraphs (lines 1822 to 1846).
+   - <section sign>7 is about ten paragraphs (lines 1822 to 1846).
    - The set spends many entries on histopathology MIL (DSMIL, DTFD-MIL, ICMIL, Hou_2016, Chikontwe_2020) and on EHR tensors, which are tangential to unaligned spatial modes.
 5. **The bibliography has defects A did not fix** (`final-message.md` lines 46 to 49 and `review.md` line 1876):
    - `Liu_2023a` has an empty author.
@@ -58,7 +58,7 @@
   A misses or barely touches several of these (A failures 1 to 3).
 - **Evidence a researcher can use.** B reports more same-cohort quantitative evidence on the registration question:
   - Dong 2024, AUC 0.63, 0.81 and 0.88 (line 362);
-  - Bonkhoff 2024, cross-dataset R² (line 362);
+  - Bonkhoff 2024, cross-dataset R<superscript two> (line 362);
   - Sperber 2023, lesion size against spatial features (line 362);
   - the total-volume baseline (line 370).
 

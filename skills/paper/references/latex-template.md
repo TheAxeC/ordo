@@ -128,7 +128,12 @@ A paper in APA 7th uses the `apa7` class in place of `article`. The class sets t
 | Text alignment | Ragged right, so the justification override above is needed | Justified |
 
 - The `apa7` class sets the text ragged right in `man` mode. The block that loads `ragged2e` and `etoolbox` justifies it again, and the draft keeps the block.
-- A manuscript that uses `apa7` compiles with the engine of SKILL.md, Steps 11, which is the first that applies of the engine a `% !TEX program =` line names, the engine the class table above gives for the class, the engine the venue's template requires, and XeLaTeX.
+- A manuscript that uses `apa7` compiles with the engine of SKILL.md, Steps 11. That is the first that applies of these:
+  - the engine a `% !TEX program =` line names;
+  - the engine the class table above gives for the class;
+  - the engine the venue's template requires;
+  - pdfLaTeX in lit-review mode;
+  - XeLaTeX.
 
 ## The width of a table column
 

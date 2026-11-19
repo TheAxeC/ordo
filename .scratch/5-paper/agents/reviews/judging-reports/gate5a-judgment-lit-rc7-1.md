@@ -15,7 +15,7 @@
 
 1. B leaves out several topics the request covers:
    - registration of images that contain lesions, and lesion-location predictors (cost-function masking, voxel-based lesion-symptom mapping, stroke cross-dataset studies);
-   - unbalanced transport (Chizat, Séjourné), which matters when lesion sets differ in total mass;
+   - unbalanced transport (Chizat, S<latin small letter e with acute>journ<latin small letter e with acute>), which matters when lesion sets differ in total mass;
    - theory on what permutation-invariant set functions can represent (Wagstaff and others);
    - the PyRadiomics and elastix papers, which B itself says were not collected (`review.md:110`).
 2. The search stopped before the reference trail was finished: condition 4, "Citation loop closes: does not hold" (`review.md:110`).

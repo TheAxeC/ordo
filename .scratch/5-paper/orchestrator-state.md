@@ -43,26 +43,17 @@ repair_reviewer: claude:sonnet  # the model the run of /refute over a repair rou
 
 ```yaml
 dispatch:                    # or the block /spec writes (a list when .agents/plan.yaml's workers_at_once is above 1). /spec writes the entry at the end of its preflight with step and `landing: preparing`, writes `"running: <agent id>"` into brief_check while the brief-check agent runs, base after its preparation commit and worktree before it creates the worktree, and fills the entry at its Steps 9, so that it holds: step, executor, worker, worktree (<worktree_root>/<slug>-<step>), base, launched, report (the builder's report, at the path the brief names), brief_check (the brief check's report path, with the agent's id, its served model, tokens, tool uses and time, or `none, a small text step` for a small text step), landing, round. `landing` is `preparing` while /spec runs, then `not-started`, `cherry-picking` while /land cherry-picks, and `backed-out` after a red line took the step back out of main. The orchestrator adds session_id, the builder's agent id followed by the model the runner served it (<agent id> (<served model>)), as soon as the builder is dispatched and its model read, builders_before (the agent id and served model of each builder it replaced, as <agent id> (<served model>, stopped) or <agent id> (<served model>, dead), one after another), builder_usage (the builder's tokens, tool uses and time from its completion notice) beside report when the builder's report is saved, and reviewer_report (the refuter report's path, with each reviewer's agent id, served model, tokens, tool uses and time, or, for a reviewer stopped for another model, its agent id, served model and stopped) at the review. A value that holds `: ` (brief_check while its agent runs, builder_usage after a repair round, reviewer_report after a run over a round) is written in double quotes, so the block stays valid YAML. A diagnosis agent has no key here: the session that starts it writes its id and role into plan.md's Agents section, as the diagnose skill's Rules say. A step dispatched while another in flight, of this plan or of another open plan, names a file its brief also names carries shared_paths: each shared file, the other step's plan and step, and why the merge at landing is simple, as plan-orchestration's "Two steps in flight" says; with no shared file the key is left out.
-- step: 5.N
-  executor: agent
-  worker: claude:opus
-  worktree: .agents/worktrees/5-paper-5.N
-  base: 376bf555b91a18ead267606b0fde7774b5cc08bd
-  launched: 2026-11-19
-  session_id: a1417bcb4e1dafb55 (claude-opus-5-5)
-  builder_usage: "324015 tokens, 217 tool uses, 32m 24s; round 1: 241168 tokens, 231 tool uses, 32m 7s"
-  report: .scratch/5-paper/agents/reviews/5.N-report.md
-  reviewer_report: ".scratch/5-paper/agents/reviews/5.N-refuter.md (a2ada325d876455a9, claude-opus-5-5, 342381 tokens, 117 tool uses, 15m 53s); over round 1: a10938585ff0e0a22, claude-sonnet-5-5, 321114 tokens, 171 tool uses, 19m 28s"
-  brief_check: .scratch/5-paper/agents/reviews/5.N-brief-check.md (a75f17e0ca361e63b, claude-opus-5-5, 196181 tokens, 65 tool uses, 12m 39s)
-  landing: not-started
-  round: 2
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled or, under `self_rule: on`, until the orchestrator closes it as `plan-orchestration`'s `references/self-rule.md`, "Closing an open item", says)
 
 A finding that is neither closed in the repair rounds nor fixed at landing is an open item here, and goes where `plan-orchestration`'s "What earns a step of its own" says; what is settled belongs in the closed list.
 
-none
+- Open item CC (2026-11-19), step 5.N, a script no ruling approved: the builder of step 5.N wrote `b5n/longsent.py` in the session's scratch folder, which lists each sentence of more than 20 words that the step adds or changes, and its report's check 5 rests on that list. The round-2 review (`agents/reviews/5.N-refuter.md`, "Repair round 2, refuted", Spec 1 and 2) found the script unapproved, and found that the builder read the prose standard's "under roughly 20 words unless the mechanism needs more" (`skills/repo-setup/templates/docs/dev/prose-standard.md:64`) as up to 25 words, which leaves 91 sentences of 21 to 25 words and 46 over 25 in the landed text, among them `skills/paper/SKILL.md:174`. Nothing the script produced is used until you rule.
+  - (a) Approve the script as a counting helper, since it computes a fact (the words of each sentence), and have each sentence it lists read and split where its mechanism does not need the length, as a step of this plan on top of 5.N. Pro: the length rule is met over the whole lit-review path, and the list that finds the sentences is exact. Con: one more step, about the size of a repair round.
+  - (b) Approve the script and accept up to 25 words as "roughly 20". Pro: nothing more to do. Con: 91 sentences stay longer than the standard asks without a reason the mechanism gives; this is the lazy option.
+  - (c) Drop the script and its list, and find the long sentences by reading the changed text, then split them as in (a). Pro: no script outside a ruling. Con: the same work as (a) with a less exact way to find the sentences.
+  - Recommendation: (a). The count is a fact a script computes exactly, and the rule is met by reading each listed sentence.
 
 
 ## Closed items (the log of what was raised and how it ended; no report carries it)
@@ -175,6 +166,7 @@ none
 - 2026-11-19. The lit-review comparison on `v8.4.0-rc.13`, on the user's go: the `paper` side runs in `gate5g/lit-review-rc13` of the session's scratchpad (a clone of input commit e5fc1da), with step 5's request and answer and the cache and temporary folders under `gate5g/`. The run was stopped on 2026-11-19 before it finished, on the user's word, with no judges and no verdict.
 - 2026-11-19. `/spec 5 5.N` ran its brief check (`agents/reviews/5.N-brief-check.md`) and stopped on open item CB.
 - 2026-11-19. The user ruled open item CB (a).
-- Next: `/spec 5 5.N` again, which writes the brief from the brief check's closures; step 5.N, paper's lit-review rewritten from academic-paper 3.2.0 (ruling The incremental change done properly), then the lit-review comparison on the next release candidate on the user's go; the full and revision comparisons on the user's go; step 6, the closing, only once every comparison of the gate wins.
+- 2026-11-19. Step 5.N, the twentieth of 21 steps, paper's lit-review rewritten from academic-paper 3.2.0, landed and booked in `plan.md` ("Step 5.N, paper's lit-review rewritten from academic-paper 3.2.0"); the landing report is `agents/reviews/5.N-landing.md`. Open item CC waits on the user.
+- Next: open item CC; then the tag and pin of the next release candidate and the lit-review comparison on it, on the user's go; the other modes' steps on the user's go.
 - The two check runs of the rebuilt skill (revision, copy `cr4b`, session ce6db165-ecf5-4128-96cc-b05d5b5b37d3; full, copy `fr5`, session 0b6daf08-9d97-45d9-9ecd-f743566be6fd) are stopped, and resume only when Axel asks.
 - Step 5.A's check, on Axel's go (2026-11-16): `v8.4.0-rc.4` tagged on f3531a7 and pinned; one `curl` per index answered 200. The lit-review `paper` side ran in `gate5a/lit-review-1` of the session's scratchpad (session 5b815d8b-6616-4994-af1b-61091e2f57c2, claude-opus-5-5, 111 min, $16.80 by `total_cost_usd`): 81 entries, every annotation "abstract not read", 2 entries from 2022 or later (step 5's run: none unread, 44 from 2022 or later). Not judged. The revision, full and disclosure sides have not started.

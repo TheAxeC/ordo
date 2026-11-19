@@ -1,6 +1,6 @@
 # 0030. Paper and writing name the model and effort of each agent and read no plan configuration
 
-Status: proposed; superseded by 0035 in the part that makes `ordo-medium` the only agent a role of `paper` or an agent of `writing` starts as; superseded by the ruling The briefs of academic-paper's run of plan 5 in the part that makes the roles of `paper` run as `ordo-medium`, now every role of `paper` on the default agent at `medium`, the part for `writing` standing
+Status: proposed; superseded by 0035 in the part that makes `ordo-medium` the only agent a role of `paper` or an agent of `writing` starts as; superseded by the ruling The briefs of academic-paper's run of plan 5 in the part that makes the roles of `paper` run as `ordo-medium`, now every role of `paper` on the default agent at `medium`, the part for `writing` standing; superseded by the ruling The incremental change done properly of plan 5 in the effort `medium` and the opus and sonnet models of the roles of `paper`, now every role on the default agent with the runner's defaults, the part for `writing` standing
 
 ## Context
 

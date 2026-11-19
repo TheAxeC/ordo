@@ -62,11 +62,9 @@ TARGET_WIDTH = 232
 STAGE_GAP = 16
 
 APNOTE = (
-    "Scripts and the session's own steps are left out. Not drawn because they are the same in "
-    "every mode of paper: at every agent start, a model of another family than the configured "
-    "one stops the run (D47), and a newer model of the same family goes on and is named in the "
-    "final message; at every patch, a structural patch, a patch that does not apply or a "
-    "failed script stops it (a ruling of plan 5)."
+    "Scripts and the session's own steps are left out. Not drawn because it is the same in "
+    "every mode of paper: at every patch, a structural patch, a patch that does not apply or a "
+    "failed script stops the run (a ruling of plan 5)."
 )
 
 DETAILED_LEGEND = (
@@ -435,10 +433,16 @@ def theme_search_nodes() -> tuple[gf.Node, ...]:
     )
 
 
-def theme_search_edges(single: str, after: str, check: str = "") -> tuple[gf.Edge, ...]:
-    """The arrows from the division to the single strategist or the theme runs and the merge run, through the identifier check when one is named."""
+def theme_search_edges(
+    single: str, after: str, check: str = "", check_end: str = ""
+) -> tuple[gf.Edge, ...]:
+    """The arrows from the division to the single strategist or the theme runs and the merge run.
+
+    With a check named, the theme runs go to the check's first box, and the merge run follows
+    its last box, check_end when it is named and the first box otherwise.
+    """
     to_merge = (
-        (E("T1", check), E("T2", check), E(check, "TM", "after theme runs"))
+        (E("T1", check), E("T2", check), E(check_end or check, "TM", "after theme runs"))
         if check
         else (E("T1", "TM"), E("T2", "TM"))
     )
@@ -458,7 +462,7 @@ def paper_full_detailed() -> gf.Graph:
     nodes = (
         N(
             "I",
-            "Intake: config.md, the interview [D24]; skip the search? DOI checking [O], "
+            "Intake agent: config.md, the interview [D24]; skip the search? DOI checking [O], "
             "venue policy [W], claims not to make [AI2], main.tex to replace [AD4], a "
             "file in words [AQ], research report, question, type [AV1, AV3, AV15]",
             "stop",
@@ -654,11 +658,6 @@ def paper_full_detailed() -> gf.Graph:
             "failed [C]",
             "stop",
         ),
-        N(
-            "MS",
-            "At every agent start: a model other than the configured one [D47]",
-            "stop",
-        ),
     )
     edges = (
         E("I", "I", "you change it, until you confirm [R]", "back"),
@@ -779,7 +778,7 @@ def paper_revision_detailed() -> gf.Graph:
     nodes = (
         N(
             "I",
-            "Intake: config.md, the run's permissions, DOI checking, the instructions "
+            "Intake agent: config.md, the run's permissions, DOI checking, the instructions "
             "[D24, Stops of paper, O, AA], the claims not to make [AI2], a file given in "
             "words [AQ], the evidence profile [AV2]",
             "stop",
@@ -926,11 +925,6 @@ def paper_revision_detailed() -> gf.Graph:
     )
     floating = (
         N("PS", "At every patch: a script failed", "stop"),
-        N(
-            "MS",
-            "At every agent start: a model other than the configured one [D47]",
-            "stop",
-        ),
     )
     edges = (
         E("I", "I", "you change it, until you confirm [R]", "back"),
@@ -1016,17 +1010,17 @@ def paper_lit_review_detailed() -> gf.Graph:
     nodes = (
         N(
             "I",
-            "Intake: config.md, DOI checking, the research question the run needs [D24, O, "
-            "AD11, AV15]; a research report and its bibliography [AV1]; the profile [AV2]; a "
-            "file in words [AQ]",
+            "Intake agent: the draft and its questions, then config.md, DOI checking, the "
+            "research question the run needs [D24, O, AD11, AV15]; a research report and its "
+            "bibliography [AV1]; the profile [AV2]; a file in words [AQ]",
             "stop",
         ),
         *theme_search_nodes(),
         N(
             "LS",
-            "Literature strategist: review.md, refs.bib, a .bib patch when a .tex is "
-            "given; a list over 50 entries shows its first 20 and last 5; it does not start "
-            "without a research question [D48, D2, AD11, AV15, AV16]",
+            "Literature strategist: review.md, refs.bib; a list over 50 entries shows its "
+            "first 20 and last 5; it does not start without a research question [D2, AD11, "
+            "AV15, AV16]",
             "ruled_maybe",
         ),
         N(
@@ -1035,10 +1029,16 @@ def paper_lit_review_detailed() -> gf.Graph:
             "ruled",
         ),
         N(
+            "SJ",
+            "Session: each theme run's report read as it ends, or the one strategist's, for "
+            f"work of its prompt or its page left undone {AP_TAG}",
+            "choice",
+        ),
+        N(
             "SC",
-            "Script, run by the session: lookup.py resolve on each entry's DOI or arXiv ID, "
-            "once, and the proceedings page of an entry with neither read, into checks.md "
-            f"{AP_TAG}",
+            "Script, run by the session: lookup.py resolve on each theme run's .bib as it "
+            "ends, or on refs.bib for one theme, a proceedings page read for an entry with "
+            f"neither, into checks.md {AP_TAG}",
             "script",
         ),
         N(
@@ -1046,6 +1046,25 @@ def paper_lit_review_detailed() -> gf.Graph:
             "Literature strategist, resumed with checks.md: the differing titles resolved; "
             f"strict: a failing identifier corrected or removed, once [O] {AP_TAG}",
             "ruled",
+        ),
+        N(
+            "MJ",
+            "Session: the merge run's report read, or the one strategist's, for sources or "
+            f"leads not assessed and items of its prompt not done {AP_TAG}",
+            "choice",
+        ),
+        N(
+            "CK",
+            "Script, run by the session: lookup.py resolve on every entry of refs.bib, no "
+            "identifier or title under two keys, the cited keys equal to the .bib's, into "
+            f"checks.md {AP_TAG}",
+            "script",
+        ),
+        N(
+            "CJ",
+            "Session: the exclusions read; one made on a failed lookup is work left undone "
+            f"{AP_TAG}",
+            "choice",
         ),
         N(
             "SR",
@@ -1059,7 +1078,13 @@ def paper_lit_review_detailed() -> gf.Graph:
             "script",
         ),
         N("RS", "A reference that cannot be confirmed [O]", "stop"),
-        N("AP", "Script: apply the .bib patch [D48]", "script"),
+        N(
+            "FM",
+            "Formatter: each target of Target formats other than Markdown, from review.md "
+            "with refs.bib as given; the review's issues back to the strategist, then the "
+            f"targets again {AP_TAG}",
+            "ruled_maybe",
+        ),
         N("X", "End"),
     )
     floating = (
@@ -1070,26 +1095,28 @@ def paper_lit_review_detailed() -> gf.Graph:
             "failed [C]",
             "stop",
         ),
-        N(
-            "MS",
-            "At every agent start: a model other than the configured one [D47]",
-            "stop",
-        ),
     )
     edges = (
         E("I", "I", "you change it, until you confirm [R]", "back"),
         E("I", "THS"),
-        *theme_search_edges("LS", "SR", "SC"),
+        *theme_search_edges("LS", "MJ", "SJ", "SC"),
+        E("SJ", "T2", "work left undone: sent back once", "back"),
+        E("SJ", "SC"),
         E("LS", "LS", SEARCH_ROUNDS, "back"),
         E("LS", "LC"),
-        E("LC", "SC"),
+        E("LC", "SJ"),
         E("SC", "LV", "one search theme"),
-        E("LV", "SR"),
+        E("LV", "MJ"),
+        E("MJ", "TM", "work left undone: sent back once", "back"),
+        E("MJ", "CK"),
+        E("CK", "CJ"),
+        E("CJ", "TM", "a failure, or an exclusion on a failed lookup: sent back once", "back"),
+        E("CJ", "SR"),
         E("SR", "RC"),
         E("RC", "RS", "strict: an identifier still fails"),
-        E("RC", "X", "no .tex"),
-        E("RC", "AP", ".tex given"),
-        E("AP", "X"),
+        E("RC", "X", "Markdown only"),
+        E("RC", "FM", "a target other than Markdown"),
+        E("FM", "X"),
     )
     return _g(nodes, edges, floating, WIDE_WIDTH)
 
@@ -1118,7 +1145,7 @@ def paper_outline_only_detailed() -> gf.Graph:
     nodes = (
         N(
             "I",
-            "Intake: config.md [D24]; the research question in full, a research report and "
+            "Intake agent: config.md [D24]; the research question in full, a research report and "
             "its bibliography read [AV1, AV15], the type by the selection table [AV3]; a "
             "file given in words found by search [AQ]",
             "stop",
@@ -1163,11 +1190,6 @@ def paper_outline_only_detailed() -> gf.Graph:
         N("X", "Outline, evidence map and argument map [T]", "ruled"),
     )
     floating = (
-        N(
-            "MS",
-            "At every agent start: a model other than the configured one [D47]",
-            "stop",
-        ),
     )
     edges = (
         E("I", "I", "you change it, until you confirm [R]", "back"),
@@ -1202,7 +1224,7 @@ def paper_abstract_only_detailed() -> gf.Graph:
     nodes = (
         N(
             "I",
-            "Intake: config.md, the paper type, the language and the claims not to make "
+            "Intake agent: config.md, the paper type, the language and the claims not to make "
             "[D24, AD12, AI2]; a file given in words found by search [AQ]",
             "stop",
         ),
@@ -1226,11 +1248,6 @@ def paper_abstract_only_detailed() -> gf.Graph:
             "PS",
             "At every patch: a structural patch, a patch that does not apply, a script "
             "failed [C]",
-            "stop",
-        ),
-        N(
-            "MS",
-            "At every agent start: a model other than the configured one [D47]",
             "stop",
         ),
     )
@@ -1276,7 +1293,7 @@ def paper_citation_check_detailed() -> gf.Graph:
     nodes = (
         N(
             "I",
-            "Intake: config.md, DOI checking strict or mark only [D24, O], the authors' "
+            "Intake agent: config.md, DOI checking strict or mark only [D24, O], the authors' "
             "earlier papers [AD8], the claims not to make [AI2]; a file given in words "
             "found by search [AQ]",
             "stop",
@@ -1323,11 +1340,6 @@ def paper_citation_check_detailed() -> gf.Graph:
             "PS",
             "At every patch: a structural patch, a patch that does not apply, a script "
             "failed [C]",
-            "stop",
-        ),
-        N(
-            "MS",
-            "At every agent start: a model other than the configured one [D47]",
             "stop",
         ),
     )
@@ -1405,7 +1417,7 @@ def paper_disclosure_detailed() -> gf.Graph:
     nodes = (
         N(
             "I",
-            "Intake: config.md, the venue or the policy anchor [AV12], the kinds of AI "
+            "Intake agent: config.md, the venue or the policy anchor [AV12], the kinds of AI "
             "use the records of earlier runs leave uncertain, each other kind "
             "pre-marked; you confirm [D24, AD10]; a file in words [AQ]",
             "stop",
@@ -1436,11 +1448,6 @@ def paper_disclosure_detailed() -> gf.Graph:
             "PS",
             "At every patch: a structural patch, a patch that does not apply, a script "
             "failed [C]",
-            "stop",
-        ),
-        N(
-            "MS",
-            "At every agent start: a model other than the configured one [D47]",
             "stop",
         ),
     )
@@ -1506,7 +1513,7 @@ def paper_plan_detailed() -> gf.Graph:
     nodes = (
         N(
             "I",
-            "Intake: config.md [D24]; the plan-mode interview of the topic, the materials in "
+            "Intake agent: config.md [D24]; the plan-mode interview of the topic, the materials in "
             "hand and the structure preference",
             "stop",
         ),
@@ -1556,11 +1563,6 @@ def paper_plan_detailed() -> gf.Graph:
         N("X", "Chapter plan and INSIGHT collection"),
     )
     floating = (
-        N(
-            "MS",
-            "At every agent start: a model other than the configured one [D47]",
-            "stop",
-        ),
     )
     edges = (
         E("I", "I", "you change it, until you confirm [R]", "back"),
@@ -1623,7 +1625,7 @@ def paper_format_convert_detailed() -> gf.Graph:
     nodes = (
         N(
             "I",
-            "Intake: config.md [D24]; the targets, the citation style, the venue and its "
+            "Intake agent: config.md [D24]; the targets, the citation style, the venue and its "
             "limits, the format profile, the cover letter; a .md, .docx or .bib found by "
             "search [AQ] [4.A R2-20]",
             "stop",
@@ -1720,11 +1722,6 @@ def paper_format_convert_detailed() -> gf.Graph:
             "PS",
             "At every patch: a structural patch, a patch that does not apply, a script "
             "failed [C]",
-            "stop",
-        ),
-        N(
-            "MS",
-            "At every agent start: a model other than the configured one [D47]",
             "stop",
         ),
     )

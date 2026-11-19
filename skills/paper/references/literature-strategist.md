@@ -3,9 +3,25 @@
 The literature strategist agent reads this page whole at every start. Its prompt (`SKILL.md`, "Agent prompts" and "The prompts of a literature search") gives the files it reads and writes, for a search of several search themes the rules of a theme run or of the merge run, and the direction the session writes for this request:
 
 - At every start: the run's specifics, what the strategist checks in particular for this request, and the sentence of "Agent prompts" on a shortcut.
-- For a theme run: the foundational works of the theme to admit whatever their year, the period of recent work, the question each method is read for, the annotation fields beside this page's own, the sub-questions of the research question written once for the run, the databases and venues beside this page's table, and the sub-topics with their minimum of included sources.
-- For the single strategist: the direction of a theme run, written over the whole request.
-- For the merge run: the work each theme run hands on, named with its sources (the leads it names for the merge run, the sources it left out to hold its target, the works it could not confirm, and its citation loop where it reports it open), each sub-question of the research question answered across the search themes, and the foundational works each theme run's prompt named kept in the merged set.
+- For a theme run:
+  - the foundational works of the theme, to admit whatever their year;
+  - the period of recent work;
+  - the question each method is read for;
+  - the annotation fields that answer the parts of the research question, beside this page's own, written once for the run and the same in every start of the search;
+  - the databases and venues beside this page's table;
+  - the sub-topics of the theme, each with its minimum of included sources.
+- For the single strategist:
+  - the direction of a theme run, written over the whole request with the sub-topics of the whole request;
+  - the parts of the research question the Synthesis Analysis is organized by.
+- For the merge run:
+  - the work each theme run hands on, named with its sources:
+    - the leads it names for the merge run;
+    - the sources it left out to hold its target;
+    - the works it could not confirm;
+    - its citation loop, where it reports it open;
+  - the parts of the research question the Synthesis Analysis is organized by;
+  - the annotation fields of the theme runs, which the literature matrix takes its columns from;
+  - the foundational works each theme run's prompt named, kept in the merged set.
 
 That direction works inside this page's rules and removes none of them.
 
@@ -50,13 +66,13 @@ The profiles are those of `references/intake.md`, "The evidence profile".
 
 The agent resolves the profile from the row "Domain evidence profile" of `config.md`, and from no other place. It reads the row and does not judge the kind of run. The citation compliance agent resolves no profile, and this agent is the profile's only reader.
 
-None of these cases blocks the search:
+None of these cases blocks the search. Each advisory is written as its name, with no square brackets ("Square brackets in the report" below):
 
-- **(a) The row is absent.** The agent screens under the neutral `unknown_user_defined`. In full mode it writes `[NO-PROFILE-NEUTRAL]` in the report, so that the neutral default is seen. The row is absent when intake never set it. A continued run carries what the earlier intake wrote: a row present applies its profile with no advisory, and a row absent gives the neutral profile and the advisory.
-- **(b) The row is exactly `unknown_user_defined`**, with no `(requested: ...)` suffix. The agent screens neutral and writes no `[NO-PROFILE-NEUTRAL]`, since the user chose or accepted the neutral profile at intake.
-- **(b-reserved) The row is `unknown_user_defined (requested: <reserved>)`**, `<reserved>` being one of the five reserved values `clinical`, `wet_lab`, `materials_physics`, `legal_case_based` and `education`. The agent reads the leading value, `unknown_user_defined`, screens neutral and writes `[PROFILE-RESERVED-FALLBACK]`. This is a valid reserved request that intake turned into the neutral profile, and the agent writes no `[PROFILE-UNRESOLVED]` for it. It reads the leading value and the parenthesis, and never compares the whole row with the four values.
-- **(c) The row cannot be resolved otherwise**: a value outside the four, the form `unknown_user_defined (requested: X)` with an `X` outside the five reserved values, or one of the other three values with a `(requested: ...)` suffix, such as `cs_ml (requested: clinical)`, which breaks intake's rule that a request and its stored value agree. The agent screens neutral and writes `[PROFILE-UNRESOLVED]`.
-- **(d) The discipline differs**: the profile's implied discipline is not the Discipline row of `config.md`. The agent uses each signal for its own job and writes `[PROFILE-DISCIPLINE-MISMATCH]`. This is a warning and no fallback: admission still uses the profile, and the Discipline row still chooses the databases. Nothing is blocked.
+- **(a) The row is absent.** The agent screens under the neutral `unknown_user_defined`. In full mode it writes the advisory `NO-PROFILE-NEUTRAL` in the report, so that the neutral default is seen. The row is absent when intake never set it. A continued run carries what the earlier intake wrote: a row present applies its profile with no advisory, and a row absent gives the neutral profile and the advisory.
+- **(b) The row is exactly `unknown_user_defined`**, with no `(requested: ...)` suffix. The agent screens neutral and writes no `NO-PROFILE-NEUTRAL`, since the user chose or accepted the neutral profile at intake.
+- **(b-reserved) The row is `unknown_user_defined (requested: <reserved>)`**, `<reserved>` being one of the five reserved values `clinical`, `wet_lab`, `materials_physics`, `legal_case_based` and `education`. The agent reads the leading value, `unknown_user_defined`, screens neutral and writes the advisory `PROFILE-RESERVED-FALLBACK`. This is a valid reserved request that intake turned into the neutral profile, and the agent writes no `PROFILE-UNRESOLVED` for it. It reads the leading value and the parenthesis, and never compares the whole row with the four values.
+- **(c) The row cannot be resolved otherwise**: a value outside the four, the form `unknown_user_defined (requested: X)` with an `X` outside the five reserved values, or one of the other three values with a `(requested: ...)` suffix, such as `cs_ml (requested: clinical)`, which breaks intake's rule that a request and its stored value agree. The agent screens neutral and writes the advisory `PROFILE-UNRESOLVED`.
+- **(d) The discipline differs**: the profile's implied discipline is not the Discipline row of `config.md`. The agent uses each signal for its own job and writes the advisory `PROFILE-DISCIPLINE-MISMATCH`. This is a warning and no fallback: admission still uses the profile, and the Discipline row still chooses the databases. Nothing is blocked.
 
 The implied disciplines of each profile, so that the comparison of case (d) compares names and infers nothing:
 
@@ -113,6 +129,8 @@ def admit(source):
 | General | Google Scholar, Web of Science, Scopus |
 | Taiwan HEI | Taiwan National Digital Library of Theses and Dissertations, Airiti Library, TSSCI |
 
+The databases and venues of the row Sources of `config.md` are searched beside those of the table.
+
 ### Step 3: the search string
 
 ```
@@ -125,8 +143,8 @@ def admit(source):
 
 | Criterion | Include | Exclude |
 |---|---|---|
-| Publication type | Peer-reviewed journals, books, conference proceedings | Blog posts and news articles, unless they are primary data |
-| Date range | The last 10 years by default, and seminal works | Outdated work, unless historically relevant |
+| Publication type | The kinds of source of the row Sources of `config.md`; without it, peer-reviewed journals, books, conference proceedings | Blog posts and news articles, unless they are primary data |
+| Date range | The row Inclusion window of `config.md`; without it, the last 10 years, and seminal works | Outdated work, unless historically relevant |
 | Language | The Language row of `config.md` (EN, zh-TW, or both) | Other languages, unless the source is key |
 | Relevance | Directly addresses the research question | Tangentially related |
 
@@ -161,6 +179,16 @@ Under a profile other than `unknown_user_defined`, the profile's standard eviden
 | Case Study | 15 | 20 to 30 |
 | Policy Brief | 10 | 15 to 25 |
 | Conference | 10 | 15 to 25 |
+
+## Square brackets in the report
+
+The key-set check of the session reads every square bracket of the report outside a code span as a bracket of citation keys.
+
+- Every square bracket outside a code span encloses citation keys only, as `[key]` or `[keyA, keyB]`.
+- A number, a score or other text that is no key stands in parentheses or plain words, with its numbers and its meaning kept.
+- The brackets of a quoted search string, such as the PubMed field tags `[tiab]`, `[dp]` and `[ti]`, stand inside a code span.
+- An advisory or a note of this page is written as its name, with no square brackets.
+- The bracketed placeholders of the formats below, such as `[N]`, are filled and never written as they stand.
 
 ## Annotated bibliography
 
@@ -239,7 +267,7 @@ The agent writes the report to `review.md` in this form:
 ## Literature Search Report
 
 ### Search Strategy
-[Databases, search strings, date range, filters]
+[The review design of the row Review design of `config.md`, the databases, search strings, date range, filters]
 
 ### Coverage Distribution Advisory
 [A `DISTRIBUTIONAL_SKEW_ADVISORY` block for each dimension with 70% or more concentration; otherwise "No distributional skew advisory triggered."]
@@ -277,7 +305,7 @@ The given source list is a `.bib` the start is given, or the sources of an annot
 1. **The same criteria.** The agent applies the inclusion and exclusion criteria of Step 4 to the entries of the list and to the results of the databases alike, with no exception.
 2. **No silent skip.** Each entry it skips is recorded in the skipped part of the PRE-SCREENED block with its reason. An entry dropped without a record breaks this page.
 3. **No change to the list.** The agent never changes an entry of the list, fills in a field of it or adds content to it. It only reads the list.
-4. **A list that cannot be read falls back.** The agent checks the list only as Step 0 says and does not open an entry's address to check the list. When the list cannot be read, it writes `[CORPUS PARSE FAILURE: <cause>]` and goes on with the search alone.
+4. **A list that cannot be read falls back.** The agent checks the list only as Step 0 says and does not open an entry's address to check the list. When the list cannot be read, it writes the line `CORPUS PARSE FAILURE: <cause>` and goes on with the search alone.
 
 ### Step 0: whether there is a list, and its shape
 
@@ -286,7 +314,7 @@ The agent checks only what it needs to read each entry, and nothing more:
 - the shape is right when the list reads as a list of entries;
 - and each entry has a key, a title, at least one author and a year that reads as a number.
 
-With no list, or an empty one, the agent runs the 4-layer search of "Detailed execution algorithm" unchanged. When the list cannot be read or its shape is wrong, it writes `[CORPUS PARSE FAILURE: <one-line cause>]` and falls back to the search alone. Otherwise it goes on to Step 1.
+With no list, or an empty one, the agent runs the 4-layer search of "Detailed execution algorithm" unchanged. When the list cannot be read or its shape is wrong, it writes the line `CORPUS PARSE FAILURE: <one-line cause>` and falls back to the search alone. Otherwise it goes on to Step 1.
 
 ### Step 1: screening the list against the research question
 
@@ -548,10 +576,10 @@ Quality gate not passed ->
 
 | Missing | The agent does |
 |---|---|
-| The research question is not clearly defined | It does not start the search, and its report says that the research question is missing, which the session asks the user at intake |
+| The research question is not clearly defined | It does not start the search. Its report says that the research question is missing, which returns it to the intake agent for the user to clarify |
 | The discipline is not given | It uses the general databases (Google Scholar and Scopus) and broadens the search |
 | The language is not given | English is primary, and it tries a search with Chinese keywords |
-| The year range is not given | The last 10 years by default, and seminal works with no limit |
+| The row Inclusion window is not given | The last 10 years by default, and seminal works with no limit |
 
 ### Adjustments by paper type
 
@@ -573,7 +601,8 @@ Quality gate not passed ->
 
 | From | Content | Form |
 |---|---|---|
-| The session's intake | `config.md` | A Markdown table, with the research question, the discipline, the language and the year range |
+| The intake agent | `config.md` | A Markdown table, with the research question, the discipline, the language, the review design, the inclusion window, the output role and the sources |
+| The Materials in hand row | An annotated bibliography | A list of sources that each carry an annotation |
 
 ### Output
 
@@ -588,6 +617,7 @@ Quality gate not passed ->
 
 - **For the planner's structure**: the literature matrix holds the Quality field (High, Medium or Low), so that the planner assigns the high-quality sources to the core sections first.
 - **For the planner's argument**: each annotation tags whether the source "supports", "opposes" or is "neutral" in viewpoint.
+- **An annotated bibliography received**: its sources go directly to Phase B, the full-text assessment, and skip Phase A.
 
 ## Quality criteria
 

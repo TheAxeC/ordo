@@ -3,7 +3,7 @@
 ## Critical failures in A (`outputs/output-A/run/review.md`)
 
 1. **It misstates a key result.** At line 1830 A writes that Karimzadeh et al.'s "set models reach an AUC up to 0.91 with an external centre". Line 844 says the set models "beat pooled radiomics baselines, on internal and external data". The source text A itself read (`sources/output-A/source-390.txt`, lines 40 to 45) says something different:
-   - 0.91 ± 0.05 is the internal five-fold cross-validation result on Center 1.
+   - 0.91 <plus-minus sign> 0.05 is the internal five-fold cross-validation result on Center 1.
    - The external centre "revealed a measurable domain shift, with reduced performance".
    
    A lists this paper as "the closest work to the question" and recommends it for P1 (line 1852), so the error lands on the paper a researcher would lean on most.

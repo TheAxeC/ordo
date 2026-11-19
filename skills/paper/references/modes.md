@@ -1,6 +1,6 @@
 # The plain request
 
-The session reads this page at Steps 1 when the first word after `/paper` is not the name of a mode or a call. It reads it at Steps 2 when an argument is given in words. It picks the mode from the request, takes the mode's arguments from the request, and shows both at the intake confirmation for the user to confirm or correct.
+The session reads this page at Steps 1 when the first word after `/paper` is not the name of a mode or a call. It reads it at Steps 2 when an argument is given in words. It picks the mode from the request, takes the mode's arguments from the request, and gives both to the intake agent. The intake agent's record shows them at the intake confirmation, for the user to confirm or correct.
 
 ## Picking the mode
 
@@ -21,7 +21,7 @@ The session asks about these before intake, as the stop "The mode to run". The q
 | "Help me write an outline" | outline-only, or plan mode | outline-only writes the outline, the evidence map and the argument map for approval. Plan mode guides the user chapter by chapter with a Socratic mentor, and ends with the chapter plan. |
 | "Help me revise my paper", "improve my paper" | revision, or a full rewrite in full mode | The session first asks whether there are reviewer comments. Revision changes the manuscript for the comments or instructions given. Full mode writes the paper again from the project's materials. |
 | "Help me with my revision" | revision, or the referee comments parsed | revision changes the manuscript for the instructions given. The parsed comments and the response letter are `rebuttal`'s. |
-| "Help me search for literature", "find literature on <topic>" | lit-review, or a research investigation | lit-review writes the review and the `.bib` entries for a paper. A research investigation is `researcher`'s, which roadmap entry 13 builds. |
+| "Help me search for literature", "find literature on <topic>" | lit-review, or a research investigation | lit-review writes an annotated bibliography, a literature matrix and a synthesis on the topic. A research investigation is `researcher`'s, which roadmap entry 13 builds. |
 | "The paper format is wrong" | citation-check, or format-convert | citation-check corrects the reference entries and their format. format-convert converts the manuscript to another format, another citation style or a venue's template. |
 | "Review my paper", "review my draft" | draft-review, or the panel review of `paper-review` | draft-review is the peer reviewer's own-draft review, one review file, nothing changed. `paper-review` is a panel of reviewers and an editor. |
 
@@ -71,7 +71,7 @@ The six signals of plan mode are each sufficient. The session detects the meanin
 
 The session takes the arguments of the mode's Quick start line from the request, and from the words of a mode call whose argument is not a path.
 
-- A path the request names that exists is the argument it fits: the project folder for full, outline-only and plan, the main `.tex` for the other modes and the calls. Format-convert takes the manuscript, which is a `.tex` that holds `\documentclass`, or a `.md`, a `.docx` or a `.bib` that the words name.
+- A path the request names that exists is the argument it fits. That is the project folder for full, outline-only and plan, and the main `.tex` for the calls and the other modes. Lit-review takes no path. Format-convert takes the manuscript, which is a `.tex` that holds `\documentclass`, or a `.md`, a `.docx` or a `.bib` that the words name.
 - Format-convert takes its target from the request's words, such as "to DOCX" for `docx` or "to IEEE" for `ieee`. A request that names no target takes Markdown, and the intake confirmation shows it.
 - A request for revision that names two existing files takes the `.tex` as the manuscript and the other file as the comments file.
 - A request for revision that names a manuscript and no comments file has the whole request as its instructions.
@@ -88,7 +88,7 @@ The session takes the arguments of the mode's Quick start line from the request,
 
 ## The confirmation
 
-- The session writes the rows "Mode", "Request" and "Taken from the request" into `config.md`. The mode row says the mode was picked from the request, the Request row holds the request as the user wrote it, and the last row lists each argument taken and the words it was taken from.
+- The intake agent writes the rows "Mode", "Request" and "Taken from the request" into `config.md`. It writes them from the mode, the request and the arguments the session gives it (SKILL.md, Steps 6). The mode row says the mode was picked from the request, and the Request row holds the request as the user wrote it. The last row lists each argument taken and the words it was taken from.
 - A mode call with an argument in words gets the Request and "Taken from the request" rows too.
 - The intake confirmation shows these rows with the rest, and the user confirms them or corrects the mode or an argument.
-- A corrected mode that is another of the nine starts intake again for that mode, and the stop "The mode to run" does not repeat.
+- A corrected mode that is another of the nine starts the intake agent again for that mode. The stop "The mode to run" does not repeat.

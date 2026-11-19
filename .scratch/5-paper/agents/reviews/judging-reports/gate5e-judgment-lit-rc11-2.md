@@ -4,14 +4,14 @@
 
 - I read both final messages in full. For A, I read `run/review.md` from its search strategy through the synthesis, gaps and recommended sources. I read its annotated bibliography by headings and in sampled entries. For B, I read `output/literature_review.tex` from line 1 to 459: search strategy, query log, synthesis, gaps, recommended sources and quality gates. I sampled B's appendices but did not read them in full.
 - `outputs/pages/index.md` lists 433 saved pages. I spot-checked citations against them rather than checking all 433:
-  - **PMLR page for Peyré, Cuturi and Solomon 2016** (`page-382`, cited by both): it shows the title and authors both sides give.
-  - **arXiv 2505.12113** (`page-096`): its title is "Cyclic-Shift Sparse Kronecker Tensor Classifier…", which matches A's preprint entry.
+  - **PMLR page for Peyr<latin small letter e with acute>, Cuturi and Solomon 2016** (`page-382`, cited by both): it shows the title and authors both sides give.
+  - **arXiv 2505.12113** (`page-096`): its title is "Cyclic-Shift Sparse Kronecker Tensor Classifier<horizontal ellipsis>", which matches A's preprint entry.
   - **Statistics and Computing DOI for the same paper** (`page-204`): the saved page is only a "Client Challenge" block. B's source text `sources/output-B/source-027.txt:10-13` shows the published version, "Shift-aware sparse kronecker tensor classification", Statistics and Computing 36(3):132, 2026. So B cites the published version and A cites the preprint.
   - **Lymphoma multi-centre study, B's Karimzadeh 2026** (`page-305`): the saved page is a captcha. B's sources `source-056.txt:23` and `source-114.txt:86` confirm the DOI and title.
 - I checked claims against the source texts each side read:
   - **B, prostate MRI fusion study (Gong 2026)**: AUC 0.824 against 0.839 for PI-RADS, and the "exploratory" caveat. Both match `source-132.txt:162`.
   - **B, registration-agnostic CTA model (Dong 2024)**: AUC 0.63, 0.81 and 0.88. All match `source-131.txt:56`.
-  - **A, MIL benchmark for 3D neuroimages (Harvey 2026)**: "matches or outperforms … on 4 of 6", "25x faster". Both match `sources/output-A/source-028.txt:60`.
+  - **A, MIL benchmark for 3D neuroimages (Harvey 2026)**: "matches or outperforms <horizontal ellipsis> on 4 of 6", "25x faster". Both match `sources/output-A/source-028.txt:60`.
 
 ## Critical failures in output A
 
@@ -34,7 +34,7 @@ None of B's failures affects a claim of fact in the synthesis or gaps.
 
 - **Structure.** B's synthesis follows the user's question in three parts: which methods predict, how each handles correspondence, and where each removes or builds on pipeline steps (`literature_review.tex:294-378`). It gives quantitative evidence a researcher can use, for example:
   - the CTA study's 0.63/0.81/0.88 AUCs (`:362`);
-  - the stroke cross-dataset R² of 0.2% against 15.8–24.4% (`:362`);
+  - the stroke cross-dataset R<superscript two> of 0.2% against 15.8<en dash>24.4% (`:362`);
   - lesion size nearly matching spatial lesion features (`:362`);
   - pooling results that differ across studies (`:346`).
 - **Pipeline coverage.** B covers what A lacks (A failure 2): registration failure at lesions, lesion-symptom mapping, stroke predictors as registration-based baselines, and how segmentation errors spread (`:332`, `:326`, `:366`). It also directly covers the request's "registration-free transport-based fusion" item with the prostate MRI fusion study (`:314`), whose numbers I verified.

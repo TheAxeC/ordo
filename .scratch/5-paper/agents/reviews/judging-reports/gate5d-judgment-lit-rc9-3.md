@@ -28,7 +28,7 @@ The saved pages and source texts support every claim I sampled from both outputs
 |---|---|---|---|---|
 | A | Chen and Martel: max, mean and attention pooling are not injective; sum pooling beats attention with overlapping intervals | `tex:3728`, `:3738` | `source-154.txt:5,20` | Matches |
 | A | Fawaz 2021: Spherical UNet 0.57 to 0.87, MoNet 0.57 to 0.61 | `tex:3677` | `source-119.txt:8,12` | Matches |
-| A | Gong 2026: AUC 0.849 ± 0.034 and 0.824 (0.694 to 0.930) | `tex:2915` | `source-077.txt:43,46` | Matches |
+| A | Gong 2026: AUC 0.849 <plus-minus sign> 0.034 and 0.824 (0.694 to 0.930) | `tex:2915` | `source-077.txt:43,46` | Matches |
 | A | Alberb 2026: Dice 0.78, F1 0.79, C-index 0.69 | `tex:3149` | `source-099.txt:13` | Matches |
 | B | Hering 2024: +0.3% AUROC, p = 0.18 | `review.md:964` | `page-197.html:264` | Matches |
 | B | Li 2018 Tucker regression: 770/197 split, error 0.32 to 0.36 | `review.md:280` | `page-160.html:949,958` | Matches |

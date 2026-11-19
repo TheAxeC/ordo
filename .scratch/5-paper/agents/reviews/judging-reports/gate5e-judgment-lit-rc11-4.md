@@ -17,7 +17,7 @@
 
 - **A, Chen and Martel 2022:** AUC 0.773 and 0.596, cohorts of 83/245 and 258/1,039 (`review.md:1840-1841`). Matches A's `sources/output-A/source-014.txt:12-21`.
 - **A, Harvey et al. 2026:** "4 of 6 moderate-sized tasks ... 25 times faster" (`review.md:1592`). Matches the arXiv record in `source-028.txt:60`.
-- **A, Peyré et al. 2016:** the PMLR URL shows the cited title (`pages/page-382.html:13`).
+- **A, Peyr<latin small letter e with acute> et al. 2016:** the PMLR URL shows the cited title (`pages/page-382.html:13`).
 - **A, Mazelet et al. 2026:** the arXiv 2605.20883 title matches (`pages/page-101.html:4`).
 - **B, Fawaz et al. 2021:** Spherical UNet goes from 0.57 to 0.87 without registration and MoNet from 0.57 to 0.61 (`tex:3677`). Matches B's `source-119.txt:8-15`. B also checked and rejected a retraction flag on this paper (`tex:289`).
 - **B, AMINN:** "average pooling beat attention" (`tex:3728`, `tex:2028`). Matches `source-153.txt:3`.

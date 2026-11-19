@@ -42,7 +42,6 @@ The ids are:
 | `disclosure` | The draft writer | The statements of disclosure mode, and in full mode the AI disclosure that a second start of the draft writer rewrites to put the model identifier in the statement and remove the line `[GAP: model identifier]` |
 | `format-convert` | The formatter | The format conversion: the citation style, the venue's template and its required elements, and the fields of the format profile in LaTeX, with the cite commands of a `.tex` made from a `.md` or a `.docx` |
 | `format-convert-copy` | The formatter | The changes that make what `pandoc` drops readable: a table's wrapper, an algorithm, a cross-reference, a drawing, a numbered citation style, and, when the run does not change the citation style, also the same changes as `format-convert` for each block. The session applies it to the conversion copy only, never to the manuscript |
-| `lit-review` | The literature strategist | The entries a literature review adds to the manuscript's `.bib` |
 | `full` | The literature strategist | The entries that full mode adds to an existing `refs.bib` |
 
 - An id may stand in more than one patch of a run folder. Each patch has its own number (SKILL.md, Steps 9), and an id names what the patch answers. The second use of `disclosure` in full mode is therefore a patch of its own. It is written against the manifest of the file as it stands after the first patches.

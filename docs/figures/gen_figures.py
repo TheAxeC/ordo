@@ -14,7 +14,9 @@ Writes, beside this file:
 Every figure shows the order of the run. An agent start is a box, solid when it always runs and
 dashed when it runs only when needed. A stop that waits on the user is an orange box. A cycle is a
 dotted arrow with its cap, and a check an agent repeats inside one start is a dotted loop on that
-agent with its cap. Scripts and the session's own steps are left out.
+agent with its cap. Scripts and the session's own steps are left out, except where a paper figure
+draws them: a script the session runs is a grey box, and a step where the session reads and
+judges is a rounded box, each with its legend line.
 
 Every box, arrow and label is written in this file, taken from each skill's SKILL.md and Stops
 table; the script reads no skill file and no other input. A change to a Stops table, to a skill's
@@ -948,6 +950,11 @@ SIMPLE_LEGEND = (
     ),
 )
 
+PAPER_KIND_LEGEND = (
+    Legend("script", "Grey box: a script the session runs, whose output is a fact"),
+    Legend("choice", "Rounded box: the session reads and judges"),
+)
+
 
 def draw_legend(canvas: Canvas, x: float, y: float, rows: Sequence[Legend]) -> float:
     """Draw the legend rows, one under another, and return the height used."""
@@ -1237,19 +1244,23 @@ def _single(
 
 
 STOPS_NOT_DRAWN = (
-    "Not drawn, since they hold in every mode: at every agent start, a model of another "
-    "family than the configured one stops the run, and a newer model of the same family "
-    "goes on and is named in the final message; at every patch, a structural patch, a "
-    "patch that does not apply or a failed script stops it."
+    "Not drawn, since they hold in every mode: at every patch, a structural patch, a "
+    "patch that does not apply or a failed script stops the run."
 )
 
 
 def _paper(name: str, mode: str, graph: Graph) -> str:
+    kinds = {node.kind for node in (*graph.nodes, *graph.floating)}
+    legend = (
+        *SIMPLE_LEGEND,
+        *(row for row in PAPER_KIND_LEGEND if row.sample in kinds),
+    )
     return _single(
         f"paper/{name}.svg",
         f"The {mode} mode of the paper skill",
         graph,
         STOPS_NOT_DRAWN,
+        legend,
     )
 
 
@@ -1268,7 +1279,7 @@ CONFIRMED = "each source confirmed by a live lookup"
 
 def paper_full_graph() -> Graph:
     nodes = (
-        Node("I", "Intake: you confirm", "stop"),
+        Node("I", "Intake agent: you confirm", "stop"),
         Node(
             "L",
             "Literature strategist, unless you skip it; " + CONFIRMED,
@@ -1407,7 +1418,7 @@ def paper_full_graph() -> Graph:
 
 def paper_revision_graph() -> Graph:
     nodes = (
-        Node("I", "Intake: you confirm", "stop"),
+        Node("I", "Intake agent: you confirm", "stop"),
         Node(
             "P",
             "Peer reviewer: the instructions as items, or, with none, a review of the "
@@ -1497,17 +1508,21 @@ def paper_revision_graph() -> Graph:
 
 def paper_lit_review_graph() -> Graph:
     nodes = (
-        Node("I", "Intake: you confirm", "stop"),
+        Node("I", "Intake agent: you confirm", "stop"),
         Node("L", "Literature strategist: " + CONFIRMED, "maybe"),
         Node("T1", THEME_RUN_FIRST, "maybe"),
         Node("T2", THEME_RUN_REST, "maybe"),
-        Node("SC", "Session: each DOI or arXiv ID resolved once, the proceedings page of an entry with neither read", "script"),
+        Node("SJ", "Session: each report read for work left undone", "choice"),
+        Node("SC", "Script: each theme run's DOIs and arXiv IDs resolved", "script"),
         Node("L2", "Literature strategist, resumed with the identifier check: titles resolved, strict: a failing identifier corrected or removed", "maybe"),
         Node("M", MERGE_RUN, "maybe"),
+        Node("MJ", "Session: the strategist's report read for work left undone", "choice"),
+        Node("CK", "Script: every entry resolved, no identifier or title under two keys, the cited keys equal to the .bib's", "script"),
+        Node("CJ", "Session: the exclusions read; one on a failed lookup is work left undone", "choice"),
         Node("LR", "You review the sources, optional", "stop"),
-        Node("RC", "Session: each corrected or added entry's DOI or arXiv ID resolved again", "script"),
+        Node("RC", "Script: each corrected or added entry's DOI or arXiv ID resolved again", "script"),
         Node("SR", "A reference that cannot be confirmed", "stop"),
-        Node("PA", "Script: the entries added to the .bib, when a .tex is given", "script"),
+        Node("F", "Formatter: each target other than Markdown, the review's issues back to the strategist", "maybe"),
     )
     edges = (
         Edge("I", "L", "one search theme"),
@@ -1516,24 +1531,31 @@ def paper_lit_review_graph() -> Graph:
         Edge("L", "L", SEARCH_LOOP, "back"),
         Edge("T1", "T1", SEARCH_LOOP, "back"),
         Edge("T2", "T2", SEARCH_LOOP, "back"),
-        Edge("L", "SC"),
-        Edge("T1", "SC"),
-        Edge("T2", "SC"),
+        Edge("L", "SJ"),
+        Edge("T1", "SJ"),
+        Edge("T2", "SJ"),
+        Edge("SJ", "T2", "work left undone: sent back once", "back"),
+        Edge("SJ", "SC"),
         Edge("SC", "L2", "one search theme"),
         Edge("SC", "M", "after theme runs: the same work, in the merge run"),
         Edge("M", "M", MERGE_LOOP, "back"),
-        Edge("L2", "LR"),
-        Edge("M", "LR"),
+        Edge("L2", "MJ"),
+        Edge("M", "MJ"),
+        Edge("MJ", "M", "work left undone: sent back once", "back"),
+        Edge("MJ", "CK"),
+        Edge("CK", "CJ"),
+        Edge("CJ", "M", "a failure, or an exclusion on a failed lookup: sent back once", "back"),
+        Edge("CJ", "LR"),
         Edge("LR", "RC"),
         Edge("RC", "SR", "strict: an identifier still fails"),
-        Edge("RC", "PA"),
+        Edge("RC", "F", "a target other than Markdown"),
     )
     return _graph(nodes, edges)
 
 
 def paper_outline_only_graph() -> Graph:
     nodes = (
-        Node("I", "Intake: you confirm", "stop"),
+        Node("I", "Intake agent: you confirm", "stop"),
         Node("L", "Literature strategist: " + CONFIRMED, "maybe"),
         Node("T1", THEME_RUN_FIRST, "maybe"),
         Node("T2", THEME_RUN_REST, "maybe"),
@@ -1569,7 +1591,7 @@ def paper_outline_only_graph() -> Graph:
 
 def paper_abstract_only_graph() -> Graph:
     nodes = (
-        Node("I", "Intake: you confirm", "stop"),
+        Node("I", "Intake agent: you confirm", "stop"),
         Node("W", "Draft writer: the abstract"),
     )
     return _graph(nodes, (Edge("I", "W"),))
@@ -1577,7 +1599,7 @@ def paper_abstract_only_graph() -> Graph:
 
 def paper_citation_check_graph() -> Graph:
     nodes = (
-        Node("I", "Intake: you confirm", "stop"),
+        Node("I", "Intake agent: you confirm", "stop"),
         Node("C", "Citation compliance"),
         Node("C2", "Citation compliance once more, when a check fails", "maybe"),
         Node(
@@ -1611,7 +1633,7 @@ def paper_disclosure_graph() -> Graph:
     nodes = (
         Node(
             "I",
-            "Intake: the venue or the policy anchor, the policy of a venue not listed, "
+            "Intake agent: the venue or the policy anchor, the policy of a venue not listed, "
             "the kinds of AI use the records leave uncertain; you confirm",
             "stop",
         ),
@@ -1627,7 +1649,7 @@ def paper_disclosure_graph() -> Graph:
 
 def paper_plan_graph() -> Graph:
     nodes = (
-        Node("I", "Intake: you confirm", "stop"),
+        Node("I", "Intake agent: you confirm", "stop"),
         Node("M", "Socratic mentor: given each answer, resumed or started fresh"),
         Node(
             "Q",
@@ -1659,7 +1681,7 @@ def paper_plan_graph() -> Graph:
 
 def paper_format_convert_graph() -> Graph:
     nodes = (
-        Node("I", "Intake: you confirm", "stop"),
+        Node("I", "Intake agent: you confirm", "stop"),
         Node("F", "Formatter: the patches and the report"),
         Node(
             "F2",

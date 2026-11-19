@@ -1,6 +1,6 @@
 # 0035. Paper and writing run their agents on the default agent when the effort agents are missing, and go on under a newer model of the configured family
 
-Status: proposed; superseded by the ruling The briefs of academic-paper's run of plan 5 in the part that starts the roles of `paper` on the default agent only when the effort agents are missing, now every role of `paper` on the default agent at `medium`, the part for `writing` standing
+Status: proposed; superseded by the ruling The briefs of academic-paper's run of plan 5 in the part that starts the roles of `paper` on the default agent only when the effort agents are missing, now every role of `paper` on the default agent at `medium`, the part for `writing` standing; superseded by the ruling The incremental change done properly of plan 5 in the effort `medium` of the roles of `paper` and in their check of the served model's family with its stop, now every role on the default agent with the runner's defaults, the part for `writing` standing
 
 ## Context
 

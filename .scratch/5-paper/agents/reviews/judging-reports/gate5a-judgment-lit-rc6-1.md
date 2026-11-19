@@ -5,7 +5,7 @@ I read both outputs in full: `output-A/output/literature_review.tex` (all 5,231 
 ## Critical failures, Output A
 
 1. **Most annotations rest on abstracts only.** For example, Theme A's note (`literature_review.tex:644`) says "Rigor scores are judgments from the abstract, since no full text was read," and the quality scores are judgments made from abstracts. A says this openly in `final-message.md:31`.
-2. **Workflow text has leaked into the review.** `tex:28` reads "This report is the merge run of the search stage (decision D1 in settings.md)", and §1 keeps pointing to theme files that the reader does not have. This makes the document harder to use as a related-work base.
+2. **Workflow text has leaked into the review.** `tex:28` reads "This report is the merge run of the search stage (decision D1 in settings.md)", and <section sign>1 keeps pointing to theme files that the reader does not have. This makes the document harder to use as a related-work base.
 3. **Some exclusions are debatable.** `tex:5203` drops Gachon 2025 as "No supervised predictor". The saved abstract (B's `source-105.txt`) describes a patient-level analysis of flow-cytometry point clouds against a residual-disease level. `tex:5210` drops Mahan 2024, a set-encoder plus linearized-transport method that bears directly on the question.
 4. **One minor mismatch.** The key `Huang2026Atlas` is attached to a work dated 2025 (`tex:4898`).
 
@@ -22,7 +22,7 @@ I read both outputs in full: `output-A/output/literature_review.tex` (all 5,231 
 ## URL and source checks
 
 - **A's URLs match their saved pages:**
-  - PMLR v48 Peyré et al. (`page-148`): "PMLR 48:2664-2672", and the abstract mentions molecules and energies.
+  - PMLR v48 Peyr<latin small letter e with acute> et al. (`page-148`): "PMLR 48:2664-2672", and the abstract mentions molecules and energies.
   - PMLR v235 Song et al. (`page-146`): "PMLR 235:46050-46073".
   - NeurIPS 2018 Luise et al. (`page-140`) and NeurIPS 2019 Togninalli et al. (`page-141`): titles match.
   - Harshman PDF: saved as `page-162`.

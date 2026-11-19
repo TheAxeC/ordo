@@ -3,7 +3,7 @@
 ## Critical failures in output A
 
 1. **The Avants 2008 annotation is empty, though its abstract was on the page A fetched.** `run/review.md:665-666` reads "**Method**: [GAP: method] (abstract not read)" and "**Key results**: [GAP: key results]", and section 3 (`review.md:122`) says the PMC page had "no abstract". The saved page (`outputs/pages/page-051.html:1418-1419`) holds the full abstract and the full text of the SyN paper. So A is wrong that nothing was there, and it left the registration step's reference method without content.
-2. **The Mémoli 2011 annotation is also empty** (`review.md:337-338`), so the paper that defines Gromov-Wasserstein, one of the topics the user named, gets no description. B did read Mémoli's abstract; its notes in `outputs/sources/output-B/source-150.txt` support B's annotation.
+2. **The M<latin small letter e with acute>moli 2011 annotation is also empty** (`review.md:337-338`), so the paper that defines Gromov-Wasserstein, one of the topics the user named, gets no description. B did read M<latin small letter e with acute>moli's abstract; its notes in `outputs/sources/output-B/source-150.txt` support B's annotation.
 3. **It misses the clinical lesion-set literature.** A says "The lesion-set predictor among the included sources uses a GNN on segmented lesions after rigid atlas co-registration" (`review.md:812`). That is one study, Prabhakar 2023. A does not cover multi-lesion MIL or set models (AMINN, multi-nodal lymphoma set models, multi-lesion radiomics aggregation), lesion-symptom mapping and stroke location predictors, transport-based morphometry used for clinical prediction (Kundu, Ironside), or the registration-at-lesion problem (Brett's cost-function masking, Juhling). These are exactly the "pipelines such methods avoid or build on". Gap 1 and Gap 4 rest on this thin base.
 4. **Published papers are cited as arXiv preprints.** Vayer et al. FGW, an ICML 2019 paper, is `@misc{arxiv_1805_09114 ... year = {2018}}` (`run/refs.bib:45-50`) and is labelled "Archival preprint" (`review.md:354`). Set Transformer (ICML 2019, `review.md:482`) and attention MIL (ICML 2018, `review.md:491`) are also typed "Archival preprint". The reader would have to re-source these to cite them correctly.
 5. **It fails its own currency gate.** 24 of 66 sources (36%) are from 2021 to 2026, against a 50% target (`review.md:890`). It also excludes Zhao et al. 2026, which it calls directly relevant, because the text was not retrieved (`review.md:124, 896`). A states both openly, but they are still gaps in coverage.
@@ -27,7 +27,7 @@ I found no factual error in B's synthesis.
     - B's "ICLR 2025 Poster" is in `sources/output-B/source-125.txt:7`.
   - The IEEE DOI pages (`page-017` to `page-025`) were saved empty, so they could not be checked as pages.
 - **A's claims I checked against its source texts all hold:**
-  - Harvey 2026: "4 of 6 moderate-sized tasks … 25x faster" (`source-073.txt:80`).
+  - Harvey 2026: "4 of 6 moderate-sized tasks <horizontal ellipsis> 25x faster" (`source-073.txt:80`).
   - Prabhakar 2023: AUCs 0.67 vs 0.61 and 0.66 vs 0.60 (`source-037.txt:39-40`).
   - Gutierrez-Becker: "challenging but also computationally expensive" (`source-059.txt:7`).
   - 3D-TBM: "registration, segmentation, cropping, and centering" (`source-054.txt:4`).

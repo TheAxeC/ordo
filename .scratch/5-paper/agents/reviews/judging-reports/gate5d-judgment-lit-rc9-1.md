@@ -2,7 +2,7 @@
 
 ## How I checked
 
-- **Reading:** I read both final messages and each side's search strategy, synthesis, gaps and recommended sources: `literature_review.tex` lines 1–460 for A, and `review.md` lines 1–240 and 1780–1885 for B. Of the annotations I read B's first block (`review.md` 164–240) and A's Bonkhoff entry (`literature_review.tex` 5078–5089); I did not read all 147 and 122 annotations.
+- **Reading:** I read both final messages and each side's search strategy, synthesis, gaps and recommended sources: `literature_review.tex` lines 1<en dash>460 for A, and `review.md` lines 1<en dash>240 and 1780<en dash>1885 for B. Of the annotations I read B's first block (`review.md` 164<en dash>240) and A's Bonkhoff entry (`literature_review.tex` 5078<en dash>5089); I did not read all 147 and 122 annotations.
 - **Entry counts:** A's `references.bib` has 147 entries and B's `refs.bib` has 122 (grep count of `@...{`).
 - **Saved pages and source texts:** I checked a sample of claims, not every one:
   - Gong 2026: page-098, page-502, and A's source-132 and source-144.
@@ -28,7 +28,7 @@ None of these undermines the structure of the review. The claims I checked on sa
 2. **Whole areas the request names are missing:**
    - **Lesion segmentation:** the request asks for lesion segmentation pipelines. `review.md` has no segmentation method; grep finds no nnU-Net or U-Net entry. Its only nnU-Net mention is as the base of the Kovacs detector (`review.md:951`).
    - **Image registration:** the only registration method is Avants 2008. LDDMM and VoxelMorph are absent; grep on `refs.bib` finds no LDDMM or Beg entry.
-   - **Unbalanced transport:** Chizat and Séjourné are absent. This matters because unequal lesion mass is central to the problem.
+   - **Unbalanced transport:** Chizat and S<latin small letter e with acute>journ<latin small letter e with acute> are absent. This matters because unequal lesion mass is central to the problem.
 3. **Its scoring rule cut central works** (`review.md:139-147`):
    - OTKE 2021 (Mialon), the trainable-reference transport embedding, which is core to "dictionaries with learnable templates".
    - Thual 2022, the transport alignment of cortical surfaces.

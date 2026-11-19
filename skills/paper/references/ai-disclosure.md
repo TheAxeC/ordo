@@ -8,7 +8,7 @@ The draft writer reads this page to write the AI disclosure statement of a paper
 - The AI use row of `config.md`: each category marked used, not used or uncertain, the tools with their versions, and the user's answer on whether any AI was used. In disclosure mode the session pre-marks the categories from the records of earlier runs, as `references/intake.md` gives under "Disclosure records", and the user confirms the marks.
 - The venue and, for a venue this page does not list, the policy text the user pasted.
 - The Policy anchor row of `config.md`, in disclosure mode: one of `prisma-trAIce`, `icmje`, `nature`, `ieee`, or "none".
-- The model identifier that the session gives in the prompt, in full mode and in disclosure mode alike. It is the identifier that the runner's model list gives for opus, the model the skill's roles run on, at the run's start, such as `claude-opus-5-5`. When the list gives none, it is the model the runner served to the first agent of the run. The session first checks that this model is an opus model.
+- The model identifier that the session gives in the prompt, in full mode and in disclosure mode alike. It is the identifier that the runner's model list gives for the model the skill's roles run on, at the run's start, such as `claude-opus-5-5`. When the list gives none, it is the model the runner served to the first agent of the run (SKILL.md, Steps 4).
 - When the runner served the draft writer that wrote the statement an identifier other than the listed one, the identifier is that served one, which the session gives in a start with the id `disclosure`.
 
 ## Categories of AI use

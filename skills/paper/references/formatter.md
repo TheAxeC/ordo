@@ -4,7 +4,7 @@ The formatter agent reads this page to prepare a LaTeX manuscript for a target f
 
 ## What the agent reads
 
-- `config.md`: Target formats, Citation style, Venue, Venue limits, Cover letter, Format profile, Materials in hand, Paper type and the Notes. When it writes a cover letter it also reads the rows Authors, Human or patient data and AI use.
+- `config.md`: Target formats, Citation style, Venue, Venue limits, Cover letter, Format profile, Materials in hand, Paper type and the Notes. When it writes a cover letter it also reads the rows Authors, Human or patient data and AI use. In lit-review mode it reads the row Authors for the title page.
 - The manuscript's files, each with its block manifest and the patch paths the session gives it, two in a run that does not change the citation style and one in a run that does (`references/patch-file.md`), and the manuscript's `.bib`, which it reads and never patches.
 - The path of the conversion copy, a copy of the manuscript's folder in the temporary folder. When the copy was compiled, also its `.aux` and `.bbl`.
 - At the second start of a run that changes the citation style, the files of the conversion copy as they stand after the first patch, each with its manifest and one patch path, the `.aux` and `.bbl` of the compile of that copy, and the `format-report.md` of the first start. The other items of this list are read as the first start read them.
@@ -173,6 +173,17 @@ The numbers and the list come from the compile of the conversion copy before the
 
 The session made the `.tex` from the input. The `.tex` holds the reference list as text and the citations as the input wrote them. It names its figures by relative paths in `figures/`.
 
+- A `.md` that cites its sources by key, as `[key]`, may be given with the `.bib` of those keys. Lit-review mode gives `review.md` so, with `refs.bib`. Such a `.md`, given with its `.bib`, takes no new `.bib`, and the formatter writes no `refs.bib`. The bullets below on making `refs.bib` do not apply to it.
+- For such a `.md`, the `format-convert` patch gives each `[key]` the cite command with that key. It names the given `.bib` and removes the reference list held as text.
+- A bracket of several keys, as `[keyA, keyB]`, becomes one cite command with those keys, in the order the bracket gives them.
+- A key named in running text without brackets, as "keyA reports", becomes the cite command of that key in the same place. No other word changes.
+- Bracketed text inside a code span, such as a field tag of a search string, stays as text.
+- Bracketed text outside a code span that is not a key of the `.bib` stays as it is. A number in square brackets is such a text. It goes to the report as an issue about the text of the `.md`. In a numbered style it would read as a citation number.
+- Each table of such a `.md` is a `longtable` that breaks across pages.
+- Its `p{}` columns are sized to the page as `p{(\linewidth - N\tabcolsep) * \real{<share>}}`, where N is 2 times (the number of columns minus 1). The shares of the columns add up to 1, so that the padding between columns is counted.
+- A table too wide for the page is set in landscape with `pdflscape`.
+- A BibTeX error that only a change of an entry would end goes to the report as an issue. The `.bib` stays as it is.
+- In lit-review mode the formatter runs the word-sequence preservation check after each conversion (SKILL.md, lit-review item 7). It compares the words of `review.md` with the words of the `.tex` body before the AI disclosure, in order, by `difflib.SequenceMatcher` with `autojunk=False`, and prints the word counts, the count of differing spans and each span.
 - The formatter writes `refs.bib` beside the new `.tex`, once, and never over an existing file. When a `refs.bib` stands there, it writes `refs-2.bib`, the `.tex` names that file, and the report names it.
 - It makes each entry from the reference text. It runs `lookup.py resolve` for the reference, and with a DOI or an arXiv ID `lookup.py bibtex`, whose standard output is the entry. A `{?}` in the entry `bibtex` prints is replaced as `SKILL.md`, Rules, says. For a preprint with a published version, the entry is the one `references/latex-template.md`, "The `.bib` entry forms", gives, with the one web search for its venue's page that section allows.
 - An entry that neither command gives is written from the reference text as the formatter reads it, and the report lists it under "Entries written from the reference text". No entry is dropped.
@@ -231,7 +242,22 @@ The report names, for each missing element, its placeholder and the call that wr
 | The title page's details, the limitations and the acknowledgements | `/paper revision` |
 | A DOI of a `.bib` entry | `/paper citation-check` |
 
-A placeholder is a block the patch inserts into the `.tex`. The AI disclosure statements stay with the draft writer, and the formatter writes none.
+A placeholder is a block the patch inserts into the `.tex`. The AI disclosure statements stay with the draft writer, and the formatter writes none, except in lit-review mode, which starts no draft writer.
+
+In lit-review mode:
+
+- The `format-convert` patch adds an unnumbered section "AI disclosure" as the last section, after the references.
+- The section states only what the run did. That is the search, the screening and the review written by the literature strategist, the identifier checks run by the session, and the conversion.
+- It names the model identifier of SKILL.md Steps 4 that the session gives.
+- It says that the user set the configuration of the review in `config.md`. The configuration is its research question, scope, sources, citation style and evidence profile.
+- It says that no author review and no peer review has taken place.
+- Each count it states is taken from the run's `refs.bib` and `checks.md`, after the duplicates are removed.
+- The title of the `.tex` is the first heading of `review.md`.
+- The `.tex` is set in one column whatever the row Paper type holds, since the literature matrix and the annotations are wide. "The paper type" below does not apply to it.
+- The author block holds the authors of the row Authors, and `[GAP: authors not supplied]` when the row holds none.
+- The `.tex` holds no abstract and no keywords, and the patch writes no placeholder for them.
+- The patch writes no placeholder for the limitations, the acknowledgements and the CRediT, funding, conflict-of-interest, data availability and ethics statements either. These belong to the manuscript the review serves.
+- The quality checklist marks each of those elements as not applicable, with that reason.
 
 ## The paper type
 
@@ -272,7 +298,7 @@ An item that fails is fixed in the patch when the fix changes form only. An item
 The formatter writes these, and only these, besides its patches, each with the Write tool:
 
 - `format-report.md` in the run folder.
-- `refs.bib` (or `refs-2.bib` when a `refs.bib` stands) beside the `.tex` made from a `.md` or `.docx`.
+- `refs.bib` (or `refs-2.bib` when a `refs.bib` stands) beside the `.tex` made from a `.md` or `.docx` given with no `.bib`.
 - `cover-letter.tex` beside the manuscript, for a journal venue with none standing.
 - `<main>-figure-<n>.tex` in the conversion copy, one for each drawing of the `.tex` that `pandoc` drops.
 
@@ -309,12 +335,18 @@ Each content change found needed, each entry written from the reference text, ea
 
 ### Conversion commands
 The formatter leaves this section out. After the conversion the session appends it, with each command it ran and its exit status, read from `checks.md`.
+In lit-review mode it also holds the counts of the last compile's log and `.blg` (SKILL.md, lit-review item 7):
+- the errors, the undefined citations and references, and the missing characters;
+- the overfull boxes in total and over 10pt, and the overfull vertical boxes;
+- the underfull boxes and the requests for one more compile;
+- the BibTeX warnings and errors.
+It also holds the output of the formatter's word-sequence preservation check of `review.md` against the `.tex`.
 ```
 
 ## Left out
 
 - The provenance gates, the zh-TW and Chinese settings (`xeCJK` and the Chinese `pandoc` options), and the submission-package verifier. The verifier belongs to `submit-manuscript`.
-- The AI disclosure statements. They stay with the draft writer, and a missing one gets its placeholder.
+- The AI disclosure statements outside lit-review mode. They stay with the draft writer, and a missing one gets its placeholder.
 - The stripping of ARS HTML-comment markers. A manuscript of this skill holds no such marker, since its block anchors live in a manifest beside the file (`references/patch-file.md`).
 - `tectonic` as a compiler. The PDF is made by `latexmk` with the engine of SKILL.md, Steps 11.
 - The pass threshold of 1 percent for the word count before and after a conversion. The session measures the headings, the figures, the tables and the words of each output, and the report lists each difference with no threshold (SKILL.md, "format-convert", "Check the content of each output").

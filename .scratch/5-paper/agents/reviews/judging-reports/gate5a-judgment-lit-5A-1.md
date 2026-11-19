@@ -5,7 +5,7 @@ I read both reviews whole: B's `run/review.md` (901 lines) and A's `output/liter
 ## Checking the cited URLs and claims
 
 **A's URLs** (`output/references.bib`):
-- Pages 049, 050, 052 and 053 have titles that match their entries: Luise 2018, Togninalli 2019, Song 2024 and Peyré 2016.
+- Pages 049, 050, 052 and 053 have titles that match their entries: Luise 2018, Togninalli 2019, Song 2024 and Peyr<latin small letter e with acute> 2016.
 - Page 054 is the Harshman PDF.
 - Page 048 (OpenReview) is a bot-check page, so it cannot confirm anything.
 
@@ -18,7 +18,7 @@ I read both reviews whole: B's `run/review.md` (901 lines) and A's `output/liter
 - TBM "89 to 95 percent" and "AUROC 0.71" are in source-142.
 - TRACER "0.78 vs 0.73 vs 0.71" is in source-079.
 
-All match. I did not find the source text for A's Bonkhoff R² figures, so that claim is not verified.
+All match. I did not find the source text for A's Bonkhoff R<superscript two> figures, so that claim is not verified.
 
 **B's quotes against `sources/output-B/`:**
 - "rigidly co-registered to the MNI152 atlas" is in source-055.
@@ -39,9 +39,9 @@ All match.
 
 ## B's critical failures
 
-1. **Missing literature.** Theme E (review.md:562 to 734) has no subject-level lesion-set predictors beyond Prabhakar 2023. It leaves out AMINN, multi-lesion PET set models, multi-lesion radiomics aggregation, lesion-symptom mapping and other registration-based stroke predictors, unbalanced transport (Chizat, Séjourné), LDDMM, the theory of set-encoder capacity, and any registration-free transport fusion study. The request names "registration-free transport-based fusion in medical imaging", and B's only candidate for it was excluded unread (review.md:124, 896).
+1. **Missing literature.** Theme E (review.md:562 to 734) has no subject-level lesion-set predictors beyond Prabhakar 2023. It leaves out AMINN, multi-lesion PET set models, multi-lesion radiomics aggregation, lesion-symptom mapping and other registration-based stroke predictors, unbalanced transport (Chizat, S<latin small letter e with acute>journ<latin small letter e with acute>), LDDMM, the theory of set-encoder capacity, and any registration-free transport fusion study. The request names "registration-free transport-based fusion in medical imaging", and B's only candidate for it was excluded unread (review.md:124, 896).
 2. **Currency gate failed** (review.md:890): 36 percent of sources are from 2021 to 2026, against a 50 percent threshold.
-3. **Two foundational sources with empty annotations.** Mémoli 2011 (review.md:337 to 338) and Avants 2008 (review.md:665 to 666) carry "[GAP: method] (abstract not read)".
+3. **Two foundational sources with empty annotations.** M<latin small letter e with acute>moli 2011 (review.md:337 to 338) and Avants 2008 (review.md:665 to 666) carry "[GAP: method] (abstract not read)".
 4. **A search that cannot be audited.** Almost every string hit the 100-record ceiling (review.md:22), and records excluded on their title were not counted (review.md:109, 893).
 5. **Gaps bounded only by the included set.** Gap 1, "No included source predicts..." (review.md:812), is scoped to B's 66 sources, not to searches that came back empty. With the coverage in failure 1, a researcher cannot rely on these gaps for a novelty claim.
 
@@ -50,4 +50,4 @@ All match.
 - **Coverage.** A's Part 1.3 and 1.4 and Part 3 (tex:320 to 378) cover the clinical lesion-set, point-cloud and registration-based literature that B's failure 1 is missing. Part 3.5 adds cohort sizes and whether each study was externally validated.
 - **Grounding of the gaps.** Each of A's gaps (tex:386 to 394) names the queries that returned nothing. B's gaps can only say what is absent from its own 66 sources.
 - **Depth of reading favours B.** B read 40 of its 66 sources in full, and its cross-cutting table (review.md:858 to 869) is a clear, usable summary. This does not make up for the missing literature.
-- **Accuracy is level.** Every claim I traced matched its source on both sides, except A's Bonkhoff R² figures, whose source text I did not find.
+- **Accuracy is level.** Every claim I traced matched its source on both sides, except A's Bonkhoff R<superscript two> figures, whose source text I did not find.
