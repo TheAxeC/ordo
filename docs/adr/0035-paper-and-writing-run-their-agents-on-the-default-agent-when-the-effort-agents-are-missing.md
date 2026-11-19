@@ -1,6 +1,6 @@
 # 0035. Paper and writing run their agents on the default agent when the effort agents are missing, and go on under a newer model of the configured family
 
-Status: proposed
+Status: proposed; superseded by the ruling The briefs of academic-paper's run of plan 5 in the part that starts the roles of `paper` on the default agent only when the effort agents are missing, now every role of `paper` on the default agent at `medium`, the part for `writing` standing
 
 ## Context
 

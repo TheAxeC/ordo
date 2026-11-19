@@ -71,7 +71,7 @@ A file or folder argument is a path, or words that name it, such as a name or a 
    - A finished plan run is one with a `final.md` and a `chapter-plan.md`.
    - For disclosure, the records of every run in `paper-runs/` beside the manuscript, which intake reads to mark the categories of AI use (`references/intake.md`, "Disclosure records").
 7. The environment variables `S2_API_KEY`, `OPENALEX_API_KEY` and `CROSSREF_POLITE_EMAIL`, each optional, never printed, read by `templates/lookup.py`.
-8. The model identifiers the runner's model list gives for opus, the model of every role but the formatter, and for sonnet, the formatter's model, such as `claude-opus-5-5` for opus (Steps 4). A role runs as the effort agent `ordo-medium` when the runner lists it and `CLAUDE_CODE_EFFORT_LEVEL` is unset, and otherwise on the runner's default agent (Steps 4).
+8. The model identifiers the runner's model list gives for opus, the model of every role but the formatter, and for sonnet, the formatter's model, such as `claude-opus-5-5` for opus (Steps 4). Every role starts on the runner's general-purpose agent, and `CLAUDE_CODE_EFFORT_LEVEL`, when it is set, gives the effort the roles run at (Steps 4).
 9. `references/intake.md`, read by the session at intake, `references/patch-file.md`, read by the session at Steps 9, and `references/modes.md` for a plain request and for an argument given in words. Each role agent reads the page of its own role (Agent prompts).
 10. For format-convert, and for the DOCX and Markdown targets of full mode, the programs `pandoc`, `latexmk`, `pdftotext` and `pdftocairo`, and for a `.bib` given also `latex` and `bibtex`, each optional, found on the PATH with `command -v`. A missing one is named in the final message with the output it would have made, and the run goes on with the other targets.
 
@@ -101,18 +101,17 @@ The five scripts are run as `python3 '<this skill's folder>/templates/<script>'`
    - The step is also done only when each command line of the run holds each path and each user value as one single-quoted argument.
 3. Find the prose standard and the writing pages as "What it reads" 1 says.
    - Done when the absolute path of the prose standard and of each of the three pages is known, or the refusal is raised.
-4. Check the runner, read the agent the roles start as, and read the model identifiers.
-   - With the effort agent `ordo-medium` among the runner's agent types and `printenv CLAUDE_CODE_EFFORT_LEVEL` exiting 1, every role starts as `ordo-medium`, and the roles run at the effort `ordo-medium` sets.
-   - With no `ordo-medium` agent listed, or with the variable set, every role starts on the runner's default agent, the general-purpose agent, with the Agent tool's `effort` set to `medium`.
-   - The roles on the default agent run at `medium`, or at the variable's value when it is set, since the variable overrides every agent's effort.
-   - A runner whose Agent tool takes no `effort` argument starts each role on the default agent without it. The roles then run at the session's effort, which the run does not read.
-   - The effort the roles run at goes into the Notes of `config.md` when intake writes it (Steps 6): `ordo-medium`, `medium`, the variable's value, or the session's effort, not read.
-   - The final message names that effort only when the roles did not start as `ordo-medium` (Steps 14).
+4. Read the effort the roles run at, and read the model identifiers.
+   - Every role starts on the runner's default agent, the general-purpose agent, with the Agent tool's `effort` set to `medium`, whatever other agent types the runner lists.
+   - The roles run at `medium`, or, when `printenv CLAUDE_CODE_EFFORT_LEVEL` exits 0, at the variable's value, since the variable overrides every agent's effort.
+   - A runner whose Agent tool takes no `effort` argument starts each role on the general-purpose agent without it. The roles then run at the session's effort, which the run does not read.
+   - The effort the roles run at goes into the Notes of `config.md` when intake writes it (Steps 6): `medium`, the variable's value, or the session's effort, not read.
+   - The final message names that effort in every run: `medium`, the variable's value, or the session's effort, not read (Steps 14).
    - Read from the runner's model list the identifier of each model the run starts: opus for every role but the formatter, and sonnet for the formatter, which format-convert starts, and full mode for a DOCX or Markdown target (Steps 14).
    - The opus identifier is the one the draft writer's prompt gives. The AI disclosure names it, or the identifier the draft writer was served when that differs from it (Steps 8).
    - A model list that gives no identifier for a model leaves it to the first agent the run starts on that model. Steps 8 reads the model that agent was served and checks that it is a model of that family. Its identifier becomes the run's identifier of that model.
    - A runner that gives no served model leaves the opus identifier a gap: the AI disclosure then lists `[GAP: model identifier]` among its gaps, and the final message lists it.
-   - Done when the agent the roles start as and the effort they run at are known, and each identifier is known, left to the first agent or recorded as a gap.
+   - Done when the effort the roles run at is known, and each identifier is known, left to the first agent or recorded as a gap.
 5. Make the run folder, or take up the unfinished run.
    - The date is the local date, `date +%Y-%m-%d`.
    - The run folder is `paper-runs/<mode>-<date>/` in the parent of the manuscript's folder.
@@ -145,7 +144,7 @@ The five scripts are run as `python3 '<this skill's folder>/templates/<script>'`
    - A reply after the end makes a new temporary folder for the incremental check and the compile of the findings pass, and removes it (Steps 13).
    - Done when the folder's absolute path is known.
 8. Start a role agent, or resume one.
-   - Start it as a fresh agent through the Agent tool on opus, or for the formatter on sonnet, as the agent Steps 4 read: `ordo-medium`, or the runner's default agent with the Agent tool's `effort` set to `medium`. Its prompt is the prompt of "Agent prompts" for its role.
+   - Start it as a fresh agent through the Agent tool on the general-purpose agent, on opus or for the formatter on sonnet, with the Agent tool's `effort` set to `medium` as Steps 4 says. Its prompt is the prompt the session writes for its role and its task, as "Agent prompts" says.
    - The session decides when to start a role agent fresh, when to resume one with a second message, and how many run at once, except for the literature strategist's search for the review in full, outline-only and lit-review mode, which runs as the theme search below says. A fresh start of a role that wrote files before in the run is given those files with its new input.
    - A strategist that reports a missing research question is started again after the session asks the question at intake.
    - The search directions a strategist's report lists for a vague research question are shown to the user at the next stop.
@@ -156,9 +155,9 @@ The five scripts are run as `python3 '<this skill's folder>/templates/<script>'`
      - The scope names the method areas of the request the search theme covers and the literatures the request names in them.
      - The scope also names each neighbouring area that another search theme covers: a source of that area is included only when it is central to this search theme's own scope, and is flagged as an overlap.
      - With one search theme, the session starts one strategist as the mode's item says, the single strategist of "The prompts of a literature search" (Agent prompts), and no merge run follows.
-     - With two search themes or more, the session starts one strategist per search theme, all at once: the theme runs. Each is given what the mode's item gives the strategist, and its search theme with its number `<k>`, its scope and its target range. Its prompt carries the rules of a theme run.
+     - With two search themes or more, the session starts one strategist per search theme, all at once: the theme runs. Each is given what the mode's item gives the strategist, and its search theme with its number `<k>`, its scope and its target range. Its prompt carries the rules and the additions of a theme run.
      - Each theme run writes `review-theme-<k>.md` and `refs-theme-<k>.bib` in the run folder, and no `review.md`, `refs.bib` or patch.
-     - When every theme run has ended, the session starts one more strategist, fresh: the merge run. In lit-review mode the identifier check (lit-review item 2) runs first. The merge run is given `config.md`, every `review-theme-<k>.md` and `refs-theme-<k>.bib`, in lit-review mode `checks.md` with the identifier check, the sources given and, where the mode's item gives one, the `.bib` with its manifest (Steps 9). Its prompt carries the rules of the merge run.
+     - When every theme run has ended, the session starts one more strategist, fresh: the merge run. In lit-review mode the identifier check (lit-review item 2) runs first. The merge run is given `config.md`, every `review-theme-<k>.md` and `refs-theme-<k>.bib`, in lit-review mode `checks.md` with the identifier check, the sources given and, where the mode's item gives one, the `.bib` with its manifest (Steps 9). Its prompt carries the rules and the additions of the merge run.
      - The merge run writes the files the mode's item names for the strategist: `review.md`, `refs.bib`, the files of "Reading a given source list" of its page for a given list, and, where a manifest is given, the patch with the mode's id.
    - Right after the start, read the agent's id and the model the runner served it, from the runner's record of the agent as the `plan-orchestration` skill's "Launching a builder" says.
    - A served model of the family of the agent's own model goes on, a newer version than the identifier of Steps 4 included. The family is opus for a role and sonnet for the formatter, and a model is of a family when its identifier names it, as `claude-opus-5-6` names opus.
@@ -167,7 +166,7 @@ The five scripts are run as `python3 '<this skill's folder>/templates/<script>'`
    - With no identifier in the model list for a model, the served model of the first agent the run starts on it gives the run's identifier of that model, which the session records in the Notes of `config.md`. A served model of another family than that model's is the same stop.
    - A draft writer that wrote the AI disclosure, in the first draft or in disclosure mode, and was served an identifier other than the one its prompt gave, is started once more (Steps 8 and 9) with the served identifier and the patch id `disclosure`. That start writes the served identifier into the statement in place of the one it holds.
    - A draft writer started before the run had an opus identifier listed `[GAP: model identifier]` in the gaps after its disclosure. When its served model is accepted, the session starts the draft writer once more (Steps 8 and 9) with the identifier and the patch id `disclosure`. That start writes the identifier into the statement and removes the gap line.
-   - Resume an agent by sending it a second message with the runner's message tool on its agent id. The agent keeps its context, no new agent starts, and the message holds the new input and the files the agent writes again.
+   - Resume an agent by sending it a second message with the runner's message tool on its agent id. The agent keeps its context, no new agent starts, and the message holds what "Agent prompts" gives for a second message.
    - When the agent has ended, read its final message whole.
    - A line of the report that says the session returns something to the user is shown at the next stop of the run and in the final message. The session reads every line of each report of the run for such lines as it reads the report, theme runs and the merge run included, and the final message holds each one under the heading of the start that wrote it.
    - Done when the agent has ended, its served model is of its own model's family and each file it was to write exists, or the stop is raised. A patch exists only for a file the agent changed.
@@ -288,7 +287,7 @@ The five scripts are run as `python3 '<this skill's folder>/templates/<script>'`
     - A plan run that a pause or the user's leaving ends writes the message to `paused.md` in place of `final.md`, so the run stays unfinished (plan mode, item 7).
     - When the draft writer wrote `cover-letter.tex` or `<main>-anonymous.tex`, it names each file, and for the anonymous copy says that the camera-ready version is the main `.tex`.
     - In full and revision it lists each `citation-report-<nn>.md` and `citation-report-edit-<r>.md` the run wrote, and `<main>.pdf`.
-    - It names the effort the roles ran at where Steps 4 says, and each served identifier other than the identifier of Steps 4 that the Notes of `config.md` record (Steps 8).
+    - It names the effort the roles ran at, as Steps 4 says, and each served identifier other than the identifier of Steps 4 that the Notes of `config.md` record (Steps 8).
     - It also lists every issue that goes to the user: `unused:` lines, references and checks left failing, acknowledged limitations, items marked "needs the user", gaps, each `[GAP: ...]` of a statement only the authors can give as the authors' fact to fill in (`references/peer-reviewer.md`, "The issues"), venues not screened, in lit-review each entry the identifier check could not check, and under mark-only each entry it found failing (lit-review items 2 and 5), and every change not applied.
     - The final message of full and revision also lists the sources that only a preprint server or no index matched. It takes them from the Summary and the Lookups table of `citation-report.md`. It says when the citations were not checked against their sources, and in full mode it says when the last draft review's verdict was not Accept.
     - When the visualization agent ran under the permission "the project's figure script edited and run", the final message lists each file outside the run folder that the script or the agent wrote or changed. The list comes from `figures.md` "Names".
@@ -791,7 +790,15 @@ Stops this call can reach: the mode to run (only for a plain request), an unfini
 
 ## Agent prompts
 
-Each role agent starts on opus, and the formatter on sonnet, as `ordo-medium` when Steps 4 found it listed and the variable unset, and otherwise on the runner's default agent with the Agent tool's `effort` set to `medium` (Steps 8). The prompt of each role agent holds these pieces:
+Each role agent starts on the runner's general-purpose agent, on opus and the formatter on sonnet, with the Agent tool's `effort` set to `medium` (Steps 4 and 8). The session writes what each role agent is sent for the task in front of it, in every mode:
+
+- A start's prompt holds the pieces of the list below and the direction of the task that follows the list.
+- A second message holds the new input, the files the agent writes again and the direction for the new task, since the agent keeps its context and its page.
+- A second message to the Socratic mentor holds the user's answer and what plan mode sends with it (the path of `outline.md` in item 3, the evaluation in item 4, the conditions of the plan-to-draft gate not met in item 6), and no direction, since the session adds nothing to the dialogue (plan mode item 2).
+- A fresh start of the Socratic mentor that continues a dialogue is a start: its prompt holds the pieces of the list below, the user's answer and the direction the next bullet says.
+- The direction of the Socratic mentor's start is written from the request and the files the start is given other than those of the dialogue (`checkpoint.md`, `dialogue.md`, `chapter-summaries.md` and `insights.md`), never from the dialogue.
+
+Every start's prompt holds at least these pieces:
 
 - The absolute path of the agent's page under `references/`, with the instruction to read it whole first.
 - The absolute paths of `config.md` and of the other files the table below lists for the role.
@@ -810,11 +817,22 @@ Each role agent starts on opus, and the formatter on sonnet, as `ordo-medium` wh
   - the command with which the draft writer computes a number from the project's saved result files, which reads only those files and writes only to standard output (`references/draft-writer.md`, "The anti-leakage rule"). The peer reviewer reads that command and runs it again only when it has that shape (`references/peer-reviewer.md`, "Numbers and data handling").
 - The instruction that the agent's final message is its report.
 
+The direction of the task is written in the session's own words for this run:
+
+- The run's specifics the task turns on, each fixed once: for a manuscript, the files, the results and the numbers each part rests on, and the definitions and the names the paper uses; for a search, the request's own strands.
+- What the agent checks in particular for this manuscript or this request, named for it: for the peer reviewer, the claims, numbers and wordings most at risk in this draft; for the draft writer, what each section must hold; for the citation compliance agent, the sources and claims most at risk; for every other role, the parts of its page's work this run puts most at risk.
+- The sentence "A shortcut (a step of your page done in part, a source not read, a count not observed) is a defect, not a saving."
+
+The direction never narrows the role's page:
+
+- Each addition works inside the rules of the role's page, and none removes a rule of the page, lowers a target, skips a layer of a search or drops a check.
+- Each addition stands beside the pieces every start's prompt holds, and none replaces one.
+
 Role agents run the read-only commands of `lookup.py` themselves: `resolve`, `search`, `fetch` (also with `--page <url>`), `quote-check`, `text` (the citation compliance agent, on a page it saved or an earlier paper's file, also as `text --abstract` for a page that holds only the abstract) and `bibtex` (also as `bibtex <arXiv ID> --page <url>`), each role the commands its row of the table below names. The peer reviewer reads the project's result files with `grep`, `awk`, `wc` and `sed -n`, runs again the command `intended-claims.md` gives for each computed number once it has read the command and found that it reads only the named result files and writes only to standard output (`references/peer-reviewer.md`, "Numbers and data handling"), and runs no other script. The session runs `cite-keys` and `check-urls`, `resolve` on the DOI or arXiv ID of each entry in lit-review mode (lit-review items 2 and 5), `anchorize_tex.py` and `apply_tex_patch.py`. The visualization agent runs its own figure scripts.
 
 | Role | Page | The prompt adds | Writes |
 |---|---|---|---|
-| Literature strategist | `references/literature-strategist.md`, and `references/patch-file.md` for a start that writes a patch | The sources given, the manuscript's `.bib` and its manifest when one is given, and the rules of "The prompts of a literature search" for its kind of start; for a theme run, its search theme with its number, its scope and its target range; for the merge run, every `review-theme-<k>.md` and `refs-theme-<k>.bib`, and in lit-review mode `checks.md` with the identifier check; for the single strategist in lit-review mode, `checks.md` once the identifier check has run; for a later input, the line of "The prompts of a literature search" that names it | `review.md`, `refs.bib`, `pre_screened_citation_keys_<list>_<timestamp>.txt` for a list of more than 50 entries, a patch for the `.bib`; a theme run writes only `review-theme-<k>.md` and `refs-theme-<k>.bib` |
+| Literature strategist | `references/literature-strategist.md`, and `references/patch-file.md` for a start that writes a patch | The sources given, the manuscript's `.bib` and its manifest when one is given, and the rules and the additions of "The prompts of a literature search" for its kind of start; for a theme run, its search theme with its number, its scope and its target range; for the merge run, every `review-theme-<k>.md` and `refs-theme-<k>.bib`, and in lit-review mode `checks.md` with the identifier check; for the single strategist in lit-review mode, `checks.md` once the identifier check has run; for a later input, the line of "The prompts of a literature search" that names it | `review.md`, `refs.bib`, `pre_screened_citation_keys_<list>_<timestamp>.txt` for a list of more than 50 entries, a patch for the `.bib`; a theme run writes only `review-theme-<k>.md` and `refs-theme-<k>.bib` |
 | Planner | `references/planner.md` | `review.md`, the user's changes to the outline, the structure chosen or insisted on, the sources found for sections that needed literature, and the files it wrote before; for the review of an expanded revision, resumed or started fresh; in plan mode, `chapter-summaries.md` and `insights.md` for the outline, `arguments.md` with the mentor's question and the user's answer for an evaluation, and every file of the run for the chapter plan; in full mode given a plan run, that run's files | `outline.md`, `arguments.md`, `structure-options.md`; in plan mode `stress-test.md` and `chapter-plan.md` |
 | Draft writer | `references/draft-writer.md`, `references/latex-template.md` and `references/patch-file.md` | The outline, the argument and the sources for a first draft with `existing-main.tex` when one stands, `references/statements.md`, `references/ai-disclosure.md` and the model identifier of Steps 4; the items, issues, findings or failing lines, and the files with their manifests, for a patch; the abstract-only and disclosure inputs; the final main `.tex` for the anonymous copy; the commands `resolve`, `bibtex` and `bibtex --page`, and the web search for a venue's page of `references/latex-template.md`, "The `.bib` entry forms" | `main.tex` whole for the first draft, `intended-claims.md`, `cover-letter.tex` for a journal venue, `<main>-anonymous.tex` for a double-blind venue, patches, `disclosure.md` |
 | Visualization | `references/visualization.md` and, for its placement patch, `references/patch-file.md` | `outline.md`, `arguments.md`, the file names in the manuscript's folder and its `figures/` folder; in revision, the items and intake's permission; in the figures call, the manifest of the `.tex` and the patch path; for its placement patch in full mode, resumed or started fresh, the manifest of `main.tex` and the patch path, or the rejection of a patch | `figures/`, `figures.md`, the patch with the id `figures`; under the permission "the project's figure script edited and run", also the script and the files it writes outside the run folder, each recorded in `figures.md` "Names" with `shasum -a 256` before and after |
@@ -841,6 +859,17 @@ The prompt of a theme run carries these rules:
 - No literature matrix across the themes, no research gaps, no skew advisory and no table of recommended sources, which the merge run writes over every theme.
 - `review-theme-<k>.md` holds the search strategy, the queries run, the screening counts, the annotated bibliography, the list "unconfirmed, excluded" and the theme notes.
 
+These rules are the minimum. To a theme run's prompt the session adds, from the request and the search theme, in its own words:
+
+- The foundational works of the theme, named, each admitted whatever its year through its page's path for seminal works.
+- The period of recent work the theme needs.
+- The question each method of the theme is read for, taken from the research question.
+- The annotation fields that answer the sub-questions the research question asks, beside its page's own fields.
+- The sub-questions are written once for the run, and every theme run's prompt, the merge run's prompt and the single strategist's prompt carry the same sub-questions, as "each fixed once" of "Agent prompts" says.
+- The databases and venues the topic needs, beside those its page's table of databases gives for the discipline.
+- The sub-topics of the theme, each with a minimum of included sources.
+- A sub-topic with fewer included sources after a documented search is reported with its searches, and is left short rather than filled by a weaker source.
+
 The prompt of the merge run carries these rules:
 
 - The duplicates across the search themes are removed: a work kept under two keys or by two theme runs keeps one key, its annotations are merged with every theme tag kept, and the keys folded into it are listed.
@@ -852,11 +881,18 @@ The prompt of the merge run carries these rules:
 - Every key the report cites stands in `refs.bib`, and every entry of `refs.bib` is cited in the report.
 - Given the `.bib` with its manifest, the patch that adds, after the `.bib`'s last block, each entry of `refs.bib` whose key, DOI or arXiv ID the `.bib` does not hold.
 
-The single strategist of a search with one search theme follows its page whole over the whole request. It writes `review.md` in the output format of its page, with no theme notes, and `refs.bib` in place of `refs-theme-<k>.bib`. Its prompt carries the rules of both lists above, with four left out:
+To the merge run's prompt the session adds the run's specifics and what the merge checks in particular for this request:
+
+- Each sub-question the research question asks is answered across the search themes.
+- The foundational works each theme run's prompt named are kept in the merged set.
+
+The single strategist of a search with one search theme follows its page whole over the whole request. It writes `review.md` in the output format of its page, with no theme notes, and `refs.bib` in place of `refs-theme-<k>.bib`. Its prompt carries the rules of the theme run's list and of the merge run's list, with four left out:
 - the theme notes;
 - the rule of no matrix, gaps, skew advisory or recommended sources;
 - the contents of `review-theme-<k>.md`;
 - the removal of duplicates across search themes.
+
+The session adds to the single strategist's prompt the additions of a theme run, written over the whole request, its sub-topics being those of the whole request.
 
 In lit-review mode it reads `checks.md` when it is resumed after the identifier check (lit-review item 3).
 
@@ -922,7 +958,7 @@ A run stops only at the stops its mode lists under its heading in "Steps". Any o
 
 ## Rules
 
-- The session launches the agents, runs the five scripts, and in format-convert and for the targets of full mode `pandoc`, `latexmk`, `pdftocairo` and `pdftotext` (and `latex` and `bibtex` for a `.bib` given), passes their outputs and files on, and judges nothing of the manuscript or of the mentor's dialogue.
+- The session launches the agents, runs the five scripts, and in format-convert and for the targets of full mode `pandoc`, `latexmk`, `pdftocairo` and `pdftotext` (and `latex` and `bibtex` for a `.bib` given), passes their outputs and files on, and judges nothing of the manuscript or of the mentor's dialogue. Its exception is the direction of "Agent prompts": it names what a role checks in particular, and it leaves every judgment of the manuscript to the role.
 - A run stops only at the stops its mode lists, and the lead of "Stops" gives how any other choice is taken.
 - A permission intake records is never asked again during the run.
 - Every role agent is started or resumed as Steps 8 says, and writes only the files its page and its prompt name.

@@ -1,6 +1,13 @@
 # Literature strategist
 
-The literature strategist agent reads this page whole at every start. Its prompt (`SKILL.md`, "Agent prompts") gives the files it reads and writes, and for a search of several search themes the rules of a theme run or of the merge run.
+The literature strategist agent reads this page whole at every start. Its prompt (`SKILL.md`, "Agent prompts" and "The prompts of a literature search") gives the files it reads and writes, for a search of several search themes the rules of a theme run or of the merge run, and the direction the session writes for this request:
+
+- At every start: the run's specifics, what the strategist checks in particular for this request, and the sentence of "Agent prompts" on a shortcut.
+- For a theme run: the foundational works of the theme to admit whatever their year, the period of recent work, the question each method is read for, the annotation fields beside this page's own, the sub-questions of the research question written once for the run, the databases and venues beside this page's table, and the sub-topics with their minimum of included sources.
+- For the single strategist: the direction of a theme run, written over the whole request.
+- For the merge run: each sub-question of the research question answered across the search themes, and the foundational works each theme run's prompt named kept in the merged set.
+
+That direction works inside this page's rules and removes none of them.
 
 ## Role definition
 
