@@ -49,7 +49,7 @@ dispatch:                    # or the block /spec writes (a list when .agents/pl
 
 A finding that is neither closed in the repair rounds nor fixed at landing is an open item here, and goes where `plan-orchestration`'s "What earns a step of its own" says; what is settled belongs in the closed list.
 
-none
+- Open item CA (2026-11-19): the rc.12 lit-review loss, diagnosed by reading only (`agents/reviews/5.L-check-diagnosis.md`). Cause: `skills/paper/SKILL.md:879` "It makes no other search" forbids the merge run every search but a failed gate's failure handling, and `:884` and `:160` give the session no place to read the theme reports and hand the merge run their open work (leads, sources cut to hold a theme's target, unconfirmed works, open citation loops); both academic-paper runs' merges assessed that work and searched further (40 and 30 sources added), `paper`'s listed 19 leads as not assessed. A second place, `:155`, keeps out of a theme's scope the counterpart lines the request implies but does not name (lesion-symptom mapping, registration failure at lesions). Options: (a) a step 5.M that carries the record's text after into `SKILL.md` :155, :160, :879, :884 and the new merge rules, and `references/literature-strategist.md:8`, then the rc.13 lit-review comparison on the user's go; (b) no change. Recommendation (a); (b) is the lazy option, it leaves the cause in place.
 
 
 ## Closed items (the log of what was raised and how it ended; no report carries it)
@@ -152,6 +152,7 @@ none
 - `v8.4.0-rc.12` tagged on 17c8a4f and pinned on the user's go (`utils/pin.sh`, "pinned: v8.4.0-rc.12 (17c8a4f), 16 skills linked").
 - 2026-11-19. The lit-review comparison on `v8.4.0-rc.12`, on the user's go: the `paper` side runs in `gate5f/lit-review-rc12` of the session's scratchpad (a clone of input commit e5fc1da), with step 5's request and answer and the cache and temporary folders under `gate5f/`; the judges follow, as for rc.11.
 - 2026-11-19. The rc.12 lit-review comparison ran: `paper` 0 of 4 against both academic-paper runs, bar 2 of 4 not met (`agents/reviews/5.L-check-blind-comparison.md`). Run $0.93 and $38.57, judges $10.55.
-- Next: the user's ruling on the rc.12 loss; the full and revision comparisons on the user's go; step 6, the closing, only once every comparison of the gate wins.
+- 2026-11-19. The rc.12 loss diagnosed on the user's ruling (a), by reading only: open item CA.
+- Next: the user's ruling on open item CA; the full and revision comparisons on the user's go; step 6, the closing, only once every comparison of the gate wins.
 - The two check runs of the rebuilt skill (revision, copy `cr4b`, session ce6db165-ecf5-4128-96cc-b05d5b5b37d3; full, copy `fr5`, session 0b6daf08-9d97-45d9-9ecd-f743566be6fd) are stopped, and resume only when Axel asks.
 - Step 5.A's check, on Axel's go (2026-11-16): `v8.4.0-rc.4` tagged on f3531a7 and pinned; one `curl` per index answered 200. The lit-review `paper` side ran in `gate5a/lit-review-1` of the session's scratchpad (session 5b815d8b-6616-4994-af1b-61091e2f57c2, claude-opus-5-5, 111 min, $16.80 by `total_cost_usd`): 81 entries, every annotation "abstract not read", 2 entries from 2022 or later (step 5's run: none unread, 44 from 2022 or later). Not judged. The revision, full and disclosure sides have not started.
