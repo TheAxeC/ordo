@@ -689,3 +689,16 @@ The brief check of step 5.J (`.scratch/5-paper/agents/reviews/5.J-brief-check.md
 Taken: (a)
 Booked: `.scratch/5-paper/plan.md` Rulings, Open item BY
 Builds on it: step 5.J
+
+## C129. Three choices of the brief of step 5.M (2026-11-19)
+
+The brief check of step 5.M (`.scratch/5-paper/agents/reviews/5.M-brief-check.md`, Names 3, The question 5 and 7, The step line 3, ADRs 2 and 5) found three choices ruling CA does not settle.
+
+- (1) The entries the merge run adds: (a) the session's identifier check runs again on them before the patch (`skills/paper/SKILL.md:529`, `docs/academic-coverage.md` row 124). Pro: every entry the lit-review run writes is resolved, as `:512` and the plan's gate ask, for the 30 to 40 sources an academic-paper-sized merge adds. Con: one `resolve` per added entry. (b) No check. Con: added entries reach the patch unchecked.
+- (2) The scope rule: (a) "the methods that stand in its place or build on it for the same question". Pro: it reaches lesion-symptom mapping, the registration-based counterpart academic-paper step 5's theme D named, and follows the research question's "remove or build on". Con: wider than CA's words. (b) CA's "the methods that stand in its place". Con: the line the rule exists for is missed.
+- (3) The record of ADR 0037's change: (a) its status line, in the form plan 5 uses for rulings, saying the part is in force in CA's form and naming what of 0037's form stays superseded. Pro: the reader of 0037 sees what holds; the form every ruling of plan 5 uses. Con: `docs/adr/README.md` asks for a new ADR for a changed decision. (b) A new ADR. Con: a record of a decision the plan's rulings already hold, with no change to the skill.
+- Recommendation: (1)(a), (2)(a), (3)(a). The lazy options were (1)(b) and (2)(b).
+
+Taken: (1)(a), (2)(a), (3)(a)
+Booked: `.scratch/5-paper/agents/briefs/5.M.md`, Decisions 4, 5 and 6
+Builds on it: step 5.M
