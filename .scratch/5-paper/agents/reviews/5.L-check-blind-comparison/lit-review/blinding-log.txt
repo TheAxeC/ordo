@@ -1,0 +1,85 @@
+text: final-message.md: 1 x /for a later `/paper full` run to take/ -> 'for a later full-manuscript run to take'
+text: final-message.md: 1 x /theme prompts/ -> 'theme briefs'
+text: final-message.md: 1 x /the prompt's/ -> "the brief's"
+text: final-message.md: 1 x /'?/Users/axelfaes/\.claude/skills/paper/templates/lookup\.py'?/ -> 'lookup'
+text: final-message.md: 1 x //paper lit-review/ -> 'this literature review'
+text: final-message.md: 1 x /paper-runs/lit-review-2026-11-19// -> 'run/'
+text: final-message.md: 2 x /review-theme-/ -> 'theme-report-'
+text: final-message.md: 2 x /refs-theme-/ -> 'theme-refs-'
+text: final-message.md: 3 x /config\.md/ -> 'settings.md'
+text: final-message.md: 1 x /[Ss]earch themes/ -> 'themes'
+text: final-message.md: 2 x /lit-review/ -> 'literature review'
+read as UTF-8: run/checks.md
+text: run/checks.md: 139 x /'?/Users/axelfaes/\.claude/skills/paper/templates/lookup\.py'?/ -> 'lookup'
+text: run/checks.md: 8 x /refs-theme-/ -> 'theme-refs-'
+text: run/checks.md: 1 x /strategist/ -> 'search agent'
+text: run/checks.md: 2 x /lit-review/ -> 'literature review'
+path: run/config.md -> run/settings.md
+text: run/settings.md: 1 x /- The roles run at effort `medium` \(the Agent tool's `effort` argument; `CLAUDE_CODE_EFFORT_LEVEL` is not set\)\. Model of every role: opus, `claude-opus-5-5`\./ -> '- Model of the role agents: opus, identifier `claude-opus-5-5`; agent effort medium.'
+text: run/settings.md: 1 x /- Served model: the runner's launch record of the four theme runs names the model requested \(opus\) and no served model identifier, so no served identifier other than `claude-opus-5-5` is recorded\./ -> '- Served model: the launch record of the four theme runs names the model requested (opus) and no served model identifier, so no served identifier other than `claude-opus-5-5` is recorded.'
+text: run/settings.md: 1 x /- Prose standard: `/Users/axelfaes/\.claude/skills/repo-setup/templates/docs/dev/prose-standard\.md` \(the repository has no `docs/dev/prose-standard\.md`\), with `/Users/axelfaes/\.claude/skills/writing/references/manuscript-prose-standard\.md`\./ -> '- Prose standard: the default prose standard (the repository has no `docs/dev/prose-standard.md`), with the default manuscript prose standard.'
+text: run/settings.md: 1 x /theme prompts/ -> 'theme briefs'
+text: run/settings.md: 1 x /paper-runs// -> 'run/'
+text: run/settings.md: 2 x /config\.md/ -> 'settings.md'
+text: run/settings.md: 1 x /[Ss]earch themes/ -> 'themes'
+text: run/settings.md: 1 x /strategist/ -> 'search agent'
+text: run/settings.md: 1 x /\| Mode \| lit-review \|/ -> '| Task | literature review |'
+text: run/settings.md: 1 x /lit-review/ -> 'literature review'
+text: run/final.md: 1 x /for a later `/paper full` run to take/ -> 'for a later full-manuscript run to take'
+text: run/final.md: 1 x /theme prompts/ -> 'theme briefs'
+text: run/final.md: 1 x /the prompt's/ -> "the brief's"
+text: run/final.md: 1 x /'?/Users/axelfaes/\.claude/skills/paper/templates/lookup\.py'?/ -> 'lookup'
+text: run/final.md: 1 x //paper lit-review/ -> 'this literature review'
+text: run/final.md: 1 x /paper-runs/lit-review-2026-11-19// -> 'run/'
+text: run/final.md: 2 x /review-theme-/ -> 'theme-report-'
+text: run/final.md: 2 x /refs-theme-/ -> 'theme-refs-'
+text: run/final.md: 3 x /config\.md/ -> 'settings.md'
+text: run/final.md: 1 x /[Ss]earch themes/ -> 'themes'
+text: run/final.md: 2 x /lit-review/ -> 'literature review'
+path: run/refs-theme-1.bib -> run/theme-refs-1.bib
+path: run/refs-theme-2.bib -> run/theme-refs-2.bib
+path: run/refs-theme-3.bib -> run/theme-refs-3.bib
+path: run/refs-theme-4.bib -> run/theme-refs-4.bib
+text: run/refs.bib: 1 x /the lit-review/ -> 'the literature review'
+path: run/review-theme-1.md -> run/theme-report-1.md
+text: run/theme-report-1.md: 11 x /run prompt/ -> 'run brief'
+text: run/theme-report-1.md: 1 x /the prompt\b/ -> 'the brief'
+text: run/theme-report-1.md: 2 x /config\.md/ -> 'settings.md'
+text: run/theme-report-1.md: 1 x /the strategist/ -> 'the search agent'
+path: run/review-theme-2.md -> run/theme-report-2.md
+read as UTF-8: run/theme-report-2.md
+text: run/theme-report-2.md: 8 x /the prompt\b/ -> 'the brief'
+text: run/theme-report-2.md: 3 x /config\.md/ -> 'settings.md'
+path: run/review-theme-3.md -> run/theme-report-3.md
+read as UTF-8: run/theme-report-3.md
+text: run/theme-report-3.md: 1 x /the prompt\b/ -> 'the brief'
+text: run/theme-report-3.md: 1 x /`/paper lit-review`/ -> 'this literature review'
+text: run/theme-report-3.md: 1 x /config\.md/ -> 'settings.md'
+text: run/theme-report-3.md: 1 x /the strategist/ -> 'the search agent'
+path: run/review-theme-4.md -> run/theme-report-4.md
+text: run/theme-report-4.md: 1 x /`/paper lit-review`/ -> 'this literature review'
+text: run/theme-report-4.md: 2 x /config\.md/ -> 'settings.md'
+text: run/theme-report-4.md: 1 x /Search theme/ -> 'Theme'
+text: run/theme-report-4.md: 1 x /the strategist/ -> 'the search agent'
+text: run/review.md: 1 x /run prompt/ -> 'run brief'
+text: run/review.md: 1 x /theme prompt\b/ -> 'theme brief'
+text: run/review.md: 1 x /theme prompts/ -> 'theme briefs'
+text: run/review.md: 1 x /`/paper lit-review`/ -> 'this literature review'
+text: run/review.md: 2 x /review-theme-/ -> 'theme-report-'
+text: run/review.md: 2 x /config\.md/ -> 'settings.md'
+text: run/review.md: 1 x /[Ss]earch themes/ -> 'themes'
+== paper
+text: source-007.txt: 1 x (?^:\baxelfaes\b)
+text: source-033.txt: 1 x (?^:/Users/axelfaes/\.claude/projects/\S*)
+text: source-038.txt: 1 x (?^:/Users/axelfaes/\.claude/projects/\S*)
+text: source-064.txt: 1 x (?^:/Users/axelfaes/\.claude/projects/\S*)
+text: source-077.txt: 1 x (?^:/Users/axelfaes/\.claude/projects/\S*)
+text: source-125.txt: 8 x (?^:/Users/axelfaes/)
+text: source-130.txt: 1 x (?^:/Users/axelfaes/\.claude/projects/\S*)
+text: source-131.txt: 1 x (?^:/Users/axelfaes/\.claude/projects/\S*)
+text: source-132.txt: 1 x (?^:/Users/axelfaes/\.claude/projects/\S*)
+text: source-133.txt: 6 x (?^:\baxelfaes\b)
+text: source-138.txt: 1 x (?^:/Users/axelfaes/\.claude/projects/\S*)
+text: source-174.txt: 1 x (?^:/Users/axelfaes/\.claude/projects/\S*)
+text: source-175.txt: 7 x (?^:\baxelfaes\b)
+text: source-188.txt: 1 x (?^:review-theme-)
