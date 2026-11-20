@@ -715,3 +715,25 @@ The review of step 5.M (`.scratch/5-paper/agents/reviews/5.M-refuter.md`, 1. Spe
 Taken: (a)
 Booked: `.scratch/5-paper/agents/reviews/5.M-refuter.md` (to be closed under "Closed" after the round)
 Builds on it: step 5.M, repair round 1
+
+## C131. The name of the response letter's own mode, in the brief of step 5.Q (2026-11-20)
+
+Ruling Open item 5.Q-letter-place gives the response letter a mode of its own for a revision already made, and names no mode.
+
+- Options: (a) `response-letter`, the name of what the mode writes, as academic-paper names `revision-coach` and `rebuttal-audit` by what they do. Pro: a reader finds the mode by the thing they want. Con: none found. (b) `rebuttal`, the name of roadmap entry 7's skill. Pro: the word users type. Con: it names a skill entry 7 had, which 5.Q's landing drops, and it reads as the audit mode's neighbour.
+- Recommendation: (a). No option was the lazy one; both cost the same.
+
+Taken: (a)
+Booked: `.scratch/5-paper/agents/briefs/5.Q.md`, "Decisions taken in this brief" 2
+Builds on it: step 5.Q
+
+## C132. Step 5.Q built by one builder, in three ordered parts (2026-11-20)
+
+The brief check of step 5.Q (`.scratch/5-paper/agents/reviews/5.Q-brief-check.md`, 4 Cases and checks) judged the step not reliably buildable by one builder (52 source files, 106,563 words, and `paper`'s present text of 97,063 words) and proposed a split by mode group.
+
+- Options: (a) one step and one builder, the work done in the order role pages and copies, then `SKILL.md` with the modes, then the ADR, the glossary, the coverage page and the figures, the report written part by part. Pro: every mode uses the shared role pages and `SKILL.md`, so a split would have each later part change files an earlier part landed, and a mode's structure can be read against academic-paper only once `SKILL.md` is whole, which is what one review of the whole skill reads. Con: one long build, which relies on the builder's context compaction and its part-by-part report. (b) Three steps, each with its own brief check, review and landing. Pro: each part reviewed alone. Con: the parts share their files, so a later part reopens an earlier landing, and no review reads a whole mode until the last.
+- Recommendation: (a). The lazy option: neither is cheaper in the work it leaves undone; (b) costs more agent runs, (a) asks more of one builder.
+
+Taken: (a)
+Booked: `.scratch/5-paper/agents/briefs/5.Q.md`, "Decisions taken in this brief" 7
+Builds on it: step 5.Q
