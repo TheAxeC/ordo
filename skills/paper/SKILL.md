@@ -172,24 +172,24 @@ The five scripts are run as `python3 '<this skill's folder>/templates/<script>'`
        - one leads job per theme run whose hand-on list is not empty, `leads-<k>`, which assesses the leads and the other sources that theme run hands on;
        - for a list of more than 40 sources, leads jobs of at most 40 sources each, `leads-<k>-<m>`, in place of `leads-<k>`;
        - one job `intersections`, which searches the intersections of the search themes that the research question joins, and the venues the topic needs.
-     - When the leads jobs and the job `intersections` have ended, the session starts the first citation round, two merge jobs at once.
-       - Its set is the union of the core sets the theme runs name and every source the leads jobs and the job `intersections` included.
-       - The backward job `backward-1` runs `refs` over that set, and the forward job `forward-1` runs `cited-by` over it for the last three years.
-       - The first round runs whenever its set holds a source not yet chained, whether or not a theme run reports its citation loop open.
+     - When the leads jobs and the job `intersections` have ended, the session starts the first citation round.
+       - Its set is the merged core set: the union of the core sets the theme runs name, each the 5 to 10 core works of Layer 2 of the strategist's page.
+       - The first round runs whether or not a theme run reports its citation loop open.
+     - Each citation round has a backward job and a forward job for each part of its set: the backward job `backward-<r>` runs `refs` over the part, and the forward job `forward-<r>` runs `cited-by` over it for the last three years.
+       - A set of at most 40 works is one part.
+       - A larger set is split into parts of at most 40 works each, and the jobs of part `<m>` are `backward-<r>-<m>` and `forward-<r>-<m>`.
+       - The session starts every job of a round at once.
      - Each merge job writes `review-<name>.md`, `refs-<name>.bib`, `screening-<name>.md` and `counts-<name>.md` in the run folder, and no `review.md`, `refs.bib` or patch.
      - When a merge job ends, the session reads its final message and its `review-<name>.md` whole. In lit-review mode the session then runs the identifier check on its `refs-<name>.bib` (lit-review item 2).
-     - After each citation round the session reads the reports of its two jobs. Where the round included a work not yet collected, the session starts the next round over the works that round included, `backward-<r>` and `forward-<r>` at once.
+     - After each citation round the session reads the reports of its jobs. Where the round included a work not yet collected, the session starts the next round over the works that round included.
      - The citation rounds end when a round includes no work not yet collected: the citation loop closes, which is condition 4 of the stopping rules of the strategist's page.
-     - The session counts the citation rounds of the run, at most 8, every round of the run counted once, those after a gate job and after the merge run included.
+     - The session counts the citation rounds of the run, at most 8.
      - A citation loop still open after the eighth round is the stop "The citation loop does not close".
      - The session then starts the merge run, fresh. In lit-review mode the identifier check of every theme run and every merge job has run by then (lit-review item 2). The merge run is given `config.md`, every theme run's and every merge job's `review-<name>.md`, `refs-<name>.bib`, `screening-<name>.md` and `counts-<name>.md`, in lit-review mode `checks.md` with the identifier check, the sources given and, where the mode's item gives one, the `.bib` with its manifest (Steps 9). Its prompt carries the rules and the additions of the merge run.
      - The merge run writes the files the mode's item names for the strategist: `review.md`, `refs.bib`, the files of "Reading a given source list" of its page for a given list, and, where a manifest is given, the patch with the mode's id. It also writes `screening-merge.md` and `counts-merge.md`.
      - Where a quality gate fails and its failure handling calls for a search, the merge run's report names that search.
      - The session starts that search as one more merge job, `gate-<n>`.
-     - Where a gate job includes sources, the session starts one more citation round over them, and the rounds go on until the citation loop closes, within the count of 8.
-     - The merge run is then resumed with the files of the gate job and of those rounds.
-     - Where the merge run's report names sources it included itself, the session starts one more citation round over them, and the rounds go on until the citation loop closes, within the count of 8.
-     - The merge run is then resumed with the files of those rounds. Every source the merge stage includes has then been chained.
+     - The merge run is then resumed with the files of the gate job.
      - In lit-review mode the synthesis start follows the merge run as a fresh agent, given `config.md`, `review.md`, `refs.bib` and `counts-merge.md`. It writes the section "Synthesis Analysis" into `review.md` by its own edits.
      - When the merge run, the synthesis start or the single strategist ends, the session reads its final message and its `review.md` whole.
      - A merge job or a merge run whose report lists sources or leads it did not assess is sent back once, resumed (Steps 8), with that work named.
@@ -200,6 +200,18 @@ The five scripts are run as `python3 '<this skill's folder>/templates/<script>'`
      - It names in the start's prompt the absolute paths of that folder and of the run's temporary folder.
      - Revision mode does the same for its strategist (revision item 3).
      - The session starts every start of the search. No start of the strategist starts an agent.
+     - The strategist check: when a start of the strategist ends (a theme run, a merge job, the merge run, the synthesis start, the single strategist, revision's strategist included), and before its report is read for the next start, the session checks from the runner's record of the agent that the start started no agent and wrote and ran no script.
+       - The record is the agent's transcript, `agent-<agent id>.jsonl`, found with `find ~/.claude/projects -name 'agent-<agent id>.jsonl'`, or under `$CLAUDE_CONFIG_DIR/projects` when that variable is set.
+       - `grep -c -E '"type":"tool_use","id":"[^"]*","name":"(Agent|Task|Skill)"' '<transcript>'` prints `0`, or the start started an agent or invoked a skill.
+       - `grep -o -E '"type":"tool_use","id":"[^"]*","name":"Bash","input":\{("[a-z_]*":("([^"\\]|\\.)*"|[a-z0-9]+),)*"command":"([^"\\]|\\.)*"' '<transcript>' | sed 's/^.*"command":"//; s/"$//'` lists each command the start ran. Its line count equals the count `grep -o -E '"type":"tool_use","id":"[^"]*","name":"Bash"' '<transcript>' | wc -l` prints. The session reads each line. Each is a `lookup.py` command of its prompt or a command its page's "The boundary of its work" lists, in the form that section gives.
+       - `grep -o -E '"type":"tool_use","id":"[^"]*","name":"(Write|Edit|NotebookEdit)","input":\{("[a-z_]*":("([^"\\]|\\.)*"|[a-z0-9]+),)*"(file_path|notebook_path)":"[^"]*"' '<transcript>' | sed 's/^.*_path":"//; s/"$//' | sort -u` lists each file the start wrote or edited. Each is a file its page's "The boundary of its work" names.
+       - `find '<its folder of the temporary folder>' -type f` lists the files of its own folder. The session reads the list for a file of code, such as a `.py` or `.sh` file.
+       - The session writes each command, its output as printed and its exit status into `checks.md` in the run folder.
+       - A start that started an agent, ran a command outside that list or in another form, or wrote a file outside those its page names is sent back once, resumed (Steps 8), with each of them named as printed. It does again by `lookup.py` and its own edits the work that agent, command or file did, and removes each file of code it wrote.
+       - The check then runs again, and the session reads the lines added since the send-back.
+       - A start that the second check still shows doing so is started once more as a fresh agent with the same prompt, its earlier files of the run folder moved to `rejected-<name>/` in the run folder and not read by any later start. The check runs on that start too.
+       - A fresh start that the check again shows doing so is not used. The final message names it with what the check printed (Steps 14), and the run goes on without its files.
+       - A runner that keeps no record of the agent leaves the check not run, and the final message says so for each start.
    - Right after the start, read the agent's id and the model the runner served it, from the runner's record of the agent as the `plan-orchestration` skill's "Launching a builder" says.
    - A served identifier other than the identifier of Steps 4 is recorded in the Notes of `config.md`, and the final message names it (Steps 14).
    - With no identifier in the model list, the served model of the first agent the run starts gives the run's identifier. The session records it in the Notes of `config.md`.
@@ -334,6 +346,7 @@ The five scripts are run as `python3 '<this skill's folder>/templates/<script>'`
       - each `[GAP: ...]` of a statement only the authors can give, as the authors' fact to fill in (`references/peer-reviewer.md`, "The issues");
       - venues not screened;
       - in lit-review, each entry the identifier check could not check, and under mark-only each entry it found failing (lit-review items 2, 4 and 6);
+      - each start of the literature strategist that the strategist check left not used, with what the check printed, or not run (Steps 8);
       - every change not applied.
     - The final message of full and revision also lists the sources that only a preprint server or no index matched. It takes them from the Summary and the Lookups table of `citation-report.md`. It says when the citations were not checked against their sources, and in full mode it says when the last draft review's verdict was not Accept.
     - When the visualization agent ran under the permission "the project's figure script edited and run", the final message lists each file outside the run folder that the script or the agent wrote or changed. The list comes from `figures.md` "Names".
@@ -557,7 +570,7 @@ The session of a lit-review run writes no script. Each command it runs is one an
 1. Start the literature strategist (Steps 8), as the theme search of Steps 8 says. It is given `config.md`, the topic, the research question and the sources the Materials in hand row names.
    - With two search themes or more these starts are the theme runs, and each writes `review-theme-<k>.md`, `refs-theme-<k>.bib`, `screening-theme-<k>.md` and `counts-theme-<k>.md`. The merge jobs follow them, and each writes `review-<name>.md`, `refs-<name>.bib`, `screening-<name>.md` and `counts-<name>.md`.
    - With one search theme the strategist writes `review.md`, `refs.bib`, `screening-single.md` and `counts-single.md`.
-   - Done when every theme run and every merge job has written its files, the citation rounds have ended, and the session has read each report (Steps 8). With one search theme, done when `review.md` and `refs.bib` exist and the session has read its report.
+   - Done when every theme run and every merge job has written its files, the citation rounds have ended, the strategist check has run on each start, and the session has read each report (Steps 8). With one search theme, done when `review.md` and `refs.bib` exist, the strategist check has run on the start and the session has read its report.
 2. Run the identifier check on each `refs-theme-<k>.bib` as its theme run ends, and on each merge job's `refs-<name>.bib` as the job ends (Steps 8), before the merge run starts. With one search theme, run it on `refs.bib`.
    - List the identifiers of the file with `grep -n -i -E '^[[:space:]]*(doi|eprint)[[:space:]]*=' '<file>'`.
    - Run `python3 '<this skill's folder>/templates/lookup.py' resolve '<identifier>' '<identifier>' ...` once for each file, with the DOI, else the arXiv ID, of every entry of the file as its arguments, each identifier one single-quoted argument (Steps 2).
@@ -953,7 +966,7 @@ A start of the literature strategist is a theme run, a merge job, the merge run,
 
 - `theme-<k>` for a theme run;
 - `leads-<k>`, or `leads-<k>-<m>` for a split list, for a leads job;
-- `backward-<r>` and `forward-<r>` for citation round `<r>`;
+- `backward-<r>` and `forward-<r>` for citation round `<r>`, or `backward-<r>-<m>` and `forward-<r>-<m>` for part `<m>` of a split set;
 - `intersections` for the search of the intersections and the venues;
 - `gate-<n>` for a quality gate's search;
 - `merge` for the merge run;
@@ -1089,18 +1102,16 @@ The prompt of a leads job carries these rules:
 
 The prompt of a backward job of a citation round carries these rules:
 
-- It runs `refs` over the works the session names.
-- In the first round those are the union of the core sets the theme runs name and every source the leads jobs and the job `intersections` included.
-- In a round after a gate job they are the sources the gate job included.
-- In a round after the merge run they are the sources the merge run included itself.
-- In any other round they are the works the round before included.
+- It runs `refs` over the works the session names, at most 40.
+- In the first round those are its part of the merged core set, the union of the core sets the theme runs name.
+- In any later round they are its part of the works the round before included.
 - It screens each cited work that is not yet collected, and annotates each it includes.
 - In the first round the works cited and not yet collected that a theme run's open citation loop names are among those it screens.
 - Its report names the works it chained from, the cited works not yet collected, and the ones it included.
 
 The prompt of a forward job of a citation round carries these rules:
 
-- It runs `cited-by --since <year>` over the same works, `<year>` being the run's year minus 2, so that the list holds the last three years.
+- It runs `cited-by --since <year>` over the same works as the backward job of its part, `<year>` being the run's year minus 2, so that the list holds the last three years.
 - It screens each citing work that is not yet collected, and annotates each it includes.
 - Its report names the works it chained from, the citing works not yet collected, and the ones it included.
 
@@ -1133,13 +1144,12 @@ The prompt of the merge run carries these rules:
 - The quality gates of its page run over the merged set with computed numbers, after the work of the rules above.
 - Where a gate fails, the merge run applies the failure handling strategies of its page itself, except a search.
 - A search of the failure handling is named in its report, with the weak theme or the missing period it searches for, and the session starts it as a gate job (Steps 8).
-- When it is resumed with the gate job's files, the merge run adds the sources the job and the citation rounds after it included.
+- When it is resumed with the gate job's files, the merge run adds the sources the job included.
 - It then reports the gate's result.
 - The merge run follows the theme run's rules on its search, requests, downloads, annotations, preprints, `.bib` entries, `grep` and final message.
 - Every query the merge run actually runs is recorded as the theme run's rule on queries says.
 - Each source the merge run adds itself gets a full annotation.
 - Each source the merge run adds itself is confirmed by a live lookup, with its DOI or arXiv ID recorded exactly as the record or the page it read gives it.
-- Its report names each source it included itself, so that the session chains them in a citation round (Steps 8).
 - Each entry the merge run adds to `refs.bib` itself has every field taken from the record it confirmed, and the report names the source as added.
 - `refs.bib` holds one entry per included work, with no character outside ASCII (an accent as its LaTeX command), its `doi` or `eprint` and `archivePrefix` fields kept, and a `url` for an entry with neither.
 - Every key the report cites stands in `refs.bib`, and every entry of `refs.bib` is cited in the report.
@@ -1157,7 +1167,7 @@ The prompt of the synthesis start carries these rules:
 To each start's prompt the session adds the run's specifics and what the start checks in particular for this request:
 
 - To a leads job: the work its theme run hands on, named with its sources from the session's reading of the theme runs (Steps 8): the leads it names for the merge jobs, the sources it left out to hold its target and the works it could not confirm.
-- To each citation round: the works it chains from, by citation key with each DOI or arXiv ID, and the round's number.
+- To each job of a citation round: the works of its part, by citation key with each DOI or arXiv ID, the round's number and, for a split set, the part's number.
 - To the first citation round: the works cited and not yet collected that each theme run with an open citation loop names.
 - To each merge job: the foundational works each theme run's prompt named, and the core sets the theme runs name.
 - To the merge run and to the synthesis start: the parts of the research question that the Synthesis Analysis is organized by. Each is named as the row "Parts of the research question" of `config.md` records it.
@@ -1181,7 +1191,7 @@ The single strategist of a search with one search theme follows its page whole o
 - the synthesis start, the single strategist writing the section "Synthesis Analysis" itself in lit-review mode.
 
 The single strategist runs its citation rounds itself:
-- Its first round chains from every source it included in its 4-layer search.
+- Its first round chains from its core set, the 5 to 10 core works of Layer 2 of its 4-layer search.
 - Each round is a backward round with `refs` and a forward round with `cited-by` for the last three years.
 - Each later round chains from the works the round before included.
 - The rounds end when a round includes no work not yet collected, at most 8 rounds.

@@ -1271,8 +1271,8 @@ MERGE_JOBS = (
     "theme run, the intersections and the venues"
 )
 CITATION_ROUNDS = (
-    "Literature strategist, citation rounds started by the session over every source "
-    "included: refs and cited-by, until the citation loop closes, at most 8"
+    "Literature strategist, citation rounds started by the session over the merged core "
+    "set: refs and cited-by in jobs of at most 40 works, until the citation loop closes, at most 8"
 )
 MERGE_RUN = (
     "Literature strategist, merge run, after the merge jobs: removes the duplicates, "
@@ -1282,9 +1282,9 @@ LOOP_STOP = "The citation loop does not close: another 8 rounds, or go on with t
 SYNTHESIS = "Literature strategist, synthesis start: the section Synthesis Analysis"
 THEME_EDGE = "two search themes or more, unless you skip the search"
 NEXT_ROUND = "a round included a work not yet collected"
-FIRST_ROUND = "the first round: the core sets and what the jobs included"
+FIRST_ROUND = "the first round: the merged core set"
 OPEN_LOOP = "open after the eighth round"
-MERGE_LOOP = "a gate job or the merge run's own sources: a citation round"
+MERGE_LOOP = "a gate's search: a gate job, then the merge run resumed"
 SEARCH_LOOP = "search rounds: 3 of 5 stopping rules, a closed citation loop among them"
 CONFIRMED = "each source confirmed by a live lookup"
 

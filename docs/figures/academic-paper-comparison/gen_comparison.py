@@ -439,9 +439,8 @@ def theme_search_nodes(synthesis: bool = False) -> tuple[gf.Node, ...]:
         ),
         N(
             "TC",
-            "Literature strategist, citation rounds over every source included: a backward "
-            "job with lookup.py refs and a forward job with lookup.py cited-by, until the "
-            f"citation loop closes, at most 8 {LR_TAG}",
+            "Literature strategist, citation rounds over the merged core set [CA]: refs and "
+            f"cited-by jobs of at most 40 works, until the loop closes, at most 8 {LR_TAG}",
             "ruled_maybe",
         ),
         N(

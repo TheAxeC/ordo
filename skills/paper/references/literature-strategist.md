@@ -15,7 +15,7 @@ The literature strategist agent reads this page whole at every start. Its prompt
   - the parts of the research question the Synthesis Analysis is organized by.
 - For a merge job:
   - for a leads job, the work its theme run hands on, named with its sources: the leads it names, the sources it left out to hold its target and the works it could not confirm;
-  - for a citation round, the works it chains from and the round's number;
+  - for a job of a citation round, the works of its part, at most 40, the round's number and, for a split set, the part's number;
   - for the first citation round, also the works each theme run's open citation loop leaves;
   - the foundational works each theme run's prompt named, and the core sets the theme runs name.
 - For the merge run:
@@ -45,8 +45,11 @@ The agent's deliverable is the literature search report, `review.md` in the run 
 - It starts no agent and invokes no skill. The session starts every start of the search.
 - Besides the `lookup.py` commands its prompt names, it runs only these:
   - `curl`, to save a work's own page into its folder of the temporary folder;
-  - command lines of `grep`, `sed -n`, `awk`, `sort`, `uniq`, `comm`, `cut`, `tr` and `wc` over its own files;
+  - command lines of `grep`, `sort`, `uniq`, `comm`, `cut`, `tr` and `wc` over its own files;
+  - `sed -n '<a>,<b>p'`, which prints lines `<a>` to `<b>` of one of its own files;
   - a shell redirect (`>`) of a command's output into a file of its folder of the temporary folder.
+- None of these commands is given an option or an argument that runs another program, and none writes a file other than by that redirect.
+- After it ends, the session reads each command it ran and each file it wrote from the runner's record of the agent (`SKILL.md`, Steps 8, the strategist check), and sends back a start that ran or wrote anything else.
 - It writes each `.bib` entry and each sentence of its report files itself, with the Write and Edit tools, from what it read. No script writes, assembles, generates or patches a report or a `.bib`.
 - It writes each screening decision as a line of its screening file: the record, its stage, its decision and its reason.
 - Each count in its report comes from a command over its own files, and stands in its counts file with the command and the command's output as printed. A count is never typed in or changed by hand.
@@ -495,8 +498,8 @@ The citation rounds that close the loop run as `SKILL.md`, "The prompts of a lit
 
 - A theme run ends its search when at least 2 of conditions 1, 2, 3 and 5 hold, or after 4 rounds with none.
 - A theme run's report says whether its citation loop is open, with the works cited and not yet collected.
-- A theme run's open citation loop is no work left undone: the session's citation rounds close the loop over every source the merge stage includes.
-- The single strategist runs its own citation rounds after its 4-layer search, chaining from every source it included, at most 8.
+- A theme run's open citation loop is no work left undone: the session's citation rounds close the loop over the merged core set, the union of the core sets the theme runs name.
+- The single strategist runs its own citation rounds after its 4-layer search, chaining from its core set, the 5 to 10 core works of Layer 2, and then from the works each round included, at most 8.
 - The single strategist's citation loop is never left open for want of a round.
 - A citation round's job, a leads job, the job `intersections` and a gate job end when the work its prompt names is done.
 - A loop still open after the eighth round is reported open with the works not collected and the rounds run.
