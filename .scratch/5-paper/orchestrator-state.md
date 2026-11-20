@@ -51,6 +51,8 @@ dispatch:                    # or the block /spec writes (a list when .agents/pl
   base: f4718c8
   launched: 2026-11-20
   report: .scratch/5-paper/agents/reviews/5.O-report.md
+  builder_usage: "first run, hand-back of three cases: 88257 tokens, 54 tool uses, 14.3 min"
+  cases_ruling: agents/briefs/5.O-cases.md
   brief_check: "agents/reviews/5.O-brief-check.md (a05d3488ca5018c8c, claude-opus-5-5, 253868 tokens, 61 tool uses, 16.0 min)"
   landing: not-started
   round: 0
