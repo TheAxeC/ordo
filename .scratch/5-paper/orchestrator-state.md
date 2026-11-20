@@ -163,6 +163,9 @@ none
 - 2026-11-19. `/spec 5 5.N` ran its brief check (`agents/reviews/5.N-brief-check.md`) and stopped on open item CB.
 - 2026-11-19. The user ruled open item CB (a).
 - 2026-11-19. Step 5.N, the twentieth of 21 steps, paper's lit-review rewritten from academic-paper 3.2.0, landed and booked in `plan.md` ("Step 5.N, paper's lit-review rewritten from academic-paper 3.2.0"); the landing report is `agents/reviews/5.N-landing.md`. Open item CC ruled (b) by the user.
-- Next: the tag and pin of the next release candidate and the lit-review comparison on it, on the user's go; the other modes' steps on the user's go.
+- `v8.4.0-rc.14` tagged on 9ecb20d and pinned on the user's go (`utils/pin.sh`, "pinned: v8.4.0-rc.14 (9ecb20d), 16 skills linked").
+- 2026-11-19. The lit-review comparison on `v8.4.0-rc.14`, on the user's go: the `paper` side runs in `gate5h/lit-review-rc14` of the session's scratchpad (a clone of input commit e5fc1da), with step 5's request and answer and the cache and temporary folders under `gate5h/`; the judges follow, as for rc.12.
+- 2026-11-20. The rc.14 lit-review comparison: `paper` 3 of 4, the bar of 2 of 4 met (judges 1, 3 and 4 for `paper`, judge 2 for academic-paper's step 5 run). Run $138.31 and 4 h 52 min, 303 sources; judges $7.94. Record `agents/reviews/5.N-check-blind-comparison.md`.
+- Next: the other modes' steps on the user's go.
 - The two check runs of the rebuilt skill (revision, copy `cr4b`, session ce6db165-ecf5-4128-96cc-b05d5b5b37d3; full, copy `fr5`, session 0b6daf08-9d97-45d9-9ecd-f743566be6fd) are stopped, and resume only when Axel asks.
 - Step 5.A's check, on Axel's go (2026-11-16): `v8.4.0-rc.4` tagged on f3531a7 and pinned; one `curl` per index answered 200. The lit-review `paper` side ran in `gate5a/lit-review-1` of the session's scratchpad (session 5b815d8b-6616-4994-af1b-61091e2f57c2, claude-opus-5-5, 111 min, $16.80 by `total_cost_usd`): 81 entries, every annotation "abstract not read", 2 entries from 2022 or later (step 5's run: none unread, 44 from 2022 or later). Not judged. The revision, full and disclosure sides have not started.

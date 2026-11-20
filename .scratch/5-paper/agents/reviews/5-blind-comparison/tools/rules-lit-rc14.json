@@ -1,0 +1,254 @@
+{
+ "paths": [
+  [
+   "config.md",
+   "settings.md"
+  ],
+  [
+   "review-theme-",
+   "theme-report-"
+  ],
+  [
+   "refs-theme-",
+   "theme-refs-"
+  ]
+ ],
+ "text": [
+  [
+   "The skill's `lookup\\.py`",
+   "The lookup script"
+  ],
+  [
+   "filled by the intake agent from",
+   "filled at intake from"
+  ],
+  [
+   "and the intake agent proposes none",
+   "and the intake proposes none"
+  ],
+  [
+   "run prompt",
+   "run brief"
+  ],
+  [
+   "theme prompt\\b",
+   "theme brief"
+  ],
+  [
+   "- The roles run at effort `medium` \\(the Agent tool's `effort` argument; `CLAUDE_CODE_EFFORT_LEVEL` is not set\\)\\. Model of every role: opus, `claude-opus-5-5`\\.",
+   "- Model of the role agents: opus, identifier `claude-opus-5-5`; agent effort medium."
+  ],
+  [
+   "- Served model: the runner's launch record of the four theme runs names the model requested \\(opus\\) and no served model identifier, so no served identifier other than `claude-opus-5-5` is recorded\\.",
+   "- Served model: the launch record of the four theme runs names the model requested (opus) and no served model identifier, so no served identifier other than `claude-opus-5-5` is recorded."
+  ],
+  [
+   "- Prose standard: `/Users/axelfaes/\\.claude/skills/repo-setup/templates/docs/dev/prose-standard\\.md` \\(the repository has no `docs/dev/prose-standard\\.md`\\), with `/Users/axelfaes/\\.claude/skills/writing/references/manuscript-prose-standard\\.md`\\.",
+   "- Prose standard: the default prose standard (the repository has no `docs/dev/prose-standard.md`), with the default manuscript prose standard."
+  ],
+  [
+   "for a later `/paper full` run to take",
+   "for a later full-manuscript run to take"
+  ],
+  [
+   "theme prompts",
+   "theme briefs"
+  ],
+  [
+   "the prompt's",
+   "the brief's"
+  ],
+  [
+   "the prompt\\b",
+   "the brief"
+  ],
+  [
+   "by the prompt\\b",
+   "by the brief"
+  ],
+  [
+   "- The roles run as the effort agent `ordo-medium` \\(listed by the runner; `printenv CLAUDE_CODE_EFFORT_LEVEL` exited 1\\)\\. Opus identifier from the runner's model list: `claude-opus-5-5`\\.",
+   "- Model of the role agents: opus, identifier `claude-opus-5-5` from the runner's model list; agent effort medium."
+  ],
+  [
+   "- Prose standard: `/Users/axelfaes/\\.claude/skills/repo-setup/templates/docs/dev/prose-standard\\.md` \\(the repository has no `docs/dev/prose-standard\\.md`\\)\\.",
+   "- Prose standard: the default prose standard (the repository has no `docs/dev/prose-standard.md`)."
+  ],
+  [
+   "The skill admits such an entry",
+   "The instructions admit such an entry"
+  ],
+  [
+   "an identifier rule the skill does not impose",
+   "an identifier rule the instructions do not impose"
+  ],
+  [
+   "- The roles run as the agent `ordo-medium` \\(listed by the runner; `CLAUDE_CODE_EFFORT_LEVEL` unset\\)\\.\\n- Opus identifier from the runner's model list: `claude-opus-5-5`\\.",
+   "- Model of the role agents: opus, identifier `claude-opus-5-5` from the runner's model list; agent effort medium."
+  ],
+  [
+   "'?/Users/axelfaes/\\.claude/skills/paper/templates/lookup\\.py'?",
+   "lookup"
+  ],
+  [
+   "Lit-review item 3: ",
+   ""
+  ],
+  [
+   "[Ll]it-review item 3",
+   "the check"
+  ],
+  [
+   "# Lit-review run",
+   "# Literature review run"
+  ],
+  [
+   "\\bLit-review\\b",
+   "Literature review"
+  ],
+  [
+   "strategist agents",
+   "search agents"
+  ],
+  [
+   "- Roles run as the agent `ordo-medium`, at the effort it sets \\(`CLAUDE_CODE_EFFORT_LEVEL` unset\\)\\.\\n- Opus identifier from the runner's model list: `claude-opus-5-5`\\.",
+   "- Model of the role agents: opus, identifier `claude-opus-5-5` from the runner's model list; agent effort medium."
+  ],
+  [
+   "\\(`/private/tmp/claude-502/-Users-axelfaes-workspace-ordo-[^`]*`, slashes written as hyphens\\)",
+   "(the run folder's path with its slashes written as hyphens)"
+  ],
+  [
+   "the `/paper lit-review` skill",
+   "a literature review tool"
+  ],
+  [
+   "`/paper lit-review`",
+   "this literature review"
+  ],
+  [
+   "/paper lit-review",
+   "this literature review"
+  ],
+  [
+   "/private/tmp/claude-502/[^ \\n\\\"'}`)]*?/gate5h/lit-review-rc14",
+   "/work"
+  ],
+  [
+   "/var/folders/[^ \\n\\\"'}`)]*",
+   "<temporary folder>"
+  ],
+  [
+   "paper-runs/lit-review-2026-11-19/",
+   "run/"
+  ],
+  [
+   "paper-runs/",
+   "run/"
+  ],
+  [
+   "review-theme-",
+   "theme-report-"
+  ],
+  [
+   "refs-theme-",
+   "theme-refs-"
+  ],
+  [
+   "theme-<k>",
+   "theme-<n>"
+  ],
+  [
+   "config\\.md",
+   "settings.md"
+  ],
+  [
+   "lookup\\.py",
+   "the lookup script"
+  ],
+  [
+   "ordo-medium",
+   "an agent at medium effort"
+  ],
+  [
+   "\\(agent a[0-9a-f]{16}[^)]*\\)",
+   ""
+  ],
+  [
+   "\\bagent a[0-9a-f]{16}\\b",
+   "agent"
+  ],
+  [
+   "[Ss]earch themes",
+   "themes"
+  ],
+  [
+   "Search theme",
+   "Theme"
+  ],
+  [
+   "search theme",
+   "theme"
+  ],
+  [
+   "The literature strategist",
+   "The search agent"
+  ],
+  [
+   "the literature strategist",
+   "the search agent"
+  ],
+  [
+   "[Ll]iterature strategists",
+   "search agents"
+  ],
+  [
+   "The strategist",
+   "The search agent"
+  ],
+  [
+   "the strategist",
+   "the search agent"
+  ],
+  [
+   "strategist",
+   "search agent"
+  ],
+  [
+   "\\blit-review mode\\b",
+   "literature review"
+  ],
+  [
+   "\\| Mode \\| lit-review \\|",
+   "| Task | literature review |"
+  ],
+  [
+   "the lit-review",
+   "the literature review"
+  ],
+  [
+   "lit-review",
+   "literature review"
+  ],
+  [
+   "\\bthe skill's\\b",
+   "its instructions'"
+  ],
+  [
+   "\\bthe skill\\b",
+   "its instructions"
+  ],
+  [
+   "\\(`SKILL\\.md`[^)]*\\)",
+   ""
+  ],
+  [
+   "SKILL\\.md",
+   "the instructions"
+  ],
+  [
+   "\\bSteps [0-9]+\\b",
+   "the instructions"
+  ]
+ ]
+}
