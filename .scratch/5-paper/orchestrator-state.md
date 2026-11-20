@@ -52,7 +52,8 @@ dispatch:                    # or the block /spec writes (a list when .agents/pl
   session_id: ad02705591414f6c9 (claude-opus-5-5)
   launched: 2026-11-20T23:01Z
   report: .scratch/5-paper/agents/reviews/5.Q-report.md
-  round: 0
+  round: 0 (cases ruling agents/briefs/5.Q-cases.md, case 6)
+  builder_usage: first run of the cases, 183706 tokens, 30 tool uses, 4.2 min
   brief_check: .scratch/5-paper/agents/reviews/5.Q-brief-check.md (a8c1cd2ba5e2d236e, claude-opus-5-5, 222747 tokens, 73 tool uses, 11.7 min)
 ```
 
