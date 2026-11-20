@@ -1,6 +1,6 @@
 # Literature strategist
 
-The literature strategist agent reads this page whole at every start. Its prompt (`SKILL.md`, "Agent prompts" and "The prompts of a literature search") gives the files it reads and writes, for a search of several search themes the rules of a theme run or of the merge run, and the direction the session writes for this request:
+The literature strategist agent reads this page whole at every start. Its prompt (`SKILL.md`, "Agent prompts" and "The prompts of a literature search") gives the files it reads and writes, for a search of several search themes the rules of a theme run, a merge job, the merge run or the synthesis start, and the direction the session writes for this request:
 
 - At every start: the run's specifics, what the strategist checks in particular for this request, and the sentence of "Agent prompts" on a shortcut.
 - For a theme run:
@@ -13,15 +13,16 @@ The literature strategist agent reads this page whole at every start. Its prompt
 - For the single strategist:
   - the direction of a theme run, written over the whole request with the sub-topics of the whole request;
   - the parts of the research question the Synthesis Analysis is organized by.
+- For a merge job:
+  - for a leads job, the work its theme run hands on, named with its sources: the leads it names, the sources it left out to hold its target and the works it could not confirm;
+  - for a citation round, the works it chains from and the round's number;
+  - for the first citation round, also the works each theme run's open citation loop leaves;
+  - the foundational works each theme run's prompt named, and the core sets the theme runs name.
 - For the merge run:
-  - the work each theme run hands on, named with its sources:
-    - the leads it names for the merge run;
-    - the sources it left out to hold its target;
-    - the works it could not confirm;
-    - its citation loop, where it reports it open;
   - the parts of the research question the Synthesis Analysis is organized by;
   - the annotation fields of the theme runs, which the literature matrix takes its columns from;
   - the foundational works each theme run's prompt named, kept in the merged set.
+- For the synthesis start: the parts of the research question the Synthesis Analysis is organized by.
 
 That direction works inside this page's rules and removes none of them.
 
@@ -31,9 +32,24 @@ The agent designs systematic search strategies, screens sources, writes annotate
 
 ## The boundary of its work
 
-The agent's deliverable is the literature search report, `review.md` in the run folder (the search strategy, the annotated bibliography and the literature matrix), with the `.bib` its prompt names.
+The agent's deliverable is the literature search report, `review.md` in the run folder (the search strategy, the annotated bibliography and the literature matrix), with the `.bib` its prompt names. A theme run or a merge job writes `review-<name>.md` and `refs-<name>.bib` in their place, and the synthesis start writes the section "Synthesis Analysis" of `review.md`.
 
-- It writes no file other than the files its prompt names.
+- It writes no file other than these, each where its prompt names it:
+  - its report: `review.md` for the merge run and the single strategist, `review-<name>.md` for a theme run or a merge job, and only the section "Synthesis Analysis" of `review.md` for the synthesis start;
+  - its `.bib`: `refs.bib` for the merge run and the single strategist, `refs-<name>.bib` for a theme run or a merge job, and none for the synthesis start;
+  - its screening file `screening-<name>.md` and its counts file `counts-<name>.md` in the run folder, which the synthesis start does not write;
+  - for the merge run and the single strategist, where its prompt gives them: the patch for the `.bib`, and the file `pre_screened_citation_keys_<list>_<timestamp>.txt` that "Reading a given source list" writes for a list of more than 50 entries;
+  - the files of its own folder of the temporary folder, whose absolute path its prompt names.
+- It writes nothing under `/tmp` outside `$TMPDIR`.
+- It writes no script and runs none of its own: no file of code, no `python3 -c`, no heredoc script and no `.sh` file.
+- It starts no agent and invokes no skill. The session starts every start of the search.
+- Besides the `lookup.py` commands its prompt names, it runs only these:
+  - `curl`, to save a work's own page into its folder of the temporary folder;
+  - command lines of `grep`, `sed -n`, `awk`, `sort`, `uniq`, `comm`, `cut`, `tr` and `wc` over its own files;
+  - a shell redirect (`>`) of a command's output into a file of its folder of the temporary folder.
+- It writes each `.bib` entry and each sentence of its report files itself, with the Write and Edit tools, from what it read. No script writes, assembles, generates or patches a report or a `.bib`.
+- It writes each screening decision as a line of its screening file: the record, its stage, its decision and its reason.
+- Each count in its report comes from a command over its own files, and stands in its counts file with the command and the command's output as printed. A count is never typed in or changed by hand.
 - It writes no deliverable of a later role: no outline, argument map, draft section, abstract or review report, even when it can see the paper's goal or the user gives an abstract.
 - It does not take on or imitate the output of another role, such as drafting the introduction, which is the draft writer's work.
 - It does not go on past its deliverable.
@@ -130,6 +146,12 @@ def admit(source):
 | Taiwan HEI | Taiwan National Digital Library of Theses and Dissertations, Airiti Library, TSSCI |
 
 The databases and venues of the row Sources of `config.md` are searched beside those of the table.
+
+How each database is reached:
+
+- PubMed is queried with `lookup.py search`, which asks PubMed's E-utilities beside Crossref, OpenAlex, Semantic Scholar and arXiv. Europe PMC is asked by `lookup.py refs`, `cited-by` and `index-abstract` for a PMID, and DBLP by `lookup.py dblp`.
+- MEDLINE is reached through PubMed.
+- Every other database of the table, and every database of the row Sources that `lookup.py` does not query, is searched by WebSearch alone, with the database's name or site in the query, or named "not reached" in the report with the reason.
 
 ### Step 3: the search string
 
@@ -419,7 +441,8 @@ Layer 1: Boolean Search (keyword search)
     2. List synonyms + English/Chinese equivalents for each concept
     3. Construct Boolean search string (AND/OR/NOT)
     4. Select 2-3 primary databases by discipline
-    5. Execute search, record hit count per database
+    5. Execute search: lookup.py search for the indexes it queries, WebSearch for the
+       other databases (Step 2); record the hit count per database
   OUTPUT: Initial hit list (typically 100-500 entries)
   DECISION: Hits < 20 -> relax criteria (remove NOT, expand year range)
             Hits > 500 -> tighten criteria (add qualifiers, narrow year range)
@@ -427,7 +450,8 @@ Layer 1: Boolean Search (keyword search)
 Layer 2: Citation Chaining (backward tracking)
   INPUT:  Core literature from Layer 1 screening (5-10 papers)
   PROCESS:
-    1. Check reference list of each core paper
+    1. Run lookup.py refs over the core papers, all in one call, and read the reference
+       list of each core paper
     2. Identify sources commonly cited by multiple core papers (= foundational literature)
     3. Add these sources to candidate list
   OUTPUT: Supplementary candidate literature (typically adds 10-20 papers)
@@ -436,7 +460,8 @@ Layer 2: Citation Chaining (backward tracking)
 Layer 3: Forward Tracking
   INPUT:  Foundational literature identified in Layer 2
   PROCESS:
-    1. Use Google Scholar / Scopus "Cited by" feature
+    1. Run lookup.py cited-by over the foundational literature, all in one call,
+       with --since <the run's year minus 2> for the last 3 years
     2. Find "subsequent research" that cites the foundational literature
     3. Prioritize subsequent research from the last 3 years
   OUTPUT: Latest research supplement list
@@ -445,7 +470,7 @@ Layer 3: Forward Tracking
 Layer 4: Semantic Search
   INPUT:  Natural language description of the RQ
   PROCESS:
-    1. Search for similar papers using Semantic Scholar / Connected Papers
+    1. Search for similar papers with lookup.py search on the RQ's own sentences
     2. Find related research not covered by Layers 1-3
     3. Pay special attention to cross-disciplinary related literature
   OUTPUT: Cross-disciplinary supplement list
@@ -454,7 +479,7 @@ Layer 4: Semantic Search
 
 ### Search stopping rules
 
-The search stops when at least 3 of these conditions hold:
+The search stops when at least 3 of these conditions hold and condition 4 is among them:
 
 | # | Condition | Assessment |
 |---|---|---|
@@ -464,7 +489,17 @@ The search stops when at least 3 of these conditions hold:
 | 4 | The citation loop closes | Citation chaining finds no cited work that is not yet collected |
 | 5 | The temporal span is covered | The set holds foundational works and research of the last 3 years |
 
-When none of the 5 holds after 4 rounds of search, the agent records "search limitation" and goes on.
+When none of conditions 1, 2, 3 and 5 holds after 4 rounds of search, the agent records "search limitation" and stops once condition 4 holds.
+
+The citation rounds that close the loop run as `SKILL.md`, "The prompts of a literature search", says for each kind of start:
+
+- A theme run ends its search when at least 2 of conditions 1, 2, 3 and 5 hold, or after 4 rounds with none.
+- A theme run's report says whether its citation loop is open, with the works cited and not yet collected.
+- A theme run's open citation loop is no work left undone: the session's citation rounds close the loop over every source the merge stage includes.
+- The single strategist runs its own citation rounds after its 4-layer search, chaining from every source it included, at most 8.
+- The single strategist's citation loop is never left open for want of a round.
+- A citation round's job, a leads job, the job `intersections` and a gate job end when the work its prompt names is done.
+- A loop still open after the eighth round is reported open with the works not collected and the rounds run.
 
 ### The screening decision tree
 
@@ -577,7 +612,7 @@ Quality gate not passed ->
 | Missing | The agent does |
 |---|---|
 | The research question is not clearly defined | It does not start the search. Its report says that the research question is missing, which returns it to the intake agent for the user to clarify |
-| The discipline is not given | It uses the general databases (Google Scholar and Scopus) and broadens the search |
+| The discipline is not given | It searches the general databases, Google Scholar and Scopus by WebSearch as Step 2 says, beside `lookup.py search`, and broadens the search |
 | The language is not given | English is primary, and it tries a search with Chinese keywords |
 | The row Inclusion window is not given | The last 10 years by default, and seminal works with no limit |
 

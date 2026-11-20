@@ -1,0 +1,44 @@
+# 0041. Paper's literature search queries every index through lookup.py, writes no script, starts its merge jobs from the session, and closes the citation loop
+
+Status: proposed
+
+## Context
+
+The lit-review run of `paper` on `v8.4.0-rc.14` (session 432a3aa1-7834-411d-80b0-2e5a391aa425) is described by the greps of its transcripts that the brief of step 5.O of plan 5 records (`.scratch/5-paper/agents/briefs/5.O.md`, "What is on the tree"):
+
+- The agents wrote 75 script files by heredoc: the merge run 33, theme 4 14, the merge run's synthesis agent 12, themes 1 and 2 7 each, theme 3 1 and the session 1. `SKILL.md` "Agent prompts" exempted the literature strategist from the rules that an agent writes no script and starts no agent.
+- The agents queried the indexes with their own clients: commands naming api.openalex.org 55 times, api.crossref.org 34, api.semanticscholar.org 36, export.arxiv.org 45, eutils.ncbi 55, europepmc 16 and dblp.org 13. `lookup.py bibtex` ran once. `lookup.py` had no command for the references and the citing works of many works, the metadata of many DOIs, an abstract, or a DBLP record, and no request reached E-utilities, Europe PMC or DBLP.
+- The merge run's `gen.py` wrote `review.md` from strings typed into it, `mkbib.py` wrote `refs.bib`, and `edit_gen.py` and `fix.py` to `fix5.py` changed counts and sentences of `review.md` by string replacement. No record of the run shows a reading behind those counts and sentences.
+- The merge run started four annotation agents and one synthesis agent, polled its own background scripts with `sleep` loops, and wrote `/tmp/merge_dirs.txt` outside the run folder and its `TMPDIR`.
+- The merge run ran alone for 204 of the run's 297 minutes. Its median context was about 211k tokens a turn, its largest 366k, and 46 Read calls returned 58 percent of what its tools returned.
+- Its report: "citation loop does not close; the two rounds added 35 works not yet collected". The merge run ran one backward and one forward round, as the ruling Open item CA of plan 5 gave it.
+
+DBLP's search interface answers a client with no browser by an HTML page with status 202 ("Making sure you're not a bot!") for the User-Agents `lookup.py (the paper skill of Ordo)`, `curl/8.7.1`, `Python-urllib/3.12` and `lookup-test`; its SPARQL endpoint `https://sparql.dblp.org/sparql` answers a GET with status 200 and the records of a title. OpenAlex reads `|` as OR inside a filter value, percent-encoded or not: `filter=doi:10.1103/physreve.69.066138%7C10.1038/nature14539` returns 2 works.
+
+## Decision
+
+The ruling The lit-review run under the rules of plan 5, items 1 to 7:
+
+1. The literature strategist writes no script, runs none of its own and starts no agent, as every other role. Besides `lookup.py` it runs `curl` to save a work's own page, command lines of `grep`, `sed -n`, `awk`, `sort`, `uniq`, `comm`, `cut`, `tr` and `wc` over its own files, and a redirect into its own folder of the run's temporary folder.
+2. Every query to an index's interface goes through `lookup.py`. The indexes are Crossref, OpenAlex, Semantic Scholar, arXiv, PubMed E-utilities, Europe PMC and DBLP. `lookup.py` gains `refs` and `cited-by` (up to 1000 works per input, from OpenAlex, Semantic Scholar and, for a PMID, Europe PMC), `resolve` over several DOIs and arXiv IDs in batches (each input with an arXiv ID asked of OpenAlex alone, since OpenAlex gives a preprint the DOI of its published version), `index-abstract` (the abstract of the first index that gives one), `dblp` (DBLP's records of a title, from its SPARQL endpoint, by the title's exact forms first and its words when they find no record or only CoRR records), and PubMed in `search`. E-utilities, Europe PMC and DBLP are paced hosts with lock files, skip files and the reply cache of the other indexes. A DOI holding `|` or `,` is asked alone, never in a filter of several DOIs. WebSearch finds sources and venue pages, and WebFetch reads or `curl` saves a work's own page; `curl` queries no index. The strategist runs no `lookup.py bibtex`, as 0040 keeps.
+3. The agent writes every `.bib` entry and every sentence of its report itself, with its own edits. Each start keeps `screening-<name>.md`, one line per record screened, and `counts-<name>.md`, each count of its report with the command over its own files that gives it and that command's output.
+4. Only the session starts agents. After the theme runs it starts the merge jobs at once: a leads job per theme run that hands sources on (at most 40 sources each), and the search of the intersections and the venues. Then it starts the citation rounds of item 7. Then the merge run removes the duplicates and writes the merged report, a quality gate's search is one more merge job, and in lit-review mode the synthesis start writes the section "Synthesis Analysis". Every later input goes to the merge run, except an issue of that section, which goes to the synthesis start. The outcome of the sources' review reaches both in lit-review mode: the merge run updates `review.md` and `refs.bib`, the synthesis start then updates "Synthesis Analysis" for each source added or removed, and the key-set check runs again.
+5. The output of the batch commands and a fetched text go to files of the start's folder of the temporary folder, and the agent reads the part it needs with `grep` or `sed -n`.
+6. The work the session sends back stands in the first prompt of each theme run, each merge job and the single strategist: a source that passes every gate held back, a record excluded by a rule its page does not hold, a record a query returned and not screened, a period of recent work not searched, an exclusion that rests on a failed lookup, an incomplete annotation and a sub-topic under its minimum. The single strategist's prompt also carries a citation loop left open for want of a round, since its rounds are its own. A theme run's open citation loop is no work left undone: it reports the loop open, and the session's citation rounds close it.
+7. The search stops only with the stopping condition 4, the citation loop closing, among the conditions that hold, so every source the search includes is chained. The first citation round chains from the core sets the theme runs name and every source the leads jobs and the search of the intersections included, whether or not a theme run reports its loop open; a gate job that includes sources, and a merge run that includes sources itself, is each followed by one more round over them. The citation rounds run until a round includes no work not yet collected, at most 8 in the run. A loop still open after the eighth round is the stop "The citation loop does not close", whose options are another 8 rounds or the run going on with the works not collected named.
+
+Items 1 and 3 deviate from academic-paper 3.2.0, whose strategist writes scripts. For these points this decision replaces the ruling The academic-paper strategist of plan 5.
+
+## Alternatives rejected
+
+- The corpus capped, so that one merge run can hold it: it drops sources that pass screening, which 0040 and the ruling The academic-paper strategist keep, and leaves the scripts and the agents of the strategist in place.
+- A rule sentence against scripts with no `lookup.py` commands behind it: the rc.14 agents wrote their own clients for work `lookup.py` could not do, so the rule would be broken for want of a command, or the work left undone.
+- Academic-paper's strategist writing scripts, as it does: a script that writes a report or a count is no reading of a source, which breaks the rules that scripts compute facts and that the skill's agents write manuscript content.
+
+## Consequences
+
+- Every index request of the search is paced, cached and recorded by `lookup.py`, and a reply read twice costs one request.
+- The merge stage runs in parallel starts with small contexts, at the cost of more agent starts and the session's reading of each report.
+- The citation loop now ends closed or at a stop the user answers; a run can take up to 8 citation rounds, and 16 when the user or the instruction not to stop asks for another 8.
+- `lookup.py` has four more commands and three more hosts to keep, each with its cases in `lookup.test.sh`.
+- `dblp` depends on DBLP's SPARQL endpoint. Its exact query answered in under a second, and its words query in 17.4 s on a title with no exact form, within the 30 s every request waits; a words query cut at 1000 rows is named in the output, since a record of the title can lie beyond the cut.

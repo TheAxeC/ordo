@@ -1,5 +1,5 @@
 #!/bin/sh
-# Offline proof of the parts of lookup.py that compute facts without the network: title matching, the choice among candidates, the DOI mismatch flag, record merging, passage lines, passage normalisation, abstract reassembly, the arXiv query syntax, the OpenAlex query text, the arXiv spacing across processes, the arXiv turn of every request to an arXiv host, the refusal of a URL other than http and https, an index whose body does not parse, the not found lines, the file name made from a key, the DOI in a URL, the PDF and arXiv HTML tests, the credentials each host gets, the URL check-urls requests, the BibTeX of an arXiv record, the BibTeX body test, the text of an HTML page, fetch given an OpenAlex ID or a Semantic Scholar ID (the record asked of that ID's index alone, a record with a DOI fetched as that DOI, and a record with neither its open-access URL tried and that index's abstract written), the keys a .tex cites with the commands of natbib and biblatex and the files it inputs, the output of cite-keys, the title check of check-urls against the record a doi resolves to, the error line for an input file that does not exist, the .bib check-urls names and the .bib quote-check reads, both the one named on the command line, the refusal of the one-argument form of check-urls and of the two-argument form of quote-check, the retraction and expression-of-concern notice lines of resolve, and resolve of a title preferring the candidate of the year given. It proves the published version of an arXiv ID: bibtex printing the entry alone on standard output and every other line on standard error, the entry doi.org gives for a published DOI that Semantic Scholar or OpenAlex names and whose record's title agrees, the @misc entry with its reason for a DOI whose title is below 0.70, a doi.org that gives no entry and every index left out, the line that names a conference or journal of Semantic Scholar with no DOI and none for an arXiv venue or another type, bibtex --page building the @inproceedings entry from the citation tags of a PMLR or NeurIPS page and refusing a page with no title tag, no year tag, a title below 0.70, a 404, a redirect to arXiv or doi.org or a file URL, fetch --page reading the PDF a page names before arxiv.org, the URLs resolve, search and fetch request, which stay the keys of the cache, the line of resolve that names the PMCID an OpenAlex record holds, the line of resolve for a DOI and for a title with every author of the record and the volume, the issue and the pages that Crossref, OpenAlex and Semantic Scholar give, in their place before the identifiers, a record of search with three authors and " et al.", a merged record that takes the volume of the other, and text: the text of a saved PMC page, Europe PMC body and PDF written as <stem>.txt and found by quote-check, the text of a page that holds only the abstract written by text --abstract as <stem>.abstract.txt and found by quote-check with the locator abstract, a declared charset, a byte order mark and an XML declaration before the root, pdftotext given one absolute path through a stand-in written on PATH, its failure and its absence, and the refusal of an existing or linked <stem>.txt or <stem>.abstract.txt, of a body that is neither HTML or XML nor a PDF, of a missing file, an empty key and a folder that is not a folder. It proves that bibtex prints every entry in ASCII by each of its three builders (the doi.org entry, the @misc entry of an arXiv record and the entry of a venue's page): an accented letter as its accent command, also from a decomposed letter, the letters, Greek letters and signs of the table in their LaTeX forms, an en dash as two hyphens, a character with no form as {?} with its warning line and exit status 0, an ASCII value unchanged, the key in ASCII and a url percent-encoded, and that the title check of check-urls gives a converted entry the verdict and ratio of the original. It also proves the pacing of each index across processes (the gap of each host with and without its credential, a redirect that takes the turn of the host it goes to, doi.org that takes none, a lock file that holds inf or nan), a 429 waited out by the Retry-After it names in each form it can take, the 429 that names more than 60 seconds left out at once with its reason and the skip file of its host (named by host and credential, mode 600, capped at 86400 seconds, ignored when it holds no time, read by a request that no cached reply answers, and never written for a host that is not an API host), the reasons bibtex prints for a 429, the host a reason names when the 429 is met on a redirect hop, and the reply cache of resolve and search (a reply sent once for the same URL in one process and in another, the replies that are not stored, the 30 days, the pruning, no credential in any file, a cache folder that cannot be made or written, an entry that cannot be used, the cache folder under XDG_CACHE_HOME or under HOME, the modes of its files). Every case runs on scratch temporary, cache and home folders set before lookup is imported, with time.sleep and time.time stubbed together as one clock where a wait is checked. Response bodies are recorded below in the shapes the indexes answer. Prints a last line starting PASS: and exits 0, or prints a line starting FAIL: and exits 1.
+# Offline proof of the parts of lookup.py that compute facts without the network: title matching, the choice among candidates, the DOI mismatch flag, record merging, passage lines, passage normalisation, abstract reassembly, the arXiv query syntax, the OpenAlex query text, the arXiv spacing across processes, the arXiv turn of every request to an arXiv host, the refusal of a URL other than http and https, an index whose body does not parse, the not found lines, the file name made from a key, the DOI in a URL, the PDF and arXiv HTML tests, the credentials each host gets, the URL check-urls requests, the BibTeX of an arXiv record, the BibTeX body test, the text of an HTML page, fetch given an OpenAlex ID or a Semantic Scholar ID (the record asked of that ID's index alone, a record with a DOI fetched as that DOI, and a record with neither its open-access URL tried and that index's abstract written), the keys a .tex cites with the commands of natbib and biblatex and the files it inputs, the output of cite-keys, the title check of check-urls against the record a doi resolves to, the error line for an input file that does not exist, the .bib check-urls names and the .bib quote-check reads, both the one named on the command line, the refusal of the one-argument form of check-urls and of the two-argument form of quote-check, the retraction and expression-of-concern notice lines of resolve, and resolve of a title preferring the candidate of the year given. It proves the published version of an arXiv ID: bibtex printing the entry alone on standard output and every other line on standard error, the entry doi.org gives for a published DOI that Semantic Scholar or OpenAlex names and whose record's title agrees, the @misc entry with its reason for a DOI whose title is below 0.70, a doi.org that gives no entry and every index left out, the line that names a conference or journal of Semantic Scholar with no DOI and none for an arXiv venue or another type, bibtex --page building the @inproceedings entry from the citation tags of a PMLR or NeurIPS page and refusing a page with no title tag, no year tag, a title below 0.70, a 404, a redirect to arXiv or doi.org or a file URL, fetch --page reading the PDF a page names before arxiv.org, the URLs resolve, search and fetch request, which stay the keys of the cache, the line of resolve that names the PMCID an OpenAlex record holds, the line of resolve for a DOI and for a title with every author of the record and the volume, the issue and the pages that Crossref, OpenAlex and Semantic Scholar give, in their place before the identifiers, a record of search with three authors and " et al.", a merged record that takes the volume of the other, and text: the text of a saved PMC page, Europe PMC body and PDF written as <stem>.txt and found by quote-check, the text of a page that holds only the abstract written by text --abstract as <stem>.abstract.txt and found by quote-check with the locator abstract, a declared charset, a byte order mark and an XML declaration before the root, pdftotext given one absolute path through a stand-in written on PATH, its failure and its absence, and the refusal of an existing or linked <stem>.txt or <stem>.abstract.txt, of a body that is neither HTML or XML nor a PDF, of a missing file, an empty key and a folder that is not a folder. It proves that bibtex prints every entry in ASCII by each of its three builders (the doi.org entry, the @misc entry of an arXiv record and the entry of a venue's page): an accented letter as its accent command, also from a decomposed letter, the letters, Greek letters and signs of the table in their LaTeX forms, an en dash as two hyphens, a character with no form as {?} with its warning line and exit status 0, an ASCII value unchanged, the key in ASCII and a url percent-encoded, and that the title check of check-urls gives a converted entry the verdict and ratio of the original. It also proves the pacing of each index across processes (the gap of each host with and without its credential, a redirect that takes the turn of the host it goes to, doi.org that takes none, a lock file that holds inf or nan), a 429 waited out by the Retry-After it names in each form it can take, the 429 that names more than 60 seconds left out at once with its reason and the skip file of its host (named by host and credential, mode 600, capped at 86400 seconds, ignored when it holds no time, read by a request that no cached reply answers, and never written for a host that is not an API host), the reasons bibtex prints for a 429, the host a reason names when the 429 is met on a redirect hop, and the reply cache of resolve and search (a reply sent once for the same URL in one process and in another, the replies that are not stored, the 30 days, the pruning, no credential in any file, a cache folder that cannot be made or written, an entry that cannot be used, the cache folder under XDG_CACHE_HOME or under HOME, the modes of its files). It proves the batch commands: refs (OpenAlex's referenced_works with their records asked in batches of 50 IDs, Semantic Scholar's references for an empty list, Europe PMC's references of a PMID, and "no references listed" with each index's reason), cited-by (--since kept by Semantic Scholar after its list is read, and a list cut at 1000 of its total over five pages of OpenAlex), resolve over several inputs (blocks equal to the lines of each input alone with OpenAlex and Crossref asked once, an error block for a title, a SICI DOI percent-encoded in both filters and matched, an index left out from a batch on in each later block, and a DOI holding | asked alone), index-abstract (an abstract from OpenAlex, a structured PubMed abstract with its labels, a Europe PMC abstract with its tags taken out, no abstract with each index's reason, and the refusal of an existing file), dblp on DBLP's SPARQL endpoint (a proceedings record and a CoRR record, the query on the longest run of the title's words, a 202 HTML page and a 200 body that does not parse left out), search merging a PubMed record on a shared DOI, the 429 of E-utilities and the skip file of DBLP, the pacing of the three new hosts across processes, and the cache of refs and none of index-abstract. Every case runs on scratch temporary, cache and home folders set before lookup is imported, with time.sleep and time.time stubbed together as one clock where a wait is checked. Response bodies are recorded below in the shapes the indexes answer. Prints a last line starting PASS: and exits 0, or prints a line starting FAIL: and exits 1.
 set -u
 
 here=$(cd "$(dirname "$0")" && pwd)
@@ -1059,12 +1059,12 @@ with attempt("K2 fetch"):
     check("K2 fetch neither reads nor writes the cache", script.asked(OPENALEX) == 2 and script.asked(SEMANTIC_SCHOLAR) == 2, repr(hosts_of(script)))
 with attempt("K2 no result"):
     scratch_case()
-    script = Script({host: [says(200, body)] for host, body in NO_RESULT.items()})
+    script = Script({**{host: [says(200, body)] for host, body in NO_RESULT.items()}, "eutils.ncbi.nlm.nih.gov": [says(200, '{"esearchresult":{"count":"0","idlist":[]}}')]})
     with fake_clock():
         status, lines, _ = run_main(["search", "zzz"], script)
         sent = len(script.urls)
         status, again, _ = run_main(["search", "zzz"], script)
-    check("K2 a 200 search with no result is stored and read back as not found", sent == 4 and len(script.urls) == 4 and again == lines == ["Crossref: not found", "OpenAlex: not found", "Semantic Scholar: not found", "arXiv: not found"], repr((hosts_of(script), head(lines), head(again))))
+    check("K2 a 200 search with no result is stored and read back as not found", sent == 5 and len(script.urls) == 5 and again == lines == ["Crossref: not found", "OpenAlex: not found", "Semantic Scholar: not found", "arXiv: not found", "PubMed: not found"], repr((hosts_of(script), head(lines), head(again))))
 
 # K3: an entry older than 30 days is not used and is replaced, and the first store removes entries older than 30 days and temporary files older than 1 day.
 DAY = 86400
@@ -1500,6 +1500,7 @@ EXPECTED_URLS = (
         "https://api.openalex.org/works?search=gradient+descent&per_page=20&select=id%2Ctitle%2Cauthorships%2Cpublication_year%2Cprimary_location%2Cdoi%2Copen_access%2Cids%2Cbiblio",
         "https://api.semanticscholar.org/graph/v1/paper/search?query=gradient+descent&limit=20&fields=paperId%2Ctitle%2Cauthors%2Cyear%2Cvenue%2CexternalIds%2CopenAccessPdf%2Cjournal",
         "https://export.arxiv.org/api/query?search_query=all%3Agradient+AND+all%3Adescent&max_results=20",
+        "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=gradient+descent&retmax=20&retmode=json",
     ]),
     (["fetch", ICML_ID, "FOLDER", "k"], [
         "https://arxiv.org/html/1811.03804",
@@ -1841,6 +1842,419 @@ with attempt("B10"):
     check("B10 a merged record takes the volume of the other record", len(record_lines) == 1 and record_lines[0].startswith("[OpenAlex, Semantic Scholar] ") and "| A. Lovelace |" in record_lines[0] and "| Journal of Sorting | vol 7 | doi " in record_lines[0], repr(lines))
 
 
+# N: the batch commands refs, cited-by, resolve over several identifiers, index-abstract and dblp, PubMed in search, and the three paced hosts of E-utilities, Europe PMC and DBLP.
+# The bodies are in the shapes each index answers, recorded and shortened: OpenAlex's referenced_works and its filters, Semantic Scholar's references and citations,
+# Europe PMC's references, citations and core search, and E-utilities' esearch, esummary and efetch.
+EUTILS, EUROPEPMC, DBLP = "eutils.ncbi.nlm.nih.gov", "www.ebi.ac.uk", "sparql.dblp.org"
+
+
+class Routes:
+    """Answers Client.send by the first part found in the URL: the n-th request matching a part gets the n-th reply of its list and the last reply repeats. A URL no part matches gets 404."""
+
+    def __init__(self, routes):
+        self.routes = [(part, list(replies)) for part, replies in routes]
+        self.urls = []
+
+    def send(self, url, headers, read_body):
+        self.urls.append(url)
+        for part, replies in self.routes:
+            if part in url:
+                status, body, header = replies.pop(0) if len(replies) > 1 else replies[0]
+                return status, body.encode("utf-8"), dict(header)
+        return 404, b"", {}
+
+    def asked(self, part):
+        return sum(1 for url in self.urls if part in url)
+
+
+def routed(arguments, routes, credentials=None):
+    """(exit status, standard output lines, standard error lines, the router) of lookup.main on a new scratch folder, answered by the routes."""
+    scratch_case(credentials)
+    router = Routes(routes)
+    with fake_clock():
+        status, lines, err = run_main(arguments, router)
+    return status, lines, err.splitlines(), router
+
+
+def json_reply(value):
+    return says(200, json.dumps(value))
+
+
+def oa_work(number, title=None, year=2020, doi=None, abstract=None):
+    work = {"id": "https://openalex.org/W%d" % number, "title": title or "Referenced work %d" % number, "publication_year": year, "authorships": [], "primary_location": {"source": {"display_name": "A Journal"}}, "open_access": {"oa_url": None}, "doi": doi}
+    if abstract is not None:
+        work["abstract_inverted_index"] = abstract
+    return work
+
+
+def oa_line(number, year=2020):
+    return "[OpenAlex] Referenced work %d | %d | A Journal | OpenAlex W%d" % (number, year, number)
+
+
+def oa_links(number, referenced):
+    return json_reply({"id": "https://openalex.org/W%d" % number, "referenced_works": ["https://openalex.org/W%d" % item for item in referenced]})
+
+
+def s2_hit(number, year):
+    return {"paperId": "%040x" % number, "title": "Citing work %d" % number, "year": year, "venue": "", "authors": [], "externalIds": {}, "openAccessPdf": None, "journal": None}
+
+
+# N1: refs on two DOIs: one line naming each input, then a record line per work it cites, in the order OpenAlex lists them; the referenced works of every input are asked in batches of 50 IDs.
+with attempt("N1"):
+    result = routed(["refs", "10.1000/a", "10.1000/b"], [
+        ("api.openalex.org/works/doi:10.1000/a?", [oa_links(1, [11, 12])]),
+        ("api.openalex.org/works/doi:10.1000/b?", [oa_links(2, [12, 13])]),
+        ("api.openalex.org/works?filter=openalex", [json_reply({"meta": {"count": 3}, "results": [oa_work(13), oa_work(11), oa_work(12)]})]),
+    ])
+    expected = ["10.1000/a: 2 of 2 references, from OpenAlex", oa_line(11), oa_line(12), "10.1000/b: 2 of 2 references, from OpenAlex", oa_line(12), oa_line(13)]
+    check("N1 refs on two DOIs", result[:2] == (0, expected), repr(result[:3]))
+    check("N1 the three referenced works are asked in one batch", result[3].asked("api.openalex.org/works?filter=openalex") == 1, repr(result[3].urls))
+    result = routed(["refs", "10.1000/a", "10.1000/b"], [
+        ("api.openalex.org/works/doi:10.1000/a?", [oa_links(1, range(100, 130))]),
+        ("api.openalex.org/works/doi:10.1000/b?", [oa_links(2, range(130, 160))]),
+        ("api.openalex.org/works?filter=openalex", [json_reply({"meta": {"count": 60}, "results": [oa_work(number) for number in range(100, 160)]})]),
+    ])
+    check("N1 sixty referenced works are asked in two batches", result[0] == 0 and result[3].asked("api.openalex.org/works?filter=openalex") == 2 and len([line for line in result[1] if line.startswith("[OpenAlex] ")]) == 60, repr((result[0], result[1][:2], result[3].urls)))
+
+# N2: an input OpenAlex holds with an empty referenced_works takes Semantic Scholar's references, and its line names Semantic Scholar.
+with attempt("N2"):
+    result = routed(["refs", "10.1000/a"], [
+        ("api.openalex.org/works/doi:10.1000/a?", [oa_links(1, [])]),
+        ("api.semanticscholar.org/graph/v1/paper/DOI:10.1000/a/references?", [json_reply({"offset": 0, "data": [{"citedPaper": s2_hit(1, 2001)}, {"citedPaper": s2_hit(2, 2002)}]})]),
+    ])
+    expected = ["10.1000/a: 2 of 2 references, from Semantic Scholar", "[Semantic Scholar] Citing work 1 | 2001 | Semantic Scholar %040x" % 1, "[Semantic Scholar] Citing work 2 | 2002 | Semantic Scholar %040x" % 2]
+    check("N2 Semantic Scholar's references for an empty referenced_works", result[:2] == (0, expected), repr(result[:3]))
+
+# N3: an input no index holds prints "no references listed" with each index's reason, never a bare zero, and exits 1.
+with attempt("N3"):
+    result = routed(["refs", "10.1000/none"], [("api.semanticscholar.org", [says(500)])])
+    check("N3 no references listed, with each index's reason", result[:2] == (1, ["10.1000/none: no references listed; OpenAlex: not found; Semantic Scholar: left out, HTTP 500"]), repr(result[:3]))
+
+# N4: a PMID that OpenAlex and Semantic Scholar do not hold takes Europe PMC's references.
+EUROPEPMC_REFERENCES = {"version": "6.9", "hitCount": 2, "request": {"id": "31978945", "source": "MED", "offSet": 0, "pageSize": 1000}, "referenceList": {"reference": [
+    {"source": "MED", "id": "12690092", "citationType": "JOURNAL ARTICLE", "title": "A novel coronavirus associated with severe acute respiratory syndrome.", "authorString": "Ksiazek TG, Erdman D, Goldsmith CS, Zaki SR.", "journalAbbreviation": "N Engl J Med", "issue": "20", "pubYear": 2003, "volume": "348", "pageInfo": "1953-1966", "citedOrder": 1, "match": "Y"},
+    {"source": "MED", "id": "26852031", "citationType": "JOURNAL ARTICLE", "title": "Coronaviruses and the human airway: a universal system for virus-host interaction studies.", "authorString": "Jonsdottir HR, Dijkman R.", "journalAbbreviation": "Virol J", "pubYear": 2016, "volume": "13", "pageInfo": "24", "citedOrder": 2, "match": "Y"},
+]}}
+with attempt("N4"):
+    result = routed(["refs", "PMID:31978945"], [("europepmc/webservices/rest/MED/31978945/references?", [json_reply(EUROPEPMC_REFERENCES)])])
+    expected = [
+        "PMID:31978945: 2 of 2 references, from Europe PMC",
+        "[Europe PMC] A novel coronavirus associated with severe acute respiratory syndrome. | Ksiazek TG, Erdman D, Goldsmith CS et al. | 2003 | N Engl J Med | vol 348 | no 20 | pages 1953--1966 | PMID 12690092",
+        "[Europe PMC] Coronaviruses and the human airway: a universal system for virus-host interaction studies. | Jonsdottir HR, Dijkman R | 2016 | Virol J | vol 13 | pages 24 | PMID 26852031",
+    ]
+    check("N4 Europe PMC's references of a PMID", result[:2] == (0, expected), repr(result[:3]))
+    check("N4 OpenAlex and Semantic Scholar are asked by the PMID first", result[3].asked("api.openalex.org/works/pmid:31978945?") == 1 and result[3].asked("api.semanticscholar.org/graph/v1/paper/PMID:31978945/references?") == 1, repr(result[3].urls))
+
+# N5: cited-by --since 2023 on a work Semantic Scholar answers: Semantic Scholar's list is filtered after it is read, so only works of 2023 and later are printed.
+with attempt("N5"):
+    result = routed(["cited-by", "10.1000/a", "--since", "2023"], [
+        ("api.openalex.org/works/doi:10.1000/a?select=id", [json_reply({"id": "https://openalex.org/W1"})]),
+        ("api.openalex.org/works?filter=cites", [json_reply({"meta": {"count": 0}, "results": []})]),
+        ("api.semanticscholar.org/graph/v1/paper/DOI:10.1000/a/citations?", [json_reply({"offset": 0, "data": [{"citingPaper": s2_hit(1, 2021)}, {"citingPaper": s2_hit(2, 2023)}, {"citingPaper": s2_hit(3, 2024)}]})]),
+    ])
+    expected = ["10.1000/a: 2 citing works from 2023 on, among 3 of 3 citing works read, from Semantic Scholar", "[Semantic Scholar] Citing work 2 | 2023 | Semantic Scholar %040x" % 2, "[Semantic Scholar] Citing work 3 | 2024 | Semantic Scholar %040x" % 3]
+    check("N5 cited-by --since 2023 from Semantic Scholar", result[:2] == (0, expected), repr(result[:3]))
+    check("N5 OpenAlex's cites filter holds the year", any("filter=cites%3AW1" in url and "from_publication_date%3A2023-01-01" in url for url in result[3].urls), repr(result[3].urls))
+
+# N6: a work with more than 1000 citing works: 1000 printed, read over every page, and "cut at 1000 of <total>".
+with attempt("N6"):
+    pages = [("page=%d&select" % page, [json_reply({"meta": {"count": 1500}, "results": [oa_work(page * 1000 + item, year=2024) for item in range(200)]})]) for page in range(1, 6)]
+    result = routed(["cited-by", "10.1000/a"], [("api.openalex.org/works/doi:10.1000/a?select=id", [json_reply({"id": "https://openalex.org/W1"})])] + pages)
+    records = [line for line in result[1] if line.startswith("[OpenAlex] ")]
+    check("N6 cut at 1000 of the total", result[0] == 0 and result[1][:1] == ["10.1000/a: cut at 1000 of 1500 citing works, from OpenAlex"] and len(records) == 1000, repr((result[0], result[1][:2], len(records))))
+    check("N6 five pages of 200 asked with the cites filter", result[3].asked("filter=cites%3AW1") == 5, repr([url for url in result[3].urls][:8]))
+
+# N7: resolve with a DOI and an arXiv ID: two blocks, each opened by a line naming its identifier and equal to the lines resolve prints for that input alone; OpenAlex asked once for the DOIs, by a filter, and once for the arXiv ID, alone.
+CROSSREF_ITEM = json.loads(CROSSREF_BODY)["message"]
+OPENALEX_WORK = json.loads(OPENALEX_BODY)
+SINGLE_ROUTES = [
+    ("api.crossref.org/works/10.1103/PhysRevE.69.066138", [says(200, CROSSREF_BODY)]),
+    ("api.openalex.org/works/doi:10.1103/PhysRevE.69.066138?", [says(200, OPENALEX_BODY)]),
+    ("api.semanticscholar.org/graph/v1/paper/DOI:10.1103/PhysRevE.69.066138?", [says(200, S2_BODY)]),
+    ("export.arxiv.org/api/query?id_list=2511.18945", [says(200, ARXIV_FEED)]),
+]
+BATCH_ROUTES = [
+    ("api.crossref.org/works?filter=", [json_reply({"status": "ok", "message": {"items": [CROSSREF_ITEM]}})]),
+    ("api.openalex.org/works?filter=", [json_reply({"meta": {"count": 1}, "results": [OPENALEX_WORK]})]),
+] + SINGLE_ROUTES
+with attempt("N7"):
+    alone_doi = routed(["resolve", "10.1103/PhysRevE.69.066138"], SINGLE_ROUTES)
+    alone_arxiv = routed(["resolve", "2511.18945"], SINGLE_ROUTES)
+    both = routed(["resolve", "10.1103/PhysRevE.69.066138", "2511.18945"], BATCH_ROUTES)
+    expected = ["== 10.1103/PhysRevE.69.066138"] + alone_doi[1] + ["== 2511.18945"] + alone_arxiv[1]
+    check("N7 the two blocks equal the lines of each input alone", both[1] == expected and len(alone_doi[1]) >= 4 and len(alone_arxiv[1]) >= 4, repr((both[1], expected)))
+    check("N7 OpenAlex asked once for the DOIs and once for the arXiv ID", both[3].asked("api.openalex.org") == 2 and both[3].asked("api.openalex.org/works?filter=doi:10.1103%2Fphysreve.69.066138&") == 1 and both[3].asked("api.openalex.org/works/doi:10.48550/arXiv.2511.18945?") == 1, repr(both[3].urls))
+    check("N7 Crossref asked once for both, by a filter", both[3].asked("api.crossref.org") == 1, repr(both[3].urls))
+
+# N7b: an arXiv ID whose OpenAlex work carries the DOI of its published version, in a batch with a DOI: its block prints the OpenAlex record, as the run on it alone does.
+with attempt("N7b"):
+    published = oa_work(9, title="Holographic dual of a preprint", year=1998, doi="https://doi.org/10.1023/a:1026654312961")
+    routes = [
+        ("api.crossref.org/works?filter=", [json_reply({"status": "ok", "message": {"items": []}})]),
+        ("api.openalex.org/works?filter=", [json_reply({"meta": {"count": 0}, "results": []})]),
+        ("api.openalex.org/works/doi:10.48550/arXiv.hep-th/9711200?", [json_reply(published)]),
+    ]
+    alone = routed(["resolve", "hep-th/9711200"], routes)
+    both = routed(["resolve", "10.1000/a", "hep-th/9711200"], routes)
+    at = both[1].index("== hep-th/9711200") if "== hep-th/9711200" in both[1] else -1
+    openalex_line = [line for line in alone[1] if line.startswith("OpenAlex: ")]
+    check("N7b the arXiv ID's block equals its lines alone, with the OpenAlex record", at > 0 and both[1][at + 1:] == alone[1] and openalex_line[:1] and openalex_line[0].startswith("OpenAlex: ratio 1.00: Holographic dual of a preprint"), repr((both[1], alone[1])))
+
+# N8: resolve with a DOI, a title and an arXiv ID: the title is an error block of its own, the two other blocks are printed, and the exit status is 1.
+with attempt("N8"):
+    result = routed(["resolve", "10.1103/PhysRevE.69.066138", "Estimating mutual information", "2511.18945"], BATCH_ROUTES)
+    blocks = [line for line in result[1] if line.startswith("== ")]
+    at = result[1].index("== Estimating mutual information") if "== Estimating mutual information" in result[1] else -1
+    check("N8 an error block for the title and the two other blocks", result[0] == 1 and blocks == ["== 10.1103/PhysRevE.69.066138", "== Estimating mutual information", "== 2511.18945"] and at >= 0 and result[1][at + 1:at + 2] == ["error: Estimating mutual information is not a DOI or an arXiv ID"], repr(result[:3]))
+
+# N9: a SICI DOI holding ;, <, >, ( and ) is percent-encoded in the OpenAlex filter and the Crossref request, and its record is matched.
+SICI = "10.1002/(SICI)1097-0258(19980430)17:8<857::AID-SIM777>3.0.CO;2-E"
+SICI_ITEM = {"DOI": SICI.lower(), "title": ["Two-sided confidence intervals for the single proportion: comparison of seven methods"], "author": [{"given": "Robert G.", "family": "Newcombe"}], "issued": {"date-parts": [[1998, 4, 30]]}, "container-title": ["Statistics in Medicine"], "volume": "17", "issue": "8", "page": "857-872"}
+with attempt("N9"):
+    result = routed(["resolve", SICI, "10.1103/PhysRevE.69.066138"], [
+        ("api.crossref.org/works?filter=", [json_reply({"status": "ok", "message": {"items": [CROSSREF_ITEM, SICI_ITEM]}})]),
+        ("api.openalex.org/works?filter=", [json_reply({"meta": {"count": 1}, "results": [OPENALEX_WORK]})]),
+    ])
+    asked = [url for url in result[3].urls if "api.crossref.org" in url or "api.openalex.org" in url]
+    encoded = all(all(code in url for code in ("%3B", "%3C", "%3E", "%28", "%29")) for url in asked)
+    check("N9 the SICI DOI is percent-encoded in the OpenAlex filter and the Crossref request", len(asked) == 2 and encoded and not any(character in url for url in asked for character in ";<>()"), repr(asked))
+    at = result[1].index("== " + SICI) if "== " + SICI in result[1] else -1
+    check("N9 the SICI record is matched to its block", at >= 0 and result[1][at + 1].startswith("Crossref: ratio 1.00: Two-sided confidence intervals for the single proportion"), repr(result[1]))
+
+# N10: three DOIs, OpenAlex asked in batches of 2, answers 429 with Retry-After: 120 at the second batch: OpenAlex is left out with its reason in the later block and the other indexes are printed.
+with attempt("N10"):
+    real_batch = lookup.OPENALEX_BATCH if hasattr(lookup, "OPENALEX_BATCH") else None
+    lookup.OPENALEX_BATCH = 2
+    try:
+        works = [oa_work(number, title="Work %d" % number, doi="https://doi.org/10.1000/w%d" % number) for number in (1, 2)]
+        items = [{"DOI": "10.1000/w%d" % number, "title": ["Work %d" % number], "issued": {"date-parts": [[2020]]}} for number in (1, 2, 3)]
+        result = routed(["resolve", "10.1000/w1", "10.1000/w2", "10.1000/w3"], [
+            ("api.crossref.org/works?filter=", [json_reply({"status": "ok", "message": {"items": items}})]),
+            ("api.openalex.org/works?filter=", [json_reply({"meta": {"count": 2}, "results": works}), says(429, Retry_After="120")]),
+        ])
+    finally:
+        if real_batch is None:
+            del lookup.OPENALEX_BATCH
+        else:
+            lookup.OPENALEX_BATCH = real_batch
+    lines = result[1]
+    third = lines[lines.index("== 10.1000/w3"):] if "== 10.1000/w3" in lines else []
+    check("N10 OpenAlex left out in the later block with its reason", "OpenAlex: left out, HTTP 429, retry after 120 s" in third, repr(lines))
+    check("N10 the earlier blocks keep OpenAlex's records", sum(1 for line in lines if line.startswith("OpenAlex: ratio 1.00: Work ")) == 2, repr(lines))
+    check("N10 Crossref is printed in every block", sum(1 for line in lines if line.startswith("Crossref: ratio 1.00: Work ")) == 3, repr(lines))
+
+# N11 to N15: index-abstract writes <folder>/<stem>.abstract.txt from the first index that gives an abstract.
+def abstract_run(identifiers, routes, existing=None):
+    """(exit status, lines, the files of the folder with their text, the router) of index-abstract into a new scratch folder."""
+    scratch_case()
+    folder = os.path.dirname(put("abstract%d/.keep" % next(case_numbers), ""))
+    for name, text in (existing or {}).items():
+        with open(os.path.join(folder, name), "w") as handle:
+            handle.write(text)
+    router = Routes(routes)
+    with fake_clock():
+        status, lines, err = run_main(["index-abstract", *identifiers, "--into", folder], router)
+    files = {name: read_text(os.path.join(folder, name)) for name in listing(folder) if name != ".keep"}
+    return status, lines + err.splitlines(), files, router, folder
+
+
+with attempt("N11"):
+    status, lines, files, router, folder = abstract_run([DOI], [("api.openalex.org/works/doi:", [says(200, OPENALEX_BODY)])])
+    check("N11 the abstract of OpenAlex's inverted index", status == 0 and files == {"10.1103_PhysRevE.69.066138.abstract.txt": "mutual information is shared information\n"} and lines == [DOI + ": 10.1103_PhysRevE.69.066138.abstract.txt from OpenAlex"], repr((status, lines, files)))
+
+EFETCH_STRUCTURED = """<?xml version="1.0" ?>
+<!DOCTYPE PubmedArticleSet PUBLIC "-//NLM//DTD PubMedArticle, 1st January 2025//EN" "https://dtd.nlm.nih.gov/ncbi/pubmed/out/pubmed_250101.dtd">
+<PubmedArticleSet><PubmedArticle><MedlineCitation Status="MEDLINE" Owner="NLM"><PMID Version="1">32109013</PMID><Article PubModel="Print-Electronic">
+<ArticleTitle>Clinical Characteristics of Coronavirus Disease 2019 in China.</ArticleTitle><Abstract>
+<AbstractText Label="BACKGROUND">Since December 2019, data have been needed on the clinical characteristics of the affected patients.</AbstractText>
+<AbstractText Label="METHODS">We extracted data regarding 1099 patients with laboratory-confirmed Covid-19 from 552 hospitals in 30 provinces.</AbstractText>
+<AbstractText Label="RESULTS">The median age of the patients was 47 years; 41.9% of the patients were female.</AbstractText>
+<AbstractText Label="CONCLUSIONS">During the first 2 months of the current outbreak, Covid-19 spread rapidly throughout China and caused varying degrees of illness. (Funded by the National Health Commission of China and others.)</AbstractText>
+</Abstract></Article></MedlineCitation></PubmedArticle></PubmedArticleSet>"""
+STRUCTURED_TEXT = (
+    "BACKGROUND: Since December 2019, data have been needed on the clinical characteristics of the affected patients.\n"
+    "METHODS: We extracted data regarding 1099 patients with laboratory-confirmed Covid-19 from 552 hospitals in 30 provinces.\n"
+    "RESULTS: The median age of the patients was 47 years; 41.9% of the patients were female.\n"
+    "CONCLUSIONS: During the first 2 months of the current outbreak, Covid-19 spread rapidly throughout China and caused varying degrees of illness. (Funded by the National Health Commission of China and others.)\n"
+)
+with attempt("N12"):
+    status, lines, files, router, folder = abstract_run(["PMID:32109013"], [
+        ("europepmc/webservices/rest/search?", [json_reply({"hitCount": 0, "resultList": {"result": []}})]),
+        ("eutils/efetch.fcgi?", [says(200, EFETCH_STRUCTURED)]),
+    ])
+    check("N12 a structured PubMed abstract keeps every labelled part in order", status == 0 and files == {"PMID_32109013.abstract.txt": STRUCTURED_TEXT} and lines == ["PMID:32109013: PMID_32109013.abstract.txt from PubMed"], repr((status, lines, files)))
+
+EUROPEPMC_CORE = {"hitCount": 1, "resultList": {"result": [{"id": "32109013", "source": "MED", "pmid": "32109013", "doi": "10.1056/nejmoa2002032", "title": "Clinical Characteristics of Coronavirus Disease 2019 in China.",
+    "abstractText": "<h4>Background</h4>Since December <i>2019</i>, data have been needed on the clinical characteristics of the affected patients.<h4>Methods</h4>We extracted data regarding 1099 patients."}]}}
+with attempt("N13"):
+    no_abstract_work = dict(OPENALEX_WORK)
+    no_abstract_work["abstract_inverted_index"] = None
+    status, lines, files, router, folder = abstract_run(["10.1056/NEJMoa2002032"], [
+        ("api.openalex.org/works/doi:", [json_reply(no_abstract_work)]),
+        ("api.semanticscholar.org/graph/v1/paper/DOI:", [json_reply({"paperId": "%040x" % 9, "abstract": None})]),
+        ("api.crossref.org/works/", [json_reply({"status": "ok", "message": {"DOI": "10.1056/nejmoa2002032", "title": ["Clinical Characteristics of Coronavirus Disease 2019 in China"]}})]),
+        ("europepmc/webservices/rest/search?", [json_reply(EUROPEPMC_CORE)]),
+    ])
+    wanted = "Background\nSince December 2019, data have been needed on the clinical characteristics of the affected patients.\nMethods\nWe extracted data regarding 1099 patients.\n"
+    check("N13 Europe PMC's abstract written without its tags", status == 0 and files == {"10.1056_NEJMoa2002032.abstract.txt": wanted} and lines == ["10.1056/NEJMoa2002032: 10.1056_NEJMoa2002032.abstract.txt from Europe PMC"], repr((status, lines, files)))
+    check("N13 PubMed and arXiv are not asked once Europe PMC gave one", router.asked(EUTILS) == 0 and router.asked("arxiv.org") == 0, repr(router.urls))
+
+with attempt("N14"):
+    status, lines, files, router, folder = abstract_run(["10.1000/none"], [("api.semanticscholar.org", [says(500)])])
+    check("N14 no index gives an abstract: no file, each index's reason, exit 1", status == 1 and files == {} and lines == ["10.1000/none: no abstract; OpenAlex: not found; Semantic Scholar: left out, HTTP 500; Crossref: not found; Europe PMC: not found; PubMed: not found; arXiv: not asked for a DOI"], repr((status, lines, files)))
+
+with attempt("N15"):
+    status, lines, files, router, folder = abstract_run([DOI], [("api.openalex.org/works/doi:", [says(200, OPENALEX_BODY)])], existing={"10.1103_PhysRevE.69.066138.abstract.txt": "the abstract fetch wrote\n"})
+    target = os.path.join(folder, "10.1103_PhysRevE.69.066138.abstract.txt")
+    check("N15 an existing abstract file is refused for that identifier and kept", lines == ["error: %s exists" % target] and files == {"10.1103_PhysRevE.69.066138.abstract.txt": "the abstract fetch wrote\n"} and router.urls == [], repr((status, lines, files, router.urls)))
+
+# N16, N17, N17b, N23, N24 and N25: dblp asks DBLP's SPARQL endpoint first for the records whose title is one of the title's exact forms, and when that returns no row or only CoRR records also for the records whose title
+# holds the longest run of the title's words; it prints each record with a title ratio of 0.70 or more, adds the cut line to a reply of 1000 rows, and leaves DBLP out with its reason for a status
+# other than 200 and 404 and for a body that does not parse. The body is the endpoint's reply, shortened: one row per record and type. The exact query is told by VALUES, the words query by CONTAINS.
+def dblp_row(key, title, venue, year, kind, pages=None):
+    row = {"publ": {"type": "uri", "value": "https://dblp.org/rec/" + key}, "title": {"type": "literal", "value": title}, "venue": {"type": "literal", "value": venue},
+        "year": {"datatype": "http://www.w3.org/2001/XMLSchema#gYear", "type": "literal", "value": year}, "type": {"type": "uri", "value": "https://dblp.org/rdf/schema#" + kind}}
+    if pages:
+        row["pages"] = {"type": "literal", "value": pages}
+    return row
+
+
+DBLP_HITS = {"head": {"vars": ["publ", "title", "venue", "year", "pages", "type"]}, "results": {"bindings": [
+    dblp_row("conf/aaai/ChoiKHXL20", "Channel Attention Is All You Need for Video Frame Interpolation.", "AAAI", "2020", "Inproceedings", "10663-10671"),
+    dblp_row("conf/nips/VaswaniSPUJGKP17", "Attention is All you Need.", "NIPS", "2017", "Inproceedings", "5998-6008"),
+    dblp_row("journals/corr/VaswaniSPUJGKP17", "Attention Is All You Need.", "CoRR", "2017", "Informal"),
+]}}
+NO_ROWS = {"results": {"bindings": []}}
+
+
+def sparql_query(url):
+    return urllib.parse.parse_qs(urllib.parse.urlsplit(url).query)["query"][0]
+
+
+with attempt("N16"):
+    result = routed(["dblp", "Attention is all you need"], [("VALUES", [json_reply(NO_ROWS)]), ("CONTAINS", [json_reply(DBLP_HITS)])])
+    expected = [
+        "== Attention is all you need",
+        "DBLP: ratio 1.00: Attention is All you Need. | NIPS | 2017 | pages 5998--6008 | Inproceedings | key conf/nips/VaswaniSPUJGKP17",
+        "DBLP: ratio 1.00: Attention Is All You Need. | CoRR | 2017 | Informal | key journals/corr/VaswaniSPUJGKP17 | CoRR record",
+    ]
+    check("N16 the proceedings record and the CoRR record, the highest ratio first and then by key, the CoRR record marked, a record below 0.70 left out", result[:2] == (0, expected), repr(result[:3]))
+    queries = [sparql_query(url) for url in result[3].urls]
+    check("N16 an exact query with no row, then the words query on the title's words, lower-cased", len(queries) == 2 and "VALUES ?title" in queries[0] and 'CONTAINS(LCASE(?title), "attention is all you need")' in queries[1], repr(queries))
+    result = routed(["dblp", "BERT: Pre-training of deep bidirectional transformers for language understanding"], [("sparql.dblp.org/sparql?", [json_reply(NO_ROWS)])])
+    query = sparql_query(result[3].urls[-1]) if result[3].urls else ""
+    check("N16 the query looks for the longest run of the title's words, and a title with no record is not found", result[:2] == (1, ["== BERT: Pre-training of deep bidirectional transformers for language understanding", "DBLP: not found"]) and '"training of deep bidirectional transformers for language understanding"' in query, repr((result[:3], query)))
+with attempt("N17"):
+    result = routed(["dblp", "Attention is all you need"], [("sparql.dblp.org/sparql?", [says(202, HTML_BODY, Content_Type="text/html")])])
+    check("N17 an HTML challenge page with status 202 leaves DBLP out", result[:2] == (1, ["== Attention is all you need", "DBLP: left out, HTTP 202"]), repr(result[:3]))
+with attempt("N17b"):
+    result = routed(["dblp", "Attention is all you need"], [("sparql.dblp.org/sparql?", [says(200, HTML_BODY, Content_Type="text/html")])])
+    check("N17b a 200 whose body does not parse leaves DBLP out", result[:2] == (1, ["== Attention is all you need", "DBLP: left out, HTTP 200, the body does not parse"]), repr(result[:3]))
+
+# N23: an exact query that returns a record: the record is printed and no words query is sent; the exact query asks for the title as given, in sentence case and in title case, each with and without a final full stop.
+with attempt("N23"):
+    nature = {"results": {"bindings": [dblp_row("journals/nature/LeCunBH15", "Deep learning.", "Nat.", "2015", "Article", "436-444")]}}
+    result = routed(["dblp", "deep learning"], [("VALUES", [json_reply(nature)]), ("CONTAINS", [json_reply(DBLP_HITS)])])
+    check("N23 the exact query's record, and no words query", result[:2] == (0, ["== deep learning", "DBLP: ratio 1.00: Deep learning. | Nat. | 2015 | pages 436--444 | Article | key journals/nature/LeCunBH15"]) and result[3].asked("CONTAINS") == 0 and len(result[3].urls) == 1, repr((result[:3], result[3].urls)))
+    query = sparql_query(result[3].urls[0]) if result[3].urls else ""
+    check("N23 the six forms of the title", 'VALUES ?title { "deep learning." "deep learning" "Deep learning." "Deep learning" "Deep Learning." "Deep Learning" }' in query, repr(query))
+
+# N25: an exact query that returns only a CoRR record: the words query is sent too, and its proceedings record is printed beside the CoRR record, each record once.
+with attempt("N25"):
+    corr = {"results": {"bindings": [dblp_row("journals/corr/VaswaniSPUJGKP17", "Attention Is All You Need.", "CoRR", "2017", "Informal")]}}
+    result = routed(["dblp", "Attention is all you need"], [("VALUES", [json_reply(corr)]), ("CONTAINS", [json_reply(DBLP_HITS)])])
+    expected = [
+        "== Attention is all you need",
+        "DBLP: ratio 1.00: Attention is All you Need. | NIPS | 2017 | pages 5998--6008 | Inproceedings | key conf/nips/VaswaniSPUJGKP17",
+        "DBLP: ratio 1.00: Attention Is All You Need. | CoRR | 2017 | Informal | key journals/corr/VaswaniSPUJGKP17 | CoRR record",
+    ]
+    check("N25 the proceedings record of the words query beside the exact CoRR record, each once", result[:2] == (0, expected) and result[3].asked("CONTAINS") == 1, repr((result[:3], result[3].urls)))
+
+# N24: a words query that returns 1000 rows prints the cut line at the end of the title's block.
+with attempt("N24"):
+    many = {"results": {"bindings": [dblp_row("journals/x/W%d" % number, "Deep learning for case %d." % number, "X", "2020", "Article") for number in range(999)] + [dblp_row("journals/corr/abs-0", "Deep learning!", "CoRR", "2016", "Informal")]}}
+    result = routed(["dblp", "Deep learning!"], [("VALUES", [json_reply(NO_ROWS)]), ("CONTAINS", [json_reply(many)])])
+    check("N24 the record and the cut line", result[0] == 0 and result[1][:2] == ["== Deep learning!", "DBLP: ratio 1.00: Deep learning! | CoRR | 2016 | Informal | key journals/corr/abs-0 | CoRR record"] and result[1][-1] == "DBLP: cut at 1000 rows", repr((result[0], result[1][:3], result[1][-2:])))
+    result = routed(["dblp", "Deep learning!"], [("VALUES", [json_reply(NO_ROWS)]), ("CONTAINS", [json_reply({"results": {"bindings": many["results"]["bindings"][:999]}})])])
+    check("N24 no cut line under 1000 rows", "DBLP: cut at 1000 rows" not in result[1], repr(result[1][-2:]))
+
+# N18: search also asks PubMed (esearch, then esummary), and a PubMed record that shares a DOI with another index's record is merged into it.
+ESEARCH = {"header": {"type": "esearch", "version": "0.3"}, "esearchresult": {"count": "1", "retmax": "1", "retstart": "0", "idlist": ["32109013"]}}
+ESUMMARY = {"header": {"type": "esummary", "version": "0.3"}, "result": {"uids": ["32109013"], "32109013": {"uid": "32109013", "pubdate": "2020 Apr 30", "source": "N Engl J Med", "fulljournalname": "The New England journal of medicine",
+    "authors": [{"name": "Guan WJ", "authtype": "Author"}, {"name": "Ni ZY", "authtype": "Author"}], "title": "Clinical Characteristics of Coronavirus Disease 2019 in China.", "volume": "382", "issue": "18", "pages": "1708-1720",
+    "articleids": [{"idtype": "pubmed", "value": "32109013"}, {"idtype": "doi", "value": "10.1056/NEJMoa2002032"}]}}}
+with attempt("N18"):
+    oa_hit = oa_work(5, title="Clinical Characteristics of Coronavirus Disease 2019 in China", doi="https://doi.org/10.1056/nejmoa2002032")
+    result = routed(["search", "covid-19 clinical characteristics"], [
+        ("eutils/esearch.fcgi?", [json_reply(ESEARCH)]),
+        ("eutils/esummary.fcgi?", [json_reply(ESUMMARY)]),
+        ("api.openalex.org/works?", [json_reply({"results": [oa_hit]})]),
+    ])
+    merged_lines = [line for line in result[1] if "Clinical Characteristics" in line]
+    check("N18 the PubMed record is merged with OpenAlex's on the DOI", len(merged_lines) == 1 and merged_lines[0].startswith("[OpenAlex, PubMed] ") and "PMID 32109013" in merged_lines[0], repr(result[1]))
+    check("N18 esearch, then esummary", result[3].asked("eutils/esearch.fcgi?") == 1 and result[3].asked("eutils/esummary.fcgi?") == 1 and [url for url in result[3].urls if EUTILS in url][0].find("esearch") > 0, repr(result[3].urls))
+
+# N19: a 429 from E-utilities with Retry-After: 2 is retried after 2 seconds, and a 429 from DBLP with Retry-After: 120 writes ordo-lookup-skip-dblp.
+with attempt("N19"):
+    scratch_case()
+    script = Script({EUTILS: [says(429, Retry_After="2"), says(200, json.dumps(ESEARCH))]})
+    with fake_clock() as clock, serving(script):
+        reply = lookup.Client({}).get("https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=x")
+    check("N19 E-utilities: one wait of 2 seconds, then the reply", clock.sleeps == [2.0] and reply.status == 200 and script.asked(EUTILS) == 2, repr((clock.sleeps, hosts_of(script))))
+    temporary, _ = scratch_case()
+    script = Script({DBLP: [says(429, Retry_After="120")]})
+    with fake_clock():
+        status, lines, err = run_main(["dblp", "Attention is all you need"], script)
+    check("N19 DBLP: left out at once and its skip file written", "DBLP: left out, HTTP 429, retry after 120 s" in lines and skip_files(temporary) == ["ordo-lookup-skip-dblp"], repr((lines, os.listdir(temporary))))
+
+# N20: the three new hosts are paced across processes, each by its own lock file and gap.
+with attempt("N20"):
+    started = {}
+    for host, url, gap in ((EUTILS, "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=x", 0.4), (EUROPEPMC, "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=x", 0.2), (DBLP, "https://sparql.dblp.org/sparql?query=x", 2.0)):
+        folder, _ = scratch_case()
+        started[host] = (gap, folder, [subprocess.Popen([sys.executable, "-B", "-I", "-c", PACED_CHILD, sys.argv[1], url], env=child_env(folder), stdout=subprocess.PIPE, text=True) for _ in range(2)])
+    for host, (gap, folder, children) in started.items():
+        times = [tuple(float(number) for number in child.communicate()[0].split()) for child in children]
+        first, second = sorted(times, key=lambda row: row[1])
+        check(f"N20 {host}: the second process starts {gap} seconds after the first ended", second[1] >= first[2] + gap, repr(times))
+        check(f"N20 {host}: its lock file", [name for name in os.listdir(folder) if name.startswith("ordo-lookup-")] == ["ordo-lookup-" + {EUTILS: "pubmed", EUROPEPMC: "europepmc", DBLP: "dblp"}[host]], repr(os.listdir(folder)))
+
+# N21: a refs reply is stored and asked again sends no request; an index-abstract reply asked again sends one.
+with attempt("N21"):
+    scratch_case()
+    router = Routes([("api.openalex.org/works/doi:10.1000/a?", [oa_links(1, [11])]), ("api.openalex.org/works?filter=openalex", [json_reply({"results": [oa_work(11)]})])])
+    with fake_clock():
+        first = run_main(["refs", "10.1000/a"], router)
+        sent = len(router.urls)
+        again = run_main(["refs", "10.1000/a"], router)
+    check("N21 refs asked again sends no request", sent == 2 and len(router.urls) == 2 and again[1] == first[1], repr((router.urls, first, again)))
+    scratch_case()
+    folder = os.path.dirname(put("abstract-again/.keep", ""))
+    router = Routes([("api.openalex.org/works/doi:", [says(200, OPENALEX_BODY)])])
+    with fake_clock():
+        run_main(["index-abstract", DOI, "--into", folder], router)
+        os.remove(os.path.join(folder, "10.1103_PhysRevE.69.066138.abstract.txt"))
+        run_main(["index-abstract", DOI, "--into", folder], router)
+    check("N21 index-abstract asked again sends the request again", router.asked("api.openalex.org/works/doi:") == 2, repr(router.urls))
+
+# N22: resolve over three DOIs, one of them holding |: that DOI is asked alone of Crossref and OpenAlex, never in a filter, and its record is printed in its own block.
+PIPE_DOI = "10.1000/a|b"
+with attempt("N22"):
+    items = [{"DOI": "10.1000/w%d" % number, "title": ["Work %d" % number], "issued": {"date-parts": [[2020]]}} for number in (1, 2)]
+    works = [oa_work(number, title="Work %d" % number, doi="https://doi.org/10.1000/w%d" % number) for number in (1, 2)]
+    result = routed(["resolve", "10.1000/w1", PIPE_DOI, "10.1000/w2"], [
+        ("api.crossref.org/works?filter=", [json_reply({"status": "ok", "message": {"items": items}})]),
+        ("api.openalex.org/works?filter=", [json_reply({"meta": {"count": 2}, "results": works})]),
+        ("api.crossref.org/works/10.1000/a%7Cb", [json_reply({"status": "ok", "message": {"DOI": PIPE_DOI, "title": ["Work with a bar"], "issued": {"date-parts": [[2021]]}}})]),
+    ])
+    filters = [url for url in result[3].urls if "filter=" in url]
+    check("N22 no filter holds the DOI with |", len(filters) == 2 and not any("a%7Cb" in url or "a|b" in url for url in filters), repr(result[3].urls))
+    check("N22 the DOI with | is asked alone of Crossref and OpenAlex", result[3].asked("api.crossref.org/works/10.1000/a%7Cb") == 1 and result[3].asked("api.openalex.org/works/doi:10.1000/a%7Cb?") == 1, repr(result[3].urls))
+    lines = result[1]
+    at = lines.index("== " + PIPE_DOI) if "== " + PIPE_DOI in lines else -1
+    check("N22 its record in its own block, between the two others", at > 0 and lines[at + 1].startswith("Crossref: ratio 1.00: Work with a bar | 2021") and lines.index("== 10.1000/w2") > at, repr(lines))
+
+
 for failure in failures:
     print(failure)
 sys.exit(1 if failures else 0)
@@ -1854,4 +2268,4 @@ if [ "$status" -ne 0 ]; then
     exit 1
 fi
 
-echo "PASS: lookup.py parses recorded bodies, matches titles, merges records, reads passage lines, finds passages, rebuilds abstracts, writes arXiv and OpenAlex queries, paces every arXiv request across processes, requests only http and https URLs, leaves out an index whose body does not parse, prints not found, names files, URLs and credentials safely, reads BibTeX and HTML, fetches a source by an OpenAlex ID or a Semantic Scholar ID through the record of that ID's index, reads the keys a .tex cites with the commands of natbib and biblatex and the files it inputs and prints the keys the .bib lacks and the entries no key cites, compares the title of a key with a doi with the record the doi resolves to and names an index that was left out, reports an input file that does not exist, reads the .bib named on the command line in check-urls and quote-check, refuses the one-argument check-urls and the two-argument quote-check, prints the retraction and expression-of-concern notices of a Crossref record and none for a correction, an erratum or a work without a notice, prefers the candidate of the year given for a title, gives the published version of an arXiv ID the entry doi.org gives for its published DOI or the line that names its venue, builds and refuses the entry of a venue's page, fetches the PDF a venue's page names, writes every bibtex entry in ASCII and compares a converted title as the original, keeps the URLs of the other commands, paces every API host across processes, waits out a 429 by its Retry-After, leaves a 429 that names more than 60 seconds out at once with its reason, names the host of a redirect hop that met it, and writes the skip file of the host, caches the index replies of resolve and search on disk for 30 days, prints the PMCID an OpenAlex record names, prints every author and the volume, the issue and the pages of a record of resolve and three authors of a record of search, and writes with text the text of a saved HTML, XML or PDF file as <stem>.txt, or with text --abstract as <stem>.abstract.txt, and refuses to replace one"
+echo "PASS: lookup.py parses recorded bodies, matches titles, merges records, reads passage lines, finds passages, rebuilds abstracts, writes arXiv and OpenAlex queries, paces every arXiv request across processes, requests only http and https URLs, leaves out an index whose body does not parse, prints not found, names files, URLs and credentials safely, reads BibTeX and HTML, fetches a source by an OpenAlex ID or a Semantic Scholar ID through the record of that ID's index, reads the keys a .tex cites with the commands of natbib and biblatex and the files it inputs and prints the keys the .bib lacks and the entries no key cites, compares the title of a key with a doi with the record the doi resolves to and names an index that was left out, reports an input file that does not exist, reads the .bib named on the command line in check-urls and quote-check, refuses the one-argument check-urls and the two-argument quote-check, prints the retraction and expression-of-concern notices of a Crossref record and none for a correction, an erratum or a work without a notice, prefers the candidate of the year given for a title, gives the published version of an arXiv ID the entry doi.org gives for its published DOI or the line that names its venue, builds and refuses the entry of a venue's page, fetches the PDF a venue's page names, writes every bibtex entry in ASCII and compares a converted title as the original, keeps the URLs of the other commands, paces every API host across processes, waits out a 429 by its Retry-After, leaves a 429 that names more than 60 seconds out at once with its reason, names the host of a redirect hop that met it, and writes the skip file of the host, caches the index replies of resolve and search on disk for 30 days, prints the PMCID an OpenAlex record names, prints every author and the volume, the issue and the pages of a record of resolve and three authors of a record of search, writes with text the text of a saved HTML, XML or PDF file as <stem>.txt, or with text --abstract as <stem>.abstract.txt, and refuses to replace one, lists with refs and cited-by the works an input cites and the works that cite it from OpenAlex, Semantic Scholar and Europe PMC, resolves several inputs in batches, writes with index-abstract the abstract of the first index that gives one, finds a title's records in DBLP by its exact forms first and names a cut at 1000 rows, adds PubMed to search, and paces E-utilities, Europe PMC and DBLP"

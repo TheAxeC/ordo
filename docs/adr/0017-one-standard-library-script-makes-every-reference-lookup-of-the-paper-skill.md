@@ -1,6 +1,6 @@
 # 0017. One standard-library script makes every reference lookup of the paper skill
 
-Status: proposed; superseded by 0032 in the part that makes `search`, `refs`, `cited-by` and `fetch` the only way the literature strategist finds and reads sources, and by 0034 in the part that makes `lookup.py` the only way the draft writer, the formatter and the citation compliance agent find a venue page, and by 0033 in the part that makes `lookup.py` the only way the citation compliance agent reads a source's text; superseded by the ruling The academic-paper strategist of plan 5 in the literature strategist's use of `lookup.py`, since the strategist runs no `lookup.py` command
+Status: proposed; superseded by 0032 in the part that makes `search`, `refs`, `cited-by` and `fetch` the only way the literature strategist finds and reads sources, and by 0034 in the part that makes `lookup.py` the only way the draft writer, the formatter and the citation compliance agent find a venue page, and by 0033 in the part that makes `lookup.py` the only way the citation compliance agent reads a source's text; superseded by the ruling The academic-paper strategist of plan 5 in the literature strategist's use of `lookup.py`, and by 0041, which makes `lookup.py` the way the strategist queries every index again, adds `index-abstract`, `dblp` and `resolve` over several inputs to its commands and PubMed E-utilities, Europe PMC and DBLP to its indexes, and keeps the strategist from `lookup.py bibtex`
 
 ## Context
 

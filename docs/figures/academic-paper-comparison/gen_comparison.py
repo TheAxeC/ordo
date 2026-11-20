@@ -396,15 +396,23 @@ AP_NOTE = (
     '"[The academic-paper strategist]" is the ruling of plan 5 that makes the literature '
     "strategist academic-paper's page and its search the run academic-paper's own "
     "lit-review made: the theme runs and the identifier check. "
-    '"[CA]" is the ruling Open item CA of plan 5, which makes the merge run do the work the '
-    "theme runs hand on."
+    '"[CA]" is the ruling Open item CA of plan 5, which makes the merge stage do the work the '
+    "theme runs hand on. "
+    '"[The lit-review run under the rules]" is the ruling of plan 5 that makes every index '
+    "query a lookup.py command, keeps every start from scripts and agents of its own, has "
+    "the session start the merge jobs at once, then the merge run and the synthesis start, "
+    "and closes the citation loop."
 )
-SEARCH_ROUNDS = "search rounds: end at any 3 of 5 conditions, or after 4 rounds when none holds"
+LR_TAG = "[The lit-review run under the rules]"
+SEARCH_ROUNDS = "search rounds: end at any 3 of 5 conditions, a closed citation loop among them"
 CONFIRMED = f"each included source confirmed by a live lookup, an unconfirmed one excluded and listed {AP_TAG}"
 
 
-def theme_search_nodes() -> tuple[gf.Node, ...]:
-    """The session's division into search themes, the theme runs and the merge run."""
+def theme_search_nodes(synthesis: bool = False) -> tuple[gf.Node, ...]:
+    """The session's division into search themes, the theme runs and the merge stage.
+
+    With synthesis, the merge run is followed by the synthesis start of lit-review mode.
+    """
     return (
         N(
             "THS",
@@ -424,37 +432,80 @@ def theme_search_nodes() -> tuple[gf.Node, ...]:
             "ruled_maybe",
         ),
         N(
-            "TM",
-            "Literature strategist, merge run, fresh: the duplicates removed, each source the "
-            "theme runs hand on assessed, the searches where the search themes meet, the report "
-            "over the merged set, the gates computed; review.md, refs.bib [CA]",
+            "TJ",
+            "Literature strategist, merge jobs, all at once: a leads job per theme run, the "
+            f"intersections and the venues [CA] {LR_TAG}",
             "ruled_maybe",
+        ),
+        N(
+            "TC",
+            "Literature strategist, citation rounds over every source included: a backward "
+            "job with lookup.py refs and a forward job with lookup.py cited-by, until the "
+            f"citation loop closes, at most 8 {LR_TAG}",
+            "ruled_maybe",
+        ),
+        N(
+            "TS",
+            "The citation loop does not close: the works not collected and the rounds run; "
+            f"another 8 rounds, or go on with the works named {LR_TAG}",
+            "stop",
+        ),
+        N(
+            "TM",
+            "Literature strategist, merge run, fresh: the duplicates removed, the report over "
+            "the merged set, the gates computed, a gate's search a job the session starts; "
+            f"review.md, refs.bib [CA] {LR_TAG}",
+            "ruled_maybe",
+        ),
+        *(
+            (
+                N(
+                    "TY",
+                    "Literature strategist, synthesis start: the section Synthesis Analysis "
+                    f"of review.md, its counts from counts-merge.md {LR_TAG}",
+                    "ruled_maybe",
+                ),
+            )
+            if synthesis
+            else ()
         ),
     )
 
 
 def theme_search_edges(
-    single: str, after: str, check: str = "", check_end: str = ""
+    single: str,
+    after: str,
+    check: str = "",
+    check_end: str = "",
+    synthesis: bool = False,
 ) -> tuple[gf.Edge, ...]:
-    """The arrows from the division to the single strategist or the theme runs and the merge run.
+    """The arrows from the division to the single strategist or the theme runs and the merge stage.
 
-    With a check named, the theme runs go to the check's first box, and the merge run follows
-    its last box, check_end when it is named and the first box otherwise.
+    With a check named, the theme runs go to the check's first box, and the merge jobs follow
+    its last box, check_end when it is named and the first box otherwise. With synthesis, the
+    merge run goes to the synthesis start, which goes to after.
     """
-    to_merge = (
-        (E("T1", check), E("T2", check), E(check_end or check, "TM", "after theme runs"))
+    to_jobs = (
+        (E("T1", check), E("T2", check), E(check_end or check, "TJ", "after theme runs"))
         if check
-        else (E("T1", "TM"), E("T2", "TM"))
+        else (E("T1", "TJ"), E("T2", "TJ"))
     )
+    to_after = (E("TM", "TY"), E("TY", after)) if synthesis else (E("TM", after),)
     return (
         E("THS", single, f"one search theme {AP_TAG}"),
         E("THS", "T1", f"two search themes or more {AP_TAG}"),
         E("THS", "T2"),
         E("T1", "T1", SEARCH_ROUNDS, "back"),
         E("T2", "T2", SEARCH_ROUNDS, "back"),
-        *to_merge,
+        *to_jobs,
+        E("TJ", "TC", gf.FIRST_ROUND),
+        E("TC", "TC", gf.NEXT_ROUND, "back"),
+        E("TC", "TM", "the citation loop closes"),
+        E("TC", "TS", gf.OPEN_LOOP),
+        E(single, "TS", f"its own rounds, {gf.OPEN_LOOP}"),
+        E("TS", "TM"),
         E("TM", "TM", gf.MERGE_LOOP, "back"),
-        E("TM", after),
+        *to_after,
     )
 
 
@@ -804,6 +855,12 @@ def paper_revision_detailed() -> gf.Graph:
             "ruled",
         ),
         N(
+            "TS",
+            "The citation loop does not close: the works not collected and the rounds run; "
+            f"another 8 rounds, or go on with the works named {LR_TAG}",
+            "stop",
+        ),
+        N(
             "VZ",
             "Visualization, within the permission; the script files it changes outside the "
             "run folder are hashed before and after [Stops of paper]",
@@ -944,6 +1001,8 @@ def paper_revision_detailed() -> gf.Graph:
         E("IT", "VZ", "an item needs a figure change, intake allows it"),
         E("IT", "AN"),
         E("LS", "LS", SEARCH_ROUNDS, "back"),
+        E("LS", "TS", f"its own citation rounds, {gf.OPEN_LOOP}"),
+        E("TS", "AN"),
         E("LS", "AN"),
         E("VZ", "AN"),
         E("AN", "DW"),
@@ -1015,7 +1074,7 @@ def paper_lit_review_detailed() -> gf.Graph:
             "bibliography [AV1]; the profile [AV2]; a file in words [AQ]",
             "stop",
         ),
-        *theme_search_nodes(),
+        *theme_search_nodes(synthesis=True),
         N(
             "LS",
             "Literature strategist: review.md, refs.bib; a list over 50 entries shows its "
@@ -1036,9 +1095,9 @@ def paper_lit_review_detailed() -> gf.Graph:
         ),
         N(
             "SC",
-            "Script, run by the session: lookup.py resolve on each theme run's .bib as it "
-            "ends, or on refs.bib for one theme, a proceedings page read for an entry with "
-            f"neither, into checks.md {AP_TAG}",
+            "Script, run by the session: one lookup.py resolve per .bib of a theme run or "
+            "merge job, or refs.bib for one theme; a proceedings page for an entry with "
+            f"neither; checks.md {AP_TAG} {LR_TAG}",
             "script",
         ),
         N(
@@ -1055,7 +1114,7 @@ def paper_lit_review_detailed() -> gf.Graph:
         ),
         N(
             "CK",
-            "Script, run by the session: lookup.py resolve on every entry of refs.bib, no "
+            "Script, run by the session: lookup.py resolve once over every entry of refs.bib, no "
             "identifier or title under two keys, the cited keys equal to the .bib's, into "
             f"checks.md {AP_TAG}",
             "script",
@@ -1080,9 +1139,9 @@ def paper_lit_review_detailed() -> gf.Graph:
         N("RS", "A reference that cannot be confirmed [O]", "stop"),
         N(
             "FM",
-            "Formatter: each target of Target formats other than Markdown, from review.md "
-            "with refs.bib as given; the review's issues back to the strategist, then the "
-            f"targets again {AP_TAG}",
+            "Formatter: each target other than Markdown, from review.md with refs.bib; "
+            "the review's issues to the merge run, or to the synthesis start for its "
+            f"section, then the targets again {AP_TAG} {LR_TAG}",
             "ruled_maybe",
         ),
         N("X", "End"),
@@ -1099,7 +1158,7 @@ def paper_lit_review_detailed() -> gf.Graph:
     edges = (
         E("I", "I", "you change it, until you confirm [R]", "back"),
         E("I", "THS"),
-        *theme_search_edges("LS", "MJ", "SJ", "SC"),
+        *theme_search_edges("LS", "MJ", "SJ", "SC", synthesis=True),
         E("SJ", "T2", "work left undone: sent back once", "back"),
         E("SJ", "SC"),
         E("LS", "LS", SEARCH_ROUNDS, "back"),

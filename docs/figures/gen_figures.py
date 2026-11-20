@@ -1266,14 +1266,26 @@ def _paper(name: str, mode: str, graph: Graph) -> str:
 
 THEME_RUN_FIRST = "Literature strategist, theme run: search theme 1"
 THEME_RUN_REST = "Literature strategist, theme runs: each other search theme, all at once"
+MERGE_JOBS = (
+    "Literature strategist, merge jobs, started by the session at once: a leads job per "
+    "theme run, the intersections and the venues"
+)
+CITATION_ROUNDS = (
+    "Literature strategist, citation rounds started by the session over every source "
+    "included: refs and cited-by, until the citation loop closes, at most 8"
+)
 MERGE_RUN = (
-    "Literature strategist, merge run, after the theme runs: removes the duplicates, "
-    "assesses the sources the theme runs hand on, searches where the search themes meet, "
+    "Literature strategist, merge run, after the merge jobs: removes the duplicates, "
     "runs the quality gates, writes the one review"
 )
+LOOP_STOP = "The citation loop does not close: another 8 rounds, or go on with the works named"
+SYNTHESIS = "Literature strategist, synthesis start: the section Synthesis Analysis"
 THEME_EDGE = "two search themes or more, unless you skip the search"
-MERGE_LOOP = "an open citation loop: a backward and a forward round; a failed gate: a search"
-SEARCH_LOOP = "search rounds: 3 of 5 stopping rules, or 4 rounds with none"
+NEXT_ROUND = "a round included a work not yet collected"
+FIRST_ROUND = "the first round: the core sets and what the jobs included"
+OPEN_LOOP = "open after the eighth round"
+MERGE_LOOP = "a gate job or the merge run's own sources: a citation round"
+SEARCH_LOOP = "search rounds: 3 of 5 stopping rules, a closed citation loop among them"
 CONFIRMED = "each source confirmed by a live lookup"
 
 
@@ -1287,6 +1299,9 @@ def paper_full_graph() -> Graph:
         ),
         Node("T1", THEME_RUN_FIRST, "maybe"),
         Node("T2", THEME_RUN_REST, "maybe"),
+        Node("J", MERGE_JOBS, "maybe"),
+        Node("CR", CITATION_ROUNDS, "maybe"),
+        Node("CS", LOOP_STOP, "stop"),
         Node("M", MERGE_RUN, "maybe"),
         Node("LR", "You review the sources, optional", "stop"),
         Node("PL", "Planner"),
@@ -1354,8 +1369,15 @@ def paper_full_graph() -> Graph:
         Edge("L", "L", SEARCH_LOOP, "back"),
         Edge("T1", "T1", SEARCH_LOOP, "back"),
         Edge("T2", "T2", SEARCH_LOOP, "back"),
-        Edge("T1", "M"),
-        Edge("T2", "M"),
+        Edge("L", "CS", OPEN_LOOP),
+        Edge("T1", "J"),
+        Edge("T2", "J"),
+        Edge("J", "CR", FIRST_ROUND),
+        Edge("CR", "CR", NEXT_ROUND, "back"),
+        Edge("CR", "M", "the citation loop closes"),
+        Edge("CR", "CS", OPEN_LOOP),
+        Edge("CS", "M"),
+        Edge("CS", "LR", "one search theme"),
         Edge("M", "M", MERGE_LOOP, "back"),
         Edge("M", "LR"),
         Edge("LR", "PL"),
@@ -1431,6 +1453,7 @@ def paper_revision_graph() -> Graph:
         ),
         Node("IA", "You approve the items, with no instructions", "stop"),
         Node("LS", "Literature strategist, for a new reference", "maybe"),
+        Node("CS", LOOP_STOP, "stop"),
         Node("V", "Visualization, for a figure", "maybe"),
         Node("W", "Draft writer: a patch per item"),
         Node("C", "Citation compliance"),
@@ -1475,6 +1498,8 @@ def paper_revision_graph() -> Graph:
         Edge("IA", "W"),
         Edge("P", "LS"),
         Edge("LS", "LS", SEARCH_LOOP, "back"),
+        Edge("LS", "CS", f"its own citation rounds, {OPEN_LOOP}"),
+        Edge("CS", "W"),
         Edge("P", "V"),
         Edge("V", "V", "checks the rendered figure, up to 2 fixes, optional", "back"),
         Edge("P", "W"),
@@ -1513,16 +1538,20 @@ def paper_lit_review_graph() -> Graph:
         Node("T1", THEME_RUN_FIRST, "maybe"),
         Node("T2", THEME_RUN_REST, "maybe"),
         Node("SJ", "Session: each report read for work left undone", "choice"),
-        Node("SC", "Script: each theme run's DOIs and arXiv IDs resolved", "script"),
+        Node("SC", "Script: each theme run's and merge job's DOIs and arXiv IDs resolved, one resolve per file", "script"),
         Node("L2", "Literature strategist, resumed with the identifier check: titles resolved, strict: a failing identifier corrected or removed", "maybe"),
+        Node("J", MERGE_JOBS, "maybe"),
+        Node("CR", CITATION_ROUNDS, "maybe"),
+        Node("CS", LOOP_STOP, "stop"),
         Node("M", MERGE_RUN, "maybe"),
+        Node("SY", SYNTHESIS, "maybe"),
         Node("MJ", "Session: the strategist's report read for work left undone", "choice"),
         Node("CK", "Script: every entry resolved, no identifier or title under two keys, the cited keys equal to the .bib's", "script"),
         Node("CJ", "Session: the exclusions read; one on a failed lookup is work left undone", "choice"),
         Node("LR", "You review the sources, optional", "stop"),
         Node("RC", "Script: each corrected or added entry's DOI or arXiv ID resolved again", "script"),
         Node("SR", "A reference that cannot be confirmed", "stop"),
-        Node("F", "Formatter: each target other than Markdown, the review's issues back to the strategist", "maybe"),
+        Node("F", "Formatter: each target other than Markdown, the review's issues back to the merge run or the synthesis start", "maybe"),
     )
     edges = (
         Edge("I", "L", "one search theme"),
@@ -1536,11 +1565,20 @@ def paper_lit_review_graph() -> Graph:
         Edge("T2", "SJ"),
         Edge("SJ", "T2", "work left undone: sent back once", "back"),
         Edge("SJ", "SC"),
+        Edge("SJ", "J", "two search themes or more"),
+        Edge("J", "CR", FIRST_ROUND),
+        Edge("CR", "CR", NEXT_ROUND, "back"),
+        Edge("J", "SJ", "each merge job's report read", "back"),
+        Edge("CR", "SJ", "the citation loop closes", "back"),
+        Edge("CR", "CS", OPEN_LOOP),
+        Edge("L", "CS", OPEN_LOOP),
+        Edge("CS", "SJ", "go on with the works named", "back"),
         Edge("SC", "L2", "one search theme"),
-        Edge("SC", "M", "after theme runs: the same work, in the merge run"),
+        Edge("SC", "M", "after the merge jobs: the same work, in the merge run"),
         Edge("M", "M", MERGE_LOOP, "back"),
         Edge("L2", "MJ"),
-        Edge("M", "MJ"),
+        Edge("M", "SY"),
+        Edge("SY", "MJ"),
         Edge("MJ", "M", "work left undone: sent back once", "back"),
         Edge("MJ", "CK"),
         Edge("CK", "CJ"),
@@ -1559,6 +1597,9 @@ def paper_outline_only_graph() -> Graph:
         Node("L", "Literature strategist: " + CONFIRMED, "maybe"),
         Node("T1", THEME_RUN_FIRST, "maybe"),
         Node("T2", THEME_RUN_REST, "maybe"),
+        Node("J", MERGE_JOBS, "maybe"),
+        Node("CR", CITATION_ROUNDS, "maybe"),
+        Node("CS", LOOP_STOP, "stop"),
         Node("M", MERGE_RUN, "maybe"),
         Node("LR", "You review the sources, optional", "stop"),
         Node("PL", "Planner: outline and argument map"),
@@ -1574,8 +1615,15 @@ def paper_outline_only_graph() -> Graph:
         Edge("L", "L", SEARCH_LOOP, "back"),
         Edge("T1", "T1", SEARCH_LOOP, "back"),
         Edge("T2", "T2", SEARCH_LOOP, "back"),
-        Edge("T1", "M"),
-        Edge("T2", "M"),
+        Edge("L", "CS", OPEN_LOOP),
+        Edge("T1", "J"),
+        Edge("T2", "J"),
+        Edge("J", "CR", FIRST_ROUND),
+        Edge("CR", "CR", NEXT_ROUND, "back"),
+        Edge("CR", "M", "the citation loop closes"),
+        Edge("CR", "CS", OPEN_LOOP),
+        Edge("CS", "M"),
+        Edge("CS", "LR", "one search theme"),
         Edge("M", "M", MERGE_LOOP, "back"),
         Edge("M", "LR"),
         Edge("LR", "PL"),
