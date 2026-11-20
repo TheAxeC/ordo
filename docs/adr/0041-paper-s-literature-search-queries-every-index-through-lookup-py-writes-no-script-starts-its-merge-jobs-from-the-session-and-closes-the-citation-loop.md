@@ -1,6 +1,6 @@
 # 0041. Paper's literature search queries every index through lookup.py, writes no script, starts its merge jobs from the session, and closes the citation loop
 
-Status: proposed
+Status: superseded by 0042
 
 ## Context
 

@@ -1,6 +1,6 @@
 # 0038. Paper fixes the parts of the research question at intake, carries them through every literature output, and loads only the strategist pages a start uses
 
-Status: proposed; superseded by the ruling The academic-paper strategist of plan 5 in its parts for the literature strategist in every mode, for lit-review mode's intake and for the split of the strategist's page, the planner's reading of the parts in full and outline-only mode standing. By the same ruling, the intake agent splits the research question into its parts in full, outline-only and lit-review mode. That supersedes the Decision's sentence that the session splits it
+Status: proposed; superseded by the ruling The academic-paper strategist of plan 5 in its parts for the literature strategist in every mode, for lit-review mode's intake and for the split of the strategist's page, the planner's reading of the parts in full and outline-only mode standing. By the same ruling, the intake agent splits the research question into its parts in full, outline-only and lit-review mode. That supersedes the Decision's sentence that the session splits it; superseded by 0042 in lit-review mode's split and in the strategist's use of the parts
 
 ## Context
 

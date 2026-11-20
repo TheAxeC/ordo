@@ -1,6 +1,6 @@
 # 0040. Paper's literature strategist keeps every source that passes screening, reads relevance by the parts, searches each named literature, and writes its entries from the full record
 
-Status: proposed; superseded by the ruling The academic-paper strategist of plan 5 in all but the entries the strategist writes from the record it confirmed and the `resolve` record with every author, its named items replaced by academic-paper's theme scopes
+Status: proposed; superseded by the ruling The academic-paper strategist of plan 5 in all but the entries the strategist writes from the record it confirmed and the `resolve` record with every author, its named items replaced by academic-paper's theme scopes; superseded by 0042 in the entries the strategist writes from the record it confirmed
 
 ## Context
 

@@ -37,7 +37,7 @@ The modes are full, outline-only, revision, abstract-only, lit-review, citation-
 |---|---|---|
 | Topic | What the paper is about. In plan mode the topic may be as rough as a field or an idea. | full, outline-only, lit-review, plan |
 | Research question | The question or thesis statement the paper answers, written in full. The literature strategist does not start without one, so full, outline-only and lit-review modes do not go on until the user gives one. A topic is never taken as the question. | full, outline-only, lit-review |
-| Parts of the research question | Not asked. The intake agent fills the row from the Research question, as "The parts of the research question" below says. It shows the row at the intake confirmation, where the user may correct it. | full, outline-only, lit-review |
+| Parts of the research question | Not asked. The intake agent fills the row from the Research question, as "The parts of the research question" below says. It shows the row at the intake confirmation, where the user may correct it. | full, outline-only |
 | Paper type | One type of the table below. A manuscript's type is proposed from the manuscript. When the user names none, the type is chosen by the table "Paper type and length" and shown with the reason. In plan mode the row is a structure preference: IMRaD, Literature Review, another of the six types, or "not sure", and "not sure" leaves the structure to the dialogue. In format-convert the type decides the layout of a conference paper, a policy brief and a thesis chapter (`references/formatter.md`, "The paper type"). | full, outline-only, revision, abstract-only, lit-review, citation-check, draft-review, plan, format-convert |
 | Discipline | The discipline and its sub-field. | full, outline-only, revision, abstract-only, lit-review, citation-check |
 | Language | The language of the paper. | full, outline-only, revision, abstract-only, lit-review, disclosure |
@@ -101,7 +101,7 @@ The modes are full, outline-only, revision, abstract-only, lit-review, citation-
 
 ## The parts of the research question
 
-In full, outline-only and lit-review mode the intake agent splits the Research question into its parts once the user has given it. It writes them in the row "Parts of the research question" before the intake confirmation. The planner reads them (`references/planner.md`). In lit-review mode the session takes from them the annotation fields of the search (SKILL.md, Steps 8). It also takes from them the parts the Synthesis Analysis is organized by.
+In full and outline-only mode the intake agent splits the Research question into its parts once the user has given it. It writes them in the row "Parts of the research question" before the intake confirmation. The planner reads them (`references/planner.md`).
 
 - A part is a sub-question of the research question, written in one sentence. A question that asks one thing has one part, and its part is the question.
 - The parts are numbered once, P1 to Pn, in the order the question asks them, and the number stays with the part for the whole run.
@@ -214,7 +214,7 @@ Format-convert marks two more, asked in that mode only:
 - In plan mode a research report among the materials is read by the mentor and fills no row, since the research question comes from the dialogue.
 - In every other mode, the materials may hold a research report or an annotated bibliography. The intake agent then reads it at intake and fills the answers it gives. The Topic and the Research question come from the report's question, and the Discipline and the method from what the report states. The sources come from the bibliography, and the other rows from what the document answers.
 - Each answer filled this way is shown at the confirmation with the document and the place it came from, and the user confirms or changes it. A row it fills is not asked, and a row the documents do not answer is asked as usual.
-- The sources of an annotated bibliography stand in the Materials in hand row as a list. The literature strategist assesses them in full text, with no title and abstract screening (`references/literature-strategist.md`, "What each output must hold").
+- The sources of an annotated bibliography stand in the Materials in hand row as a list.
 - The literature strategist screens a `.bib` that is held and searches for what it misses, unless the user skips the search in the row Literature search.
 - When the materials hold data, the visualization agent draws the figures the outline plans, beside the draft writer.
 - The row records the path of the folder or the files that hold the project's results when the user holds data or results. The peer reviewer reads them to check the numbers and the descriptions of the data handling (`references/peer-reviewer.md`, "Numbers and data handling").
@@ -301,6 +301,6 @@ In disclosure mode the intake agent reads the records of earlier runs, to mark e
 - The Notes also hold each served model identifier other than the one the runner's model list gave (SKILL.md, Steps 8), which the session writes.
 - An instruction the user gives, at intake or later in the run, not to stop for a choice whose recommendation the run would take is recorded in the Notes. The stops of SKILL.md "Stops" stay as they are, except that the stop "A research question the materials do not answer" then takes its second option, as that table says.
 - A section "Decisions" holds the user's answer at each stop and each choice the run took by its goal, with its reason. The session appends it after intake.
-- In full, outline-only and lit-review mode "Decisions" also holds the search themes of the literature search, which the session writes before the first start of the literature strategist (SKILL.md, Steps 8, the theme search).
+- In full, outline-only, lit-review and revision mode "Decisions" also holds the session's choice of one literature strategist or several with a merge, with its reason, which the session writes before the first start of the literature strategist (SKILL.md, Steps 8, the literature search).
 - At the stop "The sources' review" the session appends one line to "Decisions" that says whether the user answered the stop or the stop was taken as a recorded decision, with the change the user gave, if any.
 - The record is shown to the user whole, and the run goes on when the user confirms it.

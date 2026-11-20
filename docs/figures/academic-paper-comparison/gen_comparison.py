@@ -391,120 +391,52 @@ def ap_full_detailed() -> gf.Graph:
     return _g(nodes, edges, width=WIDE_WIDTH)
 
 
-AP_TAG = "[The academic-paper strategist]"
+LT_TAG = "[Paper's lit-review as academic-paper's]"
 AP_NOTE = (
-    '"[The academic-paper strategist]" is the ruling of plan 5 that makes the literature '
-    "strategist academic-paper's page and its search the run academic-paper's own "
-    "lit-review made: the theme runs and the identifier check. "
-    '"[CA]" is the ruling Open item CA of plan 5, which makes the merge stage do the work the '
-    "theme runs hand on. "
-    '"[The lit-review run under the rules]" is the ruling of plan 5 that makes every index '
-    "query a lookup.py command, keeps every start from scripts and agents of its own, has "
-    "the session start the merge jobs at once, then the merge run and the synthesis start, "
-    "and closes the citation loop."
+    "\"[Paper's lit-review as academic-paper's]\" is the ruling of plan 5 that makes the "
+    "literature strategist academic-paper's page and leaves the structure of the search to "
+    "the session, as academic-paper's text leaves it: one strategist, or several with a "
+    "merge, each start briefed by the session. Its one change: the strategist writes "
+    "review.md and refs.bib with its own edits, and no script assembles them."
 )
-LR_TAG = "[The lit-review run under the rules]"
-SEARCH_ROUNDS = "search rounds: end at any 3 of 5 conditions, a closed citation loop among them"
-CONFIRMED = f"each included source confirmed by a live lookup, an unconfirmed one excluded and listed {AP_TAG}"
+SEARCH_ROUNDS = "search rounds: end at any 3 of 5 conditions, or after 4 rounds"
+CONFIRMED = f"review.md and refs.bib written with its own edits, its own query scripts allowed {LT_TAG}"
 
 
-def theme_search_nodes(synthesis: bool = False) -> tuple[gf.Node, ...]:
-    """The session's division into search themes, the theme runs and the merge stage.
+def search_nodes(synthesis: bool = False) -> tuple[gf.Node, ...]:
+    """The session's choice of one strategist or several, the several starts and their merge.
 
-    With synthesis, the merge run is followed by the synthesis start of lit-review mode.
+    With synthesis, the merge also writes the synthesis analysis of lit-review mode.
     """
+    merge = "Literature strategist, the merge the session briefs: review.md and refs.bib"
     return (
         N(
             "THS",
-            "Session: the search themes, clusters of the method areas, each with its "
-            f"scope and target range, in config.md Decisions {AP_TAG}",
+            "Session: one literature strategist, or several with a merge, each start's "
+            f"brief written by the session, the choice in config.md Decisions {LT_TAG}",
             "choice",
         ),
         N(
-            "T1",
-            "Literature strategist, theme run: search theme 1, review-theme-1.md and "
-            f"refs-theme-1.bib; {CONFIRMED}",
-            "ruled_maybe",
-        ),
-        N(
             "T2",
-            f"Literature strategist, theme runs: each other search theme, all at once {AP_TAG}",
+            f"Literature strategists, the starts the session briefs, at once {LT_TAG}",
             "ruled_maybe",
-        ),
-        N(
-            "TJ",
-            "Literature strategist, merge jobs, all at once: a leads job per theme run, the "
-            f"intersections and the venues [CA], the first citation round {LR_TAG}",
-            "ruled_maybe",
-        ),
-        N(
-            "TC",
-            "Literature strategist, citation rounds over the merged core set [CA]: refs and "
-            f"cited-by jobs of at most 40 works, until the loop closes, at most 8 {LR_TAG}",
-            "ruled_maybe",
-        ),
-        N(
-            "TS",
-            "The citation loop does not close: the works not collected and the rounds run; "
-            f"another 8 rounds, or go on with the works named {LR_TAG}",
-            "stop",
         ),
         N(
             "TM",
-            "Literature strategist, merge run, fresh: the duplicates removed, the report over "
-            "the merged set, the gates computed, a gate's search a job the session starts; "
-            f"the annotations joined with cat into review.md [CA] {LR_TAG}",
+            f"{merge}, with the synthesis analysis {LT_TAG}" if synthesis else f"{merge} {LT_TAG}",
             "ruled_maybe",
         ),
-        *(
-            (
-                N(
-                    "TY",
-                    "Literature strategist, synthesis start: the section Synthesis Analysis "
-                    f"of review.md, its counts from counts-merge.md {LR_TAG}",
-                    "ruled_maybe",
-                ),
-            )
-            if synthesis
-            else ()
-        ),
     )
 
 
-def theme_search_edges(
-    single: str,
-    after: str,
-    check: str = "",
-    check_end: str = "",
-    synthesis: bool = False,
-) -> tuple[gf.Edge, ...]:
-    """The arrows from the division to the single strategist or the theme runs and the merge stage.
-
-    With a check named, the theme runs go to the check's first box, and the merge jobs follow
-    its last box, check_end when it is named and the first box otherwise. With synthesis, the
-    merge run goes to the synthesis start, which goes to after.
-    """
-    to_jobs = (
-        (E("T1", check), E("T2", check), E(check_end or check, "TJ", "after theme runs"))
-        if check
-        else (E("T1", "TJ"), E("T2", "TJ"))
-    )
-    to_after = (E("TM", "TY"), E("TY", after)) if synthesis else (E("TM", after),)
+def search_edges(single: str, after: str) -> tuple[gf.Edge, ...]:
+    """The arrows from the session's choice to the one strategist, or to the several starts and their merge."""
     return (
-        E("THS", single, f"one search theme {AP_TAG}"),
-        E("THS", "T1", f"two search themes or more {AP_TAG}"),
-        E("THS", "T2"),
-        E("T1", "T1", SEARCH_ROUNDS, "back"),
+        E("THS", single, f"one strategist {LT_TAG}"),
+        E("THS", "T2", f"several, with a merge {LT_TAG}"),
         E("T2", "T2", SEARCH_ROUNDS, "back"),
-        *to_jobs,
-        E("TJ", "TC", gf.FIRST_ROUND),
-        E("TC", "TC", gf.NEXT_ROUND, "back"),
-        E("TC", "TM", "the citation loop closes"),
-        E("TC", "TS", gf.OPEN_LOOP),
-        E(single, "TS", f"its own rounds, {gf.OPEN_LOOP}"),
-        E("TS", "TM"),
-        E("TM", "TM", gf.MERGE_LOOP, "back"),
-        *to_after,
+        E("T2", "TM"),
+        E("TM", after),
     )
 
 
@@ -518,7 +450,7 @@ def paper_full_detailed() -> gf.Graph:
             "stop",
         ),
         N("Q", "you skip the search? [J]", "ruled"),
-        *theme_search_nodes(),
+        *search_nodes(),
         N(
             "LS",
             "Literature strategist: screens your sources, searches for what they miss; a "
@@ -527,7 +459,7 @@ def paper_full_detailed() -> gf.Graph:
         ),
         N(
             "LC",
-            f"The strategist, one search theme: {CONFIRMED}",
+            f"The strategist, or the merge: {CONFIRMED}",
             "ruled",
         ),
         N(
@@ -551,7 +483,7 @@ def paper_full_detailed() -> gf.Graph:
         N(
             "LG",
             "Literature strategist, resumed or fresh: the sections that need literature "
-            f"and have no source [AD1, BR]; the merge run's after theme runs {AP_TAG}",
+            f"and have no source [AD1, BR]; the strategist that wrote review.md {LT_TAG}",
             "ruled",
         ),
         N("PG", "Planner again: assigns what was found [AD1]", "ruled"),
@@ -714,7 +646,7 @@ def paper_full_detailed() -> gf.Graph:
         E("I", "Q"),
         E("Q", "THS", "no, the default"),
         E("Q", "PL", "yes"),
-        *theme_search_edges("LS", "SR"),
+        *search_edges("LS", "LC"),
         E("LS", "LS", SEARCH_ROUNDS, "back"),
         E("LS", "LC"),
         E("LC", "SR"),
@@ -852,12 +784,6 @@ def paper_revision_detailed() -> gf.Graph:
             "Literature strategist: a .bib patch for the items that need a new reference "
             f"[Stops of paper]; {CONFIRMED}",
             "ruled",
-        ),
-        N(
-            "TS",
-            "The citation loop does not close: the works not collected and the rounds run; "
-            f"another 8 rounds, or go on with the works named {LR_TAG}",
-            "stop",
         ),
         N(
             "VZ",
@@ -1000,8 +926,6 @@ def paper_revision_detailed() -> gf.Graph:
         E("IT", "VZ", "an item needs a figure change, intake allows it"),
         E("IT", "AN"),
         E("LS", "LS", SEARCH_ROUNDS, "back"),
-        E("LS", "TS", f"its own citation rounds, {gf.OPEN_LOOP}"),
-        E("TS", "AN"),
         E("LS", "AN"),
         E("VZ", "AN"),
         E("AN", "DW"),
@@ -1073,56 +997,41 @@ def paper_lit_review_detailed() -> gf.Graph:
             "bibliography [AV1]; the profile [AV2]; a file in words [AQ]",
             "stop",
         ),
-        *theme_search_nodes(synthesis=True),
+        *search_nodes(synthesis=True),
         N(
             "LS",
-            "Literature strategist: review.md, refs.bib; a list over 50 entries shows its "
-            "first 20 and last 5; it does not start without a research question [D2, AD11, "
-            "AV15, AV16]",
+            "Literature strategist: review.md with the synthesis analysis, refs.bib; a list "
+            "over 50 entries shows its first 20 and last 5; it does not start without a "
+            "research question [D2, AD11, AV15, AV16]",
             "ruled_maybe",
         ),
         N(
             "LC",
-            f"The strategist, one search theme: {CONFIRMED}",
+            f"The strategist, or the merge: {CONFIRMED}",
             "ruled",
         ),
         N(
             "SJ",
-            "Session: each theme run's report read as it ends, or the one strategist's, for "
-            f"work of its prompt or its page left undone {AP_TAG}",
+            "Session: the report of each start read as it ends",
             "choice",
         ),
         N(
             "SC",
-            "Script, run by the session: one lookup.py resolve per .bib of a theme run or "
-            "merge job, or refs.bib for one theme; a proceedings page for an entry with "
-            f"neither; checks.md {AP_TAG} {LR_TAG}",
+            "Script, run by the session: lookup.py resolve once over every entry of "
+            "refs.bib; a proceedings page for an entry with neither; checks.md",
             "script",
         ),
         N(
             "LV",
-            "Literature strategist, resumed with checks.md: the differing titles resolved; "
-            f"strict: a failing identifier corrected or removed, once [O] {AP_TAG}",
+            "Literature strategist that wrote refs.bib, resumed with checks.md: the differing "
+            "titles resolved; strict: a failing identifier corrected or removed, once [O]",
             "ruled",
         ),
         N(
-            "MJ",
-            "Session: the merge run's report read, or the one strategist's, for sources or "
-            f"leads not assessed and items of its prompt not done {AP_TAG}",
-            "choice",
-        ),
-        N(
             "CK",
-            "Script, run by the session: lookup.py resolve once over every entry of refs.bib, no "
-            "identifier or title under two keys, the cited keys equal to the .bib's, into "
-            f"checks.md {AP_TAG}",
+            "Script, run by the session: lookup.py resolve once again over every entry "
+            "of refs.bib, into checks.md",
             "script",
-        ),
-        N(
-            "CJ",
-            "Session: the exclusions read; one made on a failed lookup is work left undone "
-            f"{AP_TAG}",
-            "choice",
         ),
         N(
             "SR",
@@ -1132,15 +1041,15 @@ def paper_lit_review_detailed() -> gf.Graph:
         N(
             "RC",
             "Script, run by the session: lookup.py resolve again on each corrected "
-            f"or added entry's DOI or arXiv ID, into checks.md [O] {AP_TAG}",
+            "or added entry's DOI or arXiv ID, into checks.md [O]",
             "script",
         ),
         N("RS", "A reference that cannot be confirmed [O]", "stop"),
         N(
             "FM",
             "Formatter: each target other than Markdown, from review.md with refs.bib; "
-            "the review's issues to the merge run, or to the synthesis start for its "
-            f"section, then the targets again {AP_TAG} {LR_TAG}",
+            "the review's issues to the strategist that wrote review.md, then the targets "
+            "again",
             "ruled_maybe",
         ),
         N("X", "End"),
@@ -1157,19 +1066,15 @@ def paper_lit_review_detailed() -> gf.Graph:
     edges = (
         E("I", "I", "you change it, until you confirm [R]", "back"),
         E("I", "THS"),
-        *theme_search_edges("LS", "MJ", "SJ", "SC", synthesis=True),
-        E("SJ", "T2", "work left undone: sent back once", "back"),
-        E("SJ", "SC"),
+        *search_edges("LS", "LC"),
         E("LS", "LS", SEARCH_ROUNDS, "back"),
         E("LS", "LC"),
         E("LC", "SJ"),
-        E("SC", "LV", "one search theme"),
-        E("LV", "MJ"),
-        E("MJ", "TM", "work left undone: sent back once", "back"),
-        E("MJ", "CK"),
-        E("CK", "CJ"),
-        E("CJ", "TM", "a failure, or an exclusion on a failed lookup: sent back once", "back"),
-        E("CJ", "SR"),
+        E("SJ", "SC"),
+        E("SC", "LV"),
+        E("LV", "CK"),
+        E("CK", "RS", "strict: an identifier still fails"),
+        E("CK", "SR"),
         E("SR", "RC"),
         E("RC", "RS", "strict: an identifier still fails"),
         E("RC", "X", "Markdown only"),
@@ -1208,16 +1113,16 @@ def paper_outline_only_detailed() -> gf.Graph:
             "file given in words found by search [AQ]",
             "stop",
         ),
-        *theme_search_nodes(),
+        *search_nodes(),
         N(
             "LS",
-            "Literature strategist, for one search theme; the search always runs, and it "
+            "Literature strategist, when the session runs one; the search always runs, and it "
             "does not start without a research question [J, AV15]",
             "ruled_maybe",
         ),
         N(
             "LC",
-            f"The strategist, one search theme: {CONFIRMED}",
+            f"The strategist, or the merge: {CONFIRMED}",
             "ruled",
         ),
         N(
@@ -1234,7 +1139,7 @@ def paper_outline_only_detailed() -> gf.Graph:
         N(
             "LG",
             "Literature strategist, resumed or fresh: the sections that need literature "
-            f"and have no source [AD1, BR]; the merge run's after theme runs {AP_TAG}",
+            f"and have no source [AD1, BR]; the strategist that wrote review.md {LT_TAG}",
             "ruled",
         ),
         N("PG", "Planner again: assigns what was found [AD1]", "ruled"),
@@ -1252,7 +1157,7 @@ def paper_outline_only_detailed() -> gf.Graph:
     edges = (
         E("I", "I", "you change it, until you confirm [R]", "back"),
         E("I", "THS"),
-        *theme_search_edges("LS", "SR"),
+        *search_edges("LS", "LC"),
         E("LS", "LS", SEARCH_ROUNDS, "back"),
         E("LS", "LC"),
         E("LC", "SR"),
