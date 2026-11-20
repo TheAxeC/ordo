@@ -51,16 +51,19 @@ dispatch:                    # or the block /spec writes (a list when .agents/pl
   base: e5b957c
   launched: 2026-11-20
   report: .scratch/5-paper/agents/reviews/5.P-report.md
+  builder_usage: 117171 tokens, 284 tool uses, 30.0 min
+  reviewer_report: "agents/reviews/5.P-refuter.md (a5f9a5a59baad3ae6, claude-opus-5-5, 282654 tokens, 75 tool uses, 15.3 min)"
   brief_check: "agents/reviews/5.P-brief-check.md (a84dffbb8f56b28df, claude-opus-5-5, 246577 tokens, 72 tool uses, 10.3 min)"
   landing: not-started
-  round: 0
+  round: 1
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled or, under `self_rule: on`, until the orchestrator closes it as `plan-orchestration`'s `references/self-rule.md`, "Closing an open item", says)
 
 A finding that is neither closed in the repair rounds nor fixed at landing is an open item here, and goes where `plan-orchestration`'s "What earns a step of its own" says; what is settled belongs in the closed list.
 
-- Open item A (2026-11-20), held: the rest of `paper` after step 5.P lands. The user prefers (a), a step that does for every other mode what 5.P does for lit-review (each mode copied from academic-paper 3.2.0's text, keeping only the deviations the goal requires and those a run shows to help, then the revision and full comparisons run again), and holds the step until the lit-review comparison after 5.P has been judged. The other options: (b) keep the rest and rerun only the revision and full comparisons, the lazy option; (c) widen 5.P to every mode. Coverage `drop` rows stay dropped, and the Chinese-language rules stay out (ruling Open item AD16).
+- Open item 5.Q held (2026-11-20): step 5.Q, the rest of `paper` as academic-paper's, is booked in `plan.md` and held; the user decides on it after the lit-review comparison after step 5.P has been judged (ruling The rest of paper as academic-paper's).
+- Open item 5.P-S6 (2026-11-20): step 5.P's reviewer (Spec 6) found that the builder made some edits of `SKILL.md`, `docs/glossary.md`, `docs/academic-coverage.md` and both figure scripts with `sed` and inline `python3` run from the shell, while the brief says no script is written for the step. No script file was added, and the reviewer read the whole diff of those files and found no unintended replacement. Options: (a) accept the edits as they stand, since the result was read whole and repair round 1 is made with the Edit and Write tools only; (b) have the builder redo those edits with the Edit tool from the base. Recommendation (a): the diff, not the tool that typed it, is what lands, and it has been read line by line; (b) costs a second build of the same text. Neither is the lazy option on the evidence, since (b) changes no line of the result.
 
 ## Closed items (the log of what was raised and how it ended; no report carries it)
 
