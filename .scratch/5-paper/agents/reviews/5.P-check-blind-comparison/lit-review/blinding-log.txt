@@ -1,0 +1,199 @@
+text: final-message.md: 1 x /A later `/paper full <project folder>` run/ -> 'A later full-manuscript run'
+text: final-message.md: 1 x //paper lit-review/ -> 'this literature review'
+text: final-message.md: 1 x /paper-runs// -> 'run/'
+text: final-message.md: 2 x /config\.md/ -> 'settings.md'
+text: final-message.md: 1 x /The strategist/ -> 'The search agent'
+text: final-message.md: 2 x /strategist/ -> 'search agent'
+text: final-message.md: 2 x /lit-review/ -> 'literature review'
+read as UTF-8: run/checks.md
+text: run/checks.md: 2 x /'?/Users/axelfaes/\.claude/skills/paper/templates/lookup\.py'?/ -> 'lookup'
+text: run/checks.md: 4 x /\bLit-review\b/ -> 'Literature review'
+text: run/checks.md: 1 x /config\.md/ -> 'settings.md'
+text: run/checks.md: 1 x /the strategist/ -> 'the search agent'
+text: run/checks.md: 1 x /strategist/ -> 'search agent'
+path: run/config.md -> run/settings.md
+text: run/settings.md: 1 x /- The prose standard of the run: `/Users/axelfaes/\.claude/skills/repo-setup/templates/docs/dev/prose-standard\.md` with the differences of `/Users/axelfaes/\.claude/skills/writing/references/manuscript-prose-standard\.md`\./ -> '- The prose standard of the run: the default prose standard with the differences of the default manuscript prose standard.'
+text: run/settings.md: 1 x /taken by the intake agent with/ -> 'taken at intake with'
+text: run/settings.md: 1 x /Strategist D asked/ -> 'Search agent D asked'
+text: run/settings.md: 1 x /`ls -la paper-runs`/ -> '`ls -la runs`'
+text: run/settings.md: 1 x /`ls paper-runs`/ -> '`ls runs`'
+text: run/settings.md: 1 x //paper lit-review/ -> 'this literature review'
+text: run/settings.md: 1 x /paper-runs// -> 'run/'
+text: run/settings.md: 2 x /config\.md/ -> 'settings.md'
+text: run/settings.md: 1 x /the strategist/ -> 'the search agent'
+text: run/settings.md: 6 x /strategist/ -> 'search agent'
+text: run/settings.md: 1 x /\blit-review mode\b/ -> 'literature review'
+text: run/settings.md: 4 x /lit-review/ -> 'literature review'
+text: run/settings.md: 1 x /SKILL\.md/ -> 'the instructions'
+text: run/settings.md: 3 x /\bSteps [0-9]+\b/ -> 'the instructions'
+text: run/final.md: 1 x /A later `/paper full <project folder>` run/ -> 'A later full-manuscript run'
+text: run/final.md: 1 x //paper lit-review/ -> 'this literature review'
+text: run/final.md: 1 x /paper-runs// -> 'run/'
+text: run/final.md: 2 x /config\.md/ -> 'settings.md'
+text: run/final.md: 1 x /The strategist/ -> 'The search agent'
+text: run/final.md: 2 x /strategist/ -> 'search agent'
+text: run/final.md: 2 x /lit-review/ -> 'literature review'
+text: run/review.md: 4 x /config\.md/ -> 'settings.md'
+text: run/review.md: 2 x /lookup\.py/ -> 'the lookup script'
+text: run/review.md: 1 x /the strategist/ -> 'the search agent'
+text: run/strand-B.md: 3 x /lookup\.py/ -> 'the lookup script'
+text: run/strand-B.md: 1 x /the literature strategist/ -> 'the search agent'
+text: run/strand-C.md: 1 x /config\.md/ -> 'settings.md'
+read as UTF-8: run/strand-D.md
+text: run/strand-D.md: 2 x /config\.md/ -> 'settings.md'
+text: run/strand-D.md: 2 x /lookup\.py/ -> 'the lookup script'
+831 source texts written to /private/tmp/claude-502/-Users-axelfaes-workspace-ordo/e68b9e7f-9bfe-4218-be15-6dd18d5f22c0/scratchpad/gate5k/sources/paper
+== paper
+text: source-001.txt: 5 x (?^:/var/folders/[^/\s]+/[^/\s]+/T/)
+text: source-001.txt: 1 x (?^:lookup\.py)
+text: source-002.txt: 1 x (?^:config\.md)
+text: source-003.txt: 1 x (?^:/private/tmp/claude-502/[^\s`'"]*?/gate5k/lit-review-rc17)
+text: source-005.txt: 1 x (?^:/private/tmp/claude-502/-private-tmp-claude-502\S*)
+text: source-005.txt: 1 x (?^:/private/tmp/claude-502/[^\s`'"]*?/gate5k/lit-review-rc17)
+text: source-006.txt: 1 x (?^:/private/tmp/claude-502/-private-tmp-claude-502\S*)
+text: source-006.txt: 1 x (?^:/private/tmp/claude-502/[^\s`'"]*?/gate5k/lit-review-rc17)
+text: source-006.txt: 1 x (?^:[Ll]it-review)
+text: source-006.txt: 1 x (?^:paper-runs/)
+text: source-007.txt: 1 x (?^:/Users/axelfaes/\.claude/projects/\S*)
+text: source-008.txt: 1 x (?^:/Users/axelfaes/\.claude/projects/\S*)
+text: source-009.txt: 2 x (?^:/Users/axelfaes/\.claude/projects/\S*)
+text: source-009.txt: 2 x (?^:\baxelfaes\b)
+text: source-010.txt: 1 x (?^:/private/tmp/claude-502/[^\s`'"]*?/gate5k/lit-review-rc17)
+text: source-011.txt: 1 x (?^:/private/tmp/claude-502/[^\s`'"]*?/gate5k/lit-review-rc17)
+text: source-012.txt: 1 x (?^:/private/tmp/claude-502/[^\s`'"]*?/gate5k/lit-review-rc17)
+text: source-013.txt: 1 x (?^:/private/tmp/claude-502/[^\s`'"]*?/gate5k/lit-review-rc17)
+text: source-015.txt: 2 x (?^:/var/folders/[^/\s]+/[^/\s]+/T/)
+text: source-016.txt: 1 x (?^:/private/tmp/claude-502/[^\s`'"]*?/gate5k/lit-review-rc17)
+text: source-017.txt: 1 x (?^:/private/tmp/claude-502/-private-tmp-claude-502\S*)
+text: source-017.txt: 1 x (?^:/private/tmp/claude-502/[^\s`'"]*?/gate5k/lit-review-rc17)
+text: source-018.txt: 1 x (?^:/private/tmp/claude-502/[^\s`'"]*?/gate5k/lit-review-rc17)
+text: source-019.txt: 1 x (?^:/private/tmp/claude-502/[^\s`'"]*?/gate5k/lit-review-rc17)
+text: source-020.txt: 3 x (?^:[Ll]it-review)
+text: source-020.txt: 1 x (?^:\bstrategist\b)
+text: source-028.txt: 5 x (?^:/var/folders/[^/\s]+/[^/\s]+/T/)
+text: source-028.txt: 136 x (?^:\baxelfaes\b)
+text: source-028.txt: 2 x (?^:config\.md)
+text: source-040.txt: 1 x (?^:config\.md)
+text: source-060.txt: 2 x (?^:/Users/axelfaes/\.claude/skills/\S*)
+text: source-060.txt: 1 x (?^:lookup\.py)
+text: source-078.txt: 2 x (?^:/private/tmp/claude-502/-private-tmp-claude-502\S*)
+text: source-078.txt: 1 x (?^:/private/tmp/claude-502/[^\s`'"]*?/gate5k/lit-review-rc17)
+text: source-078.txt: 1 x (?^:[Ll]it-review)
+text: source-078.txt: 1 x (?^:paper-runs/)
+text: source-079.txt: 1 x (?^:/private/tmp/claude-502/-private-tmp-claude-502\S*)
+text: source-079.txt: 1 x (?^:/private/tmp/claude-502/[^\s`'"]*?/gate5k/lit-review-rc17)
+text: source-079.txt: 1 x (?^:[Ll]it-review)
+text: source-079.txt: 1 x (?^:paper-runs/)
+text: source-080.txt: 1 x (?^:/private/tmp/claude-502/-private-tmp-claude-502\S*)
+text: source-080.txt: 1 x (?^:/private/tmp/claude-502/[^\s`'"]*?/gate5k/lit-review-rc17)
+text: source-080.txt: 1 x (?^:[Ll]it-review)
+text: source-080.txt: 1 x (?^:paper-runs/)
+text: source-103.txt: 1 x (?^:/private/tmp/claude-502/-private-tmp-claude-502\S*)
+text: source-103.txt: 1 x (?^:/private/tmp/claude-502/[^\s`'"]*?/gate5k/lit-review-rc17)
+text: source-103.txt: 1 x (?^:[Ll]it-review)
+text: source-103.txt: 1 x (?^:paper-runs/)
+text: source-111.txt: 1 x (?^:/private/tmp/claude-502/-private-tmp-claude-502\S*)
+text: source-111.txt: 1 x (?^:/private/tmp/claude-502/[^\s`'"]*?/gate5k/lit-review-rc17)
+text: source-111.txt: 1 x (?^:[Ll]it-review)
+text: source-111.txt: 1 x (?^:paper-runs/)
+text: source-116.txt: 1 x (?^:/private/tmp/claude-502/-private-tmp-claude-502\S*)
+text: source-120.txt: 7 x (?^:/Users/axelfaes/)
+text: source-120.txt: 5 x (?^:/Users/axelfaes/\.claude/skills/paper/templates/lookup\.py)
+text: source-120.txt: 7 x (?^:\baxelfaes\b)
+text: source-142.txt: 6 x (?^:lookup\.py)
+text: source-143.txt: 1 x (?^:/private/tmp/claude-502/-private-tmp-claude-502\S*)
+text: source-143.txt: 1 x (?^:/private/tmp/claude-502/[^\s`'"]*?/gate5k/lit-review-rc17)
+text: source-143.txt: 1 x (?^:[Ll]it-review)
+text: source-143.txt: 1 x (?^:paper-runs/)
+text: source-146.txt: 1 x (?^:/private/tmp/claude-502/-private-tmp-claude-502\S*)
+text: source-146.txt: 1 x (?^:/private/tmp/claude-502/[^\s`'"]*?/gate5k/lit-review-rc17)
+text: source-146.txt: 1 x (?^:[Ll]it-review)
+text: source-146.txt: 1 x (?^:paper-runs/)
+text: source-149.txt: 1 x (?^:/private/tmp/claude-502/-private-tmp-claude-502\S*)
+text: source-149.txt: 1 x (?^:/private/tmp/claude-502/[^\s`'"]*?/gate5k/lit-review-rc17)
+text: source-149.txt: 1 x (?^:[Ll]it-review)
+text: source-149.txt: 1 x (?^:paper-runs/)
+text: source-154.txt: 1 x (?^:/private/tmp/claude-502/-private-tmp-claude-502\S*)
+text: source-155.txt: 1 x (?^:lookup\.py)
+text: source-163.txt: 4 x (?^:/Users/axelfaes/)
+text: source-165.txt: 3 x (?^:/var/folders/[^/\s]+/[^/\s]+/T/)
+text: source-183.txt: 1 x (?^:/private/tmp/claude-502/-private-tmp-claude-502\S*)
+text: source-183.txt: 1 x (?^:/private/tmp/claude-502/[^\s`'"]*?/gate5k/lit-review-rc17)
+text: source-183.txt: 1 x (?^:[Ll]it-review)
+text: source-183.txt: 1 x (?^:paper-runs/)
+text: source-184.txt: 4 x (?^:\baxelfaes\b)
+text: source-187.txt: 1 x (?^:/private/tmp/claude-502/-private-tmp-claude-502\S*)
+text: source-187.txt: 1 x (?^:/var/folders/[^/\s]+/[^/\s]+/T/)
+text: source-191.txt: 1 x (?^:/private/tmp/claude-502/-private-tmp-claude-502\S*)
+text: source-191.txt: 1 x (?^:/private/tmp/claude-502/[^\s`'"]*?/gate5k/lit-review-rc17)
+text: source-191.txt: 1 x (?^:[Ll]it-review)
+text: source-191.txt: 1 x (?^:paper-runs/)
+text: source-223.txt: 1 x (?^:\baxelfaes\b)
+text: source-232.txt: 1 x (?^:/private/tmp/claude-502/-private-tmp-claude-502\S*)
+text: source-232.txt: 1 x (?^:/private/tmp/claude-502/[^\s`'"]*?/gate5k/lit-review-rc17)
+text: source-232.txt: 1 x (?^:[Ll]it-review)
+text: source-232.txt: 1 x (?^:paper-runs/)
+text: source-240.txt: 11 x (?^:lookup\.py)
+text: source-257.txt: 2 x (?^:lookup\.py)
+text: source-266.txt: 1 x (?^:/Users/axelfaes/\.claude/projects/\S*)
+text: source-268.txt: 40 x (?^:/var/folders/[^/\s]+/[^/\s]+/T/)
+text: source-270.txt: 1 x (?^:/Users/axelfaes/\.claude/projects/\S*)
+text: source-273.txt: 1 x (?^:lookup\.py)
+text: source-319.txt: 2 x (?^:\baxelfaes\b)
+text: source-320.txt: 10 x (?^:\baxelfaes\b)
+text: source-322.txt: 12 x (?^:\baxelfaes\b)
+text: source-326.txt: 1 x (?^:\baxelfaes\b)
+text: source-329.txt: 1 x (?^:\baxelfaes\b)
+text: source-351.txt: 9 x (?^:\baxelfaes\b)
+text: source-361.txt: 6 x (?^:/Users/axelfaes/)
+text: source-361.txt: 3 x (?^:/var/folders/[^/\s]+/[^/\s]+/T/)
+text: source-366.txt: 27 x (?^:/Users/axelfaes/)
+text: source-366.txt: 18 x (?^:/var/folders/[^/\s]+/[^/\s]+/T/)
+text: source-370.txt: 6 x (?^:/Users/axelfaes/)
+text: source-370.txt: 3 x (?^:/var/folders/[^/\s]+/[^/\s]+/T/)
+text: source-372.txt: 18 x (?^:/Users/axelfaes/)
+text: source-372.txt: 9 x (?^:/var/folders/[^/\s]+/[^/\s]+/T/)
+text: source-395.txt: 31 x (?^:\baxelfaes\b)
+text: source-480.txt: 1 x (?^:/private/tmp/claude-502/-private-tmp-claude-502\S*)
+text: source-480.txt: 1 x (?^:/private/tmp/claude-502/[^\s`'"]*?/gate5k/lit-review-rc17)
+text: source-480.txt: 1 x (?^:[Ll]it-review)
+text: source-480.txt: 1 x (?^:paper-runs/)
+text: source-481.txt: 1 x (?^:/var/folders/[^/\s]+/[^/\s]+/T/)
+text: source-482.txt: 1 x (?^:/var/folders/[^/\s]+/[^/\s]+/T/)
+text: source-483.txt: 6 x (?^:/var/folders/[^/\s]+/[^/\s]+/T/)
+text: source-484.txt: 24 x (?^:/Users/axelfaes/)
+text: source-484.txt: 12 x (?^:/var/folders/[^/\s]+/[^/\s]+/T/)
+text: source-500.txt: 7 x (?^:/var/folders/[^/\s]+/[^/\s]+/T/)
+text: source-531.txt: 2 x (?^:/var/folders/[^/\s]+/[^/\s]+/T/)
+text: source-557.txt: 2 x (?^:/var/folders/[^/\s]+/[^/\s]+/T/)
+text: source-559.txt: 2 x (?^:config\.md)
+text: source-560.txt: 1 x (?^:/var/folders/[^/\s]+/[^/\s]+/T/)
+text: source-570.txt: 5 x (?^:/var/folders/[^/\s]+/[^/\s]+/T/)
+text: source-573.txt: 1 x (?^:/var/folders/[^/\s]+/[^/\s]+/T/)
+text: source-574.txt: 1 x (?^:/var/folders/[^/\s]+/[^/\s]+/T/)
+text: source-615.txt: 2 x (?^:\baxelfaes\b)
+text: source-616.txt: 15 x (?^:\baxelfaes\b)
+text: source-625.txt: 1 x (?^:lookup\.py)
+text: source-628.txt: 4 x (?^:/Users/axelfaes/)
+text: source-629.txt: 1 x (?^:/private/tmp/claude-502/-private-tmp-claude-502\S*)
+text: source-629.txt: 1 x (?^:/private/tmp/claude-502/[^\s`'"]*?/gate5k/lit-review-rc17)
+text: source-629.txt: 1 x (?^:[Ll]it-review)
+text: source-629.txt: 1 x (?^:paper-runs/)
+text: source-637.txt: 1 x (?^:/private/tmp/claude-502/-private-tmp-claude-502\S*)
+text: source-637.txt: 1 x (?^:/private/tmp/claude-502/[^\s`'"]*?/gate5k/lit-review-rc17)
+text: source-637.txt: 1 x (?^:[Ll]it-review)
+text: source-637.txt: 1 x (?^:paper-runs/)
+text: source-640.txt: 2 x (?^:/var/folders/[^/\s]+/[^/\s]+/T/)
+text: source-652.txt: 1 x (?^:/var/folders/[^/\s]+/[^/\s]+/T/)
+text: source-656.txt: 1 x (?^:/private/tmp/claude-502/-private-tmp-claude-502\S*)
+text: source-656.txt: 1 x (?^:/private/tmp/claude-502/[^\s`'"]*?/gate5k/lit-review-rc17)
+text: source-656.txt: 1 x (?^:[Ll]it-review)
+text: source-656.txt: 1 x (?^:paper-runs/)
+text: source-662.txt: 6 x (?^:\baxelfaes\b)
+text: source-668.txt: 1 x (?^:/private/tmp/claude-502/[^\s`'"]*?/gate5k/lit-review-rc17)
+text: source-668.txt: 1 x (?^:paper-runs/lit-review-2026-11-20/)
+text: source-759.txt: 1 x (?^:lookup\.py)
+text: source-801.txt: 12 x (?^:\baxelfaes\b)
+text: source-120.txt: removed the trailing process listing (lines 45 to 51)
+text: source-273.txt: removed the listing of the tool's instruction folder (3 lines)
+removed: source-688.txt (a listing of the tool's instruction folder, not a source)

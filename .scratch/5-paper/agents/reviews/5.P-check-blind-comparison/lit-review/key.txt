@@ -1,0 +1,4 @@
+judge 1 (pair 1): A is academic-paper step 5's run, B is paper rc.17
+judge 2 (pair 1): A is paper rc.17, B is academic-paper step 5's run
+judge 3 (pair 2): A is academic-paper's second run, B is paper rc.17
+judge 4 (pair 2): A is paper rc.17, B is academic-paper's second run

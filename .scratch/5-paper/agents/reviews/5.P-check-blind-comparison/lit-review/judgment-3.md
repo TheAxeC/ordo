@@ -1,0 +1,30 @@
+**Verdict: B.** Both outputs hold up on accuracy where I checked them. B is the better review because its synthesis does real comparative work and it covers more of the requested literature. A has the cleaner deliverable (a LaTeX build with a PDF) and covers the canonical registration, segmentation and whole-slide MIL methods better. A's analysis is thin, though, and it leaves out a whole line of unaligned-mode tensor work.
+
+I did not read every line of either review. I read A's `literature_review.tex` lines 1-400, 2906-3035 and 3660-3794, which cover the search report, the start of the annotations, the merge-round annotations, gaps, recommended sources, synthesis and quality gates. I read B's `review.md` lines 1-240 and 1895-2117, which cover the search strategy, screening, the first annotation families, gaps, recommended sources, quality gates and the full synthesis. Everything else I reached only through searches.
+
+## Critical failures, output A
+
+1. **The synthesis is thin.** `literature_review.tex:3712-3755` answers the three parts of the question mostly as citation lists grouped by family, about a page per part. Example, line 3736: "Wasserstein and GW barycenters \cite{agueh2011barycenters,cuturi2014fast,peyre2016gromov} transport dictionaries \cite{...}" (a comma is also missing). It does not discuss what each handling of correspondence costs or where the families meet, and it does not draw out properties a method paper would need. For a researcher who wants to build on the review, this is its main weakness.
+2. **Unaligned-mode tensor work is missing.** `references.bib` has no Roald 2020 or 2022, which fit PARAFAC2 with an evolving voxel mode in fMRI. It also has none of the EHR PARAFAC2 line (SPARTan, COPA, TASTE, LogPar), apart from MULTIPAR. A search for `roald|TASTE|SPARTan|COPA` returned only `cohen2018curve` and `cohen2018nonnegative`. The request names "decompositions of tensors with an unaligned mode", and Roald's spatial varying mode is the closest prior work to it.
+3. **Some foundations are missing.** There is no Villani, no Benamou 2015, no Learn2Reg, no Gromov-Wasserstein learning (Xu 2019), no low-rank GW and no Brogat-Motte (searched in `references.bib`).
+
+## Critical failures, output B
+
+1. **Canonical pipeline methods are missing.** A search of `refs.bib` for VoxelMorph/Balakrishnan, U-Net/Ronneberger, nnU-Net/Isensee, Campanella, CLAM and TransMIL found none of them. Registration is covered only through surveys, Learn2Reg, ANTs and Dalca 2019. Segmentation is covered through benchmarks only.
+2. **One gap sentence misstates a source.** Gap 2 (`review.md:1906`) lists AMINN as a study that "pool[s] with attention over instances [chen2021aminn]". The source B read (`sources/output-B/source-105.txt:7`) says "AMINN with average pooling has the best performance". B's own annotation at line 1186 states this correctly, so the error is limited to the gap text.
+3. **Two bibliographic slips.** `kossaifi2017tensor` is cited as a preprint "no peer-reviewed version was confirmed" (`refs.bib:168`), although a journal version exists (I know this from memory; I did not check it against a page). `luo2022prediction` gives year 2022 for J NeuroIntervent Surg 15(4), where A gives 2023.
+4. **Disclosed limits.** About 45 sources were read at abstract level only. The currency gate passes exactly at 50.0% (`review.md:1946`). B says both openly, and they weaken the evidence base.
+
+## Checks of claims and URLs
+
+- **Fawaz 2021.** A says Spherical UNet went from 0.57 to 0.87 weeks MAE and MoNet stayed at 0.57 to 0.61 (`tex:3677`). This matches `sources/output-A/source-119.txt:12`. B gives 0.512 weeks for PointNet++ on native meshes and says non-equivariant models went "within a week to over a month". This matches `source-140.txt:18` and `source-138.txt:11`.
+- **AMINN.** B's figure of 11.4% over LASSO on the largest tumour matches `source-105.txt:7`.
+- **URLs I opened against saved pages.** All of these matched the cited works: A's arXiv 2610.41328, 2611.04337, 2606.10295 and 2510.22033 (`page-060` to `page-063`); MULTIPAR at PMLR v225 (`page-323`); ULOT at NeurIPS (`page-269`); OTKE and semi-relaxed GW at ICLR (`page-227`, `page-228`); POT at JMLR (`page-244`); and B's PMC12150736 (`page-302`). The rest of the 116 URLs in A's `.tex` and B's 19 `refs.bib` URLs were not opened.
+- **Unconfirmable pages.** A's four OpenReview URLs saved only a browser-check page (`page-278` to `page-282`), so they cannot be confirmed from the pages. All four are well-known papers that also carry arXiv IDs, so I do not count this as a failure.
+- **Entry counts.** `refs.bib` has 270 entries and A's `references.bib` has 171, as each final message says (counted with `^@`).
+
+## Reasons for B
+
+- **Synthesis.** B's synthesis (`review.md:1948-2114`) compares the families across strands. It says what each handling of correspondence imposes, from a dense map through atlas regions, templates and couplings to pooling (2.6). It connects transport and attention pooling through OTKE, UOT-Pooling and ROTP (2.4). It gives the computational cost of full couplings (2.3). It sets out the lesion-normalization evidence (Crinion, Nachev, Andersen, Juhling). It lists the properties a lesion-set predictor would need and the baselines and evaluation designs the corpus provides (4.2, 4.3). A researcher can build a method paper on this. A's synthesis does not reach that depth.
+- **Gaps.** Both sides found largely the same gaps: no outcome-trained template on clinical data, no head-to-head comparison of registration against registration-free predictors, and no propagation of segmentation error. B adds a scalability gap and evidence lines that name the queries each gap rests on. A's gap paragraphs are also well evidenced; on this point the two are close.
+- **Coverage.** B covers the tensor literature more fully (Roald, the EHR PARAFAC2 line, CP-HiFi, STORM) and the pipeline-error literature more fully. A's coverage edge is the canonical registration, segmentation and whole-slide MIL papers. A researcher can add those more easily than rebuild B's analysis, which is why B's omissions weigh less.
