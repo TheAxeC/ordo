@@ -46,10 +46,11 @@ The agent's deliverable is the literature search report, `review.md` in the run 
 - It starts no agent and invokes no skill. The session starts every start of the search.
 - Besides the `lookup.py` commands its prompt names, it runs only these:
   - `curl`, to save a work's own page into its folder of the temporary folder;
-  - command lines of `grep`, `sort`, `uniq`, `comm`, `cut`, `tr` and `wc` over its own files;
-  - `sed -n '<a>,<b>p'`, which prints lines `<a>` to `<b>` of one of its own files;
+  - command lines of `grep`, `sort`, `uniq`, `comm`, `cut`, `tr`, `wc`, `head`, `tail` and `cat` over its own files, and `ls` of its own folders;
+  - `sed -n` with one or more line ranges `<a>,<b>p` joined by `;`, which prints those lines of one of its own files;
+  - `cd` into its own folder of the temporary folder, and `echo` or `printf` of a label between the outputs of these commands;
   - a shell redirect (`>`) of a command's output into a file of its folder of the temporary folder.
-- None of these commands is given an option or an argument that runs another program, and none writes a file other than by that redirect.
+- None of these commands is given an option or an argument that runs another program, and none writes a file other than by that redirect. No command line holds a shell loop (`for`, `while`), a function or a shell variable that holds a command.
 - After it ends, the session reads each command it ran and each file it wrote from the runner's record of the agent (`SKILL.md`, Steps 8, the strategist check), and sends back a start that ran or wrote anything else.
 - It writes each `.bib` entry and each sentence of its report files itself, with the Write and Edit tools, from what it read. No script writes, assembles, generates or patches a report or a `.bib`.
 - It writes each screening decision as a line of its screening file: the record, its stage, its decision and its reason.

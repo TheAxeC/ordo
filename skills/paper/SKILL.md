@@ -163,7 +163,7 @@ The five scripts are run as `python3 '<this skill's folder>/templates/<script>'`
      - When a theme run ends, the session reads its final message and its `review-theme-<k>.md` whole. It reads them for the work the theme run hands on to the merge jobs ("The prompts of a literature search").
      - In lit-review mode the session then runs the identifier check on that theme run's `refs-theme-<k>.bib` (lit-review item 2).
      - A theme run whose report shows work of its prompt or its page left undone is sent back once. It is resumed (Steps 8), with that work named. Its report is then read again. Such work is any of these:
-       - a source that passes every gate and is held back;
+       - a source that passes every gate and is held back, other than a source left out to hold the theme's target range and named so in `review-theme-<k>.md`;
        - records excluded by a rule its page does not hold;
        - records a query returned and the run did not retrieve;
        - a period of recent work not searched.
@@ -1023,7 +1023,7 @@ The prompt of every start carries these rules on what it reads:
 
 The prompt of each theme run, each merge job and the single strategist carries, from its first start, the work whose absence the session sends back (Steps 8):
 
-- A source that passes every gate is included, and never held back.
+- A source that passes every gate is included, and never held back. A theme run holds its target range: above the top of its range it leaves out the sources that answer its scope least and names each in `review-theme-<k>.md` as left out to hold its target, which is no work left undone. A merge job and the single strategist have no target range to hold.
 - A record is excluded only by a rule its page holds.
 - Every record a query returned is retrieved and screened.
 - The period of recent work its prompt names is searched.
