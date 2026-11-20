@@ -60,7 +60,7 @@ dispatch:                    # or the block /spec writes (a list when .agents/pl
 
 A finding that is neither closed in the repair rounds nor fixed at landing is an open item here, and goes where `plan-orchestration`'s "What earns a step of its own" says; what is settled belongs in the closed list.
 
-none
+- Open item A (2026-11-20), held: the rest of `paper` after step 5.P lands. The user prefers (a), a step that does for every other mode what 5.P does for lit-review (each mode copied from academic-paper 3.2.0's text, keeping only the deviations the goal requires and those a run shows to help, then the revision and full comparisons run again), and holds the step until the lit-review comparison after 5.P has been judged. The other options: (b) keep the rest and rerun only the revision and full comparisons, the lazy option; (c) widen 5.P to every mode. Coverage `drop` rows stay dropped, and the Chinese-language rules stay out (ruling Open item AD16).
 
 ## Closed items (the log of what was raised and how it ended; no report carries it)
 
