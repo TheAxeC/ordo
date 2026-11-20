@@ -434,7 +434,7 @@ def theme_search_nodes(synthesis: bool = False) -> tuple[gf.Node, ...]:
         N(
             "TJ",
             "Literature strategist, merge jobs, all at once: a leads job per theme run, the "
-            f"intersections and the venues [CA] {LR_TAG}",
+            f"intersections and the venues [CA], the first citation round {LR_TAG}",
             "ruled_maybe",
         ),
         N(
@@ -453,7 +453,7 @@ def theme_search_nodes(synthesis: bool = False) -> tuple[gf.Node, ...]:
             "TM",
             "Literature strategist, merge run, fresh: the duplicates removed, the report over "
             "the merged set, the gates computed, a gate's search a job the session starts; "
-            f"review.md, refs.bib [CA] {LR_TAG}",
+            f"the annotations joined with cat into review.md [CA] {LR_TAG}",
             "ruled_maybe",
         ),
         *(

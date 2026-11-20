@@ -159,7 +159,7 @@ The five scripts are run as `python3 '<this skill's folder>/templates/<script>'`
      - The scope also names each neighbouring area that another search theme covers: a source of that area is included only when it is central to this search theme's own scope, and is flagged as an overlap.
      - With one search theme, the session starts one strategist as the mode's item says, the single strategist of "The prompts of a literature search" (Agent prompts), and no merge run follows.
      - With two search themes or more, the session starts one strategist per search theme, all at once: the theme runs. Each is given what the mode's item gives the strategist, and its search theme with its number `<k>`, its scope and its target range. Its prompt carries the rules and the additions of a theme run.
-     - Each theme run writes `review-theme-<k>.md`, `refs-theme-<k>.bib`, `screening-theme-<k>.md` and `counts-theme-<k>.md` in the run folder, and no `review.md`, `refs.bib` or patch.
+     - Each theme run writes `review-theme-<k>.md`, `annotations-theme-<k>.md`, `refs-theme-<k>.bib`, `screening-theme-<k>.md` and `counts-theme-<k>.md` in the run folder, and no `review.md`, `refs.bib` or patch.
      - When a theme run ends, the session reads its final message and its `review-theme-<k>.md` whole. It reads them for the work the theme run hands on to the merge jobs ("The prompts of a literature search").
      - In lit-review mode the session then runs the identifier check on that theme run's `refs-theme-<k>.bib` (lit-review item 2).
      - A theme run whose report shows work of its prompt or its page left undone is sent back once. It is resumed (Steps 8), with that work named. Its report is then read again. Such work is any of these:
@@ -169,29 +169,35 @@ The five scripts are run as `python3 '<this skill's folder>/templates/<script>'`
        - a period of recent work not searched.
      - When every theme run has ended, has been read and has been sent back where its report shows work left undone, the session names the work each theme run hands on for the merge jobs.
      - The session then starts the merge jobs at once, each a fresh literature strategist whose prompt carries the rules and the additions of its kind of merge job ("The prompts of a literature search"):
-       - one leads job per theme run whose hand-on list is not empty, `leads-<k>`, which assesses the leads and the other sources that theme run hands on;
+       - one leads job per theme run whose hand-on list is not empty, `leads-<k>`, which assesses the leads and the works that theme run hands on;
        - for a list of more than 40 sources, leads jobs of at most 40 sources each, `leads-<k>-<m>`, in place of `leads-<k>`;
-       - one job `intersections`, which searches the intersections of the search themes that the research question joins, and the venues the topic needs.
-     - When the leads jobs and the job `intersections` have ended, the session starts the first citation round.
-       - Its set is the merged core set: the union of the core sets the theme runs name, each the 5 to 10 core works of Layer 2 of the strategist's page.
+       - one job `intersections`, which searches the intersections of the search themes that the research question joins, and the venues the topic needs;
+       - the jobs of the first citation round.
+     - The set of the first citation round is the merged core set: the union of the core sets the theme runs name, each the 5 to 10 core works of Layer 2 of the strategist's page.
        - The first round runs whether or not a theme run reports its citation loop open.
+       - A work the first round includes that a leads job or the job `intersections` also includes is kept once, as the merge run's removal of duplicates says.
      - Each citation round has a backward job and a forward job for each part of its set: the backward job `backward-<r>` runs `refs` over the part, and the forward job `forward-<r>` runs `cited-by` over it for the last three years.
        - A set of at most 40 works is one part.
        - A larger set is split into parts of at most 40 works each, and the jobs of part `<m>` are `backward-<r>-<m>` and `forward-<r>-<m>`.
        - The session starts every job of a round at once.
-     - Each merge job writes `review-<name>.md`, `refs-<name>.bib`, `screening-<name>.md` and `counts-<name>.md` in the run folder, and no `review.md`, `refs.bib` or patch.
+     - Each merge job writes `review-<name>.md`, `annotations-<name>.md`, `refs-<name>.bib`, `screening-<name>.md` and `counts-<name>.md` in the run folder, and no `review.md`, `refs.bib` or patch.
      - When a merge job ends, the session reads its final message and its `review-<name>.md` whole. In lit-review mode the session then runs the identifier check on its `refs-<name>.bib` (lit-review item 2).
      - After each citation round the session reads the reports of its jobs. Where the round included a work not yet collected, the session starts the next round over the works that round included.
      - The citation rounds end when a round includes no work not yet collected: the citation loop closes, which is condition 4 of the stopping rules of the strategist's page.
      - The session counts the citation rounds of the run, at most 8.
      - A citation loop still open after the eighth round is the stop "The citation loop does not close".
-     - The session then starts the merge run, fresh. In lit-review mode the identifier check of every theme run and every merge job has run by then (lit-review item 2). The merge run is given `config.md`, every theme run's and every merge job's `review-<name>.md`, `refs-<name>.bib`, `screening-<name>.md` and `counts-<name>.md`, in lit-review mode `checks.md` with the identifier check, the sources given and, where the mode's item gives one, the `.bib` with its manifest (Steps 9). Its prompt carries the rules and the additions of the merge run.
-     - The merge run writes the files the mode's item names for the strategist: `review.md`, `refs.bib`, the files of "Reading a given source list" of its page for a given list, and, where a manifest is given, the patch with the mode's id. It also writes `screening-merge.md` and `counts-merge.md`.
+     - The session then joins the annotations and the entries the starts wrote, each copied word for word:
+       - `cat` of every theme run's and every merge job's `annotations-<name>.md`, theme runs first by `<k>` and then the merge jobs in the order they ended, into `annotations.md` in the run folder;
+       - `cat` of their `refs-<name>.bib` in the same order into `refs.bib` in the run folder;
+       - `grep -c '^#### ' 'annotations.md'` and `grep -c '^@' 'refs.bib'` are written into `checks.md`, each beside the sum of the same count over the files joined.
+     - The session then starts the merge run, fresh. In lit-review mode the identifier check of every theme run and every merge job has run by then (lit-review item 2). The merge run is given `config.md`, `annotations.md`, `refs.bib`, every theme run's and every merge job's `review-<name>.md`, `screening-<name>.md` and `counts-<name>.md`, in lit-review mode `checks.md` with the identifier check, the sources given and, where the mode's item gives one, the `.bib` with its manifest (Steps 9). Its prompt carries the rules and the additions of the merge run.
+     - The merge run removes the duplicates in `annotations.md` and `refs.bib`, and adds the annotation and the entry of each source it includes itself, by its own edits. It writes the report around the annotations as two files: `review-part-1.md`, the sections of its page's output format before the annotated bibliography, ending with the heading `### Annotated Bibliography`, and `review-part-2.md`, the sections after it. It also writes the files of "Reading a given source list" of its page for a given list, `screening-merge.md` and `counts-merge.md`, and, where a manifest is given, the patch with the mode's id once `refs.bib` is final.
      - Where a quality gate fails and its failure handling calls for a search, the merge run's report names that search.
      - The session starts that search as one more merge job, `gate-<n>`.
-     - The merge run is then resumed with the files of the gate job.
-     - In lit-review mode the synthesis start follows the merge run as a fresh agent, given `config.md`, `review.md`, `refs.bib` and `counts-merge.md`. It writes the section "Synthesis Analysis" into `review.md` by its own edits.
-     - When the merge run, the synthesis start or the single strategist ends, the session reads its final message and its `review.md` whole.
+     - The session appends the gate job's files with `cat 'annotations-gate-<n>.md' >> 'annotations.md'` and `cat 'refs-gate-<n>.bib' >> 'refs.bib'`, and resumes the merge run with them.
+     - When the merge run has ended and no gate job is left, the session writes `review.md` with `cat 'review-part-1.md' 'annotations.md' 'review-part-2.md' > 'review.md'`, and removes the three joined files with `rm`. Every later change to `review.md` is an edit of the start that holds it.
+     - In lit-review mode the synthesis start follows the merge run as a fresh agent, given `config.md`, `review.md`, `refs.bib` and `counts-merge.md`. It writes the section "Synthesis Analysis" into `review.md` by its own edits, one Edit for each part of the research question at most.
+     - When the merge run, the synthesis start or the single strategist ends, the session reads its final message and its `review.md` whole, for the merge run once the session has joined `review.md`.
      - A merge job or a merge run whose report lists sources or leads it did not assess is sent back once, resumed (Steps 8), with that work named.
      - A merge job, a merge run or a synthesis start whose report shows any other item of its prompt not done is sent back once the same way.
      - The report of a start sent back is read again when it ends.
@@ -568,7 +574,7 @@ Stops this mode can reach: the mode to run (only for a plain request), an unfini
 The session of a lit-review run writes no script. Each command it runs is one an item below names.
 
 1. Start the literature strategist (Steps 8), as the theme search of Steps 8 says. It is given `config.md`, the topic, the research question and the sources the Materials in hand row names.
-   - With two search themes or more these starts are the theme runs, and each writes `review-theme-<k>.md`, `refs-theme-<k>.bib`, `screening-theme-<k>.md` and `counts-theme-<k>.md`. The merge jobs follow them, and each writes `review-<name>.md`, `refs-<name>.bib`, `screening-<name>.md` and `counts-<name>.md`.
+   - With two search themes or more these starts are the theme runs, and each writes `review-theme-<k>.md`, `annotations-theme-<k>.md`, `refs-theme-<k>.bib`, `screening-theme-<k>.md` and `counts-theme-<k>.md`. The merge jobs follow them, and each writes `review-<name>.md`, `annotations-<name>.md`, `refs-<name>.bib`, `screening-<name>.md` and `counts-<name>.md`.
    - With one search theme the strategist writes `review.md`, `refs.bib`, `screening-single.md` and `counts-single.md`.
    - Done when every theme run and every merge job has written its files, the citation rounds have ended, the strategist check has run on each start, and the session has read each report (Steps 8). With one search theme, done when `review.md` and `refs.bib` exist, the strategist check has run on the start and the session has read its report.
 2. Run the identifier check on each `refs-theme-<k>.bib` as its theme run ends, and on each merge job's `refs-<name>.bib` as the job ends (Steps 8), before the merge run starts. With one search theme, run it on `refs.bib`.
@@ -584,7 +590,7 @@ The session of a lit-review run writes no script. Each command it runs is one an
    - Under strict, as the row DOI checking records it, each failing identifier goes once to the strategist of item 3, which corrects the entry or removes the source. Under mark-only each failing identifier is named in the final message (Steps 14).
    - Done when `checks.md` holds a run for each entry of the file with a DOI, an arXiv ID or a `url`.
 3. Give the strategist the identifier check.
-   - With two search themes or more, start the merge run (Steps 8), given `checks.md`. It resolves each title the check prints that differs from its entry's, and under strict corrects or removes each failing identifier. It writes `review.md` and `refs.bib`. The synthesis start follows it (Steps 8) and writes the section "Synthesis Analysis" into `review.md`.
+   - With two search themes or more, start the merge run (Steps 8), given `checks.md`. It resolves each title the check prints that differs from its entry's, and under strict corrects or removes each failing identifier. It edits `annotations.md` and `refs.bib`, which the session joined, and writes the two parts of the report, which the session joins into `review.md` (Steps 8). The synthesis start follows it (Steps 8) and writes the section "Synthesis Analysis" into `review.md`.
    - With one search theme, resume the strategist, or start it fresh with the files it wrote (Steps 8). It is given `checks.md`, for the same work on `review.md` and `refs.bib`.
    - Done when `review.md` and `refs.bib` exist, the strategist has ended after reading `checks.md`, and with two search themes or more the synthesis start has ended. The session has then read each report and sent back any work left undone (Steps 8).
 4. Check the report and `refs.bib` the strategist wrote.
@@ -951,7 +957,7 @@ Role agents run the read-only commands of `lookup.py` themselves, each role the 
 | Role | Page | The prompt adds | Writes |
 |---|---|---|---|
 | Intake | `references/intake.md` | The call with its arguments and each path of Steps 2 with the words it came from. The `config.md` of an earlier run, when one stands. For a later start, the user's answer word for word, or the report of a strategist that found no research question | `config.md`, as the draft and then as the confirmed record |
-| Literature strategist | `references/literature-strategist.md`, and `references/patch-file.md` for a start that writes a patch | The sources given, the manuscript's `.bib` and its manifest when one is given, the absolute paths of the run's temporary folder and of its own folder in it, and the rules and the additions of "The prompts of a literature search" for its kind of start; the commands `search`, `refs`, `cited-by`, `resolve`, `index-abstract`, `dblp`, `fetch` and `text`; for a theme run, its search theme with its number, its scope and its target range; for a merge job, the work of its kind of job; for the merge run, every theme run's and merge job's files, and in lit-review mode `checks.md` with the identifier check; for the synthesis start, `review.md`, `refs.bib` and `counts-merge.md`; for the single strategist in lit-review mode, `checks.md` once the identifier check has run; for a later input, the line of "The prompts of a literature search" that names it | The merge run and the single strategist: `review.md`, `refs.bib`, its screening and counts files, `pre_screened_citation_keys_<list>_<timestamp>.txt` for a list of more than 50 entries, a patch for the `.bib`. A theme run or a merge job: only `review-<name>.md`, `refs-<name>.bib`, `screening-<name>.md` and `counts-<name>.md`. The synthesis start: only its section of `review.md` |
+| Literature strategist | `references/literature-strategist.md`, and `references/patch-file.md` for a start that writes a patch | The sources given, the manuscript's `.bib` and its manifest when one is given, the absolute paths of the run's temporary folder and of its own folder in it, and the rules and the additions of "The prompts of a literature search" for its kind of start; the commands `search`, `refs`, `cited-by`, `resolve`, `index-abstract`, `dblp`, `fetch` and `text`; for a theme run, its search theme with its number, its scope and its target range; for a merge job, the work of its kind of job; for the merge run, every theme run's and merge job's files, and in lit-review mode `checks.md` with the identifier check; for the synthesis start, `review.md`, `refs.bib` and `counts-merge.md`; for the single strategist in lit-review mode, `checks.md` once the identifier check has run; for a later input, the line of "The prompts of a literature search" that names it | The single strategist: `review.md`, `refs.bib`, its screening and counts files, `pre_screened_citation_keys_<list>_<timestamp>.txt` for a list of more than 50 entries, a patch for the `.bib`. The merge run: its edits of `annotations.md` and `refs.bib`, `review-part-1.md`, `review-part-2.md`, its screening and counts files, the list file and the patch as the single strategist, and after the join its edits of `review.md`. A theme run or a merge job: only `review-<name>.md`, `annotations-<name>.md`, `refs-<name>.bib`, `screening-<name>.md` and `counts-<name>.md`. The synthesis start: only its section of `review.md` |
 | Planner | `references/planner.md` | `review.md`, the user's changes to the outline, the structure chosen or insisted on, the sources found for sections that needed literature, and the files it wrote before; for the review of an expanded revision, resumed or started fresh; in plan mode, `chapter-summaries.md` and `insights.md` for the outline, `arguments.md` with the mentor's question and the user's answer for an evaluation, and every file of the run for the chapter plan; in full mode given a plan run, that run's files | `outline.md`, `arguments.md`, `structure-options.md`; in plan mode `stress-test.md` and `chapter-plan.md` |
 | Draft writer | `references/draft-writer.md`, `references/latex-template.md` and `references/patch-file.md` | The outline, the argument and the sources for a first draft with `existing-main.tex` when one stands, `references/statements.md`, `references/ai-disclosure.md` and the model identifier of Steps 4; the items, issues, findings or failing lines, and the files with their manifests, for a patch; the abstract-only and disclosure inputs; the final main `.tex` for the anonymous copy; the commands `resolve`, `bibtex` and `bibtex --page`, and the web search for a venue's page of `references/latex-template.md`, "The `.bib` entry forms" | `main.tex` whole for the first draft, `intended-claims.md`, `cover-letter.tex` for a journal venue, `<main>-anonymous.tex` for a double-blind venue, patches, `disclosure.md` |
 | Visualization | `references/visualization.md` and, for its placement patch, `references/patch-file.md` | `outline.md`, `arguments.md`, the file names in the manuscript's folder and its `figures/` folder; in revision, the items and intake's permission; in the figures call, the manifest of the `.tex` and the patch path; for its placement patch in full mode, resumed or started fresh, the manifest of `main.tex` and the patch path, or the rejection of a patch | `figures/`, `figures.md`, the patch with the id `figures`; under the permission "the project's figure script edited and run", also the script and the files it writes outside the run folder, each recorded in `figures.md` "Names" with `shasum -a 256` before and after |
@@ -962,7 +968,7 @@ Role agents run the read-only commands of `lookup.py` themselves, each role the 
 
 ### The prompts of a literature search
 
-A start of the literature strategist is a theme run, a merge job, the merge run, the synthesis start or the single strategist (Steps 8). The strategist of revision mode (revision item 3) is a single strategist. A start's files in the run folder are `review-<name>.md`, `refs-<name>.bib`, `screening-<name>.md` and `counts-<name>.md`. `<name>` is one of these:
+A start of the literature strategist is a theme run, a merge job, the merge run, the synthesis start or the single strategist (Steps 8). The strategist of revision mode (revision item 3) is a single strategist. A start's files in the run folder are `review-<name>.md`, `annotations-<name>.md`, `refs-<name>.bib`, `screening-<name>.md` and `counts-<name>.md`. `<name>` is one of these:
 
 - `theme-<k>` for a theme run;
 - `leads-<k>`, or `leads-<k>-<m>` for a split list, for a leads job;
@@ -972,7 +978,7 @@ A start of the literature strategist is a theme run, a merge job, the merge run,
 - `merge` for the merge run;
 - `single` for the single strategist.
 
-The merge run and the single strategist write `review.md` and `refs.bib` in place of `review-<name>.md` and `refs-<name>.bib`, and the synthesis start writes only its section of `review.md`.
+The single strategist writes `review.md` and `refs.bib` in place of `review-<name>.md`, `annotations-<name>.md` and `refs-<name>.bib`. The merge run edits `annotations.md` and `refs.bib`, which the session joined from the starts' files, and writes `review-part-1.md` and `review-part-2.md`, which the session joins with `annotations.md` into `review.md` (Steps 8). Once `review.md` stands, a later input reaches it by the merge run's edits. The synthesis start writes only its section of `review.md`.
 
 The prompt of every start carries these rules on the indexes:
 
@@ -1042,6 +1048,7 @@ The prompt of a theme run carries these rules:
 - Every included source confirmed to exist by a live lookup in the run, with its DOI, PMID or arXiv ID recorded exactly. The lookup is `lookup.py resolve`, or reads its landing page, the resolution of its DOI at `https://doi.org/<doi>`, its PubMed record, its arXiv abstract page or its official proceedings page. No source is taken from memory without that lookup.
 - A source it cannot confirm is excluded and listed under "unconfirmed, excluded".
 - The annotation of its page for each included source, with the field Identifier: the DOI or the arXiv ID, and the URL confirmed.
+- The annotations stand in `annotations-theme-<k>.md` and in no other file, each opening with the heading `#### Author (Year). Title.` and the field Citation key, `[<key>]`, so that the session joins them word for word into the merged review (Steps 8).
 - Each annotation states only what the abstract or the text it read says.
 - The field Quality of each annotation says what it read. That is the abstract alone, or which sections of the full text.
 - A preprint is flagged as a preprint.
@@ -1054,8 +1061,9 @@ The prompt of a theme run carries these rules:
 - A section "theme notes": what the theme's literature shows as a whole, and what was looked for and not found, which the merge run uses for the gaps.
 - No literature matrix across the themes, no research gaps, no skew advisory and no table of recommended sources, which the merge run writes over every theme.
 - `review-theme-<k>.md` names each source the theme run left out, with its reason, a source left out to hold its target among them.
-- `review-theme-<k>.md` names each lead the theme run hands on to the merge jobs: a source of a neighbouring area it did not include, and a search it could not run or finish, with the reason.
-- `review-theme-<k>.md` also holds the search strategy, the queries run, the screening counts, the annotated bibliography, the list "unconfirmed, excluded" and the theme notes.
+- `review-theme-<k>.md` names each lead the theme run hands on to the merge jobs: a source of a neighbouring area it did not include, a work it could not confirm, and a search it could not run or finish, with the reason.
+- A source it left out to hold its target is not handed on, as in academic-paper's theme runs.
+- `review-theme-<k>.md` also holds the search strategy, the queries run, the screening counts, the list "unconfirmed, excluded" and the theme notes.
 - `screening-theme-<k>.md` and `counts-theme-<k>.md` stand beside it, as the rules of every start say.
 - Every square bracket of `review-theme-<k>.md` outside a code span encloses citation keys only. Its page says so under "Square brackets in the report".
 - After writing, it runs `LC_ALL=C grep -n '[^ -~]'` on its report and its `.bib` and fixes each line it prints.
@@ -1087,6 +1095,7 @@ The prompt of every merge job carries these rules:
 - It reads and annotates each source it includes, with the annotation fields of `config.md` "Decisions" (Steps 8) beside its page's own.
 - Each source it includes is confirmed by a live lookup, with its DOI or arXiv ID recorded exactly as the record or the page it read gives it.
 - Each entry of its `refs-<name>.bib` has every field taken from the record it confirmed.
+- Its annotations stand in `annotations-<name>.md`, as the theme run's rule on `annotations-theme-<k>.md` says.
 - Each source it includes is a source the theme runs did not include, and its report names it as added.
 - Each source it excludes is listed in its report with its reason.
 - The files of the theme runs and of the other merge jobs are not changed.
@@ -1095,8 +1104,7 @@ The prompt of every merge job carries these rules:
 The prompt of a leads job carries these rules:
 
 - Every source the theme run hands on is assessed on its merits, with a live lookup as a theme run makes one.
-- A source handed on is a lead the theme run names for the merge jobs, a source it left out to hold its target, or a work it could not confirm.
-- The merged set has no target per search theme, so a source a theme run left out to hold its target is judged as any other source handed on.
+- A source handed on is a lead the theme run names for the merge jobs: a source of a neighbouring area it did not include, or a work it could not confirm. A search it could not run or finish is run by the leads job.
 - Each source handed on is included or excluded, with its reason.
 - `review-<name>.md` lists each source handed on with its decision and its reason.
 
@@ -1124,7 +1132,7 @@ The prompt of a gate job `gate-<n>` carries the failure handling search the merg
 
 The prompt of the merge run carries these rules:
 
-- The duplicates across the theme runs and the merge jobs are removed: a work kept under two keys or by two starts keeps one key, its annotations are merged with every theme tag kept, and the keys folded into it are listed.
+- The duplicates across the theme runs and the merge jobs are removed in `annotations.md` and `refs.bib` by its own edits: a work kept under two keys or by two starts keeps one key, its annotations are merged with every theme tag kept, and the keys folded into it are listed.
 - In lit-review mode each title the identifier check prints that differs from its entry's is resolved, with the version-of-record title and venue decided for `refs.bib` and each decision recorded (lit-review item 3).
 - The report is written in the output format of its page over the merged set.
 - The files of the theme runs and of the merge jobs are not changed.
@@ -1138,8 +1146,9 @@ The prompt of the merge run carries these rules:
 - A section lists each source the merge run, a theme run or a merge job excluded or dropped, with its reason.
 - The report lists each source a theme run handed on, with the decision and the reason its leads job gave.
 - The report of the citation rounds names the set the first round chained from, the rounds run with what each included, whether the citation loop closes, and after how many rounds.
-- The merged annotated bibliography carries every included source with the fields the theme runs used.
-- Its annotation from the theme run or the merge job is kept unchanged, except where the removal of duplicates or the merge run's own reading changes it.
+- The merged annotated bibliography is `annotations.md`, which the session joined from the starts' files word for word. It carries every included source with the fields the theme runs used.
+- The merge run changes an annotation there only by its own edits, where the removal of duplicates or its own reading changes it, and adds there the annotation of each source it includes itself.
+- It writes the report as `review-part-1.md` and `review-part-2.md`, the sections before and after the annotated bibliography, and never copies an annotation into them (Steps 8).
 - The report names each source a merge job added as added, with the job that added it.
 - The quality gates of its page run over the merged set with computed numbers, after the work of the rules above.
 - Where a gate fails, the merge run applies the failure handling strategies of its page itself, except a search.
@@ -1148,7 +1157,7 @@ The prompt of the merge run carries these rules:
 - It then reports the gate's result.
 - The merge run follows the theme run's rules on its search, requests, downloads, annotations, preprints, `.bib` entries, `grep` and final message.
 - Every query the merge run actually runs is recorded as the theme run's rule on queries says.
-- Each source the merge run adds itself gets a full annotation.
+- Each source the merge run adds itself gets a full annotation, in `annotations.md`.
 - Each source the merge run adds itself is confirmed by a live lookup, with its DOI or arXiv ID recorded exactly as the record or the page it read gives it.
 - Each entry the merge run adds to `refs.bib` itself has every field taken from the record it confirmed, and the report names the source as added.
 - `refs.bib` holds one entry per included work, with no character outside ASCII (an accent as its LaTeX command), its `doi` or `eprint` and `archivePrefix` fields kept, and a `url` for an entry with neither.
@@ -1166,7 +1175,7 @@ The prompt of the synthesis start carries these rules:
 
 To each start's prompt the session adds the run's specifics and what the start checks in particular for this request:
 
-- To a leads job: the work its theme run hands on, named with its sources from the session's reading of the theme runs (Steps 8): the leads it names for the merge jobs, the sources it left out to hold its target and the works it could not confirm.
+- To a leads job: the work its theme run hands on, named with its sources from the session's reading of the theme runs (Steps 8): the leads it names for the merge jobs, the works it could not confirm and the searches it could not run or finish.
 - To each job of a citation round: the works of its part, by citation key with each DOI or arXiv ID, the round's number and, for a split set, the part's number.
 - To the first citation round: the works cited and not yet collected that each theme run with an open citation loop names.
 - To each merge job: the foundational works each theme run's prompt named, and the core sets the theme runs name.
@@ -1180,6 +1189,7 @@ The single strategist of a search with one search theme follows its page whole o
 - the sources left out that `review-theme-<k>.md` names;
 - the leads that `review-theme-<k>.md` names;
 - the contents of `review-theme-<k>.md`;
+- the files `annotations-<name>.md` and `annotations.md` and the two parts of the report, the single strategist writing its annotations into the section Annotated Bibliography of `review.md` itself;
 - the files of a merge job;
 - the removal of duplicates across the theme runs and the merge jobs;
 - the files of the theme runs and the merge jobs left unchanged;

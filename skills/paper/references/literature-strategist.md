@@ -14,7 +14,7 @@ The literature strategist agent reads this page whole at every start. Its prompt
   - the direction of a theme run, written over the whole request with the sub-topics of the whole request;
   - the parts of the research question the Synthesis Analysis is organized by.
 - For a merge job:
-  - for a leads job, the work its theme run hands on, named with its sources: the leads it names, the sources it left out to hold its target and the works it could not confirm;
+  - for a leads job, the work its theme run hands on, named with its sources: the leads it names, the works it could not confirm and the searches it could not run or finish;
   - for a job of a citation round, the works of its part, at most 40, the round's number and, for a split set, the part's number;
   - for the first citation round, also the works each theme run's open citation loop leaves;
   - the foundational works each theme run's prompt named, and the core sets the theme runs name.
@@ -32,11 +32,12 @@ The agent designs systematic search strategies, screens sources, writes annotate
 
 ## The boundary of its work
 
-The agent's deliverable is the literature search report, `review.md` in the run folder (the search strategy, the annotated bibliography and the literature matrix), with the `.bib` its prompt names. A theme run or a merge job writes `review-<name>.md` and `refs-<name>.bib` in their place, and the synthesis start writes the section "Synthesis Analysis" of `review.md`.
+The agent's deliverable is the literature search report, `review.md` in the run folder (the search strategy, the annotated bibliography and the literature matrix), with the `.bib` its prompt names. A theme run or a merge job writes `review-<name>.md`, `annotations-<name>.md` and `refs-<name>.bib` in their place. The merge run edits `annotations.md` and `refs.bib`, which the session joined from those files, and writes the report around the annotations as `review-part-1.md` and `review-part-2.md`, which the session joins into `review.md`. The synthesis start writes the section "Synthesis Analysis" of `review.md`.
 
 - It writes no file other than these, each where its prompt names it:
-  - its report: `review.md` for the merge run and the single strategist, `review-<name>.md` for a theme run or a merge job, and only the section "Synthesis Analysis" of `review.md` for the synthesis start;
-  - its `.bib`: `refs.bib` for the merge run and the single strategist, `refs-<name>.bib` for a theme run or a merge job, and none for the synthesis start;
+  - its report: `review.md` for the single strategist, `review-part-1.md` and `review-part-2.md` for the merge run, and its edits of `review.md` once the session has joined it, `review-<name>.md` for a theme run or a merge job, and only the section "Synthesis Analysis" of `review.md` for the synthesis start;
+  - its annotations: `annotations-<name>.md` for a theme run or a merge job, its edits of `annotations.md` for the merge run, and the section Annotated Bibliography of `review.md` for the single strategist;
+  - its `.bib`: `refs.bib` for the single strategist, its edits of `refs.bib` for the merge run, `refs-<name>.bib` for a theme run or a merge job, and none for the synthesis start;
   - its screening file `screening-<name>.md` and its counts file `counts-<name>.md` in the run folder, which the synthesis start does not write;
   - for the merge run and the single strategist, where its prompt gives them: the patch for the `.bib`, and the file `pre_screened_citation_keys_<list>_<timestamp>.txt` that "Reading a given source list" writes for a list of more than 50 entries;
   - the files of its own folder of the temporary folder, whose absolute path its prompt names.
