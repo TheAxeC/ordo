@@ -19,7 +19,7 @@
 
 I opened the saved page for every URL in both bib files:
 
-- **A:** PMLR Peyré 2016, NeurIPS Luise 2018, NeurIPS Togninalli 2019, the Harshman 1970 PDF and PMLR Song 2024 all match their entries. The OpenReview page for Bai 2025 saved as a browser-check screen. A's source record (`source-125.txt`, an OpenReview notes search) shows how it was resolved.
+- **A:** PMLR Peyr<U+00E9> 2016, NeurIPS Luise 2018, NeurIPS Togninalli 2019, the Harshman 1970 PDF and PMLR Song 2024 all match their entries. The OpenReview page for Bai 2025 saved as a browser-check screen. A's source record (`source-125.txt`, an OpenReview notes search) shows how it was resolved.
 - **B:** Sliced GW, GOT, PSWE, unbalanced GW, OGDL, Brogat-Motte, low-rank GW, FGW, GWL, Sinkhorn, Maron 1997, the REPAR PMC page and the Harshman 1972 PDF all match. On Harshman 1972, one of B's fetch logs (`source-026.txt:347`) says it could not confirm the title. I opened page 1 of the saved PDF (`page-345.pdf`) and it shows "PARAFAC2: Mathematical and Technical Notes", matching the entry.
 
 I found no fabricated or mismatched URL on either side.

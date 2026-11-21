@@ -51,14 +51,14 @@ Strand group D covers the medical-imaging pipeline steps that methods for non-al
 
 OpenAlex counts are the number of works matching any search term after relevance scoring, so they measure index breadth and were screened by relevance rank only.
 
-**Layer 2, citation chaining (backward).** The reference lists of four core papers were read through OpenAlex: Geady et al. 2025 (22 references), Wilk et al. 2025 (48), Chang et al. 2021 (28) and Jühling et al. 2024 (55), 153 references in total. Two works appear in the reference lists of three of the core aggregation papers (Geady 2025, Wilk 2025, Chang 2021) and were marked "must include": Aerts et al. 2014 and van Griethuysen et al. 2017. The Jühling list added the lesioned-brain normalization works of Brett et al. 2001, Crinion et al. 2007, Nachev et al. 2008, Andersen et al. 2010 and Ripollés et al. 2012, the ANTs evaluation of Avants et al. 2011 and the stroke outcome studies of Forkert et al. 2015 and Salvalaggio et al. 2020. Jühling 2024 cites Crinion 2007 and Andersen 2010 as cost function masking studies and Nachev 2008 as the enantiomorphic method, the two alignment options it evaluates, and Salvalaggio 2020 uses the enantiomorphic method as its alignment step. The three were screened against (d) as alignment-step tools and benchmarks used ahead of lesion-based predictors and against (f) as inside that remit; all three passed and are included. Vargas et al. 2017 came from the Geady list.
+**Layer 2, citation chaining (backward).** The reference lists of four core papers were read through OpenAlex: Geady et al. 2025 (22 references), Wilk et al. 2025 (48), Chang et al. 2021 (28) and J<U+00FC>hling et al. 2024 (55), 153 references in total. Two works appear in the reference lists of three of the core aggregation papers (Geady 2025, Wilk 2025, Chang 2021) and were marked "must include": Aerts et al. 2014 and van Griethuysen et al. 2017. The J<U+00FC>hling list added the lesioned-brain normalization works of Brett et al. 2001, Crinion et al. 2007, Nachev et al. 2008, Andersen et al. 2010 and Ripoll<U+00E9>s et al. 2012, the ANTs evaluation of Avants et al. 2011 and the stroke outcome studies of Forkert et al. 2015 and Salvalaggio et al. 2020. J<U+00FC>hling 2024 cites Crinion 2007 and Andersen 2010 as cost function masking studies and Nachev 2008 as the enantiomorphic method, the two alignment options it evaluates, and Salvalaggio 2020 uses the enantiomorphic method as its alignment step. The three were screened against (d) as alignment-step tools and benchmarks used ahead of lesion-based predictors and against (f) as inside that remit; all three passed and are included. Vargas et al. 2017 came from the Geady list.
 
 **Citation loop screen of the four reference lists.** Every one of the 153 references was screened against the criteria, by title and, where the title left the decision open, by its abstract (25 PubMed abstracts and 2 OpenAlex records read, saved with the run's working files). Works already in the set count as collected. Decisions per list:
 
 - Geady 2025 (22): 10 included (Aerts 2014, Vargas 2017, van Griethuysen 2017, Chang 2021, Henry 2022, Sun 2022, Cavinato 2023 already collected; Traverso 2020, van Timmeren 2020 and Simpson 2024 added in this loop). Excluded: 5 statistics or research-practice works outside this group (concordance index, terminology of reproducibility, grid search, transparency in AI, the Cox model); 2 clinical works (a clinical recurrence score, a phase 3 trial); 3 by (e), single-tumour radiomics or deep learning applications (Ji 2019, Tomaszewski 2022, Kazmierski 2023); 1 by (f), a commentary on segmentation foundation models (Ma and Wang 2023); 1 reference with no record in the OpenAlex reply, which could not be screened.
 - Wilk 2025 (48): 10 included (Aerts 2014 and van Griethuysen 2017 already collected; Gillies 2016, Liu 2019, Lu 2021, Zhao 2022, Xu 2022, Peng 2024, Captier 2024 and Armato 2011 added). Excluded at Phase B: Han 2020, by (e) on its full text (the unit of analysis is the lesion, tumour-zone and tumour-liver-interface signatures are modelled separately, and only the interface signature enters the final model, so no per-region features are combined into a subject-level prediction). Excluded on the abstract by (e): Chen 2018 (multiparametric rectal radiomics; the comparison is across modalities, with no aggregation across regions tested), Shan 2019 (tumoural and peritumoural models built and compared separately) and Feng 2022 (six dose-defined regions pooled into one feature set without a comparison of the combination). Excluded on the title: Optimizing the Size of Peritumoral Region (2023, a conference chapter on the width of one peritumoural region, with no abstract in OpenAlex and no open copy); 8 statistics works and software packages (random survival forests, mboost twice, survival SVM twice, glmnet twice, the multivariable prognostic modelling tutorial); 2 records of whole proceedings volumes with no article; 1 single-tumour radiomics feature method (sparse representation radiomics, 2017); 3 reviews outside the remit (a breast radiomics overview, a PET radiomics review, a review of deep learning in medical image analysis); 1 mass spectrometry imaging study outside radiological imaging; 18 single-tumour radiomics or deep learning applications, by (e).
 - Chang 2021 (28): 4 included (Aerts 2014, Lambin 2017 and van Griethuysen 2017 already collected; Kumar 2012 added). Excluded: 6 clinical oncology works on brain metastases, oligometastatic disease and multiple primary tumours; 8 statistics works and software (Cox model twice, random survival forests, mRMR twice, scikit-learn, scikit-survival, the LASSO for Cox); 1 by (f), N4ITK bias field correction; 9 single-tumour radiomics applications, by (e).
-- Jühling 2024 (55): 13 included (Brett 2001, Crinion 2007, Nachev 2008, Andersen 2010, Avants 2011, Ripollés 2012, Forkert 2015 and Salvalaggio 2020 already collected; Yourganov 2016, Pustina 2017, Rajashekar 2020, Moore 2023 and the ANTs report of Avants 2009 added). Excluded on the abstract: Cheng 2014, Wu 2015 and Ernst 2018, by (e) (voxel-based lesion-symptom mapping of functional outcome, no predictor and no variation of the alignment step); Mah 2014, Pustina 2018 (SCCAN) and Ivanova 2021, as lesion-symptom mapping inference methods or comparisons that neither vary the registration, segmentation or radiomics step nor build a subject-level predictor. Excluded on the title: 16 lesion-symptom mapping applications, reviews of lesion findings and replies, by (e); 4 lesion-symptom mapping methods (Bates 2003, Bayesian VLSM 2009, LESYMAP 2018, SCCAN on atrophy 2013), on the same ground as Mah 2014; 5 white matter or cortical atlases used for region labels after alignment, outside the alignment-step remit and, for the automated cortical labeling system, by (f); 2 by (f), the B-spline diffeomorphic registration method and brain extraction (BET); 9 works outside this group's imaging steps (neuroanatomy volumetry in psychiatric cohorts, tractography reproducibility, MEG, CT reading agreement in traumatic brain injury, psilocybin and autism network studies).
+- J<U+00FC>hling 2024 (55): 13 included (Brett 2001, Crinion 2007, Nachev 2008, Andersen 2010, Avants 2011, Ripoll<U+00E9>s 2012, Forkert 2015 and Salvalaggio 2020 already collected; Yourganov 2016, Pustina 2017, Rajashekar 2020, Moore 2023 and the ANTs report of Avants 2009 added). Excluded on the abstract: Cheng 2014, Wu 2015 and Ernst 2018, by (e) (voxel-based lesion-symptom mapping of functional outcome, no predictor and no variation of the alignment step); Mah 2014, Pustina 2018 (SCCAN) and Ivanova 2021, as lesion-symptom mapping inference methods or comparisons that neither vary the registration, segmentation or radiomics step nor build a subject-level predictor. Excluded on the title: 16 lesion-symptom mapping applications, reviews of lesion findings and replies, by (e); 4 lesion-symptom mapping methods (Bates 2003, Bayesian VLSM 2009, LESYMAP 2018, SCCAN on atrophy 2013), on the same ground as Mah 2014; 5 white matter or cortical atlases used for region labels after alignment, outside the alignment-step remit and, for the automated cortical labeling system, by (f); 2 by (f), the B-spline diffeomorphic registration method and brain extraction (BET); 9 works outside this group's imaging steps (neuroanatomy volumetry in psychiatric cohorts, tractography reproducibility, MEG, CT reading agreement in traumatic brain injury, psilocybin and autism network studies).
 
 Beyond the three normalization papers, this screen added 18 candidates to Phase A, of which 17 were included after Phase B. The reference lists of the 20 included works that the citation loop added were not chained.
 
@@ -81,8 +81,8 @@ No distributional skew advisory triggered. The counts over the 77 included sourc
 
 - Initial hits: PubMed 1,879 over 20 queries (the sum of per-query counts, which overlap); arXiv 487 over 6 queries; OpenAlex 24,390 over 6 relevance-ranked queries; citation chaining 153 references and 52 citing works.
 - Records whose titles were screened: PubMed 565 retrieved records (548 unique PMIDs); arXiv 157; OpenAlex 105; chaining 205. 1,015 title records in total, not deduplicated across sources.
-- After title/abstract screening (Phase A): 81 candidates, after removing two preprint duplicates of included journal articles (the medRxiv versions of Chang et al. 2021 and Geady et al. 2025). The 81 include 21 candidates collected in the citation loop: the three lesioned-brain normalization papers from the Jühling 2024 reference list (Crinion 2007, Nachev 2008, Andersen 2010) and the 18 candidates of the reference-list screen in the Layer 2 paragraph.
-- After full-text assessment (Phase B): 77. The abstract of each of the 81 candidates was read in full, and the full-text routes above were tried for every candidate. Of the 77 included sources, 61 were assessed on a full text: 1 read whole (van Griethuysen 2017) and 60 on their methods and results, 11 of them from the first screening pass (Chang 2021, Henry 2022, Jühling 2024, AMINN as the arXiv version of Chen 2021, Dalca 2019, Poirot 2022, Sabouri 2025, Eertink 2022, Shamonin 2013, Commowick 2018, Moawad 2025), 37 in the full-text pass over the first 60, and 12 among the works added by the citation loop (Avants 2009, Kumar 2012, Gillies 2016, Liu 2019, van Timmeren 2020, Peng 2024, Captier 2024, Moore 2023, Simpson 2024, Armato 2011, Pustina 2017, Yourganov 2016). The other 16 were assessed on the abstract alone because no route gave a text: Hess 2018, Brett 2001, Ripollés 2012, Lambin 2017, Gharibi 2026, Liao 2023, Hu 2024, Commowick 2021, Wang 2024, Karnath 2019, Roca 2020, Traverso 2020, Zhao 2022, Lu 2021, Xu 2022 and Rajashekar 2020; each annotation lists the routes and their results. Full texts were also obtained for the four excluded candidates. Four candidates were excluded at Phase B:
+- After title/abstract screening (Phase A): 81 candidates, after removing two preprint duplicates of included journal articles (the medRxiv versions of Chang et al. 2021 and Geady et al. 2025). The 81 include 21 candidates collected in the citation loop: the three lesioned-brain normalization papers from the J<U+00FC>hling 2024 reference list (Crinion 2007, Nachev 2008, Andersen 2010) and the 18 candidates of the reference-list screen in the Layer 2 paragraph.
+- After full-text assessment (Phase B): 77. The abstract of each of the 81 candidates was read in full, and the full-text routes above were tried for every candidate. Of the 77 included sources, 61 were assessed on a full text: 1 read whole (van Griethuysen 2017) and 60 on their methods and results, 11 of them from the first screening pass (Chang 2021, Henry 2022, J<U+00FC>hling 2024, AMINN as the arXiv version of Chen 2021, Dalca 2019, Poirot 2022, Sabouri 2025, Eertink 2022, Shamonin 2013, Commowick 2018, Moawad 2025), 37 in the full-text pass over the first 60, and 12 among the works added by the citation loop (Avants 2009, Kumar 2012, Gillies 2016, Liu 2019, van Timmeren 2020, Peng 2024, Captier 2024, Moore 2023, Simpson 2024, Armato 2011, Pustina 2017, Yourganov 2016). The other 16 were assessed on the abstract alone because no route gave a text: Hess 2018, Brett 2001, Ripoll<U+00E9>s 2012, Lambin 2017, Gharibi 2026, Liao 2023, Hu 2024, Commowick 2021, Wang 2024, Karnath 2019, Roca 2020, Traverso 2020, Zhao 2022, Lu 2021, Xu 2022 and Rajashekar 2020; each annotation lists the routes and their results. Full texts were also obtained for the four excluded candidates. Four candidates were excluded at Phase B:
   - Balakrishnan et al. 2019 (VoxelMorph), by (f): a primary learning-based registration method paper (full text, arXiv 1809.05231); no prediction study screened in this run names it as its alignment step.
   - Kim et al. 2022 (MGMT methylation prediction and the BraTS 2021 radiogenomic challenge), by (e): the full text states skull stripping and rigid co-registration of each patient's four sequences, with 8 patients excluded for poor co-registration, before CNN classification of the whole images. The study does not vary or measure that step and uses no alignment across subjects, radiomics aggregation or lesion set, so it reports an outcome with no methodological content on alignment.
   - arXiv 2503.23042 (MIL versus aggregation for whole-slide images), by the relevance gate for this group: the full text confirms that its instances are histopathology slides of renal cell carcinoma, not radiological lesions or regions.
@@ -161,11 +161,11 @@ Stance tags refer to one proposition: "the step, as used ahead of a subject-leve
 - **Method**: Two-fold cross-validation on 40 labeled T1-weighted brains (LPBA40) comparing three similarity metrics within the ANTs template-based normalization.
 - **Key Findings**: Mutual information for the affine step combined with cross-correlation for the diffeomorphic step gave the best cortical labeling (Jaccard 0.669, abstract). In each fold a template was built from one group of 20 brains and the left-out brains were mapped to the other group's template. Brain extraction was very sensitive to the quality of the affine initialization and less sensitive to the deformable metric. Templates built from different subgroups and metrics agreed with each other beyond the repeatability of human raters after deformable registration.
 - **Step**: registration tool and template building. **Correspondence assumed**: one diffeomorphic map per subject to a population template. **Error measured**: labeling overlap and template similarity across subgroups, not prediction. **Aggregation**: not applicable.
-- **Relevance**: ANTs is the registration used by Jühling 2024 and Thakran 2022, and Salvalaggio 2020 cites this paper for the diffeomorphic registration of its BCBtoolkit pipeline.
+- **Relevance**: ANTs is the registration used by J<U+00FC>hling 2024 and Thakran 2022, and Salvalaggio 2020 cites this paper for the diffeomorphic registration of its BCBtoolkit pipeline.
 - **Quality**: High; 5,298 citations in OpenAlex.
 - **Stance**: neutral.
 - **Potential Use**: Methods (registration baseline); Related work.
-- **Found by**: Layer 2, references of Jühling 2024.
+- **Found by**: Layer 2, references of J<U+00FC>hling 2024.
 - **Read**: methods and results, from the full text (PMC copy, XML); read the methods (LPBA40 data, cross-validation design) and the results and discussion on metrics and template stability.
 
 ### Avants, Tustison and Song (2009). Advanced Normalization Tools: V1.0.
@@ -173,11 +173,11 @@ Stance tags refer to one proposition: "the step, as used ahead of a subject-leve
 - **Method**: Documentation of the ANTs toolkit: transformation models (affine, elastic, diffeomorphic SyN and variants), similarity metrics and their combination in one objective (deformation cost plus data terms), optimal template construction (buildtemplate scripts), template-based segmentation, and application recipes.
 - **Key Findings**: The report states that the optimal template stabilizes at about ten images for most populations and is defined, for SyN, as the image of minimum shape and appearance distance to the group. For brains with stroke or traumatic lesions, which "violate the basic assumption of a one-to-one mapping from a template image to a target image", ANTs offers constrained cost function masking: the mapping inside the masked lesion is determined by the solution outside it, and the lesion is then carried to template space by the inverse transform. The report cites an independent evaluation that ranked ANTs among the top of 14 normalization methods on control data.
 - **Step**: registration tool and template construction. **Correspondence assumed**: one diffeomorphic map per subject to a template; outside a masked lesion only, for lesioned brains. **Error measured**: none in the report. **Aggregation**: not applicable.
-- **Relevance**: the tool and lesion-masking procedure that Pustina 2017 names as its alignment step (antsRegistrationSyN with cost function masking), and the registration used by Jühling 2024 and Thakran 2022.
+- **Relevance**: the tool and lesion-masking procedure that Pustina 2017 names as its alignment step (antsRegistrationSyN with cost function masking), and the registration used by J<U+00FC>hling 2024 and Thakran 2022.
 - **Quality**: Medium; a technical report, 1,310 citations in OpenAlex.
 - **Stance**: neutral.
 - **Potential Use**: Methods (registration baseline).
-- **Found by**: Layer 2, references of Jühling 2024 (citation loop).
+- **Found by**: Layer 2, references of J<U+00FC>hling 2024 (citation loop).
 - **Read**: methods and results, from the full text (the Insight Journal PDF, linked from the article page that Unpaywall lists; no PMCID); read the introduction, the sections on transformation models, similarity terms and optimal template construction, and the section on brain mapping in the presence of lesions.
 
 ### Shamonin, Bron, Lelieveldt, Smits, Klein and Staring (2013). Fast parallel image registration on CPU and GPU for diagnostic classification of Alzheimer's disease.
@@ -204,7 +204,7 @@ Stance tags refer to one proposition: "the step, as used ahead of a subject-leve
 - **Found by**: PM4.
 - **Read**: methods and results, from the full text (Europe PMC XML); read the methods (cohort, registration methods, feature construction, models F1 to F9) and the results (landmark errors, C-statistics).
 
-### Jühling, Rajashekar, Cheng, Hilgetag, Forkert and Werner (2024). Spatial normalization for voxel-based lesion symptom mapping: impact of registration approaches.
+### J<U+00FC>hling, Rajashekar, Cheng, Hilgetag, Forkert and Werner (2024). Spatial normalization for voxel-based lesion symptom mapping: impact of registration approaches.
 - **Type**: Journal article, Frontiers in Neuroscience.
 - **Method**: Lesion segmentations of 122 acute stroke patients normalized to an atlas with affine, nonlinear, nonlinear with cost function masking and enantiomorphic registration (ANTs), then uni- and multivariate lesion-symptom mapping against 30-day mRS.
 - **Key Findings**: The brain areas found important for mRS were largely consistent across registration approaches. The nonlinear variants distorted the patient images, and the lateral ventricles and adjacent areas stayed misaligned with the atlas even after nonlinear registration. The authors question the benefit of nonlinear registration for this design.
@@ -309,10 +309,10 @@ Stance tags refer to one proposition: "the step, as used ahead of a subject-leve
 - **Quality**: High; 1,012 citations in OpenAlex.
 - **Stance**: supports.
 - **Potential Use**: Introduction; Related work on registration of pathological brains.
-- **Found by**: Layer 2, references of Jühling 2024.
+- **Found by**: Layer 2, references of J<U+00FC>hling 2024.
 - **Read**: abstract only. Routes tried: NCBI ID converter (no PMCID, so no PMC or Europe PMC full text); Unpaywall (not open access, no location); arXiv title search (no match); Europe PMC preprint search by title (no hit); OpenAlex locations (closed; the submitted version listed on UCL Discovery returned HTTP 403); publisher page (Elsevier link resolver, 2.7 kB without the article body). The study design is also described in the Methods of Crinion 2007, which reused its simulated-lesion images.
 
-### Ripollés, Marco-Pallarés, de Diego-Balaguer et al. (2012). Analysis of automated methods for spatial normalization of lesioned brains.
+### Ripoll<U+00E9>s, Marco-Pallar<U+00E9>s, de Diego-Balaguer et al. (2012). Analysis of automated methods for spatial normalization of lesioned brains.
 - **Type**: Journal article (benchmark), NeuroImage. Foundational, outside the search period.
 - **Method**: 500 artificial lesions built from resection, stroke and healthy brains; comparison of cost function masking, automatic lesion identification, DARTEL and SyN with constrained masking.
 - **Key Findings**: DARTEL with an extra prior gave the most accurate normalization in both patient groups but shrank lesion volume relative to unified segmentation with cost function masking.
@@ -321,7 +321,7 @@ Stance tags refer to one proposition: "the step, as used ahead of a subject-leve
 - **Quality**: Medium; 163 citations in OpenAlex.
 - **Stance**: supports.
 - **Potential Use**: Discussion of registration error.
-- **Found by**: Layer 2, references of Jühling 2024.
+- **Found by**: Layer 2, references of J<U+00FC>hling 2024.
 - **Read**: abstract only. Routes tried: NCBI ID converter (no PMCID, so no PMC or Europe PMC full text); Unpaywall (not open access, no location); arXiv title search (no match); Europe PMC preprint search by title (no hit); OpenAlex locations (closed, publisher and PubMed only); publisher page (Elsevier link resolver, 2.7 kB without the article body).
 
 ### Crinion, Ashburner, Leff, Brett, Price and Friston (2007). Spatial normalization of lesioned brains: Performance evaluation and impact on fMRI analyses.
@@ -333,19 +333,19 @@ Stance tags refer to one proposition: "the step, as used ahead of a subject-leve
 - **Quality**: High; 340 citations in OpenAlex; ten brains for the anatomical evaluation.
 - **Stance**: supports.
 - **Potential Use**: Related work on registration of pathological brains; Discussion of registration error.
-- **Found by**: Layer 2, references of Jühling 2024 (citation loop).
+- **Found by**: Layer 2, references of J<U+00FC>hling 2024 (citation loop).
 - **Read**: methods and results, from the full text (Europe PMC XML); read the methods (data, normalization procedures, three experiments) and the results and discussion.
 
-### Nachev, Coulthard, Jäger, Kennard and Husain (2008). Enantiomorphic normalization of focally lesioned brains.
+### Nachev, Coulthard, J<U+00E4>ger, Kennard and Husain (2008). Enantiomorphic normalization of focally lesioned brains.
 - **Type**: Journal article (registration tool with evaluation), NeuroImage. Foundational, outside the search period.
 - **Method**: The lesioned region is replaced by the mirrored signal of the homologous region of the other hemisphere before nonlinear normalization. Evaluated against cost function masking and unmasked normalization with 305 real lesion shapes inserted into the scans of 50 clinical T2-weighted brains without stroke and 42 high-resolution T1-weighted brains.
 - **Key Findings**: Measured as the RMS displacement between the deformation of the lesioned and the unlesioned version of the same brain, the enantiomorphic method was better than cost function masking for every subject and every one of the 305 lesions, on average by more than a factor of four in the T2 data. Error rose with lesion size for all methods. The voxel-wise contrast favoured the enantiomorphic method in every brain voxel, most strongly near the edges of the brain.
-- **Step**: registration of lesioned brains (the enantiomorphic option evaluated by Jühling 2024 and used by Salvalaggio 2020). **Correspondence assumed**: that the hemispheres mirror each other and that a focal lesion does not cross the midline, so the healthy contralateral tissue supplies the missing correspondence. **Error measured**: normalization error caused by the lesion, by method and by lesion size. **Aggregation**: not applicable.
+- **Step**: registration of lesioned brains (the enantiomorphic option evaluated by J<U+00FC>hling 2024 and used by Salvalaggio 2020). **Correspondence assumed**: that the hemispheres mirror each other and that a focal lesion does not cross the midline, so the healthy contralateral tissue supplies the missing correspondence. **Error measured**: normalization error caused by the lesion, by method and by lesion size. **Aggregation**: not applicable.
 - **Relevance**: an alignment tool used ahead of lesion-based predictors, whose assumption (hemispheric symmetry) replaces the missing correspondence inside the lesion.
 - **Quality**: High; 305 citations in OpenAlex; lesions simulated in normal brains.
 - **Stance**: supports.
 - **Potential Use**: Related work on registration of pathological brains; Methods (registration baseline for lesion maps).
-- **Found by**: Layer 2, references of Jühling 2024 (citation loop).
+- **Found by**: Layer 2, references of J<U+00FC>hling 2024 (citation loop).
 - **Read**: methods and results, from the full text (Europe PMC XML); read the algorithm, evaluation, data and results sections.
 
 ### Andersen, Rapcsak and Beeson (2010). Cost function masking during normalization of brains with focal lesions: Still a necessity?
@@ -357,12 +357,12 @@ Stance tags refer to one proposition: "the step, as used ahead of a subject-leve
 - **Quality**: High; 237 citations in OpenAlex; a single stroke cohort.
 - **Stance**: supports.
 - **Potential Use**: Discussion of registration error.
-- **Found by**: Layer 2, references of Jühling 2024 (citation loop).
+- **Found by**: Layer 2, references of J<U+00FC>hling 2024 (citation loop).
 - **Read**: methods and results, from the full text (PMC copy through NCBI efetch, after the Europe PMC full text returned HTTP 500); read the methods and results.
 
 #### Radiomics standardization, reproducibility and outcome prediction
 
-### Zwanenburg, Vallières, Abdalah, Aerts et al. (2020). The Image Biomarker Standardization Initiative: Standardized Quantitative Radiomics for High-Throughput Image-based Phenotyping.
+### Zwanenburg, Valli<U+00E8>res, Abdalah, Aerts et al. (2020). The Image Biomarker Standardization Initiative: Standardized Quantitative Radiomics for High-Throughput Image-based Phenotyping.
 - **Type**: Journal article (standardization study), Radiology.
 - **Method**: Three-phase consensus of 25 teams on a digital phantom, a lung CT and a 51-patient sarcoma cohort.
 - **Key Findings**: 169 of 174 radiomic features were standardized. Strong or better consensus was reached for 463 of 487 features (95.1%) in phase I and 1220 of 1347 (90.6%) in phase II, and most standardized features reproduced well on CT, PET and MRI. The gross tumour volume segmentation supplied with each image was used as the region of interest by every team. The authors state that acquisition, reconstruction and segmentation remain sources of variability that the study did not address, so features reproducible from the same image may still not be reproducible across centres or scanners.
@@ -856,7 +856,7 @@ Stance tags refer to one proposition: "the step, as used ahead of a subject-leve
 - **Found by**: PM10.
 - **Read**: methods and results, from the full text (Europe PMC XML); read the comparison table and the future-directions section.
 
-### Spagnolo, Depeursinge, Schädelin et al. (2023). How far MS lesion detection and segmentation are integrated into the clinical workflow? A systematic review.
+### Spagnolo, Depeursinge, Sch<U+00E4>delin et al. (2023). How far MS lesion detection and segmentation are integrated into the clinical workflow? A systematic review.
 - **Type**: Journal article (systematic review), NeuroImage: Clinical.
 - **Method**: 156 studies rated against the six steps of the Quantitative Neuroradiology Initiative.
 - **Key Findings**: Of 156 studies, 146 (94%) and 155 (99%) fulfilled the first two steps (technical assessment), and 8 (5%), 3 (2%), 5 (3%) and one study the later clinical validation and integration steps.
@@ -901,7 +901,7 @@ Stance tags refer to one proposition: "the step, as used ahead of a subject-leve
 - **Quality**: Medium; simulated behaviour, and CT and MR acquired at different times, which the authors name as a source of disagreement.
 - **Stance**: supports.
 - **Potential Use**: Discussion of segmentation error.
-- **Found by**: Layer 2, references of Jühling 2024 (citation loop).
+- **Found by**: Layer 2, references of J<U+00FC>hling 2024 (citation loop).
 - **Read**: methods and results, from the full text (Europe PMC XML); read the methods (neuroimaging data, simulations, statistics), the results and the discussion of mask agreement.
 
 ### Simpson, Peoples, Creasy et al. (2024). Preoperative CT and survival data for patients undergoing resection of colorectal liver metastases.
@@ -961,7 +961,7 @@ Stance tags refer to one proposition: "the step, as used ahead of a subject-leve
 - **Quality**: Medium; 68 patients, leave-one-out only.
 - **Stance**: neutral.
 - **Potential Use**: Related work on lesion-based prediction; Methods (baseline).
-- **Found by**: Layer 2, references of Jühling 2024.
+- **Found by**: Layer 2, references of J<U+00FC>hling 2024.
 - **Read**: methods and results, from the full text (Europe PMC XML); read the methods (segmentation, atlas registration, region definitions) and the results.
 
 ### Salvalaggio, De Filippo De Grazia, Zorzi, Thiebaut de Schotten and Corbetta (2020). Post-stroke deficit prediction from lesion and indirect structural and functional disconnection.
@@ -973,7 +973,7 @@ Stance tags refer to one proposition: "the step, as used ahead of a subject-leve
 - **Quality**: High.
 - **Stance**: neutral.
 - **Potential Use**: Related work on lesion-based prediction.
-- **Found by**: Layer 2, references of Jühling 2024.
+- **Found by**: Layer 2, references of J<U+00FC>hling 2024.
 - **Read**: methods and results, from the full text (the PMC article page, HTML, listed by Unpaywall and fetched on a second request after the first returned a browser check; the Europe PMC full text returned HTTP 500 and NCBI efetch returned no body); read the methods (segmentation, registration, disconnection maps, models) and the results.
 
 ### Roca, Attye, Colas et al. (2020). Artificial intelligence to predict clinical disability in patients with multiple sclerosis using FLAIR MRI.
@@ -997,19 +997,19 @@ Stance tags refer to one proposition: "the step, as used ahead of a subject-leve
 - **Quality**: Medium; 53 patients; the authors call the main results possibly overoptimistic.
 - **Stance**: neutral.
 - **Potential Use**: Related work on lesion-based prediction; Methods (baseline).
-- **Found by**: Layer 2, references of Jühling 2024 (citation loop).
+- **Found by**: Layer 2, references of J<U+00FC>hling 2024 (citation loop).
 - **Read**: methods and results, from the full text (the PMC article page, HTML, listed by Unpaywall, after the Europe PMC full text returned HTTP 500, NCBI efetch returned no body, the Europe PMC page returned HTTP 403 and the Wiley page HTTP 403); read the methods (lesion drawing, image processing, lesion load, models, stacking, full-split validation) and the results.
 
-### Rajashekar, Mouchès, Fiehler et al. (2020). Structural integrity of white matter tracts as a predictor of acute ischemic stroke outcome.
+### Rajashekar, Mouch<U+00E8>s, Fiehler et al. (2020). Structural integrity of white matter tracts as a predictor of acute ischemic stroke outcome.
 - **Type**: Journal article, International Journal of Stroke.
 - **Method**: 96 acute ischemic stroke patients with follow-up FLAIR one to seven days after onset; lesions segmented semi-automatically and registered nonlinearly to a common reference atlas; lesion overlap and tract integrity for each white matter tract of the AALCAT atlas used in a linear-kernel support vector regression of 24-hour NIHSS, with leave-one-patient-out cross-validation.
 - **Key Findings**: The model with tract integrity and tract lesion overlap predicted 24-hour NIHSS with r = 0.7; adding tract integrity to overlap improved accuracy by 6% (p < 0.05).
 - **Step**: lesion segmentation and nonlinear registration to an atlas. **Correspondence assumed**: tract correspondence through the atlas. **Error measured**: none for registration or segmentation. **Aggregation**: per-tract lesion overlap and integrity as a fixed-length vector.
-- **Relevance**: a tract-wise reduction of a lesion mask to a subject vector, sharing authors (Forkert, Rajashekar) with Forkert 2015 and Jühling 2024.
+- **Relevance**: a tract-wise reduction of a lesion mask to a subject vector, sharing authors (Forkert, Rajashekar) with Forkert 2015 and J<U+00FC>hling 2024.
 - **Quality**: Medium; assessed on the abstract; leave-one-out only.
 - **Stance**: neutral.
 - **Potential Use**: Related work on lesion-based prediction.
-- **Found by**: Layer 2, references of Jühling 2024 (citation loop).
+- **Found by**: Layer 2, references of J<U+00FC>hling 2024 (citation loop).
 - **Read**: abstract only. Routes tried: NCBI ID converter (no PMCID, so no PMC or Europe PMC full text); Unpaywall (not open access, no location); arXiv title search (no match); Europe PMC preprint search by title (no hit); OpenAlex locations (closed, publisher and PubMed only); publisher page (SAGE through doi.org, HTTP 403).
 
 ### Yourganov, Fridriksson, Rorden, Gleichgerrcht and Bonilha (2016). Multivariate Connectome-Based Symptom Mapping in Post-Stroke Patients: Networks Supporting Language and Speech.
@@ -1021,7 +1021,7 @@ Stance tags refer to one proposition: "the step, as used ahead of a subject-leve
 - **Quality**: Medium; 90 patients, leave-one-out only.
 - **Stance**: neutral.
 - **Potential Use**: Related work on lesion-based prediction; Methods (lesion size baseline).
-- **Found by**: Layer 2, references of Jühling 2024 (citation loop).
+- **Found by**: Layer 2, references of J<U+00FC>hling 2024 (citation loop).
 - **Read**: methods and results, from the full text (the PMC article page, HTML, fetched directly with a browser user agent after the PMC page listed by Unpaywall returned a 21 kB browser check, the Europe PMC full text returned HTTP 500, NCBI efetch returned no body and the journal PDF returned HTTP 403); read the methods (lesions, normalization, parcellation, connectome, SVR) and the results.
 
 ### Literature Matrix
@@ -1039,7 +1039,7 @@ Themes: T1 registration, templates and common space; T2 measured effect of a pip
 | Avants 2009 | Registration and template | main | | | | | Tool | Medium |
 | Shamonin 2013 | Registration | main | | | | x | Tool and classification study | Medium |
 | Thakran 2022 | Registration | x | main | | | | Quant | Medium |
-| Jühling 2024 | Registration | x | main | | | | Quant | Medium |
+| J<U+00FC>hling 2024 | Registration | x | main | | | | Quant | Medium |
 | Arthofer 2024 | Template | main | x | | | | Template construction | High |
 | Dalca 2019 | Learned template | main | | | | | Method | High |
 | Dey 2021 | Learned template | main | | | | | Method | High |
@@ -1051,7 +1051,7 @@ Themes: T1 registration, templates and common space; T2 measured effect of a pip
 | Crinion 2007 | Registration (lesioned) | main | x | | | | Method evaluation | High |
 | Nachev 2008 | Registration (lesioned) | main | x | | | | Method | High |
 | Andersen 2010 | Registration (lesioned) | main | x | | | | Method evaluation | High |
-| Ripollés 2012 | Registration (lesioned) | main | x | | | | Benchmark | Medium |
+| Ripoll<U+00E9>s 2012 | Registration (lesioned) | main | x | | | | Benchmark | Medium |
 | Zwanenburg 2020 | Radiomics | | | main | | | Standardization | High |
 | Whybra 2024 | Radiomics | | | main | | | Standardization | High |
 | Traverso 2018 | Radiomics | | x | main | | | Systematic review | High |
@@ -1114,7 +1114,7 @@ Theme counts ("main" or "x"): T1 32, T2 29, T3 17, T4 14, T5 33. Every theme hol
 
 Each gap states what the documented search found with the queries listed above. None claims that work is absent from the literature at large.
 
-1. **Measured propagation of registration error into subject-level prediction.** Among the screened records of PM4 (10 hits), PM17 (9), PM18 (10), AX4 (48) and OA6 (top 20), and the chained references of Jühling 2024, three included studies measure how the registration step changes a downstream result across subjects: Thakran 2022 (intra-subject registration, survival C-statistic), Jühling 2024 (inter-subject normalization, lesion-symptom maps) and Crinion 2007 (normalization of lesioned brains, group fMRI activations). Nachev 2008, Andersen 2010 and Ripollés 2012 measure the normalization error and lesion volume change that a lesion causes, without a predictor. Shamonin 2013 compares only standard and accelerated versions of one registration. Thakran 2022 reports a variant of its features computed without registration, which skips alignment and does not replace it. The lesion-based predictors from the citation loop each use one alignment without varying it: ANTs with cost function masking (Pustina 2017), enantiomorphic normalization in SPM12 (Yourganov 2016) and nonlinear registration to a tract atlas (Rajashekar 2020). The screened records contain no study that compares a registration-based predictor with a predictor built for non-aligned inputs (set, transport or template-learning) on the same cohort and outcome.
+1. **Measured propagation of registration error into subject-level prediction.** Among the screened records of PM4 (10 hits), PM17 (9), PM18 (10), AX4 (48) and OA6 (top 20), and the chained references of J<U+00FC>hling 2024, three included studies measure how the registration step changes a downstream result across subjects: Thakran 2022 (intra-subject registration, survival C-statistic), J<U+00FC>hling 2024 (inter-subject normalization, lesion-symptom maps) and Crinion 2007 (normalization of lesioned brains, group fMRI activations). Nachev 2008, Andersen 2010 and Ripoll<U+00E9>s 2012 measure the normalization error and lesion volume change that a lesion causes, without a predictor. Shamonin 2013 compares only standard and accelerated versions of one registration. Thakran 2022 reports a variant of its features computed without registration, which skips alignment and does not replace it. The lesion-based predictors from the citation loop each use one alignment without varying it: ANTs with cost function masking (Pustina 2017), enantiomorphic normalization in SPM12 (Yourganov 2016) and nonlinear registration to a tract atlas (Rajashekar 2020). The screened records contain no study that compares a registration-based predictor with a predictor built for non-aligned inputs (set, transport or template-learning) on the same cohort and outcome.
 2. **Aggregation of variable lesion sets beyond fixed pooling rules.** The aggregation studies screened through PM8, PM13, PM15, AX2, AX3, OA3 and OA5 use fixed rules (averages, volume weighting, largest or top-k lesions, concatenation of ranked lesions, summary statistics, an extreme lesion), clustering into shared phenotypes (Gharibi 2026), pairwise-similarity summaries (Vargas 2017; a per-patient dendrogram in Cavinato 2023), pooling of per-lesion risks (Wilk 2025) or multiple instance pooling with attention (Chen 2021). The region-based studies from the citation loop concatenate fixed regions (Lu 2021, tumour and nodes; Peng 2024, three intratumoral clusters whose order across patients the methods do not state) or fuse per-region classifiers (Xu 2022), and Captier 2024 explains min, max, mean and SD aggregates lesion by lesion without changing them. Geady 2025 found that no fixed rule was best across three datasets, and Wilk 2025 reported test c-indices from 0.09 to 0.94 across cross-validation splits. No screened radiomics aggregation study matched lesions across subjects by optimal transport or learned a template of lesion sets.
 3. **Segmentation error carried into lesion-set predictors.** The segmentation benchmarks (Menze 2015; Commowick 2018; Carass 2017; Maier 2017; Moawad 2025; Wang 2024) report inter-rater disagreement, missed small lesions, complete misses and detection error, and Moawad 2025 names misregistered masks. Armato 2011 shows that only 928 of 2,669 larger lung nodules were marked by all four readers, so the lesion set itself depends on the reader, and Moore 2023 measured how the segmentation source (CT or MR, mean mask Dice 0.42, with lesions missed on either) displaced lesion-symptom maps. Poirot 2022 measured the effect of segmentation method on a subject-level classifier for anatomical regions, not lesions. The reproducibility literature (Traverso 2018; Pfaehler 2021; Zhao 2021) reports delineation effects on single-lesion features and prognostic values, and Aerts 2014, van Griethuysen 2017 and Geady 2024 use delineation stability to filter features. No screened study propagated lesion detection or delineation error, or the voxel uncertainty of QU-BraTS (Mehta 2022), into an aggregated subject-level prediction over several lesions.
 4. **Multiple sclerosis subject-level prediction from per-lesion sets.** The MS prediction studies retrieved by PM14, PM19 and OA4 use whole-brain or regional CNN inputs in MNI152 space, with the segmented lesions used only to fill the T1 scans (Coll 2023), or lesion load per tract (Roca 2020). No screened MS study encoded each patient's lesions as a set of per-lesion descriptors.
@@ -1139,7 +1139,7 @@ Conditions of "Search Stopping Rules":
 - 1, met: 77 included, above the Literature Review minimum of 30.
 - 2, not met: the latest round is the citation loop over the four reference lists, which added 20 included sources (Crinion 2007, Nachev 2008, Andersen 2010 and the 17 of the reference-list screen), 20 of 77 (26%), above the 10% threshold. The query round before it (PM18 to PM20) added one source, Liao 2023.
 - 3, met: every matrix theme has at least three sources (T1 32, T2 29, T3 17, T4 14, T5 33).
-- 4, met for the four core reference lists and not met beyond them: all 153 references of Geady 2025, Wilk 2025, Chang 2021 and Jühling 2024 were screened with a recorded decision (Layer 2 paragraph), and those lists now hold no uncollected work that passes the criteria for this group, apart from one Geady 2025 reference that OpenAlex returned without a record. The reference lists of the 20 sources the loop added were not chained, so chaining has not yet been shown to stop discovering uncollected works.
+- 4, met for the four core reference lists and not met beyond them: all 153 references of Geady 2025, Wilk 2025, Chang 2021 and J<U+00FC>hling 2024 were screened with a recorded decision (Layer 2 paragraph), and those lists now hold no uncollected work that passes the criteria for this group, apart from one Geady 2025 reference that OpenAlex returned without a record. The reference lists of the 20 sources the loop added were not chained, so chaining has not yet been shown to stop discovering uncollected works.
 - 5, met: foundational works from 2001, 2007, 2008, 2009, 2010, 2011, 2012, 2013 and 2014, and 16 sources from 2024 to 2026.
 
 Three of the five conditions are met. Conditions 2 and 4 need a further chaining round over the reference lists of the 20 sources the loop added, followed by a round that adds under 10%.
