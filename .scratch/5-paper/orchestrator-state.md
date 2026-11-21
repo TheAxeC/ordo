@@ -51,9 +51,11 @@ dispatch:                    # or the block /spec writes (a list when .agents/pl
   base: 5155c15
   launched: 2026-11-22
   report: .scratch/5-paper/agents/reviews/5.R-report.md
+  builder_usage: 251005 tokens, 175 tool uses, 21.6 min
+  reviewer_report: .scratch/5-paper/agents/reviews/5.R-refuter.md (ad46188dd11d72cae, claude-fable-5-2, 283618 tokens, 48 tool uses, 9.8 min)
   brief_check: .scratch/5-paper/agents/reviews/5.R-brief-check.md (ac3039549d3fee0ee, claude-fable-5-2, 279527 tokens, 53 tool uses, 10.8 min)
   landing: not-started
-  round: 0
+  round: 1
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled or, under `self_rule: on`, until the orchestrator closes it as `plan-orchestration`'s `references/self-rule.md`, "Closing an open item", says)
