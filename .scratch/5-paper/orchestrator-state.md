@@ -49,10 +49,10 @@ dispatch:                    # or the block /spec writes (a list when .agents/pl
 
 A finding that is neither closed in the repair rounds nor fixed at landing is an open item here, and goes where `plan-orchestration`'s "What earns a step of its own" says; what is settled belongs in the closed list.
 
-- Open item 5.Q-entry7-drop (2026-11-21): roadmap entry 7 is to be dropped through `/roadmap` now that 5.Q has landed, its reason naming 5.Q (ruling Open item 5.Q-entry7); `/roadmap` writes it only after the user has seen its diff (ruling AD13).
 
 
 ## Closed items (the log of what was raised and how it ended; no report carries it)
+- 2026-11-21: Open item 5.Q-entry7-drop: approved (a) by the user; roadmap entry 7 dropped in 91e23d9.
 - 2026-11-20: Open item 5.Q-target-modes: ruled (a) by the user, booked in plan.md's Rulings; the "Number of sources" row applies in lit-review, full and outline-only mode.
 - 2026-11-20: Open item 5.Q held: ruled (a) by the user, booked in plan.md's Rulings; 5.Q goes ahead as booked with an optional "Number of sources" row in lit-review mode, prepared on the user's go.
 
@@ -186,6 +186,7 @@ A finding that is neither closed in the repair rounds nor fixed at landing is an
 - 2026-11-20. The rc.17 lit-review comparison: `paper` 4 of 4 against both academic-paper runs, the bar 2 of 4 met (`agents/reviews/5.P-check-blind-comparison.md`).
 - Step 5.Q prepared on the user's go (2026-11-20): brief `agents/briefs/5.Q.md`, its brief check `agents/reviews/5.Q-brief-check.md` with every finding closed in the brief, choices C131 and C132.
 - 2026-11-21. Step 5.Q, the twenty-third of 24 steps, the rest of paper as academic-paper's, landed and booked in `plan.md` ("Step 5.Q, the rest of paper as academic-paper's"); the landing report is `agents/reviews/5.Q-landing.md`. Its check (the revision and full comparisons on the next release candidate, and roadmap entry 7's gate) is not run, on the user's word to report first.
-- Next: the user's go on step 5.Q's check (the tag and pin of the next release candidate, asked for first, then the comparisons); the drop of roadmap entry 7 through `/roadmap` once the user has seen its diff; then step 6, the closing.
+- 2026-11-21. Roadmap entry 7 dropped in 91e23d9 (ruling Open item 5.Q-entry7). `v8.4.0-rc.18` tagged on 957cd82 and pinned on the user's go (`utils/pin.sh`, "pinned: v8.4.0-rc.18 (957cd82), 16 skills linked"); rulings Open items 5.Q-check-sources, 5.Q-check-writing, 5.Q-check-time and 5.Q-check-go booked.
+- Next: step 5.Q's check, the revision, full and response-letter runs started at once, then their judges; then step 6, the closing.
 - The two check runs of the rebuilt skill (revision, copy `cr4b`, session ce6db165-ecf5-4128-96cc-b05d5b5b37d3; full, copy `fr5`, session 0b6daf08-9d97-45d9-9ecd-f743566be6fd) are stopped, and resume only when Axel asks.
 - Step 5.A's check, on Axel's go (2026-11-16): `v8.4.0-rc.4` tagged on f3531a7 and pinned; one `curl` per index answered 200. The lit-review `paper` side ran in `gate5a/lit-review-1` of the session's scratchpad (session 5b815d8b-6616-4994-af1b-61091e2f57c2, claude-opus-5-5, 111 min, $16.80 by `total_cost_usd`): 81 entries, every annotation "abstract not read", 2 entries from 2022 or later (step 5's run: none unread, 44 from 2022 or later). Not judged. The revision, full and disclosure sides have not started.
