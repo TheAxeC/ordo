@@ -48,13 +48,6 @@ Status: `[ ]` open, `[~]` in progress, `[x]` done (its gate ran and passed, with
 - Gate: every finding cites a line; a side-by-side run against academic-paper-reviewer on a paper with known referee reports, compared blind as `docs/dev/blind-comparison.md` says, wins or ties; the plan's ledger holds a record for each `rebuild: paper-review` row that the file of `skills/paper-review/` the row names holds what the source file did, checked by reading both; the plan's ledger lists every deviation from the design of academic-paper-reviewer, each with its reason and the ruling that approved it, and nothing else differs, checked by reading both skills.
 - Waits on: 3, for the writing base; 2, for the coverage.
 
-## 7. rebuttal
-
-- Status: [ ]
-- Goal: The response letter for a real submission round, from the referee comments and the revision's apply report. Its design follows the revision-coach and rebuttal-audit modes of academic-paper and steps 2 to 4 of academic-pipeline's external review protocol (`research-hub/.agents/skills/academic-pipeline/references/external_review_protocol.md`: the revision strategy per comment, the revised draft written with its point-by-point response to the reviewers, and the check that every comment has a response and every claimed change was made): the agents, phases, cycles and stops are kept as the source has them, and each deviation from them is made only with its reason and your ruling in the plan's Rulings. The comparison with the source, file by file, is made at the grill, before any brief, and each difference is a grill question that shows what the source does.
-- Gate: every referee point has a response and a pointer to its change; each referee point has a verdict, judged by reading the response and the manuscript: addressed, partly, not, or cannot be checked from the manuscript; a side-by-side run against academic-paper's revision coach (`agents/revision_coach_agent.md`) on a real round of referee comments, compared blind as `docs/dev/blind-comparison.md` says, wins or ties; the plan's ledger holds a record for each `rebuild: rebuttal` row that the file of `skills/rebuttal/` the row names holds what the source file did, checked by reading both; the plan's ledger lists every deviation from the design of academic-paper and of academic-pipeline's external review protocol, each with its reason and the ruling that approved it, and nothing else differs, checked by reading the skills and the protocol.
-- Waits on: 5, for the apply report; 6, for the point table.
-
 ## 7.A referee
 
 - Status: [ ]
@@ -202,6 +195,7 @@ Status: `[ ]` open, `[~]` in progress, `[x]` done (its gate ran and passed, with
 
 <!-- - <n>. <title>: <the reason> -->
 
+- 7. rebuttal: dropped, since step 5.Q of entry 5 copies academic-paper's revision-coach and rebuttal-audit modes into `paper` and adds the response letter with its check and the mode `response-letter`, and the check of step 5.Q carries this entry's gate.
 - 22.A. Blind comparisons of the plan skills: dropped, since the plan skills are shown by real use, having built oculus and ordo, so blind comparisons of them add nothing the user needs.
 - 15.A. Rebuild-later rows: dropped, since entry 5 builds its 8 rows for paper and entry 6 its 3 rows for paper-review, so each row is built in the plan that rebuilds its skill, before that skill's comparison with its source.
 - 9. literature: dropped, since it rebuilt deep-research, which the user does not use, and a run took about four hours; its search moves to entry 5, from academic-paper's lit-review mode and literature strategist, with `lookup.py` and its test as at 0074728.
