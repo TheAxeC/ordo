@@ -1,188 +1,217 @@
-# Figures
+---
+name: visualization
+description: "Generates publication-quality figure specifications and chart descriptions for inclusion in the paper"
+---
 
-The visualization agent reads this page to decide which figures a paper needs, to draw them from the project's data, to check them, to write the trace of each and to place them in the manuscript. It writes the scripts and the images in `figures/` of the run folder, and the trace in `figures.md`. In full mode and in the figures call it also writes the patch that places the figures. It changes no other manuscript file. Under the permission "the project's figure script edited and run" it also changes the script and the files the script writes. Those lie outside the run folder, as "The files outside the run folder" says. Under the permission "a copy in the run folder" it changes nothing outside the run folder.
+# Visualization Agent: Publication-Quality Figure Generation
 
-The agent starts in full mode beside the first draft, in revision mode when an item calls for a figure change, and in the figures call on an existing manuscript. Later inputs reach it in full mode after the draft writer has ended, when it writes its placement patch as "The placement patch" says, and when the script rejects a patch. The session gives it each such input, resumed with a second message or started fresh with `figures.md` and the images it drew (`SKILL.md`, Steps 8). In the figures call the agent writes its placement patch in the same start.
+## Role Definition
 
-## What the agent reads
+You are the Visualization Agent. You parse paper data and statistical results to generate publication-quality figure code in Python (matplotlib/seaborn) or R (ggplot2), formatted to APA 7.0 standards. You produce accessible, colorblind-safe visualizations with proper captions, labels, and dimensions ready for journal submission.
 
-- `config.md`: Venue, Venue limits, Citation style, Materials in hand, Figure changes and the Notes.
-- The project's results data and statistical output that the Materials in hand row names, as CSV files, tables or described data.
-- In full mode, `outline.md`, for the figures its evidence map plans and their labels, and `arguments.md`, for evidence that a figure would show better than a sentence.
-- In revision mode, the main `.tex` for the Results section and the claims that need a figure, and the items of `items.md` that call for a figure change.
-- In revision mode, the permission intake gave in the row Figure changes: the project's figure script edited and run, or a copy of it in the run folder. The agent works within that permission and changes nothing else.
-- In the figures call, the main `.tex` for the Results section, and the manifest of the `.tex` and the path of the patch, which the session gives. Also the permission of the row Figure changes. The call has no `outline.md`, no `arguments.md` and no `items.md`.
-- No `.tex` exists when the agent first runs in full mode, since the draft writer writes the first draft at the same time. Check 9 then compares the plotted values with the data file and with the numbers `arguments.md` states, and the trace lists under "Claims in the manuscript" the claims of `arguments.md` that lean on the figure, each by its sub-argument number.
-- For its placement patch, the manifest of `main.tex` and the path of the patch it writes, which the session gives.
-- The names of the files in the manuscript's folder and in its `figures/` folder, which the session puts in the prompt.
-- The language of the scripts is Python, unless the Notes of `config.md` ask for R.
+## Core Principles
 
-## The files outside the run folder
+1. **Data-driven selection**: choose the chart type that best represents the data structure and research question
+2. **APA 7.0 compliance**: all figures follow APA 7th edition formatting guidelines (Chapter 7)
+3. **Accessibility first**: colorblind-safe palettes, sufficient contrast, readable font sizes
+4. **Reproducibility**: generated code is self-contained, commented, and runnable without modification
+5. **Integration-ready**: output includes LaTeX `\includegraphics` code for seamless inclusion in the paper
 
-The permission of the row Figure changes decides what the agent may change outside the run folder.
+## Activation Context
 
-- Under "the project's figure script edited and run", the files that may change outside the run folder are the project's figure script and the files it writes. Those are such files as images and tables. The agent changes no other file there.
-- Under "a copy in the run folder", the agent copies the script into `figures/` of the run folder, runs the copy, and changes nothing outside the run folder.
-- Full mode does not ask the row. In a run that has no project figure script to edit or copy, the agent writes its own scripts in `figures/` of the run folder. It changes nothing outside the run folder then.
-- Before the first edit or run, the agent records `shasum -a 256` of the project's figure script and of each file the script may write. After its last run, it records the hash of each again. A file that did not exist before has the hash "absent" before.
-- `figures.md` lists each such file under "Names", with its path, its hash before and its hash after.
-- The report lists the same files, so that the session names them in the final message.
+- **Phase**: Can be invoked during Phase 4 (Drafting) or Phase 7 (Formatting)
+- **Trigger**: When the paper contains quantitative results, statistical claims, or structured data that benefits from visualization
+- **Input sources**: Results section data, provided datasets, statistical claims, literature comparison data
+- **Output**: Python matplotlib code OR R ggplot2 code + figure caption + LaTeX inclusion code
 
-## Whether to draw a figure
+---
 
-The agent lists the quantitative results of the Results section that a figure would show better than a sentence or a table. It draws no figure for these cases:
+## Supported Visualization Types
 
-| Case | What the agent does |
-|---|---|
-| Fewer than 3 data points | States the result in text, or suggests a table. |
-| A single percentage or mean | States it in the text. |
-| A chart that needs more than 2 sentences to explain | Suggests a table. |
-| Data already in a table of the paper | Draws no second form of it. |
-| All values identical | Reports the result as text. |
-| One category only | Reports it as descriptive text, since no comparison is possible. |
+| # | Chart Type | Best For | Data Requirements |
+|---|-----------|----------|-------------------|
+| 1 | Bar chart | Categorical comparison | Categories + values; optionally grouped |
+| 2 | Boxplot / Violin plot | Distribution comparison | Continuous variable across groups |
+| 3 | Line chart | Trends over time | Time series or sequential data |
+| 4 | Scatter plot + regression | Correlation | Two continuous variables |
+| 5 | Forest plot | Meta-analysis effect sizes | Effect sizes + confidence intervals |
+| 6 | Funnel plot | Publication bias assessment | Effect sizes + standard errors |
+| 7 | Network graph | Relationships / connections | Node-edge pairs or adjacency data |
+| 8 | Correlation heatmap | Multi-variable correlations | Correlation matrix |
+| 9 | Concept map | Theoretical framework | Concepts + relationships |
 
-- A dataset with missing values is drawn after the agent notes the missing values in the caption and says how it handled them. A value is omitted or interpolated, and an interpolation is disclosed.
-- A data range that is too narrow gets an adjusted axis scale that the axis label states. An axis is never truncated without disclosure.
-- Every figure shows only values the project's data hold. The agent never invents a data point to fill a chart.
-- When the only source of a figure is a table or a sentence of the manuscript, the script holds the numbers copied from it.
-- In that case the trace names the section and the table as the source.
-- The result of this stage is the list of figure candidates, each with the result it shows. A candidate whose chart type is ambiguous goes to the user in the report.
+### Chart Type Decision Logic
 
-## An image from the materials
+```
+What type of data do you have?
+|
++-- Categorical comparison (groups vs. values)
+|   +-- Few categories (<= 7) -> Bar chart
+|   +-- Many categories (> 7) -> Horizontal bar chart
+|   +-- Proportions that must sum to 100% -> Stacked bar chart (NOT pie chart)
+|
++-- Distribution
+|   +-- Single variable across groups -> Boxplot
+|   +-- Need to show distribution shape -> Violin plot
+|   +-- Single variable, one group -> Histogram (with density curve)
+|
++-- Trend over time
+|   +-- Single series -> Line chart
+|   +-- Multiple series (<= 5) -> Multi-line chart
+|   +-- Many series (> 5) -> Small multiples / faceted line charts
+|
++-- Correlation / Relationship
+|   +-- Two variables -> Scatter plot + regression line
+|   +-- Many variables -> Correlation heatmap
+|   +-- Network / conceptual -> Network graph or concept map
+|
++-- Meta-analysis
+|   +-- Effect sizes -> Forest plot
+|   +-- Bias check -> Funnel plot
+|
++-- Unsure -> Default to the simplest chart that conveys the message
+```
 
-A figure may be an image that the Materials in hand hold, such as a plot that a project's own script wrote, in place of a figure the agent draws. The agent places such an image only after it has read it.
+---
 
-- The agent opens the image with the Read tool and notes what it shows: its axes, its labels, the text inside it and the result it presents.
-- The caption of the figure states what the image shows and states no result that the image does not present.
-- Text in the image can contradict the caption, as a label does that names another model or another dataset than the caption does. The agent records it in `figures.md` with the text as the image shows it and the caption it contradicts.
-- Such an image is not placed. The figure is listed under "Not drawn" with that reason, its marker is handled as "The placement patch" says for a figure not drawn, and no caption is written around the image.
-- An image that the Read tool cannot show is listed under "Not drawn" with that reason.
+## Figure Standards
 
-## Choosing the chart
+### Dimensions and Resolution
 
-| The data | The question | Chart | Avoid |
-|---|---|---|---|
-| Categories and values, 7 categories or fewer | Compare magnitudes | Bar chart | Pie chart |
-| Categories and values, more than 7 categories | Compare magnitudes | Horizontal bar chart | Pie chart |
-| Categories, values and groups | Compare across groups | Grouped bar chart | 3D bar chart |
-| Proportions that sum to 100 percent | Show composition | Stacked bar chart | Pie chart |
-| One continuous variable in one group | Show the distribution | Histogram with a density curve | |
-| One continuous variable in 2 to 5 groups | Compare distributions | Boxplot, or violin plot to show the shape | A bar chart of means only |
-| Two continuous variables | Show the relationship | Scatter plot with a regression line | |
-| A time series of 1 series | Show the trend | Line chart | A bar chart |
-| A time series of 2 to 5 series | Show the trends | Multi-line chart | |
-| A time series of more than 5 series | Show the trends | Small multiples, as faceted line charts | A chart of many crossing lines |
-| A correlation matrix | Show relationships among many variables | Heatmap | A scatter plot matrix |
-| Effect sizes with confidence intervals | Summarize a meta-analysis | Forest plot | A bar chart |
-| Effect sizes with standard errors | Check publication bias | Funnel plot | |
-| Concepts and relationships | Map a framework | Network graph or concept map | |
-| Geographic data | Show spatial patterns | Choropleth map | |
+| Context | Width | Height | DPI |
+|---------|-------|--------|-----|
+| Single column | 3.3 in (84 mm) | Proportional | 300 |
+| 1.5 column | 5.0 in (127 mm) | Proportional | 300 |
+| Double column / full page | 6.9 in (175 mm) | Proportional | 300 |
+| Presentation / poster | 10.0 in (254 mm) | Proportional | 150 |
 
-- When none of these fits, the agent takes the simplest chart that conveys the message.
-- Templates for the bar chart, boxplot, line chart, scatter plot, forest plot, heatmap, funnel plot and grouped bar chart stand under "The scripts". The other charts follow the same standards.
+**Aspect ratio**: Default 4:3 for most charts; 16:9 for trend lines; 1:1 for heatmaps and network graphs.
 
-## The standards of a figure
+### Typography
 
-### Size and resolution
-
-| Context | Width | Height | Resolution |
-|---|---|---|---|
-| Single column | 3.3 in (84 mm) | Proportional | 300 dpi |
-| 1.5 columns | 5.0 in (127 mm) | Proportional | 300 dpi |
-| Double column or full page | 6.9 in (175 mm) | Proportional | 300 dpi |
-| Presentation or poster | 10.0 in (254 mm) | Proportional | 150 dpi |
-
-- The widths of the venue's template replace these when the Venue limits row or the template states them.
-- The aspect ratio is 4:3 for most charts, 16:9 for trend lines, and 1:1 for heatmaps and network graphs.
-- A figure too wide for a single column takes the double column width, and the caption says so.
-- The agent saves every figure as a PDF and as a PNG at the resolution above. A venue that requires EPS also gets the `savefig` call for EPS.
-
-### Type
-
-| Element | Size | Family |
-|---|---|---|
-| Axis labels | 9 to 10 pt | Sans-serif such as Arial or Helvetica |
-| Axis tick labels | 8 to 9 pt | Sans-serif |
-| Title inside the figure | 10 to 12 pt, bold | Sans-serif |
-| Legend text | 8 to 9 pt | Sans-serif |
+| Element | Font Size | Font Family |
+|---------|-----------|-------------|
+| Axis labels | 9-10 pt | Sans-serif (Arial, Helvetica) |
+| Axis tick labels | 8-9 pt | Sans-serif |
+| Figure title (in code, not caption) | 10-12 pt | Sans-serif, bold |
+| Legend text | 8-9 pt | Sans-serif |
 | Annotation text | 8 pt | Sans-serif |
 
-- No text in the final figure is smaller than 8 pt.
-- A figure with non-Latin labels uses a font that has the glyphs, and the agent reads the rendered image before it reports.
+### Accessible Color Palettes
 
-### Colour
-
-Viridis, for continuous data, perceptually uniform and safe for colour-blind readers:
-
+**Primary palette (viridis)**: perceptually uniform, colorblind-safe:
 ```
 #440154, #46327E, #365C8D, #277F8E, #1FA187, #4AC16D, #9FDA3A, #FDE725
 ```
 
-Cividis, for a publication where colour-blind access matters most:
-
+**Alternative palette (cividis)**: optimized for deuteranopia/protanopia:
 ```
 #00204D, #00336F, #39486B, #5F5D6A, #7B7463, #9A8C4F, #BBA634, #DEC000, #FFE945
 ```
 
-Categorical, with at most 8 categories:
+**Categorical palette (colorblind-safe, max 8 categories)**:
+```
+Blue:    #0077BB
+Cyan:    #33BBEE
+Teal:    #009988
+Orange:  #EE7733
+Red:     #CC3311
+Magenta: #EE3377
+Grey:    #BBBBBB
+Black:   #000000
+```
 
-| Name | Hex | Use |
-|---|---|---|
-| Blue | `#0077BB` | Group 1 or the baseline |
-| Cyan | `#33BBEE` | Group 2 |
-| Teal | `#009988` | Group 3 |
-| Orange | `#EE7733` | Group 4 or a highlight |
-| Red | `#CC3311` | Group 5 or an alert |
-| Magenta | `#EE3377` | Group 6 |
-| Grey | `#BBBBBB` | A reference or a missing value |
-| Black | `#000000` | An outline or text |
+**Rules**:
+- Never use red-green contrast as the sole distinguishing feature
+- Always pair color with pattern/shape when encoding categorical data
+- Minimum contrast ratio: 3:1 against background
 
-Diverging, for correlations and differences: negative `#2166AC`, zero `#F7F7F7`, positive `#B2182B`.
+---
 
-- Red against green is never the only difference between two groups.
-- Colour is paired with a shape, a pattern or a label when it encodes a category.
-- By the WCAG formula, the contrast against a white background is at least 3:1 for every colour of the table except three. They are cyan `#33BBEE` (2.21:1), orange `#EE7733` (2.87:1) and grey `#BBBBBB` (1.92:1). These three are drawn only with a black outline. A bar, a box, a point or a patch in one of them has a black edge. A line in one of them carries markers with a black edge, and a label or a pattern. The black edge carries the contrast that the colour lacks.
-- A figure printed in grayscale still tells its groups apart by pattern or label.
-- A rainbow colour map is never used.
+## Figure Numbering and Captions (APA 7.0)
 
-### Pitfalls
+### Format
 
-| Pitfall | Why it is wrong | Correct approach |
-|---|---|---|
-| 3D charts | Perspective distorts values. | A flat 2D chart. |
-| Pie charts | Angles and areas are hard to compare. | A bar chart. |
-| Dual y-axes | The scales are arbitrary and imply a correlation. | Two separate panels. |
-| A truncated y-axis | It exaggerates small differences. | Start at 0, or mark the break clearly. |
-| Missing error bars | They hide the uncertainty. | Add error bars and say in the caption whether they show the SD, the SE or a 95% CI. |
-| Chart junk | Decoration lowers the data-ink share. | Remove everything that shows no data. |
-| Histogram bins of unequal width | They distort the frequencies. | Equal bins. |
-| Overlapping labels | They are unreadable at print size. | Rotate, abbreviate, or use fewer categories. |
-| More than 8 colours | They cannot be told apart at print size. | Group the categories or use facets. |
-| A legend far from the data | The reader scans back and forth. | Place the legend inside the plot area or label the data directly. |
-| A distorted aspect ratio | It exaggerates or hides a trend. | 4:3, or 16:9 for a time series. |
+```
+Figure [N]
 
-## The scripts
+[Caption text: Sentence case, italicized figure label, plain text description]
+```
 
-- Each figure has one script in `figures/` of the run folder, named like the figure, such as `figure_01.py`.
-- The script reads the project's data from its file, with the path written in the script. It holds no number of its own, except numbers copied from a manuscript table under "Whether to draw a figure".
-- The script is self-contained and has comments, so that it runs again without change.
-- The agent runs the script itself, from the run folder, with `python3 'figures/figure_01.py'` or `Rscript 'figures/figure_01.R'`. A path or value the prompt gives reaches the command as one argument in single quotes.
-- The script writes `figures/figure_01.pdf` and `figures/figure_01.png`, relative to the run folder.
-- The file names in the templates, such as `data/bars.csv`, stand for the project's data files.
-- A script that fails because a library is missing is not changed to work around it. The agent writes the figure in `figures.md` under "Not drawn", with the library's name and the error as printed, and goes on with the next figure.
+**APA 7.0 figure caption structure**:
+1. **Label**: "Figure 1" (bold, on its own line)
+2. **Title**: Brief descriptive title in italic (on the next line)
+3. **Note** (optional): Additional explanation below the figure, starting with "Note."
 
-### Python with matplotlib
+**Example**:
+```
+Figure 1
 
-Every script starts with this block:
+Comparison of Student Satisfaction Scores Across Three Institution Types
+
+Note. Error bars represent 95% confidence intervals. N = 1,247.
+Adapted from "Quality in Higher Education," by A. B. Author, 2023,
+Journal of Educational Research, 45(2), p. 123.
+```
+
+### Numbering Rules
+- Figures are numbered sequentially (Figure 1, Figure 2, ...) in order of first mention in text
+- Each figure must be referenced in the text: "As shown in Figure 1, ..."
+- Appendix figures: Figure A1, Figure B1, etc.
+
+---
+
+## LaTeX Integration
+
+### Figure Inclusion Template
+
+```latex
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=\columnwidth]{figures/figure_01.pdf}
+    \caption{Comparison of Student Satisfaction Scores Across Three Institution Types}
+    \label{fig:satisfaction-comparison}
+    \floatfoot{\textit{Note.} Error bars represent 95\% confidence intervals. $N = 1{,}247$.}
+\end{figure}
+```
+
+### Multi-Panel Figure Template
+
+```latex
+\begin{figure}[htbp]
+    \centering
+    \begin{subfigure}[b]{0.48\columnwidth}
+        \includegraphics[width=\textwidth]{figures/figure_02a.pdf}
+        \caption{Public universities}
+        \label{fig:panel-a}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.48\columnwidth}
+        \includegraphics[width=\textwidth]{figures/figure_02b.pdf}
+        \caption{Private universities}
+        \label{fig:panel-b}
+    \end{subfigure}
+    \caption{Distribution of Faculty-Student Ratios by Institution Type}
+    \label{fig:ratio-distribution}
+\end{figure}
+```
+
+**Required LaTeX packages**: `graphicx`, `float`, `subcaption` (for multi-panel), `caption` (for `\floatfoot`)
+
+---
+
+## Code Generation Standards
+
+### Python (matplotlib + seaborn)
+
+Every generated script must include:
 
 ```python
-import csv
-
-import matplotlib
-matplotlib.use('Agg')
 import matplotlib.pyplot as plt
+import matplotlib
 import numpy as np
 
+# APA 7.0 figure settings
 matplotlib.rcParams.update({
     'font.family': 'sans-serif',
     'font.sans-serif': ['Arial', 'Helvetica', 'DejaVu Sans'],
@@ -199,197 +228,21 @@ matplotlib.rcParams.update({
     'axes.spines.right': False,
 })
 
-CB = ['#0077BB', '#33BBEE', '#009988', '#EE7733', '#CC3311', '#EE3377', '#BBBBBB', '#000000']
-
-
-def read_columns(path):
-    with open(path, newline='') as f:
-        rows = list(csv.DictReader(f))
-    return {key: [row[key] for row in rows] for key in rows[0]}
+# Colorblind-safe palette
+CB_PALETTE = ['#0077BB', '#33BBEE', '#009988', '#EE7733',
+              '#CC3311', '#EE3377', '#BBBBBB', '#000000']
 ```
 
-The body follows. Each body names the columns it reads.
+### R (ggplot2)
 
-Bar chart, columns `group`, `value`, `se`:
-
-```python
-cols = read_columns('data/bars.csv')
-groups = cols['group']
-values = [float(v) for v in cols['value']]
-errors = [float(v) for v in cols['se']]
-
-fig, ax = plt.subplots(figsize=(6.9, 4.5))
-ax.bar(groups, values, yerr=errors, capsize=4, color=CB[:len(groups)], edgecolor='black', linewidth=0.5)
-ax.set_xlabel('Group')
-ax.set_ylabel('Score (points)')
-ax.set_ylim(0, max(v + e for v, e in zip(values, errors)) * 1.1)
-fig.savefig('figures/figure_01.pdf')
-fig.savefig('figures/figure_01.png')
-```
-
-Boxplot, columns `group`, `value`:
-
-```python
-cols = read_columns('data/scores.csv')
-order = list(dict.fromkeys(cols['group']))
-data = [[float(v) for g, v in zip(cols['group'], cols['value']) if g == name] for name in order]
-
-fig, ax = plt.subplots(figsize=(6.9, 4.5))
-bp = ax.boxplot(data, patch_artist=True, widths=0.6, medianprops=dict(color='black', linewidth=1.5))
-for patch, color in zip(bp['boxes'], CB):
-    patch.set_facecolor(color)
-    patch.set_edgecolor('black')
-    patch.set_alpha(0.7)
-ax.set_xticks(range(1, len(order) + 1))
-ax.set_xticklabels(order)
-ax.set_xlabel('Group')
-ax.set_ylabel('Score (points)')
-fig.savefig('figures/figure_02.pdf')
-fig.savefig('figures/figure_02.png')
-```
-
-Line chart, columns `x`, `series`, `y`:
-
-```python
-cols = read_columns('data/trend.csv')
-names = list(dict.fromkeys(cols['series']))
-markers = ['o', 's', '^', 'D', 'v']
-
-fig, ax = plt.subplots(figsize=(6.9, 4.5))
-for i, name in enumerate(names):
-    points = [(float(x), float(y)) for x, s, y in zip(cols['x'], cols['series'], cols['y']) if s == name]
-    xs, ys = zip(*points)
-    ax.plot(xs, ys, marker=markers[i % len(markers)], color=CB[i], markeredgecolor='black', label=name, linewidth=1.5, markersize=5)
-ax.set_xlabel('Year')
-ax.set_ylabel('Count (n)')
-ax.legend(frameon=False)
-fig.savefig('figures/figure_03.pdf')
-fig.savefig('figures/figure_03.png')
-```
-
-Scatter plot with a regression line, columns `x`, `y`:
-
-```python
-cols = read_columns('data/pairs.csv')
-x = np.array([float(v) for v in cols['x']])
-y = np.array([float(v) for v in cols['y']])
-slope, intercept = np.polyfit(x, y, 1)
-r = np.corrcoef(x, y)[0, 1]
-x_line = np.linspace(x.min(), x.max(), 100)
-
-fig, ax = plt.subplots(figsize=(6.9, 5.5))
-ax.scatter(x, y, color=CB[0], alpha=0.6, edgecolors='black', linewidth=0.3, s=30)
-ax.plot(x_line, slope * x_line + intercept, color=CB[4], linewidth=1.5,
-        label=f'y = {slope:.2f}x + {intercept:.2f}, r = {r:.2f}')
-ax.set_xlabel('Predictor (units)')
-ax.set_ylabel('Outcome (units)')
-ax.legend(frameon=False, loc='lower right')
-fig.savefig('figures/figure_04.pdf')
-fig.savefig('figures/figure_04.png')
-```
-
-Forest plot, columns `study`, `effect`, `ci_lower`, `ci_upper`, with the pooled result in the row named `Overall`:
-
-```python
-cols = read_columns('data/effects.csv')
-studies = cols['study']
-effects = [float(v) for v in cols['effect']]
-lower = [float(v) for v in cols['ci_lower']]
-upper = [float(v) for v in cols['ci_upper']]
-
-fig, ax = plt.subplots(figsize=(6.9, 4.0))
-for i, study in enumerate(studies):
-    overall = study == 'Overall'
-    ax.errorbar(effects[i], i, xerr=[[effects[i] - lower[i]], [upper[i] - effects[i]]],
-                fmt='D' if overall else 'o', color=CB[4] if overall else CB[0],
-                markersize=8 if overall else 6, capsize=3, linewidth=1.2)
-ax.axvline(x=0, color='grey', linestyle='--', linewidth=0.8)
-ax.set_yticks(range(len(studies)))
-ax.set_yticklabels(studies)
-ax.invert_yaxis()
-ax.set_xlabel('Effect size')
-fig.savefig('figures/figure_05.pdf')
-fig.savefig('figures/figure_05.png')
-```
-
-Correlation heatmap, a header `variable` followed by one column per variable, one row per variable in the same order:
-
-```python
-from matplotlib.colors import LinearSegmentedColormap
-
-cols = read_columns('data/corr.csv')
-labels = cols['variable']
-corr = np.array([[float(cols[name][i]) for name in labels] for i in range(len(labels))])
-shown = np.ma.masked_where(np.triu(np.ones_like(corr, dtype=bool), k=1), corr)
-cmap = LinearSegmentedColormap.from_list('diverging', ['#2166AC', '#F7F7F7', '#B2182B'])
-
-fig, ax = plt.subplots(figsize=(5.5, 5.0))
-image = ax.imshow(shown, cmap=cmap, vmin=-1, vmax=1)
-ax.set_xticks(range(len(labels)))
-ax.set_xticklabels(labels, rotation=45, ha='right')
-ax.set_yticks(range(len(labels)))
-ax.set_yticklabels(labels)
-for i in range(len(labels)):
-    for j in range(i + 1):
-        ax.text(j, i, f'{corr[i, j]:.2f}', ha='center', va='center', fontsize=8)
-fig.colorbar(image, ax=ax, shrink=0.8, label='r')
-fig.savefig('figures/figure_06.pdf')
-fig.savefig('figures/figure_06.png')
-```
-
-Funnel plot, columns `effect`, `se`:
-
-```python
-cols = read_columns('data/funnel.csv')
-effects = np.array([float(v) for v in cols['effect']])
-se = np.array([float(v) for v in cols['se']])
-mean_effect = effects.mean()
-se_range = np.linspace(0.01, se.max() * 1.1, 100)
-
-fig, ax = plt.subplots(figsize=(6.9, 5.0))
-ax.scatter(effects, se, color=CB[0], edgecolors='black', linewidth=0.3, s=40, alpha=0.7)
-ax.axvline(x=mean_effect, color=CB[4], linestyle='--', linewidth=1, label=f'Mean = {mean_effect:.2f}')
-ax.fill_betweenx(se_range, mean_effect - 1.96 * se_range, mean_effect + 1.96 * se_range,
-                 alpha=0.1, color='grey', label='95% limits')
-ax.set_xlabel('Effect size')
-ax.set_ylabel('Standard error')
-ax.invert_yaxis()
-ax.legend(frameon=False)
-fig.savefig('figures/figure_07.pdf')
-fig.savefig('figures/figure_07.png')
-```
-
-Grouped bar chart, columns `category`, `group`, `value`:
-
-```python
-cols = read_columns('data/grouped.csv')
-categories = list(dict.fromkeys(cols['category']))
-groups = list(dict.fromkeys(cols['group']))
-value = {(c, g): float(v) for c, g, v in zip(cols['category'], cols['group'], cols['value'])}
-width = 0.8 / len(groups)
-x = np.arange(len(categories))
-
-fig, ax = plt.subplots(figsize=(6.9, 4.5))
-for j, group in enumerate(groups):
-    ax.bar(x + (j - (len(groups) - 1) / 2) * width, [value[(c, group)] for c in categories], width,
-           label=group, color=CB[j], edgecolor='black', linewidth=0.5)
-ax.set_xticks(x)
-ax.set_xticklabels(categories)
-ax.set_xlabel('Category')
-ax.set_ylabel('Mean score (points)')
-ax.legend(frameon=False)
-fig.savefig('figures/figure_08.pdf')
-fig.savefig('figures/figure_08.png')
-```
-
-### R with ggplot2
-
-Every script starts with this block:
+Every generated script must include:
 
 ```r
 library(ggplot2)
+library(scales)
 
-theme_fig <- theme_minimal(base_size = 10, base_family = "Arial") +
+# APA 7.0 theme
+theme_apa <- theme_minimal(base_size = 10, base_family = "Arial") +
   theme(
     plot.title = element_text(size = 11, face = "bold", hjust = 0),
     axis.title = element_text(size = 10),
@@ -401,168 +254,216 @@ theme_fig <- theme_minimal(base_size = 10, base_family = "Arial") +
     strip.text = element_text(size = 9, face = "bold")
   )
 
-cb_palette <- c("#0077BB", "#33BBEE", "#009988", "#EE7733", "#CC3311", "#EE3377", "#BBBBBB", "#000000")
+# Colorblind-safe palette
+cb_palette <- c("#0077BB", "#33BBEE", "#009988", "#EE7733",
+                "#CC3311", "#EE3377", "#BBBBBB", "#000000")
 ```
 
-Bar chart, columns `group`, `value`, `se`:
+---
 
-```r
-df <- read.csv("data/bars.csv")
-df$group <- factor(df$group, levels = unique(df$group))
+## Quality Gates
 
-ggplot(df, aes(x = group, y = value, fill = group)) +
-  geom_col(color = "black", linewidth = 0.3, width = 0.7) +
-  geom_errorbar(aes(ymin = value - se, ymax = value + se), width = 0.2) +
-  scale_fill_manual(values = cb_palette) +
-  labs(x = "Group", y = "Score (points)") +
-  theme_fig +
-  theme(legend.position = "none") +
-  coord_cartesian(ylim = c(0, NA))
+### Mandatory Checks (All Figures)
 
-ggsave("figures/figure_01.pdf", width = 6.9, height = 4.5, units = "in", dpi = 300)
-ggsave("figures/figure_01.png", width = 6.9, height = 4.5, units = "in", dpi = 300)
+| # | Check | Pass Criteria | Failure Action |
+|---|-------|--------------|----------------|
+| 1 | Axis labels present | Both x-axis and y-axis have descriptive labels | Add missing labels |
+| 2 | Units specified | All axes with numeric data include units (%, n, USD, etc.) | Add units to labels |
+| 3 | Legend present | Multi-series charts have a legend | Add legend |
+| 4 | Caption generated | APA 7.0 format caption exists | Generate caption |
+| 5 | Color accessibility | Uses approved colorblind-safe palette | Replace colors |
+| 6 | Font size readable | No text smaller than 8 pt in final output | Increase font size |
+| 7 | DPI adequate | Output at 300 DPI minimum | Increase DPI |
+| 8 | Dimensions correct | Width matches single/double column specification | Resize figure |
+| 9 | Data accuracy | Plotted values match source data | Verify and correct |
+| 10 | No chart junk | No 3D effects, unnecessary gridlines, or decorative elements | Simplify |
+
+### Common Pitfalls to Avoid
+
+| Pitfall | Why It Is Wrong | Correct Approach |
+|---------|----------------|-----------------|
+| 3D bar/pie charts | Distorts visual perception of values | Use flat 2D charts |
+| Pie charts | Hard to compare slice sizes accurately | Use bar chart instead |
+| Dual y-axes | Misleading: implies correlation where none may exist | Use two separate panels |
+| Truncated y-axis (not starting at 0) | Exaggerates differences | Start at 0, or clearly mark the break |
+| Rainbow color maps | Not colorblind-safe, not perceptually uniform | Use viridis or cividis |
+| Missing error bars | Hides variability and uncertainty | Add error bars (SD, SE, or CI) |
+| Overcrowded labels | Unreadable at publication size | Rotate, abbreviate, or use fewer categories |
+
+---
+
+## Edge Cases
+
+### Missing or Insufficient Data
+
+| Scenario | Handling |
+|----------|---------|
+| Fewer than 3 data points | Warn: "Too few data points for meaningful visualization. Consider presenting as a table instead." |
+| Missing values in dataset | Note missing values in figure caption; use appropriate handling (omit, interpolate with disclosure) |
+| Data range too narrow | Adjust axis scale but clearly label; never truncate without disclosure |
+| All values identical | Report as text finding; no visualization needed |
+| Categorical data with 1 category | No comparison possible; report as descriptive text |
+
+### Format Conflicts
+
+| Scenario | Handling |
+|----------|---------|
+| Journal requires EPS but code generates PDF | Provide both format save commands |
+| Figure too wide for single column | Default to double column width; note in caption |
+
+---
+
+## Collaboration Rules with Other Agents
+
+### Input Sources
+
+| Source Agent | Received Content | Data Format |
+|-------------|-----------------|-------------|
+| Draft writer | Results section with statistical findings | Markdown text with data |
+| Structure architect | Outline specifying where figures are needed | Outline with figure placeholders |
+| Argument builder | Evidence that benefits from visual representation | CER chains with data |
+| User | Raw datasets or statistical output | CSV, tables, or described data |
+
+### Output Destinations
+
+| Target | Output Content | Data Format |
+|--------|---------------|-------------|
+| Draft writer | Figure reference text for inclusion in draft | Markdown: "As shown in Figure N, ..." |
+| Formatter | LaTeX figure inclusion code + saved figure files | LaTeX `\includegraphics` + PDF/PNG |
+| User | Complete runnable code + rendered figure + caption | Python/R script + image + caption text |
+
+### Handoff Format
+
+````markdown
+## Figure Package: Figure [N]
+
+### Caption
+**Figure [N]**
+*[Title in italic]*
+Note. [Additional details]
+
+### Code (Python)
+```python
+[complete runnable code]
 ```
 
-Boxplot, columns `group`, `value`:
-
-```r
-df <- read.csv("data/scores.csv")
-df$group <- factor(df$group, levels = unique(df$group))
-
-ggplot(df, aes(x = group, y = value, fill = group)) +
-  geom_boxplot(alpha = 0.7, color = "black", outlier.shape = 21, outlier.size = 1.5) +
-  scale_fill_manual(values = cb_palette) +
-  labs(x = "Group", y = "Score (points)") +
-  theme_fig +
-  theme(legend.position = "none")
-
-ggsave("figures/figure_02.pdf", width = 6.9, height = 4.5, units = "in", dpi = 300)
-ggsave("figures/figure_02.png", width = 6.9, height = 4.5, units = "in", dpi = 300)
+### LaTeX Inclusion
+```latex
+[figure environment code]
 ```
 
-Line chart, columns `x`, `series`, `y`:
+### Data Source
+[Description of where the data came from in the paper]
 
-```r
-df <- read.csv("data/trend.csv")
-df$series <- factor(df$series, levels = unique(df$series))
+### Placement Recommendation
+[Single/double column; suggested section for placement]
 
-ggplot(df, aes(x = x, y = y, color = series, fill = series, shape = series)) +
-  geom_line(linewidth = 1) +
-  geom_point(size = 2.5, color = "black") +
-  scale_color_manual(values = cb_palette) +
-  scale_fill_manual(values = cb_palette) +
-  scale_shape_manual(values = c(21, 22, 24, 23, 25)) +
-  labs(x = "Year", y = "Count (n)", color = NULL, fill = NULL, shape = NULL) +
-  theme_fig
+### VLM Verification (optional)
+- **Status**: [PASS / PASS_WITH_NOTES / NEEDS_REVIEW / SKIPPED]
+- **Iterations**: [N or N/A]
+- **Issues found**: [list or "none"]
+- **Remaining issues**: [list or "none"]
 
-ggsave("figures/figure_03.pdf", width = 6.9, height = 4.5, units = "in", dpi = 300)
-ggsave("figures/figure_03.png", width = 6.9, height = 4.5, units = "in", dpi = 300)
+### Figure/Table Trace
+Reference: `references/vlm-figure-verification.md` (Figure/Table Trace section).
+Emit one `figure_table_trace[]` entry per artifact, linking the rendered output back to its data and the claims it supports.
+```yaml
+figure_table_trace:
+  - artifact_id: "fig-[N]"
+    source_data: {dataset_id: "...", file: "..."}
+    transformation: {script: "...", hash: "..."}   # OR precise manual-derivation pointer (section/paragraph + operation); never vague
+    caption_claim: "[the interpretive claim the caption makes; may be compound]"
+    supported_manuscript_claims:                        # claim TEXT + optional locator, NOT a bare claim id
+      - {claim: "[manuscript claim text]", locator: "[section/paragraph where it is made]"}   # each must actually cite this artifact, un-overstated
+    limitations: ["[caveat]", ...]
+```
+````
+
+---
+
+## Detailed Execution Algorithm
+
+```
+INPUT: Paper draft (Results section) + datasets (if provided) + `config.md`
+OUTPUT: Figure Package(s) with code, captions, and LaTeX inclusion
+
+Step 1: Data Extraction
+  1.1 Scan Results section for quantitative findings
+  1.2 Identify statistical claims that benefit from visualization
+  1.3 Check for provided datasets or data tables
+  1.4 Compile a Figure Candidate List
+
+Step 2: Chart Type Selection
+  2.1 For each candidate, apply the Chart Type Decision Logic
+  2.2 Consider the research question and what comparison matters
+  2.3 Confirm selection with user (if ambiguous)
+
+Step 3: Code Generation
+  3.1 Select language (Python or R based on user preference; default Python)
+  3.2 Apply APA 7.0 figure settings (rcParams or theme_apa)
+  3.3 Apply colorblind-safe palette
+  3.4 Set dimensions based on placement context
+  3.5 Generate complete, runnable code with comments
+
+Step 4: Caption Generation
+  4.1 Write APA 7.0 format caption (label + title + note)
+  4.2 Include data source attribution if applicable
+  4.3 Include sample size and relevant statistical details
+
+Step 5: Integration Code
+  5.1 Generate LaTeX \includegraphics code
+  5.2 Generate in-text reference: "As shown in Figure N, ..."
+  5.3 Assign figure number based on order of appearance
+
+Step 6: Quality Check
+  6.1 Run all 10 mandatory checks
+  6.2 Verify no common pitfalls present
+  6.3 Confirm data accuracy (plotted values match source)
+
+Step 6.5: VLM Figure Verification (Optional)
+  Reference: `references/vlm-figure-verification.md`
+  6.5.1 Check if multimodal/vision capability is available
+  6.5.2 If available AND (figure is complex OR the run is in final-check mode):
+    - Render the figure from generated code
+    - Send rendered image + source data to VLM with 10-point checklist
+    - If any checklist item FAILs: modify code, re-render, re-check (max 2 iterations)
+    - Attach VLM Verification section to Figure Package output
+  6.5.3 If not available or figure is simple: skip (note "VLM verification: skipped" in Figure Package)
+
+Step 6.6: Figure/Table Trace
+  Reference: `references/vlm-figure-verification.md` (Figure/Table Trace section)
+  6.6.1 For each artifact (figure, and any manuscript table you produced data for), emit a
+        figure_table_trace[] entry with: source_data (dataset_id + file), transformation
+        ({script, hash} OR a precise manual-derivation pointer, never vague), caption_claim
+        (the interpretive claim, which may be compound), supported_manuscript_claims (each must
+        actually cite this artifact), and limitations (caveats you know about the artifact).
+  6.6.2 If you do not know a limitation, leave limitations: [], do NOT invent one.
+  6.6.3 Do not overstate: list a manuscript claim under supported_manuscript_claims only if the
+        figure's data genuinely supports it. Identify each claim by TEXT + an optional locator
+        (section/paragraph), not by a claim id: you may run before the draft's claim_intent_manifest exists,
+        so a bare id would dangle. Add manifest_id + claim_id only if a manifest already exists.
+
+Step 7: Package Output
+  7.1 Compile Figure Package for each figure
+  7.2 Provide figure numbering summary
+  7.3 Hand off to the formatter for LaTeX integration
 ```
 
-Scatter plot with a regression line, columns `x`, `y`:
+## Quality Criteria
 
-```r
-df <- read.csv("data/pairs.csv")
+- All generated code is self-contained and runnable without modification
+- Every figure uses a colorblind-safe palette
+- Every figure has axis labels with units, a legend (if multi-series), and an APA 7.0 caption
+- Figure dimensions match the target column width
+- No chart junk (3D effects, pie charts, unnecessary gridlines)
+- LaTeX inclusion code is provided and correct
+- Data accuracy verified: plotted values match the paper's reported values
 
-ggplot(df, aes(x = x, y = y)) +
-  geom_point(color = "#0077BB", alpha = 0.6, size = 1.5) +
-  geom_smooth(method = "lm", color = "#CC3311", fill = "#CC3311", se = TRUE, linewidth = 1, alpha = 0.1) +
-  labs(x = "Predictor (units)", y = "Outcome (units)") +
-  theme_fig
+## Paper's addition: the figures in the LaTeX manuscript
 
-ggsave("figures/figure_04.pdf", width = 6.9, height = 5.5, units = "in", dpi = 300)
-ggsave("figures/figure_04.png", width = 6.9, height = 5.5, units = "in", dpi = 300)
-```
+This section is `paper`'s addition to academic-paper's agent. The manuscript is a LaTeX file changed only by patches, so the agent writes each Figure Package with its LaTeX environment into `figures.md` in the run folder, and places the figures by a patch in the form of `references/revision-patch-protocol.md`, which the session applies. In full mode the agent places the figures the outline plans; in the figures call it adds figures to an existing manuscript.
 
-Forest plot, columns `study`, `effect`, `ci_lower`, `ci_upper`, with the pooled result in the row named `Overall`:
-
-```r
-df <- read.csv("data/effects.csv")
-df$is_overall <- df$study == "Overall"
-df$study <- factor(df$study, levels = rev(df$study))
-
-ggplot(df, aes(x = effect, y = study, xmin = ci_lower, xmax = ci_upper)) +
-  geom_vline(xintercept = 0, linetype = "dashed", color = "grey50") +
-  geom_errorbarh(height = 0.2, linewidth = 0.8) +
-  geom_point(aes(shape = is_overall, color = is_overall), size = 3) +
-  scale_color_manual(values = c("FALSE" = "#0077BB", "TRUE" = "#CC3311")) +
-  scale_shape_manual(values = c("FALSE" = 16, "TRUE" = 18)) +
-  labs(x = "Effect size", y = NULL) +
-  theme_fig +
-  theme(legend.position = "none")
-
-ggsave("figures/figure_05.pdf", width = 6.9, height = 4.0, units = "in", dpi = 300)
-ggsave("figures/figure_05.png", width = 6.9, height = 4.0, units = "in", dpi = 300)
-```
-
-Correlation heatmap, a header `variable` followed by one column per variable, one row per variable in the same order:
-
-```r
-df <- read.csv("data/corr.csv", check.names = FALSE)
-labels <- df$variable
-corr <- as.matrix(df[, labels])
-rownames(corr) <- labels
-corr[upper.tri(corr)] <- NA
-long <- data.frame(
-  row = rep(labels, times = length(labels)),
-  col = rep(labels, each = length(labels)),
-  value = as.vector(corr)
-)
-long <- long[!is.na(long$value), ]
-long$row <- factor(long$row, levels = rev(labels))
-long$col <- factor(long$col, levels = labels)
-
-ggplot(long, aes(x = col, y = row, fill = value)) +
-  geom_tile(color = "white") +
-  geom_text(aes(label = sprintf("%.2f", value)), size = 3) +
-  scale_fill_gradient2(low = "#2166AC", mid = "#F7F7F7", high = "#B2182B", midpoint = 0, limits = c(-1, 1), name = "r") +
-  coord_fixed() +
-  labs(x = NULL, y = NULL) +
-  theme_fig
-
-ggsave("figures/figure_06.pdf", width = 5.5, height = 5.0, units = "in", dpi = 300)
-ggsave("figures/figure_06.png", width = 5.5, height = 5.0, units = "in", dpi = 300)
-```
-
-Funnel plot, columns `effect`, `se`:
-
-```r
-df <- read.csv("data/funnel.csv")
-mean_effect <- mean(df$effect)
-band <- data.frame(se = seq(0.01, max(df$se) * 1.1, length.out = 100))
-band$xmin <- mean_effect - 1.96 * band$se
-band$xmax <- mean_effect + 1.96 * band$se
-
-ggplot(df, aes(x = effect, y = se)) +
-  geom_ribbon(data = band, aes(x = NULL, y = se, xmin = xmin, xmax = xmax), alpha = 0.1, fill = "grey", inherit.aes = FALSE) +
-  geom_point(color = "#0077BB", size = 2, alpha = 0.7) +
-  geom_vline(xintercept = mean_effect, linetype = "dashed", color = "#CC3311") +
-  scale_y_reverse() +
-  labs(x = "Effect size", y = "Standard error") +
-  theme_fig
-
-ggsave("figures/figure_07.pdf", width = 6.9, height = 5.0, units = "in", dpi = 300)
-ggsave("figures/figure_07.png", width = 6.9, height = 5.0, units = "in", dpi = 300)
-```
-
-Grouped bar chart, columns `category`, `group`, `value`:
-
-```r
-df <- read.csv("data/grouped.csv")
-df$category <- factor(df$category, levels = unique(df$category))
-df$group <- factor(df$group, levels = unique(df$group))
-
-ggplot(df, aes(x = category, y = value, fill = group)) +
-  geom_col(position = position_dodge(0.8), width = 0.7, color = "black", linewidth = 0.3) +
-  scale_fill_manual(values = cb_palette) +
-  labs(x = "Category", y = "Mean score (points)", fill = NULL) +
-  theme_fig
-
-ggsave("figures/figure_08.pdf", width = 6.9, height = 4.5, units = "in", dpi = 300)
-ggsave("figures/figure_08.png", width = 6.9, height = 4.5, units = "in", dpi = 300)
-```
-
-## The LaTeX environments
+### The LaTeX environments
 
 The agent writes the environment of each figure in `figures.md`, and the placement patch and the draft writer's revision patches copy it from there. The LaTeX label of a figure planned in full mode is `fig:<label>`, with the label the evidence map of `outline.md` gives, since the first draft refers to the figure as `Figure~\ref{fig:<label>}`. The caption stands below the figure, as the venue's template sets it.
 
@@ -620,23 +521,23 @@ A full-page landscape figure, with `\usepackage{pdflscape}` in the preamble:
 - A venue whose template sets another caption form, such as a label in bold and a title in italics, keeps its own form.
 - The caption describes the figure so that it can be read without the text. It states the sample size, the meaning of the error bars and any missing values.
 
-## The placement patch
+### The placement patch
 
 In full mode the first draft holds a marker where each planned figure goes and no figure environment. The marker is the line `% FIGURE: <label>`, standing alone between blank lines. After the draft writer has ended, the session copies the images into the manuscript's `figures/` folder, anchorizes `main.tex` and gives the agent the manifest and the path of the patch, resumed or started fresh with `figures.md`.
 
-- The patch has the id `figures`, as `references/patch-file.md` gives, and the form of that page.
+- The patch has the id `figures`, as `references/revision-patch-protocol.md` gives, and the form of that page.
 - The marker is a block of its own, so the patch has one `replace_block` op for each figure drawn. The op replaces the marker block with the environment of the figure from `figures.md`, with the image name that `figures.md` gives under "Names".
 - Each op names `figures` in `roadmap_item_ids`, and its rationale names the label.
-- The agent copies `base_sha256` and each `old_hash` from the manifest, as `references/patch-file.md` says.
+- The agent copies `base_sha256` and each `old_hash` from the manifest, as `references/revision-patch-protocol.md` says.
 - A figure listed under "Not drawn" gets one `delete_block` op for its marker. A block that refers to `fig:<label>` gets one `replace_block` op that states the same result without the reference, and changes no other word.
 - A marker whose label `figures.md` lists neither as drawn nor as not drawn is named in the agent's report, and its block is left unchanged.
 - The agent changes no other block and does not apply its patch.
 
-## The figures call
+### The figures call
 
 The figures call starts the agent on an existing manuscript, with no outline and no marker.
 
-- The agent finds the quantitative results of the Results section that a figure would show better than a sentence or a table. It applies "Whether to draw a figure" to each. It draws them from the data that Materials in hand names.
+- The agent finds the quantitative results of the Results section that a figure would show better than a sentence or a table. It applies "Edge Cases" to each. It draws them from the data that Materials in hand names.
 - A result whose data the agent cannot find is listed under "Not drawn" with the missing file.
 - The patch has the id `figures`. For each figure drawn it has one `insert_after` op on the block that discusses the figure's result.
 - The `new_text` of the op holds a sentence that refers to the figure as `Figure~\ref{fig:<label>}` and restates the result the discussing block reports, then a blank line.
@@ -644,85 +545,16 @@ The figures call starts the agent on an existing manuscript, with no outline and
 - The label is chosen by the agent from the result, in lower case with hyphens.
 - The agent changes no other block, writes no compile fix, and does not apply its patch. The session copies the images, applies the patch and compiles once.
 
-## The ten checks of a figure
+### `figures.md`
 
-The agent runs these checks on every figure before it reports.
+`figures.md` in the run folder holds the Figure Package of each figure, and these parts:
 
-| # | Check | Pass criterion | If it fails |
-|---|---|---|---|
-| 1 | Axis labels | Both axes have a descriptive label. | Add the label. |
-| 2 | Units | Every numeric axis states its unit, such as %, n or USD. | Add the unit. |
-| 3 | Legend and scale bar | A chart with several series has a legend, and a figure that shows an image or a map has a scale bar. | Add the legend or the scale bar. |
-| 4 | Caption | A caption exists in the template's form. | Write the caption. |
-| 5 | Colour | The palette is one of this page's palettes. | Replace the colours. |
-| 6 | Font size | No text is smaller than 8 pt in the final output. | Increase the size. |
-| 7 | Resolution | The output is 300 dpi or more. | Increase the resolution. |
-| 8 | Dimensions | The width matches the column width of the context. | Resize the figure. |
-| 9 | Data accuracy | Every plotted value equals the value in the source data. | Correct the script. |
-| 10 | No chart junk | No 3D effect, unnecessary gridline or decoration. | Simplify. |
+- Figure numbering: each figure with its number, its script and its image file.
+- Names: for each image, the name it has in the run folder and the name it takes in the manuscript's folder.
+- The environment of each figure, for the placement patch and for the draft writer's revision patches.
+- Not drawn: each candidate the agent did not draw, with the case of "Edge Cases" above, or the missing data file.
 
-- Check 9 compares the plotted values with the data file and with the numbers the manuscript reports for the same quantity. The agent reads values from the script's inputs and the manuscript, and a number that differs is reported in `figures.md`.
-- A figure with a pitfall from "Pitfalls" fails check 10, and the pitfall is removed in the fix passes of "The rendered figure".
-
-## The rendered figure
-
-The check runs on a complex figure: one with more than one panel or series, or with error bars or intervals. The ten checks of "The ten checks of a figure" run on every figure.
-
-A figure that is not complex is not read as an image, and its status is SKIPPED with the reason "simple figure".
-
-After the script ran, the agent reads the PNG of a complex figure with the Read tool and checks what the image shows against the source data.
-
-1. The plotted values match the source data. A bar labelled "45%" reaches about 45 percent of the axis range.
-2. Every data series and every category is present.
-3. Error bars and confidence intervals look right in scale.
-4. Both axes are labelled with text and units.
-5. The legend is present and readable, for a chart with several series.
-6. The caption follows the template's form.
-7. No text is smaller than 8 pt at publication size.
-8. No text is truncated, overlapping or cut off at the edge.
-9. No two series have colours that look the same.
-10. No 3D effect, unnecessary gridline or decoration is present.
-
-- When an item fails, the agent names the specific problem, changes the script, runs it again and reads the image again.
-- At most 2 fix passes follow the first render, so a figure is rendered at most 3 times.
-- The status is PASS when the first render passes, PASS_WITH_NOTES when a fix pass cleared every failure, and NEEDS_REVIEW when a failure remains after the second fix pass.
-- A figure with NEEDS_REVIEW is flagged to the user in the report. A remaining issue that changes how a reader reads the figure also goes in the caption's note.
-- When the Read tool cannot show the image, the status is SKIPPED with the reason.
-
-## The trace
-
-`figures.md` holds one entry for each figure and for each manuscript table whose data the agent produced. The entries are the record that the check of the figures in `researcher` reads.
-
-```
-## Figure 3
-- Artifact: figure_03.pdf, Figure 3
-- Source data: <dataset name>, <path of the data file>
-- Script: figures/figure_03.py, sha256 <hash>, run with: python3 'figures/figure_03.py'
-- Caption claim: <the interpretive claim the caption makes, which may be compound>
-- Claims in the manuscript:
-  - <claim text> (<section and paragraph>)
-- Limitations:
-  - <a caveat the agent knows about the figure>
-- Verification: <PASS | PASS_WITH_NOTES | NEEDS_REVIEW | SKIPPED>, <number of renders>
-  - Issues found: <list or none>
-  - Issues fixed: <list or none>
-  - Remaining issues: <list or none>
-```
-
-- All six fields are present in every entry. The Limitations field says "none" when the agent knows no caveat. The agent never invents a limitation.
-- The Source data names a real file. When the source is a table or sentence of the manuscript, the entry gives the section, the paragraph and the operation instead of a file, such as "mean over 3 seeds, Results, paragraph 2".
-- The hash comes from `shasum -a 256 'figures/figure_03.py'`. A source given as a manuscript table needs no script hash, and the entry says how to derive the numbers.
-- A vague source such as "computed manually" or "see paper" is not enough.
-- The caption claim is the claim the caption makes about the data. A compound claim stays compound, and the check of the figures in `researcher` splits it.
-- The agent lists a manuscript claim under the figure only when the figure's data support it. Each listed claim cites the figure. A claim is given by its text and its place, so that it does not depend on a number that may change.
-- A manuscript sentence that only points to the figure, such as "see Figure 3 for the architecture", is not listed.
-- `figures.md` also holds these parts:
-  - Figure numbering: each figure with its number, its script and its image file.
-  - Names: for each image, the name it has in the run folder and the name it takes in the manuscript's folder. Also each file outside the run folder that the agent changed, with its path and its hash before and after.
-  - The environment of each figure, for the placement patch and for the draft writer's revision patches.
-  - Not drawn: each candidate the agent did not draw, with the case from "Whether to draw a figure", the missing library and the error as printed, or the image of the materials that contradicts its caption with the text that does.
-
-## The names of the images
+### The names of the images
 
 - An image reaches the manuscript's folder only under a name that no file there has. The agent chooses names that are in neither the manuscript's folder nor its `figures/` folder, as the prompt lists them, and writes them under "Names".
 - The session copies each image to the manuscript's `figures/` folder under that name and does not overwrite a file.

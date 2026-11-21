@@ -43,25 +43,13 @@ repair_reviewer: claude:sonnet  # the model the run of /refute over a repair rou
 
 ```yaml
 dispatch:                    # or the block /spec writes (a list when .agents/plan.yaml's workers_at_once is above 1). /spec writes the entry at the end of its preflight with step and `landing: preparing`, writes `"running: <agent id>"` into brief_check while the brief-check agent runs, base after its preparation commit and worktree before it creates the worktree, and fills the entry at its Steps 9, so that it holds: step, executor, worker, worktree (<worktree_root>/<slug>-<step>), base, launched, report (the builder's report, at the path the brief names), brief_check (the brief check's report path, with the agent's id, its served model, tokens, tool uses and time, or `none, a small text step` for a small text step), landing, round. `landing` is `preparing` while /spec runs, then `not-started`, `cherry-picking` while /land cherry-picks, and `backed-out` after a red line took the step back out of main. The orchestrator adds session_id, the builder's agent id followed by the model the runner served it (<agent id> (<served model>)), as soon as the builder is dispatched and its model read, builders_before (the agent id and served model of each builder it replaced, as <agent id> (<served model>, stopped) or <agent id> (<served model>, dead), one after another), builder_usage (the builder's tokens, tool uses and time from its completion notice) beside report when the builder's report is saved, and reviewer_report (the refuter report's path, with each reviewer's agent id, served model, tokens, tool uses and time, or, for a reviewer stopped for another model, its agent id, served model and stopped) at the review. A value that holds `: ` (brief_check while its agent runs, builder_usage after a repair round, reviewer_report after a run over a round) is written in double quotes, so the block stays valid YAML. A diagnosis agent has no key here: the session that starts it writes its id and role into plan.md's Agents section, as the diagnose skill's Rules say. A step dispatched while another in flight, of this plan or of another open plan, names a file its brief also names carries shared_paths: each shared file, the other step's plan and step, and why the merge at landing is simple, as plan-orchestration's "Two steps in flight" says; with no shared file the key is left out.
-- step: 5.Q
-  landing: reviewing
-  base: 87c6c7f
-  worktree: .agents/worktrees/5-paper-5.Q
-  executor: agent
-  worker: claude:opus (ordo-medium)
-  session_id: ad02705591414f6c9 (claude-opus-5-5)
-  launched: 2026-11-20T23:01Z
-  report: .scratch/5-paper/agents/reviews/5.Q-report.md
-  round: 0 (cases ruling agents/briefs/5.Q-cases.md, case 6)
-  round: 1 (agents/briefs/5.Q-round-1.md, sent 2026-11-21)
-  builder_usage: first run of the cases, 183706 tokens, 30 tool uses, 4.2 min; the build after the cases ruling, 256777 tokens, 425 tool uses, 77.6 min
-  reviewer_report: .scratch/5-paper/agents/reviews/5.Q-refuter.md (adcd4b62e424bda2f, claude-opus-5-5, 226213 tokens, 153 tool uses, 19.8 min)
-  brief_check: .scratch/5-paper/agents/reviews/5.Q-brief-check.md (a8c1cd2ba5e2d236e, claude-opus-5-5, 222747 tokens, 73 tool uses, 11.7 min)
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled or, under `self_rule: on`, until the orchestrator closes it as `plan-orchestration`'s `references/self-rule.md`, "Closing an open item", says)
 
 A finding that is neither closed in the repair rounds nor fixed at landing is an open item here, and goes where `plan-orchestration`'s "What earns a step of its own" says; what is settled belongs in the closed list.
+
+- Open item 5.Q-entry7-drop (2026-11-21): roadmap entry 7 is to be dropped through `/roadmap` now that 5.Q has landed, its reason naming 5.Q (ruling Open item 5.Q-entry7); `/roadmap` writes it only after the user has seen its diff (ruling AD13).
 
 
 ## Closed items (the log of what was raised and how it ended; no report carries it)
@@ -197,6 +185,7 @@ A finding that is neither closed in the repair rounds nor fixed at landing is an
 - 2026-11-20. Turn 3 finished at 23:06; the run took 3 h 30 min and $104.96 against the bar of 2 h 11 min and academic-paper's $75.59, `refs.bib` 270 entries; the slower stage is the strategists' search, 122 min against 68, its cause the session's briefs holding no target number of included sources (`agents/reviews/5.P-check-run.md`). The user ruled (a): the judges run on this run.
 - 2026-11-20. The rc.17 lit-review comparison: `paper` 4 of 4 against both academic-paper runs, the bar 2 of 4 met (`agents/reviews/5.P-check-blind-comparison.md`).
 - Step 5.Q prepared on the user's go (2026-11-20): brief `agents/briefs/5.Q.md`, its brief check `agents/reviews/5.Q-brief-check.md` with every finding closed in the brief, choices C131 and C132.
-- Next: step 5.Q's builder, review and landing; then a report to the user, with no comparison rerun until the user's go; then step 6, the closing.
+- 2026-11-21. Step 5.Q, the twenty-third of 24 steps, the rest of paper as academic-paper's, landed and booked in `plan.md` ("Step 5.Q, the rest of paper as academic-paper's"); the landing report is `agents/reviews/5.Q-landing.md`. Its check (the revision and full comparisons on the next release candidate, and roadmap entry 7's gate) is not run, on the user's word to report first.
+- Next: the user's go on step 5.Q's check (the tag and pin of the next release candidate, asked for first, then the comparisons); the drop of roadmap entry 7 through `/roadmap` once the user has seen its diff; then step 6, the closing.
 - The two check runs of the rebuilt skill (revision, copy `cr4b`, session ce6db165-ecf5-4128-96cc-b05d5b5b37d3; full, copy `fr5`, session 0b6daf08-9d97-45d9-9ecd-f743566be6fd) are stopped, and resume only when Axel asks.
 - Step 5.A's check, on Axel's go (2026-11-16): `v8.4.0-rc.4` tagged on f3531a7 and pinned; one `curl` per index answered 200. The lit-review `paper` side ran in `gate5a/lit-review-1` of the session's scratchpad (session 5b815d8b-6616-4994-af1b-61091e2f57c2, claude-opus-5-5, 111 min, $16.80 by `total_cost_usd`): 81 entries, every annotation "abstract not read", 2 entries from 2022 or later (step 5's run: none unread, 44 from 2022 or later). Not judged. The revision, full and disclosure sides have not started.

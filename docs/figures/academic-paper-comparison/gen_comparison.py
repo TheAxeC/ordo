@@ -3,15 +3,15 @@
 Imports the layout code of ../gen_figures.py, found from this file's own location. The import
 writes a __pycache__ folder beside gen_figures.py, which git ignores.
 
-Writes, beside this file, 20 figures:
+Writes, beside this file, 25 figures:
 
-- <mode>-simple.svg and <mode>-detailed.svg for each of the nine modes full, revision,
-  lit-review, outline-only, abstract-only, citation-check, disclosure, plan and format-convert:
-  academic-paper 3.2.0 on the left and paper on the right. The simple view draws the agent starts, the stops and the
-  cycles. The detailed view draws every step, script and stop, with grey boxes for scripts and
-  indigo boxes tagged with the ruling that makes paper differ from academic-paper.
-- academic-paper-only-modes.svg: the two modes academic-paper has and paper does not, each
-  with the box that takes its place, drawn dashed when it is not built yet.
+- <mode>-simple.svg and <mode>-detailed.svg for each of the twelve modes full, revision,
+  lit-review, outline-only, abstract-only, citation-check, disclosure, plan, format-convert,
+  revision-coach, rebuttal-audit and response-letter: academic-paper 3.2.0 on the left, or for
+  response-letter steps 3 and 4 of academic-pipeline's external review protocol, and paper on
+  the right. The simple view draws the agent starts, the stops and the cycles. The detailed view
+  draws every step, script and stop, with grey boxes for scripts and indigo boxes tagged with
+  the ruling that makes paper differ from academic-paper.
 - academic-pipeline.svg: the stages of academic-pipeline and the skill each goes to.
 
 Every box, arrow and label is written in this file, taken from the files of academic-paper
@@ -74,7 +74,7 @@ DETAILED_LEGEND = (
     L("agent", "Plain box, no tag: as academic-paper does it"),
     L(
         "ruled",
-        'Indigo box, with a tag such as "[D44]" or "[K]": differs from academic-paper by the '
+        'Indigo box, with a tag such as "[5.Q (i)]": differs from academic-paper by the '
         "ruling of plan 5 that the tag names",
     ),
     L("choice", "Rounded box: a decision the run takes"),
@@ -440,295 +440,6 @@ def search_edges(single: str, after: str) -> tuple[gf.Edge, ...]:
     )
 
 
-def paper_full_detailed() -> gf.Graph:
-    nodes = (
-        N(
-            "I",
-            "Intake agent: config.md, the interview [D24]; skip the search? DOI checking [O], "
-            "venue policy [W], claims not to make [AI2], main.tex to replace [AD4], a "
-            "file in words [AQ], research report, question, type [AV1, AV3, AV15]",
-            "stop",
-        ),
-        N("Q", "you skip the search? [J]", "ruled"),
-        *search_nodes(),
-        N(
-            "LS",
-            "Literature strategist: screens your sources, searches for what they miss; a "
-            "list over 50 entries shows its first 20 and last 5 [J, AV16]",
-            "ruled_maybe",
-        ),
-        N(
-            "LC",
-            f"The strategist, or the merge: {CONFIRMED}",
-            "ruled",
-        ),
-        N(
-            "SR",
-            "You review the sources: add or remove, optional [J]",
-            "stop",
-        ),
-        N(
-            "PL",
-            "Planner: outline and evidence map, argument map; one role for structure "
-            "architect and argument builder [D43]; the structure checked against the "
-            "question and the materials [AV18]",
-            "ruled",
-        ),
-        N(
-            "SQ",
-            "A research question the materials do not answer: the part, the files and "
-            "lines, what would answer it, three options [BI]",
-            "stop",
-        ),
-        N(
-            "LG",
-            "Literature strategist, resumed or fresh: the sections that need literature "
-            f"and have no source [AD1, BR]; the strategist that wrote review.md {LT_TAG}",
-            "ruled",
-        ),
-        N("PG", "Planner again: assigns what was found [AD1]", "ruled"),
-        N(
-            "PW",
-            "Planner, fresh: rewrites each argument with two or more weak-argument signs "
-            "[The simulation in step 5.F]",
-            "ruled",
-        ),
-        N("OA", "Outline approval: each rewritten argument before and after [The simulation in step 5.F]", "stop"),
-        N(
-            "SO",
-            "Planner: asks what is wrong with the structure, writes 2 alternatives; your "
-            "own structure is followed as user-customized [AD2]",
-            "ruled",
-        ),
-        N(
-            "DW",
-            "Draft writer: first draft, abstract in the venue's form, six statements, "
-            "figure places [S], model named [N], claims list and results [AV7, BH], "
-            "cover letter [AV8], no self-scores [D43, D45], prose standard [AJ, AW]",
-            "ruled",
-        ),
-        N(
-            "DM",
-            "Draft writer once more: the model identifier, when the list gave none [N] or the served one differs",
-            "ruled",
-        ),
-        N(
-            "VZ",
-            "Visualization, when the materials hold data, beside the writer [D43]: figures "
-            "and their LaTeX, placed as its own patch [S]",
-            "ruled",
-        ),
-        N("SC", "Script: cite-keys, check-urls [AF]", "script"),
-        N(
-            "CA",
-            "Citation compliance agent, after the draft and before round 1: reads each "
-            "cited source, judges every claim, checks the claims not to make and the "
-            "intended claims [AF, AI2, AV7, The simulation in step 5.F]",
-            "ruled",
-        ),
-        N(
-            "S2",
-            "A claim the run cannot support: every claim not held in one list, a source "
-            "not read apart [AF, The simulation in step 5.F]",
-            "stop",
-        ),
-        N(
-            "ST",
-            "The citation style to confirm: more than half the entries fail the same "
-            "check [AV14]",
-            "stop",
-        ),
-        N("QC", "Script: cite-keys, check-urls, quote-check [AF]", "script"),
-        N("CA2", "Citation compliance agent again, fresh, once [AF]", "ruled"),
-        N(
-            "R1",
-            "Peer reviewer, round 1: fixed criteria, no scoring plan, reads the citation "
-            "report [D45, AF]",
-            "ruled",
-        ),
-        N(
-            "NP",
-            "The draft review does not pass, no answer recommended: the root cause and "
-            "its estimate; revise by hand, a lower venue, accept, an expanded revision "
-            "by root cause, or end [AD3, BR]",
-            "stop",
-        ),
-        N(
-            "RJ",
-            "The draft review rejects the draft: each Critical issue fixable, structural "
-            "or fundamental, a roadmap; nothing revised before you confirm [BR]",
-            "stop",
-        ),
-        N("W1", "Draft writer: round 1 issues, a patch [C]", "ruled"),
-        N(
-            "IC",
-            "Citation compliance agent, fresh: the cited sentences of the patch only, "
-            "citation-report-<nn>.md [BI]",
-            "ruled",
-        ),
-        N(
-            "R2",
-            "Peer reviewer, round 2: also checks each number against its result file and "
-            "row, and each description of the data handling [D45, BH]",
-            "ruled",
-        ),
-        N("RC", "Script: reference checks", "script"),
-        N("RF", "Draft writer: reference-fix, once [K]", "ruled"),
-        N(
-            "RC2",
-            "Script: reference checks again, failures left named [K]",
-            "script",
-        ),
-        N("SS", "A reference that cannot be confirmed [O]", "stop"),
-        N(
-            "CP",
-            "Session: compile in a copy, no formatter; the engine is the first that "
-            "applies of a % !TEX program line, the class table, the venue's template, "
-            "XeLaTeX [M, AV11] [4.A R2-6]",
-            "ruled",
-        ),
-        N(
-            "PD",
-            "Session: the PDF of the compile copied to main.pdf beside main.tex "
-            "[The simulation in step 5.F]",
-            "ruled",
-        ),
-        N("CF", "Draft writer: compile-fix, once [M]", "ruled"),
-        N("CP2", "Session: compile once more, the rest named [M]", "ruled"),
-        N("WR", "/writing review: 4 agents, unless you said no at intake [D46, 5.C (2)]", "ruled_maybe"),
-        N(
-            "FM",
-            "End: the final message with the numbered report, the sources only a preprint "
-            "server or no index matched, and a verdict that was not Accept [D46, AG]",
-            "ruled",
-        ),
-        N(
-            "WA",
-            "Draft writer: applies the findings [D46]",
-            "ruled",
-        ),
-        N(
-            "IC2",
-            "Citation compliance agent, fresh: the cited sentences of the findings pass "
-            "[BI]",
-            "ruled",
-        ),
-        N(
-            "RG",
-            "Peer reviewer, fresh: reads the findings pass, its numbers and its "
-            "descriptions of the data; an item goes to the writer once, then the compile "
-            "[BI]",
-            "ruled",
-        ),
-        N(
-            "AC",
-            "Draft writer: the anonymous copy, when the venue is double-blind [AV9]",
-            "ruled",
-        ),
-        N(
-            "FT",
-            "Formatter: the DOCX and Markdown targets of Target formats, after the last "
-            "compile [The simulation in step 5.F]",
-            "ruled_maybe",
-        ),
-    )
-    floating = (
-        N(
-            "PS",
-            "At every patch: a structural patch, a patch that does not apply (retry as "
-            "often as you ask, write it again in full, or leave it [BR]), a script "
-            "failed [C]",
-            "stop",
-        ),
-    )
-    edges = (
-        E("I", "I", "you change it, until you confirm [R]", "back"),
-        E("I", "Q"),
-        E("Q", "THS", "no, the default"),
-        E("Q", "PL", "yes"),
-        *search_edges("LS", "LC"),
-        E("LS", "LS", SEARCH_ROUNDS, "back"),
-        E("LS", "LC"),
-        E("LC", "SR"),
-        E("SR", "PL"),
-        E("PL", "LG", "a section has no source [AD1]"),
-        E("PL", "SQ", "a part of the question has no result [BI]"),
-        E("SQ", "PL", "a fresh start with your answer", "back"),
-        E("PL", "OA"),
-        E("PL", "PW", "two or more weak-argument signs [The simulation in step 5.F]"),
-        E("PW", "OA"),
-        E("LG", "PG"),
-        E("PG", "OA"),
-        E("OA", "PL", "you ask for changes, until you approve [R]", "back"),
-        E("OA", "SO", "you disagree with the structure [AD2]"),
-        E("SO", "OA", "your choice", "back"),
-        E("OA", "DW"),
-        E("OA", "VZ"),
-        E("DW", "SC"),
-        E("DW", "DM", "the list gave none [N]"),
-        E("DM", "SC"),
-        E("VZ", "SC"),
-        E("SC", "CA"),
-        E("CA", "S2", "after every claim: each claim not held, each source not read [AF, The simulation in step 5.F]"),
-        E(
-            "CA",
-            "SS",
-            "no lookup confirms a reference, or under strict a DOI fails [O]",
-        ),
-        E("CA", "ST", "a systematic format error [AV14]"),
-        E("ST", "CA", "a fresh start with the confirmed style, once", "back"),
-        E("CA", "QC"),
-        E("QC", "CA2", "a failure"),
-        E("CA2", "R1"),
-        E("QC", "R1"),
-        E(
-            "NP",
-            "PL",
-            "an expanded revision, only when you choose it, back to the step the cause "
-            "names [AD3]",
-            "back",
-        ),
-        E("NP", "RC", "accept: the issues left become limitations [5.C (3)]"),
-        E("R1", "RJ", "Reject"),
-        E("RJ", "W1", "fixable: a Major Revision pass, after you confirm [BR]"),
-        E("RJ", "PL", "structural: back to the outline, after you confirm [BR]", "back"),
-        E("RJ", "I", "fundamental: back to intake, after you confirm [BR]", "back"),
-        E("R1", "W1", "Minor or Major"),
-        E("W1", "IC"),
-        E("IC", "R2", "round 2, the last", "dotted"),
-        E("R2", "NP", "a score under 6.5 with a Critical issue unresolved [5.C (3), BR]"),
-        E("NP", "R2", "by hand, or a lower venue [BR]", "back"),
-        E("R2", "RC", "otherwise: the rest become limitations [U]"),
-        E("R1", "RC", "Accept"),
-        E("RC", "RF", "a failure"),
-        E("RF", "RC2"),
-        E("RC2", "SS", "strict: a reference still fails [O]"),
-        E("RC", "CP"),
-        E("RC2", "CP"),
-        E("CP", "CF", "fails, or a layout fault [M]"),
-        E("CP", "PD", "it compiles"),
-        E("CF", "CP2"),
-        E("CP2", "PD", "it compiles"),
-        E("CP", "WR"),
-        E("CP2", "WR"),
-        E("WR", "FM"),
-        E("CP", "FM", "no /writing review [5.C (2)]"),
-        E("CP2", "FM"),
-        E(
-            "FM",
-            "WA",
-            "your one-line reply, up to 3 answers [R], or an autonomous pass [D46]",
-        ),
-        E("FM", "AC", "a double-blind venue [AV9]"),
-        E("WA", "IC2"),
-        E("IC2", "RG"),
-        E("RG", "AC"),
-        E("FM", "FT", "a DOCX or Markdown target [The simulation in step 5.F]"),
-        E("RG", "FT"),
-    )
-    return _g(nodes, edges, floating, WIDE_WIDTH)
-
-
 def ap_revision_detailed() -> gf.Graph:
     nodes = (
         N("RP", "Peer reviewer: the comments as a revision roadmap"),
@@ -756,228 +467,6 @@ def ap_revision_detailed() -> gf.Graph:
     return _g(nodes, edges, width=WIDE_WIDTH)
 
 
-def paper_revision_detailed() -> gf.Graph:
-    nodes = (
-        N(
-            "I",
-            "Intake agent: config.md, the run's permissions, DOI checking, the instructions "
-            "[D24, Stops of paper, O, AA], the claims not to make [AI2], a file given in "
-            "words [AQ], the evidence profile [AV2]",
-            "stop",
-        ),
-        N("IT", "Peer reviewer: the instructions as items.md"),
-        N(
-            "RV",
-            "Peer reviewer: reviews the manuscript with full mode's draft-review criteria, "
-            "its issues as items.md [AA]",
-            "ruled",
-        ),
-        N(
-            "SQ",
-            "A research question the materials do not answer: the part, the files and "
-            "lines, what would answer it, three options [BI]",
-            "stop",
-        ),
-        N("IA", "You approve the items: drop or add, no patch before [AA]", "stop"),
-        N(
-            "LS",
-            "Literature strategist: a .bib patch for the items that need a new reference "
-            f"[Stops of paper]; {CONFIRMED}",
-            "ruled",
-        ),
-        N(
-            "VZ",
-            "Visualization, within the permission; the script files it changes outside the "
-            "run folder are hashed before and after [Stops of paper]",
-            "ruled",
-        ),
-        N("AN", "Script: anchorize the files", "script"),
-        N(
-            "DW",
-            "Draft writer: a patch per item, a revision log with its statuses; each "
-            "number it writes has its result file and row in the claims list [AD6, BH]",
-            "ruled",
-        ),
-        N("AP", "Script: apply the patch", "script"),
-        N(
-            "D1",
-            "A patch that does not apply: retry as often as you ask, write it again in "
-            "full, or leave it [BR]",
-            "stop",
-        ),
-        N("D2", "A structural patch", "stop"),
-        N(
-            "CA",
-            "Citation compliance agent, after the patches: reads each cited source, checks "
-            "the claims not to make, lists the claims off the list of intended claims "
-            "[AF, AI2, AV7]",
-            "ruled",
-        ),
-        N(
-            "S2",
-            "A claim the run cannot support: every claim not held in one list, a source "
-            "not read apart [AF, The simulation in step 5.F]",
-            "stop",
-        ),
-        N(
-            "ST",
-            "The citation style to confirm: more than half the entries fail the same "
-            "check [AV14]",
-            "stop",
-        ),
-        N(
-            "SC",
-            "Script: cite-keys, check-urls, quote-check, failures are items of reading 1 "
-            "[D49, K, AF]",
-            "ruled",
-        ),
-        N("CA2", "Citation compliance agent again, fresh, once [AF]", "ruled"),
-        N(
-            "RD1",
-            "Peer reviewer: reading 1, reads the citation report, checks each number "
-            "against its result file and row, and each description of the data handling "
-            "[D49, AF, BH]",
-            "ruled",
-        ),
-        N("W2", "Draft writer: the one pass [D49]", "ruled"),
-        N(
-            "IC",
-            "Citation compliance agent, fresh: the cited sentences of the patch only, "
-            "citation-report-<nn>.md [BI]",
-            "ruled",
-        ),
-        N(
-            "SC2",
-            "Script: reference checks, failures are items of reading 2 [K]",
-            "ruled",
-        ),
-        N("RD2", "Peer reviewer: reading 2 [D49]", "ruled"),
-        N("RF", "Draft writer: reference-fix, once [K]", "ruled"),
-        N(
-            "RC3",
-            "Script: reference checks again, failures left named [K]",
-            "script",
-        ),
-        N("SS", "A reference that cannot be confirmed [O]", "stop"),
-        N(
-            "CP",
-            "Session: compile in a copy; the engine is the first that applies of a "
-            "% !TEX program line, the class table, the venue's template, XeLaTeX "
-            "[D46, AV11] [4.A R2-6]",
-            "ruled",
-        ),
-        N(
-            "PD",
-            "Session: the PDF of the compile copied to <main>.pdf beside the main .tex "
-            "[The simulation in step 5.F]",
-            "ruled",
-        ),
-        N("CF", "Draft writer: compile-fix, once [M]", "ruled"),
-        N("CP2", "Session: compile once more, the rest named [M]", "ruled"),
-        N("WR", "/writing review: 4 agents, unless you said no at intake [D46, 5.C (2)]", "ruled_maybe"),
-        N(
-            "FM",
-            "End: the final message with the numbered report, the sources only a preprint "
-            "server or no index matched, and the files the figure script changed [D46, AG]",
-            "ruled",
-        ),
-        N(
-            "WA",
-            "Draft writer: applies the findings [D46]",
-            "ruled",
-        ),
-        N(
-            "IC2",
-            "Citation compliance agent, fresh: the cited sentences of the findings pass "
-            "[BI]",
-            "ruled",
-        ),
-        N(
-            "RG",
-            "Peer reviewer, fresh: reads the findings pass, its numbers and its "
-            "descriptions of the data; an item goes to the writer once, then the compile "
-            "[BI]",
-            "ruled",
-        ),
-        N(
-            "AC",
-            "Draft writer: the anonymous copy, when the venue is double-blind [AV9]",
-            "ruled",
-        ),
-    )
-    floating = (
-        N("PS", "At every patch: a script failed", "stop"),
-    )
-    edges = (
-        E("I", "I", "you change it, until you confirm [R]", "back"),
-        E("I", "IT", "a comments file or text"),
-        E("I", "RV", "no instructions [AA]"),
-        E("RV", "IA"),
-        E("IA", "AN"),
-        E("IT", "SQ", "an item names a part with no result [BI]"),
-        E("RV", "SQ", "an issue names a part with no result [BI]"),
-        E("SQ", "IA", "your answer, no instructions [BI]"),
-        E("SQ", "LS", "your answer, instructions given"),
-        E("SQ", "VZ", "your answer, instructions given"),
-        E("SQ", "AN", "your answer, instructions given"),
-        E("IA", "LS", "an item needs a new reference, intake allows it"),
-        E("IA", "VZ", "an item needs a figure change, intake allows it"),
-        E("IT", "LS", "an item needs a new reference, intake allows it"),
-        E("IT", "VZ", "an item needs a figure change, intake allows it"),
-        E("IT", "AN"),
-        E("LS", "LS", SEARCH_ROUNDS, "back"),
-        E("LS", "AN"),
-        E("VZ", "AN"),
-        E("AN", "DW"),
-        E("DW", "AP"),
-        E("AP", "DW", "rejected: the role writes the patch again, resumed or fresh", "back"),
-        E("AP", "D1", "a second rejection"),
-        E("AP", "D2", "exit 3, structural"),
-        E("AP", "CA"),
-        E("CA", "S2", "after every claim: each claim not held, each source not read [AF, The simulation in step 5.F]"),
-        E(
-            "CA",
-            "SS",
-            "no lookup confirms a reference, or under strict a DOI fails [O]",
-        ),
-        E("CA", "ST", "a systematic format error [AV14]"),
-        E("ST", "CA", "a fresh start with the confirmed style, once", "back"),
-        E("CA", "SC"),
-        E("SC", "CA2", "a failure"),
-        E("CA2", "RD1"),
-        E("SC", "RD1"),
-        E("RD1", "W2", "items not resolved"),
-        E("W2", "IC"),
-        E("IC", "SC2"),
-        E("SC2", "RD2", "reading 2, the last", "dotted"),
-        E("RD1", "CP", "all resolved"),
-        E("RD2", "CP", "items left become limitations"),
-        E("RD2", "RF", "a reference still failing"),
-        E("RF", "RC3"),
-        E("RC3", "SS", "strict: a reference still fails [O]"),
-        E("RC3", "CP"),
-        E("CP", "CF", "fails, or a layout fault [M]"),
-        E("CP", "PD", "it compiles"),
-        E("CF", "CP2"),
-        E("CP2", "PD", "it compiles"),
-        E("CP", "WR"),
-        E("CP2", "WR"),
-        E("WR", "FM"),
-        E("CP", "FM", "no /writing review [5.C (2)]"),
-        E("CP2", "FM"),
-        E(
-            "FM",
-            "WA",
-            "your one-line reply, up to 3 answers [R], or an autonomous pass [D46]",
-        ),
-        E("FM", "AC", "a double-blind venue [AV9]"),
-        E("WA", "IC2"),
-        E("IC2", "RG"),
-        E("RG", "AC"),
-    )
-    return _g(nodes, edges, floating, WIDE_WIDTH)
-
-
 def ap_lit_review_detailed() -> gf.Graph:
     nodes = (
         N("LI", "Intake, citation verification: mark only or strict", "stop"),
@@ -992,9 +481,8 @@ def paper_lit_review_detailed() -> gf.Graph:
     nodes = (
         N(
             "I",
-            "Intake agent: the draft and its questions, then config.md, DOI checking, the "
-            "research question the run needs [D24, O, AD11, AV15]; a research report and its "
-            "bibliography [AV1]; the profile [AV2]; a file in words [AQ]",
+            "Intake agent: config.md, citation verification, the number of sources "
+            "[5.Q item 6], the research question the run needs [AD11, AV15]",
             "stop",
         ),
         *search_nodes(synthesis=True),
@@ -1104,76 +592,6 @@ def ap_outline_only_detailed() -> gf.Graph:
     return _g(nodes, edges, width=WIDE_WIDTH)
 
 
-def paper_outline_only_detailed() -> gf.Graph:
-    nodes = (
-        N(
-            "I",
-            "Intake agent: config.md [D24]; the research question in full, a research report and "
-            "its bibliography read [AV1, AV15], the type by the selection table [AV3]; a "
-            "file given in words found by search [AQ]",
-            "stop",
-        ),
-        *search_nodes(),
-        N(
-            "LS",
-            "Literature strategist, when the session runs one; the search always runs, and it "
-            "does not start without a research question [J, AV15]",
-            "ruled_maybe",
-        ),
-        N(
-            "LC",
-            f"The strategist, or the merge: {CONFIRMED}",
-            "ruled",
-        ),
-        N(
-            "SR",
-            "You review the sources: add or remove, optional [J]",
-            "stop",
-        ),
-        N(
-            "PL",
-            "Planner: outline and evidence map, argument map with its weak-argument signs "
-            "[D43, T]; the structure checked against the question and the materials [AV18]",
-            "ruled",
-        ),
-        N(
-            "LG",
-            "Literature strategist, resumed or fresh: the sections that need literature "
-            f"and have no source [AD1, BR]; the strategist that wrote review.md {LT_TAG}",
-            "ruled",
-        ),
-        N("PG", "Planner again: assigns what was found [AD1]", "ruled"),
-        N("OA", "Outline approval", "stop"),
-        N(
-            "SO",
-            "Planner: asks what is wrong with the structure, writes 2 alternatives; your "
-            "own structure is followed as user-customized [AD2]",
-            "ruled",
-        ),
-        N("X", "Outline, evidence map and argument map [T]", "ruled"),
-    )
-    floating = (
-    )
-    edges = (
-        E("I", "I", "you change it, until you confirm [R]", "back"),
-        E("I", "THS"),
-        *search_edges("LS", "LC"),
-        E("LS", "LS", SEARCH_ROUNDS, "back"),
-        E("LS", "LC"),
-        E("LC", "SR"),
-        E("SR", "PL"),
-        E("PL", "LG", "a section has no source [AD1]"),
-        E("PL", "OA"),
-        E("LG", "PG"),
-        E("PG", "OA"),
-        E("OA", "PL", "you ask for changes, until you approve [R]", "back"),
-        E("OA", "SO", "you disagree with the structure [AD2]"),
-        E("SO", "OA", "your choice", "back"),
-        E("OA", "X"),
-    )
-    return _g(nodes, edges, floating, WIDE_WIDTH)
-
-
 def ap_abstract_only_detailed() -> gf.Graph:
     nodes = (
         N("AI", "Intake, citation verification: mark only or strict", "stop"),
@@ -1181,46 +599,6 @@ def ap_abstract_only_detailed() -> gf.Graph:
         N("AX", "Abstract and keywords"),
     )
     return _g(nodes, (E("AI", "AB"), E("AB", "AX")), width=WIDE_WIDTH)
-
-
-def paper_abstract_only_detailed() -> gf.Graph:
-    nodes = (
-        N(
-            "I",
-            "Intake agent: config.md, the paper type, the language and the claims not to make "
-            "[D24, AD12, AI2]; a file given in words found by search [AQ]",
-            "stop",
-        ),
-        N(
-            "FD",
-            "Session: grep for the file that holds the abstract environment, since the "
-            "patch must name that file [C]",
-            "script",
-        ),
-        N(
-            "DW",
-            "Draft writer, in place of the abstract agent: abstract and keywords, one "
-            "patch, its parts and lengths by paper type, its own text checked against the "
-            "prose standard [T, AJ, AV18]",
-            "ruled",
-        ),
-        N("X", "Abstract and keywords"),
-    )
-    floating = (
-        N(
-            "PS",
-            "At every patch: a structural patch, a patch that does not apply, a script "
-            "failed [C]",
-            "stop",
-        ),
-    )
-    edges = (
-        E("I", "I", "you change it, until you confirm [R]", "back"),
-        E("I", "FD"),
-        E("FD", "DW"),
-        E("DW", "X"),
-    )
-    return _g(nodes, edges, floating, WIDE_WIDTH)
 
 
 def ap_citation_check_detailed() -> gf.Graph:
@@ -1250,95 +628,6 @@ def ap_citation_check_detailed() -> gf.Graph:
         E("CR", "CX"),
     )
     return _g(nodes, edges, width=WIDE_WIDTH)
-
-
-def paper_citation_check_detailed() -> gf.Graph:
-    nodes = (
-        N(
-            "I",
-            "Intake agent: config.md, DOI checking strict or mark only [D24, O], the authors' "
-            "earlier papers [AD8], the claims not to make [AI2]; a file given in words "
-            "found by search [AQ]",
-            "stop",
-        ),
-        N("SC", "Script: cite-keys, check-urls [D15, D17]", "script"),
-        N(
-            "CC",
-            "Citation compliance agent: fetches each source and reads the passage each "
-            "claim cites [D50, D22]; retraction notices from lookup.py [AD7]; clinical "
-            "rows [AH]; versions of one work [AK]; claims list [AV7]",
-            "ruled",
-        ),
-        N(
-            "EP",
-            "Passages that closely repeat an earlier paper: reuse of results is flagged, a "
-            "plagiarism tool is suggested [AD8]",
-            "ruled",
-        ),
-        N("CD", "each issue", "choice"),
-        N("CA", "Corrected by a patch, logged"),
-        N("CH", "Flagged for your review"),
-        N("CW", "Revised wording suggested, no patch"),
-        N("S2", "A claim the run cannot support", "stop"),
-        N(
-            "CR",
-            "Replaced by a candidate whose passage holds the claim, as a patch; flagged for "
-            "you when none does [X]",
-            "ruled",
-        ),
-        N("S1", "A reference that cannot be confirmed", "stop"),
-        N(
-            "ST",
-            "The citation style to confirm: more than half the entries fail the same "
-            "check [AV14]",
-            "stop",
-        ),
-        N("RC", "Script: cite-keys, check-urls, quote-check [D50, D22]", "script"),
-        N("CC2", "Citation compliance agent again, fresh, once [L]", "ruled"),
-        N("RC2", "Script: the three checks again, failures left named [L]", "script"),
-        N("X", "Citation report, checks.md"),
-    )
-    floating = (
-        N(
-            "PS",
-            "At every patch: a structural patch, a patch that does not apply, a script "
-            "failed [C]",
-            "stop",
-        ),
-    )
-    edges = (
-        E("I", "I", "you change it, until you confirm [R]", "back"),
-        E("I", "SC"),
-        E("SC", "CC"),
-        E("CC", "CD"),
-        E("CD", "CA", "formatting, one right answer"),
-        E("CD", "CH", "right claim, wrong source"),
-        E("CD", "CW", "the claim drifts from its source"),
-        E(
-            "CD",
-            "S2",
-            "the claim is not in its source, or the source cannot be read [D22]",
-        ),
-        E("CD", "CR", "a retracted source"),
-        E("CD", "EP", "a passage repeats an earlier paper [AD8]"),
-        E("CD", "ST", "a systematic format error [AV14]"),
-        E("ST", "CC", "a fresh start with the confirmed style, once", "back"),
-        E(
-            "CD",
-            "S1",
-            "no lookup confirms a reference, or under strict a DOI fails [O]",
-        ),
-        E("CA", "RC"),
-        E("CH", "RC"),
-        E("CW", "RC"),
-        E("CR", "RC"),
-        E("EP", "RC"),
-        E("RC", "CC2", "a failure"),
-        E("CC2", "RC2"),
-        E("RC", "X"),
-        E("RC2", "X"),
-    )
-    return _g(nodes, edges, floating, WIDE_WIDTH)
 
 
 def ap_disclosure_detailed() -> gf.Graph:
@@ -1374,58 +663,6 @@ def ap_disclosure_detailed() -> gf.Graph:
         E("DD", "DX"),
     )
     return _g(nodes, edges, width=WIDE_WIDTH)
-
-
-def paper_disclosure_detailed() -> gf.Graph:
-    nodes = (
-        N(
-            "I",
-            "Intake agent: config.md, the venue or the policy anchor [AV12], the kinds of AI "
-            "use the records of earlier runs leave uncertain, each other kind "
-            "pre-marked; you confirm [D24, AD10]; a file in words [AQ]",
-            "stop",
-        ),
-        N("VL", "the venue listed?", "choice"),
-        N(
-            "MI",
-            "Session: the opus identifier of the model list, such as claude-opus-5-5, "
-            "else the first agent's served model [N, 5.C (6)]; the draft writer's served "
-            "identifier when it differs",
-            "ruled",
-        ),
-        N(
-            "DW",
-            "Draft writer: the statements as a patch, disclosure.md; the disclosure names "
-            "that model [D43, D47]",
-            "ruled",
-        ),
-        N(
-            "DW2",
-            "Draft writer once more: the model identifier, when the list gave none [N] or the served one differs",
-            "ruled",
-        ),
-        N("X", "Statements and placement"),
-    )
-    floating = (
-        N(
-            "PS",
-            "At every patch: a structural patch, a patch that does not apply, a script "
-            "failed [C]",
-            "stop",
-        ),
-    )
-    edges = (
-        E("I", "I", "you change it, until you confirm [R]", "back"),
-        E("I", "VL"),
-        E("VL", "MI", "yes"),
-        E("VL", "MI", "not listed: you paste its policy, at intake [W]"),
-        E("VL", "MI", "no venue yet: the generic statement [W]"),
-        E("MI", "DW"),
-        E("DW", "DW2", "the list gave none [N]"),
-        E("DW", "X"),
-        E("DW2", "X"),
-    )
-    return _g(nodes, edges, floating, WIDE_WIDTH)
 
 
 def ap_plan_detailed() -> gf.Graph:
@@ -1472,88 +709,6 @@ def ap_plan_detailed() -> gf.Graph:
     return _g(nodes, edges, width=WIDE_WIDTH)
 
 
-def paper_plan_detailed() -> gf.Graph:
-    nodes = (
-        N(
-            "I",
-            "Intake agent: config.md [D24]; the plan-mode interview of the topic, the materials in "
-            "hand and the structure preference",
-            "stop",
-        ),
-        N(
-            "M",
-            "Socratic mentor, given each answer, resumed or started fresh; Step 0 refers a "
-            "missing foundation to /paper lit-review and idea [4.A D5]; checkpoint.md "
-            "after each round [AY]",
-            "ruled",
-        ),
-        N(
-            "Q",
-            "The mentor's question: each round is a stop; its offers are to skip a "
-            "chapter, switch to outline-only or pause [4.A D1]",
-            "stop",
-        ),
-        N(
-            "P1",
-            "Planner, a fresh start when the mentor ends with next: outline; the outline "
-            "and the argument map from the chapter summaries [AY] [4.A D16]",
-            "ruled",
-        ),
-        N(
-            "S",
-            "Socratic mentor, Step 2.5: contribution sharpening, three questions on the "
-            "chapter summaries, one round or more [4.A R2-7]",
-            "ruled",
-        ),
-        N(
-            "PE",
-            "Planner, a fresh start for each answer: sub-arguments rated Strong, "
-            "Moderate or Weak into stress-test.md [4.A D6]",
-            "ruled",
-        ),
-        N(
-            "P2",
-            "Planner, a fresh start: chapter-plan.md with the plan-to-draft gate [4.A D6]",
-            "ruled",
-        ),
-        N(
-            "H",
-            "The plan's handoff: the mentor's message and its cross-chapter observation "
-            "beside the chapter plan; full mode only when the gate holds [4.A D3] "
-            "[4.A R2-27]",
-            "stop",
-        ),
-        N("X", "Chapter plan and INSIGHT collection"),
-    )
-    floating = (
-    )
-    edges = (
-        E("I", "I", "you change it, until you confirm [R]", "back"),
-        E("I", "M"),
-        E("M", "Q"),
-        E(
-            "Q",
-            "M",
-            "your answer; over 8 rounds on a chapter or 30 in all: the offers",
-            "back",
-        ),
-        E("M", "P1", "the last chapter summary is written"),
-        E("P1", "S", "you confirm that summary"),
-        E("S", "Q", "its questions to you", "back"),
-        E("Q", "PE", "your answer to a stress-test question"),
-        E("PE", "M", "the rating goes to the mentor", "back"),
-        E(
-            "M",
-            "P2",
-            "every sub-argument is Moderate or above, or you end it",
-        ),
-        E("P2", "H"),
-        E("H", "M", "a condition of the gate is not met", "back"),
-        E("H", "X"),
-    )
-    return _g(nodes, edges, floating, WIDE_WIDTH)
-
-
 def ap_format_convert_detailed() -> gf.Graph:
     nodes = (
         N(
@@ -1584,178 +739,8 @@ def ap_format_convert_detailed() -> gf.Graph:
     return _g(nodes, edges, width=WIDE_WIDTH)
 
 
-def paper_format_convert_detailed() -> gf.Graph:
-    nodes = (
-        N(
-            "I",
-            "Intake agent: config.md [D24]; the targets, the citation style, the venue and its "
-            "limits, the format profile, the cover letter; a .md, .docx or .bib found by "
-            "search [AQ] [4.A R2-20]",
-            "stop",
-        ),
-        N(
-            "PC",
-            "Session: pandoc makes the .tex of a .md or .docx in the manuscript's folder "
-            "with a relative media folder, never over a file; a .docx reaches no PDF "
-            "[4.A D10] [4.A R1-21]",
-            "script",
-        ),
-        N(
-            "CP",
-            "Session: copies the folder to convert/ before any patch; when the citation "
-            "style stays, compiles it for the numbers of references and citations, "
-            "whether or not the .tex names a .bib [4.A R1-23] [4.A R2-1]",
-            "script",
-        ),
-        N(
-            "F",
-            "Formatter, first start: the format-convert patch, and the format-convert-copy "
-            "patch too when the style stays; format-report.md, refs.bib, the cover "
-            "letter [AY] [4.A R1-23] [4.A R2-9] [4.A R2-33]",
-            "ruled",
-        ),
-        N(
-            "G",
-            "Formatter, same start: a missing required element gets a placeholder in the "
-            ".tex, a missing DOI only a line in the report; the AI disclosure stays with "
-            "the draft writer [AD9] [4.A R1-8]",
-            "ruled",
-        ),
-        N(
-            "AP",
-            "Session: applies the format-convert patches to the manuscript only for "
-            "latex, another citation style or a venue, else to pdf/; then cite-keys and "
-            "check-urls [C] [4.A R1-26]",
-            "script",
-        ),
-        N(
-            "F2",
-            "A change of the citation style with a DOCX or Markdown target: the session "
-            "applies the patch to convert/ and compiles it, and the formatter starts "
-            "again as a fresh agent for the conversion patch in the new style "
-            "[4.A R2-9]",
-            "ruled",
-        ),
-        N(
-            "PD",
-            "Session: latexmk makes the PDF in pdf/ and copies it beside the .tex [AY]",
-            "script",
-        ),
-        N(
-            "CV",
-            "Session: applies the copy patches to convert/ and draws each figure to a "
-            "PNG, kept beside the Markdown [4.A R1-22] [4.A R2-8]",
-            "script",
-        ),
-        N(
-            "RD",
-            "Session: reference_docx.py writes the reference .docx when none is held, "
-            "pandoc makes DOCX and Markdown with -s [4.A R1-24] [4.A R2-12]",
-            "script",
-        ),
-        N(
-            "CK",
-            "Session: the counts of headings, figures, tables, rows, columns, cite "
-            "commands, entries and words of each output, no threshold [4.A item 6] "
-            "[4.A R2-21] [4.A R2-23]",
-            "script",
-        ),
-        N(
-            "CQ",
-            "Session: the figure paths and the abstract's first words [4.A item 6] "
-            "[4.A R2-23]",
-            "script",
-        ),
-        N(
-            "CR",
-            "Session: appends the commands it ran to format-report.md [4.A R2-26]",
-            "script",
-        ),
-        N("X", "Formatted documents and the report"),
-    )
-    floating = (
-        N(
-            "BL",
-            "A .bib given: no formatter and none of the steps above; latex and bibtex "
-            "with the style's .bst, or a CSL file, make its reference list as "
-            "<name>-<style>.md and .docx [4.A R2-20]",
-            "script",
-        ),
-        N(
-            "PS",
-            "At every patch: a structural patch, a patch that does not apply, a script "
-            "failed [C]",
-            "stop",
-        ),
-    )
-    edges = (
-        E("I", "I", "you change it, until you confirm [R]", "back"),
-        E("I", "PC"),
-        E("PC", "CP"),
-        E("CP", "F"),
-        E("F", "G"),
-        E("G", "AP"),
-        E("AP", "F2"),
-        E("F2", "PD"),
-        E("PD", "CV"),
-        E("CV", "RD"),
-        E("RD", "CK"),
-        E("CK", "CQ"),
-        E("CQ", "CR"),
-        E("CR", "X"),
-    )
-    return _g(nodes, edges, floating, WIDE_WIDTH)
-
-
 # ---------------------------------------------------------------------------------------
-# The modes of academic-paper that paper does not have, and academic-pipeline.
-
-
-class Pair(NamedTuple):
-    """A mode of academic-paper and what takes its place in Ordo, as two panels."""
-
-    left: gf.Panel
-    right: gf.Panel
-
-
-def only_modes() -> tuple[Pair, ...]:
-    def todo(label: str) -> gf.Graph:
-        return _g((N("P", label, "todo"),), ())
-
-    coach = _g(
-        (
-            N("R", "Revision coach: the referee comments"),
-            N("X", "Revision roadmap, tracking template, response letter skeleton"),
-        ),
-        (E("R", "X"),),
-    )
-    audit = _g(
-        (
-            N(
-                "R",
-                "Revision coach, parsing only: the comments and your response draft",
-            ),
-            N("X", "Coverage per comment, gaps, risk flags"),
-        ),
-        (E("R", "X"),),
-    )
-    return (
-        Pair(
-            gf.Panel("academic-paper revision-coach", coach),
-            gf.Panel("Ordo", todo("rebuttal, entry 7")),
-        ),
-        Pair(
-            gf.Panel("academic-paper rebuttal-audit", audit),
-            gf.Panel("Ordo", todo("rebuttal, entry 7")),
-        ),
-    )
-
-
-ONLY_NOTE = (
-    "Plan mode and format conversion are built in paper, as its plan and format-convert modes. "
-    "The two modes drawn here, revision-coach and rebuttal-audit, are the rebuttal skill's, "
-    "roadmap entry 7."
-)
+# academic-pipeline and the skill each of its stages goes to.
 
 
 def pipeline_flow() -> gf.Graph:
@@ -1941,181 +926,700 @@ def pipeline_figure() -> str:
 
 
 # ---------------------------------------------------------------------------------------
+# paper, detailed view, and the three modes of revision comments on both sides.
+
+GOAL = "[5.Q (i)]"
+LETTER = "[5.Q item 5]"
+SOURCES = "[5.Q item 6]"
+PATCH_STOPS = (
+    N(
+        "PS",
+        f"At every patch: a structural patch, a patch that does not apply, a script failed {GOAL}",
+        "stop",
+    ),
+)
+CHECKS = (
+    f"Script, run by the session: lookup.py cite-keys and check-urls; latexmk compile "
+    f"with the engine of the class {GOAL}"
+)
+FIXES = f"Draft writer: the reference fix and the compile fix, when a check fails {GOAL}"
+CLAIMS = (
+    f"Citation compliance: format, DOI, retractions, and each claim against the passage "
+    f"read in its source's full text {GOAL}"
+)
+CLAIM_STOP = (
+    f"A claim the run cannot support: the check stops at the first claim not held, and the "
+    f"stop is raised once the agent has ended {GOAL}"
+)
+REFERENCE_STOP = f"A reference that cannot be confirmed, only under strict {GOAL}"
+STYLE_STOP = "The citation style to confirm, when more than half the entries fail the same check"
+INCREMENTAL = f"Citation compliance, fresh: the cited sentences of the patch {GOAL}"
+CLOSING = f"/writing review, unless you said no at intake {GOAL}"
+FINDINGS = f"Draft writer: the findings you pick, or the autonomous pass, as a patch {GOAL}"
+
+
+def paper_full_detailed() -> gf.Graph:
+    nodes = (
+        N(
+            "I0",
+            f"Phase 0 Intake agent: config.md; citation verification, the number of sources "
+            f"{SOURCES}, the closing review {GOAL}",
+            "stop",
+        ),
+        N("Q1", "you skip Phase 1, giving your own sources?", "choice"),
+        *search_nodes(),
+        N(
+            "L1",
+            "Phase 1 Literature strategist: screens your sources, searches for what they "
+            "miss, unless you say your sources only",
+        ),
+        N("R1", "You review the sources: add or remove, optional", "stop"),
+        N("O2", "Phase 2 Structure architect: outline and evidence map"),
+        N("OA", "Outline approval", "stop"),
+        N("A3", "Phase 3 Argument builder"),
+        N(
+            "W4",
+            f"Phase 4 Draft writer: 4a pre-commitment, 4b main.tex whole and self-scores {GOAL}",
+            "ruled",
+        ),
+        N(
+            "V4",
+            f"Visualization, when there are quantitative results: the figures, placed by "
+            f"patch {GOAL}",
+            "ruled_maybe",
+        ),
+        N("AB", "A generator phase aborted", "stop"),
+        N("C5", f"Phase 5a {CLAIMS}", "ruled"),
+        N("SS", STYLE_STOP, "stop"),
+        N("CS", CLAIM_STOP, "stop"),
+        N("SR", REFERENCE_STOP, "stop"),
+        N("B5", f"Phase 5b Abstract agent, in parallel: one patch {GOAL}", "ruled"),
+        N(
+            "P6",
+            "Phase 6 Peer reviewer, round 1: 6a scoring plan, 6b scores and verdict",
+        ),
+        N("UD", "The draft review does not pass", "stop"),
+        N(
+            "W6",
+            f"Draft writer: revises, the whole draft as one patch over every block {GOAL}",
+            "ruled",
+        ),
+        N("IC", INCREMENTAL, "ruled"),
+        N("P62", "Peer reviewer, round 2: the revised sections"),
+        N("CK", CHECKS, "script"),
+        N("FX", FIXES, "ruled_maybe"),
+        N(
+            "F7",
+            f"Phase 7 Formatter: targets, journal formatting, cover letter, AI disclosure, "
+            f"as patches {GOAL}",
+            "ruled",
+        ),
+        N(
+            "K7",
+            "Final checklist: content, format, required elements, DOIs; compile errors "
+            "fixed, warnings accepted",
+        ),
+        N("WG", CLOSING, "ruled_maybe"),
+        N("WA", FINDINGS, "ruled_maybe"),
+        N("X7", "Output package"),
+    )
+    edges = (
+        E("I0", "Q1"),
+        E("Q1", "THS", "no, the default"),
+        E("Q1", "O2", "yes"),
+        *search_edges("L1", "R1"),
+        E("L1", "L1", SEARCH_ROUNDS, "back"),
+        E("L1", "R1"),
+        E("R1", "O2"),
+        E("O2", "OA"),
+        E("OA", "O2", "you ask for restructuring, no cap stated", "back"),
+        E("OA", "A3"),
+        E("A3", "W4"),
+        E("A3", "V4"),
+        E("W4", "AB", "a 4a lint fails twice, or a 4b lint fails"),
+        E("W4", "C5"),
+        E("W4", "B5"),
+        E("C5", "SS", "a systematic format error"),
+        E("SS", "C5", "once", "back"),
+        E("C5", "CS"),
+        E("C5", "SR", "under strict, a DOI or arXiv ID provably fails lookup"),
+        E("C5", "P6"),
+        E("B5", "P6"),
+        E("V4", "P6"),
+        E("P6", "AB", "a 6a lint fails twice, or a 6b lint fails"),
+        E("P6", "UD", "flagged for the reviewer stage"),
+        E("P6", "W6", "a revision"),
+        E("W6", "IC"),
+        E("IC", "P62", "round 2, the last", "dotted"),
+        E("P62", "UD", "below 6.5, a Critical issue unresolved"),
+        E(
+            "P62",
+            "CK",
+            "6.5 or more, or every Critical resolved: the rest become limitations",
+        ),
+        E("P6", "CK", "Accept"),
+        E("CK", "FX"),
+        E("FX", "SR", "a failure left after the reference fix"),
+        E("FX", "F7"),
+        E("CK", "F7"),
+        E("F7", "K7"),
+        E("K7", "F7", "an item fails: fix it and check it again, no cap", "back"),
+        E("K7", "WG"),
+        E("WG", "WA", "your reply"),
+        E("K7", "X7", "no /writing review"),
+        E("WG", "X7"),
+        E("WA", "X7"),
+    )
+    return _g(nodes, edges, PATCH_STOPS, WIDE_WIDTH)
+
+
+def paper_revision_detailed() -> gf.Graph:
+    nodes = (
+        N(
+            "SQ",
+            f"Session asks: the closing review, the claims not to make, the earlier papers "
+            f"{GOAL}",
+            "stop",
+        ),
+        N("RP", "Peer reviewer: the comments as a revision roadmap"),
+        N("AN", "Script: anchorize the draft", "script"),
+        N("RW", "Draft writer: a patch per item, never a full draft"),
+        N("AP", "Script: apply the patch to a new file", "script"),
+        N("D1", "You decide: retry, full re-emission or abort", "stop"),
+        N("D2", "You acknowledge it, or the patch is narrowed", "stop"),
+        N("RC", f"{CLAIMS}, new references among them", "ruled"),
+        N("SS", STYLE_STOP, "stop"),
+        N("CS", CLAIM_STOP, "stop"),
+        N("SR", REFERENCE_STOP, "stop"),
+        N("R2", "Peer reviewer, round 2: the re-review"),
+        N("W2", "Draft writer: the items not resolved, as patches"),
+        N("IC", INCREMENTAL, "ruled"),
+        N("CK", CHECKS, "script"),
+        N("FX", FIXES, "ruled_maybe"),
+        N(
+            "RL",
+            f"Draft writer, fresh: response-letter.md beside the manuscript, when the "
+            f"comments are referee comments {LETTER}",
+            "ruled_maybe",
+        ),
+        N(
+            "LC",
+            f"Peer reviewer, fresh: response-letter-check.md, a verdict per point {LETTER}",
+            "ruled_maybe",
+        ),
+        N("WG", CLOSING, "ruled_maybe"),
+        N("WA", FINDINGS, "ruled_maybe"),
+        N("RX", "Revised draft, apply reports, revision log, the rest as limitations"),
+    )
+    edges = (
+        E("SQ", "RP"),
+        E("RP", "AN"),
+        E("AN", "RW"),
+        E("RW", "AP"),
+        E("AP", "RW", "exit 2: the writer emits the patch once more", "back"),
+        E("AP", "D1", "a second rejection"),
+        E("AP", "D2", "exit 3, structural"),
+        E("AP", "RC"),
+        E("RC", "SS", "a systematic format error"),
+        E("SS", "RC", "a fresh start, once", "back"),
+        E("RC", "CS"),
+        E("RC", "SR", "under strict, a DOI or arXiv ID provably fails lookup"),
+        E("RC", "R2", "round 2, the last", "dotted"),
+        E("R2", "W2", "items not resolved"),
+        E("W2", "IC"),
+        E("IC", "CK"),
+        E("R2", "CK"),
+        E("CK", "FX"),
+        E("FX", "SR", "a failure left after the reference fix"),
+        E("FX", "RL"),
+        E("CK", "RL"),
+        E("RL", "LC"),
+        E("LC", "WG"),
+        E("CK", "WG", "a /writing report as the comments"),
+        E("WG", "WA", "your reply"),
+        E("WG", "RX"),
+        E("WA", "RX"),
+    )
+    return _g(nodes, edges, width=WIDE_WIDTH)
+
+
+def paper_outline_only_detailed() -> gf.Graph:
+    nodes = (
+        N(
+            "OI",
+            f"Intake: citation verification, the number of sources {SOURCES}",
+            "stop",
+        ),
+        *search_nodes(),
+        N("OL", "Literature strategist"),
+        N("OR", "You review the sources: add or remove, optional", "stop"),
+        N("OS", "Structure architect: outline and evidence map"),
+        N("OA", "Outline approval", "stop"),
+        N("OX", "Outline, evidence map, word count per section"),
+    )
+    edges = (
+        E("OI", "THS"),
+        *search_edges("OL", "OR"),
+        E("OL", "OL", SEARCH_ROUNDS, "back"),
+        E("OL", "OR"),
+        E("OR", "OS"),
+        E("OS", "OA"),
+        E("OA", "OS", "you ask for restructuring, no cap stated", "back"),
+        E("OA", "OX"),
+    )
+    return _g(nodes, edges, width=WIDE_WIDTH)
+
+
+def paper_abstract_only_detailed() -> gf.Graph:
+    nodes = (
+        N("AI", "Intake, citation verification: mark only or strict", "stop"),
+        N(
+            "FD",
+            f"Session: grep for the file that holds the abstract, which the patch names "
+            f"{GOAL}",
+            "script",
+        ),
+        N("AB", f"Abstract agent: the abstract and keywords as one patch {GOAL}", "ruled"),
+        N("AX", "Abstract and keywords"),
+    )
+    edges = (E("AI", "FD"), E("FD", "AB"), E("AB", "AX"))
+    return _g(nodes, edges, PATCH_STOPS, WIDE_WIDTH)
+
+
+def paper_citation_check_detailed() -> gf.Graph:
+    nodes = (
+        N(
+            "CQ",
+            f"Session asks: the claims not to make, the earlier papers {GOAL}",
+            "stop",
+        ),
+        N("CK", f"Script, run by the session: lookup.py cite-keys and check-urls {GOAL}", "script"),
+        N(
+            "CC",
+            f"Citation compliance agent, one pass: cross-check, format, DOI, retractions, "
+            f"and each claim against the passage read in its source's full text {GOAL}",
+            "ruled",
+        ),
+        N("SS", STYLE_STOP, "stop"),
+        N("CD", "each issue", "choice"),
+        N("CA", "Corrected by patch, logged"),
+        N("CH", "Flagged for your review"),
+        N("CW", "Revised wording suggested"),
+        N("CS", CLAIM_STOP, "stop"),
+        N("SR", REFERENCE_STOP, "stop"),
+        N("CR", "Removed, or kept with a note"),
+        N("QC", f"Script, run by the session: quote-check of each passage {GOAL}", "script"),
+        N("CX", "Citation audit report"),
+    )
+    edges = (
+        E("CQ", "CK"),
+        E("CK", "CC"),
+        E("CC", "SS", "a systematic format error"),
+        E("SS", "CC", "a fresh start, once", "back"),
+        E("CC", "CD"),
+        E("CD", "CA", "formatting only"),
+        E("CD", "CH", "right claim, wrong source"),
+        E("CD", "CW", "the claim drifts from its source"),
+        E("CD", "CS", "the claim is not in its source"),
+        E("CD", "SR", "under strict, a DOI or arXiv ID provably fails lookup"),
+        E("CD", "CR", "a retracted source"),
+        E("CA", "QC"),
+        E("CH", "QC"),
+        E("CW", "QC"),
+        E("CR", "QC"),
+        E("QC", "CX"),
+    )
+    return _g(nodes, edges, PATCH_STOPS, WIDE_WIDTH)
+
+
+def paper_disclosure_detailed() -> gf.Graph:
+    nodes = (
+        N("SL", "a venue or a policy anchor given?", "choice"),
+        N("SA", "You name one", "stop"),
+        N("VL", "venue in the policy database?", "choice"),
+        N("PA", "Anchor table lookup"),
+        N("VP", "Halt: you paste the venue's policy", "stop"),
+        N(
+            "CG",
+            "Formatter: each kind of AI use marked used, not used or uncertain, from the "
+            "run folders",
+        ),
+        N("CU", "You confirm it", "stop"),
+        N("MD", "Session: the model identifier from the runner's model list"),
+        N(
+            "DD",
+            f"Formatter: the disclosure paragraph as one patch, at the place the policy "
+            f"gives {GOAL}",
+            "ruled",
+        ),
+        N("DX", "Paragraph and placement"),
+    )
+    edges = (
+        E("SL", "SA", "neither"),
+        E("SL", "VL", "a venue"),
+        E("SL", "PA", "a policy anchor"),
+        E("VL", "VP", "no"),
+        E("VL", "CG", "yes"),
+        E("VP", "CG"),
+        E("SA", "SL", "", "return"),
+        E("PA", "CG"),
+        E("CG", "CU", "uncertain"),
+        E("CG", "MD"),
+        E("CU", "MD"),
+        E("MD", "DD"),
+        E("DD", "DX"),
+    )
+    return _g(nodes, edges, PATCH_STOPS, WIDE_WIDTH)
+
+
+def paper_plan_detailed() -> gf.Graph:
+    nodes = (
+        N("PI", "Intake: the 3-question simplified interview", "stop"),
+        N(
+            "S0",
+            "Step 0 readiness check: materials and the research question",
+        ),
+        N("S1", "Step 1 thesis: INSIGHT thesis_statement"),
+        N(
+            "S2",
+            "Step 2 chapters, six in order, at least 2 rounds each; a chapter summary "
+            "after each",
+        ),
+        N("MQ", "The mentor's question: each answer goes to the mentor, resumed", "stop"),
+        N("SA", "Structure architect: the outline from all chapter summaries"),
+        N(
+            "S25",
+            "Step 2.5 contribution sharpening, at least 1 round; INSIGHT contribution_claim",
+        ),
+        N(
+            "S3",
+            "Step 3 stress test: socratic mentor and argument builder probe each "
+            "sub-argument",
+        ),
+        N("X", "Chapter plan and INSIGHT collection"),
+    )
+    edges = (
+        E("PI", "S0"),
+        E("S0", "S1"),
+        E("S1", "S2"),
+        E("S2", "MQ"),
+        E("MQ", "S2", "offers after 8 rounds on a chapter, 30 in all", "back"),
+        E("S2", "SA"),
+        E("SA", "S25"),
+        E("S25", "S3"),
+        E("S3", "X"),
+    )
+    return _g(nodes, edges, width=WIDE_WIDTH)
+
+
+def paper_format_convert_detailed() -> gf.Graph:
+    nodes = (
+        N("Q", "Session asks: the targets, the format profile, the materials", "stop"),
+        N(
+            "PD",
+            f"Script, run by the session: pandoc, a .md or a .docx to the .tex every "
+            f"target is converted from {GOAL}",
+            "script",
+        ),
+        N(
+            "F",
+            f"Phase 7 Formatter: citation style, venue template, format profile, as "
+            f"patches; the report {GOAL}",
+            "ruled",
+        ),
+        N(
+            "F2",
+            f"Formatter, resumed: the conversion patch, when the citation style changes "
+            f"{GOAL}",
+            "ruled_maybe",
+        ),
+        N(
+            "CV",
+            f"Script, run by the session: the patches applied, latexmk for the PDF, pandoc "
+            f"for DOCX and Markdown {GOAL}",
+            "script",
+        ),
+        N(
+            "K",
+            f"Script, run by the session: the headings, figures, tables and abstract "
+            f"counted in each output {GOAL}",
+            "script",
+        ),
+        N("X", "Formatted document"),
+    )
+    edges = (
+        E("Q", "PD", "a .md or a .docx"),
+        E("Q", "F"),
+        E("PD", "F"),
+        E("F", "F2"),
+        E("F", "CV"),
+        E("F2", "CV"),
+        E("CV", "K"),
+        E("K", "X"),
+    )
+    return _g(nodes, edges, PATCH_STOPS, WIDE_WIDTH)
+
+
+def ap_revision_coach_simple() -> gf.Graph:
+    nodes = (
+        N("R", "Revision coach: the referee comments"),
+        N("X", "Revision roadmap, tracking template, response letter skeleton"),
+    )
+    return _g(nodes, (E("R", "X"),))
+
+
+def ap_rebuttal_audit_simple() -> gf.Graph:
+    nodes = (
+        N("R", "Revision coach, parsing only: the comments and your response draft"),
+        N("X", "Coverage per comment, gaps, risk flags"),
+    )
+    return _g(nodes, (E("R", "X"),))
+
+
+def ap_response_letter_simple() -> gf.Graph:
+    nodes = (
+        N("W", "Step 3: the response letter, each point with its change and place"),
+        N("C", "Step 4: the re-review, a verdict per point"),
+    )
+    return _g(nodes, (E("W", "C"),))
+
+
+def ap_revision_coach_detailed() -> gf.Graph:
+    nodes = (
+        N("RC", "Revision coach: parse, classify, map, prioritize every comment"),
+        N("RV", "You validate the parsed comments", "stop"),
+        N("RM", "Revision roadmap"),
+        N("RT", "Tracking template and response letter skeleton, when you ask"),
+        N("RL", "Schema 11 commitment ledger, in the pipeline"),
+    )
+    edges = (
+        E("RC", "RV"),
+        E("RV", "RC", "a correction", "back"),
+        E("RV", "RM"),
+        E("RM", "RT"),
+        E("RM", "RL"),
+    )
+    return _g(nodes, edges, width=WIDE_WIDTH)
+
+
+def paper_revision_coach_detailed() -> gf.Graph:
+    nodes = (
+        N("RC", "Revision coach: parse, classify, map, prioritize every comment"),
+        N("RV", "You validate the parsed comments", "stop"),
+        N("RM", "Revision coach, resumed: revision roadmap"),
+        N("RT", "Tracking template and response letter skeleton, when you ask"),
+    )
+    edges = (
+        E("RC", "RV"),
+        E("RV", "RC", "a correction", "back"),
+        E("RV", "RM"),
+        E("RM", "RT"),
+    )
+    return _g(nodes, edges, width=WIDE_WIDTH)
+
+
+def ap_rebuttal_audit_detailed() -> gf.Graph:
+    nodes = (
+        N("G", "both the comments and a response draft given?", "choice"),
+        N("RC", "Route to revision-coach"),
+        N("RA", "Revision coach, parsing only"),
+        N("X", "Coverage table, gap list, risk flags, suggestions; no Schema 11, no verified status"),
+    )
+    edges = (E("G", "RC", "the comments only"), E("G", "RA", "both"), E("RA", "X"))
+    return _g(nodes, edges, width=WIDE_WIDTH)
+
+
+def paper_rebuttal_audit_detailed() -> gf.Graph:
+    nodes = (
+        N("G", "both the comments and a response draft given?", "choice"),
+        N("RC", "Route to revision-coach"),
+        N("RA", "Revision coach, parsing only"),
+        N(
+            "X",
+            f"rebuttal-audit.md: coverage table, gap list, risk flags, suggestions; "
+            f"nothing marked verified {LETTER}",
+            "ruled",
+        ),
+    )
+    edges = (E("G", "RC", "the comments only"), E("G", "RA", "both"), E("RA", "X"))
+    return _g(nodes, edges, width=WIDE_WIDTH)
+
+
+def ap_response_letter_detailed() -> gf.Graph:
+    nodes = (
+        N("W", "Step 3: the author writes the response letter, point by point"),
+        N(
+            "C",
+            "Step 4: re-review, completeness, consistency, truthfulness, a verdict per point",
+        ),
+        N("X", "Verdicts; no reassessment of the paper, no new requests"),
+    )
+    return _g(nodes, (E("W", "C"), E("C", "X")), width=WIDE_WIDTH)
+
+
+def paper_response_letter_detailed() -> gf.Graph:
+    nodes = (
+        N(
+            "W",
+            f"Draft writer, fresh: response-letter.md beside the manuscript, in the response "
+            f"template's form {LETTER}",
+            "ruled",
+        ),
+        N(
+            "C",
+            f"Peer reviewer, fresh: completeness, consistency, truthfulness, a verdict per "
+            f"point, response-letter-check.md {LETTER}",
+            "ruled",
+        ),
+        N("X", "Verdicts in the final message; no manuscript file changed"),
+    )
+    return _g(nodes, (E("W", "C"), E("C", "X")), width=WIDE_WIDTH)
+
+
+# ---------------------------------------------------------------------------------------
 # The figures.
+
+NOTE = (
+    'A tag such as "[5.Q (i)]" names the part of item 3 (i) of step 5.Q\'s brief that the '
+    'goal of plan 5 keeps, "[5.Q item 5]" the response letter and its check, and '
+    '"[5.Q item 6]" the number of sources.'
+)
 
 SIMPLE = (
     (
         "full",
+        "academic-paper 3.2.0",
         ap_full_simple,
-        "Also stops for you: a draft that fails its format check twice, and a claim not in "
-        "its source. " + APNOTE,
+        "Also stops for you: a draft that fails its format check twice. paper: no RAISE "
+        "compliance agent and no hard gate; the claim check stops the run instead. " + APNOTE,
     ),
-    ("revision", ap_revision_simple, APNOTE),
-    ("lit-review", ap_lit_review_simple, APNOTE),
-    ("outline-only", ap_outline_only_simple, APNOTE),
-    ("abstract-only", ap_abstract_only_simple, APNOTE),
-    ("citation-check", ap_citation_check_simple, APNOTE),
-    ("disclosure", ap_disclosure_simple, APNOTE),
+    ("revision", "academic-paper 3.2.0", ap_revision_simple, APNOTE),
+    ("lit-review", "academic-paper 3.2.0", ap_lit_review_simple, APNOTE),
+    ("outline-only", "academic-paper 3.2.0", ap_outline_only_simple, APNOTE),
+    ("abstract-only", "academic-paper 3.2.0", ap_abstract_only_simple, APNOTE),
+    ("citation-check", "academic-paper 3.2.0", ap_citation_check_simple, APNOTE),
+    ("disclosure", "academic-paper 3.2.0", ap_disclosure_simple, APNOTE),
     (
         "plan",
+        "academic-paper 3.2.0",
         ap_plan_simple,
-        "academic-paper marks no stop in the dialogue rounds. " + APNOTE,
+        "academic-paper marks no stop in the dialogue rounds; paper shows each question of "
+        "the mentor as a stop. " + APNOTE,
     ),
-    ("format-convert", ap_format_convert_simple, APNOTE),
+    ("format-convert", "academic-paper 3.2.0", ap_format_convert_simple, APNOTE),
+    ("revision-coach", "academic-paper 3.2.0", ap_revision_coach_simple, APNOTE),
+    ("rebuttal-audit", "academic-paper 3.2.0", ap_rebuttal_audit_simple, APNOTE),
+    (
+        "response-letter",
+        "academic-pipeline",
+        ap_response_letter_simple,
+        "academic-paper has no such mode; its steps are steps 3 and 4 of academic-pipeline's "
+        "external review protocol. " + APNOTE,
+    ),
 )
 
 DETAILED = (
     (
         "full",
+        "academic-paper 3.2.0",
         ap_full_detailed,
         paper_full_detailed,
-        (
-            "No RAISE check (V) and no hard gate: what the hard gate refuses is handled by K and "
-            "O. academic-paper's conversion to DOCX and Markdown is paper's format-convert mode "
-            '(D3, D25). "[4.A R2-6]" is a ruling of step 4.A\'s second repair round.'
-        ),
+        "No RAISE check and no hard gate: what the hard gate refuses is handled by the claim "
+        "check and its stop. " + NOTE,
     ),
     (
         "revision",
+        "academic-paper 3.2.0",
         ap_revision_detailed,
         paper_revision_detailed,
-        (
-            "academic-paper: no compile and no formatter in this mode. Its agents are the peer "
-            "reviewer, the draft writer and citation compliance; the mode table lists no intake "
-            'agent for it, while the intake page\'s mode list names it. paper: "The stops of paper" '
-            "is a ruling of plan 5. paper has no full re-emission: a structural patch is "
-            'acknowledged or narrowed once (a ruling of plan 5). "[4.A R2-6]" is a ruling of '
-            "step 4.A's second repair round."
-        ),
+        "academic-paper: no compile and no formatter in this mode, and no intake agent. "
+        + NOTE,
     ),
     (
         "lit-review",
+        "academic-paper 3.2.0",
         ap_lit_review_detailed,
         paper_lit_review_detailed,
-        ("academic-paper: no cycle, no reference check, no manuscript changed. " + AP_NOTE),
+        "academic-paper: no cycle, no reference check, no manuscript changed. " + AP_NOTE,
     ),
     (
         "outline-only",
+        "academic-paper 3.2.0",
         ap_outline_only_detailed,
         paper_outline_only_detailed,
-        ("academic-paper: no argument builder."),
+        AP_NOTE + " " + NOTE,
     ),
     (
         "abstract-only",
+        "academic-paper 3.2.0",
         ap_abstract_only_detailed,
         paper_abstract_only_detailed,
-        ("academic-paper: no cycle."),
+        "academic-paper: no cycle. " + NOTE,
     ),
     (
         "citation-check",
+        "academic-paper 3.2.0",
         ap_citation_check_detailed,
         paper_citation_check_detailed,
-        (
-            "academic-paper: one pass, no second run. The mode table lists no intake agent for it, "
-            "while the intake page's mode list names it. paper: a retracted source follows "
-            "academic-paper's retraction protocol (a ruling of plan 5); it differs only in that the "
-            "replacement's passage is read in the run before it is used (D22, D50)."
-        ),
+        "academic-paper: one pass, no intake agent. " + NOTE,
     ),
     (
         "disclosure",
+        "academic-paper 3.2.0",
         ap_disclosure_detailed,
         paper_disclosure_detailed,
-        (
-            "academic-paper: no cycle. The mode table lists agent 9, the formatter; the mode guide "
-            "says the disclosure protocol runs standalone. paper: the other statements are "
-            "written when the venue or you ask (C108 part 4). paper has no policy-anchor track."
-        ),
+        "The mode table lists agent 9, the formatter, which writes the statement in both. "
+        + NOTE,
     ),
     (
         "plan",
+        "academic-paper 3.2.0",
         ap_plan_detailed,
         paper_plan_detailed,
-        (
-            "academic-paper: the dialogue rounds are no stops. paper: the mentor is given each "
-            "answer, resumed or started fresh, and writes the checkpoint after each round "
-            "so that a fresh start, in this run or a continued one, takes up from it (AY, BR). The stress test is the planner's "
-            "rating of each answer, with the plan-to-draft gate in the chapter plan. "
-            "academic-paper names 30 rounds in one list and 15 in another, and paper takes 30. "
-            'A tag such as "[4.A D1]" names a decision of step 4.A\'s brief and "[4.A R2-7]" '
-            "a ruling of its second repair round."
-        ),
+        "academic-paper: the dialogue rounds are no stops. paper: the session shows each "
+        "question of the mentor and gives it your answer. " + NOTE,
     ),
     (
         "format-convert",
+        "academic-paper 3.2.0",
         ap_format_convert_detailed,
         paper_format_convert_detailed,
-        (
-            "academic-paper: the formatter converts and compiles itself, with a hard gate "
-            "on provenance markers. paper: no provenance gate, no ARS marker stripping and "
-            "no 1 percent word-count threshold; the formatter writes patches and a report "
-            "and the session converts (AY); a PDF is made from the .tex only, never from a "
-            ".docx. A request with no target takes Markdown [4.A R1-16]. A tag such as "
-            '"[4.A D10]" names a decision of step 4.A\'s brief, "[4.A item 6]" an item of '
-            'it, "[4.A R1-23]" a ruling of its first repair round and "[4.A R2-9]" a '
-            "ruling of its second."
-        ),
+        "academic-paper: the formatter converts and compiles itself, with a hard gate on "
+        "provenance markers. paper: the formatter writes patches and a report, and the "
+        "session converts and counts. " + NOTE,
+    ),
+    (
+        "revision-coach",
+        "academic-paper 3.2.0",
+        ap_revision_coach_detailed,
+        paper_revision_coach_detailed,
+        NOTE,
+    ),
+    (
+        "rebuttal-audit",
+        "academic-paper 3.2.0",
+        ap_rebuttal_audit_detailed,
+        paper_rebuttal_audit_detailed,
+        NOTE,
+    ),
+    (
+        "response-letter",
+        "academic-pipeline",
+        ap_response_letter_detailed,
+        paper_response_letter_detailed,
+        "academic-paper has no such mode. " + NOTE,
     ),
 )
-
-
-def only_modes_figure() -> str:
-    name = "academic-paper-only-modes.svg"
-    pairs = only_modes()
-    layouts = [
-        (gf.FlowLayout(name, pair.left.graph), gf.FlowLayout(name, pair.right.graph))
-        for pair in pairs
-    ]
-    row_width = max(a.width + b.width + PANEL_GAP for a, b in layouts)
-    width = max(row_width + 2 * gf.MARGIN, 700)
-    heights = [max(a.height, b.height) for a, b in layouts]
-    note_room = gf.note_height(name, ONLY_NOTE, width - 2 * gf.MARGIN)
-    legend = (
-        L("agent", "Solid box: built"),
-        L("stop", "Orange box: the run stops for you"),
-        L("todo", "Dashed box: not built yet, with its roadmap entry"),
-    )
-    height = (
-        gf.MARGIN
-        + sum(h + 40 + ROW_GAP for h in heights)
-        + note_room
-        + gf.legend_height(legend)
-        + 3 * gf.MARGIN
-    )
-    boxes = []
-    for pair in pairs:
-        for panel in (pair.left, pair.right):
-            boxes.append(
-                f"{panel.caption}: " + "; ".join(n.label for n in panel.graph.nodes)
-            )
-    label = (
-        "The modes academic-paper has and paper does not. Boxes: "
-        + " | ".join(boxes)
-        + "."
-    )
-    canvas = gf.Canvas(name, width, height, label)
-    cursor = gf.MARGIN
-    for pair, (a, b), row_height in zip(pairs, layouts, heights, strict=True):
-        gf.draw_caption(canvas, gf.MARGIN, cursor + 12, pair.left.caption, a.width)
-        gf.draw_caption(
-            canvas, gf.MARGIN + a.width + PANEL_GAP, cursor + 12, "Ordo", b.width
-        )
-        a.draw(canvas, gf.MARGIN, cursor + 24)
-        b.draw(canvas, gf.MARGIN + a.width + PANEL_GAP, cursor + 24)
-        cursor += row_height + 40 + ROW_GAP
-    gf.draw_note(canvas, gf.MARGIN, cursor + 4, ONLY_NOTE, width - 2 * gf.MARGIN)
-    gf.draw_legend(canvas, gf.MARGIN, cursor + note_room + gf.MARGIN, legend)
-    return canvas.render()
 
 
 def figures() -> tuple[tuple[str, str], ...]:
     """Every figure of this script, as the file name and its body."""
     paper_simple = dict(gf.PAPER_MODES)
     out: list[tuple[str, str]] = []
-    for mode, ap_build, note in SIMPLE:
+    for mode, caption, ap_build, note in SIMPLE:
         panels = [
-            gf.Panel("academic-paper 3.2.0", ap_build()),
-            gf.Panel("paper", paper_simple[mode]()),
+            gf.Panel(caption, ap_build()),
+            gf.Panel("paper", gf.with_mode_stop(paper_simple[mode]())),
         ]
         out.append(
             (
@@ -2129,10 +1633,10 @@ def figures() -> tuple[tuple[str, str], ...]:
                 ),
             )
         )
-    for mode, ap_build, paper_build, note in DETAILED:
+    for mode, caption, ap_build, paper_build, note in DETAILED:
         panels = [
-            gf.Panel("academic-paper 3.2.0", ap_build()),
-            gf.Panel("paper, as ruled", paper_build()),
+            gf.Panel(caption, ap_build()),
+            gf.Panel("paper, as built", gf.with_mode_stop(paper_build())),
         ]
         out.append(
             (
@@ -2146,7 +1650,6 @@ def figures() -> tuple[tuple[str, str], ...]:
                 ),
             )
         )
-    out.append(("academic-paper-only-modes.svg", only_modes_figure()))
     out.append(("academic-pipeline.svg", pipeline_figure()))
     return tuple(out)
 

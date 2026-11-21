@@ -1,6 +1,6 @@
 # 0028. A paper run checks each number it writes and its description of the data handling against the saved result files
 
-Status: proposed
+Status: superseded by 0043
 
 ## Context
 

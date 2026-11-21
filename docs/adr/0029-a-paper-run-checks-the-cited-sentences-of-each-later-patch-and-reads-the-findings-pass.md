@@ -1,6 +1,6 @@
 # 0029. A paper run checks the cited sentences of each later patch and reads the findings pass
 
-Status: proposed; superseded by 0036 in its sentence that ADR 0027's "No other agent receives a second message" stands
+Status: proposed; superseded by 0036 in its sentence that ADR 0027's "No other agent receives a second message" stands; superseded by 0043 in the reading of the findings pass by a fresh peer reviewer and in the draft-review writer passes, now the draft writer's rewrite of each revision loop of full mode and revision's second writer pass, the incremental check of each later patch standing
 
 ## Context
 

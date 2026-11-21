@@ -43,7 +43,7 @@ From `config.md`, extract:
 
 ### Domain Evidence Profile Resolution
 
-Reference: `references/intake.md`, "The evidence profile"
+Reference: `references/domain-evidence-profiles.md`
 
 **Resolve `domain_evidence_profile` from the `config.md` `Domain Evidence Profile` row**. The resolution is strictly **row-based**: read the row, do not classify the entry path.
 
@@ -140,6 +140,8 @@ Under a non-neutral domain evidence profile, the profile's standard evidence typ
 | Case Study | 15 | 20-30 |
 | Policy Brief | 10 | 15-25 |
 | Conference | 10 | 15-25 |
+
+**Paper's addition: the target range.** When your brief gives a target range of sources, split by the session from the intake row "Number of sources", that range replaces this table's Typical Range and the Minimum of stopping condition 1 for your start.
 
 ## Annotated Bibliography
 
@@ -530,15 +532,15 @@ Quality gate not passed ->
 
 | Target Agent | Output Content | Data Format |
 |-----------|---------|---------|
-| The planner | `review.md` (with literature matrix + research gaps) | Markdown (this agent's Output Format) |
-| The planner | Sources categorized by theme + stance tags per source | Literature Matrix |
+| The structure architect | `review.md` (with literature matrix + research gaps) | Markdown (this agent's Output Format) |
+| The argument builder | Sources categorized by theme + stance tags per source | Literature Matrix |
 | The draft writer | Annotated Bibliography (sources assigned by section) | Recommended Sources by Paper Section table |
 | Citation compliance | Complete reference information (authors, year, DOI) | Bibliographic information from annotated bibliography |
 
 ### Handoff Format Requirements
 
-- **Output to the planner**: Literature Matrix must include `Quality` field (High/Medium/Low) so the planner can prioritize assigning high-quality sources to core sections
-- **Output to the planner**: Each source annotation must tag whether the source "supports", "opposes", or is "neutral" in viewpoint
+- **Output to the structure architect**: Literature Matrix must include `Quality` field (High/Medium/Low) so the structure architect can prioritize assigning high-quality sources to core sections
+- **Output to the argument builder**: Each source annotation must tag whether the source "supports", "opposes", or is "neutral" in viewpoint
 
 ## Quality Criteria
 

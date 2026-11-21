@@ -9,7 +9,8 @@ Writes, beside this file:
 - grill.svg, writing.svg, code-comments.svg: the agents, stops and cycles of each skill.
 - paper/full.svg, paper/revision.svg, paper/lit-review.svg, paper/outline-only.svg,
   paper/abstract-only.svg, paper/citation-check.svg, paper/disclosure.svg, paper/plan.svg,
-  paper/format-convert.svg: one figure per mode of the paper skill.
+  paper/format-convert.svg, paper/revision-coach.svg, paper/rebuttal-audit.svg,
+  paper/response-letter.svg: one figure per mode of the paper skill.
 
 Every figure shows the order of the run. An agent start is a box, solid when it always runs and
 dashed when it runs only when needed. A stop that waits on the user is an orange box. A cycle is a
@@ -1249,7 +1250,22 @@ STOPS_NOT_DRAWN = (
 )
 
 
+MODE_STOP = Node("MS", "The mode to run, for a plain request that fits two modes", "stop")
+CLAIM_NOT_HELD = "the check stops at the first claim not held, and the stop is raised once the agent has ended"
+STYLE_STOP = "The citation style to confirm"
+STYLE_EDGE = "a systematic format error"
+REFERENCE_STOP = "A reference that cannot be confirmed, only under strict"
+
+
+def with_mode_stop(graph: Graph) -> Graph:
+    """The graph with the stop every mode of paper lists, the mode to run, standing apart."""
+    return Graph(
+        graph.nodes, graph.edges, (*graph.floating, MODE_STOP), graph.node_width, graph.caption
+    )
+
+
 def _paper(name: str, mode: str, graph: Graph) -> str:
+    graph = with_mode_stop(graph)
     kinds = {node.kind for node in (*graph.nodes, *graph.floating)}
     legend = (
         *SIMPLE_LEGEND,
@@ -1273,228 +1289,123 @@ SEARCH_LOOP = "search rounds: 3 of 5 stopping rules, or 4 rounds"
 CONFIRMED = "review.md and refs.bib written with its own edits"
 
 
-def paper_full_graph() -> Graph:
+SEARCH_STOP = "search rounds: end at any 3 of 5 conditions, or after 4 rounds"
+PATCHED = "Script: each patch applied, the compile, the reference checks"
+WRITING = "/writing review, unless you said no; the draft writer applies what you pick"
+
+
+def _search(after: str) -> tuple[tuple[Node, ...], tuple[Edge, ...]]:
+    """The session's choice of one literature strategist or several with a merge."""
     nodes = (
-        Node("I", "Intake agent: you confirm", "stop"),
         Node("S", STRUCTURE, "choice"),
-        Node(
-            "L",
-            "Literature strategist, unless you skip it; " + CONFIRMED,
-            "maybe",
-        ),
+        Node("L", "Literature strategist, unless you give your own sources", "maybe"),
         Node("T2", STARTS, "maybe"),
-        Node("M", MERGE + CONFIRMED, "maybe"),
+        Node("M", MERGE + "review.md and refs.bib", "maybe"),
         Node("LR", "You review the sources, optional", "stop"),
-        Node("PL", "Planner"),
-        Node(
-            "SQ",
-            "A research question the materials do not answer, when a part has no result",
-            "stop",
-        ),
-        Node("G", "Literature strategist: the sections with no source", "maybe"),
-        Node("PL2", "Planner: assigns what was found", "maybe"),
-        Node(
-            "PW",
-            "Planner, fresh: rewrites each argument with two or more weak-argument signs",
-            "maybe",
-        ),
-        Node("OA", "Outline approval: each rewritten argument before and after", "stop"),
-        Node("W", "Draft writer"),
-        Node(
-            "WM",
-            "Draft writer once more: the model identifier, when the model list gave none or the served one differs",
-            "maybe",
-        ),
-        Node("V", "Visualization, with data", "maybe"),
-        Node("C", "Citation compliance"),
-        Node("C2", "Citation compliance once more, when a check fails", "maybe"),
-        Node(
-            "SC",
-            "A claim the run cannot support, or a reference that cannot be confirmed",
-            "stop",
-        ),
-        Node(
-            "SS",
-            "The citation style to confirm, when more than half the entries fail the same check",
-            "stop",
-        ),
-        Node("P", "Peer reviewer"),
-        Node("WR", "Draft writer: a patch"),
-        Node(
-            "IC",
-            "Citation compliance for each later patch with a cited sentence: those "
-            "sentences only",
-            "maybe",
-        ),
-        Node("SJ", "The draft review rejects the draft: each Critical issue classed, a roadmap", "stop"),
-        Node("SD", "The draft review does not pass: no answer recommended", "stop"),
-        Node("RF", "Draft writer: reference fix", "maybe"),
-        Node("SR", "A reference that cannot be confirmed", "stop"),
-        Node("CF", "Draft writer: compile fix", "maybe"),
-        Node("WG", "/writing: 4 agents, unless you said no at intake", "maybe"),
-        Node("RP", "End: the final message, with the /writing report and your reply, optional"),
-        Node("WA", "Draft writer: applies what you pick", "maybe"),
-        Node("IC2", "Citation compliance: the sentences of the findings pass", "maybe"),
-        Node("PR", "Peer reviewer: reads the findings pass", "maybe"),
-        Node("CF2", "Draft writer: compile fix", "maybe"),
-        Node(
-            "AN", "Draft writer: the anonymous copy, for a double-blind venue", "maybe"
-        ),
-        Node("FT", "Formatter: the DOCX and Markdown targets you named", "maybe"),
     )
     edges = (
-        Edge("I", "S", "unless you skip the search"),
         Edge("S", "L", ONE),
         Edge("S", "T2", SEVERAL),
-        Edge("L", "L", SEARCH_LOOP, "back"),
-        Edge("T2", "T2", SEARCH_LOOP, "back"),
+        Edge("L", "L", SEARCH_STOP, "back"),
+        Edge("T2", "T2", SEARCH_STOP, "back"),
         Edge("T2", "M"),
         Edge("L", "LR"),
         Edge("M", "LR"),
-        Edge("LR", "PL"),
-        Edge("PL", "G", "a section has no source"),
-        Edge("PL", "SQ"),
-        Edge("SQ", "PL", "a fresh start with your answer", "back"),
-        Edge("PL", "OA"),
-        Edge("PL", "PW", "two or more weak-argument signs"),
-        Edge("PW", "OA"),
-        Edge("G", "PL2"),
-        Edge("G", "G", SEARCH_LOOP, "back"),
-        Edge("PL2", "OA"),
-        Edge("OA", "PL", "changes or another structure, no cap", "back"),
-        Edge("OA", "W"),
-        Edge("OA", "V"),
+        Edge("LR", after),
+    )
+    return nodes, edges
+
+
+def paper_full_graph() -> Graph:
+    search_nodes, search_edges = _search("A")
+    nodes = (
+        Node("I", "Intake agent: you confirm", "stop"),
+        *search_nodes,
+        Node("A", "Structure architect"),
+        Node("OA", "Outline approval", "stop"),
+        Node("B", "Argument builder"),
+        Node("W", "Draft writer, 2 calls: main.tex"),
+        Node("GA", "A generator phase aborted", "stop"),
+        Node("V", "Visualization, with data: the figures placed by patch", "maybe"),
+        Node("C", "Citation compliance: each claim against its source's full text"),
+        Node("SS", STYLE_STOP, "stop"),
+        Node("AB", "Abstract agent: a patch"),
+        Node("P", "Peer reviewer, 2 calls"),
+        Node("WR", "Draft writer: the whole draft again, as one patch"),
+        Node("IC", "Citation compliance: the cited sentences of the patch"),
+        Node("SD", "The draft review does not pass", "stop"),
+        Node("SC", "A claim the run cannot support", "stop"),
+        Node("SR", REFERENCE_STOP, "stop"),
+        Node("CF", PATCHED, "script"),
+        Node("F", "Formatter: targets, cover letter, AI disclosure, checklist"),
+        Node("WG", WRITING, "maybe"),
+    )
+    edges = (
+        Edge("I", "S"),
+        *search_edges,
+        Edge("A", "OA"),
+        Edge("OA", "A", "restructuring, no cap", "back"),
+        Edge("OA", "B"),
+        Edge("B", "W"),
+        Edge("B", "V"),
         Edge("V", "V", "checks the rendered figure, up to 2 fixes, optional", "back"),
+        Edge("W", "GA", "a 4a lint fails twice, or a 4b lint fails"),
         Edge("W", "C"),
-        Edge("W", "WM"),
-        Edge("WM", "C"),
-        Edge("V", "C"),
-        Edge("C", "SC", "after every claim is judged: each claim not held, or a reference that fails"),
-        Edge("C", "SS"),
+        Edge("W", "AB"),
+        Edge("C", "SS", STYLE_EDGE),
         Edge("SS", "C", "a fresh start, once", "back"),
-        Edge("C", "C2"),
+        Edge("C", "SC", CLAIM_NOT_HELD),
+        Edge("C", "SR", "under strict, a DOI or arXiv ID provably fails lookup"),
         Edge("C", "P"),
-        Edge("C2", "P"),
-        Edge("P", "WR", "Minor or Major: round 2, once", "dotted"),
+        Edge("AB", "P"),
+        Edge("V", "P"),
+        Edge("P", "WR", "a revision: round 2, once", "dotted"),
         Edge("WR", "IC"),
         Edge("IC", "P", "", "back"),
-        Edge("P", "SJ", "Reject in round 1"),
-        Edge("SJ", "WR", "fixable: a Major Revision pass, after you confirm", "dotted"),
-        Edge("SJ", "PL", "structural: back to the outline, after you confirm", "back"),
-        Edge("SJ", "I", "fundamental: back to intake, after you confirm", "back"),
-        Edge("P", "SD", "after round 2: a score under 6.5 with a Critical issue open"),
-        Edge("SD", "P", "revise by hand, or a lower venue: a fresh review", "back"),
-        Edge(
-            "SD",
-            "PL",
-            "an expanded revision, only when you choose it, from the step the cause names",
-            "back",
-        ),
-        Edge("P", "RF"),
-        Edge("SD", "RF", "accept"),
-        Edge("RF", "SR", "strict: a reference still fails"),
-        Edge("RF", "CF"),
-        Edge("CF", "WG"),
-        Edge("WG", "RP"),
-        Edge("CF", "RP", "no /writing review"),
-        Edge("RP", "WA"),
-        Edge("WA", "IC2"),
-        Edge("IC2", "PR"),
-        Edge("PR", "CF2"),
-        Edge("RP", "AN"),
-        Edge("CF2", "AN"),
-        Edge("RP", "FT"),
-        Edge("CF2", "FT"),
+        Edge("P", "GA", "a 6a lint fails twice, or a 6b lint fails"),
+        Edge("P", "SD", "after round 2 a score under 6.5 with a Critical issue open"),
+        Edge("P", "CF"),
+        Edge("CF", "SR", "a failure left after the reference fix"),
+        Edge("CF", "F"),
+        Edge("F", "F", "a checklist item fails, no cap", "back"),
+        Edge("F", "WG"),
     )
     return _graph(nodes, edges)
 
 
 def paper_revision_graph() -> Graph:
     nodes = (
-        Node("I", "Intake agent: you confirm", "stop"),
-        Node(
-            "P",
-            "Peer reviewer: the instructions as items, or, with none, a review of the "
-            "manuscript",
-        ),
-        Node(
-            "SQ",
-            "A research question the materials do not answer, when an item names a part",
-            "stop",
-        ),
-        Node("IA", "You approve the items, with no instructions", "stop"),
-        Node("LS", "Literature strategist, for a new reference; " + CONFIRMED, "maybe"),
-        Node("V", "Visualization, for a figure", "maybe"),
+        Node("P", "Peer reviewer: the comments as a roadmap"),
         Node("W", "Draft writer: a patch per item"),
-        Node("C", "Citation compliance"),
-        Node("C2", "Citation compliance once more, when a check fails", "maybe"),
-        Node(
-            "SC",
-            "A claim the run cannot support, or a reference that cannot be confirmed",
-            "stop",
-        ),
-        Node(
-            "SS",
-            "The citation style to confirm, when more than half the entries fail the same check",
-            "stop",
-        ),
-        Node("R", "Peer reviewer: reading"),
-        Node("W2", "Draft writer: one pass"),
-        Node(
-            "IC",
-            "Citation compliance for each later patch with a cited sentence: those "
-            "sentences only",
-            "maybe",
-        ),
-        Node("RF", "Draft writer: reference fix", "maybe"),
-        Node("SD", "A reference that cannot be confirmed", "stop"),
-        Node("CF", "Draft writer: compile fix", "maybe"),
-        Node("WG", "/writing: 4 agents, unless you said no at intake", "maybe"),
-        Node("RP", "End: the final message, with the /writing report and your reply, optional"),
-        Node("WA", "Draft writer: applies what you pick", "maybe"),
-        Node("IC2", "Citation compliance: the sentences of the findings pass", "maybe"),
-        Node("PR", "Peer reviewer: reads the findings pass", "maybe"),
-        Node("CF2", "Draft writer: compile fix", "maybe"),
-        Node(
-            "AN", "Draft writer: the anonymous copy, for a double-blind venue", "maybe"
-        ),
+        Node("C", "Citation compliance: each claim against its source's full text"),
+        Node("SS", STYLE_STOP, "stop"),
+        Node("SC", "A claim the run cannot support", "stop"),
+        Node("SR", REFERENCE_STOP, "stop"),
+        Node("R2", "Peer reviewer: the re-review"),
+        Node("W2", "Draft writer: the items not resolved", "maybe"),
+        Node("CF", PATCHED, "script"),
+        Node("RL", "Draft writer: the response letter, for referee comments", "maybe"),
+        Node("RC", "Peer reviewer: the letter checked, a verdict per point", "maybe"),
+        Node("WG", WRITING, "maybe"),
+        Node("X", "Revised draft, the rest as limitations"),
     )
     edges = (
-        Edge("I", "P"),
-        Edge("P", "IA", "no instructions given"),
-        Edge("P", "SQ", "an item names a part with no result"),
-        Edge("SQ", "IA", "your answer, no instructions"),
-        Edge("SQ", "W", "your answer, instructions given"),
-        Edge("IA", "W"),
-        Edge("P", "LS"),
-        Edge("LS", "LS", SEARCH_LOOP, "back"),
-        Edge("P", "V"),
-        Edge("V", "V", "checks the rendered figure, up to 2 fixes, optional", "back"),
         Edge("P", "W"),
-        Edge("LS", "W"),
-        Edge("V", "W"),
         Edge("W", "C"),
-        Edge("C", "SC", "after every claim is judged: each claim not held, or a reference that fails"),
-        Edge("C", "SS"),
+        Edge("C", "SS", STYLE_EDGE),
         Edge("SS", "C", "a fresh start, once", "back"),
-        Edge("C", "C2"),
-        Edge("C", "R"),
-        Edge("C2", "R"),
-        Edge("R", "W2", "items not resolved: reading 2, once", "dotted"),
-        Edge("W2", "IC"),
-        Edge("IC", "R", "", "back"),
-        Edge("R", "RF"),
-        Edge("RF", "SD", "strict: a reference still fails"),
-        Edge("RF", "CF"),
-        Edge("CF", "WG"),
-        Edge("WG", "RP"),
-        Edge("CF", "RP", "no /writing review"),
-        Edge("RP", "WA"),
-        Edge("WA", "IC2"),
-        Edge("IC2", "PR"),
-        Edge("PR", "CF2"),
-        Edge("RP", "AN"),
-        Edge("CF2", "AN"),
+        Edge("C", "SC", CLAIM_NOT_HELD),
+        Edge("C", "SR", "under strict, a DOI or arXiv ID provably fails lookup"),
+        Edge("C", "R2", "round 2, once"),
+        Edge("R2", "W2"),
+        Edge("W2", "CF"),
+        Edge("R2", "CF"),
+        Edge("CF", "SR", "a failure left after the reference fix"),
+        Edge("CF", "RL"),
+        Edge("RL", "RC"),
+        Edge("RC", "WG"),
+        Edge("CF", "WG", "a /writing report as the comments"),
+        Edge("WG", "X"),
     )
     return _graph(nodes, edges)
 
@@ -1537,34 +1448,18 @@ def paper_lit_review_graph() -> Graph:
 
 
 def paper_outline_only_graph() -> Graph:
+    search_nodes, search_edges = _search("A")
     nodes = (
         Node("I", "Intake agent: you confirm", "stop"),
-        Node("S", STRUCTURE, "choice"),
-        Node("L", "Literature strategist: " + CONFIRMED, "maybe"),
-        Node("T2", STARTS, "maybe"),
-        Node("M", MERGE + CONFIRMED, "maybe"),
-        Node("LR", "You review the sources, optional", "stop"),
-        Node("PL", "Planner: outline and argument map"),
-        Node("G", "Literature strategist: the sections with no source", "maybe"),
-        Node("PL2", "Planner: assigns what was found", "maybe"),
+        *search_nodes,
+        Node("A", "Structure architect"),
         Node("OA", "Outline approval", "stop"),
     )
     edges = (
         Edge("I", "S"),
-        Edge("S", "L", ONE),
-        Edge("S", "T2", SEVERAL),
-        Edge("L", "L", SEARCH_LOOP, "back"),
-        Edge("T2", "T2", SEARCH_LOOP, "back"),
-        Edge("T2", "M"),
-        Edge("L", "LR"),
-        Edge("M", "LR"),
-        Edge("LR", "PL"),
-        Edge("PL", "G", "a section has no source"),
-        Edge("PL", "OA"),
-        Edge("G", "PL2"),
-        Edge("G", "G", SEARCH_LOOP, "back"),
-        Edge("PL2", "OA"),
-        Edge("OA", "PL", "changes or another structure, no cap", "back"),
+        *search_edges,
+        Edge("A", "OA"),
+        Edge("OA", "A", "restructuring, no cap", "back"),
     )
     return _graph(nodes, edges)
 
@@ -1572,39 +1467,29 @@ def paper_outline_only_graph() -> Graph:
 def paper_abstract_only_graph() -> Graph:
     nodes = (
         Node("I", "Intake agent: you confirm", "stop"),
-        Node("W", "Draft writer: the abstract"),
+        Node("AB", "Abstract agent: a patch"),
     )
-    return _graph(nodes, (Edge("I", "W"),))
+    return _graph(nodes, (Edge("I", "AB"),))
 
 
 def paper_citation_check_graph() -> Graph:
     nodes = (
-        Node("I", "Intake agent: you confirm", "stop"),
-        Node("C", "Citation compliance"),
-        Node("C2", "Citation compliance once more, when a check fails", "maybe"),
-        Node(
-            "SD",
-            "A claim the run cannot support, or a reference that cannot be confirmed",
-            "stop",
-        ),
+        Node("C", "Citation compliance: each claim against its source's full text"),
         Node(
             "SS",
             "The citation style to confirm, when more than half the entries fail the same check",
             "stop",
         ),
+        Node("SC", "A claim the run cannot support", "stop"),
+        Node("SR", REFERENCE_STOP, "stop"),
         Node("X", "Citation report"),
     )
     edges = (
-        Edge("I", "C"),
         Edge("C", "SS"),
         Edge("SS", "C", "a fresh start, once", "back"),
-        Edge(
-            "C",
-            "SD",
-            "a claim the source does not hold, or a reference no lookup confirms",
-        ),
-        Edge("C", "C2"),
-        Edge("C2", "X"),
+        Edge("C", "SC", CLAIM_NOT_HELD),
+        Edge("C", "SR", "under strict, a DOI or arXiv ID provably fails lookup"),
+        Edge("C", "X"),
     )
     return _graph(nodes, edges)
 
@@ -1612,64 +1497,90 @@ def paper_citation_check_graph() -> Graph:
 def paper_disclosure_graph() -> Graph:
     nodes = (
         Node(
-            "I",
-            "Intake agent: the venue or the policy anchor, the policy of a venue not listed, "
-            "the kinds of AI use the records leave uncertain; you confirm",
+            "S",
+            "You name the venue, and paste the policy of a venue it does not know",
             "stop",
         ),
-        Node("W", "Draft writer: the statements"),
-        Node(
-            "W2",
-            "Draft writer once more: the model identifier, when the model list gave none or the served one differs",
-            "maybe",
-        ),
+        Node("F", "Formatter: each kind of AI use marked, the statement as a patch"),
+        Node("U", "You confirm each uncertain kind of AI use", "stop"),
     )
-    return _graph(nodes, (Edge("I", "W"), Edge("W", "W2")))
+    edges = (
+        Edge("S", "F"),
+        Edge("F", "U", "a kind marked uncertain"),
+        Edge("U", "F", "your answer", "back"),
+    )
+    return _graph(nodes, edges)
 
 
 def paper_plan_graph() -> Graph:
     nodes = (
-        Node("I", "Intake agent: you confirm", "stop"),
-        Node("M", "Socratic mentor: given each answer, resumed or started fresh"),
-        Node(
-            "Q",
-            "The mentor's question: each answer; offers after 8 rounds on a chapter "
-            "and 30 in all",
-            "stop",
-        ),
-        Node("P1", "Planner: the outline from the chapter summaries"),
-        Node("S", "Mentor, Step 2.5: contribution sharpening, one round or more"),
-        Node("PE", "Planner: evaluates each stress-test answer"),
-        Node("P2", "Planner: the chapter plan"),
-        Node("H", "The plan's handoff", "stop"),
+        Node("I", "Intake agent: 3 questions, you confirm", "stop"),
+        Node("M", "Socratic mentor, chapter by chapter, given each answer"),
+        Node("Q", "The mentor's question", "stop"),
+        Node("S", "Structure architect: the outline"),
+        Node("M2", "Socratic mentor and argument builder: the stress test"),
+        Node("X", "Chapter plan and INSIGHT collection"),
     )
     edges = (
         Edge("I", "M"),
         Edge("M", "Q"),
-        Edge("Q", "M", "your answer", "back"),
-        Edge("M", "P1", "the last chapter summary is written"),
-        Edge("P1", "S", "you confirm that summary"),
-        Edge("S", "Q", "its questions to you", "back"),
-        Edge("Q", "PE", "your answer to a stress-test question"),
-        Edge("PE", "M", "the rating goes to the mentor", "back"),
-        Edge("M", "P2", "every sub-argument is Moderate or above, or you end it"),
-        Edge("P2", "H"),
-        Edge("H", "M", "a condition of the gate is not met", "back"),
+        Edge("Q", "M", "offers after 8 rounds on a chapter, 30 in all", "back"),
+        Edge("M", "S"),
+        Edge("S", "M2"),
+        Edge("M2", "X"),
     )
     return _graph(nodes, edges)
 
 
 def paper_format_convert_graph() -> Graph:
     nodes = (
-        Node("I", "Intake agent: you confirm", "stop"),
-        Node("F", "Formatter: the patches and the report"),
+        Node("F", "Formatter: LaTeX, DOCX, PDF, Markdown, citation style, as patches"),
         Node(
             "F2",
-            "Formatter again, for the conversion patch, when the citation style changes",
+            "Formatter, resumed: the conversion patch, when the citation style changes",
             "maybe",
         ),
+        Node("CF", "Script: patches applied, compile, pandoc, the counts", "script"),
+        Node("X", "Formatted document"),
     )
-    return _graph(nodes, (Edge("I", "F"), Edge("F", "F2")))
+    edges = (
+        Edge("F", "F2"),
+        Edge("F", "CF"),
+        Edge("F2", "CF"),
+        Edge("CF", "X"),
+    )
+    return _graph(nodes, edges)
+
+
+def paper_revision_coach_graph() -> Graph:
+    nodes = (
+        Node("R", "Revision coach: the comments parsed"),
+        Node("Q", "You confirm the parsed comments", "stop"),
+        Node("R2", "Revision coach, resumed: roadmap, tracking template, letter skeleton"),
+    )
+    edges = (
+        Edge("R", "Q"),
+        Edge("Q", "R", "a correction", "back"),
+        Edge("Q", "R2"),
+    )
+    return _graph(nodes, edges)
+
+
+def paper_rebuttal_audit_graph() -> Graph:
+    nodes = (
+        Node("R", "Revision coach, parsing only: the comments and your response draft"),
+        Node("X", "Coverage per comment, gaps, risk flags; advisory, nothing verified"),
+    )
+    return _graph(nodes, (Edge("R", "X"),))
+
+
+def paper_response_letter_graph() -> Graph:
+    nodes = (
+        Node("W", "Draft writer: response-letter.md beside the manuscript"),
+        Node("P", "Peer reviewer, fresh: a verdict per point"),
+        Node("X", "The letter and its check"),
+    )
+    return _graph(nodes, (Edge("W", "P"), Edge("P", "X")))
 
 
 PAPER_MODES = (
@@ -1682,6 +1593,9 @@ PAPER_MODES = (
     ("disclosure", paper_disclosure_graph),
     ("plan", paper_plan_graph),
     ("format-convert", paper_format_convert_graph),
+    ("revision-coach", paper_revision_coach_graph),
+    ("rebuttal-audit", paper_rebuttal_audit_graph),
+    ("response-letter", paper_response_letter_graph),
 )
 
 

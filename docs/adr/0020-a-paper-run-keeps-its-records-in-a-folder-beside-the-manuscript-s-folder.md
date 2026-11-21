@@ -1,6 +1,6 @@
 # 0020. A paper run keeps its records in a folder beside the manuscript's folder
 
-Status: proposed
+Status: proposed; superseded by 0043 in its sentence on a run that continues an unfinished run, since `paper` no longer offers one
 
 ## Context
 
