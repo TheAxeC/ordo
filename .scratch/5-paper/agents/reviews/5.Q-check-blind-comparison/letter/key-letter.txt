@@ -1,0 +1,4 @@
+order command: python3 -c 'import random; print(random.choice(["new is A", "old is A"]))'
+output: new is A
+judge-letter-rc18-1: A is paper rc.18 (response-letter.md of its revision run), B is academic-paper (response-to-reviewers.md of step 3 revision run)
+judge-letter-rc18-2: A is academic-paper, B is paper rc.18

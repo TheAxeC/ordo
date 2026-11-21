@@ -1,0 +1,5 @@
+1. Yes.
+2. None.
+3. None.
+The code and materials are in code/. DO NOT RUN ANYTHING: no code, no downloads, no experiments; read the code only.
+From here on, do not stop for a choice whose recommendation you would take; take it and record it in config.md. I refuse to interact further.

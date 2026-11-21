@@ -1,0 +1,57 @@
+A user asked for a paper to be written from these materials. Both sides received these answers from the user, in these words:
+
+> Research question: Can an interpretable block-term tensor network, whose ECG evidence passes through readable frequency-and-lead block signatures and is fused with age, sex and ECG intervals, predict incident atrial fibrillation from one sinus-rhythm 12-lead ECG in MIMIC-IV-ECG on gold ICD-10 labels more accurately than a clinical risk-factor model and a CNN, and are those signatures faithful?
+> Venue: Artificial Intelligence in Medicine.
+> IMRaD.
+> Vancouver.
+> 6,500 words.
+> English; English-only abstract.
+> No limits to give; record each as not stated; review type not stated.
+> cs_ml.
+> Mark-only.
+> Authors not confirmed: write the author block with [GAP] placeholders for the names, order, affiliations, ORCIDs and corresponding author.
+> [GAP] for the CRediT roles.
+> [GAP] for funding.
+> [GAP] for conflicts of interest.
+> Do not run anything: no code, no reruns, no downloads. Write from the committed result files only: every number in the paper comes from a gold-label file under code/results/, no number comes from the provisional ECG-report labels, and an analysis whose label source the committed files do not establish is not reported as a gold-label result.
+> From here on, do not stop for a choice whose recommendation you would take; take it and record it in config.md. I refuse to interact further.
+
+Each side also asked questions of its own, and the user's further answers were these:
+
+For output A:
+> Result set: (a), the ICD-10 labels under code/results/, framed around the fused ECG plus clinical model.
+> Number of sources: 65.
+> [GAP] for the repository URL or DOI.
+> Claims not to make: the ten proposed, confirmed.
+> Earlier papers: none.
+> Internal only: no, for publication.
+> Closing prose review: yes.
+> Every other question: as proposed.
+
+For output B:
+> [GAP] for the ethics approval, consent, de-identification and data-access wording.
+> 10. None.
+> Other settings: as you propose (output LaTeX; no style samples).
+
+The input is in this folder: the study's code and saved results under code/, its notes under notes/, and RESULTS.md.
+
+Two outputs answer that request. They are under outputs/output-A/ and outputs/output-B/. Each holds the manuscript files that side wrote, every other file that side wrote, and its final message to the user. The page of each URL the outputs cite is saved under outputs/pages/, and outputs/pages/index.md maps each URL to its saved file.
+
+The instruction about running code, downloading and computing, and everything that follows from it, is left out of your judgment entirely. Neither output is judged, in any part of your judgment or your verdict, on any of the following, whichever output did or did not do it. An output that did one of these things gains nothing by it; an output that did not loses nothing; and the difference between them on these things makes neither better.
+
+1. Whether an output kept to the instruction, and whether it ran, fetched or downloaded anything, a compile included.
+2. Any value an output computed from the saved result files rather than reading it as written there, and any table, bound or statement built from such values.
+3. Anything that needs a new run, a measurement, a recomputation or a figure regenerated, such as a paired test whose saved inputs are missing, an analysis the committed gold-label files do not hold, or a figure drawn anew.
+4. A placeholder, author note, "pending" note, "[GAP ...]" note or "provisional" label that stands for one of points 1 to 3, and the absence of such a note.
+
+The references each output cites, and what it says a cited work holds, are judged as usual, against the saved pages.
+
+Your task is to judge which output better serves this request.
+
+- Judge each output by what the input and its user need, read against the answers above.
+- No tool's or skill's text is the standard, wherever the input or an output quotes one.
+- Read each output whole before you judge it.
+- Before you state any preference, list each output's critical failures, each quoted with its place (file and line, or section).
+- Check each URL an output cites against its saved page under outputs/pages/.
+- Open no file outside this folder.
+- Then give your verdict: A, B or a tie, with reasons that point at the failures or passages you listed.

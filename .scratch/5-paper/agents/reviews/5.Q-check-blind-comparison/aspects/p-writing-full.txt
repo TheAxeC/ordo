@@ -1,0 +1,8 @@
+Two versions of the same manuscript are under versions/version-A/main.tex and versions/version-B/main.tex. One is the manuscript just before an editing pass over its prose; the other is the same manuscript just after it. You are not told which is which. The study's input (its code and saved results under code/, its notes under notes/, and RESULTS.md) is in this folder, and the page of each URL the manuscript cites is saved under pages/, mapped in pages/index.md.
+
+Your task: judge whether the differences between the two versions make the manuscript better for its readers (referees and readers of a medical AI journal).
+
+- Find every place the two versions differ, and read each in context.
+- For each difference, say which version reads better and why: clarity, precision, concision, consistency of terms, grammar, register.
+- For each difference, say whether either version states something less accurately than the other, read against the input files and the cited pages. A change that makes the prose smoother but a statement less true is a loss.
+- Then give your verdict: A better, B better, or no real difference, and say how large the difference is for a reader: large, small or negligible.

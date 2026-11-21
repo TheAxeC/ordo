@@ -1,0 +1,6 @@
+Judges x, same orders as the first judges:
+judge-xrev-1: A is academic-paper, B is paper rc.18
+judge-xrev-2: A is paper rc.18, B is academic-paper
+judge-xletter-1: A is paper rc.18, B is academic-paper
+judge-xletter-2: A is academic-paper, B is paper rc.18
+judge-xletter-3 (in place of judge-xletter-1, discarded): A is paper rc.18, B is academic-paper

@@ -1,0 +1,3 @@
+judge 1: output-A is paper, output-B is academic-paper
+judge 2: output-A is academic-paper, output-B is paper
+drawn with random.choice: "new is A"

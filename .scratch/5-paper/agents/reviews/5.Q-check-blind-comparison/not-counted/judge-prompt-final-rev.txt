@@ -1,0 +1,20 @@
+A user asked for this manuscript to be revised for these referee comments. The user gave both sides an instruction about running code, downloading and computing. Leave that instruction and its consequences out of your judgment entirely:
+
+- Do not judge whether either output kept to the instruction.
+- Where an output left something undone, and its own text gives that instruction, or a decision it records that it took itself in place of asking the user, as the reason, that is no failure of that output. Examples: a value not computed, a source not looked up, a reference not added, a file such as the highlights not updated.
+- Where the other output did that thing, it is no merit of the other output either. Do not count it as better on that point, alone or as part of your overall judgment. Judge neither output on that point.
+- Judge everything else as usual.
+
+The input is in this folder: the manuscript under manuscript/, the referee comments in admin/reviews/reviewer-comments.md, and the study's code and saved results under code/. The authors' public code repository, which an output cites, is under sources/ecg-representation-clustering/ at the commit the output names.
+
+Two outputs answer that request. They are under outputs/output-A/ and outputs/output-B/. Each holds the revised manuscript files, the diff of manuscript/ against the input (manuscript.diff), every other file that side wrote, and its final message to the user. The page of each URL the outputs cite is saved under outputs/pages/, and outputs/pages/index.md maps each URL to its saved file.
+
+Your task is to judge which output better serves this request.
+
+- Judge each output by what the input and its user need: a revised manuscript that answers the referee comments and that the authors can resubmit, with every claim true to the input.
+- No tool's or skill's text is the standard, wherever the input or an output quotes one.
+- Read each output whole before you judge it.
+- Before you state any preference, list each output's critical failures, each quoted with its place (file and line, or section).
+- Check each URL an output cites against its saved page under outputs/pages/.
+- Open no file outside this folder.
+- Then give your verdict: A, B or a tie, with reasons that point at the failures or passages you listed.

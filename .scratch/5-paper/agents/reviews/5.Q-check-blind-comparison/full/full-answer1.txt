@@ -1,0 +1,23 @@
+Result set: (a). Do not run anything: no code, no reruns, no downloads. Write from the committed result files only: every number in the paper comes from a gold-label file under code/results/, no number comes from the provisional ECG-report labels, and an analysis whose label source the committed files do not establish is not reported as a gold-label result.
+1. As you propose.
+2. Research question: Can an interpretable block-term tensor network, whose ECG evidence passes through readable frequency-and-lead block signatures and is fused with age, sex and ECG intervals, predict incident atrial fibrillation from one sinus-rhythm 12-lead ECG in MIMIC-IV-ECG on gold ICD-10 labels more accurately than a clinical risk-factor model and a CNN, and are those signatures faithful?
+3. IMRaD.
+4. As you propose.
+5. Venue: Artificial Intelligence in Medicine.
+6. No limits to give; record each as not stated; review type not stated.
+7. Vancouver.
+8. As you propose.
+9. As you propose.
+10. 6,500 words.
+11. English; English-only abstract.
+12. Authors not confirmed: write the author block with [GAP] placeholders for the names, order, affiliations, ORCIDs and corresponding author. [GAP] for the CRediT roles. [GAP] for the repository URL or DOI.
+13. [GAP] for funding. [GAP] for conflicts of interest.
+14. None.
+15. cs_ml.
+16. Mark-only.
+17. Number of sources: 65.
+18. Confirmed.
+19. None.
+20. No, for publication.
+21. Yes.
+From here on, do not stop for a choice whose recommendation you would take; take it and record it in config.md. I refuse to interact further.

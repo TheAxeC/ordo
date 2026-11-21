@@ -1,0 +1,4 @@
+order command: python3 -c 'import random; print(random.choice(["new is A", "old is A"]))'
+output: old is A
+judge-rev-rc18-1: A is academic-paper (step 3 revision output), B is paper rc.18
+judge-rev-rc18-2: A is paper rc.18, B is academic-paper

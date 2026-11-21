@@ -1,0 +1,8 @@
+changes.md lists changes made to a manuscript, each at one or more places. For each place it gives two versions of the text, version 1 and version 2. For each change, one version is the text before a citation check found a problem and the other is the text after the fix; you are not told which, and the order differs from change to change. The manuscript's bibliography is refs.bib. The study's input (its code and saved results under code/, its notes under notes/, and RESULTS.md) is in this folder, and the page of each URL the manuscript cites is saved under pages/, mapped in pages/index.md.
+
+Your task: judge whether these changes make the manuscript's cited claims more accurate.
+
+- For each change, read both versions, the entries of refs.bib they cite, and the saved page of each cited source.
+- For each change, say which version is better supported by its cited sources and by the input files, and why. Say when the saved page is a stub or holds too little to decide, and judge then from what the page and the input do show.
+- For each change, say whether the difference matters to a reader: a claim the source does not hold corrected, a minor wording point, or no real difference; and whether either version introduces an error.
+- Then give your verdict over all the changes: do the better versions fix real errors that a referee or reader would care about, and how many.

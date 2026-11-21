@@ -1,0 +1,340 @@
+text: final-message.md: 1 x /the agents of the paper skill/ -> 'AI agents'
+text: final-message.md: 1 x /the writing skill/ -> 'the prose review'
+text: final-message.md: 1 x /The writing skill/ -> 'The prose review'
+text: final-message.md: 1 x /`?ordo-(low|medium|high|xhigh|max)`?/ -> 'an agent at \\1 effort'
+text: final-message.md: 1 x /prose_facts\.py/ -> 'the prose-facts script'
+text: final-message.md: 2 x /`lookup\.py / -> '`lookup '
+text: final-message.md: 1 x /`/writing` review/ -> 'prose review'
+text: final-message.md: 1 x /`/writing`/ -> 'prose review'
+text: final-message.md: 1 x /paper-runs/full-2026-11-21// -> 'run/'
+text: final-message.md: 1 x /full-2026-11-21/?/ -> 'run/'
+text: final-message.md: 3 x /\b[Cc]onfig\.md/ -> 'settings.md'
+text: final-message.md: 4 x /\bchecks\.md/ -> 'check-log.md'
+text: final-message.md: 3 x /\bD([0-9]+)-([0-9]+)\b/ -> 'RI\\1.\\2'
+text: final-message.md: 1 x /\bF([0-9]+)\b(?!\s+(?:of\s+[0-9]|score|than|was|among|=|[0-9]))(?<!Macro F1)(?<!average F1)(?<!an F1)(?<!detection F1)(?<!level F1)(?<!component F1)(?<!graph F1)/ -> 'K\\1'
+text: manuscript/cover-letter.tex: 1 x /the agents of the paper skill/ -> 'AI agents'
+binary kept whole: manuscript/main.pdf
+binary kept whole: manuscript/figures/fig1_pipeline_overview.png
+binary kept whole: manuscript/figures/fig2_bttn_interpret.png
+binary kept whole: manuscript/figures/fig3_beat_saliency.png
+binary kept whole: manuscript/figures/fig4_clin_eval.png
+path: paper-runs/full-2026-11-21/arguments.md -> run/arguments.md
+text: run/arguments.md: 2 x /\b[Cc]onfig\.md/ -> 'settings.md'
+path: paper-runs/full-2026-11-21/checks.md -> run/check-log.md
+text: run/check-log.md: 8 x //private/tmp/claude-502/[^\s'\"`)]*?/gate5q/full-rc18/ -> '/work'
+text: run/check-log.md: 9 x //var/folders/[^\s`'\"]*/ -> '<a temporary folder>'
+text: run/check-log.md: 31 x /lookup\.py/ -> 'the lookup script'
+text: run/check-log.md: 1 x //writing\b/ -> 'prose review'
+text: run/check-log.md: 8 x /paper-runs/full-2026-11-21// -> 'run/'
+text: run/check-log.md: 1 x /full-2026-11-21/?/ -> 'run/'
+text: run/check-log.md: 2 x /\.patched\b/ -> '.result'
+text: run/check-log.md: 32 x /\bF([0-9]+)\b(?!\s+(?:of\s+[0-9]|score|than|was|among|=|[0-9]))(?<!Macro F1)(?<!average F1)(?<!an F1)(?<!detection F1)(?<!level F1)(?<!component F1)(?<!graph F1)/ -> 'K\\1'
+path: paper-runs/full-2026-11-21/citation-report-07.md -> run/citation-report-07.md
+read as UTF-8: run/citation-report-07.md
+text: run/citation-report-07.md: 1 x /`lookup\.py / -> '`lookup '
+text: run/citation-report-07.md: 3 x /lookup\.py/ -> 'the lookup script'
+text: run/citation-report-07.md: 1 x /\.patched\.apply-report\.json/ -> '.result.log.json'
+text: run/citation-report-07.md: 3 x /\.patch\.json/ -> '.edits.json'
+text: run/citation-report-07.md: 3 x /\.patched\b/ -> '.result'
+text: run/citation-report-07.md: 1 x /\b[Cc]onfig\.md/ -> 'settings.md'
+path: paper-runs/full-2026-11-21/citation-report-10.md -> run/citation-report-10.md
+read as UTF-8: run/citation-report-10.md
+text: run/citation-report-10.md: 2 x /`lookup\.py / -> '`lookup '
+text: run/citation-report-10.md: 3 x /lookup\.py/ -> 'the lookup script'
+text: run/citation-report-10.md: 3 x /\.patch\.json/ -> '.edits.json'
+text: run/citation-report-10.md: 2 x /\.patched\b/ -> '.result'
+text: run/citation-report-10.md: 1 x /\b[Cc]onfig\.md/ -> 'settings.md'
+path: paper-runs/full-2026-11-21/citation-report-13.md -> run/citation-report-13.md
+read as UTF-8: run/citation-report-13.md
+text: run/citation-report-13.md: 1 x /`lookup\.py / -> '`lookup '
+text: run/citation-report-13.md: 4 x /lookup\.py/ -> 'the lookup script'
+text: run/citation-report-13.md: 3 x /\.patch\.json/ -> '.edits.json'
+text: run/citation-report-13.md: 2 x /\.patched\b/ -> '.result'
+text: run/citation-report-13.md: 1 x /\b[Cc]onfig\.md/ -> 'settings.md'
+path: paper-runs/full-2026-11-21/citation-report-16.md -> run/citation-report-16.md
+read as UTF-8: run/citation-report-16.md
+text: run/citation-report-16.md: 2 x /`lookup\.py / -> '`lookup '
+text: run/citation-report-16.md: 1 x /lookup\.py/ -> 'the lookup script'
+text: run/citation-report-16.md: 1 x /\.block-manifest\.json/ -> '.blocks.json'
+text: run/citation-report-16.md: 3 x /\.patch\.json/ -> '.edits.json'
+text: run/citation-report-16.md: 3 x /\.patched\b/ -> '.result'
+text: run/citation-report-16.md: 3 x /\b[Cc]onfig\.md/ -> 'settings.md'
+path: paper-runs/full-2026-11-21/citation-report-20.md -> run/citation-report-20.md
+read as UTF-8: run/citation-report-20.md
+text: run/citation-report-20.md: 1 x /`lookup\.py / -> '`lookup '
+text: run/citation-report-20.md: 1 x /lookup\.py/ -> 'the lookup script'
+text: run/citation-report-20.md: 1 x /\.block-manifest\.json/ -> '.blocks.json'
+text: run/citation-report-20.md: 3 x /\.patch\.json/ -> '.edits.json'
+text: run/citation-report-20.md: 3 x /\.patched\b/ -> '.result'
+text: run/citation-report-20.md: 2 x /\b[Cc]onfig\.md/ -> 'settings.md'
+path: paper-runs/full-2026-11-21/citation-report-26.md -> run/citation-report-26.md
+read as UTF-8: run/citation-report-26.md
+text: run/citation-report-26.md: 1 x //var/folders/[^\s`'\"]*/ -> '<a temporary folder>'
+text: run/citation-report-26.md: 8 x /lookup\.py/ -> 'the lookup script'
+text: run/citation-report-26.md: 3 x /\.patch\.json/ -> '.edits.json'
+text: run/citation-report-26.md: 4 x /\.patched\b/ -> '.result'
+text: run/citation-report-26.md: 1 x /\b[Cc]onfig\.md/ -> 'settings.md'
+path: paper-runs/full-2026-11-21/citation-report-31.md -> run/citation-report-31.md
+read as UTF-8: run/citation-report-31.md
+text: run/citation-report-31.md: 1 x //var/folders/[^\s`'\"]*/ -> '<a temporary folder>'
+text: run/citation-report-31.md: 58 x /lookup\.py/ -> 'the lookup script'
+text: run/citation-report-31.md: 1 x /`/writing` review/ -> 'prose review'
+text: run/citation-report-31.md: 1 x /\.block-manifest\.json/ -> '.blocks.json'
+text: run/citation-report-31.md: 3 x /\.patch\.json/ -> '.edits.json'
+text: run/citation-report-31.md: 2 x /\.patched\b/ -> '.result'
+text: run/citation-report-31.md: 1 x /\bchecks\.md/ -> 'check-log.md'
+text: run/citation-report-31.md: 2 x /\bF([0-9]+)\b(?!\s+(?:of\s+[0-9]|score|than|was|among|=|[0-9]))(?<!Macro F1)(?<!average F1)(?<!an F1)(?<!detection F1)(?<!level F1)(?<!component F1)(?<!graph F1)/ -> 'K\\1'
+path: paper-runs/full-2026-11-21/citation-report-34.md -> run/citation-report-34.md
+read as UTF-8: run/citation-report-34.md
+text: run/citation-report-34.md: 10 x /lookup\.py/ -> 'the lookup script'
+text: run/citation-report-34.md: 1 x /\.block-manifest\.json/ -> '.blocks.json'
+text: run/citation-report-34.md: 3 x /\.patch\.json/ -> '.edits.json'
+text: run/citation-report-34.md: 3 x /\.patched\b/ -> '.result'
+path: paper-runs/full-2026-11-21/citation-report-37.md -> run/citation-report-37.md
+read as UTF-8: run/citation-report-37.md
+text: run/citation-report-37.md: 5 x /lookup\.py/ -> 'the lookup script'
+text: run/citation-report-37.md: 1 x /\.block-manifest\.json/ -> '.blocks.json'
+text: run/citation-report-37.md: 3 x /\.patch\.json/ -> '.edits.json'
+text: run/citation-report-37.md: 2 x /\.patched\b/ -> '.result'
+path: paper-runs/full-2026-11-21/citation-report-40.md -> run/citation-report-40.md
+read as UTF-8: run/citation-report-40.md
+text: run/citation-report-40.md: 5 x /lookup\.py/ -> 'the lookup script'
+text: run/citation-report-40.md: 3 x /\.patch\.json/ -> '.edits.json'
+text: run/citation-report-40.md: 1 x /\.patched\b/ -> '.result'
+path: paper-runs/full-2026-11-21/citation-report-43.md -> run/citation-report-43.md
+read as UTF-8: run/citation-report-43.md
+text: run/citation-report-43.md: 7 x /lookup\.py/ -> 'the lookup script'
+text: run/citation-report-43.md: 1 x /\.block-manifest\.json/ -> '.blocks.json'
+text: run/citation-report-43.md: 3 x /\.patch\.json/ -> '.edits.json'
+text: run/citation-report-43.md: 1 x /\.patched\b/ -> '.result'
+path: paper-runs/full-2026-11-21/citation-report-start1.md -> run/citation-report-start1.md
+read as UTF-8: run/citation-report-start1.md
+text: run/citation-report-start1.md: 1 x //var/folders/[^\s`'\"]*/ -> '<a temporary folder>'
+text: run/citation-report-start1.md: 2 x /`lookup\.py / -> '`lookup '
+text: run/citation-report-start1.md: 72 x /lookup\.py/ -> 'the lookup script'
+text: run/citation-report-start1.md: 2 x /\b[Cc]onfig\.md/ -> 'settings.md'
+path: paper-runs/full-2026-11-21/citation-report.md -> run/citation-report.md
+read as UTF-8: run/citation-report.md
+text: run/citation-report.md: 3 x /`lookup\.py / -> '`lookup '
+text: run/citation-report.md: 67 x /lookup\.py/ -> 'the lookup script'
+text: run/citation-report.md: 2 x /\.patch\.json/ -> '.edits.json'
+text: run/citation-report.md: 2 x /\b[Cc]onfig\.md/ -> 'settings.md'
+path: paper-runs/full-2026-11-21/config.md -> run/settings.md
+text: run/settings.md: 1 x /The writing skill/ -> 'The prose review'
+text: run/settings.md: 1 x /`anchorize_tex\.py`/ -> 'its anchoring script'
+text: run/settings.md: 2 x /`apply_tex_patch\.py`/ -> 'its patch script'
+text: run/settings.md: 1 x /prose_facts\.py/ -> 'the prose-facts script'
+text: run/settings.md: 1 x /lookup\.py/ -> 'the lookup script'
+text: run/settings.md: 1 x /`/writing` review/ -> 'prose review'
+text: run/settings.md: 1 x /`/writing`/ -> 'prose review'
+text: run/settings.md: 1 x /strategist/ -> 'search agent'
+text: run/settings.md: 2 x /\b[Cc]onfig\.md/ -> 'settings.md'
+text: run/settings.md: 6 x /\bD([0-9]+)-([0-9]+)\b/ -> 'RI\\1.\\2'
+text: run/settings.md: 1 x /\bF([0-9]+)\b(?!\s+(?:of\s+[0-9]|score|than|was|among|=|[0-9]))(?<!Macro F1)(?<!average F1)(?<!an F1)(?<!detection F1)(?<!level F1)(?<!component F1)(?<!graph F1)/ -> 'K\\1'
+path: paper-runs/full-2026-11-21/draft-report.md -> run/draft-report.md
+text: run/draft-report.md: 1 x /`/writing` review/ -> 'prose review'
+text: run/draft-report.md: 5 x /\bF([0-9]+)\b(?!\s+(?:of\s+[0-9]|score|than|was|among|=|[0-9]))(?<!Macro F1)(?<!average F1)(?<!an F1)(?<!detection F1)(?<!level F1)(?<!component F1)(?<!graph F1)/ -> 'K\\1'
+path: paper-runs/full-2026-11-21/figures.md -> run/figures.md
+text: run/figures.md: 1 x /full-2026-11-21/?/ -> 'run/'
+path: paper-runs/full-2026-11-21/final.md -> run/final.md
+text: run/final.md: 1 x /the agents of the paper skill/ -> 'AI agents'
+text: run/final.md: 1 x /the writing skill/ -> 'the prose review'
+text: run/final.md: 1 x /The writing skill/ -> 'The prose review'
+text: run/final.md: 1 x /`?ordo-(low|medium|high|xhigh|max)`?/ -> 'an agent at \\1 effort'
+text: run/final.md: 1 x /prose_facts\.py/ -> 'the prose-facts script'
+text: run/final.md: 2 x /`lookup\.py / -> '`lookup '
+text: run/final.md: 1 x /`/writing` review/ -> 'prose review'
+text: run/final.md: 1 x /`/writing`/ -> 'prose review'
+text: run/final.md: 1 x /paper-runs/full-2026-11-21// -> 'run/'
+text: run/final.md: 1 x /full-2026-11-21/?/ -> 'run/'
+text: run/final.md: 3 x /\b[Cc]onfig\.md/ -> 'settings.md'
+text: run/final.md: 4 x /\bchecks\.md/ -> 'check-log.md'
+text: run/final.md: 3 x /\bD([0-9]+)-([0-9]+)\b/ -> 'RI\\1.\\2'
+text: run/final.md: 1 x /\bF([0-9]+)\b(?!\s+(?:of\s+[0-9]|score|than|was|among|=|[0-9]))(?<!Macro F1)(?<!average F1)(?<!an F1)(?<!detection F1)(?<!level F1)(?<!component F1)(?<!graph F1)/ -> 'K\\1'
+path: paper-runs/full-2026-11-21/format-report.md -> run/format-report.md
+text: run/format-report.md: 1 x /the agents of the paper skill/ -> 'AI agents'
+text: run/format-report.md: 9 x /`lookup\.py / -> '`lookup '
+text: run/format-report.md: 2 x /lookup\.py/ -> 'the lookup script'
+text: run/format-report.md: 2 x /\.patch\.json/ -> '.edits.json'
+text: run/format-report.md: 7 x /\b[Cc]onfig\.md/ -> 'settings.md'
+text: run/format-report.md: 3 x /\bD([0-9]+)-([0-9]+)\b/ -> 'RI\\1.\\2'
+path: paper-runs/full-2026-11-21/intended-claims.md -> run/intended-claims.md
+text: run/intended-claims.md: 2 x /\.patch\.json/ -> '.edits.json'
+path: paper-runs/full-2026-11-21/lit-A.bib -> run/lit-A.bib
+path: paper-runs/full-2026-11-21/lit-A.md -> run/lit-A.md
+text: run/lit-A.md: 7 x /`lookup\.py / -> '`lookup '
+text: run/lit-A.md: 1 x /\b[Cc]onfig\.md/ -> 'settings.md'
+text: run/lit-A.md: 2 x /\bF([0-9]+)\b(?!\s+(?:of\s+[0-9]|score|than|was|among|=|[0-9]))(?<!Macro F1)(?<!average F1)(?<!an F1)(?<!detection F1)(?<!level F1)(?<!component F1)(?<!graph F1)/ -> 'K\\1'
+path: paper-runs/full-2026-11-21/lit-B.bib -> run/lit-B.bib
+path: paper-runs/full-2026-11-21/lit-B.md -> run/lit-B.md
+text: run/lit-B.md: 9 x /`lookup\.py / -> '`lookup '
+text: run/lit-B.md: 1 x /lookup\.py/ -> 'the lookup script'
+text: run/lit-B.md: 3 x /\b[Cc]onfig\.md/ -> 'settings.md'
+path: paper-runs/full-2026-11-21/outline.md -> run/outline.md
+text: run/outline.md: 4 x /\b[Cc]onfig\.md/ -> 'settings.md'
+path: paper-runs/full-2026-11-21/precommitments.md -> run/precommitments.md
+text: run/precommitments.md: 8 x /\bF([0-9]+)\b(?!\s+(?:of\s+[0-9]|score|than|was|among|=|[0-9]))(?<!Macro F1)(?<!average F1)(?<!an F1)(?<!detection F1)(?<!level F1)(?<!component F1)(?<!graph F1)/ -> 'K\\1'
+path: paper-runs/full-2026-11-21/refs.bib -> run/refs.bib
+path: paper-runs/full-2026-11-21/review-1.md -> run/review-1.md
+text: run/review-1.md: 1 x /\b[Cc]onfig\.md/ -> 'settings.md'
+text: run/review-1.md: 46 x /\bD([0-9]+)-([0-9]+)\b/ -> 'RI\\1.\\2'
+text: run/review-1.md: 10 x /\bF([0-9]+)\b(?!\s+(?:of\s+[0-9]|score|than|was|among|=|[0-9]))(?<!Macro F1)(?<!average F1)(?<!an F1)(?<!detection F1)(?<!level F1)(?<!component F1)(?<!graph F1)/ -> 'K\\1'
+path: paper-runs/full-2026-11-21/review-2.md -> run/review-2.md
+text: run/review-2.md: 1 x /\b[Cc]onfig\.md/ -> 'settings.md'
+text: run/review-2.md: 1 x /\bchecks\.md/ -> 'check-log.md'
+text: run/review-2.md: 68 x /\bD([0-9]+)-([0-9]+)\b/ -> 'RI\\1.\\2'
+text: run/review-2.md: 10 x /\bF([0-9]+)\b(?!\s+(?:of\s+[0-9]|score|than|was|among|=|[0-9]))(?<!Macro F1)(?<!average F1)(?<!an F1)(?<!detection F1)(?<!level F1)(?<!component F1)(?<!graph F1)/ -> 'K\\1'
+path: paper-runs/full-2026-11-21/review-3.md -> run/review-3.md
+text: run/review-3.md: 1 x /\.patched\b/ -> '.result'
+text: run/review-3.md: 3 x /\b[Cc]onfig\.md/ -> 'settings.md'
+text: run/review-3.md: 38 x /\bD([0-9]+)-([0-9]+)\b/ -> 'RI\\1.\\2'
+text: run/review-3.md: 8 x /\bF([0-9]+)\b(?!\s+(?:of\s+[0-9]|score|than|was|among|=|[0-9]))(?<!Macro F1)(?<!average F1)(?<!an F1)(?<!detection F1)(?<!level F1)(?<!component F1)(?<!graph F1)/ -> 'K\\1'
+path: paper-runs/full-2026-11-21/review.md -> run/review.md
+text: run/review.md: 6 x /`lookup\.py / -> '`lookup '
+text: run/review.md: 1 x /lookup\.py/ -> 'the lookup script'
+text: run/review.md: 5 x /\b[Cc]onfig\.md/ -> 'settings.md'
+path: paper-runs/full-2026-11-21/revision-log.md -> run/revision-log.md
+text: run/revision-log.md: 2 x /\.block-manifest\.json/ -> '.blocks.json'
+text: run/revision-log.md: 4 x /\.patch\.json/ -> '.edits.json'
+text: run/revision-log.md: 2 x /\b[Cc]onfig\.md/ -> 'settings.md'
+text: run/revision-log.md: 40 x /\bD([0-9]+)-([0-9]+)\b/ -> 'RI\\1.\\2'
+text: run/revision-log.md: 1 x /\bF([0-9]+)\b(?!\s+(?:of\s+[0-9]|score|than|was|among|=|[0-9]))(?<!Macro F1)(?<!average F1)(?<!an F1)(?<!detection F1)(?<!level F1)(?<!component F1)(?<!graph F1)/ -> 'K\\1'
+path: paper-runs/full-2026-11-21/patches/01-main.tex.block-manifest.json -> run/patches/01-main.tex.blocks.json
+text: run/patches/01-main.tex.blocks.json: 1 x /ars_[a-z_]+/ -> 'field'
+path: paper-runs/full-2026-11-21/patches/01-main.tex.patch.json -> run/patches/01-main.tex.edits.json
+path: paper-runs/full-2026-11-21/patches/01-main.tex.patched -> run/patches/01-main.tex.result
+path: paper-runs/full-2026-11-21/patches/01-main.tex.patched.apply-report.json -> run/patches/01-main.tex.result.log.json
+text: run/patches/01-main.tex.result.log.json: 1 x /\.patched\b/ -> '.result'
+text: run/patches/01-main.tex.result.log.json: 8 x /ars_[a-z_]+/ -> 'field'
+path: paper-runs/full-2026-11-21/patches/02-main.tex.block-manifest.json -> run/patches/02-main.tex.blocks.json
+text: run/patches/02-main.tex.blocks.json: 1 x /ars_[a-z_]+/ -> 'field'
+path: paper-runs/full-2026-11-21/patches/02-main.tex.patch.json -> run/patches/02-main.tex.edits.json
+path: paper-runs/full-2026-11-21/patches/02-main.tex.patched -> run/patches/02-main.tex.result
+path: paper-runs/full-2026-11-21/patches/02-main.tex.patched.apply-report.json -> run/patches/02-main.tex.result.log.json
+text: run/patches/02-main.tex.result.log.json: 1 x /\.patched\b/ -> '.result'
+text: run/patches/02-main.tex.result.log.json: 6 x /ars_[a-z_]+/ -> 'field'
+path: paper-runs/full-2026-11-21/patches/06-refs.bib.block-manifest.json -> run/patches/06-refs.bib.blocks.json
+text: run/patches/06-refs.bib.blocks.json: 1 x /ars_[a-z_]+/ -> 'field'
+path: paper-runs/full-2026-11-21/patches/06-refs.bib.patch.json -> run/patches/06-refs.bib.edits.json
+path: paper-runs/full-2026-11-21/patches/06-refs.bib.patched -> run/patches/06-refs.bib.result
+path: paper-runs/full-2026-11-21/patches/06-refs.bib.patched.apply-report.json -> run/patches/06-refs.bib.result.log.json
+text: run/patches/06-refs.bib.result.log.json: 1 x /\.patched\b/ -> '.result'
+text: run/patches/06-refs.bib.result.log.json: 122 x /ars_[a-z_]+/ -> 'field'
+path: paper-runs/full-2026-11-21/patches/07-main.tex.block-manifest.json -> run/patches/07-main.tex.blocks.json
+text: run/patches/07-main.tex.blocks.json: 1 x /ars_[a-z_]+/ -> 'field'
+path: paper-runs/full-2026-11-21/patches/07-main.tex.patch.json -> run/patches/07-main.tex.edits.json
+path: paper-runs/full-2026-11-21/patches/07-main.tex.patched -> run/patches/07-main.tex.result
+path: paper-runs/full-2026-11-21/patches/07-main.tex.patched.apply-report.json -> run/patches/07-main.tex.result.log.json
+text: run/patches/07-main.tex.result.log.json: 1 x /\.patched\b/ -> '.result'
+text: run/patches/07-main.tex.result.log.json: 60 x /ars_[a-z_]+/ -> 'field'
+path: paper-runs/full-2026-11-21/patches/10-main.tex.block-manifest.json -> run/patches/10-main.tex.blocks.json
+text: run/patches/10-main.tex.blocks.json: 1 x /ars_[a-z_]+/ -> 'field'
+path: paper-runs/full-2026-11-21/patches/10-main.tex.patch.json -> run/patches/10-main.tex.edits.json
+path: paper-runs/full-2026-11-21/patches/10-main.tex.patched -> run/patches/10-main.tex.result
+path: paper-runs/full-2026-11-21/patches/10-main.tex.patched.apply-report.json -> run/patches/10-main.tex.result.log.json
+text: run/patches/10-main.tex.result.log.json: 1 x /\.patched\b/ -> '.result'
+text: run/patches/10-main.tex.result.log.json: 24 x /ars_[a-z_]+/ -> 'field'
+path: paper-runs/full-2026-11-21/patches/13-main.tex.block-manifest.json -> run/patches/13-main.tex.blocks.json
+text: run/patches/13-main.tex.blocks.json: 1 x /ars_[a-z_]+/ -> 'field'
+path: paper-runs/full-2026-11-21/patches/13-main.tex.patch.json -> run/patches/13-main.tex.edits.json
+path: paper-runs/full-2026-11-21/patches/13-main.tex.patched -> run/patches/13-main.tex.result
+path: paper-runs/full-2026-11-21/patches/13-main.tex.patched.apply-report.json -> run/patches/13-main.tex.result.log.json
+text: run/patches/13-main.tex.result.log.json: 1 x /\.patched\b/ -> '.result'
+text: run/patches/13-main.tex.result.log.json: 4 x /ars_[a-z_]+/ -> 'field'
+path: paper-runs/full-2026-11-21/patches/16-main.tex.block-manifest.json -> run/patches/16-main.tex.blocks.json
+text: run/patches/16-main.tex.blocks.json: 1 x /ars_[a-z_]+/ -> 'field'
+path: paper-runs/full-2026-11-21/patches/16-main.tex.patch.json -> run/patches/16-main.tex.edits.json
+text: run/patches/16-main.tex.edits.json: 242 x /\bD([0-9]+)-([0-9]+)\b/ -> 'RI\\1.\\2'
+path: paper-runs/full-2026-11-21/patches/16-main.tex.patched -> run/patches/16-main.tex.result
+path: paper-runs/full-2026-11-21/patches/16-main.tex.patched.apply-report.json -> run/patches/16-main.tex.result.log.json
+text: run/patches/16-main.tex.result.log.json: 1 x /\.patched\b/ -> '.result'
+text: run/patches/16-main.tex.result.log.json: 240 x /ars_[a-z_]+/ -> 'field'
+text: run/patches/16-main.tex.result.log.json: 260 x /\bD([0-9]+)-([0-9]+)\b/ -> 'RI\\1.\\2'
+path: paper-runs/full-2026-11-21/patches/20-main.tex.block-manifest.json -> run/patches/20-main.tex.blocks.json
+text: run/patches/20-main.tex.blocks.json: 1 x /ars_[a-z_]+/ -> 'field'
+path: paper-runs/full-2026-11-21/patches/20-main.tex.patch.json -> run/patches/20-main.tex.edits.json
+text: run/patches/20-main.tex.edits.json: 240 x /\bD([0-9]+)-([0-9]+)\b/ -> 'RI\\1.\\2'
+path: paper-runs/full-2026-11-21/patches/20-main.tex.patched -> run/patches/20-main.tex.result
+path: paper-runs/full-2026-11-21/patches/20-main.tex.patched.apply-report.json -> run/patches/20-main.tex.result.log.json
+text: run/patches/20-main.tex.result.log.json: 1 x /\.patched\b/ -> '.result'
+text: run/patches/20-main.tex.result.log.json: 242 x /ars_[a-z_]+/ -> 'field'
+text: run/patches/20-main.tex.result.log.json: 248 x /\bD([0-9]+)-([0-9]+)\b/ -> 'RI\\1.\\2'
+path: paper-runs/full-2026-11-21/patches/26-main.tex.block-manifest.json -> run/patches/26-main.tex.blocks.json
+text: run/patches/26-main.tex.blocks.json: 1 x /ars_[a-z_]+/ -> 'field'
+path: paper-runs/full-2026-11-21/patches/26-main.tex.patch.json -> run/patches/26-main.tex.edits.json
+path: paper-runs/full-2026-11-21/patches/26-main.tex.patched -> run/patches/26-main.tex.result
+path: paper-runs/full-2026-11-21/patches/26-main.tex.patched.apply-report.json -> run/patches/26-main.tex.result.log.json
+text: run/patches/26-main.tex.result.log.json: 1 x /\.patched\b/ -> '.result'
+text: run/patches/26-main.tex.result.log.json: 26 x /ars_[a-z_]+/ -> 'field'
+path: paper-runs/full-2026-11-21/patches/29-main.tex.block-manifest.json -> run/patches/29-main.tex.blocks.json
+text: run/patches/29-main.tex.blocks.json: 1 x /ars_[a-z_]+/ -> 'field'
+path: paper-runs/full-2026-11-21/patches/29-main.tex.patch.json -> run/patches/29-main.tex.edits.json
+text: run/patches/29-main.tex.edits.json: 1 x /the agents of the paper skill/ -> 'AI agents'
+text: run/patches/29-main.tex.edits.json: 1 x /the paper skill/ -> 'the writing tool'
+path: paper-runs/full-2026-11-21/patches/29-main.tex.patched -> run/patches/29-main.tex.result
+text: run/patches/29-main.tex.result: 1 x /the agents of the paper skill/ -> 'AI agents'
+path: paper-runs/full-2026-11-21/patches/29-main.tex.patched.apply-report.json -> run/patches/29-main.tex.result.log.json
+text: run/patches/29-main.tex.result.log.json: 1 x /the paper skill/ -> 'the writing tool'
+text: run/patches/29-main.tex.result.log.json: 1 x /\.patched\b/ -> '.result'
+text: run/patches/29-main.tex.result.log.json: 2 x /ars_[a-z_]+/ -> 'field'
+path: paper-runs/full-2026-11-21/patches/30-refs.bib.block-manifest.json -> run/patches/30-refs.bib.blocks.json
+text: run/patches/30-refs.bib.blocks.json: 1 x /ars_[a-z_]+/ -> 'field'
+path: paper-runs/full-2026-11-21/patches/30-refs.bib.patch.json -> run/patches/30-refs.bib.edits.json
+text: run/patches/30-refs.bib.edits.json: 8 x /lookup\.py/ -> 'the lookup script'
+path: paper-runs/full-2026-11-21/patches/30-refs.bib.patched -> run/patches/30-refs.bib.result
+path: paper-runs/full-2026-11-21/patches/30-refs.bib.patched.apply-report.json -> run/patches/30-refs.bib.result.log.json
+text: run/patches/30-refs.bib.result.log.json: 8 x /lookup\.py/ -> 'the lookup script'
+text: run/patches/30-refs.bib.result.log.json: 1 x /\.patched\b/ -> '.result'
+text: run/patches/30-refs.bib.result.log.json: 20 x /ars_[a-z_]+/ -> 'field'
+path: paper-runs/full-2026-11-21/patches/31-main.tex.block-manifest.json -> run/patches/31-main.tex.blocks.json
+text: run/patches/31-main.tex.blocks.json: 1 x /ars_[a-z_]+/ -> 'field'
+path: paper-runs/full-2026-11-21/patches/31-main.tex.patch.json -> run/patches/31-main.tex.edits.json
+text: run/patches/31-main.tex.edits.json: 102 x /\bF([0-9]+)\b(?!\s+(?:of\s+[0-9]|score|than|was|among|=|[0-9]))(?<!Macro F1)(?<!average F1)(?<!an F1)(?<!detection F1)(?<!level F1)(?<!component F1)(?<!graph F1)/ -> 'K\\1'
+path: paper-runs/full-2026-11-21/patches/31-main.tex.patched -> run/patches/31-main.tex.result
+path: paper-runs/full-2026-11-21/patches/31-main.tex.patched.apply-report.json -> run/patches/31-main.tex.result.log.json
+text: run/patches/31-main.tex.result.log.json: 1 x /\.patched\b/ -> '.result'
+text: run/patches/31-main.tex.result.log.json: 102 x /ars_[a-z_]+/ -> 'field'
+text: run/patches/31-main.tex.result.log.json: 148 x /\bF([0-9]+)\b(?!\s+(?:of\s+[0-9]|score|than|was|among|=|[0-9]))(?<!Macro F1)(?<!average F1)(?<!an F1)(?<!detection F1)(?<!level F1)(?<!component F1)(?<!graph F1)/ -> 'K\\1'
+path: paper-runs/full-2026-11-21/patches/32-main.tex.block-manifest.json -> run/patches/32-main.tex.blocks.json
+text: run/patches/32-main.tex.blocks.json: 1 x /ars_[a-z_]+/ -> 'field'
+path: paper-runs/full-2026-11-21/patches/32-main.tex.patch.json -> run/patches/32-main.tex.edits.json
+path: paper-runs/full-2026-11-21/patches/32-main.tex.patched -> run/patches/32-main.tex.result
+path: paper-runs/full-2026-11-21/patches/32-main.tex.patched.apply-report.json -> run/patches/32-main.tex.result.log.json
+text: run/patches/32-main.tex.result.log.json: 1 x /\.patched\b/ -> '.result'
+text: run/patches/32-main.tex.result.log.json: 2 x /ars_[a-z_]+/ -> 'field'
+path: paper-runs/full-2026-11-21/patches/34-main.tex.block-manifest.json -> run/patches/34-main.tex.blocks.json
+text: run/patches/34-main.tex.blocks.json: 1 x /ars_[a-z_]+/ -> 'field'
+path: paper-runs/full-2026-11-21/patches/34-main.tex.patch.json -> run/patches/34-main.tex.edits.json
+path: paper-runs/full-2026-11-21/patches/34-main.tex.patched -> run/patches/34-main.tex.result
+path: paper-runs/full-2026-11-21/patches/34-main.tex.patched.apply-report.json -> run/patches/34-main.tex.result.log.json
+text: run/patches/34-main.tex.result.log.json: 1 x /\.patched\b/ -> '.result'
+text: run/patches/34-main.tex.result.log.json: 6 x /ars_[a-z_]+/ -> 'field'
+path: paper-runs/full-2026-11-21/patches/37-main.tex.block-manifest.json -> run/patches/37-main.tex.blocks.json
+text: run/patches/37-main.tex.blocks.json: 1 x /ars_[a-z_]+/ -> 'field'
+path: paper-runs/full-2026-11-21/patches/37-main.tex.patch.json -> run/patches/37-main.tex.edits.json
+path: paper-runs/full-2026-11-21/patches/37-main.tex.patched -> run/patches/37-main.tex.result
+path: paper-runs/full-2026-11-21/patches/37-main.tex.patched.apply-report.json -> run/patches/37-main.tex.result.log.json
+text: run/patches/37-main.tex.result.log.json: 1 x /\.patched\b/ -> '.result'
+text: run/patches/37-main.tex.result.log.json: 2 x /ars_[a-z_]+/ -> 'field'
+path: paper-runs/full-2026-11-21/patches/40-main.tex.block-manifest.json -> run/patches/40-main.tex.blocks.json
+text: run/patches/40-main.tex.blocks.json: 1 x /ars_[a-z_]+/ -> 'field'
+path: paper-runs/full-2026-11-21/patches/40-main.tex.patch.json -> run/patches/40-main.tex.edits.json
+path: paper-runs/full-2026-11-21/patches/40-main.tex.patched -> run/patches/40-main.tex.result
+path: paper-runs/full-2026-11-21/patches/40-main.tex.patched.apply-report.json -> run/patches/40-main.tex.result.log.json
+text: run/patches/40-main.tex.result.log.json: 1 x /\.patched\b/ -> '.result'
+text: run/patches/40-main.tex.result.log.json: 2 x /ars_[a-z_]+/ -> 'field'
+path: paper-runs/full-2026-11-21/patches/43-main.tex.block-manifest.json -> run/patches/43-main.tex.blocks.json
+text: run/patches/43-main.tex.blocks.json: 1 x /ars_[a-z_]+/ -> 'field'
+path: paper-runs/full-2026-11-21/patches/43-main.tex.patch.json -> run/patches/43-main.tex.edits.json
+path: paper-runs/full-2026-11-21/patches/43-main.tex.patched -> run/patches/43-main.tex.result
+path: paper-runs/full-2026-11-21/patches/43-main.tex.patched.apply-report.json -> run/patches/43-main.tex.result.log.json
+text: run/patches/43-main.tex.result.log.json: 1 x /\.patched\b/ -> '.result'
+text: run/patches/43-main.tex.result.log.json: 6 x /ars_[a-z_]+/ -> 'field'
+path: paper-runs/full-2026-11-21/figures/fig1_pipeline_overview.png -> run/figures/fig1_pipeline_overview.png
+binary kept whole: run/figures/fig1_pipeline_overview.png
+path: paper-runs/full-2026-11-21/figures/fig2_bttn_interpret.png -> run/figures/fig2_bttn_interpret.png
+binary kept whole: run/figures/fig2_bttn_interpret.png
+path: paper-runs/full-2026-11-21/figures/fig3_beat_saliency.png -> run/figures/fig3_beat_saliency.png
+binary kept whole: run/figures/fig3_beat_saliency.png
+path: paper-runs/full-2026-11-21/figures/fig4_clin_eval.png -> run/figures/fig4_clin_eval.png
+binary kept whole: run/figures/fig4_clin_eval.png

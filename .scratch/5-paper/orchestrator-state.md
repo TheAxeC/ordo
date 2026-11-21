@@ -22,8 +22,8 @@ standards: [docs/dev/skill-layout.md, skills/repo-setup/templates/docs/dev/prose
 worktree_root: .agents/worktrees # where a step's worktree is created, relative to the repository root; gitignored.
 worktree_paths: []           # sparse-checkout paths for a step's worktree; empty means the whole tree.
 executor: agent              # the plan's default: a builder is dispatched in the step's worktree for every step not marked orchestrator.
-worker: claude:opus          # from .agents/plan.yaml.
-reviewer: claude:opus        # the model the first run of /refute, the brief check, the diagnosis agent, the lookups of /grill, the review agents of /writing and, the agents of /code-comments run on.
+worker: claude:fable         # from .agents/plan.yaml.
+reviewer: claude:fable       # the model the first run of /refute, the brief check, the diagnosis agent, the lookups of /grill, the review agents of /writing and, the agents of /code-comments run on.
 libraries: avoid             # from .agents/plan.yaml: no new dependency.
 review: every                # every step is refuted.
 refute_after_repair: yes     # /refute runs again over each repair round.
@@ -34,8 +34,8 @@ bench: []                    # no A/B.
 adr: docs/adr                # the ADR folder: grill writes the decision records into it, /plan, /spec and /refute read them.
 design_bar: industry         # what grill's options are held to: industry, state-of-the-art or novel.
 design_references: []        # the published standards a design is held to, such as WCAG 2.2 AA.
-worker_effort: medium        # the effort a builder runs at: low, medium, high, xhigh or max.
-reviewer_effort: high        # the effort a reviewer, a brief-check agent and a lookup agent of /grill run at: low, medium, high, xhigh or max.
+worker_effort: low           # the effort a builder runs at: low, medium, high, xhigh or max.
+reviewer_effort: low         # the effort a reviewer, a brief-check agent and a lookup agent of /grill run at: low, medium, high, xhigh or max.
 self_rule: on                # the plan runs under self-rule.
 next_entry: on               # copied from .agents/plan.yaml; after the closing, next-entry mode reads .agents/plan.yaml itself.
 repair_reviewer: claude:sonnet  # the model the run of /refute over a repair round runs on, at reviewer_effort.

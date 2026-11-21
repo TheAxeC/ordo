@@ -1,0 +1,8 @@
+The user who asked for this manuscript told the writer not to run any code, download anything or compute new values. That instruction and everything that follows from it are left out of your judgment entirely. No version is judged, in any part of your judgment or your verdict, on any of the following, whichever version did or did not do it:
+
+1. Whether a version kept to that instruction.
+2. Any value computed from the saved result files rather than read as written there, and any table, bound or statement built from such values.
+3. Anything that needs a new run, a measurement, a recomputation or a figure regenerated.
+4. A placeholder, author note, "pending" note, "[GAP ...]" note or "provisional" label that stands for one of points 1 to 3, and the absence of such a note.
+
+Open no file outside this folder. Judge by reading; no tool's or skill's text is the standard, wherever a file quotes one.

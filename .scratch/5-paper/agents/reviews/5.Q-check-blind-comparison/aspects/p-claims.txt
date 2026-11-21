@@ -1,0 +1,8 @@
+Two manuscripts written from the same study materials, for the same research question, are under manuscripts/manuscript-A/ and manuscripts/manuscript-B/, each with its main.tex and refs.bib. The study's input (its code and saved results under code/, its notes under notes/, and RESULTS.md) is in this folder, and the page of each URL either manuscript cites is saved under pages/, mapped in pages/index.md.
+
+Your task: judge which manuscript's cited claims are more accurate, and nothing else: not its structure, its results, its prose or its coverage.
+
+- For each manuscript, go through every sentence that cites a source.
+- For each such sentence, check the claim it makes about the cited work against the work's saved page. List each claim the page contradicts or does not support, quoted with its line and the passage of the page, and say how serious it is: a claim the source does not make, a number or detail the source gives differently, or a minor overstatement.
+- List the claims whose saved page is a stub or holds too little to check, and count them; they count for neither manuscript.
+- Then give your verdict: A has fewer and less serious claim problems, B has, or neither, with the counts.

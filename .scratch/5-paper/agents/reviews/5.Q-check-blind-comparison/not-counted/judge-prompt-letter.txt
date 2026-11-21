@@ -1,0 +1,15 @@
+A user asked for this manuscript to be revised for these referee comments, and for the letter that answers the referees. The user told both sides not to run any code, so new results the comments ask for could not be produced.
+
+The input is in this folder: the manuscript as submitted under manuscript/, the referee comments in admin/reviews/reviewer-comments.md, and the study's code and saved results under code/. The authors' public code repository is under sources/ecg-representation-clustering/.
+
+Two outputs answer that request. They are under outputs/output-A/ and outputs/output-B/. Each holds a response letter to the referees (response-letter.md), the revised manuscript that letter describes (manuscript/), and the diff of manuscript/ against the input (manuscript.diff).
+
+Your task is to judge which response letter better serves this request.
+
+- Judge each letter by what the input and its user need: a letter the authors can send with their resubmission, which answers every referee point, says for each point what was changed and where in the revised manuscript, or why it was not changed, and says nothing about the revised manuscript that the revised manuscript does not bear out.
+- Read each letter against the referee comments and against the revised manuscript it describes.
+- No tool's or skill's text is the standard, wherever the input or an output quotes one.
+- Read each letter whole before you judge it.
+- Before you state any preference, list each letter's critical failures, each quoted with its place (file and line, or section).
+- Open no file outside this folder.
+- Then give your verdict: A, B or a tie, with reasons that point at the failures or passages you listed.

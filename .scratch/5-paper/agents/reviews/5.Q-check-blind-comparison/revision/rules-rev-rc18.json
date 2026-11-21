@@ -1,0 +1,322 @@
+{
+ "paths": [
+  [
+   "paper-runs/revision-2026-11-21/",
+   "run/"
+  ],
+  [
+   "admin/reviews/revision-round1/",
+   "admin/reviews/run/"
+  ],
+  [
+   ".patched.apply-report.json",
+   ".result.log.json"
+  ],
+  [
+   ".block-manifest.json",
+   ".blocks.json"
+  ],
+  [
+   ".patch.json",
+   ".edits.json"
+  ],
+  [
+   ".patched",
+   ".result"
+  ],
+  [
+   "config.md",
+   "settings.md"
+  ],
+  [
+   "items.md",
+   "issues.md"
+  ],
+  [
+   "checks.md",
+   "check-log.md"
+  ],
+  [
+   "writing-report.md",
+   "prose-report.md"
+  ],
+  [
+   "findings-pass.md",
+   "prose-pass.md"
+  ]
+ ],
+ "text": [
+  [
+   "ran on `ordo-medium`, each served `claude-opus-5-5`",
+   "ran on the same model"
+  ],
+  [
+   "on `ordo-medium`, each served `claude-opus-5-5`",
+   "on the same model"
+  ],
+  [
+   "as the skill gives it",
+   "as the procedure gives it"
+  ],
+  [
+   "(?m)^# /paper revision: ",
+   "# Revision: "
+  ],
+  [
+   "`?apply_tex_patch\\.py`?",
+   "the patch script"
+  ],
+  [
+   "`?anchorize_tex\\.py`?",
+   "the anchoring script"
+  ],
+  [
+   " invoked through the Skill tool",
+   " run"
+  ],
+  [
+   "The `writing` skill",
+   "The prose review"
+  ],
+  [
+   "the `writing` skill",
+   "the prose review"
+  ],
+  [
+   "the skill requires",
+   "the procedure requires"
+  ],
+  [
+   "the skill's",
+   "the procedure's"
+  ],
+  [
+   "The skill's",
+   "The procedure's"
+  ],
+  [
+   "The skill's revision mode needs",
+   "The revision procedure needs"
+  ],
+  [
+   "(?m)^# The academic-paper side: the last message of (turn [12]), as it printed it",
+   "# The last message of \\1, as it printed it"
+  ],
+  [
+   "~/\\.claude/projects/[^`\\s]*",
+   "<the session's tool folder>"
+  ],
+  [
+   "python3 '/Users/axelfaes/\\.claude/skills/paper/templates/lookup\\.py'",
+   "lookup"
+  ],
+  [
+   "/private/tmp/claude-502/[^\\s'\"`]*?/gate5q/revision-rc18",
+   "/work"
+  ],
+  [
+   "`/Users/axelfaes/\\.claude/skills/repo-setup/templates/docs/dev/prose-standard\\.md` \\(the repository has no `docs/dev/prose-standard\\.md` and `standards` is empty\\), with `/Users/axelfaes/\\.claude/skills/writing/references/manuscript-prose-standard\\.md`",
+   "the default prose standard, with the manuscript prose standard"
+  ],
+  [
+   "Effort agent: `ordo-high`\\.",
+   "Agent effort: high."
+  ],
+  [
+   "The skill's own machinery runs: `anchorize_tex\\.py` and `apply_tex_patch\\.py` apply the patches, `lookup\\.py` checks",
+   "The run's own tools run: its anchoring script and its patch script apply the patches, its lookup script checks"
+  ],
+  [
+   "which cannot be found or checked without `lookup\\.py`",
+   "which cannot be found or checked without the lookup script"
+  ],
+  [
+   "the output of `prose_facts\\.py`",
+   "the output of the prose-facts script"
+  ],
+  [
+   "one deviation from the `writing` skill",
+   "one deviation from the prose review's procedure"
+  ],
+  [
+   "The skill has the session paste",
+   "The procedure has the session paste"
+  ],
+  [
+   "the content each agent receives is the one the skill specifies",
+   "the content each agent receives is the one the procedure specifies"
+  ],
+  [
+   "The review ran as the `writing` skill specifies",
+   "The review ran as the prose review's procedure specifies"
+  ],
+  [
+   "The review ran through the `writing` skill's four agents",
+   "The review ran through the prose review's four agents"
+  ],
+  [
+   "It differed from the skill in two ways",
+   "It differed from the procedure in two ways"
+  ],
+  [
+   "The response letter is the `rebuttal` skill's work and is not written by this run",
+   "The response letter is separate work and is not written by this run"
+  ],
+  [
+   "That is the `rebuttal` skill's work\\.",
+   "That is separate work."
+  ],
+  [
+   "python3 lookup\\.py",
+   "lookup"
+  ],
+  [
+   "`lookup\\.py ",
+   "`lookup "
+  ],
+  [
+   "lookup\\.py",
+   "the lookup script"
+  ],
+  [
+   "`/writing` review",
+   "prose review"
+  ],
+  [
+   "/writing\\b",
+   "prose review"
+  ],
+  [
+   "`scripts/ars_anchorize_draft\\.py` and `scripts/ars_apply_revision_patch\\.py`",
+   "its anchoring script and its patch script"
+  ],
+  [
+   "`\\.claude/skills/academic-paper/agents/peer_reviewer_agent\\.md`",
+   "the peer reviewer's instructions"
+  ],
+  [
+   "`\\.claude/skills/academic-paper/references/writing_quality_check\\.md`",
+   "the writing-quality checklist"
+  ],
+  [
+   "Mode: `academic-paper` revision, ",
+   "Mode: revision, "
+  ],
+  [
+   "`?draft_writer_agent`?",
+   "draft writer"
+  ],
+  [
+   "`?peer_reviewer_agent`?",
+   "peer reviewer"
+  ],
+  [
+   "`?citation_compliance_agent`?",
+   "citation checker"
+  ],
+  [
+   "in the revision-2 working directory",
+   "in the working directory"
+  ],
+  [
+   "admin/reviews/revision-round1/",
+   "admin/reviews/run/"
+  ],
+  [
+   "paper-runs/revision-2026-11-21/",
+   "run/"
+  ],
+  [
+   "paper-runs/",
+   "run/"
+  ],
+  [
+   "revision-2026-11-21/",
+   "run/"
+  ],
+  [
+   "\"ars_before\"",
+   "\"before\""
+  ],
+  [
+   "\"ars_after\"",
+   "\"after\""
+  ],
+  [
+   "\"ars_in_blocks\"",
+   "\"in_blocks\""
+  ],
+  [
+   "ars_[a-z_]+",
+   "field"
+  ],
+  [
+   "\\.patched\\.apply-report\\.json",
+   ".result.log.json"
+  ],
+  [
+   "\\.block-manifest\\.json",
+   ".blocks.json"
+  ],
+  [
+   "\\.patch\\.json",
+   ".edits.json"
+  ],
+  [
+   "\\.patched\\b",
+   ".result"
+  ],
+  [
+   "apply-report",
+   "result log"
+  ],
+  [
+   "block-manifest",
+   "block list"
+  ],
+  [
+   "\\b[Cc]onfig\\.md",
+   "settings.md"
+  ],
+  [
+   "\\bitems\\.md",
+   "issues.md"
+  ],
+  [
+   "\\bchecks\\.md",
+   "check-log.md"
+  ],
+  [
+   "literature strategist",
+   "search agent"
+  ],
+  [
+   "strategist",
+   "search agent"
+  ],
+  [
+   "In the skill's order:",
+   "In the procedure's order:"
+  ],
+  [
+   "the skill's revision mode",
+   "the revision procedure"
+  ],
+  [
+   "The skill itself forbids this\\.",
+   "The procedure itself forbids this."
+  ],
+  [
+   "the skill has no such agent",
+   "the procedure has no such agent"
+  ],
+  [
+   "The first step of the skill's",
+   "The first step of the"
+  ],
+  [
+   "\\bF([0-9]+)\\b(?!\\s+(?:of\\s+[0-9]|score|than|was|among|=|[0-9]))(?<!Macro F1)(?<!average F1)(?<!an F1)(?<!detection F1)(?<!level F1)(?<!component F1)(?<!graph F1)",
+   "K\\1"
+  ]
+ ]
+}
