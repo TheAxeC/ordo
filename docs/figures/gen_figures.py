@@ -11,17 +11,24 @@ Writes, beside this file:
   paper/abstract-only.svg, paper/citation-check.svg, paper/disclosure.svg, paper/plan.svg,
   paper/format-convert.svg, paper/revision-coach.svg, paper/rebuttal-audit.svg,
   paper/response-letter.svg: one figure per mode of the paper skill.
+- paper/lifecycle.svg: the stages of a manuscript, each with example requests and the mode of
+  the paper skill each request runs.
+- paper/run-folder.svg: the files a run of the paper skill leaves, each with the modes that
+  write it.
 
-Every figure shows the order of the run. An agent start is a box, solid when it always runs and
-dashed when it runs only when needed. A stop that waits on the user is an orange box. A cycle is a
-dotted arrow with its cap, and a check an agent repeats inside one start is a dotted loop on that
-agent with its cap. Scripts and the session's own steps are left out, except where a paper figure
-draws them: a script the session runs is a grey box, and a step where the session reads and
-judges is a rounded box, each with its legend line.
+Every figure but the last two shows the order of a run. A box is an agent start or a task of a
+resumed agent, solid when it always runs and dashed when it runs only when needed. A stop that
+waits on the user is an orange box. A cycle is a dotted arrow with its cap, and a check an agent
+repeats inside one start is a dotted loop on that agent with its cap. Scripts and the session's
+own steps are left out, except where a paper figure draws them: a script the session runs is a
+grey box, and a step where the session reads and judges is a rounded box, each with its legend
+line. paper/lifecycle.svg and paper/run-folder.svg draw no run: their boxes are requests, modes
+and files, as their own legends say.
 
 Every box, arrow and label is written in this file, taken from each skill's SKILL.md and Stops
-table; the script reads no skill file and no other input. A change to a Stops table, to a skill's
-agents, its cycles or its name is made in the labels below, and the script is run again.
+table, and for paper/lifecycle.svg also from the paper skill's mode selection guide; the script
+reads no skill file and no other input. A change to a Stops table, to a skill's agents, its
+cycles or its name is made in the labels below, and the script is run again.
 
 This file is also the layout code of gen_comparison.py, which imports it from its own folder's
 parent.
@@ -149,6 +156,8 @@ STYLES = {
     "pipe": Style(SCRIPT_FILL, EDGE, "", INK, 1.5, False),
     "dr": Style("#f6eedc", "#a16207", "", "#422006", 1.5, False),
     "paper": Style("#dff3f1", "#0f766e", "", "#134e4a", 1.5, False),
+    "request": Style(PANEL, EDGE, "", MUTED, 1, True),
+    "nomode": Style(PANEL, EDGE, DASHED, MUTED, 1.5, False),
 }
 
 
@@ -941,8 +950,11 @@ class Legend(NamedTuple):
 
 
 SIMPLE_LEGEND = (
-    Legend("agent", "Solid box: an agent start that always runs"),
-    Legend("maybe", "Dashed box: an agent start that runs only when needed"),
+    Legend("agent", "Solid box: an agent start, or a task of a resumed agent, that always runs"),
+    Legend(
+        "maybe",
+        "Dashed box: an agent start, or a task of a resumed agent, that runs only when needed",
+    ),
     Legend("stop", "Orange box: the run stops for you"),
     Legend("dotted", "Dotted arrow: a cycle, with its cap"),
     Legend(
@@ -1076,9 +1088,9 @@ class Lane:
     caption: str
     nodes: tuple[Node, ...]
     columns: int = 1
+    node_width: float = 196
 
 
-LANE_NODE_WIDTH = 196
 LANE_PAD = 10
 LANE_HEAD = 26
 LANE_GAP = 26
@@ -1090,7 +1102,7 @@ class _LaneBox(NamedTuple):
 
 
 def _lane_box(figure: str, lane: Lane, x: float, y: float) -> _LaneBox:
-    width = lane.columns * LANE_NODE_WIDTH + (lane.columns + 1) * LANE_PAD
+    width = _lane_width(lane)
     cells = []
     cursor = y + LANE_HEAD
     for start in range(0, len(lane.nodes), lane.columns):
@@ -1100,7 +1112,7 @@ def _lane_box(figure: str, lane: Lane, x: float, y: float) -> _LaneBox:
                 figure,
                 f"box {node.key!r}",
                 node.label,
-                LANE_NODE_WIDTH - 2 * PAD_X,
+                lane.node_width - 2 * PAD_X,
                 NODE_SIZE,
             )
             for node in row
@@ -1113,15 +1125,15 @@ def _lane_box(figure: str, lane: Lane, x: float, y: float) -> _LaneBox:
                 )
         height = max(_node_height(wrapped) for wrapped in lines)
         for column, (node, wrapped) in enumerate(zip(row, lines, strict=True)):
-            left = x + LANE_PAD + column * (LANE_NODE_WIDTH + LANE_PAD)
-            cells.append((Rect(left, cursor, LANE_NODE_WIDTH, height), node, wrapped))
+            left = x + LANE_PAD + column * (lane.node_width + LANE_PAD)
+            cells.append((Rect(left, cursor, lane.node_width, height), node, wrapped))
         cursor += height + LANE_PAD
     frame = Rect(x, y, width, cursor - y)
     return _LaneBox(frame, cells)
 
 
 def _lane_width(lane: Lane) -> float:
-    return lane.columns * LANE_NODE_WIDTH + (lane.columns + 1) * LANE_PAD
+    return lane.columns * lane.node_width + (lane.columns + 1) * LANE_PAD
 
 
 def _lane_height(figure: str, lane: Lane) -> float:
@@ -1252,8 +1264,11 @@ STOPS_NOT_DRAWN = (
 
 MODE_STOP = Node("MS", "The mode to run, for a plain request that fits two modes", "stop")
 CLAIM_NOT_HELD = "the check stops at the first claim not held, and the stop is raised once the agent has ended"
+CLAIM_CHECK = "Citation compliance: each claim against its source's full text, unless you said no"
 STYLE_STOP = "The citation style to confirm"
-STYLE_EDGE = "a systematic format error"
+STYLE_EDGE = "more than half the cited entries in another style than the Citation Format row"
+STYLE_BACK = "your answer: resumed for the format work only"
+RESULTS_FIX = "Draft writer, resumed: the statements the result files do not bear out, as a patch"
 REFERENCE_STOP = "A reference that cannot be confirmed, only under strict"
 
 
@@ -1327,12 +1342,17 @@ def paper_full_graph() -> Graph:
         Node("W", "Draft writer, 2 calls: main.tex"),
         Node("GA", "A generator phase aborted", "stop"),
         Node("V", "Visualization, with data: the figures placed by patch", "maybe"),
-        Node("C", "Citation compliance: each claim against its source's full text"),
+        Node("C", CLAIM_CHECK),
         Node("SS", STYLE_STOP, "stop"),
         Node("AB", "Abstract agent: a patch"),
         Node("P", "Peer reviewer, 2 calls"),
-        Node("WR", "Draft writer: the whole draft again, as one patch"),
-        Node("IC", "Citation compliance: the cited sentences of the patch"),
+        Node("RF", RESULTS_FIX, "maybe"),
+        Node("WR", "Draft writer, resumed: the whole draft again, as one patch"),
+        Node(
+            "IC",
+            "Citation compliance, resumed: the cited sentences of the patch, unless you said no",
+            "maybe",
+        ),
         Node("SD", "The draft review does not pass", "stop"),
         Node("SC", "A claim the run cannot support", "stop"),
         Node("SR", REFERENCE_STOP, "stop"),
@@ -1353,9 +1373,11 @@ def paper_full_graph() -> Graph:
         Edge("W", "C"),
         Edge("W", "AB"),
         Edge("C", "SS", STYLE_EDGE),
-        Edge("SS", "C", "a fresh start, once", "back"),
+        Edge("SS", "C", STYLE_BACK, "back"),
         Edge("C", "SC", CLAIM_NOT_HELD),
         Edge("C", "SR", "under strict, a DOI or arXiv ID provably fails lookup"),
+        Edge("C", "RF"),
+        Edge("RF", "P"),
         Edge("C", "P"),
         Edge("AB", "P"),
         Edge("V", "P"),
@@ -1377,15 +1399,15 @@ def paper_revision_graph() -> Graph:
     nodes = (
         Node("P", "Peer reviewer: the comments as a roadmap"),
         Node("W", "Draft writer: a patch per item"),
-        Node("C", "Citation compliance: each claim against its source's full text"),
+        Node("C", CLAIM_CHECK),
         Node("SS", STYLE_STOP, "stop"),
         Node("SC", "A claim the run cannot support", "stop"),
         Node("SR", REFERENCE_STOP, "stop"),
-        Node("R2", "Peer reviewer: the re-review"),
-        Node("W2", "Draft writer: the items not resolved", "maybe"),
+        Node("RF", RESULTS_FIX, "maybe"),
+        Node("R2", "Peer reviewer, resumed: the re-review"),
         Node("CF", PATCHED, "script"),
-        Node("RL", "Draft writer: the response letter, for referee comments", "maybe"),
-        Node("RC", "Peer reviewer: the letter checked, a verdict per point", "maybe"),
+        Node("RL", "Draft writer, resumed: the response letter, for referee comments", "maybe"),
+        Node("RC", "Peer reviewer, resumed: the letter checked, a verdict per point", "maybe"),
         Node("WG", WRITING, "maybe"),
         Node("X", "Revised draft, the rest as limitations"),
     )
@@ -1393,13 +1415,13 @@ def paper_revision_graph() -> Graph:
         Edge("P", "W"),
         Edge("W", "C"),
         Edge("C", "SS", STYLE_EDGE),
-        Edge("SS", "C", "a fresh start, once", "back"),
+        Edge("SS", "C", STYLE_BACK, "back"),
         Edge("C", "SC", CLAIM_NOT_HELD),
         Edge("C", "SR", "under strict, a DOI or arXiv ID provably fails lookup"),
+        Edge("C", "RF"),
+        Edge("RF", "R2"),
         Edge("C", "R2", "round 2, once"),
-        Edge("R2", "W2"),
-        Edge("W2", "CF"),
-        Edge("R2", "CF"),
+        Edge("R2", "CF", "the items not resolved become limitations"),
         Edge("CF", "SR", "a failure left after the reference fix"),
         Edge("CF", "RL"),
         Edge("RL", "RC"),
@@ -1477,7 +1499,8 @@ def paper_citation_check_graph() -> Graph:
         Node("C", "Citation compliance: each claim against its source's full text"),
         Node(
             "SS",
-            "The citation style to confirm, when more than half the entries fail the same check",
+            "The citation style to confirm, when more than half the cited entries follow "
+            "another style than the Citation Format row",
             "stop",
         ),
         Node("SC", "A claim the run cannot support", "stop"),
@@ -1486,7 +1509,7 @@ def paper_citation_check_graph() -> Graph:
     )
     edges = (
         Edge("C", "SS"),
-        Edge("SS", "C", "a fresh start, once", "back"),
+        Edge("SS", "C", STYLE_BACK, "back"),
         Edge("C", "SC", CLAIM_NOT_HELD),
         Edge("C", "SR", "under strict, a DOI or arXiv ID provably fails lookup"),
         Edge("C", "X"),
@@ -1524,7 +1547,7 @@ def paper_plan_graph() -> Graph:
     edges = (
         Edge("I", "M"),
         Edge("M", "Q"),
-        Edge("Q", "M", "offers after 8 rounds on a chapter, 30 in all", "back"),
+        Edge("Q", "M", "offers after 8 rounds on a chapter, suggests outline-only past 15 in all", "back"),
         Edge("M", "S"),
         Edge("S", "M2"),
         Edge("M2", "X"),
@@ -1577,7 +1600,7 @@ def paper_rebuttal_audit_graph() -> Graph:
 def paper_response_letter_graph() -> Graph:
     nodes = (
         Node("W", "Draft writer: response-letter.md beside the manuscript"),
-        Node("P", "Peer reviewer, fresh: a verdict per point"),
+        Node("P", "Peer reviewer: a verdict per point"),
         Node("X", "The letter and its check"),
     )
     return _graph(nodes, (Edge("W", "P"), Edge("P", "X")))
@@ -1605,6 +1628,216 @@ def paper_figures() -> tuple[tuple[str, str], ...]:
         (f"paper/{mode}.svg", _paper(mode, mode, build()))
         for mode, build in PAPER_MODES
     )
+
+
+def _asks(*pairs: tuple[str, str]) -> tuple[Node, ...]:
+    """Boxes for a one-column lane: each request in plain words above the mode it runs."""
+    nodes = []
+    for index, (request, mode) in enumerate(pairs):
+        nodes.append(Node(f"q{index}", request, "request"))
+        nodes.append(Node(f"m{index}", mode))
+    return tuple(nodes)
+
+
+def _asks_across(*pairs: tuple[str, str]) -> tuple[Node, ...]:
+    """Boxes for a lane with one column per pair: the requests in a row above their modes."""
+    requests = tuple(
+        Node(f"q{index}", request, "request") for index, (request, _) in enumerate(pairs)
+    )
+    modes = tuple(Node(f"m{index}", mode) for index, (_, mode) in enumerate(pairs))
+    return requests + modes
+
+
+def _lanes_label(title: str, rows: Sequence[Row]) -> str:
+    """The text a lanes figure carries for a reader who cannot see it: each lane's boxes."""
+    lanes = [
+        f"{lane.caption}: " + "; ".join(node.label for node in lane.nodes)
+        for row in rows
+        for lane in row.lanes
+    ]
+    return f"{title}. " + " | ".join(lanes) + "."
+
+
+LIFECYCLE_LEGEND = (
+    Legend("request", "Rounded box: what you ask, in plain words"),
+    Legend("agent", "Solid box: the mode or the call of /paper that the request above it runs"),
+    Legend("nomode", "Dashed box: work the session does on request, with no mode behind it"),
+)
+
+
+def paper_lifecycle() -> str:
+    write = Lane(
+        "Write",
+        _asks(
+            ("Help me plan my paper", "/paper plan"),
+            ("Review the literature on a topic", "/paper lit-review"),
+            ("Outline a paper", "/paper outline-only"),
+            ("Write a paper", "/paper full"),
+        ),
+    )
+    submit = Lane(
+        "Submit",
+        _asks(
+            ("Write an abstract", "/paper abstract-only"),
+            (
+                "Convert my paper to DOCX, or the citations to another style",
+                "/paper format-convert",
+            ),
+            ("Write an AI disclosure statement", "/paper disclosure"),
+        ),
+    )
+    desk = Lane(
+        "Desk reject",
+        _asks(
+            ("Revise the manuscript on the editor's comments", "/paper revision"),
+            ("Format it for another journal", "/paper format-convert"),
+        ),
+    )
+    referee = Lane(
+        "Referee revision",
+        _asks(
+            ("Parse the reviewer comments", "/paper revision-coach"),
+            ("Revise the manuscript on the referee comments", "/paper revision"),
+            (
+                "Write the response letter for a revision already made",
+                "/paper response-letter",
+            ),
+            ("Audit my rebuttal", "/paper rebuttal-audit"),
+        ),
+    )
+    any_stage = Lane(
+        "Any stage",
+        _asks_across(
+            ("Check the citations", "/paper citation-check, a mode"),
+            ("Review my draft", "/paper draft-review, a call"),
+            ("Draw the figures", "/paper figures, a call"),
+        ),
+        columns=3,
+    )
+    internal = Lane(
+        "Internal documents",
+        _asks_across(
+            (
+                "A record of every attempt, for my own reference",
+                "/paper full, outline-only or abstract-only, with the intake row Internal "
+                "only set to yes",
+            ),
+            (
+                "An outline or a literature review to pass to my co-authors",
+                "/paper outline-only or /paper lit-review",
+            ),
+        ),
+        columns=2,
+    )
+    no_mode = Lane(
+        "No mode",
+        (
+            Node("a", "Write the highlights", "nomode"),
+            Node("b", "Describe a graphical abstract", "nomode"),
+        ),
+        columns=2,
+    )
+    rows = (
+        Row("THE STAGES OF A MANUSCRIPT, IN ORDER", (write, submit, desk, referee)),
+        Row("AT ANY STAGE", (any_stage,), arrows=False),
+        Row(
+            "INTERNAL DOCUMENTS, AND WORK WITH NO MODE BEHIND IT",
+            (internal, no_mode),
+            arrows=False,
+        ),
+    )
+    note = (
+        "A revision run on referee comments also writes the response letter and checks it. "
+        "The mode guide ties no mode to a desk reject: that column is a reading of each mode's use."
+    )
+    label = _lanes_label("The stages of a manuscript and the mode of the paper skill each request runs", rows)
+    return lanes_figure("paper/lifecycle.svg", label, rows, LIFECYCLE_LEGEND, note)
+
+
+RUN_FOLDER_LEGEND = (
+    Legend("agent", "Solid box: a file or a folder, and after the colon the modes and calls that write it"),
+    Legend("script", "Grey box: one of the four files each patch keeps"),
+)
+
+
+def _files(*pairs: tuple[str, str], kind: str = "agent") -> tuple[Node, ...]:
+    """A box per file: its name, and after a colon the modes that write it."""
+    return tuple(
+        Node(f"f{index}", f"{name}: {modes}", kind)
+        for index, (name, modes) in enumerate(pairs)
+    )
+
+
+def paper_run_folder() -> str:
+    records = Lane(
+        "paper-runs/<mode>-<date>/, beside the manuscript's folder",
+        _files(
+            ("config.md", "every mode and call"),
+            ("final.md", "every mode and call"),
+            ("checks.md", "full, revision, citation-check, draft-review, lit-review, format-convert"),
+            ("review.md", "full, outline-only, lit-review"),
+            ("refs.bib", "full, outline-only, lit-review"),
+            ("outline.md", "full, outline-only, plan"),
+            ("arguments.md", "full"),
+            ("intended-claims.md", "full"),
+            ("existing-main.tex", "full, the copy of a main.tex that stood there"),
+            ("draft-report.md", "full, with the trace table"),
+            ("figures/ and figures.md", "full, figures"),
+            ("citation-report.md", "full, revision, citation-check"),
+            ("citation-report-<nn>.md", "full, revision, one per incremental check"),
+            ("review-<r>.md", "full, one per round; review-2.md: revision; review-1.md: draft-review"),
+            ("items.md", "revision"),
+            ("revision-log.md", "revision"),
+            ("response-letter-check.md", "revision, response-letter"),
+            ("rebuttal-audit.md", "rebuttal-audit"),
+            ("disclosure.md", "disclosure"),
+            ("format-report.md", "full, lit-review, format-convert"),
+            ("dialogue.md, chapter-summaries.md, insights.md, chapter-plan.md", "plan"),
+            (
+                "The parsed comments, the roadmap, the tracking template, the letter skeleton",
+                "revision-coach",
+            ),
+            ("Each target of the conversion", "lit-review"),
+        ),
+        columns=4,
+    )
+    patches = Lane(
+        "patches/, in the run folder: the four files of each patch, named by its number",
+        _files(
+            ("<nn>-<file name>.block-manifest.json", "the manifest"),
+            ("<nn>-<file name>.patch.json", "the patch an agent writes"),
+            ("<nn>-<file name>.patched", "the patched file"),
+            ("<nn>-<file name>.patched.apply-report.json", "the apply report"),
+            kind="script",
+        ),
+        columns=2,
+        node_width=402,
+    )
+    manuscript = Lane(
+        "The manuscript's folder",
+        _files(
+            ("main.tex", "full"),
+            ("refs.bib", "full, when none stands there"),
+            ("figures/", "full, figures"),
+            ("response-letter.md", "revision, response-letter"),
+            ("cover-letter.tex", "format-convert, for a journal venue with none there"),
+            ("<main>.pdf", "full, revision, format-convert"),
+            ("<main>.docx and <main>.md", "full, format-convert"),
+            ("<name>.tex, refs.bib and figures/", "format-convert, from a .md or a .docx"),
+        ),
+        columns=4,
+    )
+    rows = (
+        Row("THE RECORDS OF A RUN, EACH WITH THE MODES THAT WRITE IT", (records,), arrows=False),
+        Row("THE PATCHES", (patches,), arrows=False),
+        Row("WRITTEN IN THE MANUSCRIPT'S FOLDER", (manuscript,), arrows=False),
+    )
+    note = (
+        "A lit-review run has no manuscript: its folder is paper-runs/lit-review-<date>/ in the "
+        "folder the session runs in. The run folder holds no compile folder."
+    )
+    label = _lanes_label("What a run of the paper skill leaves behind", rows)
+    return lanes_figure("paper/run-folder.svg", label, rows, RUN_FOLDER_LEGEND, note)
 
 
 def grill() -> str:
@@ -1889,6 +2122,8 @@ def figures() -> tuple[tuple[str, str], ...]:
         ("writing.svg", writing()),
         ("code-comments.svg", code_comments()),
         *paper_figures(),
+        ("paper/lifecycle.svg", paper_lifecycle()),
+        ("paper/run-folder.svg", paper_run_folder()),
     )
 
 

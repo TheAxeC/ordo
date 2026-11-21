@@ -1,6 +1,6 @@
 # 0029. A paper run checks the cited sentences of each later patch and reads the findings pass
 
-Status: proposed; superseded by 0036 in its sentence that ADR 0027's "No other agent receives a second message" stands; superseded by 0043 in the reading of the findings pass by a fresh peer reviewer and in the draft-review writer passes, now the draft writer's rewrite of each revision loop of full mode and revision's second writer pass, the incremental check of each later patch standing
+Status: proposed; superseded by 0036 in its sentence that ADR 0027's "No other agent receives a second message" stands; superseded by 0043 in the reading of the findings pass by a fresh peer reviewer; superseded by 0043 in the draft-review writer passes, now the draft writer's rewrite of each revision loop of full mode; superseded by 0043 in revision's second writer pass, which no longer runs; superseded by 0043 in its words "a fresh citation compliance agent" and "Each such start is a fresh agent", the check being made by the citation compliance agent of the first check, resumed; superseded by 0043 in that the check runs after each such patch, for a run whose Claim check or Incremental checks row is no; the incremental check of each later patch standing
 
 ## Context
 

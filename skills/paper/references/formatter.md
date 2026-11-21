@@ -106,7 +106,7 @@ When `config.md` **does** carry a `Format Profile` path, the profile is a schola
 
 ### Read it: fail closed BEFORE formatting
 
-Resolve the path and load the profile *before* producing any output. Do not half-format then discover the profile is broken. For each bad-path case, **STOP and ask the scholar to fix the profile** rather than rendering under an ambiguous contract:
+Resolve the path and load the profile *before* producing any output. Do not half-format then discover the profile is broken. For each bad-path case, **STOP: write no output for that target**, name the fault and what the scholar must fix in `format-report.md`, and ask no question during the run. Nothing is rendered under a profile that cannot be read, and the session names the fault in the final message:
 
 | Case | Behavior |
 |---|---|
@@ -318,7 +318,7 @@ For each cited key that joins a `version_family_id`, compare the rendered citati
 
 Surface `VERSION_INCONSISTENT_CITATION` in `provenance_summary.md` when these fields mix concrete versions. Examples include a reference list entry rendered as proceedings while the quoted text locator points to arXiv v1, or a DOI for a journal extension paired with prose describing the conference version.
 
-Do not auto-standardize the reference. Do not rewrite the manuscript during formatting. Report the inconsistency and ask the scholar to choose one of these remediation paths:
+Do not auto-standardize the reference. Do not rewrite the manuscript during formatting. Report the inconsistency and these remediation paths in `format-report.md`, for the scholar to choose from after the run; the session names them in the final message, and no question is asked during the run:
 
 - standardize the citation to the scholar-confirmed `primary_version_key`
 - explicitly cite the preprint / proceedings / journal extension being quoted
@@ -777,7 +777,7 @@ Each file the formatter changes gets two patches when the run does not change th
 | `format-convert-copy` | The files of the conversion copy alone, before `pandoc` runs. Never the manuscript. | The changes of "The conversion patch", and in a run that does not change the citation style also every change of the `format-convert` patch for a block. One op for a block. |
 
 - In a run that does not change the citation style, a block that both patches change has the same change of the first in both, so the copy that `pandoc` reads holds the placeholders and the required elements too.
-- In a run that changes the citation style, the first start writes the `format-convert` patch only. The second start writes the `format-convert-copy` patch against the copy as the first patch left it, so its ops hold only the changes of "The conversion patch", with the cite commands, the `.aux` and the `.bbl` of the new style.
+- In a run that changes the citation style, the first start writes the `format-convert` patch only. The formatter, resumed, writes the `format-convert-copy` patch against the copy as the first patch left it, so its ops hold only the changes of "The conversion patch", with the cite commands, the `.aux` and the `.bbl` of the new style.
 - The copy patch is written only when a DOCX or Markdown target stands.
 
 ### The output formats
@@ -834,7 +834,7 @@ The session converts to each target the user named. The formatter prepares the `
 - **Any other style.** The citations stay as they are, and the session runs `pandoc --citeproc`, with the CSL file in hand or in Chicago author-date.
 - **A `.md` or `.docx` given.** The reference list that the input held as text is removed once the `.tex` names the `.bib`. This change goes into the `format-convert` patch, since the `.tex` is a file the run made. In a run that does not change the citation style the copy patch holds it too, and in one that does the copy already holds it from the first patch.
 
-The numbers and the list come from the compile of the conversion copy before the formatter's start in a run that does not change the citation style. In a run that does change it, they come from the compile of the copy after the first patch, which the second start reads, so the citations and the list of the conversion patch are in the new style. A patch of a run that does not change the style but changes the class leaves the numbers as the compile of the copy printed them, and the report names the style of the list. A conversion copy that was not compiled has no numbers, and the report says that the cross-references and the numbered style were not made.
+The numbers and the list come from the compile of the conversion copy before the formatter's start in a run that does not change the citation style. In a run that does change it, they come from the compile of the copy after the first patch, which the formatter, resumed, reads, so the citations and the list of the conversion patch are in the new style. A patch of a run that does not change the style but changes the class leaves the numbers as the compile of the copy printed them, and the report names the style of the list. A conversion copy that was not compiled has no numbers, and the report says that the cross-references and the numbered style were not made.
 
 ### A `.md` or `.docx` given
 
@@ -856,4 +856,4 @@ The session made the `.tex` from the input. The `.tex` holds the reference list 
 - An entry that neither command gives is written from the reference text as the formatter reads it, and the report lists it under "Entries written from the reference text". No entry is dropped.
 - The `format-convert` patch gives each citation of the text a cite command with the entry's key, names the `.bib`, and removes the reference list held as text.
 - The patch changes no wording of the text.
-- The session compiles this `.tex` in the conversion copy before the patch, for its cross-reference numbers; its `.aux` holds no `\bibcite` line, since the `.tex` cites nothing yet. With no citation style among the targets its DOCX and Markdown outputs use `pandoc --citeproc`. With one, the run changes the citation style, the session compiles the copy after the first patch, and the second start reads the numbers or the author-year form from that compile.
+- The session compiles this `.tex` in the conversion copy before the patch, for its cross-reference numbers; its `.aux` holds no `\bibcite` line, since the `.tex` cites nothing yet. With no citation style among the targets its DOCX and Markdown outputs use `pandoc --citeproc`. With one, the run changes the citation style, the session compiles the copy after the first patch, and the formatter, resumed, reads the numbers or the author-year form from that compile.

@@ -1,31 +1,31 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 653.4 608" width="653.4" height="608" role="img" aria-label="The revision-coach mode of the paper skill. Boxes: Revision coach: the comments parsed (agent); You confirm the parsed comments (stop); Revision coach, resumed: roadmap, tracking template, letter skeleton (agent); The mode to run, for a plain request that fits two modes (stop).">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 686.4 608" width="686.4" height="608" role="img" aria-label="The revision-coach mode of the paper skill. Boxes: Revision coach: the comments parsed (agent); You confirm the parsed comments (stop); Revision coach, resumed: roadmap, tracking template, letter skeleton (agent); The mode to run, for a plain request that fits two modes (stop).">
 <title>The revision-coach mode of the paper skill. Boxes: Revision coach: the comments parsed (agent); You confirm the parsed comments (stop); Revision coach, resumed: roadmap, tracking template, letter skeleton (agent); The mode to run, for a plain request that fits two modes (stop).</title>
 <defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#4f46e5"/></marker></defs>
-<rect x="0" y="0" width="653.4" height="608" rx="10" fill="#f8fafc" stroke="#64748b"/>
-<path d="M320.9,102 L320.9,148" fill="none" stroke="#4f46e5" stroke-width="1.8" marker-end="url(#arrow)" stroke-linejoin="round"/>
-<path d="M320.9,194 L320.9,240" fill="none" stroke="#4f46e5" stroke-width="1.8" marker-end="url(#arrow)" stroke-linejoin="round"/>
-<path d="M346.9,148 L346.9,102" fill="none" stroke="#4f46e5" stroke-width="1.8" stroke-dasharray="2 4" marker-end="url(#arrow)" stroke-linejoin="round"/>
-<rect x="213.9" y="56" width="214" height="46" rx="8" fill="#ffffff" stroke="#64748b" stroke-width="1.5"/>
-<text x="320.9" y="75.4" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="middle">Revision coach: the comments</text>
-<text x="320.9" y="89.4" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="middle">parsed</text>
-<rect x="213.9" y="148" width="214" height="46" rx="8" fill="#fff1e6" stroke="#b45309" stroke-width="2"/>
-<text x="320.9" y="167.4" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#7c2d12" font-weight="400" text-anchor="middle">You confirm the parsed</text>
-<text x="320.9" y="181.4" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#7c2d12" font-weight="400" text-anchor="middle">comments</text>
-<rect x="213.9" y="240" width="214" height="60" rx="8" fill="#ffffff" stroke="#64748b" stroke-width="1.5"/>
-<text x="320.9" y="259.4" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="middle">Revision coach, resumed:</text>
-<text x="320.9" y="273.4" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="middle">roadmap, tracking template,</text>
-<text x="320.9" y="287.4" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="middle">letter skeleton</text>
-<rect x="213.9" y="340" width="214" height="46" rx="8" fill="#fff1e6" stroke="#b45309" stroke-width="2"/>
-<text x="320.9" y="359.4" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#7c2d12" font-weight="400" text-anchor="middle">The mode to run, for a plain</text>
-<text x="320.9" y="373.4" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#7c2d12" font-weight="400" text-anchor="middle">request that fits two modes</text>
-<text x="396.7" y="128.6" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="10.5" fill="#475569" font-weight="400" text-anchor="middle" stroke="#f8fafc" stroke-width="4" stroke-linejoin="round" paint-order="stroke">a correction</text>
-<text x="16" y="426" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#475569" font-weight="400" text-anchor="start">Not drawn, since they hold in every mode: at every patch, a structural patch, a patch that</text>
-<text x="16" y="441" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#475569" font-weight="400" text-anchor="start">does not apply or a failed script stops the run.</text>
+<rect x="0" y="0" width="686.4" height="608" rx="10" fill="#f8fafc" stroke="#64748b"/>
+<path d="M337.4,102 L337.4,148" fill="none" stroke="#4f46e5" stroke-width="1.8" marker-end="url(#arrow)" stroke-linejoin="round"/>
+<path d="M337.4,194 L337.4,240" fill="none" stroke="#4f46e5" stroke-width="1.8" marker-end="url(#arrow)" stroke-linejoin="round"/>
+<path d="M363.4,148 L363.4,102" fill="none" stroke="#4f46e5" stroke-width="1.8" stroke-dasharray="2 4" marker-end="url(#arrow)" stroke-linejoin="round"/>
+<rect x="230.4" y="56" width="214" height="46" rx="8" fill="#ffffff" stroke="#64748b" stroke-width="1.5"/>
+<text x="337.4" y="75.4" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="middle">Revision coach: the comments</text>
+<text x="337.4" y="89.4" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="middle">parsed</text>
+<rect x="230.4" y="148" width="214" height="46" rx="8" fill="#fff1e6" stroke="#b45309" stroke-width="2"/>
+<text x="337.4" y="167.4" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#7c2d12" font-weight="400" text-anchor="middle">You confirm the parsed</text>
+<text x="337.4" y="181.4" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#7c2d12" font-weight="400" text-anchor="middle">comments</text>
+<rect x="230.4" y="240" width="214" height="60" rx="8" fill="#ffffff" stroke="#64748b" stroke-width="1.5"/>
+<text x="337.4" y="259.4" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="middle">Revision coach, resumed:</text>
+<text x="337.4" y="273.4" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="middle">roadmap, tracking template,</text>
+<text x="337.4" y="287.4" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="middle">letter skeleton</text>
+<rect x="230.4" y="340" width="214" height="46" rx="8" fill="#fff1e6" stroke="#b45309" stroke-width="2"/>
+<text x="337.4" y="359.4" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#7c2d12" font-weight="400" text-anchor="middle">The mode to run, for a plain</text>
+<text x="337.4" y="373.4" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#7c2d12" font-weight="400" text-anchor="middle">request that fits two modes</text>
+<text x="413.2" y="128.6" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="10.5" fill="#475569" font-weight="400" text-anchor="middle" stroke="#f8fafc" stroke-width="4" stroke-linejoin="round" paint-order="stroke">a correction</text>
+<text x="16" y="426" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#475569" font-weight="400" text-anchor="start">Not drawn, since they hold in every mode: at every patch, a structural patch, a patch that does not</text>
+<text x="16" y="441" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#475569" font-weight="400" text-anchor="start">apply or a failed script stops the run.</text>
 <text x="16" y="478" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="10" fill="#475569" font-weight="700" text-anchor="start">HOW TO READ THE FIGURE</text>
 <rect x="16" y="492" width="28" height="14" rx="4" fill="#ffffff" stroke="#64748b" stroke-width="1.5"/>
-<text x="56" y="503" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#0f172a" font-weight="400" text-anchor="start">Solid box: an agent start that always runs</text>
+<text x="56" y="503" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#0f172a" font-weight="400" text-anchor="start">Solid box: an agent start, or a task of a resumed agent, that always runs</text>
 <rect x="16" y="512" width="28" height="14" rx="4" fill="#ffffff" stroke="#64748b" stroke-width="1.5" stroke-dasharray="6 4"/>
-<text x="56" y="523" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#0f172a" font-weight="400" text-anchor="start">Dashed box: an agent start that runs only when needed</text>
+<text x="56" y="523" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#0f172a" font-weight="400" text-anchor="start">Dashed box: an agent start, or a task of a resumed agent, that runs only when needed</text>
 <rect x="16" y="532" width="28" height="14" rx="4" fill="#fff1e6" stroke="#b45309" stroke-width="2"/>
 <text x="56" y="543" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#0f172a" font-weight="400" text-anchor="start">Orange box: the run stops for you</text>
 <path d="M16,559 L44,559" fill="none" stroke="#4f46e5" stroke-width="1.8" stroke-dasharray="2 4" marker-end="url(#arrow)" stroke-linejoin="round"/>

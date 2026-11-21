@@ -95,5 +95,5 @@
 <rect x="16" y="1174" width="28" height="14" rx="7" fill="#ffffff" stroke="#64748b" stroke-width="1.5"/>
 <text x="56" y="1185" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#0f172a" font-weight="400" text-anchor="start">Rounded box: a decision the run takes</text>
 <rect x="16" y="1194" width="28" height="14" rx="4" fill="#eef2ff" stroke="#4338ca" stroke-width="2" stroke-dasharray="6 4"/>
-<text x="56" y="1205" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#0f172a" font-weight="400" text-anchor="start">Dashed indigo box: a ruled agent start that runs only when needed</text>
+<text x="56" y="1205" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#0f172a" font-weight="400" text-anchor="start">Dashed indigo box: a ruled agent start, or a ruled task of a resumed agent, that runs only when needed</text>
 </svg>

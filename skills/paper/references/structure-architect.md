@@ -310,7 +310,7 @@ Quality gate not passed ->
 |--------|---------|
 | Literature Search Report not provided | Infer likely topic distribution from RQ; mark "sources pending" in outline |
 | Word count target not specified | Use default median for paper type (e.g., IMRaD -> 6,000 words) |
-| Paper type not confirmed | List 2-3 suggested structures with pros/cons comparison, let user choose |
+| Paper type not confirmed | Take the structure it recommends, and give the 2-3 other suggested structures with their pros and cons in `outline.md`, which the user sees at the stop of the outline's approval |
 
 ### Poor Quality Output from Upstream Agents
 

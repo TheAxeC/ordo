@@ -9,9 +9,9 @@ Writes, beside this file, 25 figures:
   lit-review, outline-only, abstract-only, citation-check, disclosure, plan, format-convert,
   revision-coach, rebuttal-audit and response-letter: academic-paper 3.2.0 on the left, or for
   response-letter steps 3 and 4 of academic-pipeline's external review protocol, and paper on
-  the right. The simple view draws the agent starts, the stops and the cycles. The detailed view
-  draws every step, script and stop, with grey boxes for scripts and indigo boxes tagged with
-  the ruling that makes paper differ from academic-paper.
+  the right. The simple view draws the agent starts, the tasks of resumed agents, the stops and
+  the cycles. The detailed view draws every step, script and stop, with grey boxes for scripts
+  and indigo boxes tagged with the ruling that makes paper differ from academic-paper.
 - academic-pipeline.svg: the stages of academic-pipeline and the skill each goes to.
 
 Every box, arrow and label is written in this file, taken from the files of academic-paper
@@ -81,7 +81,9 @@ DETAILED_LEGEND = (
 )
 
 RULED_MAYBE_LEGEND = L(
-    "ruled_maybe", "Dashed indigo box: a ruled agent start that runs only when needed"
+    "ruled_maybe",
+    "Dashed indigo box: a ruled agent start, or a ruled task of a resumed agent, that runs only "
+    "when needed",
 )
 
 
@@ -942,18 +944,33 @@ CHECKS = (
     f"Script, run by the session: lookup.py cite-keys and check-urls; latexmk compile "
     f"with the engine of the class {GOAL}"
 )
-FIXES = f"Draft writer: the reference fix and the compile fix, when a check fails {GOAL}"
+FIXES = (
+    f"Draft writer, resumed: the reference fix for a missing entry, the compile fix for a "
+    f"failed compile or a box over 10pt {GOAL}"
+)
 CLAIMS = (
     f"Citation compliance: format, DOI, retractions, and each claim against the passage "
-    f"read in its source's full text {GOAL}"
+    f"read in its source's full text, unless you said no at intake {GOAL}"
 )
 CLAIM_STOP = (
     f"A claim the run cannot support: the check stops at the first claim not held, and the "
     f"stop is raised once the agent has ended {GOAL}"
 )
 REFERENCE_STOP = f"A reference that cannot be confirmed, only under strict {GOAL}"
-STYLE_STOP = "The citation style to confirm, when more than half the entries fail the same check"
-INCREMENTAL = f"Citation compliance, fresh: the cited sentences of the patch {GOAL}"
+STYLE_STOP = (
+    "The citation style to confirm, when more than half the cited entries follow another "
+    "style than the Citation Format row"
+)
+STYLE_EDGE = "a format error in most entries, in another style"
+STYLE_BACK = "resumed, format only"
+RESULTS = (
+    f"Draft writer, resumed: the statements the result files do not bear out, as a patch "
+    f"{GOAL}"
+)
+INCREMENTAL = (
+    f"Citation compliance, resumed: the cited sentences of the patch, unless you said no "
+    f"at intake {GOAL}"
+)
 CLOSING = f"/writing review, unless you said no at intake {GOAL}"
 FINDINGS = f"Draft writer: the findings you pick, or the autonomous pass, as a patch {GOAL}"
 
@@ -963,7 +980,7 @@ def paper_full_detailed() -> gf.Graph:
         N(
             "I0",
             f"Phase 0 Intake agent: config.md; citation verification, the number of sources "
-            f"{SOURCES}, the closing review {GOAL}",
+            f"{SOURCES}, the closing review, the claim check, the incremental checks {GOAL}",
             "stop",
         ),
         N("Q1", "you skip Phase 1, giving your own sources?", "choice"),
@@ -1001,11 +1018,12 @@ def paper_full_detailed() -> gf.Graph:
         N("UD", "The draft review does not pass", "stop"),
         N(
             "W6",
-            f"Draft writer: revises, the whole draft as one patch over every block {GOAL}",
+            f"Draft writer, resumed: revises, the whole draft as one patch over every block {GOAL}",
             "ruled",
         ),
-        N("IC", INCREMENTAL, "ruled"),
-        N("P62", "Peer reviewer, round 2: the revised sections"),
+        N("RS", RESULTS, "ruled_maybe"),
+        N("IC", INCREMENTAL, "ruled_maybe"),
+        N("P62", "Peer reviewer, resumed, round 2: the revised sections"),
         N("CK", CHECKS, "script"),
         N("FX", FIXES, "ruled_maybe"),
         N(
@@ -1039,10 +1057,12 @@ def paper_full_detailed() -> gf.Graph:
         E("W4", "AB", "a 4a lint fails twice, or a 4b lint fails"),
         E("W4", "C5"),
         E("W4", "B5"),
-        E("C5", "SS", "a systematic format error"),
-        E("SS", "C5", "once", "back"),
+        E("C5", "SS", STYLE_EDGE),
+        E("SS", "C5", STYLE_BACK, "back"),
         E("C5", "CS"),
         E("C5", "SR", "under strict, a DOI or arXiv ID provably fails lookup"),
+        E("C5", "RS"),
+        E("RS", "P6"),
         E("C5", "P6"),
         E("B5", "P6"),
         E("V4", "P6"),
@@ -1077,8 +1097,8 @@ def paper_revision_detailed() -> gf.Graph:
     nodes = (
         N(
             "SQ",
-            f"Session asks: the closing review, the claims not to make, the earlier papers "
-            f"{GOAL}",
+            f"Session asks: the closing review, the claim check, the incremental checks, the "
+            f"claims not to make, the earlier papers, the result files {GOAL}",
             "stop",
         ),
         N("RP", "Peer reviewer: the comments as a revision roadmap"),
@@ -1091,20 +1111,20 @@ def paper_revision_detailed() -> gf.Graph:
         N("SS", STYLE_STOP, "stop"),
         N("CS", CLAIM_STOP, "stop"),
         N("SR", REFERENCE_STOP, "stop"),
-        N("R2", "Peer reviewer, round 2: the re-review"),
-        N("W2", "Draft writer: the items not resolved, as patches"),
-        N("IC", INCREMENTAL, "ruled"),
+        N("RS", RESULTS, "ruled_maybe"),
+        N("R2", "Peer reviewer, resumed, round 2: the re-review"),
+        N("IC", INCREMENTAL, "ruled_maybe"),
         N("CK", CHECKS, "script"),
         N("FX", FIXES, "ruled_maybe"),
         N(
             "RL",
-            f"Draft writer, fresh: response-letter.md beside the manuscript, when the "
+            f"Draft writer, resumed: response-letter.md beside the manuscript, when the "
             f"comments are referee comments {LETTER}",
             "ruled_maybe",
         ),
         N(
             "LC",
-            f"Peer reviewer, fresh: response-letter-check.md, a verdict per point {LETTER}",
+            f"Peer reviewer, resumed: response-letter-check.md, a verdict per point {LETTER}",
             "ruled_maybe",
         ),
         N("WG", CLOSING, "ruled_maybe"),
@@ -1120,18 +1140,18 @@ def paper_revision_detailed() -> gf.Graph:
         E("AP", "D1", "a second rejection"),
         E("AP", "D2", "exit 3, structural"),
         E("AP", "RC"),
-        E("RC", "SS", "a systematic format error"),
-        E("SS", "RC", "a fresh start, once", "back"),
+        E("RC", "SS", STYLE_EDGE),
+        E("SS", "RC", STYLE_BACK, "back"),
         E("RC", "CS"),
         E("RC", "SR", "under strict, a DOI or arXiv ID provably fails lookup"),
+        E("RC", "RS"),
+        E("RS", "R2"),
         E("RC", "R2", "round 2, the last", "dotted"),
-        E("R2", "W2", "items not resolved"),
-        E("W2", "IC"),
-        E("IC", "CK"),
-        E("R2", "CK"),
+        E("R2", "CK", "the items not resolved become limitations"),
         E("CK", "FX"),
         E("FX", "SR", "a failure left after the reference fix"),
-        E("FX", "RL"),
+        E("FX", "IC"),
+        E("IC", "RL"),
         E("CK", "RL"),
         E("RL", "LC"),
         E("LC", "WG"),
@@ -1190,14 +1210,15 @@ def paper_citation_check_detailed() -> gf.Graph:
     nodes = (
         N(
             "CQ",
-            f"Session asks: the claims not to make, the earlier papers {GOAL}",
+            f"Session asks: the claims not to make, the earlier papers, the result files {GOAL}",
             "stop",
         ),
         N("CK", f"Script, run by the session: lookup.py cite-keys and check-urls {GOAL}", "script"),
         N(
             "CC",
             f"Citation compliance agent, one pass: cross-check, format, DOI, retractions, "
-            f"and each claim against the passage read in its source's full text {GOAL}",
+            f"each claim against the passage read in its source's full text, and the study's "
+            f"own results against the result files {GOAL}",
             "ruled",
         ),
         N("SS", STYLE_STOP, "stop"),
@@ -1214,8 +1235,8 @@ def paper_citation_check_detailed() -> gf.Graph:
     edges = (
         E("CQ", "CK"),
         E("CK", "CC"),
-        E("CC", "SS", "a systematic format error"),
-        E("SS", "CC", "a fresh start, once", "back"),
+        E("CC", "SS", STYLE_EDGE),
+        E("SS", "CC", STYLE_BACK, "back"),
         E("CC", "CD"),
         E("CD", "CA", "formatting only"),
         E("CD", "CH", "right claim, wrong source"),
@@ -1303,7 +1324,7 @@ def paper_plan_detailed() -> gf.Graph:
         E("S0", "S1"),
         E("S1", "S2"),
         E("S2", "MQ"),
-        E("MQ", "S2", "offers after 8 rounds on a chapter, 30 in all", "back"),
+        E("MQ", "S2", "offers after 8 rounds on a chapter, suggests outline-only past 15 in all", "back"),
         E("S2", "SA"),
         E("SA", "S25"),
         E("S25", "S3"),
@@ -1461,13 +1482,13 @@ def paper_response_letter_detailed() -> gf.Graph:
     nodes = (
         N(
             "W",
-            f"Draft writer, fresh: response-letter.md beside the manuscript, in the response "
+            f"Draft writer: response-letter.md beside the manuscript, in the response "
             f"template's form {LETTER}",
             "ruled",
         ),
         N(
             "C",
-            f"Peer reviewer, fresh: completeness, consistency, truthfulness, a verdict per "
+            f"Peer reviewer: completeness, consistency, truthfulness, a verdict per "
             f"point, response-letter-check.md {LETTER}",
             "ruled",
         ),

@@ -501,7 +501,7 @@ Quality gate not passed ->
 
 | Missing Item | Handling |
 |--------|---------|
-| RQ not clearly defined | Return to the intake agent for user to clarify -> cannot start search |
+| RQ not clearly defined | Search on the research question as `config.md` states it, and name what is unclear in `review.md` |
 | Discipline not specified | Use general databases (Google Scholar + Scopus) + broaden search scope |
 | Language preference not specified | Default to English |
 | Year range not specified | Use default 10 years + seminal works unrestricted |

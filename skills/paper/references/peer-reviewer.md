@@ -600,7 +600,7 @@ Your task is to score the writer's draft against your Phase 6a pre-committed sco
 
 ## Paper's addition: the response letter check
 
-This section is `paper`'s addition to academic-paper's agent. In revision mode, when the comments file holds referee comments, and in response-letter mode, a fresh peer reviewer checks `response-letter.md` as step 4 of `references/external-review-protocol.md` gives. It reads the comments file, the letter and the revised `.tex`.
+This section is `paper`'s addition to academic-paper's agent. In revision mode, when the comments file holds referee comments, and in response-letter mode, the peer reviewer checks `response-letter.md` as step 4 of `references/external-review-protocol.md` gives. At the end of a revision run it is the run's peer reviewer, resumed, and in response-letter mode it is the role's first start. It reads the comments file, the letter and the revised `.tex`. The resumed reviewer is given the `.tex` as it stands after the reference checks and the compile, and reads it again, since it may have changed since the re-review.
 
 - Every referee point has a response (completeness).
 - Each response matches the change made in the revised `.tex` (consistency).

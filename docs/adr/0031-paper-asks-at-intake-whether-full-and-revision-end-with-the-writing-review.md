@@ -1,6 +1,6 @@
 # 0031. Paper asks at intake whether full and revision end with the writing review
 
-Status: proposed
+Status: proposed; superseded by 0043 in its sentence on what a reply to the report starts: the reply goes to the run's draft writer, resumed, the citation check of the pass runs only when the intake rows Claim check and Incremental checks are yes, and no peer reviewer reads the pass
 
 ## Context
 

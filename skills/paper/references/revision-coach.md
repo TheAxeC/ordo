@@ -44,7 +44,7 @@ You are the Revision Coach Agent. You parse unstructured reviewer comments, from
 3. Editor's decision letter (optional): for overall verdict context
 
 **Input validation**:
-- If reviewer comments are missing or empty -> ask user to provide them
+- If reviewer comments are missing or empty -> report that no comment was given and end; the final message names it
 - If comments are extremely short (< 50 words total) -> confirm that this is the complete set
 - If comments appear to be the paper itself (not reviews) -> alert user and ask for correction
 
@@ -66,8 +66,9 @@ You are the Revision Coach Agent. You parse unstructured reviewer comments, from
 
 **Ambiguity handling**:
 - If a comment contains multiple distinct points -> split into separate items
-- If reviewer identity is unclear -> label as "Unknown" and ask user to clarify
-- If a comment is vague (e.g., "needs more work") -> flag as "NEEDS_CLARIFICATION" and ask user what they think the reviewer means
+- If reviewer identity is unclear -> label as "Unknown" and flag it for the user
+- If a comment is vague (e.g., "needs more work") -> flag as "NEEDS_CLARIFICATION" for the user to interpret
+- A flag for the user is answered at the stop "The parsed comments". In rebuttal-audit mode, which has no such stop, the flags stand in `rebuttal-audit.md` and the final message names them
 
 ### Step 3: Classification
 
@@ -239,7 +240,7 @@ Thank you for the constructive feedback on our manuscript "[Title]".
 | Comment could be Major or Minor | Default to Major (conservative); flag for user confirmation |
 | Comment addresses multiple sections | Split into separate items, one per section |
 | Comment is a question, not a directive | Classify as Minor; suggested action is "Provide clarification in text and response letter" |
-| Comment contradicts another reviewer | Flag the contradiction; note both positions; ask user which to prioritize |
+| Comment contradicts another reviewer | Flag the contradiction; note both positions; flag for the user which to prioritize |
 
 ### Unusual Input
 
@@ -255,8 +256,8 @@ Thank you for the constructive feedback on our manuscript "[Title]".
 
 | Scenario | Handling |
 |----------|---------|
-| Cannot determine reviewer boundaries | Present full text with best-guess parsing; ask user to confirm or correct |
-| Comment meaning unclear | Mark as "NEEDS_CLARIFICATION"; include raw text; ask user to interpret |
+| Cannot determine reviewer boundaries | Present full text with best-guess parsing; flag for the user to confirm or correct |
+| Comment meaning unclear | Mark as "NEEDS_CLARIFICATION"; include raw text; flag for the user to interpret |
 | Duplicate comments across reviewers | Merge into single item; note "Raised by R1, R2" |
 
 ---
@@ -303,7 +304,7 @@ The revision coach output -> revision mode input
 | 3 | Section mapping accuracy | Each comment maps to the correct section (verify against draft if available) | Re-map with user confirmation |
 | 4 | Priority logic | P1 items are genuinely more critical than P2/P3 | Re-prioritize; apply override rules |
 | 5 | Actionability | Every non-Positive item has a concrete "Suggested Action" | Add specific action suggestions |
-| 6 | Disambiguation | All "NEEDS_CLARIFICATION" items have been resolved with user | Ask user for clarification |
+| 6 | Disambiguation | All "NEEDS_CLARIFICATION" items have been resolved with user | Flag for the user's clarification |
 | 7 | No silent drops | Total parsed items >= total identifiable comments in input | Re-parse input for missed comments |
 
 ## Quality Criteria

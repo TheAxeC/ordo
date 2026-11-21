@@ -12,7 +12,7 @@ This document records the failure scenarios that `paper` may encounter at each s
 | F2 | Wrong paper structure selected | The structure architect finds RQ-structure mismatch | Medium | Return to Phase 2, suggest alternative structures |
 | F3 | Severely over word count | Draft exceeds target word count by 30% or more | Medium | Identify sections to cut, suggest condensing |
 | F4 | Severely under word count | Draft is 30% or more below target word count | Medium | Identify sections to expand, suggest additions |
-| F5 | Citation format entirely wrong | The citation compliance agent finds > 50% format errors | High | Completely re-run citation phase |
+| F5 | Citation format entirely wrong | The citation compliance agent finds > 50% format errors | High | Correct the entries as one patch, after the citation style is confirmed when the entries follow another style; no claim or source check is repeated |
 | F7 | Peer review rejection | The peer reviewer issues a Reject verdict | High | Analyze rejection reasons, recommend major revision or restructuring |
 | F8 | Plan mode does not converge | > 15 rounds of dialogue without completing all chapters | Medium | Suggest switching to outline-only mode |
 | F10 | User abandons midway | Explicitly states unwillingness to continue | Low | Save completed Chapter Plan |
@@ -64,7 +64,7 @@ and literature foundation are still missing.
 2. Explain why they are mismatched
 3. Suggest 1-2 alternative structures
 4. Explain how the alternative structures better answer the RQ
-5. Return to Phase 2 to let the user re-select
+5. Return to Phase 2 with the alternative structure that best answers the RQ, and record the choice in `config.md` under "Decisions"; the user sees it at the stop "The outline's approval"
 ```
 
 ---
@@ -85,7 +85,7 @@ and literature foundation are still missing.
    b. Condense the literature review (keep core literature)
    c. Remove overly detailed method descriptions
    d. Compress repeated literature dialogue in Discussion
-4. Do not proactively delete; let the user decide
+4. Apply the reduction that follows from the run's goal, and record it in `config.md` under "Decisions"
 ```
 
 ---
@@ -124,8 +124,9 @@ and literature foundation are still missing.
 1. Analyze error patterns (systematic vs. scattered)
 2. If systematic errors:
    a. Identify root cause (user may have selected the wrong citation format)
-   b. Confirm the correct citation format
-   c. Completely re-run citation phase
+   b. Entries in the style of the Citation Format row: correct them in the same start, as one patch
+   c. Entries in another style: confirm the correct citation format at the stop "The citation style to confirm", then the same agent, resumed, corrects the entries as one patch
+   d. Repeat no check of a claim or of a source
 3. If scattered errors:
    a. Fix one by one
    b. Produce a correction report
@@ -149,7 +150,7 @@ and literature foundation are still missing.
    b. Structural issues (argument architecture needs reorganization) -> Return to Phase 3 for restructuring
    c. Fundamental issues (RQ infeasible, insufficient data) -> Return to Phase 0 for re-evaluation
 3. Produce a revision roadmap
-4. Execute revision after user confirmation
+4. Execute the revision as the revision loop of full mode gives; the run stops only at the stop "The draft review does not pass", and the option taken is recorded in `config.md` under "Decisions"
 ```
 
 **Note**: If still Reject after 2 rounds of revision, recommend the user to:

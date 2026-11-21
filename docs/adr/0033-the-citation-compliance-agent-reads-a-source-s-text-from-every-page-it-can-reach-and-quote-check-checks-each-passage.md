@@ -1,6 +1,6 @@
 # 0033. The citation compliance agent reads a source's text from every page it can reach, and quote-check checks each passage
 
-Status: proposed
+Status: proposed; superseded by 0043 in its sentence that the citation compliance agent reads each cited source's text in full and revision mode, for a run whose Claim check row is no
 
 ## Context
 

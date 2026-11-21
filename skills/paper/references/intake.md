@@ -145,7 +145,8 @@ Auto-suggest based on discipline; user can override.
 Ask what the user already has:
 - [ ] Research question / thesis statement
 - [ ] Literature / bibliography
-- [ ] Data / results
+- [ ] Data / results: the result files, with their paths
+- [ ] Analysis code of the study, with its path
 - [ ] Existing draft sections
 - [ ] Reviewer feedback (for revision mode)
 - [ ] Style guide or template from target journal
@@ -250,10 +251,15 @@ This step is `paper`'s addition to academic-paper's interview. It asks the rows 
 | Earlier papers | The authors' earlier papers that the paper may repeat passages of, each as a path, a DOI or a citation, or "none". The citation compliance agent reads it ("Passages that repeat an earlier paper"). | full |
 | Internal only | Whether the user asks for the manuscript as an internal record, such as a record of every attempt, and not as work to publish. Default: no. The intake agent never sets it from the materials. | full, outline-only, abstract-only |
 | Closing review | Whether the run ends with the `/writing` review of the manuscript, whose report a one-line reply answers. With no, the run ends after the compile, and the final message names `/writing` and `/paper revision <main.tex> <report>` for a later review. Default: yes. | full |
+| Claim check | Whether the citation compliance agent reads each cited source's text and judges each claim against its passage. With no, it checks that each source exists and that its entry is in the citation style, and reads no source's text; it still flags a sentence that states a claim of the row Claims not to make and a passage that repeats a paper of the row Earlier papers, and no incremental check runs. Default: yes. | full |
+| Incremental checks | Whether each later patch of the draft writer that adds or changes a cited sentence gets a citation check of its own. With no, no check runs after the later patches, and with this row no and Closing review yes, the patches of the `/writing` pass get no check. Default: yes. | full |
 
 - The row Internal only is shown at the confirmation with its value. A value "yes" is shown as "the manuscript is marked internal only and may present a negative result". It is "yes" only when the user's request or an answer here asks for an internal record.
-- In revision mode, which has no intake agent, the session asks the Closing review question itself, and the rows Claims not to make and Earlier papers with it.
-- In citation-check mode the session asks the rows Claims not to make and Earlier papers (`SKILL.md`, Steps 6).
+- In revision mode, which has no intake agent, the session asks the Closing review, Claim check and Incremental checks questions itself, each as the table words it, and the rows Claims not to make and Earlier papers with them.
+- In citation-check mode the session asks the rows Claims not to make and Earlier papers (`SKILL.md`, Steps 6). The mode always runs the claim check and has no later patch.
+- The question on Incremental checks says, in its own words, that with this row no and Closing review yes the patches of the `/writing` pass get no check.
+- The results check of `references/citation-compliance.md` runs under either answer to Claim check.
+- In revision and citation-check mode the session also asks where the study's result files and code are, or "none", and writes the answer into the row Existing Materials.
 
 ## Output Format
 
@@ -276,7 +282,7 @@ This step is `paper`'s addition to academic-paper's interview. It asks the rows 
 | **Body Language** | [EN] |
 | **Abstract** | [EN] |
 | **Word Count Target** | [number] words |
-| **Existing Materials** | [list of provided materials] |
+| **Existing Materials** | [list of provided materials, the result files and the analysis code each with its path] |
 | **Co-Authors** | [single-author / number of co-authors + corresponding author + brief contribution notes] |
 | **Funding** | [no funding / funder name(s) + grant number(s) + PI role] |
 | **Style Profile** | [attached / null] |
@@ -288,6 +294,8 @@ This step is `paper`'s addition to academic-paper's interview. It asks the rows 
 | **Earlier papers** | [each as a path, a DOI or a citation, or "none"] (`paper`'s addition, Step 14) |
 | **Internal only** | [yes / no] (`paper`'s addition, Step 14) |
 | **Closing review** | [yes / no] (`paper`'s addition, Step 14) |
+| **Claim check** | [yes / no] (`paper`'s addition, Step 14) |
+| **Incremental checks** | [yes / no] (`paper`'s addition, Step 14) |
 
 ### Notes
 [Any special requirements, constraints, or preferences noted during interview]

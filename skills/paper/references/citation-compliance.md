@@ -258,7 +258,7 @@ Step 2: Confirm (check Reference List format)
   +-- IEEE: numbered [1], conference proceedings common
   +-- Vancouver: numbered, superscript, medical journals common
 
-Step 3: If unable to determine -> ask user; if user does not respond -> default to APA 7th
+Step 3: If unable to determine -> take the Citation Format row of `config.md`; with no such row -> default to APA 7th; report the choice
 ```
 
 ### Core Verification Rules by Format
@@ -341,7 +341,7 @@ Each correction uses a three-column structure:
 Quality gate not passed ->
 +-- Many orphan citations (> 5 entries) ->
 |   Likely cause: the draft writer used sources not in Annotated Bibliography
-|   Handling: List all orphans, ask user to confirm if valid sources -> add to RefList or remove
+|   Handling: List all orphans in the report as issues; the final message names them; no question is asked
 +-- Format error rate > 20% ->
 |   Likely cause: the draft writer mixed formats or used outdated rules
 |   Handling: Re-run full format conversion (rather than correcting one by one)
@@ -410,9 +410,9 @@ Quality gate not passed ->
 
 ## Paper's addition: the lookups and the claim check
 
-This section is `paper`'s addition to academic-paper's agent. It holds the checks `paper` runs with `templates/lookup.py`: the cross-check of cited keys, the `.bib` entry and DOI checks, the lookup of every reference, the reading of each cited source's full text, the judgment of each claim against its passage, the incremental check of later patches and the calibration of the claim check. It writes `citation-report.md` in the run folder in the form of "The file" below, and the patches that carry its corrections, as `references/revision-patch-protocol.md` gives. In full mode it runs after the draft; in revision mode after the patches are applied; in citation-check mode it is the whole run.
+This section is `paper`'s addition to academic-paper's agent. It holds the checks `paper` runs with `templates/lookup.py`: the cross-check of cited keys, the `.bib` entry and DOI checks, the lookup of every reference, the reading of each cited source's full text, the judgment of each claim against its passage, the incremental check of later patches and the calibration of the claim check. It also holds the results check, which reads the manuscript's statements about the study's own results against the user's result files and code. It writes `citation-report.md` in the run folder in the form of "The file" below, and the patches that carry its corrections, as `references/revision-patch-protocol.md` gives. In full mode it runs after the draft; in revision mode after the patches are applied; in citation-check mode it is the whole run.
 
-The agent reads `config.md` (Citation Format, Co-Authors, Earlier papers, Claims not to make, Discipline, Paper type, Domain evidence profile and Citation Verification), `intended-claims.md` of the run folder in full and revision modes, the main `.tex` with the files it inputs and `refs.bib`, the output of `lookup.py cite-keys` and of `lookup.py check-urls` that the session puts in the prompt, and the path of the temporary folder for fetched texts and saved pages.
+The agent reads `config.md` (Citation Format, Co-Authors, Earlier papers, Claims not to make, Claim check, Existing Materials, Discipline, Paper type, Domain evidence profile and Citation Verification), `intended-claims.md` of the run folder in full and revision modes, in full mode the section "Trace table" of `draft-report.md`, the result files and the code the session names, the main `.tex` with the files it inputs and `refs.bib`, the output of `lookup.py cite-keys` and of `lookup.py check-urls` that the session puts in the prompt, and the path of the temporary folder for fetched texts and saved pages.
 
 ### Both ways
 
@@ -474,9 +474,10 @@ The agent counts, over the cited entries, how many fail each deterministic check
 
 - More than half of the cited entries failing the same check is a systematic error. Examples are every entry missing its DOI, or every entry in another style than the Citation Format row names.
 - The agent reports the pattern first in the report's "Items flagged for review", in the form "Systematic format error: <N> of <M> cited entries (<pct> percent) <what is wrong>". The line names the likely cause, such as a Citation Format row that does not match the manuscript, and the style the entries follow.
-- The agent writes no patch in this start. It finishes the other checks of the page, so that the report is whole, and ends.
-- The session raises the stop "The citation style to confirm" before it applies anything. The user confirms the Citation Format row or gives another style, and the answer is appended to `config.md` under "Decisions".
-- The session then starts the agent again as a fresh agent, given the confirmed style, and the agent does all the work of this page again. In that second start the pattern is not a stop again: the agent corrects the entries one by one and logs each correction.
+- A format error never repeats a check of a claim or of a source. In every case the agent finishes the other checks of the page in the same start and writes its patches for the claims, and no source is read again because of the pattern.
+- When the entries follow the style the Citation Format row names, as when every entry lacks its DOI, there is no stop. The agent corrects the entries in the same start, as one patch, and logs each correction.
+- When the entries follow another style than the row names, the agent leaves the entries' format as it is in this start and ends. The session raises the stop "The citation style to confirm", the user confirms the Citation Format row or gives another style, and the answer is appended to `config.md` under "Decisions".
+- After the answer the session resumes the agent for the format work only, given the confirmed style. The agent corrects the entries as one patch, logs each correction and reads no source again.
 - A check that fails in half of the cited entries or fewer is scattered, and the agent corrects each failure one by one, as the sections below say.
 
 ### Looking a reference up
@@ -577,9 +578,22 @@ The screen runs on each journal or proceedings that a cited entry names. It flag
 - For a venue the record signs do not clear, the report lists "not screened: <venue>" with those signs, and the final message asks the user to check them in DOAJ, the COPE directory, the Scopus Source List or Think. Check. Submit.
 - A venue with a sign is a MEDIUM issue flagged for the user, who replaces the source with a better one or keeps it with a caveat.
 
+### The row Claim check
+
+The row Claim check of `config.md` says whether a full or revision run checks its claims against the sources' texts. Citation-check mode, which does not ask the row, always checks them.
+
+With the row no, the agent reads no source's text:
+
+- It checks that each source exists and that its entry is in the citation style, under "Both ways", "The `.bib` entries", "DOI and URL", "A format error in most entries", "Looking a reference up", "Retractions" and "The checks of the whole reference list".
+- It reads every sentence against the row Claims not to make ("Claims the paper must not make") and the manuscript against the row Earlier papers ("Passages that repeat an earlier paper"). Each such issue stands in the report and is named in the final message, with no stop.
+- It runs the results check ("The results check").
+- "Reading the source", "Judging a claim" with its other sub-sections, the passage lines and `quote-check` do not apply, and the report says in its Summary that no claim was read against its source.
+- A retracted source is flagged with its candidates and gets no replacement patch, since a replacement rests on a passage read.
+- No incremental check follows a later patch.
+
 ### Reading the source
 
-Each cited sentence of the manuscript rests on a passage that the agent reads in this run from the source's full text. In every mode the agent checks every cited sentence so.
+Each cited sentence of the manuscript rests on a passage that the agent reads in this run from the source's full text. In every mode the agent checks every cited sentence so, except in a run whose row Claim check is no.
 
 The agent reads a source's text from the first of these ways that gives its full text, tried in this order:
 
@@ -627,7 +641,7 @@ The table applies only after every way of "Reading the source" that applies to t
 |---|---|---|
 | Only the abstract was read | No way gave the full text, and an abstract was read: `<stem>.abstract.txt` exists, written by `fetch` or by `text --abstract` | The locator is `abstract`, and the claim is marked "abstract only". The source supports what the abstract says and nothing beyond it. |
 | An access restriction | Every way answered with a restriction: the indexes list no open copy for `fetch`, and each saved address answers 402 or 403 or gives a sign-in, payment or bot check page | The verdict is UNVERIFIABLE_ACCESS. The claim goes to the user through the stop "A claim the run cannot support", with each address tried and its status. |
-| An outage | An index is left out, or a URL or an address fails to connect or answers 429 or a 5xx status | The agent fetches or saves that address again once. A URL or an index left out with a reason "retry after <n> s" is not fetched again and is not waited for. If the second try fails, or is not made for that reason, the claim is marked "tool failure" with the reason as printed, and goes to the user with each address tried. The second start judges it again. |
+| An outage | An index is left out, or a URL or an address fails to connect or answers 429 or a 5xx status | The agent fetches or saves that address again once. A URL or an index left out with a reason "retry after <n> s" is not fetched again and is not waited for. If the second try fails, or is not made for that reason, the claim is marked "tool failure" with the reason as printed, and goes to the user with each address tried. The agent, resumed after the stop, judges it again. |
 
 - The agent never judges a source it did not read, and it never says it read a source whose text no way of "Reading the source" returned.
 - A source that no way gives the text of supports nothing, whatever the abstract suggests about the rest.
@@ -707,7 +721,8 @@ In full and revision modes the agent compares the claims of the text with `inten
 - A claim the text makes that no line of the list states is listed as "not on the list", with its sentence quoted and its place.
 - A line of the list that no sentence of the text states is listed as "intended, not made", with the line quoted.
 - In a revision run the comparison covers the text the patches added or changed, and the list covers the claims of that text.
-- Each entry is a MEDIUM issue `C<m>` flagged for the user, and the agent writes no patch for it, since the paper's argument is the author's. The report goes to the peer reviewer, which reads the two lists with the draft in the draft review.
+- Each entry is a MEDIUM issue `C<m>` flagged for the user in the report, and the agent writes no patch for it, since the paper's argument is the author's.
+- The session names each entry in the final message.
 - A claim the list does not hold may still be right, and the report says only that the draft's text and its list differ.
 - The list holds no rule the paper must not break. That check is "Claims the paper must not make", and it runs whether or not the list exists.
 - A missing `intended-claims.md` means no comparison, and the report says "no list written".
@@ -807,23 +822,41 @@ Calibration measures how often the agent's judgment of a claim is wrong. The ses
 - The pairs are data that the user keeps with the calibration, outside this skill's text. The session asks the user for their folder.
 - A run that exits 1 is reported to the user with the table of counts. The agent's judgment is not relied on for the labels that failed until the page is changed and the calibration is run again.
 
+### The results check
+
+In full, revision and citation-check mode, when the user's materials hold result files or code, the agent reads the manuscript's statements about the study itself against those files. The check runs whatever the row Claim check says.
+
+- The agent reads each statement the manuscript makes about the study's own results against the result files: a single number, a count, a list and a bound.
+- The agent reads each description of how the data were handled against the code and the result files it rests on: the missing values, the imputation, the recoding, the cohort selection and what each variable is.
+- In full mode the index is the section "Trace table" of `draft-report.md`, which names for each statement the file, and the row or line, it rests on. The agent opens that place and reads the statement against it.
+- In revision and citation-check mode, and for a statement with no row of the table, the agent finds the file itself among the result files and the code.
+- A statement or description that the files do not bear out is an issue `R<m>`, with `<m>` counted from 1 in the report's table "Results check". The issue quotes the sentence, names the file and the row or line read, and says what the file shows.
+- A statement for which the agent finds no file is an issue too, with the result "no file found".
+- The agent may run one command per statement to compute a number from a result file: a count, a sum or a mean. It writes no script.
+- It gives that command in the issue's row, or, for a statement the files bear out, in the statement's row of the report's table "Results check".
+- The agent writes no patch for an issue `R<m>`. In full and revision the session resumes the draft writer once with the issues, and in citation-check they stand in the report and the final message names them.
+- With no result file and no code among the materials, the report says under "Results check" that the statements about the study's own results were not checked, and the final message names it.
+- The peer reviewer is given neither the result files nor the code.
+
 ### The corrections
 
 - A correction that has one right answer is written as a patch: a typing slip in a key, a `dx.doi.org` URL, a DOI prefix, a period after a DOI, a name or year in the sentence that the entry corrects, a correction from a record that is certain, a duplicate entry, a replacement of a retracted source.
 - Each operation names its issues `C<m>` in `roadmap_item_ids`.
-- In full and revision modes the patches are applied to the manuscript the run holds, and the report goes to the peer reviewer, which reads it with the draft.
+- In full and revision modes the patches are applied to the manuscript the run holds. In revision mode the report goes to the peer reviewer's re-review, which reads it with the revised draft.
 - An ambiguous case is flagged and is never changed.
 - A line of `check-urls` that holds "title not checked" gets no correction.
 - Every correction is logged in the report, with its location, the error, the correction and the rule it follows.
 - A MINOR issue is corrected or flagged like any other, since a reviewer notices it.
-- The text that a patch puts in the manuscript, and the wording the report suggests, follow the manuscript prose standard's rule "No software wording". They name no file, script, path, code identifier or exit code, and use no wording of software operations about the project's own work. An issue the agent sends on to the draft writer says what is wrong with the claim, not the file or the command it was found by.
+- The text that a patch puts in the manuscript, and the wording the report suggests, follow the manuscript prose standard's rule "No software wording". They name no file, script, path, code identifier or exit code, and use no wording of software operations about the project's own work. A results-check issue, which the session sends on to the draft writer, says what is wrong with the statement and names the file and the row or line it was read in, and the wording it suggests for the manuscript names neither.
 
 ### The incremental check
 
-In full and revision modes, a patch that adds or changes a cited sentence after the first check has run gets a check of its own. A cited sentence is a sentence that holds a cite command.
+In full and revision modes, a patch of the draft writer that adds or changes a cited sentence after the first check has run gets a check of its own, when the rows Claim check and Incremental checks of `config.md` are both yes. A cited sentence is a sentence that holds a cite command.
 
-- The patches that get this check are the draft writer's rewrite of each revision loop of full mode, revision's second writer pass, the reference fix, the compile fix and the findings pass.
-- The agent is a fresh start for one patch. It reads `config.md`, the `.bib`, `intended-claims.md`, the patch file `patches/<nn>-<file name>.patch.json` with the main `.tex` and its inputs as the patch left them, the outputs of `lookup.py cite-keys` and `check-urls`, and the path of the temporary folder.
+- The patches that get this check are the draft writer's rewrite of each revision loop of full mode, the results-check patch, the reference fix, the compile fix and the findings pass.
+- A patch the agent writes itself, with the ids `C<m>`, gets no check, so a check never leads to another check.
+- An incremental check does not run the results check. The statements a results-check patch rewrites are not read again against the result files.
+- The session resumes the agent that made the first check, with one message for one patch. The agent reads the patch file `patches/<nn>-<file name>.patch.json` with the main `.tex` and its inputs as the patch left them, the outputs of `lookup.py cite-keys` and `check-urls`, and the path of the temporary folder.
 - It finds the cited sentences in the new text of the patch's operations. A sentence that an operation changed and that holds a cite command is one of them.
 - It checks those sentences and the entries they cite under every section of this page, with the same lookups, the same verdicts and the same reading of the source's full text, in the ways of "Reading the source", as the first check. The temporary folder holds the fetched texts and the saved pages, and the session makes a new one when the earlier one is gone.
 - It judges no sentence the patch did not write.
@@ -831,7 +864,8 @@ In full and revision modes, a patch that adds or changes a cited sentence after 
 - Before it reports, it runs `lookup.py quote-check '<citation-report-<nn>.md>' '<the .bib>' '<temporary folder>'`, as "Reading the source" says.
 - Its patches carry ids `C<m>`, with `<m>` the number of the issue in its own report, and the session applies them as it applies the patches of the first check.
 - A claim that its source does not hold, or a source it cannot read, is the stop "A claim the run cannot support", as in the first check.
-- The peer reviewer's next round of Phase 6b takes the report with the patch's changes.
+- An issue of this check starts no pass of the draft writer. The agent closes it with its own `C<m>` patch, or lists it in the report: a claim marked "Drift" gets suggested wording and no patch.
+- The session sends no item of the report to the draft writer or to the peer reviewer, and names each item the report leaves in the final message.
 
 ### The file
 
@@ -862,6 +896,8 @@ In full and revision modes, a patch that adds or changes a cited sentence after 
 | Claims not on the list, and intended claims not made | <N> and <N> |
 | Passages that repeat an earlier paper | <N> |
 | Sources with a retraction or expression-of-concern notice | <N> (<keys>) |
+| Statements about the study's own results and data handling read | <N> |
+| Statements the result files and the code do not bear out | <N> |
 
 ### Lookups
 | Key | Command | Line used | Indexes that matched | Fields confirmed | Verdict |
@@ -898,6 +934,11 @@ In full and revision modes, a patch that adds or changes a cited sentence after 
 |---|---|---|---|
 | C2 | refs.bib, jones2008 | Source from 2008, not clearly seminal | Verify the need or find a newer source |
 
+### Results check
+| # | Statement | File, and row or line | What the file shows | Result |
+|---|---|---|---|---|
+| R1 | Missing covariates were imputed with the training mean | cohort.csv, rows with the value 999 in the column bmi | 41 rows keep the missing-value code | not borne out |
+
 ### Passage lines
 > [@smith2024, p. 14, table 2]: "the passage as the text gives it"
 ```
@@ -906,7 +947,7 @@ In full and revision modes, a patch that adds or changes a cited sentence after 
 - "Pages read" has one row for each address tried for a source or an earlier paper. That covers each URL `fetch` printed, with the status it printed, and each address saved with `curl`, with the status and the final address `curl` printed.
 - The Used column of "Pages read" reads "full text" for an address that gave the source's full text, and "abstract only" for one that gave only the abstract. It reads "refused" for every other answer: an error status, or a sign-in, payment or bot check page.
 
-- Each issue has the number `C<m>` in the order the report lists it, across both tables.
+- Each issue has the number `C<m>` in the order the report lists it, across both tables. An issue of "Results check" has its own number `R<m>`, and a statement the files bear out stands in that table with no number.
 - The entries of "Claims against the list" stand in "Items flagged for review", each with its sentence or its line of the list quoted. The systematic format error of "A format error in most entries" stands there first.
 - The report ends with the lines of `check-urls` that it passes on unchanged, if there are any.
 - A flagged item that needs a decision only the user can make, such as a retracted source with no replacement, is marked "needs the user" in its suggested action.

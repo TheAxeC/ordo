@@ -646,23 +646,51 @@ The agent never writes a negative or null result from the project's notes or res
 
 ### The reference fix
 
-The patch with the id `reference-fix` answers the lines of the reference checks that the session gives: a `missing:` line, or a `check-urls` line that fails the status rules of `references/citation-compliance.md`, "DOI and URL".
+The patch with the id `reference-fix` answers the `missing:` lines of `lookup.py cite-keys` that the session gives. A failing line of `check-urls` is no line of the fix: the session names it in the final message.
 
 - A `missing:` line whose key is a typing slip of an existing key, with the same author and year, is corrected in the `.tex`.
 - A `missing:` line for a source that `refs.bib` of the run holds is answered by adding, after the last block of the `.bib`, that source's entry copied whole from the run's `refs.bib`.
 - A `missing:` line for a source that `review.md` of the run names and its `refs.bib` does not hold is answered by adding, after the last block of the `.bib`, the entry that `lookup.py bibtex` prints on standard output. For a preprint with a published version, the entry is the one `references/latex-template-reference.md`, "The `.bib` entry forms", gives, with the one web search for its venue's page that section allows. A `{?}` in the entry `bibtex` prints is replaced as `SKILL.md`, Rules, says.
-- A `check-urls` line is answered as "The `.bib` entries" and "DOI and URL" of `references/citation-compliance.md` say: the identifier is corrected when `lookup.py resolve` gives a record that is certain.
 - A line the agent cannot answer is left unchanged and named in its report with the lookups tried.
-- A line that holds "title not checked" is no line of the fix.
 - The agent adds no source from memory.
 
 ### The compile fix
 
-The patch with the id `compile-fix` answers the compile lines that the session gives: a compile error, a line starting `Overfull \hbox` or `Overfull \vbox`, or `LaTeX Warning: Float too large`.
+The patch with the id `compile-fix` answers the compile lines that the session gives: a compile error, or a line starting `Overfull \hbox` or `Overfull \vbox` whose box is more than 10pt over. The session gives no smaller box and no line `LaTeX Warning: Float too large`.
 
 - A compile error is corrected at the place the log names.
 - An overfull line is corrected by a change of wording or of a table or figure width that leaves every claim, number and citation as it was.
 - A line the agent cannot correct that way is left unchanged and named in its report.
+
+### The trace table
+
+In full mode the agent writes a section "Trace table" in `draft-report.md`, which the citation compliance agent reads as the index of its results check (`references/citation-compliance.md`, "The results check").
+
+- The table has one row for each statement the manuscript makes about the study's own results: a single number, a count, a list or a bound.
+- It has one row for each description of how the data were handled: the missing values, the imputation, the recoding, the cohort selection and what a variable is.
+- A row gives the statement as the manuscript words it, its section, the result file or code file it rests on, and the row or line of that file.
+- A number the agent computes from a result file has the command that computed it in its row.
+- A statement that no file of the user's materials bears out is not written, as the Knowledge Isolation Directive of `references/anti-leakage-protocol.md` says for the Methods section.
+- A later patch of the agent that adds or changes such a statement adds or changes its row in `draft-report.md`.
+- A manuscript with no result of its own has the section with the line "no statement about the study's own results".
+
+```markdown
+## Trace table
+| # | Statement | Section | File | Row or line |
+|---|---|---|---|---|
+| 1 | The cohort holds 4,812 patients | Methods | results/cohort.csv | the row count without the header |
+```
+
+### The results-check patch
+
+The patch with the ids `R<m>` answers the issues of the citation compliance agent's results check that the session gives, each a statement or a description that the result files and the code do not bear out.
+
+- Each op names the `R<m>` of the issue it answers.
+- The agent rewrites the statement to what the named file shows, or removes a statement that no file bears out.
+- In full mode it changes the row of the trace table for each statement it changes, as "The trace table" says.
+- In revision mode no trace table exists, and the agent writes none.
+- An issue it cannot answer from the files is left unchanged and named in its report.
+- The session sends these issues once, and no second pass follows.
 
 ### The `/writing` findings
 

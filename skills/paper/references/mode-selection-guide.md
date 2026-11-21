@@ -245,7 +245,7 @@ User Input ->
 
 **Expected Output**: `response-letter.md` beside the manuscript + `response-letter-check.md` in the run folder
 **Expected Duration**: Short
-**Agents Used**: the draft writer, then a fresh peer reviewer for the check
+**Agents Used**: the draft writer, then the peer reviewer for the check
 
 ---
 

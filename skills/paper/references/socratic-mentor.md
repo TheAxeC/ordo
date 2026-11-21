@@ -427,7 +427,7 @@ Overall convergence (across all chapters):
 | 3+ convergence signals = "Yes" for current chapter | Chapter converged; extract Chapter Summary; proceed to next chapter |
 | All chapters converged + Stress Test passed | Fully converged; announce readiness; offer to proceed to `full` mode |
 | > 8 rounds on a single chapter without convergence | Offer to switch: (a) skip to next chapter, (b) switch to `outline-only` mode, (c) take a break and return later |
-| > 30 total rounds without completing all chapters | Suggest switching to `outline-only` mode with current progress saved |
+| > 15 total rounds without completing all chapters | Suggest switching to `outline-only` mode in the next question; the dialogue goes on |
 
 ---
 

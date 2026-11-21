@@ -396,7 +396,7 @@ Step 1: Data Extraction
 Step 2: Chart Type Selection
   2.1 For each candidate, apply the Chart Type Decision Logic
   2.2 Consider the research question and what comparison matters
-  2.3 Confirm selection with user (if ambiguous)
+  2.3 If ambiguous, take the chart type that follows from the run's goal, and report the choice so that it is recorded in `config.md` under "Decisions"
 
 Step 3: Code Generation
   3.1 Select language (Python or R based on user preference; default Python)
@@ -523,7 +523,7 @@ A full-page landscape figure, with `\usepackage{pdflscape}` in the preamble:
 
 ### The placement patch
 
-In full mode the first draft holds a marker where each planned figure goes and no figure environment. The marker is the line `% FIGURE: <label>`, standing alone between blank lines. After the draft writer has ended, the session copies the images into the manuscript's `figures/` folder, anchorizes `main.tex` and gives the agent the manifest and the path of the patch, resumed or started fresh with `figures.md`.
+In full mode the first draft holds a marker where each planned figure goes and no figure environment. The marker is the line `% FIGURE: <label>`, standing alone between blank lines. After the draft writer has ended, the session copies the images into the manuscript's `figures/` folder, anchorizes `main.tex` and gives the agent, resumed, the manifest and the path of the patch.
 
 - The patch has the id `figures`, as `references/revision-patch-protocol.md` gives, and the form of that page.
 - The marker is a block of its own, so the patch has one `replace_block` op for each figure drawn. The op replaces the marker block with the environment of the figure from `figures.md`, with the image name that `figures.md` gives under "Names".
