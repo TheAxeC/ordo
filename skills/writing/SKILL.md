@@ -2,7 +2,7 @@
 name: writing
 description: "Review the prose of a draft with a script and four fresh agents that change nothing. The script computes the counts and word lists that have one right answer. The agents read a whole .tex file with the files it inputs and includes, a .md, a .txt or a .docx against the prose standard and the academic writing rules, each checking its own rules. The report shown to the user lists each break of a named rule, numbered, with its place, the quoted passage and what the rule asks for, the findings that leave the reader wrong or unsure first, grouped by rule, and proposes no replacement. Triggers on: /writing <file>, review the writing of a draft, check a draft against the prose standard, review the prose of a manuscript, review the prose of a grant, check the writing of a text."
 metadata:
-  version: "2.0.0"
+  version: "2.1.0"
 ---
 
 # Review the prose of a draft
@@ -37,9 +37,8 @@ metadata:
    - `.docx`: the file, read through `templates/docx_paragraphs.py`.
    - Any other extension is a refusal that names it.
    - A file that does not exist, an input or include file included, is a refusal that names the file.
-4. The output of `templates/prose_facts.py` for the draft and the prose standard (Steps 5).
+4. The output of `templates/prose_facts.py` for the draft and the prose standard (Steps 4).
    - A non-zero exit of this script, or of `templates/docx_paragraphs.py` for a `.docx`, is a refusal that shows the line it printed.
-5. The model identifier the runner's model list gives for opus, the model every agent runs on, and the runner's agent types: every agent starts as the effort agent `ordo-medium` when the runner lists it and `CLAUDE_CODE_EFFORT_LEVEL` is unset, and otherwise on the runner's default agent (Steps 4).
 
 ## Steps
 
@@ -57,41 +56,25 @@ metadata:
    - A name resolves against the main file's folder, and `.tex` is added to a name without an extension.
    - A file is listed once.
    - Done when every file of the list exists, or the refusal is raised.
-4. Read the agent the four agents start as, and the opus identifier.
-   - With the effort agent `ordo-medium` among the runner's agent types and `printenv CLAUDE_CODE_EFFORT_LEVEL` exiting 1, every agent starts as `ordo-medium`.
-   - With no `ordo-medium` agent listed, or with the variable set, every agent starts on the runner's default agent, the general-purpose agent, with the Agent tool's `effort` set to `medium`.
-   - The agents on the default agent run at `medium`, or at the variable's value when it is set, since the variable overrides every agent's effort.
-   - A runner whose Agent tool takes no `effort` argument starts each agent on the default agent without it, and the agents run at the session's effort, which the run does not read.
-   - Read the identifier of opus from the runner's model list.
-   - A model list that gives no identifier for opus leaves it to the first agent, as Steps 7 says.
-   - Done when the agent the four start as, the effort they run at, and the identifier or its being left to the first agent are known.
-5. Run the scripts, each path in single quotes as one argument, a single quote inside a path written as `'\''`, so the shell expands nothing in it.
+4. Run the scripts, each path in single quotes as one argument, a single quote inside a path written as `'\''`, so the shell expands nothing in it.
    - Run `python3 '<this skill's folder>/templates/prose_facts.py' '<draft>' '<prose standard>'`, with the main file of Steps 3's list as `<draft>`.
    - For a `.docx`, also run `python3 '<this skill's folder>/templates/docx_paragraphs.py' '<draft>'`.
    - A non-zero exit of either script is the refusal "No facts" ("Stops"), with the line the script printed.
    - Done when the output of each script is held, or the refusal is raised.
-6. Start three fresh agents in the background, at once: the sentence agent, the section agent and the whole-draft agent. Each runs on opus as the agent Steps 4 read: `ordo-medium`, or the runner's default agent with the Agent tool's `effort` set to `medium`.
+5. Start three fresh agents in the background, at once: the sentence agent, the section agent and the whole-draft agent.
+   - Each starts on the runner's general-purpose agent with the runner's defaults, and its prompt sets no model and no effort.
    - Each prompt is the prompt of "Agent prompts" for a finding agent.
    - Done when the runner has started the three agents.
-7. Read the id and the model the runner served for each agent it started, from the runner's record of the agent as the `plan-orchestration` skill's "Launching a builder" says.
-   - A served model of the opus family goes on, a newer version than the opus identifier of Steps 4 included, and is named as Steps 10 says.
-   - A model is of the opus family when its identifier names opus, as `claude-opus-5-6` does.
-   - A served model of another family, for any of the four agents, is the stop "A model other than the configured one" ("Stops").
-   - With no identifier in the model list, the served model of the sentence agent, the first agent Steps 6 names, becomes the run's identifier, and one that is not an opus model is the same stop.
-   - On that stop every agent of the run still running is stopped through the runner's stop tool, and nothing any of them wrote is used.
-   - Done when the ids and the served models are read and each model is of the opus family, or the stop is raised.
-8. When the runner reports that the three agents ended, start the checking agent as Steps 6 starts the others, then read its id and served model as Steps 7 says.
+6. When the runner reports that the three agents ended, start the checking agent as Steps 5 starts the others.
    - The prompt is the prompt of "Agent prompts" for the checking agent.
    - The checking agent starts after the three, since its prompt carries their findings.
-   - Done when the runner has started the agent and its served model is of the opus family, or the stop is raised.
-9. When the runner reports that the checking agent ended, show its final message, the report, whole as the message that ends the turn.
+   - Done when the runner has started the agent.
+7. When the runner reports that the checking agent ended, show its final message, the report, whole as the message that ends the turn.
    - Write no file and add no finding.
    - Done when the report is shown whole.
-10. After the report, in the same message, give on one line the tokens of the four agents from their completion notices and their sum.
-    - The line also names the effort the agents ran at when they did not start as `ordo-medium` (Steps 4).
-    - The line also names each served identifier other than the opus identifier of Steps 4 (Steps 7).
-    - The checking agent's report above it stays whole and unchanged.
-    - Done when the line follows the report.
+8. After the report, in the same message, give on one line the tokens of the four agents from their completion notices and their sum.
+   - The checking agent's report above it stays whole and unchanged.
+   - Done when the line follows the report.
 
 ## Agent prompts
 
@@ -289,20 +272,19 @@ These texts name no break, so no agent gets them:
 
 ## Stops
 
-The first row is a stop, a decision for the user. It leaves no open item, since this skill is not a plan skill. The rows below it are refusals, which name their cause and leave nothing.
+Every row is a refusal, which names its cause and leaves nothing.
 
 | Stop | When | What it shows | What resumes it |
 |---|---|---|---|
-| A model other than the configured one | The runner served one of the four agents a model of another family than opus (Steps 7 and 8) | The configured model, the served model and the Claude Code version, as plain text | The user's decision, then `/writing` again |
 | No prose standard | Neither of the two places of "What it reads" 1 holds it, or a manuscript's page `references/manuscript-prose-standard.md` is missing | Both paths, or the path of the page | A prose standard at one of the two places, or the page restored, then `/writing` again |
 | Draft refused | The call holds more than one argument (Steps 1), the extension is none of `.tex`, `.md`, `.txt` and `.docx`, or the file or an input or include file does not exist | The line of Quick start, the extension or the missing file | The call or the draft corrected, then `/writing` again |
-| No facts | A script of Steps 5 exits non-zero | The line the script printed | The cause put right, then `/writing` again |
+| No facts | A script of Steps 4 exits non-zero | The line the script printed | The cause put right, then `/writing` again |
 
 ## Anti-patterns
 
 | Anti-pattern | Why it fails | Do instead |
 |---|---|---|
-| The session reads the draft and reports the findings itself | The session may have written the draft, so it would review its own work | Start the agents of Steps 6 and 8 and show the checking agent's report |
+| The session reads the draft and reports the findings itself | The session may have written the draft, so it would review its own work | Start the agents of Steps 5 and 6 and show the checking agent's report |
 | An agent edits the draft | The text under review is no longer the text the user wrote, and the report no longer describes it | Each agent reports each break and changes nothing; the skill that owns the text applies the findings the user accepts |
 
 ## Rules

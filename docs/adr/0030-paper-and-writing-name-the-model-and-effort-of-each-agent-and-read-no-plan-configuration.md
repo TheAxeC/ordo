@@ -1,6 +1,6 @@
 # 0030. Paper and writing name the model and effort of each agent and read no plan configuration
 
-Status: proposed; superseded by 0035 in the part that makes `ordo-medium` the only agent a role of `paper` or an agent of `writing` starts as; superseded by the ruling The briefs of academic-paper's run of plan 5 in the part that makes the roles of `paper` run as `ordo-medium`, now every role of `paper` on the default agent at `medium`, the part for `writing` standing; superseded by the ruling The incremental change done properly of plan 5 in the effort `medium` and the opus and sonnet models of the roles of `paper`, now every role on the default agent with the runner's defaults, the part for `writing` standing
+Status: proposed; superseded by 0035 in the part that makes `ordo-medium` the only agent a role of `paper` starts as; superseded by the ruling The briefs of academic-paper's run of plan 5 in the part that makes the roles of `paper` run as `ordo-medium`, now every role of `paper` on the default agent at `medium`; superseded by the ruling The incremental change done properly of plan 5 in the effort `medium` and the opus and sonnet models of the roles of `paper`, now every role on the default agent with the runner's defaults
 
 ## Context
 
@@ -8,7 +8,7 @@ ADR 0027 decides that each role of a `paper` run "runs as `ordo-<reviewer_effort
 
 ## Decision
 
-`paper` and `writing` read no `.agents/plan.yaml`. Each skill names in its own text the model and the effort of each agent it starts: every role of `paper` and every agent of `writing` runs as `ordo-medium` on opus, and `paper`'s formatter runs as `ordo-medium` on sonnet. The prose standard is `docs/dev/prose-standard.md` of the repository when it has one, and otherwise the `repo-setup` skill's `templates/docs/dev/prose-standard.md`, with no refusal for a missing configuration. This record supersedes ADR 0027 in the effort and the model its roles run at, and ADR 0001 in the `standards` key; both stand for every other part.
+`paper` and `writing` read no `.agents/plan.yaml`. `paper` names in its own text the model and the effort of each agent it starts: every role of `paper` runs as `ordo-medium` on opus, and `paper`'s formatter runs as `ordo-medium` on sonnet. `writing` starts each of its agents on the runner's default agent with the runner's defaults, and its prompts set no model and no effort. The prose standard is `docs/dev/prose-standard.md` of the repository when it has one, and otherwise the `repo-setup` skill's `templates/docs/dev/prose-standard.md`, with no refusal for a missing configuration. This record supersedes ADR 0027 in the effort and the model its roles run at, and ADR 0001 in the `standards` key; both stand for every other part.
 
 ## Alternatives rejected
 
@@ -18,4 +18,4 @@ ADR 0027 decides that each role of a `paper` run "runs as `ordo-<reviewer_effort
 
 ## Consequences
 
-`/paper` and `/writing` run in any repository. The `projects:` form of their calls goes, since it only chose which project's keys to read. A change of model or effort is a change of the skill's text. The effort agent `ordo-medium` must be installed, and `CLAUDE_CODE_EFFORT_LEVEL` must stay unset, as for every effort agent.
+`/paper` and `/writing` run in any repository. The `projects:` form of their calls goes, since it only chose which project's keys to read. For `paper`, a change of model or effort is a change of the skill's text. For the roles of `paper`, the effort agent `ordo-medium` must be installed, and `CLAUDE_CODE_EFFORT_LEVEL` must stay unset, as for every effort agent. `writing` needs no effort agent, and `CLAUDE_CODE_EFFORT_LEVEL` may be set when it runs.

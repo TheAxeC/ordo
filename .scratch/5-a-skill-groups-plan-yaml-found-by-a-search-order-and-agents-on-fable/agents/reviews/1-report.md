@@ -109,3 +109,40 @@ Nothing. One observation on a premise: the brief's "What is on the tree" does no
 ## Handed back
 
 Nothing.
+
+## Repair round 1
+
+NOT DONE: nothing. Each of the eight rulings is carried out, and nothing else was changed.
+
+1. `docs/adr/0030-...md`, Decision: the sentence now opens "`paper` names in its own text the model and the effort of each agent it starts", and the one sentence on `writing` follows it. Consequences: "For `paper`, a change of model or effort is a change of the skill's text."; the last sentence reads "`writing` needs no effort agent, and `CLAUDE_CODE_EFFORT_LEVEL` may be set when it runs.", so the record says once, in its decision, how `writing` starts its agents.
+2. `docs/adr/0035-...md`, Alternatives rejected: "The default agent at the session's effort, for `paper`: a run of `paper` names the effort its agents ran at, and it cannot name an effort it does not read."
+3. `docs/adr/0035-...md`, Context: "ADR 0030 decides that every role of `paper` "runs as `ordo-medium` on opus", the agents of `writing` start the same way, and both skills refuse to start with ...". The quote is now what ADR 0030's decision says.
+4. `skills/repo-setup/templates/plan-terms.md`, then `docs/glossary.md` by the sync, entry **reviewer**: "An agent started with the warning the entry **effort agent** gives follows the session and is not held to these models."
+5. The same two files, entry **brief check**: "by one fresh read-only agent, the brief-check agent: the effort agent `ordo-<reviewer_effort>` on the model the configuration block's `reviewer:` names, or, when the runner lists no such agent, an agent started with the warning the entry **effort agent** gives. Its report is saved at `agents/reviews/<step>-brief-check.md`. The brief check also holds each line ...".
+6. `skills/plan-orchestration/SKILL.md`, "The two tiers, and the models": the sentence "The `plan` skill's `templates/plan.yaml` names Claude Opus for each of those keys." is removed.
+7. `docs/adr/0007-...md`, Alternatives rejected: "The same model at medium effort: the run over a repair round stays on the first run's model, and a repository cannot set another model for it." and "No change until the reviewer trial of plan 2.F reports: until then no repository can set the model of the run over a repair round apart from the first run's."
+8. `skills/code-comments/SKILL.md`, "The rewrite" 5: "then start the rewrite agent as a fresh agent on the runner's general-purpose agent with the runner's defaults, its prompt setting no model and no effort." It no longer points at Steps 5 and says nothing on the background.
+
+The checks, each run from the worktree's root under `env -u CLAUDE_CONFIG_DIR -u ORDO_SKILL_DIRS -u ORDO_STABLE`, as printed:
+
+- `sh skills/land/templates/land.test.sh 2>&1 | tail -1`: `PASS: land.sh scratch tests`
+- `sh skills/ordo-init/templates/check_config.test.sh 2>&1 | tail -1`: `PASS: check_config.py scratch tests`
+- `sh skills/repo-setup/templates/sync_rules.test.sh 2>&1 | tail -1`: `PASS: sync_rules.py scratch tests`
+- `python3 skills/repo-setup/templates/sync_rules.py . --only glossary`: `ok: the plan-terms block equals the template`, exit 0
+- The character-set check over the paths `git status --porcelain` lists: prints nothing, exit 0
+- `git diff -- 'skills/*/SKILL.md' | grep -c '^[+-]description'`: `0`, so no description changed and the lengths of the first report stand
+
+The cases, run again:
+
+- C1: 7 lines, `.agents/plan.yaml:9` and `:11`, `docs/roadmap.md:23`, `:26` and `:27`, `skills/paper/references/disclosure_mode_protocol.md:111`, `skills/plan-orchestration/templates/prices.txt:3`; none keeps an agent off Fable. Met.
+- C2: prints nothing. Met.
+- C3: both greps print nothing. Met.
+- C4: `ordo-help` 127 and 129, `plan-orchestration` 54 and 460, `refute` 53 and 202, `spec` 93 and 489, each for `CLAUDE_CODE_EFFORT_LEVEL` alone. Met.
+- C5, by reading: unchanged by this round in `spec`, `refute`, `grill` and `diagnose`; in `plan-orchestration` the round removed one sentence of "The two tiers, and the models", and Steps 1 and "Launching a builder" still state the warning. Met.
+- C6: prints nothing. Met.
+- C7: `git diff --stat -- skills/paper` prints nothing; `git diff -- .agents/plan.yaml` changes the comment of the `reviewer` line, the value `claude:fable` on both sides. Met.
+- C8: line 65 only, which says the prompt sets no model and no effort. Met.
+- C9, by reading: the lines printed are those of the first report's run after the change; none says either skill starts an effort agent, runs on a configured model or stops on a served model. Met.
+- C10, by reading: the decisions of ADR 0014, 0030 and 0035 state what `code-comments` and `writing` do. Met.
+
+`git diff --numstat | wc -l` prints 27: the round changed no file outside the 27 the first report lists.

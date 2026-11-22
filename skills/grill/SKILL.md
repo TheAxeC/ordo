@@ -2,7 +2,7 @@
 name: grill
 description: "Settle a roadmap entry's design decisions before its plan opens, by an interview in rounds: list the decisions the entry's goal and gate need, ask every decision whose prerequisites are settled in one round, each with its options, their pros and cons, a reference line for the configured design bar, one recommendation and the lazy option named, have facts looked up by agents instead of asked, and write each answer as it settles into the plan's Rulings or the entry's rulings file, each lookup agent into the Agents section of the same file, the roadmap entry, the glossary and a proposed ADR, written on the user's yes or, under `--self-rule`, on the orchestrator's recommendation. Triggers on: grill <entry>, grill me on the entry, settle the design decisions of an entry, interview me about the design, design decisions before the plan, stress-test the design of an entry."
 metadata:
-  version: "1.3.1"
+  version: "1.4.0"
 ---
 
 # Settle an entry's design decisions
@@ -215,12 +215,16 @@ metadata:
 
 ### Looking up a fact
 
-1. Before the first lookup agent starts, check as the `spec` skill's Steps 1 does that the runner lists the effort agent `ordo-<reviewer_effort>` and that `CLAUDE_CODE_EFFORT_LEVEL` is unset (`printenv CLAUDE_CODE_EFFORT_LEVEL` exits 1).
-   - Either check failing does not end the interview: the lookups are made by the session's own reads, and the next round says so with the cause, the missing agent or the variable's value.
-   - The item is done when both checks passed, or the next round is set to give the cause.
+1. Before the first lookup agent starts, check as the `spec` skill's Steps 1 does that `CLAUDE_CODE_EFFORT_LEVEL` is unset (`printenv CLAUDE_CODE_EFFORT_LEVEL` exits 1), and read whether the runner lists the effort agent `ordo-<reviewer_effort>`.
+   - A variable that is set does not end the interview: the lookups are made by the session's own reads, and the next round says so with the variable's value.
+   - An effort agent the runner does not list does not end the interview: the session prints a warning as plain text, and the lookup agents are started all the same.
+     - The warning names the missing agent.
+     - The warning says that each lookup agent follows the session: it starts on the runner's default agent, with no model named and no effort set.
+     - The warning says that the configured model and effort are therefore not applied.
+   - The item is done when the variable is unset and it is known whether the runner lists the effort agent, with the warning printed when it does not, or the next round is set to give the variable's value.
 2. A fact in a file the session has read, or can read in a few lines, is read by the session itself.
    - The item is done when the fact is in hand with its `path:line`, or the lookup goes to an agent under item 3.
-3. Any other lookup, when item 1's checks passed, starts a lookup agent as the `spec` skill's brief-check agent is launched: the effort agent `ordo-<reviewer_effort>`, on the model `reviewer` names.
+3. Any other lookup, when item 1 found the variable unset, starts a lookup agent as the `spec` skill's brief-check agent is launched: the effort agent `ordo-<reviewer_effort>`, on the model `reviewer` names, or, after the warning of item 1, the runner's default agent with no model named and no effort set.
    - It is read-only and changes nothing.
    - It invokes no skill and starts no agent.
    - It returns each fact with its source, a `path:line` or a URL it fetched.
@@ -230,9 +234,10 @@ metadata:
    - That file is the open plan's `plan.md`, or else the rulings file, created with its heading line as "Steps / Writing what settled" 1 says.
    - A `plan.md` without the section gets it before `## Blocked, and by what`.
    - A rulings file without the section gets it at its end.
-   - A served model that is not the configured one is the stop "A lookup agent served another model" ("Stops"): the agent is stopped through the runner's stop tool, and nothing it found is used.
+   - For a lookup agent started as the effort agent, a served model that is not the configured one is the stop "A lookup agent served another model" ("Stops"): the agent is stopped through the runner's stop tool, and nothing it found is used.
    - The bullet of a stopped agent is written all the same, since it ran.
-   - The item is done when the file, read back, holds the bullet, and the served model is the configured one or the stop is raised.
+   - A lookup agent started after the warning of item 1 is not held to the configured model: the stop is not raised for it, and its bullet holds its served model.
+   - The item is done when the file, read back, holds the bullet, and the served model is the configured one, the agent was started after the warning, or the stop is raised.
 5. A lookup that finishes joins the next round: the decisions that waited on it are asked.
    - The item is done when each fact a decision needs is in hand with its source.
 
@@ -368,7 +373,7 @@ The first three rows are stops, which wait on the user. The rest are refusals, w
 |---|---|---|---|
 | A round | Every round, at Steps 6, or under `--self-rule` a round of decisions of the six kinds; the "record as ADR?" decisions and each roadmap diff no quoted ruling states ride in it | The frontier as decisions in the decision form, the answer form, and in the first round the decisions carried rulings settle and the archived plans a ruling sets aside | The user's answers |
 | The end | Steps 10, except under `--self-rule` | The decisions settled with where each was written, the step changes owed, and the question of the shared understanding and the commit | The user's confirmation and answer on the commit |
-| A lookup agent served another model | The runner served a lookup agent a model that is not the configured one ("Steps / Looking up a fact") | The configured value of `reviewer` and the served model | The user's instruction, then the lookup started again |
+| A lookup agent served another model | The runner served a lookup agent started as the effort agent a model that is not the configured one ("Steps / Looking up a fact") | The configured value of `reviewer` and the served model | The user's instruction, then the lookup started again |
 | No configuration | `.agents/plan.yaml` is missing | A refusal that names `/ordo-init` | `/ordo-init`, then `/grill` again |
 | No such entry | `<entry>` matches no roadmap entry | A refusal that names `/roadmap add <goal>` | `/grill` with an entry that exists |
 | A required key missing | A required key is not in `.agents/plan.yaml` | The key | The key added, then `/grill` again |

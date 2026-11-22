@@ -43,20 +43,6 @@ repair_reviewer: claude:sonnet  # the model the run of /refute over a repair rou
 
 ```yaml
 dispatch:
-- step: 1
-  executor: agent
-  worker: claude:fable
-  base: 650332d
-  worktree: .agents/worktrees/5-a-skill-groups-plan-yaml-found-by-a-search-order-and-agents-on-fable-1
-  launched: 2026-11-22
-  report: .scratch/5-a-skill-groups-plan-yaml-found-by-a-search-order-and-agents-on-fable/agents/reviews/1-report.md
-  brief_check: .scratch/5-a-skill-groups-plan-yaml-found-by-a-search-order-and-agents-on-fable/agents/reviews/1-brief-check.md (a3baabc725c3d4805, claude-fable-5-2, 136624 tokens, 17 tool uses, 3.8 minutes)
-  shared_paths: "steps 2 and 3 of this plan name files this step names (the SKILL.md of nine skills, the plan templates, the glossary and its source, the README, ADR 0007, 0014 and 0030, .agents/plan.yaml): simple by the ruling Three steps in flight, since this step lands first and steps 2 and 3 move or reword the same files on top of it"
-  session_id: ad35ad4cb7d6e0618 (claude-fable-5-2)
-  builder_usage: 263337 tokens, 42 tool uses, 10.2 minutes
-  reviewer_report: .scratch/5-a-skill-groups-plan-yaml-found-by-a-search-order-and-agents-on-fable/agents/reviews/1-refuter.md (af9bdf0f24d9b60a2, claude-fable-5-2, 222767 tokens, 29 tool uses, 5.4 minutes)
-  landing: not-started
-  round: 1
 - step: 2
   executor: agent
   worker: claude:fable
@@ -67,6 +53,7 @@ dispatch:
   brief_check: .scratch/5-a-skill-groups-plan-yaml-found-by-a-search-order-and-agents-on-fable/agents/reviews/2-brief-check.md (a4acb97b2cf90ba34, claude-fable-5-2, 172921 tokens, 25 tool uses, 7.0 minutes)
   shared_paths: "this step moves every skill folder and rewrites paths in files steps 1 and 3 of this plan also name: simple by the ruling Three steps in flight, since step 1 lands first and its edits are carried into the moved files, and step 3 lands on the grouped layout with its paths fixed at its landing"
   session_id: a8ad09548be32789f (claude-fable-5-2)
+  builder_usage: 227863 tokens, 46 tool uses, 14.8 minutes
   landing: not-started
   round: 0
 - step: 3
@@ -114,5 +101,5 @@ dispatch:
 ## Current position (rewritten before every step commit of this plan)
 
 - 2026-11-22. The plan is opened; nothing has landed.
-- Roadmap entry 5.A (Skill groups, plan.yaml found by a search order, and agents on Fable). Plan step 1 of 5: Fable and the session. Next: step 2, the skill groups.
+- Roadmap entry 5.A (Skill groups, plan.yaml found by a search order, and agents on Fable). Plan step 2 of 5: the skill groups, built and in review; step 3, the search order, is being built. Step 1 landed. Next: the landing of step 2.
 - Open on Axel's side: none.

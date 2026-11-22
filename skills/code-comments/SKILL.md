@@ -2,7 +2,7 @@
 name: code-comments
 description: "Review the comments a git diff adds or changes, the uncommitted changes or a range of commits, with a finding agent and a checking agent that change nothing, and rewrite the comments the user picks in C, C++ and CMake files. Each agent reads its whole task from a prompt file the session writes with shell commands. A file over 256 KB reaches it as its diff hunks. The report shown to the user lists each comment that breaks a named rule with its place, the quoted comment and what the rule asks for, the false comments first, and proposes no replacement. The report names each file given as hunks. A rewrite is kept only when the file's code compares equal to its code before the rewrite. Triggers on: /code-comments, /code-comments <base>..<head>, review the comments of a diff, review the comments of a range, check the comments of my changes, check the comments against the code, apply the comment findings, apply <numbers>, apply all."
 metadata:
-  version: "1.0.0"
+  version: "1.1.0"
 ---
 
 # Review the comments of a diff
@@ -14,7 +14,6 @@ metadata:
 ```
 /code-comments                    review the comments of the uncommitted changes against HEAD, untracked files included
 /code-comments <base>..<head>     review the comments of a range of commits
-/code-comments <project> ...      the same when .agents/plan.yaml has the projects: form; <project> names the project whose keys are read
 apply <numbers>                   after a report: rewrite the comments of those findings, the numbers separated by commas or spaces
 apply all                         after a report: rewrite the comments of every finding
 ```
@@ -28,20 +27,16 @@ apply all                         after a report: rewrite the comments of every 
 
 ## What it reads
 
-1. `.agents/plan.yaml` of the repository the session is in: `reviewer`, `reviewer_effort` (`high` when absent) and `standards` (`[]` when absent).
-   - A missing file, or a file without `reviewer`, is the refusal "No plan configuration", which names `/ordo-init`.
-   - In the `projects:` form the first argument of the call is always the project whose keys are read. A name no project has is the refusal "Unknown project", which lists the projects.
-2. The prose standard, from the first of these three places that holds it:
-   - The page of `standards` whose file name is `prose-standard.md`.
-   - `docs/dev/prose-standard.md`.
+1. The prose standard, from the first of these two places that holds it:
+   - `docs/dev/prose-standard.md` of the repository the session is in.
    - `templates/docs/dev/prose-standard.md` in the `repo-setup` skill's folder, which stands beside this skill's folder.
-   - None of the three is the refusal "No prose standard", which names the three paths.
+   - Neither is the refusal "No prose standard", which names both paths.
    - The file found, when it lacks one of the headings `## 0.`, `## A.`, `## B.`, `## C.` and `## E.`, is the same refusal, which names that file.
-3. The diff, from the call's remaining argument.
+2. The diff, from the call's argument.
    - No argument: the uncommitted changes against `HEAD`, as `git diff HEAD` gives them, together with every untracked file git does not ignore, each read as added whole.
    - `<base>..<head>`: the range. Each end is resolved by `git rev-parse --verify --end-of-options '<ref>^{commit}'`, and an end that does not resolve is the refusal "A range that does not resolve", which names it.
-   - Outside the `projects:` form, an argument that holds no `..` is the refusal "Not a range", which names it. The skill never reviews it as another diff.
-4. The files the diff touches, each whole, or as its diff hunks with 40 lines on either side when the file is over 262144 bytes.
+   - An argument that holds no `..` is the refusal "Not a range", which names it. The skill never reviews it as another diff.
+3. The files the diff touches, each whole, or as its diff hunks with 40 lines on either side when the file is over 262144 bytes.
    - The working tree's copy for the default call, and `git show '<head>:<path>'` for a range.
    - A file the diff deletes and a binary file are left out, and a renamed file is read at its new path.
    - A file the diff adds whole and an untracked file are given whole at any size.
@@ -49,17 +44,17 @@ apply all                         after a report: rewrite the comments of every 
    - A Markdown file's prose is not a comment and is not judged.
    - The commands of "The prompt file" write a file's text into the agents' prompt files, and the session does not read it.
    - A diff that leaves no file to review is the refusal "Nothing to review".
-5. The reply `apply <numbers>` or `apply all`, read only after a report shown earlier in the session.
+4. The reply `apply <numbers>` or `apply all`, read only after a report shown earlier in the session.
    - With no report shown earlier in the session, as after a compaction or in a new session, it is the refusal "No report to apply", and nothing is changed.
    - A number the report does not hold is the refusal "A number the report does not hold", which names it, and nothing is changed.
 
 ## Steps
 
-1. Read the call and `.agents/plan.yaml` as "What it reads" 1 and 3 say.
-   - Done when `reviewer`, `reviewer_effort`, `standards` and the kind of call are known, or the refusal is raised.
-2. Find the prose standard as "What it reads" 2 says.
+1. Read the call as "What it reads" 2 says.
+   - Done when the kind of call is known, or the refusal is raised.
+2. Find the prose standard as "What it reads" 1 says.
    - Done when its absolute path is known and `grep -c -e '^## [0ABCE]\. ' -- '<path>'` prints 5, or the refusal is raised.
-3. Resolve the diff and list the files to review with each file's size, as "What it reads" 3 and 4 say.
+3. Resolve the diff and list the files to review with each file's size, as "What it reads" 2 and 3 say.
    - For a range, resolve both ends first. A range end that does not resolve is the refusal, and the session runs no other command.
    - List the changed files with `git diff --no-ext-diff --find-renames --name-status -z HEAD`, or for a range with the two resolved commits in place of `HEAD`.
    - List the untracked files of the default call with `git ls-files --others --exclude-standard -z`.
@@ -70,33 +65,25 @@ apply all                         after a report: rewrite the comments of every 
    - Give every other file whole.
    - Give the diff as `git diff --no-ext-diff --no-color --find-renames HEAD`, and for a range as the same command with the two resolved commits in place of `HEAD`.
    - Done when the diff command, the list of files to review, each file's size and whether it is given whole or as hunks are held and no file's text has been read, or the refusal is raised.
-4. Check that the runner lists the effort agent `ordo-<reviewer_effort>` among its agent types and that `printenv CLAUDE_CODE_EFFORT_LEVEL` exits 1, as the `refute` skill's Steps 1 checks.
-   - Either check failing is the refusal "The configured effort cannot apply".
-   - Done when both checks hold, or the refusal is raised.
-5. Make the prompt folder, then write `finding.md` in it with the commands of "The prompt file".
+4. Make the prompt folder, then write `finding.md` in it with the commands of "The prompt file".
    - Make the folder with `mktemp -d "${TMPDIR:-/tmp}/code-comments-prompt.XXXXXX"`. It is the first write of the review, made after the last refusal.
    - Append the pieces of `finding.md` in the order "The prompt file" gives, the non-ASCII output of each reviewed file among them.
    - Only a hit on a line the diff adds or changes, inside a comment, can become a finding, and the agents judge which lines those are.
    - Done when `finding.md` holds every piece.
-6. Start the finding agent in the background as `ordo-<reviewer_effort>` on the model `reviewer` names.
-   - Its prompt is the one "The prompt file" gives, with the role finding and the absolute path of `finding.md`.
-   - Read its id and the model the runner served it from the runner's record of the agent, as the `plan-orchestration` skill's "Launching a builder" says.
-   - A served model that is not the configured one, as the `refute` skill's Steps 1 defines it, is the stop "A model other than the configured one".
-   - On that stop every agent of the run still running is stopped through the runner's stop tool.
-   - On that stop nothing any of the stopped agents wrote is used.
-   - On that stop the session removes the prompt folder with `rm -rf '<prompt>'`.
-   - Done when the runner has started the agent and its served model is the configured one, or the stop is raised.
-7. When the runner reports that the finding agent ended, write `checking.md` and start the checking agent as Steps 6 starts the finding agent, then read its id and served model as Steps 6 says.
+5. Start the finding agent in the background, as a fresh agent on the runner's general-purpose agent with the runner's defaults.
+   - Its prompt is the one "The prompt file" gives, with the role finding and the absolute path of `finding.md`, and sets no model and no effort.
+   - Done when the runner has started the agent.
+6. When the runner reports that the finding agent ended, write `checking.md` and start the checking agent as Steps 5 starts the finding agent.
    - Write `checking.md` with the pieces and the commands of "The prompt file", in the order it gives.
    - Its prompt is the one "The prompt file" gives, with the role checking and the absolute path of `checking.md`.
-   - Done when `checking.md` holds every piece, the runner has started the agent and its served model is the configured one, or the stop is raised.
-8. When the runner reports that the checking agent ended, remove the prompt folder with `rm -rf '<prompt>'`, then show the agent's final message, the report, whole as the message that ends the turn.
+   - Done when `checking.md` holds every piece and the runner has started the agent.
+7. When the runner reports that the checking agent ended, remove the prompt folder with `rm -rf '<prompt>'`, then show the agent's final message, the report, whole as the message that ends the turn.
    - Follow it with one line that gives both agents' tokens from their completion notices and their sum.
    - Done when the prompt folder is gone and the report and the token line are shown.
 
 ### The rewrite
 
-1. On `apply <numbers>` or `apply all`, check that a report was shown earlier in the session, as "What it reads" 5 says, then take the picked findings: the report's numbers named, or every number in the report for `all`.
+1. On `apply <numbers>` or `apply all`, check that a report was shown earlier in the session, as "What it reads" 4 says, then take the picked findings: the report's numbers named, or every number in the report for `all`.
    - Done when a report was shown and every picked number is a number of the report, or the refusal is raised before anything is changed.
 2. Leave out a picked finding in a file that is not C, C++ (`.c`, `.cc`, `.cpp`, `.h`, `.hpp`) or CMake (`CMakeLists.txt`, `.cmake`).
    - Done when each such finding is held for the final message, which names it as not rewritten.
@@ -112,12 +99,9 @@ apply all                         after a report: rewrite the comments of every 
    - A file the status lists as deleted has no copy.
    - Keep the status listing, to compare it with the listing item 6 reads.
    - Done when every file named above that exists has its copy and the prompt folder exists.
-5. Write `rewrite.md` in the prompt folder with the commands of "The prompt file", then start the rewrite agent as `ordo-<reviewer_effort>` on the model `reviewer` names, and check its served model as Steps 6 says.
+5. Write `rewrite.md` in the prompt folder with the commands of "The prompt file", then start the rewrite agent as a fresh agent on the runner's general-purpose agent with the runner's defaults, its prompt setting no model and no effort.
    - Its prompt is the rewrite agent's prompt "The prompt file" gives, with the absolute path of `rewrite.md`.
-   - On the stop "A model other than the configured one", item 6's put-back is applied to every file it finds changed, the picked files included, with no comparison.
-   - After that put-back the session removes the scratch folder and the prompt folder with `rm -rf '<scratch>' '<prompt>'`.
-   - The stop's message names each file put back, the scratch folder removed and the prompt folder removed.
-   - Done when the runner reports that the agent ended and its served model is the configured one, or the stop is raised.
+   - Done when the runner reports that the agent ended.
 6. Find every file the agent changed, by content.
    - Compare each copied file byte for byte with its copy, by `cmp -s -- '<file>' '<copy>'`.
    - A path that item 4's listing held as deleted and that is still absent is not a changed file.
@@ -331,18 +315,14 @@ The rewrite agent gets these bullets:
 
 ## Stops
 
-The first row is a stop, a decision for the user. It leaves no open item, since this skill is not a plan skill. The rows below it are refusals, which name their cause and leave nothing.
+Every row is a refusal, which names its cause and leaves nothing.
 
 | Stop | When | What it shows | What resumes it |
 |---|---|---|---|
-| A model other than the configured one | The runner served the finding, checking or rewrite agent a model that is not the configured one (Steps 6 and 7, "The rewrite" 5) | The configured model, the served model and the Claude Code version, as plain text; the prompt folder removed; during the rewrite also each file put back and the scratch folder removed | The user's decision, then `/code-comments` again |
-| No plan configuration | `.agents/plan.yaml` is missing, or has no `reviewer` | A refusal that names `/ordo-init` | `/ordo-init`, then `/code-comments` again |
-| Unknown project | In the `projects:` form, the first argument names no project | The projects the file lists | `/code-comments` again with a listed project |
-| No prose standard | None of the three places of "What it reads" 2 holds it, or the file found lacks one of its sections 0, A, B, C and E | The three paths, or the file found | A prose standard with its sections at one of the three paths, then `/code-comments` again |
-| Not a range | Outside the `projects:` form, the argument holds no `..` | The argument | `/code-comments <base>..<head>`, or `/code-comments` for the uncommitted changes |
+| No prose standard | Neither of the two places of "What it reads" 1 holds it, or the file found lacks one of its sections 0, A, B, C and E | Both paths, or the file found | A prose standard with its sections at one of the two paths, then `/code-comments` again |
+| Not a range | The argument holds no `..` | The argument | `/code-comments <base>..<head>`, or `/code-comments` for the uncommitted changes |
 | A range that does not resolve | An end of the range is not a commit | The end that does not resolve | `/code-comments` again with commits that exist |
 | Nothing to review | The diff leaves no file to review, as when it only deletes files or touches only binary files | The diff's files and why each is left out | A diff that touches a text file |
-| The configured effort cannot apply | The runner lists no `ordo-<level>` agent for the level `reviewer_effort` names, or `CLAUDE_CODE_EFFORT_LEVEL` is set, which runs every agent at its level whatever the definition says (Steps 4) | The missing agent, or the variable's value | The effort agents installed as the plan skills are, or the variable unset, then `/code-comments` again in a new session |
 | No report to apply | `apply` is typed with no report shown earlier in the session | A refusal that names the missing report | `/code-comments`, then `apply` again |
 | A number the report does not hold | `apply` names a number that is not in the report | The number | `apply` again with numbers of the report |
 
@@ -350,7 +330,7 @@ The first row is a stop, a decision for the user. It leaves no open item, since 
 
 | Anti-pattern | Why it fails | Do instead |
 |---|---|---|
-| The session reads the comments and judges them itself | The session may have written the code, so it would review its own work | Start the agents of Steps 6 and 7 and show the checking agent's report |
+| The session reads the comments and judges them itself | The session may have written the code, so it would review its own work | Start the agents of Steps 5 and 6 and show the checking agent's report |
 | The session types a file's text into an agent's prompt | A typed copy can drop or change a line, and a large diff cannot be typed at all | Write the prompt file with the commands of "The prompt file" and give the agent a prompt that names it |
 | An agent edits a file during the review | The code under review is no longer the code the user wrote, and the report no longer describes it | Each review agent reports and changes nothing; only the rewrite agent edits, and only the picked comments |
 | A rewrite kept without a comparison, or kept after `differ` | A change to code would stand in a rewrite the user took for comments only | Run `strip_comments.py --compare` on each changed picked file and put the copy back unless it prints `equal` |

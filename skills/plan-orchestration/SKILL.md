@@ -2,7 +2,7 @@
 name: plan-orchestration
 description: "Run every open plan unattended in one session, or the plan named, step by step, from its ledger folder: pick the next unblocked step, prepare its brief and worktree, dispatch one builder agent in the step's worktree, have a reviewer refute the result, send its findings back to the builder for the repair rounds plan.yaml allows, read the delta, land the step with the small fixes made at landing, book it, and repeat, and under self_rule: on and next_entry: on go on to the next roadmap entry after a closing; stop only where a decision is for the user. Every project specific comes from .agents/plan.yaml and the ledger, so the same skill runs a code tool, a research project or a manuscript under Claude Code, and one orchestrator session can hand the plans to another mid-way. Triggers on: run every open plan, run the plan, next step, orchestrate the plan, plan orchestration, dispatch the next step, continue the plan, resume the plan, C<n> Agree, C<n> => <ruling> (the review of a choice taken under self-rule)."
 metadata:
-  version: "7.0.0"
+  version: "7.1.0"
 ---
 
 # Plan orchestration
@@ -50,9 +50,10 @@ The loop runs over the plans that `/plan` opened. Each step goes through the sam
 
 1. Read the inputs in the order "What it reads" gives them.
    - Read the dispatch block of every open plan and resolve those of the plans the invocation runs before anything else, as "Resuming, and handing the plan over" says.
-   - Before any dispatch, check that the runner lists the effort agents each plan the run runs names in its configuration block, `ordo-<worker_effort>` and `ordo-<reviewer_effort>`, among its agent types, each level `high` when that block has no such key.
    - Before any dispatch, check that `CLAUDE_CODE_EFFORT_LEVEL` is unset: `printenv CLAUDE_CODE_EFFORT_LEVEL` exits 1.
-   - Either check failing is the refusal "The configured effort cannot apply" ("Stops"), and the loop dispatches nothing.
+     - A variable that is set is the refusal "The configured effort cannot apply" ("Stops"), and the loop dispatches nothing.
+   - Before any dispatch, check that the runner lists the effort agents each plan the run runs names in its configuration block, `ordo-<worker_effort>` and `ordo-<reviewer_effort>`, among its agent types, each level `high` when that block has no such key.
+     - An effort agent the runner does not list is no refusal: the loop goes on, and each agent that would start as it is started with the warning of "Launching a builder".
 2. Pick the next step that nothing blocks, for each free slot under the limit of "Two steps in flight".
    - Each free slot takes the next unblocked step of the earliest plan in the roadmap's order that has one.
      - In the `projects:` form, the projects stand in the order `.agents/plan.yaml` lists them, and each project's plans in its roadmap's order.
@@ -206,11 +207,11 @@ The loop runs over the plans that `/plan` opened. Each step goes through the sam
 ## The two tiers, and the models
 
 - Two tiers take part: the orchestrator, and the agents it starts (the builders, the reviewers, the brief-check agents and the diagnosis agents).
-- **Default.** The orchestrator and every agent run on Claude Opus.
-- **Orchestrator.** It may also run on Claude Fable.
+- **Orchestrator.** It runs on the model of its own session.
   - It reads, decides, invokes the skills, lands and books.
   - It never writes step code itself beyond a fix at landing, unless the step's executor is `inline`.
-- **Agents.** A builder, a reviewer, a brief-check agent or a diagnosis agent runs on a Claude model, and never on Claude Fable.
+- **Agents.** A builder, a reviewer, a brief-check agent and a diagnosis agent each run on the Claude model the configuration block names for them, by the key the bullets below give.
+  - An agent started with the warning of "Launching a builder" follows the session instead.
 - **Builder.** One per step, in the step's worktree, under the brief and the rules file, on the model the configuration block's `worker:` names, at the effort `worker_effort` names, launched as "Launching a builder" says.
 - **Reviewer.** The model is set per run of `/refute`.
   - The first run of a step runs on the model the configuration block's `reviewer:` names.
@@ -220,7 +221,7 @@ The loop runs over the plans that `/plan` opened. Each step goes through the sam
 - **Diagnosis agent.** One per diagnosis run with no person present, started by the orchestrator or by the `/spec` session as the `diagnose` skill's "Rules" say, on the model the configuration block's `reviewer:` names, at the effort `reviewer_effort` names.
   - It changes no file of the main checkout or of the step's worktree.
 - **Runner.** Both tiers run under Claude Code.
-- Any allowed combination is chosen per step.
+- Any combination of these models is chosen per step.
 - A new combination is booked in the rulings with what decides it.
   - It is measured by the landing reports of the steps it ran: each agent's tokens, tool uses and time, whether the first report passed its bar, and the fixes at landing.
 - The same skill runs a code tool, a research project or a manuscript.
@@ -359,7 +360,14 @@ The orchestrator, still one, may have as many steps running at once as the limit
 - Right after the launch, and before the launch commit (Steps 4), the orchestrator reads the model the runner served the builder from the runner's own record of the agent: under Claude Code, the `model` field of the assistant entries of the agent's transcript, `subagents/agent-<agent id>.jsonl` in the session's folder under `~/.claude/projects/`, or under `$CLAUDE_CONFIG_DIR/projects/` when that variable is set.
 - The orchestrator writes that model beside `session_id` in the dispatch entry, as `session_id: <agent id> (<served model>)`.
 - The same check runs when the builder is resumed for a repair round.
-- A served model that is not the configured one is the stop "A model other than the configured one" ("Stops"): the agent is stopped through the runner's stop tool, and nothing it wrote is used.
+- For a builder launched as an effort agent, a served model that is not the configured one is the stop "A model other than the configured one" ("Stops"): the agent is stopped through the runner's stop tool, and nothing it wrote is used.
+- When the runner lists no `ordo-<worker_effort>` agent, the orchestrator prints a warning as plain text and dispatches the builder all the same.
+  - The warning names the missing agent.
+  - The warning says that the builder follows the session: it starts on the runner's default agent, with no model named and no effort set.
+  - The warning says that the configured model and effort are therefore not applied.
+  - The served model of such a builder is read and written beside `session_id` as for any builder.
+  - Such a builder is not held to the configured model, and the stop "A model other than the configured one" is not raised for it.
+  - A reviewer, a brief-check agent and a diagnosis agent whose `ordo-<reviewer_effort>` agent the runner does not list are started with the same warning, as the `refute`, `spec` and `diagnose` skills say.
 - A builder that is replaced keeps its record: its agent id and served model move to the dispatch entry's `builders_before:` key, one after another.
   - A builder stopped for another model is recorded as `<agent id> (<served model>, stopped)`.
   - A dead builder is recorded as `<agent id> (<served model>, dead)`.
@@ -448,8 +456,8 @@ The table holds seven kinds of stop, each for a decision for the user, and one r
 | A rule clash | A contradiction between two established rules or decisions, an ADR among them, except a ruling of the user that replaces a bullet ending "(self-rule)", which is no clash | The stop message, below | The user's ruling |
 | A finding that is the user's | A finding that changes a public shape or an established decision; or one that neither the repair rounds nor a fix at landing close (a finding outside the step's part, work the last round left undone, a changed view not fixed at landing), which goes where "What earns a step of its own" says, by a ruling of the user or, under `self_rule: on`, a choice `references/self-rule.md`, "Closing an open item", books | The stop message, below | The user's ruling |
 | The roadmap diff | The closing step's `/roadmap done`, which shows its diff of the roadmap | The diff, in the stop message | The user's approval of the diff |
-| A model other than the configured one | The runner served a builder, a reviewer, a brief-check agent or a diagnosis agent a model that is not the configured one: a different model family, or an older version than the newest the configured alias names in the runner's model list ("Launching a builder") | The stop message, below, with the configured value, the served model and the Claude Code version | The user's ruling |
-| The configured effort cannot apply | A refusal (Steps 1): the runner lists no `ordo-<level>` agent for a level the configuration block names, or `CLAUDE_CODE_EFFORT_LEVEL` is set, which runs every agent at its level whatever the definition says | The missing agent, or the variable's value | The effort agents installed as the plan skills are, or the variable unset, then a new session |
+| A model other than the configured one | The runner served a builder, a reviewer, a brief-check agent or a diagnosis agent launched as an effort agent a model that is not the configured one: a different model family, or an older version than the newest the configured alias names in the runner's model list ("Launching a builder") | The stop message, below, with the configured value, the served model and the Claude Code version | The user's ruling |
+| The configured effort cannot apply | A refusal (Steps 1): `CLAUDE_CODE_EFFORT_LEVEL` is set, which runs every agent at its level whatever the definition says | The variable's value | The variable unset, then a new session |
 
 - Fixing a defect in what the user asked for is never a stop, whatever the fix makes visible.
 - A stop is booked in the state file's open items the moment it is raised, and under the step's Step 0 in `plan.md`.

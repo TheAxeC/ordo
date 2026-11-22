@@ -1868,13 +1868,8 @@ def writing() -> str:
         Edge("C", "K"),
         Edge("K", "RP"),
     )
-    stop = Node(
-        "SM", "A model other than the configured one, for any of the four", "stop"
-    )
     note = "The three finding agents start at once; the checking agent starts after they end."
-    return _single(
-        "writing.svg", "The writing skill", _graph(nodes, edges, (stop,)), note
-    )
+    return _single("writing.svg", "The writing skill", _graph(nodes, edges), note)
 
 
 def code_comments() -> str:
@@ -1889,14 +1884,11 @@ def code_comments() -> str:
         Edge("K", "RP"),
         Edge("RP", "RW", "apply <numbers> or apply all"),
     )
-    stop = Node(
-        "SM", "A model other than the configured one, for any of the three", "stop"
-    )
     note = "A rewrite is kept only when the code of the file compares equal to its code before."
     return _single(
         "code-comments.svg",
         "The code-comments skill",
-        _graph(nodes, edges, (stop,)),
+        _graph(nodes, edges),
         note,
     )
 

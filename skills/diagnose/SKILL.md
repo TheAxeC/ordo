@@ -2,7 +2,7 @@
 name: diagnose
 description: "Find the cause of a defect before changing anything: one command run red on the exact symptom, the case shrunk until each remaining part is needed for the red, three to five ranked hypotheses that each name the result that would falsify them, one change per probe tied to one hypothesis, the fix with a test run red without it where the failure costs something, and the cause written where it is kept. Run by a person, it waits for the reply to the hypotheses before the first probe. Run unattended in a plan's loop, it runs in a fresh agent, probes on a scratch copy, leaves the step's worktree unchanged and hands the fix over by where the defect was found. It leaves behind the diagnosis record. Triggers on: diagnose, diagnose this, debug this, this is broken, find the cause of, why does this fail, why is this slow, this got slower, this test is flaky, fails only sometimes, the cause is not known, diagnose the finding, find the cause a step's text asks for."
 metadata:
-  version: "2.1.1"
+  version: "2.2.0"
 ---
 
 # Diagnose a defect
@@ -385,10 +385,15 @@ The first five rows are stops. The cause not found, inside a plan, is a decision
   - Run by a person, the skill stays in the person's session.
 - The session that holds the skill, the orchestrator or the `/spec` session, starts the diagnosis agent.
   - It starts the agent as the effort agent `ordo-<reviewer_effort>` on the model the configuration block's `reviewer:` names, and checks it as the `refute` skill's Steps 1 checks its reviewer:
-    - The runner lists the effort agent.
     - `CLAUDE_CODE_EFFORT_LEVEL` is unset.
+    - The runner lists the effort agent.
+    - When the runner does not list it, the session prints a warning as plain text and starts the agent all the same.
+      - The warning names the missing agent.
+      - The warning says that the agent follows the session: it starts on the runner's default agent, with no model named and no effort set.
+      - The warning says that the configured model and effort are therefore not applied.
+      - An agent started with the warning is not held to the configured model: the stop "A model other than the configured one" is not raised for it, and its served model is written in its numbered item and in the record's head as for any diagnosis agent.
     - The session reads the agent's id and served model right after the start.
-    - A served model that is not the configured one is the stop "A model other than the configured one".
+    - For an agent started as the effort agent, a served model that is not the configured one is the stop "A model other than the configured one".
       - The agent is stopped.
       - Nothing it wrote is used.
 - The session makes the refusals of Steps 1 before it starts the diagnosis agent.

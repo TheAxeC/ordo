@@ -102,3 +102,96 @@ No history, date, plan or step name is added by the diff, and no non-ASCII. The 
 - The ruling "Fable and the session" itself, as instructed.
 
 Agent usage: af9bdf0f24d9b60a2, claude-fable-5-2, 222767 tokens, 29 tool uses, 5.4 minutes.
+
+## Repair round 1, refuted
+
+### Verification
+
+Run from the worktree root, under `env -u CLAUDE_CONFIG_DIR -u ORDO_SKILL_DIRS -u ORDO_STABLE`.
+
+- `sh skills/land/templates/land.test.sh 2>&1 | tail -1`: `PASS: land.sh scratch tests`
+- `sh skills/ordo-init/templates/check_config.test.sh 2>&1 | tail -1`: `PASS: check_config.py scratch tests`
+- `sh skills/repo-setup/templates/sync_rules.test.sh 2>&1 | tail -1`: `PASS: sync_rules.py scratch tests`
+- `python3 skills/repo-setup/templates/sync_rules.py . --only glossary`: `ok: the plan-terms block equals the template`, exit 0
+- Character-set check over the paths `git status --short` lists: no output, exit 0
+- Description-length command, largest four: `1022 skills/roadmap/SKILL.md`, `1018 skills/plan-orchestration/SKILL.md`, `1003 skills/spec/SKILL.md`, `994 skills/paper/SKILL.md`. All are at most 1,024.
+- C1, `grep -rn -i fable` outside `.scratch`: hits at `.agents/plan.yaml:9` and `:11`, `docs/roadmap.md:23`, `:26`, `:27`, `skills/paper/references/disclosure_mode_protocol.md:111`, `skills/plan-orchestration/templates/prices.txt:3`, and `.git:1` (the worktree's gitdir path). I read each one: none keeps an agent off Fable.
+- C2: no output.
+- C3: both greps print nothing.
+- C4: eight lines, `skills/ordo-help/SKILL.md:127` and `:129`, `skills/refute/SKILL.md:53` and `:202`, `skills/spec/SKILL.md:93` and `:489`, `skills/plan-orchestration/SKILL.md:54` and `:460`. Each states the refusal for `CLAUDE_CODE_EFFORT_LEVEL` alone.
+- C6: no output.
+- C7: `git diff 650332d --stat -- skills/paper` prints nothing. The `.agents/plan.yaml` diff is one line pair, the `reviewer` comment, with `claude:fable` on both sides; the comment loses "and the agents of /code-comments".
+- C8: one line, `skills/writing/SKILL.md:65`: "Each starts on the runner's general-purpose agent with the runner's defaults, and its prompt sets no model and no effort."
+- C9: the only hit that mentions effort or model is `README.md:119`. It ends "`writing`, `code-comments` and `paper` start every agent on the runner's default agent with the runner's defaults."
+
+The round's delta is seven files: ADR 0007, 0030, 0035, `docs/glossary.md`, `skills/code-comments/SKILL.md`, `skills/plan-orchestration/SKILL.md` and `skills/repo-setup/templates/plan-terms.md`. Each is a point's file. No other tracked file differs from the snapshot, and none of the seven files adds a date, a plan name or a step name.
+
+### Verdicts
+
+Brief items 1 to 7:
+- Item 1: holds.
+- Item 2: holds.
+- Item 3: holds.
+- Item 4: holds. The refusal for `CLAUDE_CODE_EFFORT_LEVEL` alone stays in `spec`, `refute`, `plan-orchestration` and `ordo-help`, as C4 shows. I did not re-read the `grill` and `diagnose` warning text this round.
+- Item 5: violated for ADR 0035, Spec finding 1.
+- Item 6: holds.
+- Item 7: holds.
+
+Cases C1 to C10:
+- C1: met.
+- C2: met.
+- C3: met.
+- C4: met.
+- C5: not verifiable. The warning text of `spec`, `refute`, `plan-orchestration`, `grill` and `diagnose` was not re-read this round, and the round changed none of it.
+- C6: met.
+- C7: met.
+- C8: met.
+- C9: met.
+- C10: partial. ADR 0014 and ADR 0030 state what `code-comments` and `writing` do. ADR 0035's Context contradicts its own Decision for `writing` (Spec finding 1).
+
+The eight points:
+1. Carried out. ADR 0030 Decision now opens "`paper` names in its own text the model and the effort...", and Consequences opens "For `paper`, a change of model or effort...". The record says once what `writing` does.
+2. Carried out. The ADR 0035 alternative now reads "The default agent at the session's effort, for `paper`: ...".
+3. Not met. The quote of ADR 0030 is now true. The sentence around it still says something false, Spec finding 1.
+4. Carried out. The template and `docs/glossary.md` both read "follows the session and is not held to these models". The sync check passes.
+5. Carried out. The **brief check** entry now carries the warning case in the **diagnosis agent** entry's wording.
+6. Carried out. The sentence is gone, and no other tracked file outside `.scratch` says "names Claude Opus". The remaining sentence in that bullet, "An agent started with the warning of "Launching a builder" follows the session instead.", still holds.
+7. Carried out. Both rejections now argue from the Context.
+8. Carried out. Item 5 of "The rewrite" now reads "...as a fresh agent on the runner's general-purpose agent with the runner's defaults, its prompt setting no model and no effort." It no longer points at Steps 5 and says nothing on the background.
+
+### Spec
+
+1. `docs/adr/0035-...md`, Context. Quoted text: "ADR 0030 decides that every role of `paper` "runs as `ordo-medium` on opus", the agents of `writing` start the same way, and both skills refuse to start with "The configured effort cannot apply" when the runner lists no `ordo-medium` agent or `CLAUDE_CODE_EFFORT_LEVEL` is set (`skills/paper/SKILL.md`, Steps 4), so neither runs in a Claude Code setup without Ordo's agents. Both also stop a run at "A model other than the configured one"..."
+
+   Point 3 asked that the sentence say nothing of ADR 0030 that ADR 0030 does not say. ADR 0030 now says `writing` starts on the runner's default agent with no model and no effort. So "the agents of `writing` start the same way" is still false of ADR 0030.
+
+   The same sentence still says `writing` refuses on a missing `ordo-medium` agent or a set `CLAUDE_CODE_EFFORT_LEVEL`, and stops on another model. `writing` does neither now. The Decision of the same record says `writing` starts on the default agent in every setup and has no stop.
+
+   A reader of ADR 0035 meets a Context that describes `writing` as it was and a Decision that says otherwise. The round edited this sentence and left the contradiction in it. Rule 19 of the change standard applies.
+
+### Proof
+
+none
+
+### Standards
+
+none. No history, date, plan or step name and no non-ASCII was added by the round.
+
+### Behaviour
+
+none
+
+### Declined to judge
+
+- C5, as stated under Verdicts.
+- Whether ADR 0007's alternatives name a trial of "plan 2.F". That name was in the base text and the brief leaves it.
+- The figures `docs/figures/code-comments.svg` and `docs/figures/writing.svg`, rendered. I did not open them. The round did not touch them.
+- The plan's whole verify list. The brief says not to run it.
+
+Agent usage: afa2da60d2fdec6cb, claude-sonnet-5-5, 99641 tokens, 10 tool uses, 1.3 minutes.
+
+## Closed
+
+- First run, Standards 1 to 7 and Behaviour 2: closed by the builder in repair round 1, as the run over the round confirms for points 1, 2 and 4 to 8.
+- First run, Behaviour 1 (the prose standard no longer read from the `standards` key): what item 3 of the brief asks; stated in the landing report.
+- Round 1, Spec 1 (the Context of ADR 0035 still describes `writing` as it was): fixed at landing, the Context worded for `paper` alone.

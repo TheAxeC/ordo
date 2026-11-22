@@ -2,7 +2,7 @@
 name: refute
 description: "Review a built step without changing anything: a fresh reviewer reads the diff against the brief and the repository's standards, reruns the checks the brief names and every command the builder's report quotes, treats an unreproduced claim as a finding (a count, a path or a measurement only when a decision rests on it), and writes a report that gives a verdict per item of the brief and per case (holds, violated or not applicable; met, partial, unmet or not verifiable) and findings under four headings (spec, proof, standards, behaviour), each with its failure scenario. Run once per step before its first repair round, and once alone for a small text step. Run again over each repair round when the configuration block says refute_after_repair: yes, up to repair_rounds. One more round is allowed only for a red verification command or an unbuilt acceptance item whose fix is too large for landing. Triggers on: refute <entry> <step>, review the step, refute the diff, run the refuter."
 metadata:
-  version: "5.0.0"
+  version: "5.1.0"
 ---
 
 # Refute a step
@@ -49,11 +49,16 @@ metadata:
 1. Dispatch one reviewer as the effort agent `ordo-<reviewer_effort>` (the configuration block's `reviewer_effort`, `high` when the block has no such key), on the model the configuration block's `reviewer:` names, once per step before its first repair round.
    - A small text step gets this one run, whatever the configuration block's `review:` says.
    - A small text step has no run over a repair round.
-   - Before the dispatch, check that the runner lists that agent among its agent types.
    - Before the dispatch, check that `CLAUDE_CODE_EFFORT_LEVEL` is unset: `printenv CLAUDE_CODE_EFFORT_LEVEL` exits 1.
-   - Either check failing is the refusal "The configured effort cannot apply" ("Stops"), and no reviewer is dispatched.
+     - A variable that is set is the refusal "The configured effort cannot apply" ("Stops"), and no reviewer is dispatched.
+   - Before the dispatch, check that the runner lists that agent among its agent types.
+   - When the runner does not list it, the orchestrator or the session prints a warning as plain text and dispatches the reviewer all the same.
+     - The warning names the missing agent.
+     - The warning says that the reviewer follows the session: it starts on the runner's default agent, with no model named and no effort set.
+     - The warning says that the configured model and effort are therefore not applied.
    - Right after the dispatch, the orchestrator or the session reads the reviewer's agent id and the model the runner served it, from the runner's record of the agent as `plan-orchestration`'s "Launching a builder" says.
-   - A served model that is not the configured one is the stop "A model other than the configured one" ("Stops"): the reviewer is stopped through the runner's stop tool, and nothing it wrote is used.
+   - For a reviewer dispatched as the effort agent, a served model that is not the configured one is the stop "A model other than the configured one" ("Stops"): the reviewer is stopped through the runner's stop tool, and nothing it wrote is used.
+   - A reviewer dispatched with the warning is not held to the configured model: the stop is not raised for it, and its served model is recorded as Steps 7 says, or for a run over a repair round as "Steps / Over a repair round" 6 says.
    - The configured model is the model the configuration block's `reviewer:` names for the first run, and for a run over a repair round the model "Steps / Over a repair round" 1 gives.
    - The stopped reviewer is recorded under the `reviewer_report` of the step's dispatch entry, after the records before it.
      - A first-run reviewer: `(<agent id>, <served model>, stopped)`.
@@ -91,8 +96,9 @@ metadata:
 1. When the configuration block holds `refute_after_repair: yes`, `/refute` runs again after each of the step's repair rounds, a small text step having none (Steps 1), at most `repair_rounds`, or one more under `plan-orchestration`'s exception, on a fresh reviewer each time, as Rules 1 says, dispatched as Steps 1 says except for its model.
    - The model is the one the configuration block's `repair_reviewer:` names, or the `reviewer:` value when the block has no `repair_reviewer:` key, at the effort `reviewer_effort` names.
    - This holds for every run over a repair round, the run over the extra round of `plan-orchestration`'s exception and a reviewer started over a round in place of one stopped for another model included.
+   - A reviewer dispatched with the warning of Steps 1 follows the session, and the model of this item is not applied to it.
    - A run that finds nothing ends the rounds.
-   - Done when the reviewer of the run is dispatched on the model this item gives.
+   - Done when the reviewer of the run is dispatched on the model this item gives, or with the warning of Steps 1.
 2. The reviewer reads the same files, plus the first refuter report, the dispatch block's round entries and the snapshot folder made when the round was sent, `<worktree>-round-<n>`, beside the worktree, with its `files.txt`.
 3. The round's delta is, read against the whole diff since the base:
    - for each path of `files.txt`, the difference between the snapshot's copy and the worktree's file (`diff -u`), a deleted path against nothing;
@@ -189,11 +195,11 @@ The first row is a stop, a decision for the user: it leaves an open item, booked
 
 | Stop | When | What it shows | What resumes it |
 |---|---|---|---|
-| A model other than the configured one | The runner served the reviewer a model that is not the configured one: a different model family, or an older version than the newest the configured alias names in the runner's model list (Steps 1) | The open item, booked in the open items, with the configured model (Steps 1), the served model and the Claude Code version | The user's ruling, then `/refute` again |
+| A model other than the configured one | The runner served a reviewer dispatched as the effort agent a model that is not the configured one: a different model family, or an older version than the newest the configured alias names in the runner's model list (Steps 1) | The open item, booked in the open items, with the configured model (Steps 1), the served model and the Claude Code version | The user's ruling, then `/refute` again |
 | A required key missing | A required key is not in `.agents/plan.yaml`; the refusal names it | The key | The key added, then `/refute` again |
 | No ledger folder | No folder under `<ledger_root>/` holds a `plan.md` that opens with `# Plan: <entry>` | A refusal that names `/plan` | `/plan`, then the step prepared and built |
 | No report | No builder's report on disk | The report path the builder was told to write to | The report written, then `/refute` again |
-| The configured effort cannot apply | The runner lists no `ordo-<level>` agent for the level the configuration block's `reviewer_effort` names, or `CLAUDE_CODE_EFFORT_LEVEL` is set, which runs every agent at its level whatever the definition says (Steps 1) | The missing agent, or the variable's value | The effort agents installed as the plan skills are, or the variable unset, then `/refute` again in a new session |
+| The configured effort cannot apply | `CLAUDE_CODE_EFFORT_LEVEL` is set, which runs every agent at its level whatever the definition says (Steps 1) | The variable's value | The variable unset, then `/refute` again in a new session |
 
 ## Anti-patterns
 

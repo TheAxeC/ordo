@@ -69,9 +69,9 @@ The skills that launch agents each have a figure of their own. `grill` starts lo
 
 ![The grill skill: Lookup agent, when a decision needs a fact a file read does not give, dashed; A lookup agent served another model, a stop; A round, a stop that repeats until no decision is open; The end, a stop.](docs/figures/grill.svg)
 
-![The writing skill: Sentence agent, Section agent and Whole-draft agent start at once; Checking agent starts after them; The end: the numbered report; A model other than the configured one, for any of the four, a stop.](docs/figures/writing.svg)
+![The writing skill: Sentence agent, Section agent and Whole-draft agent start at once; Checking agent starts after them; The end: the numbered report.](docs/figures/writing.svg)
 
-![The code-comments skill: Finding agent; Checking agent; The end: the report of the comments that break a rule; Rewrite agent, when you type apply, dashed; A model other than the configured one, for any of the three, a stop.](docs/figures/code-comments.svg)
+![The code-comments skill: Finding agent; Checking agent; The end: the report of the comments that break a rule; Rewrite agent, when you type apply, dashed.](docs/figures/code-comments.svg)
 
 Each mode of `paper` has its figure. In every mode, at every patch a structural patch, a patch that does not apply or a failed script stops the run.
 
@@ -116,7 +116,7 @@ Two more figures of `paper` show how its modes and its files connect. The first 
 
 The skills call each other and read each other's templates, so install all of them. Claude Code reads skills from `~/.claude/skills` (or `$CLAUDE_CONFIG_DIR/skills` for a second account). Remove any copy of these skills under a repository's `.agents/skills` or `.claude/skills`, so that the installed copy is the only one loaded.
 
-The plan skills, `grill`, `writing` and `code-comments` launch their agents through five agent definitions, `agents/ordo-low.md` to `agents/ordo-max.md`, which Claude Code reads from `~/.claude/agents` (or `$CLAUDE_CONFIG_DIR/agents`). For the plan skills, `grill` and `code-comments`, `CLAUDE_CODE_EFFORT_LEVEL` must be unset, since it overrides the effort each definition sets. `writing` starts its agents as `ordo-medium` when it is listed and the variable is unset, and otherwise runs them on the runner's default agent with the Agent tool's `effort` set to `medium`, at the variable's value when it is set. `paper` starts every role on the runner's default agent with the runner's defaults.
+The plan skills and `grill` launch their agents through five agent definitions, `agents/ordo-low.md` to `agents/ordo-max.md`, which Claude Code reads from `~/.claude/agents` (or `$CLAUDE_CONFIG_DIR/agents`). For them, `CLAUDE_CODE_EFFORT_LEVEL` must be unset, since it overrides the effort each definition sets. When Claude Code lists no `ordo-<level>` agent for a level the configuration names, `spec`, `refute`, `plan-orchestration`, `diagnose` and `grill` print a warning that names the missing agent and start the agent on the runner's default agent, with no model named and no effort set, so the configured model and effort are not applied. `writing`, `code-comments` and `paper` start every agent on the runner's default agent with the runner's defaults.
 
 ### With the skills CLI
 

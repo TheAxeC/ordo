@@ -2,7 +2,7 @@
 name: spec
 description: "Prepare one step of an open plan: refuse a step without its authority ((approved) or (ruling <name>)), check each premise of the step's text against the tree, under libraries: check, look for a library for each capability the step builds, a candidate being the user's choice, or under self-rule the orchestrator's, write the brief (checked premises, fix text, verification list, report shape, pointer to the rules file, cases, libraries checked, paths it writes), compare those paths with the briefs of steps in flight, a shared file judged by the orchestrator, run for a full step the brief check by a fresh read-only agent, create the worktree at main's head, stage the base binaries, and record the dispatch in the state file. A step a red line took back out of main is prepared again, its old work saved as a patch in the ledger and applied in the new worktree. Triggers on: spec <entry> <step>, brief <step>, prepare step <n>, write the brief; and on a ruling typed in reply to a stop (Ruled: ...)."
 metadata:
-  version: "7.0.0"
+  version: "7.1.0"
 ---
 
 # Prepare a step
@@ -89,9 +89,10 @@ Ruled: <the choice>      the reply to a stop, booked as "Steps / A ruling" says;
      - The brief of a `/spec` taken over is no such change.
    - An uncommitted change at the brief check's report path `agents/reviews/<step>-brief-check.md` is a refusal ("Stops"), named by path, since "Steps / The brief check" saves the report there.
      - The report of a `/spec` taken over, and the report that a wait of this step at Steps 5 left on disk, are no such change.
-   - The runner lists the effort agent `ordo-<reviewer_effort>` among its agent types, the level `high` when the configuration block has no `reviewer_effort` key, since "Steps / The brief check" and the diagnosis of Steps 2 start that agent.
    - `CLAUDE_CODE_EFFORT_LEVEL` is unset: `printenv CLAUDE_CODE_EFFORT_LEVEL` exits 1.
-   - Either effort check failing is the refusal "The configured effort cannot apply" ("Stops"), and writes nothing.
+     - A variable that is set is the refusal "The configured effort cannot apply" ("Stops"), and writes nothing.
+   - Whether the runner lists the effort agent `ordo-<reviewer_effort>` among its agent types is read, the level `high` when the configuration block has no `reviewer_effort` key, since "Steps / The brief check" and the diagnosis of Steps 2 start that agent.
+     - An effort agent the runner does not list is no refusal: the brief-check agent and a diagnosis agent are then started with the warning of "Steps / The brief check" 1.
    - The step's worktree path `<worktree_root>/<slug>-<step>` and its branch `<slug>-<step>` do not exist, `<slug>` being the name of the plan's ledger folder, apart from those of this step's own dispatch entry that reads `landing: backed-out`.
    - A `/spec` taken over after its preparation commit finds the worktree and the branch its interrupted run made, which are no refusal.
    - A path or a branch that exists is the refusal "A worktree or branch that exists" ("Stops"), which names it and writes nothing.
@@ -390,22 +391,27 @@ Steps 5 says when this runs.
    - It writes `<REDACTED>` in place of the value of a secret in every line it quotes, as the rules file's rule on secrets in quoted command output says.
    - It writes its report in the rules file's character set, a character outside it in a quoted line written by its name in angle brackets, such as `<tab>` or `<em dash>`.
    - The agent runs in the background.
+   - When the runner lists no `ordo-<reviewer_effort>` agent (Steps 1), the session prints a warning as plain text and starts the agent all the same.
+     - The warning names the missing agent.
+     - The warning says that the agent follows the session: it starts on the runner's default agent, with no model named and no effort set.
+     - The warning says that the configured model and effort are therefore not applied.
+     - An agent started with the warning is not held to the configured model: the stop "A model other than the configured one" is not raised for it, and its served model is recorded as items 3 and 5 say.
    - Right after the start, the session reads the agent's id and the model the runner served it, from the runner's record of the agent as `plan-orchestration`'s "Launching a builder" says.
-   - A served model that is not the configured one is the stop "A model other than the configured one" ("Stops").
+   - For an agent started as the effort agent, a served model that is not the configured one is the stop "A model other than the configured one" ("Stops").
      - The agent is stopped through the runner's stop tool.
      - Nothing it wrote is used.
    - A brief-check agent stopped for another model has no dispatch entry left to be recorded in, since the stop removes the entry ("Steps / A stop" 2), so the session writes its bullet `- <agent id>: brief check of step <n>, <served model>` straight into `plan.md`'s Agents section.
      - A `plan.md` with no Agents section gets it, created before `## Blocked, and by what`.
      - The session reads the section back.
    - The stop's commit carries `plan.md` among the ledger files it commits ("Steps / A stop" 1).
-   - A served model that is the configured one is followed by `brief_check: "running: <agent id>"`, which the session writes into this step's dispatch entry, quoted as `plan`'s `templates/orchestrator-state.md` says of a value that holds `: `.
+   - A served model that is the configured one, or that of an agent started with the warning, is followed by `brief_check: "running: <agent id>"`, which the session writes into this step's dispatch entry, quoted as `plan`'s `templates/orchestrator-state.md` says of a value that holds `: `.
      - The preflight of a later `/spec` and `plan-orchestration`'s "Resuming, and handing the plan over" tell a live brief check from a dead one by that id and the runner's agent listing.
    - While the agent runs, the session may run other skills for other steps: `/land`, `/refute` and another `/spec`, each as its own text says.
      - The brief and the brief-check report of this `/spec` are carried only by its preparation commit (Steps 6), whatever other commit of the plan is made meanwhile.
      - A commit of the same plan that names `plan.md` or the state file carries that file as it stands on disk, this run's `preparing` entry and premise corrections included.
      - The preparation commit names what is left.
      - A landing runs from its cherry-pick to its commit before any other commit or skill (the `land` skill's Rules), so the report of an agent that ends during a landing is saved after the landing's commit, and no commit of this `/spec` is made before then.
-   - Item 1 is done when the agent's id and served model are read, the model is the configured one and `brief_check: "running: <agent id>"` is written, or when the stop is raised.
+   - Item 1 is done when the agent's id and served model are read, the model is the configured one or the agent was started with the warning, and `brief_check: "running: <agent id>"` is written, or when the stop is raised.
 2. The agent runs these checks and reports each with the command that shows it and that command's output:
    - **Names.** Every name the step changes (a file, a heading, a key, a function, a term) is grepped across the repository, and every hit outside the brief's "Paths this step writes" is listed, each with whether the change makes it false.
    - **The step line.** Every part of the plan's step line is present in "What to build": each requirement is mapped to the part of the line it serves, and a part with no requirement is named.
@@ -468,7 +474,7 @@ The first seven rows are stops, which leave an open item as "Steps / A stop" say
 | A user-visible choice | The brief would have to choose a public shape, a wire format, a config key or a vocabulary, or, under `libraries: check`, a library could replace code the step would write by hand (Steps 3) | The open item, booked in the open items | A ruling |
 | A brief check finding the brief cannot absorb | A finding of the brief check whose fix would change the part the step builds or make a choice the user would see, or a finding the session cannot close by a change to the brief ("Steps / The brief check") | The open item, booked in the open items, with the report's path | A ruling |
 | A cause not found | A part of the step's text asks for a cause to be found and the diagnosis did not find it, and the step has no other part (Steps 2) | The open item the `diagnose` skill's Steps 15 raised, with the diagnosis record's path | A ruling |
-| A model other than the configured one | The runner served the brief-check agent or a diagnosis agent a model that is not the configured one: a different model family, or an older version than the newest the configured alias names in the runner's model list ("Steps / The brief check") | The open item, booked in the open items, with the configured value, the served model and the Claude Code version | A ruling |
+| A model other than the configured one | The runner served a brief-check agent or a diagnosis agent started as the effort agent a model that is not the configured one: a different model family, or an older version than the newest the configured alias names in the runner's model list ("Steps / The brief check") | The open item, booked in the open items, with the configured value, the served model and the Claude Code version | A ruling |
 | A step that does not converge | The step has stopped twice before its build (two open items under its Step 0) and this run finds a third choice for the user ("Steps / A stop" 3) | The open item, booked in the open items, with the two rulings given and every choice left | A ruling that rewrites, splits or removes the step |
 | A repair round as a step | The step's line fixes what a run or a review of another step found and runs that check again (Steps 1) | The step, the step whose finding it fixes, and `plan-orchestration`'s "What earns a step of its own" | The failure raised to the user as an open item on the approach, as `plan-orchestration`'s "What earns a step of its own" says |
 | A step without its authority | The step's line ends with neither `(approved)` nor a `(ruling <name>)` for each ruling it rests on, each naming a ruling in the Rulings section, a line ending "(the user)" or "(self-rule)" (Steps 1) | The step and the authority it lacks | A ruling, booked as "Steps / A ruling" says with the tag on the step's line, then `/spec` again |
@@ -480,7 +486,7 @@ The first seven rows are stops, which leave an open item as "Steps / A stop" say
 | A brief check still running | This step's own dispatch entry reads `landing: preparing`, its `brief_check` reads `"running: <agent id>"`, and the runner still lists that agent (Steps 1) | The step and the agent id | The agent ends: a `/spec` still waiting on it goes on, and with none waiting, as after a compaction, `/spec` again takes the entry over ("Steps / A `/spec` taken over") |
 | A worktree or branch that exists | The step's worktree path `<worktree_root>/<slug>-<step>` or its branch `<slug>-<step>` exists, other than those of this step's own entry that reads `landing: backed-out`, and those the interrupted run of a `/spec` taken over made (Steps 1) | The path or the branch, named | The step that holds it landed, then `/spec` again |
 | No such step | The step is not in `plan.md`'s list (Steps 1) | The list | `/spec` with a step in the list |
-| The configured effort cannot apply | The runner lists no `ordo-<level>` agent for the level the configuration block's `reviewer_effort` names, or `CLAUDE_CODE_EFFORT_LEVEL` is set, which runs every agent at its level whatever the definition says (Steps 1) | The missing agent, or the variable's value | The effort agents installed as the plan skills are, or the variable unset, then `/spec` again in a new session |
+| The configured effort cannot apply | `CLAUDE_CODE_EFFORT_LEVEL` is set, which runs every agent at its level whatever the definition says (Steps 1) | The variable's value | The variable unset, then `/spec` again in a new session |
 | A step taken back out of main that cannot be saved | At "Steps / A step taken back out of main", a path in the kept worktree outside the ledger root, two diffs that differ, a failed git command, or a state file that cannot be written or does not read back | The path, or the command and what it printed | The cause put right, as the bullet below says, then `/spec` again |
 
 - The cause of the last row is put right by the user: the path moved out of the worktree or removed, the ledger or the state file made writable, or the entry corrected.
