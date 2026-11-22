@@ -57,6 +57,7 @@ Steps 1 to 3 run in order, in both rounds.
    - Ask the direction of the review, such as a methodological focus. With none given, the direction is "balanced".
    - Ask the severity of the review. With none given, the severity is "medium".
    - Ask the budget: the most major points, the most minor points and the length of the report in words. With none given, the budget is 7 major points, 7 minor points and 1,200 words.
+   - Say in the question that each number of the budget is a ceiling, as `agents/referee_agent.md`, "The budget", says.
    - Ask the journal's fields, the values of its recommendation and its length limit. With no fields named, the fields are the default ones of `templates/referee_report_template.md`.
    - Ask whether to shrink the panel, and to which reviewers. With no answer, all five reviewers run.
    - Write the direction and the severity in the user's own words.
@@ -78,9 +79,9 @@ Steps 1 to 3 run in order, in both rounds.
    - Give it `agents/referee_agent.md`, the manuscript, `intake.md`, every reviewer's report and `templates/selection_template.md`.
    - It selects as `agents/referee_agent.md`, "The selection", says.
    - Start no editorial synthesizer in its place.
-   - Done when `selection.md` and `left-out.md` stand in the run folder, and `selection.md` selects no more major points and no more minor points than the budget gives.
-6. Show the user the selected points and the left-out comments with their reasons: the stop "The selection".
-   - The user confirms, moves items between the two lists, or changes a point from major to minor or back.
+   - Done when `selection.md` and `left-out.md` stand in the run folder, and `selection.md` holds the found counts and a selection as `agents/referee_agent.md`, "The budget", says.
+6. Show the user the found counts beside the budget, the selected points, the points over the budget and the left-out comments with their reasons: the stop "The selection".
+   - The user confirms, moves items between the lists, or changes a point from major to minor or back.
    - When the user changes anything, resume the same referee agent with the user's changes. It rewrites `selection.md` and `left-out.md` as `agents/referee_agent.md`, "The user's changes", says.
    - Show the user the rewritten lists, which the user confirms or changes again.
    - With no change, the referee is not resumed here.
@@ -89,7 +90,7 @@ Steps 1 to 3 run in order, in both rounds.
    - Give it the confirmed `selection.md` and `templates/referee_report_template.md`.
    - It writes as `agents/referee_agent.md`, "The report", says.
    - Done when `referee-report.md` stands in the run folder.
-8. End the run with a message that names `referee-report.md` and `left-out.md` by their paths.
+8. End the run with a message that names `referee-report.md` and `left-out.md` by their paths, and says that `left-out.md` holds the points over the budget and the left-out comments.
    - Write no Revision Roadmap and hold no coaching dialogue: the run ends here.
    - Done when the message is sent.
 
@@ -109,7 +110,7 @@ The first four rows wait for the user. The row with a tag ends the run before it
 | The round | A plain request does not say whether it is a first or a second round (Steps 1) | The question which round it is, with the inputs each round takes | The user's answer; the run goes on under the subsection of that round |
 | The intake | Before any agent starts (first round item 1; `references/second_round.md`, "The intake") | The questions of the intake, each with its default, in one message | The user's answers; an unanswered question takes its default |
 | The Reviewer Configuration | After the field analyst ends (first round item 3) | The Reviewer Configuration Card | The user confirms it, or adjusts reviewer identities and then confirms |
-| The selection | After the referee's selection, before the report is written (first round item 6) | The selected points, major and minor, the left-out comments with their reasons and, in a second round, the first-round points resolved | The user confirms, or moves items and then confirms |
+| The selection | After the referee's selection, before the report is written (first round item 6) | The found counts beside the budget, the selected points, major and minor, the points over the budget, the left-out comments with their reasons and, in a second round, the first-round points resolved | The user confirms, or moves items and then confirms |
 | `[PANEL-SHRUNK]` | A reviewer is marked unusable under a contract (first round item 4) | The tags the `paper-review-panel` skill's Stops table gives for this stop | Nothing: the run ends, and the review starts again with `/referee` |
 | The panel skill is not installed | The `paper-review-panel` folder with its `SKILL.md` does not stand beside this skill's folder (Steps 1) | That `referee` runs the pages of the `paper-review-panel` skill, and that this skill is not installed beside it | The skill installed, then `/referee` again |
 | A missing input | The call gives no manuscript, or a second-round call gives no response letter (Steps 1) | The round's line of Quick start | The call corrected, then `/referee` again |
@@ -118,7 +119,7 @@ The first four rows wait for the user. The row with a tag ends the run before it
 
 | Anti-pattern | Why it fails | Do instead |
 |---|---|---|
-| Carrying every comment of the panel into the report | A report with too many points hides the ones the editor must act on | Select within the budget, and keep the others in `left-out.md` with a reason each |
+| Carrying every comment of the panel into the report | A report with too many points hides the ones the editor must act on | Select as `agents/referee_agent.md`, "The budget", says, and keep the others in `left-out.md` with a reason each |
 | A report that shows the panel | The editor asked one reviewer, and a report that speaks of several is not one the user can send | Write in the first person singular of one reviewer, as `agents/referee_agent.md`, "The report", says |
 | A copy of a page of `paper-review-panel` in this skill | The copy drifts from the page the panel runs | Name the page with its skill, and start the role from it |
 | Writing a revision roadmap or coaching the author | The manuscript is someone else's, and the report goes to the editor | End the run at the report |

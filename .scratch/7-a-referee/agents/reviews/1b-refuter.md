@@ -173,3 +173,169 @@ Checked and not found: non-ASCII (the check exits 0); history in a page (no run,
 - The state of the worktree's index and of any commit after a7be82a: `git log` and `git diff --cached` would give it, and neither is among the commands I may run.
 
 Reviewer usage: a7fa4b89e49397c7e, claude-fable-5-2, 182225 tokens, 16 tool uses, 7.0 minutes.
+
+## Repair round 1, refuted
+
+```
+$ git status --short   (worktree)
+ M skills/academic/referee/SKILL.md
+ M skills/academic/referee/agents/referee_agent.md
+ M skills/academic/referee/references/second_round.md
+ M skills/academic/referee/templates/referee_report_template.md
+ M skills/academic/referee/templates/selection_template.md
+?? .scratch/7-a-referee/agents/briefs/1b-round-1.md
+?? .scratch/7-a-referee/agents/reviews/1b-report.md
+
+$ (ASCII check of the brief's check 1, over the six paths)
+exit=0          (no line printed)
+
+$ sed -n 5p skills/academic/referee/SKILL.md
+  version: "1.0.0"
+
+$ wc -l skills/academic/referee/SKILL.md skills/academic/referee/*/*.md
+     138 skills/academic/referee/SKILL.md
+     104 skills/academic/referee/agents/referee_agent.md
+     110 skills/academic/referee/references/second_round.md
+      58 skills/academic/referee/templates/referee_report_template.md
+      95 skills/academic/referee/templates/selection_template.md
+     505 total        (the builder's section quotes the same five counts)
+
+$ python3 -c 'import yaml; print(len(yaml.safe_load(open("skills/academic/referee/SKILL.md").read().split("---")[1])["description"]))'
+882
+
+$ git diff a7be82a --numstat
+6<tab>5<tab>skills/academic/referee/SKILL.md
+55<tab>15<tab>skills/academic/referee/agents/referee_agent.md
+65<tab>9<tab>skills/academic/referee/references/second_round.md
+29<tab>2<tab>skills/academic/referee/templates/referee_report_template.md
+49<tab>7<tab>skills/academic/referee/templates/selection_template.md
+
+$ grep -n 'two lists' README.md   (main checkout)
+30:| `referee` | Referees someone else's paper ... A referee agent selects the comments worth sending within the budget and shows you the selected and the left-out comments, which you move between the two lists. The same agent then writes ... (one line)
+
+$ grep -n -i -w case skills/academic/referee/references/second_round.md skills/academic/referee/agents/referee_agent.md
+(no output)
+
+$ diff -u <snapshot> <worktree> for each path of files.txt
+SKILL.md: no difference. The other four files and the report differ as the builder's section says (read in full).
+```
+
+The worktree's `git status` also lists `.scratch/7-a-referee/agents/briefs/1b-round-1.md` as untracked. I ran no command that writes anything.
+
+### Verdicts
+
+The ten closures:
+
+1. Closed. `references/second_round.md`, "The check of the revision", item 4, now has the EIC write number, title, first-round grade or "carries none", what the point asked, status, what the revision and response did, and what is still missing. "What is still missing holds only what the first-round point asked." Item 6 gives the referee the response letter and the first-round comments. The referee page says the grade is the one `revision-check.md` gives.
+2. Closed for what the finding quoted. The bullets under 3.4 are split, the two conditions are a bulleted set with the labels "Introduced by the revision" and "A main claim fails", and every sentence my word count finds over 24 words is named in the builder's check 3, except one sentence of the report template's intro that was not changed by the round. Bullets that still hold two rules are finding 6.
+3. Closed. "Otherwise the value is the referee's judgment."
+4. Closed as ruled: `README.md` is not written, and a replacement is given under "Doc text". The quoted current line is abbreviated, which is finding 5.
+5. Closed for the four pairs: the test and "never merged" stand in "New points" only, "names what the revision added or changed" with its line stands in "New points" only, and number and title stand in "The selection and the report" only. Rules still written more than once are finding 7.
+6. Closed. The bullet reads "An observation is a left-out comment with its reason when it is not about what is still missing of a first-round point and does not meet both conditions."
+7. Closed. The "Major points over the budget" entry in the selection template carries "Why it is major", and item 9 of the selection lists it.
+8. Closed. "The two found counts ... stay as you wrote them" and "The line "Cut by the budget" of that section is rewritten to count what the section "Points over the budget" then holds."
+9. Closed. Major points over the budget are in full, minor points in one line, and the passage of a minor one is read when it is moved in. The table of user-visible changes has the row "A point over the budget in `selection.md`". A consequence of the one-line form is finding 1.
+10. Closed. The row "An empty heading of `referee-report.md`" is in the table.
+
+Items of "What to build":
+
+1. holds.
+2. holds.
+3. holds.
+4. holds.
+5. holds. The minor-point form (no passage, no per-point reason) is the round's ruling 9, a narrowing of the brief's "each with its grade, its passage and its merged comments, and a reason that names the budget". See finding 1 for what the one-line form leaves undefined.
+6. holds.
+7. holds.
+8. holds.
+9. holds.
+10. holds.
+11. holds.
+12. holds.
+13. holds.
+14. holds.
+15. holds.
+16. holds. `SKILL.md` is unchanged by the round, and line 5 reads `  version: "1.0.0"`. Finding 3 is about a sentence of `SKILL.md` and the description that stay silent on a new content of `left-out.md`; they are not false.
+
+Cases:
+
+- C1. met.
+- C2. met. Three major points stand under "Major points over the budget" in full, with a reason that names the budget. The found count says ten.
+- C3. met.
+- C4. met.
+- C5. met.
+- C6. met.
+- C7. met.
+- C8. met. The first-round grade now reaches the referee through `revision-check.md`, and "never above" has something to compare against.
+- C9. met.
+- C10. met. The EIC's still-missing text is limited to what the point asked. The referee holds that text against the first-round comment or the response letter, and text beyond it is an observation. The new abstract observation is left out.
+- C11. met.
+
+The questions after the round:
+
+- Does the referee in a second round get each first-round point's number, grade and what it asked? Yes. `revision-check.md` carries all three per point, and the referee also reads what each point asked in the first-round comments or the response letter, as item 6 and "The selection and the report" give it.
+- Can text beyond what a first-round point asked still end up inside that point? Not by the pages' own routes: the EIC's text is limited, the referee checks it, a reviewer's comment goes under a point only when it is about what is still missing, and "no other observation is merged". One route is the user's: "A comment the user moves in ... joins the selected point the user names", kept "as the user made it". That is the user's choice.
+- Is any rule still written in two places on one page, or do two sentences contradict? Yes, see findings 2 and 7.
+- Do `SKILL.md` and the two templates agree with the referee's page and the second-round page on the lists `selection.md` and `left-out.md` hold and on what the stop shows? On the stop and on `selection.md`, yes. On `left-out.md`, `SKILL.md` names the file but never says it now holds the points over the budget (finding 3).
+
+### Findings
+
+#### Spec
+
+1. `agents/referee_agent.md`, "The user's changes" (with `templates/selection_template.md`, "Minor points over the budget"). Quoted: "A point the user regrades changes its section and nothing else." The minor entry is "- m8: [the point, as a phrase]. Comments: ...".
+   What is wrong: a minor point over the budget has no passage, no weakness and no "Why it is major". Regraded to major it moves to "Major points over the budget" and, by "nothing else", stays a one-line entry. If the user then moves it in, "A major point the user moves in ... becomes a selected point as it stands there", and the selected major point lacks the passage, the weakness and "Why it is major" that the template and item 7 require. The same holds for a selected minor point regraded to major.
+   Failure scenario: the user regrades m8 to major and moves it in at the selection stop. The referee writes the report from `selection.md` and has no passage or reason for that point. It either writes the point from nothing or ties it to a passage it never read.
+
+2. `agents/referee_agent.md`, "The selection", item 2, with `references/second_round.md`, "New points". Quoted: item 2 "Merge the comments about the same weakness into one point" and "A comment that names no weakness of the paper becomes no point"; second-round page "Such an observation is never a point." and "A comment of the five reviewers is held to the same two tests as any other observation."
+   What is wrong: item 2 says every comment that names a weakness is a point, which is also why the found counts are "how many ... the paper has". In a second round, observations that name a weakness are left out and never points. The second-round page adds this to each call, but item 2 does not say so, so two sentences give different answers for the same comment. Nothing says that in a second round the found counts exclude such observations.
+   Failure scenario: in a second round the referee reads item 2 first, makes a point of a reviewer's weakness comment that fails both conditions, and counts it in "Points found".
+
+3. `SKILL.md`, the description and the introduction ("It leaves behind `referee-report.md`, `selection.md` and `left-out.md`"), with the Anti-patterns row "keep the others in `left-out.md` with a reason each". `agents/referee_agent.md`, "The selection", item 11, has `left-out.md` hold the sections "Points over the budget" and "Left-out comments".
+   What is wrong: the description says "the left-out comments, each with its reason", and no sentence of `SKILL.md` says that `left-out.md` also holds the cut points. A minor point over the budget has no reason line, only its heading.
+   Failure scenario: a user told to look in `left-out.md` for what the report leaves out does not expect cut major points there. This is low.
+
+#### Proof
+
+4. The builder's report, "DONE / NOT DONE", rows 4, 12 and 15, and "Judgment calls", item 6. Quoted: row 4 "item 2 with its three bullets"; row 12 "the last bullet with its three sub-bullets"; row 15 "the three bullets that begin "In a second round""; item 6 "since condition 2 of its test is the test of a major point".
+   What is wrong: item 2 of "The selection" now has four bullets. The last bullet of "New points" has five sub-bullets. "The report" has six bullets that begin "In a second round". "New points" no longer numbers its conditions. The round said it corrected rows 3 and 5 and the judgment call, and these stayed.
+   Failure scenario: the orchestrator uses these rows to find where each item is carried, and a row names a count that is not on the page.
+
+5. The builder's report, "Doc text". Quoted: "30: ... A referee agent selects the comments worth sending ... which you move between the two lists. ..."
+   What is wrong: `docs/dev/change-standard.md`, "Where the work happens", says a "Doc text" entry quotes the current line with the number `grep -n` prints, "and the quoted text is what locates it". The report abbreviates the line with "...". The sentence it quotes is unique in the line (`grep -c` printed 1), so the place is found, and the replacement text is fine.
+   Failure scenario: small. The orchestrator pastes from an abbreviated quote.
+
+#### Standards
+
+6. `agents/referee_agent.md`, "The report", two bullets; `references/second_round.md`, "The check of the revision", item 4. Quoted: "Make the report as long as its points need. The length of the budget and the journal's limit are ceilings: stay within the shorter one, and add no text to come near it."; "In a second round, put any new point after the remaining first-round points, marked as new, with what the revision added or changed."; "It writes as a new issue only what meets both conditions, and names for each what the revision added or changed."
+   What is wrong: `docs/dev/skill-layout.md`, "Lists and tables": requirements that can each be broken while the other holds, joined by "and" or a second sentence, are two bullets. Each bullet holds two or three such requirements (stay within the shorter limit, add no padding; where the new point stands, that it is marked, that it names the change; what may be a new issue, that it names the change). The builder's check 3 names the first two as kept for being "a qualifier" and "one instruction for one point". Neither reason is a qualifier of the rule. Each is a second rule.
+   Failure scenario: a later change drops "marked as new" and the bullet still reads as followed. A reviewer cannot tell which clause was meant.
+
+7. `references/second_round.md`, "The check of the revision" item 4 and "The selection and the report". Quoted pairs: "It writes as a new issue only what meets both conditions ... It writes everything else it notices under a heading "Other observations"" and "Anything else the EIC notices about that passage or topic is a new issue or an other observation, by the two conditions."; "What is still missing holds only what the first-round point asked.", "A remaining first-round point holds only what the first-round point asked and what of it is still missing." and "Text there that goes beyond what the point asked is an observation under "New points"."
+   What is wrong: `docs/dev/skill-layout.md`, "Where a rule goes": "A rule is written once. Another place that needs it names the section it is in." The first pair is the same rule twice inside one item. The second is one limit on the content of a first-round point, stated three times, for the EIC and then twice for the referee.
+   Failure scenario: someone loosens one copy and leaves the others, and the EIC and the referee then work to different limits on what a remaining point may hold.
+
+#### Behaviour
+
+None beyond finding 1.
+
+### Declined to judge
+
+- "Most second rounds have no new point." is a vague qualifier under the prose standard, section A, but the brief's item 10 asks for the sentence and the round's brief says not to change it. It is the orchestrator's call.
+- Whether the paraphrase of the two conditions that the session gives the EIC keeps "by itself" and "fail" each time depends on a run, not on reading.
+- Whether a first-round major point that was not answered at all can be graded minor in a second round, when item 3 finds the main claim standing and the recommendation is then accept or minor revision, matches what the user's ruling "What a second round is" means. That is the user's call.
+- How many points a strict merge leaves under "Points over the budget" on real reports, and what reading the passages of the major ones costs, depends on a run.
+- Whether a major point a user moves out and the recommendation rule "left out as small" fit together (a point left out with the reason "moved out by the user" is not "left out as small"): the page is silent and I did not settle it.
+- The README replacement sentence's wording is the orchestrator's, as the round rules.
+- Not reviewed: the figure `docs/figures/gen_figures.py`, `referee()`, which the brief says stays true. I did not rerun the plan's whole verify list, which runs once at landing.
+
+Reviewer usage: ae590f6a0158cac61, claude-sonnet-5-5, 141449 tokens, 18 tool uses, 3.3 minutes.
+
+## Closed
+
+- First run, Spec 1.1, Proof 2.1 to 2.3, Standards 3.1 to 3.6 and Behaviour 4.1 and 4.2: each closed by the builder in repair round 1 under its ruling in `agents/briefs/1b-round-1.md`, and each confirmed closed by the run over the round; Standards 3.1, the README's sentence, fixed at landing with the builder's "Doc text".
+- Round 1, finding 1, a point regraded to major lacks its passage and reason: fixed at landing in `skills/academic/referee/agents/referee_agent.md`, "The user's changes".
+- Round 1, finding 2, item 2 of the selection against "New points": fixed at landing in `references/second_round.md`, "The selection and the report", which says such an observation becomes no point at item 2.
+- Round 1, finding 3, `SKILL.md` silent on what `left-out.md` holds: fixed at landing in `SKILL.md`, "first round", item 8.
+- Round 1, finding 4, counts in the builder's report: fixed at landing in the saved report `agents/reviews/1b-report.md`.
+- Round 1, finding 5, the abbreviated quote of the README's line: the replacement was applied at landing on the full sentence, found once by its words.
+- Round 1, finding 6, bullets that hold two rules: fixed at landing, the three quoted bullets split.
+- Round 1, finding 7, a rule written twice: fixed at landing in `references/second_round.md`, item 4, which now names the section that states the limit and drops the second copy of the new-issue rule.

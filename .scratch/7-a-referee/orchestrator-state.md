@@ -43,19 +43,6 @@ repair_reviewer: claude:sonnet  # the model the run of /refute over a repair rou
 
 ```yaml
 dispatch:
-- step: 1b
-  executor: agent
-  worker: claude:fable
-  base: a7be82a
-  worktree: .agents/worktrees/7-a-referee-1b
-  report: .scratch/7-a-referee/agents/reviews/1b-report.md
-  brief_check: .scratch/7-a-referee/agents/reviews/1b-brief-check.md (a209c45f6fbb2d894, claude-fable-5-2, 211641 tokens, 17 tool uses, 5.6 minutes)
-  session_id: af33cf9bca3b7181b (claude-fable-5-2)
-  builder_usage: the build 153958 tokens, 11 tool uses, 5.7 minutes
-  reviewer_report: >-
-    .scratch/7-a-referee/agents/reviews/1b-refuter.md (a7fa4b89e49397c7e, claude-fable-5-2, 182225 tokens, 16 tool uses, 7.0 minutes)
-  landing: not-started
-  round: 1
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled or, under `self_rule: on`, until the orchestrator closes it as `plan-orchestration`'s `references/self-rule.md`, "Closing an open item", says)
@@ -91,5 +78,6 @@ dispatch:
 - 2026-11-22. Step 1, the skill, has landed, and `v9.1.0-rc.1` is tagged on 0b4f269 and pinned. Step 2, the gate's two runs, is next: each run is made by a separate agent that invokes `/referee`, never in this session, and this session answers its stops with the skill's defaults and asks the user nothing (ruling "How every run is made"). The inputs are copied to `.agents/gate-7a/round1/` and `.agents/gate-7a/round2/`, since `research-hub` is read only.
 - 2026-11-23. Both runs of step 2 have ended, each with its report written: the first round in `.agents/gate-7a/round1/referee-runs/round-1-2026-11-22/` (agent a8a1ce052177b256e, 144334 tokens, 27 tool uses, 17.5 minutes; 7 major and 7 minor points, 1193 words, 24 comments left out) and the second round in `.agents/gate-7a/round2/referee-runs/round-2-2026-11-22/` (agent a912c1d07c6e1f03e, 85014 tokens, 15 tool uses, 10.8 minutes; 7 major and 5 minor points, 1197 words, 1 comment left out, 3 first-round points resolved). Step 2 waits for the user's reading of each `referee-report.md` against the comments sent. The run agents' notes on the skill's text are in their final messages.
 - 2026-11-23. The user read both reports: the first round is close to the comments sent, but its 7 major points equal the budget, which the user ruled bad; the second round is wrong, its points being mostly new items. Step 1b, added on those two rulings, changes the skill; step 2's runs are then made again.
-- Roadmap entry 7.A (referee). Plan step 1b of 4: the count of points and the second round. Next: step 2, the gate's two runs. Next: step 3, the closing.
+- 2026-11-23. Step 1b has landed. Step 2's two runs are made again on the changed skill, each by a separate agent, with the stops answered by this session, after a new release candidate is tagged and pinned.
+- Roadmap entry 7.A (referee). Plan step 2 of 4: the gate's two runs. Next: step 3, the closing. Next: step 3, the closing.
 - Open on Axel's side: none.
