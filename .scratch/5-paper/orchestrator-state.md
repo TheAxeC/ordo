@@ -43,13 +43,25 @@ repair_reviewer: claude:sonnet  # the model the run of /refute over a repair rou
 
 ```yaml
 dispatch:                    # or the block /spec writes (a list when .agents/plan.yaml's workers_at_once is above 1). /spec writes the entry at the end of its preflight with step and `landing: preparing`, writes `"running: <agent id>"` into brief_check while the brief-check agent runs, base after its preparation commit and worktree before it creates the worktree, and fills the entry at its Steps 9, so that it holds: step, executor, worker, worktree (<worktree_root>/<slug>-<step>), base, launched, report (the builder's report, at the path the brief names), brief_check (the brief check's report path, with the agent's id, its served model, tokens, tool uses and time, or `none, a small text step` for a small text step), landing, round. `landing` is `preparing` while /spec runs, then `not-started`, `cherry-picking` while /land cherry-picks, and `backed-out` after a red line took the step back out of main. The orchestrator adds session_id, the builder's agent id followed by the model the runner served it (<agent id> (<served model>)), as soon as the builder is dispatched and its model read, builders_before (the agent id and served model of each builder it replaced, as <agent id> (<served model>, stopped) or <agent id> (<served model>, dead), one after another), builder_usage (the builder's tokens, tool uses and time from its completion notice) beside report when the builder's report is saved, and reviewer_report (the refuter report's path, with each reviewer's agent id, served model, tokens, tool uses and time, or, for a reviewer stopped for another model, its agent id, served model and stopped) at the review. A value that holds `: ` (brief_check while its agent runs, builder_usage after a repair round, reviewer_report after a run over a round) is written in double quotes, so the block stays valid YAML. A diagnosis agent has no key here: the session that starts it writes its id and role into plan.md's Agents section, as the diagnose skill's Rules say. A step dispatched while another in flight, of this plan or of another open plan, names a file its brief also names carries shared_paths: each shared file, the other step's plan and step, and why the merge at landing is simple, as plan-orchestration's "Two steps in flight" says; with no shared file the key is left out.
+- step: 5.R
+  executor: agent
+  worker: claude:fable
+  session_id: ae46e3f2b8d82155e (claude-fable-5-2)
+  worktree: .agents/worktrees/5-paper-5.R
+  base: 93a22a0
+  launched: 2026-11-22
+  report: .scratch/5-paper/agents/reviews/5.R-report.md
+  builder_usage: "251005 tokens, 175 tool uses, 21.6 min; round 1: 314619 tokens, 22 tool uses, 5.1 min; round 2: 227597 tokens, 65 tool uses, 13.7 min"
+  reviewer_report: ".scratch/5-paper/agents/reviews/5.R-refuter.md (ad46188dd11d72cae, claude-fable-5-2, 283618 tokens, 48 tool uses, 9.8 min); over round 1: a92c3d6a2c1309493, claude-sonnet-5-5, 157741 tokens, 45 tool uses, 3.5 min; over round 2: a501ef8a51c551ad3, claude-sonnet-5-5, 233182 tokens, 53 tool uses, 5.9 min"
+  brief_check: .scratch/5-paper/agents/reviews/5.R-brief-check.md (ac3039549d3fee0ee, claude-fable-5-2, 279527 tokens, 53 tool uses, 10.8 min)
+  landing: not-started
+  round: 3
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled or, under `self_rule: on`, until the orchestrator closes it as `plan-orchestration`'s `references/self-rule.md`, "Closing an open item", says)
 
 A finding that is neither closed in the repair rounds nor fixed at landing is an open item here, and goes where `plan-orchestration`'s "What earns a step of its own" says; what is settled belongs in the closed list.
 
-- Open item 5.R-wordseq (2026-11-22): lit-review's formatter is told to run a word-sequence check with `difflib.SequenceMatcher` (`skills/paper/SKILL.md`, lit-review's targets; `references/formatter.md`), and a role writes and runs no script; no script under `skills/paper/templates/` makes that comparison. (a) A script under `templates/` that the session runs, with its test: keeps the guard against text lost in a conversion; costs a script, a test and a line in `docs/dev/scripts.md`. (b) Drop the check: no cost, and a conversion that loses text is found only by the counts of format-convert. Recommended: (a), since comparing two word sequences is a fact a machine computes. (b) is the lazy option.
 
 
 
@@ -63,6 +75,7 @@ A finding that is neither closed in the repair rounds nor fixed at landing is an
 - 2026-11-20: Open item 5.Q-rebuttal, revision-coach and rebuttal-audit in `paper`: ruled (c) by the user, both modes copied and the response letter written.
 - 2026-11-20: Open item 5.P-run, how to run main's `paper` for the check after 5.P: ruled (a) by the user.
 - 2026-11-20: Open item 5.Q-letter, the response letter in the revision comparison: withdrawn, since the ruling The response letter in the revision comparison (2026-11-16) already removes the letter from academic-paper's output and tells the judges it is not judged.
+- 2026-11-22: Open item 5.R-wordseq, the word-sequence check of lit-review's formatter: ruled (a) by the user, a script the session runs.
 - 2026-11-20: Open item 5.P-S6, step 5.P's edits made with `sed` and inline `python3`: ruled (a) by the user, accepted as they stand.
 - 2026-11-19: Open item CC, the unapproved helper `b5n/longsent.py` and the reading of "roughly 20": ruled (b) by the user, booked in plan.md's Rulings; no step added.
 - 2026-11-19: Open item CB, `lookup.py` in the plan's goal and gate: ruled (a) by the user, booked in plan.md's Rulings; step 5.N's line tagged (ruling CB).
@@ -192,6 +205,7 @@ A finding that is neither closed in the repair rounds nor fixed at landing is an
 - 2026-11-22. Step 5.R, the twenty-fourth of 25 steps, the paper figures of use and the seven ruled changes, landed and booked in `plan.md` ("Step 5.R, the paper figures of use and the seven ruled changes"); the landing report is `agents/reviews/5.R-landing.md`.
 - 2026-11-22. The review of ruling 5.Q-no-rerun ran (`agents/reviews/5.R-deviation-audit.md`, agent a7f240d919a101f50, claude-fable-5-2, 384485 tokens, 44 tool uses, 12.8 min): 47 deviations, 17 with no covering ruling. Ruling Open item 5.R-audit closes them as repair round 2 of step 5.R, on a worktree at 2cd4c95, since round 1 landed in 2cd4c95.
 - 2026-11-22. Repair round 2 of step 5.R landed and booked in `plan.md` ("Step 5.R, repair round 2"); the landing report `agents/reviews/5.R-landing.md` holds it.
-- Next: the same review by a fresh agent, the check of ruling Open item 5.R-audit; then step 6, the closing.
+- 2026-11-22. Repair round 3 of step 5.R sent to the builder (`agents/briefs/5.R-round-3.md`, ruling Open item 5.R-wordseq); the second review by a fresh agent (ae20c7007667991fc) runs on 93a22a0.
+- Next: the review of round 3 and its landing; the second review saved and read; then step 6, the closing.
 - The two check runs of the rebuilt skill (revision, copy `cr4b`, session ce6db165-ecf5-4128-96cc-b05d5b5b37d3; full, copy `fr5`, session 0b6daf08-9d97-45d9-9ecd-f743566be6fd) are stopped, and resume only when Axel asks.
 - Step 5.A's check, on Axel's go (2026-11-16): `v8.4.0-rc.4` tagged on f3531a7 and pinned; one `curl` per index answered 200. The lit-review `paper` side ran in `gate5a/lit-review-1` of the session's scratchpad (session 5b815d8b-6616-4994-af1b-61091e2f57c2, claude-opus-5-5, 111 min, $16.80 by `total_cost_usd`): 81 entries, every annotation "abstract not read", 2 entries from 2022 or later (step 5's run: none unread, 44 from 2022 or later). Not judged. The revision, full and disclosure sides have not started.
