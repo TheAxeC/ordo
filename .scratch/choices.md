@@ -840,7 +840,7 @@ The source's two-call scoring protocol places a contract in front of each review
 - Recommendation: (a). The lazy option: (d).
 
 Taken: (a)
-Booked: `.scratch/6-paper-review/plan.md:38` (Open item 2-contracts)
+Booked: `.scratch/archive/6-paper-review/plan.md:39` (Open item 2-contracts)
 Builds on it: step 2
 
 ## C142. The three contribution questions of the coaching step, at /spec of step 2 of plan 6 (2026-11-22)
@@ -851,7 +851,7 @@ Phase 2.5 step 3 of the source asks the questions L5-W1, L5-W2 and L5-W3 and say
 - Recommendation: (a). The lazy option: (b).
 
 Taken: (a)
-Booked: `.scratch/6-paper-review/plan.md:39` (Open item 2-questions)
+Booked: `.scratch/archive/6-paper-review/plan.md:40` (Open item 2-questions)
 Builds on it: step 2
 
 ## C143. The form of the call, at /spec of step 2 of plan 6 (2026-11-22)
@@ -862,5 +862,5 @@ The source has no slash command of its own: it starts on a plain request and pic
 - Recommendation: (a). The lazy option: (b).
 
 Taken: (a)
-Booked: `.scratch/6-paper-review/plan.md:40` (Open item 2-call)
+Booked: `.scratch/archive/6-paper-review/plan.md:41` (Open item 2-call)
 Builds on it: step 2
