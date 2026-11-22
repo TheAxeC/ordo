@@ -71,10 +71,10 @@ Run from the repository root.
    - None: the skill offers to write `docs/roadmap.md` from the `roadmap` skill's `templates/roadmap.md` (in the `roadmap` folder beside this skill's folder), with no entries.
      - `/roadmap add` fills it.
    - The step is done when the draft names the roadmap file, offers `docs/roadmap.md`, or the stop of several candidates stands.
-3. Draft `verification`: the page that defines the green check, with the commands every step runs and the directory each runs from.
+3. Draft `verification`: the page that defines the green check, with the commands every step runs, each written as the `plan` skill's "What it reads" 3 says.
    - An existing page qualifies only when it states commands.
    - None: the skill offers to write `docs/dev/building.md` from the commands the CI jobs and build files run (install, build, test, lint, type check).
-   - Each command is run once from its directory before it is written.
+   - Each command is run once, as it is to be written, before it is written.
    - Its exit status and the last lines of its output are shown beside it.
    - A command that fails is not written as a check.
      - It is a stop ("Stops").
@@ -95,7 +95,10 @@ Run from the repository root.
    - The step is done when every key the repository cannot give has its value.
 7. Leave each optional key out, so its default applies, unless the repository gives a reason.
    - A key that is written names that reason in its comment.
-   - `standards` lists every standards page the repository has, wherever it is (design principles, coding standards, a UI standard, a layout or prose standard), and `docs/glossary.md` when the repository has one, so every brief names them.
+   - `standards` lists every standards page the repository has, wherever it is (design principles, coding standards, a UI standard, a layout or prose standard), and the repository's glossary when it has one, wherever it is, so every brief names them.
+     - The glossary is listed under the file name `glossary.md`, by which the skills find it (the `plan` skill's "What it reads" 1).
+     - A page of terms under another file name, such as `docs/terms.md`, is listed as it stands and is not renamed.
+     - The draft says of such a page that the skills read a glossary only under the file name `glossary.md`, so the page is a standards page and no glossary for them.
      - The paths `/repo-setup` installs by default are `docs/dev/design-principles.md`, the pages under `docs/dev/coding-standards/` and `docs/dev/ui-standard.md`.
    - `worktree_paths` is the project's directory in the `projects:` form.
    - `bench` and `look` are left out unless the user names binaries or a view.

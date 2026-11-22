@@ -36,7 +36,7 @@ metadata:
    - For `premise`, what the step's text says happens, in each part of the text that asks for a cause to be found.
      - The words of such a part vary, as in "find why X happens and end it" and "find the cause of X and fix it".
      - The step's text is its line in `plan.md`'s step list, the rulings its tags name and its Step 0.
-2. The rules file and the standards the plan configuration names, `docs/glossary.md` and the ADRs in force as the `spec` skill's "What it reads" 5 says, each when the repository has it.
+2. The rules file and the standards the plan configuration names, the glossary among them, and the ADRs in force as the `spec` skill's "What it reads" 5 says, each when the repository has it.
    - With no rules file, "Rules" states the rules this skill needs.
 3. Inside a plan, the ledger folder and `orchestrator-state.md`.
    - `<entry>` resolves to its folder as the `spec` skill's "What it reads" 2 says.

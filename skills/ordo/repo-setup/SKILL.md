@@ -13,7 +13,7 @@ metadata:
 
 ```
 /repo-setup [<path>]          a new repository at <path> (default: the current folder, which must hold no tracked file)
-/repo-setup sync [<path>]     an existing repository: its shared-rules block and its glossary's plan-terms block against their templates
+/repo-setup sync [<path>] [<folder>]   an existing repository: its shared-rules block and its glossary's plan-terms block against their templates; <folder> holds its plan.yaml, as a path from the repository root
 /repo-setup ... --ruling <ledger file> "<name>"   either form, under a quoted ruling: a draft or a sync change the ruling states is written without the stop
 ```
 
@@ -32,7 +32,14 @@ metadata:
    - The language of a file is read from its extension: C++ from `.cpp`, `.cc`, `.cxx`, `.h`, `.hpp`, `.hh`; Python from `.py`; TypeScript from `.ts`, `.tsx`, `.svelte`.
    - Files under `.git/` are left out.
 4. The `ordo-init` and `roadmap` skills beside this skill's folder: `/ordo-init`, the `ordo-init` skill's `templates/check_config.py`, and the `roadmap` skill's `templates/roadmap.md`.
-5. For `sync`, the repository's `CLAUDE.md` and `docs/glossary.md`, through `templates/sync_rules.py`, and the rules of its `CLAUDE.md` and the entries of its `docs/glossary.md` for the exit-2 draft.
+5. For `sync`, the repository's `CLAUDE.md` and its glossary, through `templates/sync_rules.py`, and the rules of its `CLAUDE.md` and the entries of its glossary for the exit-2 draft.
+   - The glossary is the page the repository's `plan.yaml` names in its `standards` list, as `/plan`'s "What it reads" 1 says.
+   - `<folder>` names the `plan.yaml` as the part in front of the entry does in a call of `/plan`: the folder that holds it, as a path from the repository root, with a project's name after it in the `projects:` form.
+   - `<folder>` is given only after `<path>`, and a single argument is the path.
+   - Without `<folder>`, the `plan.yaml` is the first found in the three places at the repository root.
+   - In the `projects:` form, the glossary is read from the `standards` list of the project the call names.
+   - In the `projects:` form with no project named, the glossary is read from the first project in the file's order whose list names one.
+   - With no `plan.yaml`, or one whose `standards` list names no glossary, the glossary is `docs/glossary.md`.
 6. The quoted ruling, when the invocation ends with `--ruling <ledger file> "<name>"`.
    - `<ledger file>` is a plan's `plan.md` or a rulings file, given by a path the skill can read from where it runs.
    - The quoted ruling is the bullet named `<name>` in that file's Rulings section, or in the file itself when it is a rulings file, with every line under it: its sub-bullets and their fenced blocks.
@@ -130,7 +137,9 @@ metadata:
 
 ### sync
 
-1. Run `python3 <this skill's folder>/templates/sync_rules.py <path>`, which checks the shared-rules block of `CLAUDE.md` and then the plan-terms block of `docs/glossary.md`.
+1. Run `python3 <this skill's folder>/templates/sync_rules.py <path>`, which checks the shared-rules block of `CLAUDE.md` and then the plan-terms block of the glossary.
+   - When the repository's `plan.yaml` names a glossary ("What it reads" 5), the run adds `--glossary <the glossary's path from the repository root>`, and each later run of Steps / sync adds it too.
+   - Otherwise the script runs without the option, on the glossary "What it reads" 5 gives.
    - Steps 2 to 9 follow its exit status and, on exit 2, its `error:` lines.
 2. Exit 0: both blocks equal their templates, so nothing is to be done.
 3. Exit 1, when a block differs: show the diff of each block that differs, for the user's ruling per hunk ("Stops").
@@ -139,12 +148,12 @@ metadata:
    - Under a quoted ruling whose hunks are the hunks of the diff, each with the choice for it, the choices are applied without the stop.
    - A diff whose hunks are not the ruling's is shown whole, and the stop stands.
    - The item is done when each hunk has the user's ruling or the quoted ruling's choice.
-4. Exit 2 with `error: CLAUDE.md has no single shared-rules block` or `error: docs/glossary.md has no single plan-terms block`: draft the change for each block the lines name.
+4. Exit 2 with `error: CLAUDE.md has no single shared-rules block` or `error: <glossary> has no single plan-terms block`, `<glossary>` being the path passed with `--glossary` or else `docs/glossary.md`: draft the change for each block the lines name.
    - The shared-rules block inserted after the opening paragraph of `CLAUDE.md`.
    - Each rule of the existing `CLAUDE.md` that the block now states, listed for removal with the block rule that replaces it.
    - A rule that differs in substance, kept in Project rules and named.
-   - With no `docs/glossary.md`, the file written from `templates/docs/glossary.md`, its plan-terms block filled from `templates/plan-terms.md`.
-   - With a `docs/glossary.md` that has no single block, the plan-terms block inserted after its opening paragraph, and each existing entry that the block now defines listed for removal.
+   - With no file at the glossary's path, the file written there from `templates/docs/glossary.md`, its plan-terms block filled from `templates/plan-terms.md`.
+   - With a glossary that has no single block, the plan-terms block inserted after its opening paragraph, and each existing entry that the block now defines listed for removal.
 5. Show the drafted change ("Stops").
    - Under a quoted ruling that states the drafted change, the draft of Steps / sync 4 takes the ruling's text.
    - The rules of Steps / sync 4 are worked on it.

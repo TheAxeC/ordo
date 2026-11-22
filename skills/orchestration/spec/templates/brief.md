@@ -10,6 +10,7 @@ A design ruling decides what is built. It never exempts the code: every line is 
 
 - <each fact the step rests on: the file, the count, the name, the line number in code or the section of a page, and the command that checked it>.
 - <each ADR the step touches: its number, its title and the sentence of its decision the step is under; or that no ADR touches the step>.
+- <that the repository has no glossary, when the `standards` list names none>.
 
 ## What to build
 
@@ -99,7 +100,7 @@ Write it to `<ledger>/agents/reviews/<step>-report.md`, in the rules file's char
 - The cases' first run: every case of "Cases" by its name, none left out, each with the command or the reading that checked it and its output as printed, and each case the brief's rules got wrong with the rule, the result and the orchestrator's ruling.
 - The DONE / NOT DONE table with the checks above and their output as printed, the character-set check's line and its exit status included, over the files the step changes, when the verify list holds one.
   - A line shortened with "..." is not verbatim.
-- The terms: each term of `docs/glossary.md` the diff adds, changes or uses in a new place, each use read against the entry, and each changed entry's "Stated in" checked by `grep -n` of the term in the section it names.
+- The terms: each term of the glossary `<the glossary's path; the whole bullet is left out when the repository has no glossary>` the diff adds, changes or uses in a new place, each use read against the entry, and each changed entry's "Stated in" checked by `grep -n` of the term in the section it names.
 - The files with line counts.
 - Every judgment call the brief left open.
 - Every host- or user-visible change with its before and after.

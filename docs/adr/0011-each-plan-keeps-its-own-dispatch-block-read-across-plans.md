@@ -8,7 +8,7 @@ Roadmap entry 2.I has one session run every open plan, with one limit on steps i
 
 ## Decision
 
-Each plan keeps its own dispatch block in its own state file. The skills read the dispatch blocks of every open plan to count the steps in flight against the one limit, to compare a brief's paths with the steps in flight, and to resume.
+Each plan keeps its own dispatch block in its own state file. The skills read the dispatch blocks of every open plan, the open plans being those of the `plan.yaml` the call reads, to count the steps in flight against the one limit, to compare a brief's paths with the steps in flight, and to resume.
 
 ## Alternatives rejected
 

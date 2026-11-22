@@ -133,7 +133,7 @@ metadata:
   - a case of a code step in the brief's "Cases" that the rules file's test rule calls a test for and no test of the step checks;
   - a case whose first run on the unchanged tree the report does not give;
   - a script written for the step, by the builder or by the session that runs it inline, that the brief does not build under "What to build" and that no line of `plan.md`'s Rulings approves;
-  - a step whose brief's size line says it is a small text step and whose diff changes a script, a test or a configuration file, or 20 lines or more, counted as the glossary's entry **small text step** says.
+  - a step whose brief's size line says it is a small text step and whose diff changes a script, a test or a configuration file, or 20 lines or more, counted as the glossary's entry **small text step** says, the entry read where the `spec` skill's Steps 4 reads it.
     - Such a step is then handled as a full step.
 - **Proof.** A finding is:
   - a "seen failing first" claim with no quoted failing check;

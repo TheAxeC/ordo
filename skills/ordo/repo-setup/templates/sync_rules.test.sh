@@ -1,10 +1,12 @@
 #!/bin/sh
-# Exercise sync_rules.py --write on scratch repositories whose CLAUDE.md holds the shared-rules block and whose docs/glossary.md holds the plan-terms block, each filled from its template.
+# Exercise sync_rules.py, with --write and with --glossary, on scratch repositories whose CLAUDE.md holds the shared-rules block and whose docs/glossary.md holds the plan-terms block, each filled from its template.
 # Each case is kept because its failure loses text of the user's outside the block, leaves a file written that does not hold what was meant, or writes one file when the run was refused.
 # --write makes a drifted block equal the template and keeps every byte outside the block, in an LF file under a preamble holding a tab, trailing spaces and a UTF-8 letter, and in a CRLF glossary, where the block is written in CRLF too.
 # A CLAUDE.md that is not UTF-8 is refused and its bytes stay as they were, and a --write whose file does not read back as written is refused.
 # --only glossary --write rewrites the glossary alone and leaves a drifted CLAUDE.md byte for byte.
 # A drifted shared-rules block beside a missing glossary writes nothing, since every input is checked before anything is written.
+# --glossary <path> checks and rewrites the plan-terms block in the file named and makes no docs/glossary.md, and a missing file named gets the no-single-block error under its own path.
+# --glossary with no path, given twice, written with "=", or naming a path that resolves outside the root gets the usage line and writes nothing, inside the root or outside it.
 
 set -u
 
@@ -89,11 +91,11 @@ to_crlf() {
     perl -pi -e 's/\n/\r\n/' "$1"
 }
 
-# Changes the first entry of a repository's plan-terms block.
+# Changes the first entry of a repository's plan-terms block, in docs/glossary.md or in the file named after the repository.
 drift_terms() {
-    perl -pi -e 'if (!$done && s/^- \*\*.*/- **drifted**: a changed entry./) { $done = 1 }' \
-        "$test_root/$1/docs/glossary.md"
-    grep -q '^- \*\*drifted\*\*' "$test_root/$1/docs/glossary.md" || fail "drift_terms changed nothing in $1"
+    drifted=$test_root/$1/${2:-docs/glossary.md}
+    perl -pi -e 'if (!$done && s/^- \*\*.*/- **drifted**: a changed entry./) { $done = 1 }' "$drifted"
+    grep -q '^- \*\*drifted\*\*' "$drifted" || fail "drift_terms changed nothing in $1"
 }
 
 # Checks that stdout is exactly the lines given, one per argument.
@@ -102,6 +104,23 @@ expect_lines() {
     shift
     wanted=$(printf '%s\n' "$@")
     [ "$output" = "$wanted" ] || fail "$label: stdout is [$output], expected [$wanted]"
+}
+
+# The usage line: exit 2, nothing on stdout, and on stderr the one line that names every argument.
+usage='Usage: sync_rules.py <repository root> [--write] [--only glossary] [--glossary <path>]'
+expect_usage() {
+    label=$1
+    shift
+    expect 2 "$@"
+    [ -z "$output" ] || fail "$label: stdout is not empty: [$output]"
+    [ "$errors" = "$usage" ] || fail "$label: stderr is [$errors], expected [$usage]"
+}
+
+# Moves a repository's glossary to pages/glossary.md, so that the repository holds no docs/glossary.md.
+move_glossary() {
+    mkdir "$test_root/$1/pages"
+    mv "$test_root/$1/docs/glossary.md" "$test_root/$1/pages/glossary.md"
+    rmdir "$test_root/$1/docs"
 }
 
 # A drifted block, under a preamble holding a tab, trailing spaces and a UTF-8 letter.
@@ -210,5 +229,78 @@ expect_refusal "drifted rules, no glossary, --write" "$no_block" \
     python3 -B "$sync" "$test_root/drift-no-glossary" --write
 cmp -s "$test_root/drift-no-glossary/before" "$test_root/drift-no-glossary/CLAUDE.md" ||
     fail "--write changed CLAUDE.md beside a missing glossary"
+
+# --glossary on a repository whose glossary is pages/glossary.md and equals the template: both blocks checked, the glossary alone with --only glossary, and no docs/glossary.md made.
+make_repo moved
+move_glossary moved
+expect 0 python3 -B "$sync" "$test_root/moved" --glossary pages/glossary.md
+expect_lines "--glossary on an equal block" "ok: the shared-rules block equals the template" "ok: the plan-terms block equals the template"
+expect 0 python3 -B "$sync" "$test_root/moved" --glossary pages/glossary.md --only glossary
+expect_lines "--glossary with --only glossary" "ok: the plan-terms block equals the template"
+[ ! -e "$test_root/moved/docs/glossary.md" ] || fail "--glossary made a docs/glossary.md"
+
+# --glossary on a drifted block under a preamble: the diff is labelled with the path given, and --write rewrites that file's block, keeps every byte outside it and makes no docs/glossary.md.
+make_repo moved-drift
+move_glossary moved-drift
+drift_terms moved-drift pages/glossary.md
+glossary=$test_root/moved-drift/pages/glossary.md
+printf '# Title\t  \ncaf\303\251  \n' >"$test_root/moved-drift/preamble"
+cat "$test_root/moved-drift/preamble" "$glossary" >"$test_root/moved-drift/joined"
+mv "$test_root/moved-drift/joined" "$glossary"
+outside_block "$glossary" terms >"$test_root/moved-drift/terms-before"
+expect 1 python3 -B "$sync" "$test_root/moved-drift" --glossary pages/glossary.md
+case "$output" in
+    *"--- pages/glossary.md (plan terms)"*) ;;
+    *) fail "--glossary does not label the diff with the path given: [$output]" ;;
+esac
+expect 0 python3 -B "$sync" "$test_root/moved-drift" --glossary pages/glossary.md --write
+expect_lines "--glossary --write" "ok: the shared-rules block equals the template" "written: the plan-terms block now equals the template"
+expect 0 python3 -B "$sync" "$test_root/moved-drift" --glossary pages/glossary.md
+outside_block "$glossary" terms >"$test_root/moved-drift/terms-after"
+cmp -s "$test_root/moved-drift/terms-before" "$test_root/moved-drift/terms-after" ||
+    fail "--glossary --write changed bytes outside the plan-terms block"
+[ ! -e "$test_root/moved-drift/docs/glossary.md" ] || fail "--glossary --write made a docs/glossary.md"
+
+# --glossary with no path after it, given twice, and written with "=" after the root, before it and with no root: the usage line, and both drifted files left byte for byte under --write.
+make_repo bad-option
+drift bad-option
+drift_terms bad-option
+cp "$test_root/bad-option/CLAUDE.md" "$test_root/bad-option/claude-before"
+cp "$test_root/bad-option/docs/glossary.md" "$test_root/bad-option/glossary-before"
+expect_usage "--glossary with no path" python3 -B "$sync" "$test_root/bad-option" --write --glossary
+expect_usage "--glossary given twice" \
+    python3 -B "$sync" "$test_root/bad-option" --glossary docs/glossary.md --glossary docs/glossary.md --write
+expect_usage "--glossary=<path>" python3 -B "$sync" "$test_root/bad-option" --glossary=docs/glossary.md --write
+expect_usage "--glossary=<path> before the root" \
+    python3 -B "$sync" --glossary=docs/glossary.md "$test_root/bad-option" --write
+expect_usage "--glossary=<path> with no root" python3 -B "$sync" --glossary=docs/glossary.md
+cmp -s "$test_root/bad-option/claude-before" "$test_root/bad-option/CLAUDE.md" ||
+    fail "a refused --glossary changed CLAUDE.md"
+cmp -s "$test_root/bad-option/glossary-before" "$test_root/bad-option/docs/glossary.md" ||
+    fail "a refused --glossary changed docs/glossary.md"
+
+# --glossary naming a file outside the root, by "..", by an absolute path and by a link inside the root: the usage line under --write, the drifted file outside and the drifted CLAUDE.md left byte for byte.
+make_repo outside
+drift outside
+drift_terms outside
+cp "$test_root/outside/docs/glossary.md" "$test_root/out.md"
+cp "$test_root/out.md" "$test_root/out-before"
+cp "$test_root/outside/CLAUDE.md" "$test_root/outside/claude-before"
+ln -s ../out.md "$test_root/outside/link.md"
+expect_usage "--glossary ../out.md" python3 -B "$sync" "$test_root/outside" --glossary ../out.md --write
+expect_usage "--glossary with an absolute path outside the root" \
+    python3 -B "$sync" "$test_root/outside" --glossary "$test_root/out.md" --write
+expect_usage "--glossary with a link to a file outside the root" \
+    python3 -B "$sync" "$test_root/outside" --glossary link.md --write
+cmp -s "$test_root/out-before" "$test_root/out.md" || fail "--glossary --write changed a file outside the root"
+cmp -s "$test_root/outside/claude-before" "$test_root/outside/CLAUDE.md" ||
+    fail "a --glossary outside the root changed CLAUDE.md"
+
+# --glossary naming a file that does not exist: the no-single-block error under the path given, and the file not made.
+make_repo missing
+expect_refusal "--glossary on a missing file" \
+    "pages/missing.md has no single plan-terms block ($terms_begin ... $terms_end)" \
+    python3 -B "$sync" "$test_root/missing" --glossary pages/missing.md
+[ ! -e "$test_root/missing/pages/missing.md" ] || fail "--glossary made the missing file"
 
 printf 'PASS: sync_rules.py scratch tests\n'

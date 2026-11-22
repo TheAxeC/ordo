@@ -1,17 +1,17 @@
 #!/usr/bin/env python3
 """Compare a repository's shared-rules block and plan-terms block with their templates, and rewrite them on request.
 
-Usage: sync_rules.py <repository root> [--write] [--only glossary]
+Usage: sync_rules.py <repository root> [--write] [--only glossary] [--glossary <path>]
 
-The shared-rules block is the text of CLAUDE.md between the lines "<!-- ordo:shared-rules begin -->" and "<!-- ordo:shared-rules end -->"; its template is shared-rules.md beside this script. The plan-terms block is the text of docs/glossary.md between "<!-- ordo:plan-terms begin -->" and "<!-- ordo:plan-terms end -->"; its template is plan-terms.md beside this script. A marker string is counted wherever it stands, inside a line of prose too. Each block is compared line by line, so a CRLF file whose block holds the template's lines equals it.
+The shared-rules block is the text of CLAUDE.md between the lines "<!-- ordo:shared-rules begin -->" and "<!-- ordo:shared-rules end -->"; its template is shared-rules.md beside this script. The plan-terms block is the text of the glossary between "<!-- ordo:plan-terms begin -->" and "<!-- ordo:plan-terms end -->"; its template is plan-terms.md beside this script. The glossary is docs/glossary.md in the root, or with --glossary <path> the file at that path, read from the root; <glossary> below stands for docs/glossary.md or for the path as given. The path and the root are resolved through links, and the path must resolve inside the root; an absolute path inside the root is accepted. A marker string is counted wherever it stands, inside a line of prose too. Each block is compared line by line, so a CRLF file whose block holds the template's lines equals it.
 
-The shared-rules block is checked first, then the plan-terms block. --only glossary checks the plan-terms block alone, for a repository with no shared-rules block, and then neither CLAUDE.md nor shared-rules.md is read. Every file is read and every block located before anything is written or printed on stdout, so an error in any file writes nothing. Each file in error prints its own "error:" line, in the order the files are read: shared-rules.md, CLAUDE.md, plan-terms.md, docs/glossary.md.
+The shared-rules block is checked first, then the plan-terms block. --only glossary checks the plan-terms block alone, for a repository with no shared-rules block, and then neither CLAUDE.md nor shared-rules.md is read. Every file is read and every block located before anything is written or printed on stdout, so an error in any file writes nothing. Each file in error prints its own "error:" line, in the order the files are read: shared-rules.md, CLAUDE.md, plan-terms.md, the glossary.
 
---write replaces the text between the two markers of each block that differs with its template and keeps every byte outside them. It writes the block with the file's own line ending: CRLF or LF, whichever most of its lines end with, and the first line's ending on a tie. It then reads the file back to check that it holds what was written. CLAUDE.md is written first, and a failed write or read-back of it stops before docs/glossary.md is written.
+--write replaces the text between the two markers of each block that differs with its template and keeps every byte outside them. It writes the block with the file's own line ending: CRLF or LF, whichever most of its lines end with, and the first line's ending on a tie. It then reads the file back to check that it holds what was written. CLAUDE.md is written first, and a failed write or read-back of it stops before the glossary is written.
 
-Exit status: 0 when every block checked equals its template (or was just rewritten with --write); 1 when a block differs, with the unified diff of each differing block printed under its file's name; 2 when CLAUDE.md is missing, when CLAUDE.md or docs/glossary.md has no single block (a missing docs/glossary.md included), when a file cannot be read or is not UTF-8, and when --write cannot write a file or the file does not read back as written. The "ok:" and "written:" lines and the diffs go to stdout, the shared-rules block's first; each "error:" line goes to stderr.
+Exit status: 0 when every block checked equals its template (or was just rewritten with --write); 1 when a block differs, with the unified diff of each differing block printed under its file's name; 2 when CLAUDE.md is missing, when CLAUDE.md or the glossary has no single block (a missing glossary included), when a file cannot be read or is not UTF-8, and when --write cannot write a file or the file does not read back as written. The "ok:" and "written:" lines and the diffs go to stdout, the shared-rules block's first; each "error:" line goes to stderr.
 
-The lines on stdout, besides the diffs, which are labelled "CLAUDE.md (shared rules)" or "docs/glossary.md (plan terms)" against "template":
+The lines on stdout, besides the diffs, which are labelled "CLAUDE.md (shared rules)" or "<glossary> (plan terms)" against "template":
     ok: the shared-rules block equals the template
     ok: the plan-terms block equals the template
     written: the shared-rules block now equals the template
@@ -19,14 +19,14 @@ The lines on stdout, besides the diffs, which are labelled "CLAUDE.md (shared ru
 
 The error lines of exit 2. The first two name a block to draft:
     error: CLAUDE.md has no single shared-rules block (<begin marker> ... <end marker>)
-    error: docs/glossary.md has no single plan-terms block (<begin marker> ... <end marker>)
+    error: <glossary> has no single plan-terms block (<begin marker> ... <end marker>)
 The others name a file to fix before the check can run:
     error: no CLAUDE.md in <root>
     error: <path> is not UTF-8 (byte <n>)
     error: cannot read <path>: <reason>
     error: cannot write <path>: <reason>
     error: <path> does not read back as written
-The usage line, on stderr, also exits 2: for no path or a second path, and for --only with no value, with a value other than glossary, given twice, or written as --only=glossary.
+The usage line, on stderr, also exits 2 and writes nothing: for no root or a second root, for --only with no value, with a value other than glossary, given twice, or written as --only=glossary, and for --glossary with no path, given twice, written as --glossary=<path>, or with a path that resolves outside the root.
 """
 import difflib
 import os
@@ -73,10 +73,11 @@ def line_ending(text):
 
 
 def arguments(argv):
-    """The root, --write and --only glossary, in any order; None when the usage line is due."""
+    """The root, --write, --only glossary and the path of --glossary (None without it), in any order; None when the usage line is due."""
     root = None
     write = False
     only = False
+    glossary = None
     rest = list(argv)
     while rest:
         arg = rest.pop(0)
@@ -86,13 +87,24 @@ def arguments(argv):
             if only or not rest or rest.pop(0) != "glossary":
                 return None
             only = True
-        elif arg.startswith("--only") or root is not None:
+        elif arg == "--glossary":
+            if glossary is not None or not rest:
+                return None
+            glossary = rest.pop(0)
+        elif arg.startswith(("--only", "--glossary")) or root is not None:
             return None
         else:
             root = arg
     if root is None:
         return None
-    return root, write, only
+    return root, write, only, glossary
+
+
+def inside(root, path):
+    """Whether the path, read from the root, resolves through links to a place inside the root."""
+    resolved_root = os.path.realpath(root)
+    resolved = os.path.realpath(os.path.join(root, path))
+    return os.path.commonpath([resolved_root, resolved]) == resolved_root
 
 
 def load(root, here, block):
@@ -140,13 +152,18 @@ def rewrite(path, text, start, stop, template):
 
 def main(argv):
     parsed = arguments(argv)
+    if parsed is not None and parsed[3] is not None and not inside(parsed[0], parsed[3]):
+        parsed = None
     if parsed is None:
         print(__doc__.strip().splitlines()[2], file=sys.stderr)
         return 2
-    root, write, only = parsed
+    root, write, only, glossary = parsed
     root = os.path.abspath(root)
     here = os.path.dirname(os.path.realpath(__file__))
-    blocks = [PLAN_TERMS] if only else [SHARED_RULES, PLAN_TERMS]
+    plan_terms = PLAN_TERMS
+    if glossary is not None:
+        plan_terms = dict(PLAN_TERMS, page=glossary, label=f"{glossary} (plan terms)")
+    blocks = [plan_terms] if only else [SHARED_RULES, plan_terms]
     loaded = [load(root, here, block) for block in blocks]
     if None in loaded:
         return 2

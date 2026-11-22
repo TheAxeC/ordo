@@ -34,7 +34,7 @@ Ruled: <the choice>      the reply to a stop, booked as "Steps / A ruling" says;
    - `/plan` names a new folder by the entry's slug.
    - An older plan keeps whatever folder it has.
    - No such folder is a refusal ("Stops").
-3. `orchestrator-state.md`: the configuration block, the open items, and the dispatch block; and the dispatch block of every other open plan's `orchestrator-state.md`.
+3. `orchestrator-state.md`: the configuration block, the open items, and the dispatch block; and the dispatch block of every other open plan's `orchestrator-state.md`, the open plans being those `plan-orchestration`'s "What it reads" 1 gives a call.
    - The limit on steps in flight is the plan configuration's `workers_at_once`, counted over the dispatch blocks of every open plan, as `plan-orchestration`'s "Two steps in flight" states it.
    - A step is refused when the steps in flight of all open plans already reach that limit ("Stops").
    - A step is in flight from the start of its `/spec`: its dispatch entry at `landing: preparing` counts, as `plan-orchestration`'s "Two steps in flight" says.
@@ -165,6 +165,8 @@ Ruled: <the choice>      the reply to a stop, booked as "Steps / A ruling" says;
    - The line under the title is the size line, written from the step's text before the build.
      - `Size: a small text step: no brief check, one review, no repair round` for a step that is a small text step, as the glossary's entry **small text step** says.
      - `Size: a full step` for every other step.
+     - The glossary is the page `/plan`'s "What it reads" 1 names, read at its path in the configuration block's `standards` list.
+     - With no glossary, the entry **small text step** is read from the `repo-setup` skill's `templates/plan-terms.md`, and the brief says under "What is on the tree" that the repository has no glossary.
    - The premises as checked, with the command that checked each.
    - The ADRs the step touches, as Steps 2 names them.
    - The change Steps 1 made to the plan's verify list, when it made one.
@@ -179,6 +181,7 @@ Ruled: <the choice>      the reply to a stop, booked as "Steps / A ruling" says;
      - A check of the verify list whose file list comes from a git command is written in the brief with that file list given as `printf '%s\0' <the files the step changes> |` in place of the git command, the rest of the command as the verify list has it.
      - The brief says the plan's whole verify list runs once, at landing on main.
    - The report shape, with the cases' first run before the result table.
+     - The report's bullet on terms names the glossary by its path, and is written only when the repository has a glossary.
    - Under "Cases", every must-pass and must-refuse example the step's text gives, in one list, each an input and its expected result.
      - Each case checks what the step changes, and none asks the builder to quote or explain a place the step does not change.
      - The brief states the builder's first task as the template states it: the first run of every case on the unchanged tree before any change.

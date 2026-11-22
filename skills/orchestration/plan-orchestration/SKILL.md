@@ -36,14 +36,18 @@ continue the plan                    the same as /plan-orchestration with no ent
 
 1. The plan configuration and the ledger folder of each plan the invocation runs: every project specific comes from them.
    - The plan configuration is found and its paths are read as `/plan`'s "What it reads" 1 says, a folder named alone or in front of `<entry>` as a path from the repository root.
-   - A call that names no folder reads the first `plan.yaml` found in the three places at the repository root, and its open plans are the open plans of that file.
+   - A call that names no folder reads the first `plan.yaml` found in the three places at the repository root.
    - The plans of a `plan.yaml` in a project folder are run by naming the folder.
    - No `plan.yaml` in any place of the order is a refusal ("Stops").
    - `/plan-orchestration` with no entry and `continue the plan` run every open plan.
    - `/plan-orchestration <entry>` runs that plan alone.
    - An open plan is a folder under `<ledger_root>/` (in the `projects:` form, under a project's `ledger_root`), outside `<archive_root>/`, whose `plan.md` opens with `# Plan: <entry>`.
      - A folder without such a `plan.md` is no plan.
+   - The open plans of a call are the open plans under the `ledger_root` of the `plan.yaml` the call reads, in the `projects:` form under the `ledger_root` of each of its projects.
+     - A plan under another `plan.yaml` of the repository is not among them.
+     - "Every open plan" and "all open plans", in the text of every plan skill, are the open plans of the call.
 2. The state file `orchestrator-state.md` of each of those plans first, then its `plan.md`, then the tail of the transcript when there is one: the reading order after any compaction, and for a new orchestrator.
+   - The line of the state file's "Where things are" that names the plan configuration gives a resuming session the folder, and in the `projects:` form the project, to put in front of the entry in each call for that plan.
 3. The dispatch block in the state file of every open plan, which "Resuming, and handing the plan over" reads.
 4. The builder's report, the diff since the step's base, and the refuter reports of the step.
 5. For the recurring-findings pass of a plan, the refuter reports of that plan written since its last pass.
@@ -334,7 +338,7 @@ On every resumption, with a dispatch block or without one:
 
 The orchestrator, still one, may have as many steps running at once as the limit allows, each through steps 3 to 9 on its own, across every open plan, under these rules:
 
-- **The limit.** The plan configuration's `workers_at_once` is the most steps in flight at once, read at each pick and counted over the dispatch blocks of every open plan of the `plan.yaml` the call found.
+- **The limit.** The plan configuration's `workers_at_once` is the most steps in flight at once, read at each pick and counted over the dispatch blocks of every open plan, which "What it reads" 1 defines for a call.
   - A step is in flight from the start of its `/spec`: its dispatch entry at `landing: preparing` counts toward the limit (the `spec` skill's Steps 1).
   - In the `projects:` form, the limit is the smallest `workers_at_once` among the projects that have an open plan.
   - A configuration block that holds a `workers_at_once` line is read as if the line were not there.

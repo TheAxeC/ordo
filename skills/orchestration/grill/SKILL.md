@@ -1,13 +1,13 @@
 ---
 name: grill
-description: "Settle a roadmap entry's design decisions before its plan opens, by an interview in rounds: list the decisions the entry's goal and gate need, ask every decision whose prerequisites are settled in one round, each with its options, their pros and cons, a reference line for the configured design bar, one recommendation and the lazy option named, have facts looked up by agents instead of asked, and write each answer as it settles into the plan's Rulings or the entry's rulings file, each lookup agent into the Agents section of the same file, the roadmap entry, the glossary and a proposed ADR, written on the user's yes or, under `--self-rule`, on the orchestrator's recommendation. Triggers on: grill <entry>, grill me on the entry, settle the design decisions of an entry, interview me about the design, design decisions before the plan, stress-test the design of an entry."
+description: "Settle a roadmap entry's design decisions before its plan opens, by an interview in rounds: list the decisions the entry's goal and gate need, ask every decision whose prerequisites are settled in one round, each with its options, their pros and cons, a reference line for the configured design bar, one recommendation and the lazy option named, have facts looked up by agents instead of asked, and write each answer as it settles into the plan's Rulings or the entry's rulings file, each lookup agent into the Agents section of the same file, the roadmap entry, the glossary, the glossary's path in the standards list of plan.yaml and of each open plan's configuration block when it creates or lists a glossary, and a proposed ADR, written on the user's yes or, under `--self-rule`, on the orchestrator's recommendation. Triggers on: grill <entry>, grill me on the entry, settle the design decisions of an entry, interview me about the design, design decisions before the plan, stress-test the design of an entry."
 metadata:
   version: "2.0.0"
 ---
 
 # Settle an entry's design decisions
 
-`/grill <entry>` interviews the user, in rounds, until the design decisions of one roadmap entry are settled. It leaves behind each settled answer as a bullet of the plan's Rulings or of the entry's rulings file, each lookup agent it started as a bullet of the Agents section of the same file, the roadmap entry the answers changed, the glossary terms they settled, a proposed ADR for each decision the user chose to record, or that the orchestrator recommends recording under `--self-rule`, and one commit, made when the user allows it, or at once under `--self-rule`.
+`/grill <entry>` interviews the user, in rounds, until the design decisions of one roadmap entry are settled. It leaves behind each settled answer as a bullet of the plan's Rulings or of the entry's rulings file, each lookup agent it started as a bullet of the Agents section of the same file, the roadmap entry the answers changed, the glossary terms they settled, the glossary's path added to the `standards` list of the `plan.yaml` and of each open plan's configuration block when it creates or lists a glossary, a proposed ADR for each decision the user chose to record, or that the orchestrator recommends recording under `--self-rule`, and one commit, made when the user allows it, or at once under `--self-rule`.
 
 ## Quick start
 
@@ -43,8 +43,8 @@ metadata:
    - No match is a refusal that names `/roadmap add <goal>` ("Stops").
 3. The rules file `rules` names, and every page `standards` lists, each in full.
 4. The ADRs in force in the folder `adr` names, as the `spec` skill's "What it reads" 5 says: which records are in force, and what each record's decision is.
-5. `docs/glossary.md`, whole.
-   - A repository without it gets it at the first term written, created from the `repo-setup` skill's `templates/docs/glossary.md`.
+5. The glossary, whole, found as `/plan`'s "What it reads" 1 says.
+   - A repository without one gets it at the first term written, as "Steps / Writing what settled" 2 says.
    - A glossary without the plan-terms block gets its terms after the opening paragraph.
 6. The Rulings of the open plan, when a folder under `<ledger_root>/`, outside the folder `archive_root` names, holds a `plan.md` whose title, after `# Plan: `, equals `<entry>` or starts with `<entry>` and a space, a full stop after a number being allowed, and otherwise the rulings file `<ledger_root>/rulings/<slug>.md` when it exists.
    - The slug is derived as the `plan` skill's Steps 1 derives it.
@@ -172,7 +172,7 @@ metadata:
    - The interview goes on under `--self-rule` after the user's answers.
    - Under `--self-rule`, each decision answered with its recommendation goes through the checks of Steps 7 that read an answer ("Steps / Terms and claims" and "Steps / An answer that contradicts") before Steps 8.
      - An answer that contradicts a ruling or an ADR in force becomes a rule-clash decision, kind 3, sent to the user as the bullets above say for the six kinds.
-     - A term the answer needs that the glossary lacks becomes a decision of its own, kind 3 where the glossary is a standards page.
+     - A term the answer needs that the glossary lacks becomes a decision of its own, kind 3, since the glossary is a standards page and a glossary created or added to the `standards` list changes the plan configuration.
    - When the frontier is empty, no round is sent and the turn does not end: the skill goes on to Steps 8, which makes a roadmap diff a quoted ruling states.
    - The step is done in one of these states:
      - the message is sent and the turn has ended;
@@ -298,14 +298,21 @@ metadata:
    - A roadmap diff written under a quoted ruling gets no bullet, since the quoted ruling is its ruling.
    - The item is done when the file, read back, holds the bullet whole.
 2. Write the glossary term.
-   - A term the interview settles is written into `docs/glossary.md` below the plan-terms block, in the file's form `- **<term>**: <definition>`, at once.
+   - A term the interview settles is written into the glossary below the plan-terms block, in the file's form `- **<term>**: <definition>`, at once.
+   - In a repository whose `standards` list names no glossary, the skill first looks for a `glossary.md` in the folder that holds the rules file, and then for the glossary `/repo-setup` writes, at the path the `repo-setup` skill's "The tree" gives it from the repository root.
+     - The first found is the glossary: it is not written over, and the term is written into it.
+     - A new glossary is written only when neither exists, as `glossary.md` in the folder that holds the rules file, from the glossary template "What it reads" 10 names.
+   - The term's decision shows the glossary found or the new one, and the two additions of its path, with the term, for the user's yes in the round.
+     - Its path is added to the `standards` list of the `plan.yaml`, written relative to the folder that holds that file, as `/plan`'s "What it reads" 1 reads a path.
+     - Its path, as it reads from the repository root, is added to the `standards` line of the configuration block of each open plan of that `plan.yaml` (`plan-orchestration`'s "What it reads" 1), so the next `/spec` of an open plan reads the glossary.
+   - On the yes, a new glossary and the two additions are written before the term.
    - A term that clashes with the glossary's existing definition is put to the user as a decision.
    - A term the plan-terms block defines is never written into the block, since `/repo-setup sync` undoes it.
    - No copy of the `repo-setup` skill's `templates/plan-terms.md` is changed by this skill.
    - A clash with such a term is put to the user as a decision.
    - Its answer is written as a Rulings bullet (item 1).
    - The end lists it as a change for the user to make in the Ordo repository (Steps 10).
-   - The item is done when the glossary, read back, holds the term whole.
+   - The item is done when the glossary, read back, holds the term whole, and, for a glossary created or added to the list, the `plan.yaml` and each open plan's configuration block, read back, hold its path.
 3. Draft the change to the roadmap entry.
    - An answer that changes the entry's goal, gate or text is drafted into the entry in the file's own format and under the `roadmap` skill's Rules: the goal, the gate and the dependencies only, nothing the user did not ask for, no history, another repository only as a path.
    - A changed gate is asked "could this pass without the goal being reached?", as the `roadmap` skill's "Steps / add" 3 says.

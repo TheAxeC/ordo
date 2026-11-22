@@ -51,13 +51,14 @@ A finding that is neither closed in the repair rounds nor fixed at landing is an
 ## Verification, every step
 
 - A landing runs the `land` skill's `templates/land.sh` from the repository root as `sh <the land skill's folder>/templates/land.sh <state file> <slug>-<step> <base> <plan.yaml>`, the last argument the path of the `plan.yaml` the call reads. It commits the step's work in its worktree, cherry-picks the range onto main, runs the `verify` list on main through `templates/checks.sh` and prints the booking data. It exits 0 when the step landed and every check passed, 1 on a failed check or a stop, 2 on a conflict and 64 on a refusal, 127 when `python3` is not installed, or with git's own status when a git step fails; the `land` skill's `templates/land.test.sh` proves it.
-- <the commands, and the directory each runs from>.
+- <the commands, each written as it runs from the repository root>.
 - The `verify` list above runs through the `land` skill's `templates/checks.sh <state file>` from the root of main's checkout, once, at landing. It prints `$ <command>` and the output of each command, then `checks: <n> commands passed`, and the lines it prints are what the booking quotes. The builder and the reviewer run the checks the brief names for the files the step changes before landing.
 - Every step: `LC_ALL=C grep -n '[^ -~]'` over every file the diff touches finds nothing new, and `git status --short` shows nothing of the step's.
 
 ## Where things are
 
 - Design: <path>. Ledger: `<ledger_root>/<slug>/`, with `agents/briefs/` and `agents/reviews/`.
+- Plan configuration: <the path of the `plan.yaml` this plan reads, from the repository root>. In a call, in front of the entry: <the folder that holds that file, as a path from the repository root, when a call that names no folder would not read this file, with the project after it in the `projects:` form, such as `apps/web`, `.agents`, `tools/a` or the project `x` alone; or "nothing">.
 - The data the steps read, and who may change it: <paths>.
 - Anything running that a step must not disturb: <the service, its port, and why>.
 

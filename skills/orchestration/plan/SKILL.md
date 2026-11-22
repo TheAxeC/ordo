@@ -43,6 +43,10 @@ metadata:
      - A `ledger_root` or a `worktree_root` that resolves to the repository root is refused, and `ledger_root: .` in `.scratch/plan.yaml` is the folder `.scratch`.
      - `look`, `bench` and `design_references` hold text and are not resolved.
      - In the text of every skill, `<ledger_root>`, `<archive_root>` and `<worktree_root>` stand for the folder the key names as it reads from the repository root, and a page a key names is opened at the path it resolves to.
+   - The glossary is the page of the `standards` list whose file name is `glossary.md`.
+     - A repository whose `standards` list names no such page has no glossary for the skills, whatever file of that name it holds.
+     - When the list names more than one such page, the glossary is the first in the list's order.
+     - A skill that reads the standards from the configuration block of an open plan's state file reads the glossary's path from that block's `standards` list.
    - Its keys, which of them are required and the default of each optional one are in `templates/plan.yaml` (one project) and `templates/plan.projects.yaml` (several, listed under `projects:`, with `<entry>` then `<project>/<entry>`).
    - An optional key missing takes the default the example file gives it.
      - A default that is a path is read from the repository root, wherever the file stands: `adr` is then `docs/adr` and `worktree_root` is `.agents/worktrees`.
@@ -52,6 +56,8 @@ metadata:
      - No match is a stop ("Stops").
      - An entry that stands under the roadmap's "Not yet specified" section is a refusal that names `/roadmap add <entry>`, which names its gate ("Stops").
 3. The verification page the configuration names, for the commands every step runs.
+   - Each command of the page runs from the repository root, whatever folder holds the `plan.yaml`.
+   - A page in a project folder therefore writes each command as it runs from the root: `test -d apps/web/src` for a check of `src` in `apps/web`.
 4. The rulings file `<ledger_root>/rulings/<slug>.md`, the slug as Steps 1 derives it, when it exists: the settled design answers for the entry, the user's and those `/grill --self-rule` wrote, written while no plan was open, and, under its `## Agents` heading, the lookup agents `/grill` started while no plan was open.
 5. The ADRs in the folder the configuration's `adr` names (`docs/adr` when it has none): each `NNNN-*.md` record for its part in force, as the `spec` skill's "What it reads" 5 says.
 6. The quoted ruling, when the invocation ends with `--ruling <ledger file> "<name>"`.
@@ -181,7 +187,11 @@ metadata:
    - The dispatch block is empty.
    - The open items are empty.
    - The position names the first step.
-   - The step is done when the state file holds the configuration block with every key written out, the empty dispatch block, no open item and the position.
+   - The line of "Where things are" that names the plan configuration holds the path of the `plan.yaml` the call read, from the repository root, and what stands in front of the entry in a call ("What it reads" 1).
+     - The folder is named when a call that names no folder would not read this file: the file is in none of the three places at the repository root, or it is in a later place of the order while an earlier place also holds a `plan.yaml`.
+     - The project follows the folder in the `projects:` form: `apps/web/plan.yaml` and `apps/web` for `/plan apps/web/12`, `tools/plan.yaml` and `tools/a` for `/plan tools/a/12`, `.agents/plan.yaml` and `.agents` for `/plan .agents/7` beside a `docs/plan.yaml`.
+     - Otherwise the line says "nothing", or the project alone in the `projects:` form.
+   - The step is done when the state file holds the configuration block with every key written out, the empty dispatch block, no open item, the position and the line that names the plan configuration.
 5. Create `agents/briefs/` and `agents/reviews/`, each with an empty `.gitkeep`, since git does not keep an empty folder.
 6. Commit `plan.md`, `orchestrator-state.md` and the two `.gitkeep` files as the plan's opening commit, naming its paths.
    - Each new or changed path is staged with `git add -- <path> ...`.
