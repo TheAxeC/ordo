@@ -83,13 +83,6 @@ Status: `[ ]` open, `[~]` in progress, `[x]` done (its gate ran and passed, with
 - Gate: one real run for a project's manual setup you name, the script run by you, reviewed by you.
 - Waits on: 2.D, for the layout rules.
 
-## 22. teach
-
-- Status: [ ]
-- Goal: A `teach` skill: a teaching workspace that persists across sessions, with a mission file saying why you learn the topic, short lessons tied to it, reference sheets, records of what you learned, and retrieval practice spaced over time. Its design follows mattpocock's `teach`: the agents, phases, cycles and stops are kept as the source has them, and each deviation from them is made only with its reason and your ruling in the plan's Rulings.
-- Gate: one real run on a topic you name over at least two sessions, the second reading the first's records and scheduling its retrieval practice, reviewed by you; a blind comparison as `docs/dev/blind-comparison.md` says against mattpocock's `teach` on the same topic, wins or ties; the plan's ledger lists every deviation from the design of mattpocock's `teach`, each with its reason and the ruling that approved it, and nothing else differs, checked by reading both skills.
-- Waits on: 2.D, for the layout rules and the blind-comparison protocol.
-
 ## 23. Pruning pass
 
 - Status: [ ]
@@ -149,3 +142,4 @@ Status: `[ ]` open, `[~]` in progress, `[x]` done (its gate ran and passed, with
 - 15. submit-grant: dropped, since entry 14, whose portal notes it reused, is dropped.
 - 16. Switch over: dropped, since the user switches the installed skills over by hand; `utils/check_coverage.py` is deleted at the closing of entry 13.
 - 17. review: dropped, since the user reviews a step with `/refute` and asks for no review of a diff outside a plan.
+- 22. teach: dropped, since nothing in the roadmap needs it and the user expects no use of it.
