@@ -75,5 +75,5 @@ dispatch: []
 ## Current position (rewritten before every step commit of this plan)
 
 - 2026-11-22. The plan is opened; nothing has landed.
-- Roadmap entry 5.A (Skill groups, plan.yaml found by a search order, and agents on Fable). Plan step 5 of 6: the closing. Steps 1, 2, 3 and 4.A landed. Step 4, the checks on the pinned skills, is recorded in `agents/reviews/4-pinned-checks.md` on `v9.0.0-rc.1`, which does not hold step 4.A; open with the user: the review of the run on the scratch repository, the reading of the diff of `paper` for step 4.A, and the five unclear places the scratch run found. Next: the user's answers, then the closing.
+- Roadmap entry 5.A (Skill groups, plan.yaml found by a search order, and agents on Fable). Plan step 4.B of 7: the four places the scratch run found unclear, added by the ruling "The scratch run's four places". Steps 1, 2, 3 and 4.A landed; step 4 is recorded on `v9.0.0-rc.1`. Next: `/spec 5.A 4.B`, its build, review and landing, then a release candidate with steps 4.A and 4.B pinned and one format-convert run for ADR 0043, then the closing.
 - Open on Axel's side: none.
