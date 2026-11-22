@@ -51,8 +51,11 @@ dispatch:
   report: .scratch/7-a-referee/agents/reviews/1b-report.md
   brief_check: .scratch/7-a-referee/agents/reviews/1b-brief-check.md (a209c45f6fbb2d894, claude-fable-5-2, 211641 tokens, 17 tool uses, 5.6 minutes)
   session_id: af33cf9bca3b7181b (claude-fable-5-2)
+  builder_usage: the build 153958 tokens, 11 tool uses, 5.7 minutes
+  reviewer_report: >-
+    .scratch/7-a-referee/agents/reviews/1b-refuter.md (a7fa4b89e49397c7e, claude-fable-5-2, 182225 tokens, 16 tool uses, 7.0 minutes)
   landing: not-started
-  round: 0
+  round: 1
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled or, under `self_rule: on`, until the orchestrator closes it as `plan-orchestration`'s `references/self-rule.md`, "Closing an open item", says)
