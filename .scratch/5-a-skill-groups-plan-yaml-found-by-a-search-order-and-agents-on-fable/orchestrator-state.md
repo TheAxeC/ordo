@@ -44,8 +44,17 @@ repair_reviewer: claude:sonnet  # the model the run of /refute over a repair rou
 ```yaml
 dispatch:
 - step: 1
-  landing: preparing
-  brief_check: "running: a3baabc725c3d4805"
+  executor: agent
+  worker: claude:fable
+  base: 650332d
+  worktree: .agents/worktrees/5-a-skill-groups-plan-yaml-found-by-a-search-order-and-agents-on-fable-1
+  launched: 2026-11-22
+  report: .scratch/5-a-skill-groups-plan-yaml-found-by-a-search-order-and-agents-on-fable/agents/reviews/1-report.md
+  brief_check: .scratch/5-a-skill-groups-plan-yaml-found-by-a-search-order-and-agents-on-fable/agents/reviews/1-brief-check.md (a3baabc725c3d4805, claude-fable-5-2, 136624 tokens, 17 tool uses, 3.8 minutes)
+  shared_paths: "steps 2 and 3 of this plan name files this step names (the SKILL.md of nine skills, the plan templates, the glossary and its source, the README, ADR 0007, 0014 and 0030, .agents/plan.yaml): simple by the ruling Three steps in flight, since this step lands first and steps 2 and 3 move or reword the same files on top of it"
+  session_id: ad35ad4cb7d6e0618 (claude-fable-5-2)
+  landing: not-started
+  round: 0
 - step: 2
   landing: preparing
   brief_check: "running: a4acb97b2cf90ba34"
