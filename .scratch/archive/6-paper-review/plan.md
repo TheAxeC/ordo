@@ -21,7 +21,7 @@ a fresh agent reads `diff -r` of the skill's folder against `research-hub/.agent
 - ✅ 2 `SKILL.md` and the places that list the skills: the source's `SKILL.md` carried section by section, with its words, into the layout of `docs/dev/skill-layout.md` as `skills/academic/paper-review/SKILL.md`, with the three things the source does not state taken as `paper` has them (ruling The three things the source does not state); the README's row and its count of skills, `paper`'s Use instead row, the glossary's entry "panel review" and the skill's figure; the reviewer reads the source's `SKILL.md` against the new one, and the verify list of `docs/dev/building.md` passes on main (1 commit) (approved) (ruling 2-contracts) (ruling 2-questions) (ruling 2-call)
 - ✅ 2.A the name: the skill is renamed `paper-review-panel`: its folder `skills/academic/paper-review-panel/`, the name in its frontmatter, its call `/paper-review-panel`, its run folder `paper-review-panel-runs/`, its figure `docs/figures/paper-review-panel.svg`, and every place of the repository outside the ledgers that names it (the README, `paper`, the glossary, the roadmap, the ADRs, the figure scripts and the pages on them); `git grep -nE '(^|[^-a-z])paper-review([^-a-z]|$)' -- . ':!.scratch'` and `git grep -n 'paper-review-runs' -- . ':!.scratch'` print nothing, and the verify list of `docs/dev/building.md` passes (1 commit) (ruling The skill's name)
 - ✅ 3 the gate's reading: a fresh agent reads `diff -r` of `skills/academic/paper-review-panel/` against `research-hub/.agents/skills/academic-paper-reviewer/` once and writes `agents/reviews/3-diff-reading.md`, which lists each difference with which edit of ADR 0043, Decision 1, it is, or none; the user reads that list (0 commit) (approved) (ruling The skill's name)
-- 4 the closing: the closing report written (the cost script's output, or that the plan started no agent), the roadmap entry ticked with the gate's output, this folder moved to the archive (orchestrator, no agent) (approved)
+- ✅ 4 the closing: the closing report written (the cost script's output, or that the plan started no agent), the roadmap entry ticked with the gate's output, this folder moved to the archive (orchestrator, no agent) (approved)
 
 ## Could run in parallel
 
@@ -120,3 +120,10 @@ Each agent a plan skill started for this plan has one bullet, with its agent id,
 - Verification on main: `env -u CLAUDE_CONFIG_DIR -u ORDO_SKILL_DIRS -u ORDO_STABLE sh ~/.claude/skills/land/templates/land.sh .scratch/6-paper-review/orchestrator-state.md 6-paper-review-3 78cc139 docs/plan.yaml` exited 0 and printed `checks: 12 commands passed`.
 - Look: the configuration block's `look:` is empty. A/B: none, `bench: []`.
 - Usage: brief check afefa3411b72942e8 claude-fable-5-2 120526 tokens, 11 tool uses, 3.9 minutes; builder a57f5bfda7baf53ac claude-fable-5-2 163816 tokens, 49 tool uses, 25.8 minutes, its round 1 stopped with no completion notice; reviewer a4244c99937ed072e claude-fable-5-2 276245 tokens, 28 tool uses, 5.8 minutes.
+
+### Step 4, the closing (2026-11-22)
+
+- The closing report: `agents/reviews/closing.md`, the cost script's output, exit 0 (01c2f29).
+- The pipeline figure and the roadmap's description of it show `paper-review-panel` as built (e0c97e0).
+- The roadmap entry: marked done with the gate's output through `/roadmap done 6`, the diff approved by the user.
+- The folder moves to `.scratch/archive/6-paper-review/`.

@@ -76,6 +76,6 @@ dispatch:
 
 ## Current position (rewritten before every step commit of this plan)
 
-- 2026-11-22. Steps 1, 2, 2.A and 3 are on main. The page of the gate's reading is `agents/reviews/3-diff-reading.md`, with the user's three rulings on what it found at its top. Step 4, the closing, is next: the orchestrator's step, with no `/spec` and no dispatch entry.
-- Roadmap entry 6 (paper-review-panel). Plan step 3 of 5, the gate's reading, landed. Next: step 4, the closing.
+- 2026-11-22. Every step is on main and the plan is closed: the closing report is written, the roadmap entry is marked done, and this folder is in the archive.
+- Roadmap entry 6 (paper-review-panel). Plan step 4 of 5, the closing, done. Next: nothing.
 - Open on Axel's side: none.
