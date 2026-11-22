@@ -44,8 +44,16 @@ repair_reviewer: claude:sonnet  # the model the run of /refute over a repair rou
 ```yaml
 dispatch:
 - step: 1
-  landing: preparing
-  brief_check: "running: a7158d80e8b21c9c4"
+  executor: agent
+  worker: claude:fable
+  base: ea700fc
+  worktree: .agents/worktrees/6-paper-review-1
+  launched: 2026-11-22
+  report: .scratch/6-paper-review/agents/reviews/1-report.md
+  brief_check: .scratch/6-paper-review/agents/reviews/1-brief-check.md (a7158d80e8b21c9c4, claude-fable-5-2, 234992 tokens, 29 tool uses, 7.2 minutes)
+  session_id: a840c1d8f45ecd55f (claude-fable-5-2)
+  landing: not-started
+  round: 0
 - step: 2
   landing: preparing
   brief_check: "running: a10369c9579256655"
@@ -82,6 +90,6 @@ dispatch:
 
 ## Current position (rewritten before every step commit of this plan)
 
-- 2026-11-22. The plan is opened; nothing has landed.
-- Roadmap entry 6 (paper-review). Plan step 1 of 4: the pages, with step 2, `SKILL.md` and the places that list the skills, in parallel. Next: `/spec 6 1` and `/spec 6 2`.
+- 2026-11-22. Nothing has landed. Step 1 is with its builder in `.agents/worktrees/6-paper-review-1`; step 2 is in `/spec`, waiting on its brief check.
+- Roadmap entry 6 (paper-review). Plan step 1 of 4: the pages. Next: step 2, `SKILL.md` and the places that list the skills, in parallel with it.
 - Open on Axel's side: none.
