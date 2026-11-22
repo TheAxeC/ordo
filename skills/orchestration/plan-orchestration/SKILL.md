@@ -1,8 +1,8 @@
 ---
 name: plan-orchestration
-description: "Run every open plan unattended in one session, or the plan named, step by step, from its ledger folder: pick the next unblocked step, prepare its brief and worktree, dispatch one builder agent in the step's worktree, have a reviewer refute the result, send its findings back to the builder for the repair rounds plan.yaml allows, read the delta, land the step with the small fixes made at landing, book it, and repeat, and under self_rule: on and next_entry: on go on to the next roadmap entry after a closing; stop only where a decision is for the user. Every project specific comes from .agents/plan.yaml and the ledger, so the same skill runs a code tool, a research project or a manuscript under Claude Code, and one orchestrator session can hand the plans to another mid-way. Triggers on: run every open plan, run the plan, next step, orchestrate the plan, plan orchestration, dispatch the next step, continue the plan, resume the plan, C<n> Agree, C<n> => <ruling> (the review of a choice taken under self-rule)."
+description: "Run every open plan unattended in one session, or the plan named, step by step, from its ledger folder: pick the next unblocked step, prepare its brief and worktree, dispatch one builder agent in the step's worktree, have a reviewer refute the result, send its findings back to the builder for the repair rounds plan.yaml allows, read the delta, land the step with the small fixes made at landing, book it, and repeat, and under self_rule: on and next_entry: on go on to the next roadmap entry after a closing; stop only where a decision is for the user. Every project specific comes from plan.yaml and the ledger, so the same skill runs a code tool, a research project or a manuscript under Claude Code, and one orchestrator session can hand the plans to another mid-way. Triggers on: run every open plan, run the plan, next step, orchestrate the plan, plan orchestration, dispatch the next step, continue the plan, resume the plan, C<n> Agree, C<n> => <ruling> (the review of a choice taken under self-rule)."
 metadata:
-  version: "7.1.0"
+  version: "8.0.0"
 ---
 
 # Plan orchestration
@@ -15,6 +15,8 @@ The unattended loop that runs the steps of every open plan, or of the one plan n
 /plan-orchestration                  run the steps of every open plan unattended until a pause of every open plan, or until no open plan has an unblocked step; with no plan open, under self_rule: on and next_entry: on, take the next roadmap entry
 /plan-orchestration <entry>          the same for the plan of that entry alone
 /plan-orchestration <entry> inline   the same, with the orchestrating session building every code step itself
+/plan-orchestration <folder>         the first line, for the open plans of the plan.yaml in <folder>, a path from the repository root
+/plan-orchestration <folder>/<entry>   the second line, for a plan of the plan.yaml in <folder>
 continue the plan                    the same as /plan-orchestration with no entry, resuming from the state files after a compaction or in another session
 ```
 
@@ -25,14 +27,18 @@ continue the plan                    the same as /plan-orchestration with no ent
 | One step by hand, stopping after each skill | `/spec`, then "build it", `/refute` and `/land`, the sequence `/ordo-help` prints |
 | The plan is not open yet | `/plan <entry>` |
 | Where a plan stands and which command comes next, or where every open plan stands | `/ordo-help <entry>`, or `/ordo-help` |
-| The repository has no `.agents/plan.yaml` | `/ordo-init` |
+| The repository has no plan configuration | `/ordo-init` |
 | A finding, a red line or a brief-check finding whose cause is not known, or a cause a step's text asks to have found, diagnosed by hand | `/diagnose <entry> <step> <finding>`, `red line`, `brief check <n>` or `premise` |
 | What the reviews keep finding across plans | `/plan-retro` |
 | What went well and what went wrong in the Claude Code sessions of a plan | `/session-retro <entry>` |
 
 ## What it reads
 
-1. `.agents/plan.yaml` and the ledger folder of each plan the invocation runs: every project specific comes from them.
+1. The plan configuration and the ledger folder of each plan the invocation runs: every project specific comes from them.
+   - The plan configuration is found and its paths are read as `/plan`'s "What it reads" 1 says, a folder named alone or in front of `<entry>` as a path from the repository root.
+   - A call that names no folder reads the first `plan.yaml` found in the three places at the repository root, and its open plans are the open plans of that file.
+   - The plans of a `plan.yaml` in a project folder are run by naming the folder.
+   - No `plan.yaml` in any place of the order is a refusal ("Stops").
    - `/plan-orchestration` with no entry and `continue the plan` run every open plan.
    - `/plan-orchestration <entry>` runs that plan alone.
    - An open plan is a folder under `<ledger_root>/` (in the `projects:` form, under a project's `ledger_root`), outside `<archive_root>/`, whose `plan.md` opens with `# Plan: <entry>`.
@@ -56,7 +62,7 @@ The loop runs over the plans that `/plan` opened. Each step goes through the sam
      - An effort agent the runner does not list is no refusal: the loop goes on, and each agent that would start as it is started with the warning of "Launching a builder".
 2. Pick the next step that nothing blocks, for each free slot under the limit of "Two steps in flight".
    - Each free slot takes the next unblocked step of the earliest plan in the roadmap's order that has one.
-     - In the `projects:` form, the projects stand in the order `.agents/plan.yaml` lists them, and each project's plans in its roadmap's order.
+     - In the `projects:` form, the projects stand in the order the plan configuration lists them, and each project's plans in its roadmap's order.
    - Each pair of the picked step with the steps in flight is judged under "Two steps in flight".
    - A step that waits because its shared file is not simple to merge is blocked, and the slot goes to the next pick.
    - A step that must run alone ("Two steps in flight"), when it is the next pick, holds the loop: no further step is dispatched until nothing else is in flight and it has been dispatched.
@@ -320,7 +326,7 @@ On every resumption, with a dispatch block or without one:
 
 ## Self-rule
 
-- **Scope.** The section applies under `self_rule: on` in the configuration block, and to next-entry mode and to `/grill` and `/plan` run with `--self-rule`, where `.agents/plan.yaml` holds the keys, as `references/self-rule.md`, "Next-entry mode", says.
+- **Scope.** The section applies under `self_rule: on` in the configuration block, and to next-entry mode and to `/grill` and `/plan` run with `--self-rule`, where the `plan.yaml` found holds the keys, as `references/self-rule.md`, "Next-entry mode", says.
   - Otherwise, with `self_rule: off` or the key absent, every open item waits for the user, as "Stops" says.
 - **The reference.** Under `self_rule: on`, and for the review of a choice, the session reads `references/self-rule.md`, which says which open items stay with the user, how the others are closed, how the choices file is kept and reviewed, and how next-entry mode runs.
 
@@ -328,7 +334,7 @@ On every resumption, with a dispatch block or without one:
 
 The orchestrator, still one, may have as many steps running at once as the limit allows, each through steps 3 to 9 on its own, across every open plan, under these rules:
 
-- **The limit.** `.agents/plan.yaml`'s `workers_at_once` is the most steps in flight at once, read at each pick and counted over the dispatch blocks of every open plan.
+- **The limit.** The plan configuration's `workers_at_once` is the most steps in flight at once, read at each pick and counted over the dispatch blocks of every open plan of the `plan.yaml` the call found.
   - A step is in flight from the start of its `/spec`: its dispatch entry at `landing: preparing` counts toward the limit (the `spec` skill's Steps 1).
   - In the `projects:` form, the limit is the smallest `workers_at_once` among the projects that have an open plan.
   - A configuration block that holds a `workers_at_once` line is read as if the line were not there.
@@ -446,7 +452,7 @@ When the user sets a time by which no agent may run, the loop keeps a night rule
 
 ## Stops
 
-The table holds seven kinds of stop, each for a decision for the user, and one refusal, the last row, which names its cause and leaves no open item:
+The table holds seven kinds of stop, each for a decision for the user, and two refusals, the last two rows, each of which names its cause and leaves no open item:
 
 | Stop | When | What it shows | What resumes it |
 |---|---|---|---|
@@ -457,6 +463,7 @@ The table holds seven kinds of stop, each for a decision for the user, and one r
 | A finding that is the user's | A finding that changes a public shape or an established decision; or one that neither the repair rounds nor a fix at landing close (a finding outside the step's part, work the last round left undone, a changed view not fixed at landing), which goes where "What earns a step of its own" says, by a ruling of the user or, under `self_rule: on`, a choice `references/self-rule.md`, "Closing an open item", books | The stop message, below | The user's ruling |
 | The roadmap diff | The closing step's `/roadmap done`, which shows its diff of the roadmap | The diff, in the stop message | The user's approval of the diff |
 | A model other than the configured one | The runner served a builder, a reviewer, a brief-check agent or a diagnosis agent launched as an effort agent a model that is not the configured one: a different model family, or an older version than the newest the configured alias names in the runner's model list ("Launching a builder") | The stop message, below, with the configured value, the served model and the Claude Code version | The user's ruling |
+| No configuration | A refusal: no `plan.yaml` is in the folder the call names or in the three places at the repository root ("What it reads" 1); a path of that file refused as `/plan`'s Stops row "A path refused" says is refused here too, and that row says what the refusal shows and what resumes it, with this skill's call in place of `/plan` | The places looked in, and `/ordo-init` | `/ordo-init`, then the invocation again |
 | The configured effort cannot apply | A refusal (Steps 1): `CLAUDE_CODE_EFFORT_LEVEL` is set, which runs every agent at its level whatever the definition says | The variable's value | The variable unset, then a new session |
 
 - Fixing a defect in what the user asked for is never a stop, whatever the fix makes visible.
@@ -497,7 +504,7 @@ The table holds seven kinds of stop, each for a decision for the user, and one r
 
 ## Rules
 
-- The skill carries no project name, since that is in `.agents/plan.yaml` and the ledger.
+- The skill carries no project name, since that is in the plan configuration and the ledger.
   - The models it names are those in "The two tiers, and the models".
 - A fix of a defect in delivered work needs no yes.
 - The round cap: a step gets at most `repair_rounds` repair rounds, and one more only when the delta leaves a verification command red or an acceptance item of the brief unbuilt and the fix is too large for landing.

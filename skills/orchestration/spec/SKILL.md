@@ -2,7 +2,7 @@
 name: spec
 description: "Prepare one step of an open plan: refuse a step without its authority ((approved) or (ruling <name>)), check each premise of the step's text against the tree, under libraries: check, look for a library for each capability the step builds, a candidate being the user's choice, or under self-rule the orchestrator's, write the brief (checked premises, fix text, verification list, report shape, pointer to the rules file, cases, libraries checked, paths it writes), compare those paths with the briefs of steps in flight, a shared file judged by the orchestrator, run for a full step the brief check by a fresh read-only agent, create the worktree at main's head, stage the base binaries, and record the dispatch in the state file. A step a red line took back out of main is prepared again, its old work saved as a patch in the ledger and applied in the new worktree. Triggers on: spec <entry> <step>, brief <step>, prepare step <n>, write the brief; and on a ruling typed in reply to a stop (Ruled: ...)."
 metadata:
-  version: "7.1.0"
+  version: "8.0.0"
 ---
 
 # Prepare a step
@@ -13,6 +13,7 @@ metadata:
 
 ```
 /spec <entry> <step>     write the one file a builder works from, have a fresh agent check it against the tree for a full step, and put the tree in the state the builder expects
+/spec <folder>/<entry> <step>   the same, from the plan.yaml in <folder>, a path from the repository root
 Ruled: <the choice>      the reply to a stop, booked as "Steps / A ruling" says; then /spec <entry> <step> again
 ```
 
@@ -27,14 +28,14 @@ Ruled: <the choice>      the reply to a stop, booked as "Steps / A ruling" says;
 
 ## What it reads
 
-1. `.agents/plan.yaml`, its required keys and defaults as `/plan` states them.
+1. The plan configuration, found and its paths read as `/plan`'s "What it reads" 1 says, a folder named in front of `<entry>` as a path from the repository root; its required keys and defaults as `/plan` states them.
    - A required key missing is a refusal ("Stops").
 2. The ledger folder: `<entry>` resolves to the folder under `<ledger_root>/` whose `plan.md` opens with `# Plan: <entry>` (the number, or the number and title).
    - `/plan` names a new folder by the entry's slug.
    - An older plan keeps whatever folder it has.
    - No such folder is a refusal ("Stops").
 3. `orchestrator-state.md`: the configuration block, the open items, and the dispatch block; and the dispatch block of every other open plan's `orchestrator-state.md`.
-   - The limit on steps in flight is `.agents/plan.yaml`'s `workers_at_once`, counted over the dispatch blocks of every open plan, as `plan-orchestration`'s "Two steps in flight" states it.
+   - The limit on steps in flight is the plan configuration's `workers_at_once`, counted over the dispatch blocks of every open plan, as `plan-orchestration`'s "Two steps in flight" states it.
    - A step is refused when the steps in flight of all open plans already reach that limit ("Stops").
    - A step is in flight from the start of its `/spec`: its dispatch entry at `landing: preparing` counts, as `plan-orchestration`'s "Two steps in flight" says.
    - The count leaves out this step's own entry, which an earlier `/spec` of this step may have left (Steps 1).
@@ -96,7 +97,7 @@ Ruled: <the choice>      the reply to a stop, booked as "Steps / A ruling" says;
    - The step's worktree path `<worktree_root>/<slug>-<step>` and its branch `<slug>-<step>` do not exist, `<slug>` being the name of the plan's ledger folder, apart from those of this step's own dispatch entry that reads `landing: backed-out`.
    - A `/spec` taken over after its preparation commit finds the worktree and the branch its interrupted run made, which are no refusal.
    - A path or a branch that exists is the refusal "A worktree or branch that exists" ("Stops"), which names it and writes nothing.
-   - The steps in flight of all open plans, this step's own entry left out, are fewer than `.agents/plan.yaml`'s `workers_at_once` ("What it reads" 3).
+   - The steps in flight of all open plans, this step's own entry left out, are fewer than the plan configuration's `workers_at_once` ("What it reads" 3).
      - Otherwise the refusal is "A step in flight" ("Stops"), which names them and writes nothing.
    - This step's own dispatch entry at `landing: preparing` belongs to an earlier `/spec` of the step.
      - When its `brief_check` reads `"running: <agent id>"` and the runner still lists that agent, that `/spec` is waiting on its brief check.
@@ -114,13 +115,13 @@ Ruled: <the choice>      the reply to a stop, booked as "Steps / A ruling" says;
    - A step not in the list is a refusal ("Stops"), with the list printed.
    - A refusal here writes nothing.
    - A step whose dispatch entry reads `landing: backed-out` then goes through "Steps / A step taken back out of main", which removes that entry, before the compare below.
-   - Then compare the plan's verify list with the commands of the verification page `.agents/plan.yaml`'s `verification:` names, copied as the `plan` skill's Steps 4 copies them, by reading.
+   - Then compare the plan's verify list with the commands of the verification page the plan configuration's `verification:` names, copied as the `plan` skill's Steps 4 copies them, by reading.
      - A list equal to the page's commands, filters included, is left as it is.
      - On a difference, the session rewrites the `verify:` list of the state file to the page's commands, and Steps 4 names the change in the brief under "What is on the tree".
      - The rewritten list is one of the session's own records, so a step that waits at Steps 5 keeps it.
    - Then write this step's dispatch entry into the state file, in the shape the `plan` skill's `templates/orchestrator-state.md` gives, holding `step: <n>` and `landing: preparing`.
-     - With `.agents/plan.yaml`'s `workers_at_once` 1, the entry is `dispatch:` followed by its keys.
-     - With `.agents/plan.yaml`'s `workers_at_once` above 1, the entry is appended to the list of entries.
+     - With the plan configuration's `workers_at_once` 1, the entry is `dispatch:` followed by its keys.
+     - With the plan configuration's `workers_at_once` above 1, the entry is appended to the list of entries.
      - A `/spec` taken over has its entry already and writes none.
      - The step is in flight from here: the entry counts toward the limit, and the steps that reach their Steps 5 afterwards compare their briefs with this step's once it is written.
    - A stop, a wait at Steps 5 and each refusal after the entry is written remove it: the state file reads back with only this step's entry removed.
@@ -147,7 +148,7 @@ Ruled: <the choice>      the reply to a stop, booked as "Steps / A ruling" says;
    - A step's text that contradicts the part in force of an ADR is a rule clash, a stop ("Stops").
      - The open item names the ADR and quotes the step's words that contradict it.
      - Its options are the step changed to follow the ADR, or a new ADR that supersedes it, as the ADR folder's `README.md` says.
-3. Look for libraries, as `.agents/plan.yaml`'s `libraries` says, before the brief is written.
+3. Look for libraries, as the plan configuration's `libraries` says, before the brief is written.
    - Under `libraries: check`, the session looks for existing libraries for every capability the step builds.
    - A candidate that could replace code the step would write by hand is a stop ("A user-visible choice", "Stops").
    - The stop gives the options (each candidate, and writing it by hand), the pros and cons of each, and one recommendation.
@@ -480,9 +481,9 @@ The first seven rows are stops, which leave an open item as "Steps / A stop" say
 | A step without its authority | The step's line ends with neither `(approved)` nor a `(ruling <name>)` for each ruling it rests on, each naming a ruling in the Rulings section, a line ending "(the user)" or "(self-rule)" (Steps 1) | The step and the authority it lacks | A ruling, booked as "Steps / A ruling" says with the tag on the step's line, then `/spec` again |
 | An unusable `plan.md` | `plan.md` is missing or not UTF-8, lacks the step list or the Rulings section, or lists a step twice (Steps 1) | What is wrong in it | `plan.md` put right, then `/spec` again |
 | A failed preflight | Not on `main`, something staged, a git operation in progress, an uncommitted change at the brief's path or at the brief check's report path, or one on this plan's `plan.md` or state file that the session did not make (Steps 1) | What it saw | The tree put right, then `/spec` again |
-| A required key missing | A required key is not in `.agents/plan.yaml`; the refusal names it | The key | The key added, then `/spec` again |
+| A required key missing | A required key is not in the `plan.yaml` found, in the folder the call names or else at the repository root; the refusal names it; a path of that file refused as `/plan`'s Stops row "A path refused" says is refused here too, and that row says what the refusal shows and what resumes it, with this skill's call in place of `/plan` | The key | The key added, then `/spec` again |
 | No ledger folder | No folder under `<ledger_root>/` holds a `plan.md` that opens with `# Plan: <entry>` | A refusal that names `/plan` | `/plan`, then `/spec` |
-| A step in flight | The steps in flight of all open plans, this step's own entry left out, already reach `.agents/plan.yaml`'s `workers_at_once` ("What it reads" 3, Steps 1) | The steps in flight, each named with its plan and its `landing` value | A step landed, a red line took its landing back out of main and its dispatch block reads `landing: backed-out` (the `land` skill's Steps 6), or the `/spec` of a step at `landing: preparing` stopped or waited and removed its entry (Steps 1) |
+| A step in flight | The steps in flight of all open plans, this step's own entry left out, already reach the plan configuration's `workers_at_once` ("What it reads" 3, Steps 1) | The steps in flight, each named with its plan and its `landing` value | A step landed, a red line took its landing back out of main and its dispatch block reads `landing: backed-out` (the `land` skill's Steps 6), or the `/spec` of a step at `landing: preparing` stopped or waited and removed its entry (Steps 1) |
 | A brief check still running | This step's own dispatch entry reads `landing: preparing`, its `brief_check` reads `"running: <agent id>"`, and the runner still lists that agent (Steps 1) | The step and the agent id | The agent ends: a `/spec` still waiting on it goes on, and with none waiting, as after a compaction, `/spec` again takes the entry over ("Steps / A `/spec` taken over") |
 | A worktree or branch that exists | The step's worktree path `<worktree_root>/<slug>-<step>` or its branch `<slug>-<step>` exists, other than those of this step's own entry that reads `landing: backed-out`, and those the interrupted run of a `/spec` taken over made (Steps 1) | The path or the branch, named | The step that holds it landed, then `/spec` again |
 | No such step | The step is not in `plan.md`'s list (Steps 1) | The list | `/spec` with a step in the list |

@@ -2,7 +2,7 @@
 name: land
 description: "Bring a refuted step from its worktree onto main and book it: the step's builder and reviewers stopped, a wip commit in the worktree, the cherry-pick of the whole range onto main, the verification commands on main, the look at the changed views where the configuration block's look: says, the interleaved A/B against the staged base binaries, the booking in the plan with each agent's tokens, tool uses and time, the state file rewritten, the landing report, the commit that names its paths, the worktree and its branches removed. Refuses while a finding is left neither closed nor raised to the user as an open item, or with any red line. Triggers on: land <entry> <step>, land the step, cherry-pick the step, book the step."
 metadata:
-  version: "5.0.0"
+  version: "6.0.0"
 ---
 
 # Land a step
@@ -13,6 +13,7 @@ metadata:
 
 ```
 /land <entry> <step>     the only way a step reaches main: bring the refuted step over, check it there, book it, commit it, remove its worktree
+/land <folder>/<entry> <step>   the same, from the plan.yaml in <folder>, a path from the repository root
 ```
 
 ## Use instead
@@ -26,7 +27,7 @@ metadata:
 
 ## What it reads
 
-1. `.agents/plan.yaml`, its required keys and defaults as `/plan` states them.
+1. The plan configuration, found and its paths read as `/plan`'s "What it reads" 1 says, a folder named in front of `<entry>` as a path from the repository root; its required keys and defaults as `/plan` states them.
    - A required key missing is a refusal ("Stops").
 2. The ledger folder: `<entry>` resolves to the folder under `<ledger_root>/` whose `plan.md` opens with `# Plan: <entry>` (the number, or the number and title).
    - `/plan` names a new folder by the entry's slug, and an older plan keeps whatever folder it has.
@@ -40,7 +41,7 @@ metadata:
    - The user's unrelated changes are listed by path.
      - They are left alone.
 7. The step's diagnosis record `agents/reviews/<step>-diagnosis.md`, when it exists, for the booking of Steps 9.
-8. The verification page `.agents/plan.yaml`'s `verification:` names, for the compare of Steps 2.
+8. The verification page the plan configuration's `verification:` names, for the compare of Steps 2.
    - Its copy in the step's worktree when the step changed it since the base, main's copy otherwise, and the merge of the two when main and the worktree both changed it.
 
 ## Steps
@@ -61,6 +62,7 @@ metadata:
    - The landing commit carries the state file (Steps 12).
    - Done when `landing: cherry-picking` is set and the verify list equals the page's commands as the cherry-pick brings the page.
 3. In the worktree, from inside it, after waiting for its `index.lock` to go: `git add -A` of the whole tree with the ledger root left out.
+   - `templates/land.sh` does this step, Steps 4 and Steps 6 as one command, run as "The landing script" says, with the path of the `plan.yaml` the call reads as its fourth argument.
    - `git commit -q -m wip` when something is staged.
    - A builder that committed everything leaves nothing staged, and the landing makes no wip commit.
    - The landing removes a lock older than 60 s while no `git` process runs, as stale.
@@ -177,14 +179,17 @@ metadata:
 
 ## The landing script
 
-- `templates/land.sh` does Steps 3, 4 and 6 as one command, run from the repository root as `sh <this skill's folder>/templates/land.sh <state file> <slug>-<step> <base>`.
+- `templates/land.sh` does Steps 3, 4 and 6 as one command, run from the repository root as `sh <this skill's folder>/templates/land.sh <state file> <slug>-<step> <base> <plan.yaml>`.
   - `<state file>` is the plan's `orchestrator-state.md`, relative to the repository root or absolute.
   - `<slug>-<step>` is the step's branch, which is also its worktree folder's name, `<slug>` being the name of the plan's ledger folder.
   - `<base>` is the base the dispatch block records.
-- It reads `worktree_root` and `ledger_root` from `.agents/plan.yaml`.
+  - `<plan.yaml>` is the path of the `plan.yaml` the call reads ("What it reads" 1), relative to the repository root or absolute.
+- It reads `worktree_root` and `ledger_root` from the `plan.yaml` given, and opens no other.
   - In the `projects:` form it reads them from the project whose `ledger_root` holds the state file.
-  - The step's worktree is `<worktree_root>/<slug>-<step>`, and the worktree's add leaves that `ledger_root` out.
-  - No `.agents/plan.yaml`, an empty one or one that is not valid YAML, no `worktree_root`, no `ledger_root`, a state file under no project's `ledger_root`, or no `checks.sh` in `land.sh`'s own folder is refused with exit 64 before anything is touched.
+  - Each of the two is read relative to the folder that holds the `plan.yaml`, and `worktree_root` left out is `.agents/worktrees` at the repository root.
+  - The step's worktree is `<worktree root>/<slug>-<step>`, and the worktree's add leaves that ledger root out.
+  - Fewer or more than four arguments, a `plan.yaml` that is no file, an empty one or one that is not valid YAML, no `ledger_root`, a `ledger_root` or a `worktree_root` that resolves outside the repository or to its root, a state file under no project's `ledger_root`, or no `checks.sh` in `land.sh`'s own folder is refused with exit 64 before anything is touched.
+  - Each refusal of the configuration names the `plan.yaml` by the path given.
 - Its check on main (Steps 6) is the plan's verify list: after main's cherry-pick it runs `sh <its own folder>/checks.sh <state file>` from the repository root.
   - Its own folder is the one that holds `land.sh`, and it looks for `checks.sh` nowhere else.
   - A non-zero exit fails the landing with exit 1 and the output of `checks.sh` printed.
@@ -215,7 +220,7 @@ metadata:
    - No path or branch is built from the step id.
 2. When the worktree still exists (`git worktree list` names it), from inside it, `git status --porcelain --untracked-files=all` lists every change, untracked files included.
    - A worktree already gone skips steps 2 and 3.
-   - Each path must be under the ledger root, `.agents/plan.yaml`'s `ledger_root` (in the `projects:` form, the one that holds the state file's folder), since the ledger is written only on main and its copies in the worktree are records already saved there or copies the orchestrator put there.
+   - Each path must be under the ledger root, the plan configuration's `ledger_root` (in the `projects:` form, the one that holds the state file's folder), since the ledger is written only on main and its copies in the worktree are records already saved there or copies the orchestrator put there.
    - Any other path is a stop ("Stops") that names it, and nothing is removed.
 3. Run `git worktree remove --force <worktree>`, when it still exists, since without `--force` git refuses a worktree holding untracked or modified files, such as those ledger copies.
 4. Run `rm -r` on each `<worktree>-round-<n>` folder beside the worktree, when it exists.
@@ -230,7 +235,7 @@ metadata:
 | A red line for the user | A red line after the cherry-pick that no fix inside the brief closes, and what to do is a decision for the user | The failure, booked in the open items as Steps 6 says | The user's ruling or, under `self_rule: on`, for a first failure only (Steps 6), the choice `plan-orchestration`'s `references/self-rule.md`, "Closing an open item", books |
 | A rule clash | A finding at landing is a clash between two of the user's rulings (Steps 6), the stop of the same name of `plan-orchestration` | The open item naming both rulings, and the step taken back out of main | The user's ruling |
 | A lock held | An `index.lock`, the worktree's or main's, still there after 60 s of waiting at Steps 3 or 4 | The lock's path, and what the stop leaves, as the bullet below says | The lock removed once no git command uses it, then `/land` again, as the bullet below says |
-| A required key missing | A required key is not in `.agents/plan.yaml`; the refusal names it | The key | The key added, then `/land` again |
+| A required key missing | A required key is not in the `plan.yaml` found, in the folder the call names or else at the repository root; the refusal names it; a path of that file refused as `/plan`'s Stops row "A path refused" says is refused here too, and that row says what the refusal shows and what resumes it, with this skill's call in place of `/plan` | The key | The key added, then `/land` again |
 | No ledger folder | No folder under `<ledger_root>/` holds a `plan.md` that opens with `# Plan: <entry>` | A refusal that names `/plan` | `/plan`, then the step prepared, built and refuted |
 | No dispatch block | The state file holds no dispatch block naming this step, or its entry reads `landing: preparing` | That the block is missing, or the step's landing state | `/spec` for the step |
 | No verify runner | `templates/checks.sh` is not beside `templates/land.sh`, and `land.sh` exits 64 before anything is touched | The path it looked for | The `land` skill installed whole, then `/land` again |

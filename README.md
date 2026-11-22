@@ -1,6 +1,6 @@
 # Ordo
 
-Ordo is a set of agent skills for Claude Code that run a multi-step change as a plan. The skills carry no project name and no path. Everything specific to a repository comes from that repository's `.agents/plan.yaml`. The same skills therefore run a C++ engine, a TypeScript tool or a research project.
+Ordo is a set of agent skills for Claude Code that run a multi-step change as a plan. The skills carry no project name and no path. Everything specific to a repository comes from that repository's `plan.yaml`, the plan configuration. The same skills therefore run a C++ engine, a TypeScript tool or a research project.
 
 One roadmap entry becomes a plan, kept in a ledger folder. Each step of the plan gets a brief, its written specification, and is built in its own git worktree. A fresh reviewer that changes nothing reviews the step. The step is cherry-picked onto `main` only after its checks pass there.
 
@@ -11,7 +11,7 @@ Around that loop, `repo-setup` and `ordo-init` set a repository up for it. `road
 | Skill | What it does |
 |---|---|
 | `repo-setup` | Sets up a new repository and then runs `/ordo-init`. It writes `CLAUDE.md` with the shared rules, the change and prose standards, the standards pages, a roadmap, a glossary, an ADR folder, `.gitignore` and `LICENSE`, and installs the project skills. `sync` keeps an existing repository's shared rules and its glossary's plan terms equal to their templates |
-| `ordo-init` | Sets a repository up for the other skills. It drafts `.agents/plan.yaml` from the repository, offers the pages it lacks and fixes the ignore rules. On an existing file, it checks the file |
+| `ordo-init` | Sets a repository up for the other skills. It drafts `docs/plan.yaml` from the repository, offers the pages it lacks and fixes the ignore rules. On an existing file, it checks the file |
 | `roadmap` | Keeps the roadmap that `/plan` opens entries from. It shows the open entries in order and the entries not yet specified. It adds an entry with its goal, a gate that could not pass without the goal being reached, and its place, or puts work whose gate cannot yet be named under "Not yet specified". It moves an entry, marks one done with the gate's output, and drops one. It learns the file's own format, including an ordered build plan over a capability map |
 | `grill` | Interviews the user about one roadmap entry, in rounds. Each round asks every decision whose prerequisites are settled, each with its options, their pros and cons, a reference line for the configured design bar, one recommendation and the lazy option named, while agents look up the facts. It writes each answer as it settles into the plan's Rulings or the entry's rulings file, each lookup agent it starts as a bullet of the Agents section of that file, the roadmap entry and the glossary, and a proposed ADR on the user's yes or, under `--self-rule`, on the orchestrator's recommendation |
 | `plan` | Opens a plan for one roadmap entry: the ledger folder, `plan.md` with a drafted step list for approval, the gate and each step's check asked whether it could pass without the goal being reached, `orchestrator-state.md`. It refuses an entry not yet specified |
@@ -33,7 +33,7 @@ The order of use, shortened from what `/ordo-help` prints:
 
 ```
 /repo-setup                   once, for a new repository: the tree, the shared rules, the standards, then /ordo-init
-/ordo-init                    once per existing repository: writes .agents/plan.yaml, or checks the one there
+/ordo-init                    once per existing repository: writes docs/plan.yaml, or checks the plan.yaml there
 /roadmap add <goal>           an entry with its goal, gate and place in the order
 /roadmap add <entry>          for an entry not yet specified: its gate and place in the order, before /plan opens it
 /grill <entry>                optional: an interview in rounds that settles the entry's design decisions, written as they settle
@@ -171,26 +171,31 @@ python3 <skills>/repo-setup/templates/sync_rules.py <repository>
 python3 <skills>/repo-setup/templates/sync_rules.py <repository> --only glossary
 ```
 
-An existing repository opts in with `.agents/plan.yaml` at its root. Run `/ordo-init` from the repository root. It drafts the file from the repository and shows it, with any page it would create and the `.gitignore` lines it would add. It writes after you approve.
+An existing repository opts in with a `plan.yaml`, the plan configuration. The skills use the first one found in the folder a call names, then in `.scratch/`, `docs/` and `.agents/` at the repository root, and read every path in it relative to the folder that holds it. A call names the folder in front of the entry, as a path from the repository root: `/plan apps/web/12` uses `apps/web/plan.yaml`.
 
-On a repository that already has the file, `/ordo-init` checks it. The same check runs on its own:
+Run `/ordo-init` from the repository root. It drafts `docs/plan.yaml` from the repository and shows it, with any page it would create and the `.gitignore` lines it would add. It writes after you approve.
+
+On a repository that already has the file, `/ordo-init` checks it. The same check runs on its own, on the path of the file, and `--find` prints the file the search order finds:
 
 ```sh
-python3 <skills>/ordo-init/templates/check_config.py <repository>
+python3 <skills>/ordo-init/templates/check_config.py <repository>/docs/plan.yaml
+python3 <skills>/ordo-init/templates/check_config.py --find <repository> [<folder>]
 ```
 
 To write the file by hand, start from one of the two example files in the plan skill's `templates/` folder:
 
 ```sh
-cp <skills>/plan/templates/plan.yaml .agents/plan.yaml            # one project
-cp <skills>/plan/templates/plan.projects.yaml .agents/plan.yaml   # several projects; a plan is then named <project>/<entry>
+cp <skills>/plan/templates/plan.yaml docs/plan.yaml            # one project
+cp <skills>/plan/templates/plan.projects.yaml docs/plan.yaml   # several projects; a plan is then named <project>/<entry>
 ```
 
-The example `plan.yaml` describes every key. Nine are required: `roadmap`, `verification`, `rules`, `ledger_root`, `archive_root`, `worktree_root`, `worker`, `reviewer` and `libraries`. A skill that needs a missing required key stops and names it.
+The example `plan.yaml` describes every key, and its paths are written for a file in `docs/`. Eight are required: `roadmap`, `verification`, `rules`, `ledger_root`, `archive_root`, `worker`, `reviewer` and `libraries`. A skill that needs a missing required key stops and names it.
 
-Every other key is optional. A key left out takes the default the comment beside it in the example `plan.yaml` gives. For example, a missing `worktree_paths` means the whole tree, and a missing `look` means that no changed view is opened at landing.
+Every other key is optional. A key left out takes the default the comment beside it in the example `plan.yaml` gives, and a default that is a path is read from the repository root. For example, a missing `worktree_root` means `.agents/worktrees` at the repository root, a missing `worktree_paths` means the whole tree, and a missing `look` means that no changed view is opened at landing.
 
-Git must ignore `worktree_root` and must not ignore `.agents/plan.yaml`.
+Git must ignore the worktree root and must not ignore the `plan.yaml`.
+
+A repository whose `.agents/plan.yaml` holds paths written from the repository root still has its file found, in the fourth place of the search, and its paths are now read from `.agents/`. Its owner puts `../` in front of each path, or moves the file to `docs/plan.yaml` and rewrites each path relative to `docs/`. `check_config.py` names each page it does not find by the path it resolved, which shows the cause.
 
 A plan's verify list is the `verify:` key of the first `yaml` or `yml` block of its `orchestrator-state.md`. It runs through `sh <the land skill's folder>/templates/checks.sh <state file>`, from the root of the repository it checks.
 
@@ -208,9 +213,9 @@ python3 <skills>/plan-orchestration/templates/plan_cost.py <ledger folder> [<tra
 
 ## The landing script
 
-`skills/orchestration/land/templates/land.sh` does the cherry-pick and the checks on `main` as one command, run from the repository root as `sh <the land skill's folder>/templates/land.sh <state file> <slug>-<step> <base>`, `<slug>` being the name of the plan's ledger folder. It runs from the `land` skill itself, and nothing is copied into the ledger.
+`skills/orchestration/land/templates/land.sh` does the cherry-pick and the checks on `main` as one command, run from the repository root as `sh <the land skill's folder>/templates/land.sh <state file> <slug>-<step> <base> <plan.yaml>`, `<slug>` being the name of the plan's ledger folder and `<plan.yaml>` the path of the plan configuration the call reads. It runs from the `land` skill itself, and nothing is copied into the ledger.
 
-`land.sh` reads `worktree_root` and `ledger_root` from `.agents/plan.yaml`, and refuses with exit 64 when either is missing. In the `projects:` form it reads those of the project whose `ledger_root` holds the state file. After main's cherry-pick it runs the verify list through the `checks.sh` in its own folder. It then prints the data for the step's booking in the plan: the diff stat against the base and the staged paths.
+`land.sh` reads `worktree_root` and `ledger_root` from the `plan.yaml` given and opens no other, each read relative to the folder that holds that file. It refuses with exit 64 when the fourth argument or `ledger_root` is missing, and a `worktree_root` left out is `.agents/worktrees` at the repository root. In the `projects:` form it reads those of the project whose `ledger_root` holds the state file. After main's cherry-pick it runs the verify list through the `checks.sh` in its own folder. It then prints the data for the step's booking in the plan: the diff stat against the base and the staged paths.
 
 A ledger file left uncommitted in the worktree, such as a builder's report, never reaches `main`, while one that a commit of the step holds does. `land.test.sh` proves `land.sh` on scratch repositories. The land skill's section "The landing script" in `skills/orchestration/land/SKILL.md` states the rest, including the refusals and the exit statuses.
 

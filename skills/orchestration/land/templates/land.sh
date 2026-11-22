@@ -36,19 +36,24 @@
 # cherry-pick of the step's own commits (git cherry marks it +).
 #
 # Arguments, run from the repository root:
-#   sh <the land skill's folder>/templates/land.sh <state file> <step> <base>
+#   sh <the land skill's folder>/templates/land.sh <state file> <step> <base> <plan.yaml>
 #   <state file>  the plan's orchestrator-state.md, relative to the repository root or absolute.
 #   <step>        the step's branch, which is also its worktree folder's name (letters, digits,
 #                 ".", "_" and "-").
 #   <base>        the recorded base commit, in hexadecimal.
+#   <plan.yaml>   the path of the plan.yaml the landing reads, relative to the repository root
+#                 or absolute.
 #
-# It reads .agents/plan.yaml with python3 and PyYAML. In the one-project form it takes
-# worktree_root and ledger_root. In the projects: form it takes the project whose ledger_root
-# holds the state file (the deepest, when ledger roots nest) and that project's worktree_root.
-# Both keys are required; a missing one is refused. Each value is a folder inside the repository:
-# no leading /, no .. part, no newline, not ".". The step's worktree is <worktree_root>/<step>. It
-# also reads the state file, through checks.sh, and the git state of main and of the step's
-# worktree.
+# It reads the plan.yaml given, and no other, with python3 and PyYAML. In the one-project form it
+# takes worktree_root and ledger_root. In the projects: form it takes the project whose
+# ledger_root holds the state file (the deepest, when ledger roots nest) and that project's
+# worktree_root. ledger_root is required; a missing one is refused. worktree_root left out is
+# .agents/worktrees at the repository root. Each value is read relative to the folder that holds
+# the plan.yaml, that folder and the repository root resolved through symbolic links first, and
+# may lead out of that folder through "..". Each must resolve to a folder inside the repository
+# that is not its root, and is refused when empty, when it starts with / and when it holds a
+# newline. The step's worktree is <worktree root>/<step>. It also reads the state file, through
+# checks.sh, and the git state of main and of the step's worktree.
 #
 # Exit status:
 #   0   landed and checked: the range is staged on main and every command of the verify list
@@ -70,12 +75,14 @@
 #   n   any other status: a git step failed, and the landing ends with git's own exit status after
 #       printing git's output and the step that failed; or python3 is not installed (127) or cannot
 #       import yaml (1), and the shell's or Python's own message is the only one printed.
-#   64  a refusal of its arguments or configuration, before anything is touched: not three
+#   64  a refusal of its arguments or configuration, before anything is touched: not four
 #       arguments; a step name or a base that is not of the form above; no checks.sh in the folder
-#       of this script; a state file that is not a file; no .agents/plan.yaml, or one that is
-#       empty or not valid YAML; no ledger_root or no worktree_root, in the one-project form or in the project the state file belongs to, or a
-#       project of the projects: form without a ledger_root; a ledger_root or worktree_root that is
-#       not a folder inside the repository; a state file under no project's ledger_root.
+#       of this script; a state file that is not a file; a plan.yaml that is not a file, or one
+#       that is empty or not valid YAML; no ledger_root, in the one-project form or in a project
+#       of the projects: form; a ledger_root or worktree_root that is not a folder inside the
+#       repository, or is its root; a state file under no project's ledger_root, or in the
+#       one-project form not under the ledger_root. Each refusal of the configuration names the
+#       plan.yaml by the path given.
 
 set -u
 
@@ -84,13 +91,14 @@ fail() {
     exit "${2:-1}"
 }
 
-if [ "$#" -ne 3 ]; then
-    fail "Usage: sh <the land skill's folder>/templates/land.sh <state file> <step> <base>" 64
+if [ "$#" -ne 4 ]; then
+    fail "Usage: sh <the land skill's folder>/templates/land.sh <state file> <step> <base> <plan.yaml>" 64
 fi
 
 landing_state_arg=$1
 landing_step=$2
 landing_base=$3
+landing_config_arg=$4
 
 case "$landing_step" in
     '' | *[!A-Za-z0-9._-]*)
@@ -120,13 +128,13 @@ landing_tmp=$(mktemp -d "${TMPDIR:-/tmp}/land.XXXXXX") || fail "preflight failed
 trap 'rm -rf "$landing_tmp"' 0 1 2 3 15
 landing_output=$landing_tmp/output.txt
 
-# Prints the state file's absolute path, the worktree root and the ledger root, one per line, or
-# refuses with a message and exit 64.
-python3 - "$landing_root" "$landing_state_arg" >"$landing_tmp/config.txt" <<'PYTHON'
+# Prints the state file's absolute path, the worktree root and the ledger root, the two roots as
+# paths from the repository root, one per line, or refuses with a message and exit 64.
+python3 - "$landing_root" "$landing_state_arg" "$landing_config_arg" >"$landing_tmp/config.txt" <<'PYTHON'
 import os, sys
 import yaml
 
-root, state = sys.argv[1], sys.argv[2]
+root, state, given = sys.argv[1], sys.argv[2], sys.argv[3]
 
 def refuse(message):
     sys.stderr.write("configuration failed: " + message + "\n")
@@ -137,49 +145,53 @@ if not os.path.isfile(state_path):
     refuse("state file not found: " + state)
 relative = os.path.relpath(state_path, root)
 
-def folder(value, key, where):
-    if value in ("", ".") or value.startswith("/") or ".." in value.split("/") or "\n" in value:
-        refuse(key + where + " must be a folder inside the repository: " + value)
-    return value
-
 def under(path, folder_path):
     return path == folder_path or path.startswith(folder_path + "/")
 
-config_path = os.path.join(root, ".agents", "plan.yaml")
+config_path = os.path.join(root, given)
+if not os.path.isfile(config_path):
+    refuse("the plan.yaml is not a file: " + given)
+config_folder = os.path.realpath(os.path.dirname(config_path))
+
+# The folder a key's value names, read from the folder of the plan.yaml, as a path from the
+# repository root.
+def folder(value, key, where):
+    resolved = os.path.realpath(os.path.join(config_folder, value))
+    if value == "" or value.startswith("/") or "\n" in value or not under(resolved, root) or resolved == root:
+        refuse(key + where + " in " + given + " must be a folder inside the repository and not its root: " + value)
+    return os.path.relpath(resolved, root)
+
 try:
     with open(config_path, encoding="utf-8") as handle:
         config = yaml.safe_load(handle)
-except FileNotFoundError:
-    refuse(".agents/plan.yaml not found")
 except yaml.YAMLError as error:
-    refuse(".agents/plan.yaml is not valid YAML: " + str(error).replace("\n", " "))
+    refuse(given + " is not valid YAML: " + str(error).replace("\n", " "))
 if config is None:
-    refuse(".agents/plan.yaml is empty")
+    refuse(given + " is empty")
 
 if "projects" in config:
     found = None
     for name, project in config["projects"].items():
         where = " of the project " + str(name)
         if "ledger_root" not in project:
-            refuse("no ledger_root" + where + " in .agents/plan.yaml")
+            refuse("no ledger_root" + where + " in " + given)
         ledger = folder(project["ledger_root"], "ledger_root", where)
         if under(relative, ledger) and (found is None or len(ledger) > len(found[1])):
             found = (project, ledger, where)
     if found is None:
-        refuse("the state file " + state + " is under no project's ledger_root")
+        refuse("the state file " + state + " is under no project's ledger_root of " + given)
     project, ledger, where = found
-    if "worktree_root" not in project:
-        refuse("no worktree_root" + where + " in .agents/plan.yaml")
-    worktrees = folder(project["worktree_root"], "worktree_root", where)
 else:
     if "ledger_root" not in config:
-        refuse("no ledger_root in .agents/plan.yaml")
+        refuse("no ledger_root in " + given)
+    project, where = config, ""
     ledger = folder(config["ledger_root"], "ledger_root", "")
     if not under(relative, ledger):
-        refuse("the state file " + state + " is not under the ledger_root " + ledger)
-    if "worktree_root" not in config:
-        refuse("no worktree_root in .agents/plan.yaml")
-    worktrees = folder(config["worktree_root"], "worktree_root", "")
+        refuse("the state file " + state + " is not under the ledger_root " + ledger + " of " + given)
+if "worktree_root" in project:
+    worktrees = folder(project["worktree_root"], "worktree_root", where)
+else:
+    worktrees = ".agents/worktrees"
 
 print(state_path)
 print(worktrees)

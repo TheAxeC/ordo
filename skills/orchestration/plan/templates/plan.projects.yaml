@@ -1,20 +1,20 @@
-# Example .agents/plan.yaml for a repository with several projects. Copy it to .agents/plan.yaml and replace the names and paths.
+# Example plan.yaml for a repository with several projects. Copy it to docs/plan.yaml and replace the names and paths.
 # Each project takes the keys of plan.yaml, with the same required keys and the same defaults. A plan is then named <project>/<entry>.
-# Every path is relative to the repository root.
+# Every path is relative to the folder that holds this file, and leads to another folder of the repository through "..".
 
 projects:
   tool-a:
-    roadmap: tools/tool-a/ROADMAP.md
-    verification: tools/tool-a/docs/building.md
-    rules: tools/tool-a/docs/change-standard.md
-    ledger_root: tools/tool-a/.scratch
-    archive_root: tools/tool-a/.scratch/archive
-    worktree_root: .agents/worktrees
+    roadmap: ../tools/tool-a/ROADMAP.md
+    verification: ../tools/tool-a/docs/building.md
+    rules: ../tools/tool-a/docs/change-standard.md
+    ledger_root: ../tools/tool-a/.scratch
+    archive_root: ../tools/tool-a/.scratch/archive
+    worktree_root: ../.agents/worktrees
     worker: claude:opus
     reviewer: claude:opus
     libraries: check
     standards: []
-    worktree_paths: [tools/tool-a]
+    worktree_paths: [../tools/tool-a]
     review: every
     refute_after_repair: yes
     repair_rounds: 1
@@ -22,7 +22,7 @@ projects:
     look: ""
     workers_at_once: 1
     bench: []
-    adr: docs/adr
+    adr: adr
     design_bar: industry
     design_references: []
     worker_effort: high
@@ -31,17 +31,17 @@ projects:
     next_entry: off
     repair_reviewer: claude:opus
   tool-b:
-    roadmap: tools/tool-b/ROADMAP.md
-    verification: tools/tool-b/docs/building.md
-    rules: tools/tool-b/docs/change-standard.md
-    ledger_root: tools/tool-b/.scratch
-    archive_root: tools/tool-b/.scratch/archive
-    worktree_root: .agents/worktrees
+    roadmap: ../tools/tool-b/ROADMAP.md
+    verification: ../tools/tool-b/docs/building.md
+    rules: ../tools/tool-b/docs/change-standard.md
+    ledger_root: ../tools/tool-b/.scratch
+    archive_root: ../tools/tool-b/.scratch/archive
+    worktree_root: ../.agents/worktrees
     worker: claude:opus
     reviewer: claude:opus
     libraries: check
     standards: []
-    worktree_paths: [tools/tool-b]
+    worktree_paths: [../tools/tool-b]
     review: earned
     refute_after_repair: yes
     repair_rounds: 1
@@ -49,7 +49,7 @@ projects:
     look: ""
     workers_at_once: 1
     bench: []
-    adr: docs/adr
+    adr: adr
     design_bar: industry
     design_references: []
     worker_effort: high

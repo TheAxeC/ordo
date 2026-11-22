@@ -1,6 +1,5 @@
-# Agent skills (restored from skills-lock.json by `npx skills experimental_install`) and the plan skills' worktrees under .agents/worktrees/. The plan configuration stays tracked.
+# Agent skills (restored from skills-lock.json by `npx skills experimental_install`) and the plan skills' worktrees under .agents/worktrees/.
 .agents/*
-!.agents/plan.yaml
 .claude/
 
 # OS and editors

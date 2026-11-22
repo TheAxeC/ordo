@@ -2,7 +2,7 @@
 name: session-retro
 description: "Read the transcripts of Claude Code sessions, from a plan's opening to its own last commit (to the time of the run while the plan is open), from one Claude Code session with its subagents, or from a time window, and report what went well, to keep and repeat, and what went wrong, to change. Each point quotes its place in the transcript by id, line and timestamp and proposes a change to a named rule, skill or brief, as a sentence to add or change, and the user decides on each proposal. Leaves behind a sessions report in the ledger's retros folder. Triggers on: session-retro, review the Claude Code sessions of a plan, review this Claude Code session, review a time window of Claude Code sessions, what went well and what went wrong in the Claude Code sessions, mine the Claude Code transcripts, read the transcripts of a plan."
 metadata:
-  version: "2.1.0"
+  version: "3.0.0"
 ---
 
 # Review of Claude Code sessions
@@ -13,8 +13,11 @@ metadata:
 
 ```
 /session-retro <entry>                 review the Claude Code sessions of a plan, from the commit that added its plan.md to its own last commit, or to the time of the run while it is open
+/session-retro <folder>/<entry>        the same, from the plan.yaml in <folder>, a path from the repository root
 /session-retro session <session id>    review one Claude Code session with its subagents
 /session-retro <start> <end>           review any window, two ISO 8601 times with a zone, such as 2026-09-28T22:51:46+02:00
+/session-retro <folder> session <session id>   the session form, from the plan.yaml in <folder>
+/session-retro <folder> <start> <end>          the window form, from the plan.yaml in <folder>
 ```
 
 ## Use instead
@@ -27,8 +30,10 @@ metadata:
 
 ## What it reads
 
-1. `.agents/plan.yaml`: `ledger_root`, `archive_root`, `worktree_root`, `rules` and `standards`.
-   - A missing file or key is a refusal ("Stops").
+1. The plan configuration, found and its paths read as `/plan`'s "What it reads" 1 says, a folder named in front of `<entry>`, or as the first argument in front of `session <session id>` and of `<start> <end>`, as a path from the repository root: `ledger_root`, `archive_root`, `worktree_root`, `rules` and `standards`.
+   - A first argument is the folder when it is a folder of the repository, and the form is then told from the arguments after it.
+     - The word `session` and a time are never read as a folder.
+   - A missing file or key is a refusal ("Stops"), except `worktree_root`, which left out is `.agents/worktrees` at the repository root.
 2. For `<entry>`, the ledger folder under `<ledger_root>/` or `<archive_root>/` whose `plan.md` has a title, after `# Plan: `, that equals `<entry>` or starts with `<entry>` and a space, a full stop after a number being allowed (the number, or the number and title).
    - No such folder is a refusal ("Stops").
 3. The transcript folders of Claude Code, under `$CLAUDE_CONFIG_DIR/projects` when that variable is set and under `~/.claude/projects` otherwise.
@@ -42,6 +47,7 @@ metadata:
 ## Steps
 
 1. Resolve the window.
+   - A first argument that is a folder of the repository is the folder the call names ("What it reads" 1), and the three forms below are told apart by the arguments after it.
    - For `<entry>`, find the plan's folder, whose name is `<slug>`:
      ```sh
      for plan in "<ledger_root>"/*/plan.md "<archive_root>"/*/plan.md; do [ -f "$plan" ] && head -n 1 "$plan" | awk -v entry='<entry>' 'index($(0), "# Plan: ") == 1 { title = substr($(0), 9); if (title == entry || index(title, entry " ") == 1 || index(title, entry ". ") == 1) found = 1 } END { exit !found }' && echo "$plan"; done
@@ -179,7 +185,7 @@ python3 <this skill's folder>/templates/transcript_window.py <transcript folder>
 |---|---|---|---|
 | A large output | Steps 4, the outputs together are more than 1,000,000 bytes | The size, and the number of parts of each output | The user's word to read it all, which continues at Steps 5, or a narrower window given as `/session-retro <start> <end>`, which ends this run after the working folder is removed |
 | The proposals | Steps 10, each proposal | The proposal with its point and places | The user's decision on it: approved, corrected or declined |
-| No configuration | `.agents/plan.yaml` is missing, or a key of "What it reads" 1 is not in it | The file or the key | The file or key added, then `/session-retro` again |
+| No configuration | No `plan.yaml` is in the folder the call names or in the three places at the repository root, or a key "What it reads" 1 requires is not in the one found; a path of that file refused as `/plan`'s Stops row "A path refused" says is refused here too, and that row says what the refusal shows and what resumes it, with this skill's call in place of `/plan` | The places looked in, or the key | The file or key added, then `/session-retro` again |
 | No such plan | No plan folder's title matches `<entry>` as "What it reads" 2 says, more than one does, or no commit added its `plan.md` | The entry and what was found | The entry corrected, then `/session-retro` again |
 | No transcript folder | Steps 2 finds no folder, or none holds the session id | The folder names looked for, and that Claude Code removes transcripts older than its `cleanupPeriodDays` setting | A window or a session Claude Code still keeps, then `/session-retro` again |
 | The reader failed | The reader exits with status 1 or 2 | The `error:` lines | The file made readable, or the times or the session id corrected, then `/session-retro` again |

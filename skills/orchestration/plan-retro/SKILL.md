@@ -2,7 +2,7 @@
 name: plan-retro
 description: "Read every refuter report of a repository's plans, open and archived, group the findings by the kind of defect, count the kinds that come back across steps and plans, and for each one propose the change that stops it at its source: a rule sentence on the rules page, a change to the text that should have prevented the defect, a page added to the standards the briefs point at, or, for a fact a machine computes, a check the user approves. Writes a retro report and changes nothing else until the user approves. Triggers on: plan-retro, retro, run a retro, what do the reviews keep finding, mine the refuter reports."
 metadata:
-  version: "1.2.2"
+  version: "2.0.0"
 ---
 
 # Retro over the refuter reports
@@ -14,6 +14,8 @@ metadata:
 ```
 /plan-retro             the retro over every refuter run the previous retro did not list
 /plan-retro <project>   the same, for one project of a plan.yaml in the projects: form
+/plan-retro <folder>    the same, from the plan.yaml in <folder>, a path from the repository root
+/plan-retro <folder>/<project>   the same, for one project of the plan.yaml in <folder>
 ```
 
 ## Use instead
@@ -26,7 +28,7 @@ metadata:
 
 ## What it reads
 
-1. `.agents/plan.yaml`, its required keys and defaults as `/plan` states them: `ledger_root`, `archive_root`, `rules`, `standards`, `verification`.
+1. The plan configuration, found and its paths read as `/plan`'s "What it reads" 1 says, a folder named as the argument, in front of a project's name when there is one, as a path from the repository root; its required keys and defaults as `/plan` states them: `ledger_root`, `archive_root`, `rules`, `standards`, `verification`.
    - A required key missing is a refusal ("Stops").
 2. Every refuter report under `<ledger_root>/` and `<archive_root>/`, each `agents/reviews/<step>-refuter.md`, leaving out the runs the previous retro lists under "Reports read" (Steps 1).
 3. The newest file under `<ledger_root>/retros/` named `<YYYY-MM-DD>.md`, the previous retro, for its "Reports read" list. With no previous retro, every run is read.
@@ -58,7 +60,7 @@ metadata:
 9. Show the retro to the user.
 10. Take the user's decision on each proposal, one by one: approved, corrected or declined ("Stops").
 11. Write each decision beside its proposal in the retro.
-12. Make the approved edits: the rules page, a standards page, the text that should have prevented the defect, `.agents/plan.yaml`, the verification page, and, for an approved check of a fact, its script.
+12. Make the approved edits: the rules page, a standards page, the text that should have prevented the defect, the plan configuration, the verification page, and, for an approved check of a fact, its script.
 13. Run each approved check's command.
 14. Show each command's output.
 15. Commit the retro and the edited files in one commit whose subject names the retro.
@@ -80,7 +82,7 @@ The skill checks where the rule should have come from, in this order, and propos
 
 1. **The rule is not written anywhere.** Grep the rules page and the standards pages for it.
    - When it is absent, the proposal is the rule's text, in the voice and numbering of the page it goes into (the rules page for how a change is made and reported, a standards page for what the code or prose looks like), with the findings it would have prevented cited.
-2. **The rule is written on a page the briefs do not point at.** When the rule is on a page that is neither the rules page nor listed in `standards`, the proposal adds the page to `standards` in `.agents/plan.yaml`.
+2. **The rule is written on a page the briefs do not point at.** When the rule is on a page that is neither the rules page nor listed in `standards`, the proposal adds the page to `standards` in the plan configuration.
 3. **The rule is written where the briefs point, and the defect still recurs.** The proposal is a sharper sentence for the existing rule, or a change to the text that should have prevented the defect (a brief template, a skill's step).
    - It quotes the findings that show how builders read the current text.
 4. **Whether the rule is kept is a fact a machine computes.** Only then may the proposal add a check beside the change of 3: a grep over the diff, a lint rule or a script over the tree.
@@ -92,7 +94,7 @@ The skill checks where the rule should have come from, in this order, and propos
 | Stop | When | What it shows | What resumes it |
 |---|---|---|---|
 | The proposals | Every retro with a recurring kind, at Steps 10 | The retro, each proposal in it | The user's decision on each: approved, corrected or declined |
-| A required key missing | A required key is not in `.agents/plan.yaml`; the refusal names it | The key | The key added, then `/plan-retro` again |
+| A required key missing | A required key is not in the `plan.yaml` found, in the folder the call names or else at the repository root; the refusal names it; a path of that file refused as `/plan`'s Stops row "A path refused" says is refused here too, and that row says what the refusal shows and what resumes it, with this skill's call in place of `/plan` | The key | The key added, then `/plan-retro` again |
 | A previous retro that cannot be read | At Steps 1, the previous retro is not UTF-8, has no `## Reports read` heading, or holds a line there that is not an entry in the form of `templates/retro.md` | The retro's path and what is wrong in it | The previous retro's "Reports read" corrected to the form of `templates/retro.md`, or a retro over everything, then `/plan-retro` again |
 
 - The first row is a stop: it waits on the user.

@@ -1,13 +1,13 @@
-# Example .agents/plan.yaml for a repository with one project. Copy it to .agents/plan.yaml and replace the paths.
-# Every path is relative to the repository root. A required key that is missing stops the skill that needs it, and the refusal names the key.
-# An optional key that is missing takes the default its comment gives.
+# Example plan.yaml for a repository with one project. Copy it to docs/plan.yaml and replace the paths.
+# Every path is relative to the folder that holds this file, and leads to another folder of the repository through "..". A required key that is missing stops the skill that needs it, and the refusal names the key.
+# An optional key that is missing takes the default its comment gives. A default that is a path is read from the repository root.
 
-roadmap: docs/roadmap.md                  # required. The source of truth for what is open; a plan is one entry of it.
-verification: docs/dev/building.md        # required. The page that defines the green check; /plan copies its commands into the ledger.
-rules: docs/dev/change-standard.md        # required. How a change is made; every brief points here first.
-ledger_root: .scratch                     # required. A plan lives in <ledger_root>/<slug>/.
-archive_root: .scratch/archive            # required. Where a closed plan's folder moves.
-worktree_root: .agents/worktrees          # required. Where a step's worktree is created; add it to .gitignore.
+roadmap: roadmap.md                       # required. The source of truth for what is open; a plan is one entry of it.
+verification: dev/building.md             # required. The page that defines the green check; /plan copies its commands into the ledger.
+rules: dev/change-standard.md             # required. How a change is made; every brief points here first.
+ledger_root: ../.scratch                  # required. A plan lives in <ledger_root>/<slug>/.
+archive_root: ../.scratch/archive         # required. Where a closed plan's folder moves.
+worktree_root: ../.agents/worktrees       # optional, default .agents/worktrees. Where a step's worktree is created; add it to .gitignore.
 worker: claude:opus                       # required. claude:<model> of the builder.
 reviewer: claude:opus                     # required. claude:<model> the first run of /refute, the brief check, the diagnosis agent and the lookups of /grill run on.
 libraries: check                          # required. check: /spec looks for a library for every capability a step builds before it writes the brief; avoid: no new dependency.
@@ -20,7 +20,7 @@ review_minutes: 0                         # optional, default 0. The reviewer's 
 look: ""                                  # optional, default "". Where a changed view is opened at landing (a page, a command); "" means no look step.
 workers_at_once: 1                        # optional, default 1. Steps in flight at once across every open plan; above 1, two of them share a file only when the orchestrator judges the merge at landing simple (plan-orchestration, "Two steps in flight").
 bench: []                                 # optional, default []. Binaries /spec stages and /land runs interleaved, base against new; [] means no A/B.
-adr: docs/adr                             # optional, default docs/adr. The folder of architecture decision records: grill writes them, /plan, /spec and /refute read them.
+adr: adr                                  # optional, default docs/adr. The folder of architecture decision records: grill writes them, /plan, /spec and /refute read them.
 design_bar: industry                      # optional, default industry. What grill's options are held to and what their reference line cites: industry (what production projects in the field ship), state-of-the-art (the best published work), novel (beyond both, with what would show it works).
 design_references: []                     # optional, default []. Published standards a design is held to, such as WCAG 2.2 AA; grill cites them per option.
 worker_effort: high                       # optional, default high. The effort a builder runs at: low, medium, high, xhigh or max.

@@ -2,7 +2,7 @@
 name: diagnose
 description: "Find the cause of a defect before changing anything: one command run red on the exact symptom, the case shrunk until each remaining part is needed for the red, three to five ranked hypotheses that each name the result that would falsify them, one change per probe tied to one hypothesis, the fix with a test run red without it where the failure costs something, and the cause written where it is kept. Run by a person, it waits for the reply to the hypotheses before the first probe. Run unattended in a plan's loop, it runs in a fresh agent, probes on a scratch copy, leaves the step's worktree unchanged and hands the fix over by where the defect was found. It leaves behind the diagnosis record. Triggers on: diagnose, diagnose this, debug this, this is broken, find the cause of, why does this fail, why is this slow, this got slower, this test is flaky, fails only sometimes, the cause is not known, diagnose the finding, find the cause a step's text asks for."
 metadata:
-  version: "2.2.0"
+  version: "3.0.0"
 ---
 
 # Diagnose a defect
@@ -17,6 +17,7 @@ metadata:
 /diagnose <entry> <step> red line          find the cause of a red line at the step's landing whose cause is not known
 /diagnose <entry> <step> brief check <n>   find the cause of finding <n> of the step's brief check
 /diagnose <entry> <step> premise           find the cause a step's text asks to have found, before the step's brief is written
+/diagnose <folder>/<entry> <step> ...      each of the four above, from the plan.yaml in <folder>, a path from the repository root
 ```
 
 ## Use instead
@@ -35,10 +36,11 @@ metadata:
    - For `premise`, what the step's text says happens, in each part of the text that asks for a cause to be found.
      - The words of such a part vary, as in "find why X happens and end it" and "find the cause of X and fix it".
      - The step's text is its line in `plan.md`'s step list, the rulings its tags name and its Step 0.
-2. The rules file and the standards `.agents/plan.yaml` names, `docs/glossary.md` and the ADRs in force as the `spec` skill's "What it reads" 5 says, each when the repository has it.
+2. The rules file and the standards the plan configuration names, `docs/glossary.md` and the ADRs in force as the `spec` skill's "What it reads" 5 says, each when the repository has it.
    - With no rules file, "Rules" states the rules this skill needs.
 3. Inside a plan, the ledger folder and `orchestrator-state.md`.
    - `<entry>` resolves to its folder as the `spec` skill's "What it reads" 2 says.
+   - The plan configuration is found and its paths are read as `/plan`'s "What it reads" 1 says, a folder named in front of `<entry>` as a path from the repository root.
    - No such folder is a refusal ("Stops").
    - For a finding of a reviewer's report and for a red line, the dispatch entry for the step names the worktree and the base.
    - For a red line, the entry reads `landing: backed-out`: a red line the landing could not fix on main has taken the step back out of main, as the `land` skill's Steps 6 says.
@@ -354,7 +356,7 @@ The first five rows are stops. The cause not found, inside a plan, is a decision
 | A red command a person drives | Run by a person, when only a person can trigger the symptom | The list of actions, one per line, each with what to look at after it | The user's observation after each action, one line each |
 | Not enough output after redaction | Run by a person, when the output with each secret written `<REDACTED>` cannot show the cause; with no person present, Steps 15 gives it as a cause not found | That the redacted output is not enough, and what else the diagnosis needs | The user's answer, then the step that was running again |
 | The cause not found | One of the conditions Steps 15 gives | The record with every probe, or every way tried from its "No red command" section, and inside a plan the open item | Inside a plan, the user's ruling on the open item or, under `self_rule: on`, the choice `plan-orchestration`'s `references/self-rule.md`, "Closing an open item", books; run by a person, the user's next direction |
-| No ledger folder | Inside a plan, no folder holds a `plan.md` that opens with `# Plan: <entry>` | A refusal that names `/plan` | `/plan`, then `/diagnose` again |
+| No ledger folder | Inside a plan, no folder under the ledger root of the `plan.yaml` found, in the folder the call names or else at the repository root, holds a `plan.md` that opens with `# Plan: <entry>`; a path of that file refused as `/plan`'s Stops row "A path refused" says is refused here too, and that row says what the refusal shows and what resumes it, with this skill's call in place of `/plan` | A refusal that names `/plan` | `/plan`, then `/diagnose` again |
 | No dispatch entry | Inside a plan, for a finding of a reviewer's report or a red line, the state file has no dispatch entry for the step or one that reads `landing: preparing`, or for a red line one that does not read `landing: backed-out` | A refusal that names the step and its landing state | What the bullets below give for the kind of input: a finding, a red line or a step already landed |
 | No report | Inside a plan, for a finding, the report the finding is in is not on disk | The path where the report is read | The report written, then `/diagnose` again |
 | No finding | Inside a plan, for a finding, the report holds no finding under the name given | A refusal that names the finding and lists the findings the report has | `/diagnose` again with a name the report holds |

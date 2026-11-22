@@ -2,7 +2,7 @@
 name: plan
 description: "Open a plan for one roadmap entry: create its ledger folder from the repository's plan configuration, write plan.md with the entry's goal, gate and a drafted step list for approval, the gate and each step's check asked whether it could pass without the goal being reached, each approved step tagged (approved), and orchestrator-state.md with the configuration block filled from the repository. Triggers on: open a plan, start a plan, plan <roadmap entry>, new plan for <entry>."
 metadata:
-  version: "5.0.4"
+  version: "6.0.0"
 ---
 
 # Open a plan
@@ -14,6 +14,8 @@ metadata:
 ```
 /plan <entry>             open the plan for one roadmap entry: the ledger folder the step skills and the orchestrator run from, its step list drafted for approval
 /plan <project>/<entry>   the same, in a repository whose plan.yaml lists several projects
+/plan <folder>/<entry>    the same, from the plan.yaml in <folder>, a path from the repository root
+/plan <folder>/<project>/<entry>   the same, for one project of the plan.yaml in <folder>
 /plan <entry> --ruling <ledger file> "<name>"   the same, under a quoted ruling: a step list that is the ruled one is written without the stop
 /plan <entry> --self-rule   the same, run by plan-orchestration in next-entry mode: the orchestrator takes the drafted step list as its choice
 ```
@@ -22,7 +24,7 @@ metadata:
 
 | When | Use |
 |---|---|
-| The repository has no `.agents/plan.yaml` | `/ordo-init` |
+| The repository has no plan configuration | `/ordo-init` |
 | The roadmap has no entry for the work yet | `/roadmap add <goal>` |
 | The entry's design decisions are not settled | `/grill <entry>` |
 | The plan is open and a step is due | `/spec <entry> <step>`, or `/plan-orchestration <entry>` for every step |
@@ -30,10 +32,21 @@ metadata:
 
 ## What it reads
 
-1. `.agents/plan.yaml` at the repository root: the only place a project specific lives.
+1. The plan configuration, the only place a project specific lives: the first `plan.yaml` found in the folder named in the call, then in `.scratch/`, `docs/` and `.agents/` at the repository root, in that order.
+   - The folder stands in the call in front of the entry, as a path from the repository root: `/plan apps/web/12` reads `apps/web/plan.yaml`.
+   - The folder is the longest leading part of what stands in front of the entry that is a folder holding a `plan.yaml`, and what is left of that part names a project of the file's `projects:` form: `/plan tools/a/12` reads the project `a` of `tools/plan.yaml`.
+   - With no such folder, the file is the first found in the three places at the repository root, and the whole part in front of the entry names a project of it: `/plan x/12` reads the project `x` of `docs/plan.yaml`.
+   - A call that names no folder reads the first file found in the three places at the repository root.
+   - Every path a key holds is read relative to the folder that holds the file: `roadmap`, `verification`, `rules`, `ledger_root`, `archive_root`, `worktree_root`, `worktree_paths`, each entry of `standards` and `adr`.
+     - The file's folder and the repository root are resolved through links before a path is resolved or compared.
+     - A path may lead out of the file's folder through `..`, and is refused when it resolves outside the repository.
+     - A `ledger_root` or a `worktree_root` that resolves to the repository root is refused, and `ledger_root: .` in `.scratch/plan.yaml` is the folder `.scratch`.
+     - `look`, `bench` and `design_references` hold text and are not resolved.
+     - In the text of every skill, `<ledger_root>`, `<archive_root>` and `<worktree_root>` stand for the folder the key names as it reads from the repository root, and a page a key names is opened at the path it resolves to.
    - Its keys, which of them are required and the default of each optional one are in `templates/plan.yaml` (one project) and `templates/plan.projects.yaml` (several, listed under `projects:`, with `<entry>` then `<project>/<entry>`).
    - An optional key missing takes the default the example file gives it.
-   - No file, and a required key missing, are stops ("Stops").
+     - A default that is a path is read from the repository root, wherever the file stands: `adr` is then `docs/adr` and `worktree_root` is `.agents/worktrees`.
+   - No file in any place of the order, and a required key missing, are stops ("Stops").
 2. The roadmap the configuration names.
    - `<entry>` is matched against the entries by number or title.
      - No match is a stop ("Stops").
@@ -58,7 +71,7 @@ metadata:
    - With no ruling, the skill says which of these it found.
    - With no ruling, every stop stands.
 7. The argument `--self-rule`, right after `<entry>`, before any other argument.
-   - It is refused ("Stops") unless `.agents/plan.yaml`, in the `projects:` form the project's keys, holds `self_rule: on` and `next_entry: on`.
+   - It is refused ("Stops") unless the `plan.yaml` found, in the `projects:` form the project's keys, holds `self_rule: on` and `next_entry: on`.
 
 ## Steps
 
@@ -159,6 +172,7 @@ metadata:
    - The step is done when `plan.md` is written and the `Booked:` lines are rewritten, or the draft is shown and the stop stands.
 4. Write `orchestrator-state.md` from `templates/orchestrator-state.md`.
    - The configuration block is filled in from `plan.yaml`, every key of the block written out with the default for an optional key the file leaves out: the verify list, the rules file, the standards, the worktree root and paths, the worker, the reviewer, `libraries`, the review cadence, `repair_rounds`, `refute_after_repair`, `review_minutes`, `look`, `bench`, `adr`, `design_bar`, `design_references`, `worker_effort`, `reviewer_effort`, `self_rule`, `next_entry`, `repair_reviewer`.
+   - Each path of the block (the rules file, each standard, the worktree root, each worktree path and `adr`) is written as it reads from the repository root, so the briefs, `checks.sh` and every skill that reads the block read it from there, wherever `plan.yaml` stands.
    - The verify list is the verification page's commands, each test command with the filter the page names for its summary line, so the copy and the compare of the `spec` skill's Steps 1 follow one rule.
    - A `repair_reviewer` that `plan.yaml` leaves out is written with the `reviewer` value.
    - The block's `executor:` is not a project specific and is not in `plan.yaml`.
@@ -188,11 +202,12 @@ metadata:
 |---|---|---|---|
 | A gate with no count | The copied gate is met only by fixing and checking again until nothing fails (Steps 2) | The gate, the words that need the repeated fixing, and the round cap of `plan-orchestration`'s Rules | The user's gate, written through `/roadmap`, then `/plan` again |
 | The drafted step list | Every plan, after Steps 2, except a draft written under a quoted ruling as Steps 3 says, or under `--self-rule` outside the cases Steps 3 keeps with the user: the skill does the mechanical half of opening a plan and stops at the design half | The drafted `plan.md`: the goal, the gate, the steps and each step's check, and in "## Gate" the answer to "could this pass without the goal being reached?" with its reason for the gate and for each step's check, and the design decisions no ADR in force or ruling settles and the rulings file's lines left to place (Steps 3) | The user's approval or correction |
-| No configuration | `.agents/plan.yaml` is missing: no file, no run | That the file is missing, and `/ordo-init`, which writes it | `/ordo-init`, then `/plan` again |
-| A required key missing | A required key is not in `plan.yaml`; the refusal names the key | The key | The key added, then `/plan` again |
+| No configuration | No `plan.yaml` is in the folder the call names or in the three places at the repository root ("What it reads" 1): no file, no run | That the file is missing, the places looked in, and `/ordo-init`, which writes it | `/ordo-init`, then `/plan` again |
+| A required key missing | A required key is not in the `plan.yaml` found, in the folder the call names or else at the repository root; the refusal names the key | The key | The key added, then `/plan` again |
+| A path refused | A refusal: a path of the `plan.yaml` found resolves outside the repository, or its `ledger_root` or `worktree_root` resolves to the repository root ("What it reads" 1) | The file, the key and its value | The value corrected, then `/plan` again |
 | No such entry | `<entry>` matches no roadmap entry | The open entries | `/plan` with an entry that exists |
 | Not yet specified | `<entry>` stands under the roadmap's "Not yet specified" section, so it has no gate for its steps to run | A refusal that names the entry, what must be known before its gate can be named, and `/roadmap add <entry>` | `/roadmap add <entry>`, then `/plan` again |
-| `--self-rule` without the keys | `--self-rule` is given and `.agents/plan.yaml` does not hold `self_rule: on` and `next_entry: on` | A refusal that names the two keys and their values | The two keys set to `on`, then `/plan` again, or `/plan` without `--self-rule` |
+| `--self-rule` without the keys | `--self-rule` is given and the `plan.yaml` found does not hold `self_rule: on` and `next_entry: on` | A refusal that names the two keys and their values | The two keys set to `on`, then `/plan` again, or `/plan` without `--self-rule` |
 | The plan exists | The ledger folder is already there: a plan is opened once | The folder, and the entry's rulings file when one is still there, for the user to remove, as the bullets below say | Nothing |
 
 - When the stop "The plan exists" finds the entry's rulings file still there, the Agents bullets it holds are named.

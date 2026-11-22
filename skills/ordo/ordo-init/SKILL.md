@@ -1,18 +1,18 @@
 ---
 name: ordo-init
-description: "Set a repository up for the plan skills: draft .agents/plan.yaml from what the repository already has (the roadmap, the page that defines the checks, the change standard, the check commands its CI and build files run, one project or several), offer the pages it lacks, make git ignore the worktree root and keep the configuration tracked, and write nothing until the user approves. On a repository that already has .agents/plan.yaml it checks the file instead: required keys, unknown keys, values, the pages it names, the ignore rules. Triggers on: ordo-init, set up the plan skills, init plan.yaml, configure ordo, check plan.yaml."
+description: "Set a repository up for the plan skills: draft the plan configuration docs/plan.yaml from what the repository already has (the roadmap, the page that defines the checks, the change standard, the check commands its CI and build files run, one project or several), offer the pages it lacks, make git ignore the worktree root and keep the configuration tracked, and write nothing until the user approves. On a repository that already has a plan.yaml in docs/, .scratch/ or .agents/ it checks the file instead: required keys, unknown keys, values, the pages it names, the ignore rules. Triggers on: ordo-init, set up the plan skills, init plan.yaml, configure ordo, check plan.yaml."
 metadata:
-  version: "2.0.1"
+  version: "3.0.0"
 ---
 
 # Set a repository up for the plan skills
 
-`/ordo-init` writes the one file the plan skills (`plan`, `spec`, `refute`, `land`, `ordo-help`, `plan-orchestration`) need in a repository, `.agents/plan.yaml`, and the pages that file names when the repository lacks them. It leaves behind that file, the pages the user approved, the `.gitignore` lines it needed, and one commit when the repository's commit rule allows it.
+`/ordo-init` writes the one file the plan skills (`plan`, `spec`, `refute`, `land`, `ordo-help`, `plan-orchestration`) need in a repository, the plan configuration `docs/plan.yaml`, and the pages that file names when the repository lacks them. It leaves behind that file, the pages the user approved, the `.gitignore` lines it needed, and one commit when the repository's commit rule allows it.
 
 ## Quick start
 
 ```
-/ordo-init     draft .agents/plan.yaml and the pages it lacks for approval, or check the .agents/plan.yaml that is there
+/ordo-init     draft docs/plan.yaml and the pages it lacks for approval, or check the plan.yaml that is there
 /ordo-init --ruling <ledger file> "<name>"   the same, under a quoted ruling: a draft the ruling states is written without the stop
 ```
 
@@ -27,7 +27,8 @@ metadata:
 ## What it reads
 
 1. The plan skill's `templates/plan.yaml` (one project) and `templates/plan.projects.yaml` (several), in the `plan` folder beside this skill's folder: the keys, which are required, each optional key's default, and the comment that says what the key is.
-2. `.agents/plan.yaml`, when it exists.
+2. The plan configuration, when the repository has one: the first `plan.yaml` found in `.scratch/`, `docs/` and `.agents/` at the repository root, the order the `plan` skill's "What it reads" 1 states for a call that names no folder.
+   - `python3 <this skill's folder>/templates/check_config.py --find .` prints its path, or exits 1 with the places looked in when there is none.
    - Then the skill checks instead of drafting ("Steps / Checking an existing file").
 3. The repository's commit rule: the answer to `repo-setup`'s question 5 when `/repo-setup` runs this skill, or, when it runs alone, the user's answer at the approval stop of Steps 11.
    - When the skill runs alone under a quoted ruling that states whether it may commit, the commit rule is what the ruling states.
@@ -83,7 +84,7 @@ Run from the repository root.
    - Each rule the repository already states elsewhere is added, citing the file it came from.
 5. Draft `ledger_root`, `archive_root` and `worktree_root`.
    - An existing folder of plans (a folder whose subfolders hold `plan.md` and `orchestrator-state.md`) or of worktrees is kept.
-   - Otherwise the values are the example's.
+   - Otherwise `ledger_root` and `archive_root` take the example's values, and `worktree_root` is left out, so its default `.agents/worktrees` at the repository root applies.
 6. Ask the user for the keys the repository cannot give ("Stops").
    - A key whose value a quoted ruling states is not asked.
    - Its value is the ruling's.
@@ -102,14 +103,15 @@ Run from the repository root.
    - `design_bar`, `design_references`, `worker_effort`, `reviewer_effort`, `self_rule`, `next_entry` and `repair_reviewer` are left out unless the user gives a value.
    - The step is done when each optional key is left out or written with its reason in its comment.
 8. Give every key written the example's comment for it, without the required/optional marker, in the example's order.
+   - The file is drafted for `docs/plan.yaml`, and each path in it is written relative to `docs/`, the folder that holds it, as the `plan` skill's "What it reads" 1 reads it: `roadmap.md` for `docs/roadmap.md`, `../CONTRIBUTING.md` for a page at the repository root, `../.scratch` for a ledger root at the repository root.
+   - Its head comment says that every path is relative to the folder that holds the file.
 9. Draft the ignore rules.
-   - The worktree root must be ignored: `git check-ignore -q --no-index <worktree_root>/probe` exits 0.
+   - The worktree root must be ignored: `git check-ignore -q --no-index <worktree_root>/probe` exits 0, `<worktree_root>` being the folder as it reads from the repository root, `.agents/worktrees` when the key is left out.
    - When it does not, the draft adds `/<worktree_root>/` to `.gitignore`.
-   - `.agents/plan.yaml` must not be ignored: `git check-ignore -q --no-index .agents/plan.yaml` exits 1.
-   - A rule that ignores the whole `.agents/` folder is drafted as `.agents/*` with `!.agents/plan.yaml` after it, since git cannot re-include a file whose parent folder is excluded.
+   - The configuration file must not be ignored: `git check-ignore -q --no-index docs/plan.yaml` exits 1.
 10. Show, in this order:
     1. The form and why.
-    2. The draft `.agents/plan.yaml` in full.
+    2. The draft `docs/plan.yaml` in full.
     3. Each page it would create, in full, with the commands' results for a verification page.
     4. The `.gitignore` changes, as Rules 5 says.
     5. When the skill runs alone, the question whether it may commit.
@@ -117,7 +119,7 @@ Run from the repository root.
     - The step is done when everything this item lists is shown.
 11. Stop for the approval ("Stops").
     - Under a quoted ruling, compare the draft Steps 10 shows with the ruling.
-    - The comparison covers the form, each key of `.agents/plan.yaml` with its value, each change to `.gitignore`, and the full text of each page to create.
+    - The comparison covers the form, each key of the drafted `docs/plan.yaml` with its value, each change to `.gitignore`, and the full text of each page to create.
     - Under `/repo-setup`, a key this skill derives from the tree `/repo-setup` wrote counts as stated.
     - A draft the ruling states in each of these is written without the stop.
     - A commit question Steps 10 shows is then asked alone.
@@ -125,7 +127,8 @@ Run from the repository root.
     - The stop then stands with nothing written.
     - The step is done when the draft is written, or it is shown and the stop stands with nothing written.
 12. Write what was approved.
-13. Run `python3 <this skill's folder>/templates/check_config.py .`.
+13. Run `python3 <this skill's folder>/templates/check_config.py --find .`, which prints the file the plan skills will read, and then `python3 <this skill's folder>/templates/check_config.py <the path it printed>`.
+    - The path printed is `docs/plan.yaml`.
     - Show its output.
     - The setup is done only when that exits 0.
 14. Commit the files written in one commit whose subject names the plan configuration.
@@ -140,8 +143,9 @@ Run from the repository root.
 
 ### Checking an existing file
 
-1. With `.agents/plan.yaml` present, write nothing.
-   - Run `templates/check_config.py`.
+1. With a plan configuration present ("What it reads" 2), write nothing.
+   - Run `python3 <this skill's folder>/templates/check_config.py --find .`, and then `python3 <this skill's folder>/templates/check_config.py <the path it printed>`, so the file checked is the file the plan skills read.
+   - Each line the check prints names the file by its path from the repository root, and a page or a folder it does not find by the path it resolves to, read from the folder that holds the file.
 2. It reports each of these.
    - A key written twice.
    - A key beside `projects:` in the `projects:` form.
@@ -154,13 +158,15 @@ Run from the repository root.
      - `review` neither `every` nor `earned`.
      - `libraries` neither `check` nor `avoid`.
      - `adr` not naming a folder under the repository root.
+     - A path that resolves outside the repository.
+     - A `ledger_root` or a `worktree_root` that is the repository root.
      - `design_bar` outside `industry`, `state-of-the-art` and `novel`.
      - `design_references` not a list of text.
      - `worker_effort` or `reviewer_effort` outside `low`, `medium`, `high`, `xhigh` and `max`.
      - A value whose kind differs from its default's.
    - A page named by `roadmap`, `verification`, `rules` or `standards` that does not exist.
    - A `worktree_paths` entry that does not exist.
-   - A worktree root git does not ignore.
+   - A worktree root git does not ignore, `.agents/worktrees` at the repository root when the key is left out.
    - A configuration file git ignores.
    - The item is done when each of these that holds is reported.
 3. Optional keys left out are listed as notes with the default that applies, which for `repair_reviewer` is the `reviewer` value.
@@ -193,7 +199,7 @@ Run from the repository root.
 | Anti-pattern | Why it fails | Do instead |
 |---|---|---|
 | A rule the repository does not state, written into a page | The page then binds the builders to something nobody decided | Rules 2 and 3 |
-| Overwriting an existing page or `.agents/plan.yaml` | The user's text is lost without a decision | Rules 4 and 5 |
+| Overwriting an existing page or plan configuration | The user's text is lost without a decision | Rules 4 and 5 |
 
 ## Rules
 
@@ -202,7 +208,7 @@ Run from the repository root.
 - The skill draws only from the repository and the user, for the file it drafts and for every page.
 - A page the skill writes states what the repository already does or says.
   - It cites where.
-- The skill never overwrites an existing page or `.agents/plan.yaml`.
+- The skill never overwrites an existing page or plan configuration.
 - A change to an existing file, `.gitignore` included, is shown as a diff and made after approval.
   - Under a quoted ruling that states the change, it is made without being shown for approval, as Steps 11 and "Steps / Checking an existing file" 4 say.
-- Every path is relative to the repository root.
+- Every path in this skill's text is relative to the repository root, and a path in the drafted file is written relative to `docs/`, as Steps 8 says.

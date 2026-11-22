@@ -217,3 +217,97 @@ Cases:
 - Sentence-level style nits in the changed skill text (two rules joined by "and" in one bullet of `skills/plan/SKILL.md`, "What it reads" 1): a careful reader could go either way, and none changes what a reader does.
 
 Agent usage: a5a88f7bf8c87a8df, claude-fable-5-2, 288132 tokens, 29 tool uses, 10.1 minutes.
+
+## Repair round 1, refuted
+
+REVIEW OF REPAIR ROUND 1, STEP 3 OF PLAN 5.A
+
+### Verification
+Run in the worktree under `env -u CLAUDE_CONFIG_DIR -u ORDO_SKILL_DIRS -u ORDO_STABLE`:
+```
+$ sh skills/ordo-init/templates/check_config.test.sh 2>&1 | tail -1
+PASS: check_config.py scratch tests
+$ sh skills/land/templates/land.test.sh 2>&1 | tail -1
+PASS: land.sh scratch tests
+$ sh skills/repo-setup/templates/sync_rules.test.sh 2>&1 | tail -1
+PASS: sync_rules.py scratch tests
+$ python3 skills/repo-setup/templates/sync_rules.py . --only glossary
+ok: the plan-terms block equals the template      (exit 0)
+$ LC_ALL=C grep -n '[^ -~]' skills/ordo-init/templates/check_config.py
+(no output, grep exit 1)
+$ python3 skills/ordo-init/templates/check_config.py docs/plan.yaml | tail -2
+note: docs/plan.yaml: design_references not set, default [] applies
+ok: docs/plan.yaml carries every required key, no unknown key, and every page it names exists      (exit 0)
+   (grep -c 'docs/docs' on its output: 0)
+$ python3 skills/ordo-init/templates/check_config.py --find .
+docs/plan.yaml
+$ grep -rn -F '.agents/plan.yaml' . --exclude-dir=.scratch --exclude-dir=.git --exclude-dir=worktrees | wc -l
+19
+```
+The 19 lines are the first review's 19 (18 state or build the fourth place in tests or docs, plus ADR 0007 line 11). Character-set check of the delta (header lines left out): no character outside ASCII. `git status --short` outside ` M`/` D`: the two `.scratch` files and `docs/plan.yaml` only. The delta covers 16 changed paths, and every one is a path some ruling asks for. Run by git diff, the version lines changed since the base are exactly six: land 5.0.0 to 6.0.0, ordo-init 2.0.1 to 3.0.0, plan-retro 1.2.2 to 2.0.0, repo-setup 5.3.2 to 6.0.0, roadmap 2.0.0 to 3.0.0, session-retro 2.1.0 to 3.0.0. No other version hunk exists in `git diff 0c93942`.
+
+### Verdicts
+Items of "What to build" (item 10 as ruling 8 replaces it):
+1 holds. 2 holds (round 1 closed the `session-retro` gap). 3 holds. 4 holds. 5 holds (the docstring now lists the `--find` argument error). 6 holds. 7 holds. 8 holds. 9 holds (ADR 0007 line 11 is left for step 1, as the brief says). 10 holds as ruling 8 replaces it: the six lines match the ruling.
+
+Rulings of the round:
+- 1 (no change): carried out. The diff has no change to the three-place search.
+- 2: carried out, and it holds (read whole, see below).
+- 3: carried out and holds. The fixture `find-outside/plan.yaml` stands outside the repository. Without the refusal, `--find` would print that file and exit 0, which `expect_not_found` rejects. It asserts the line "the folder ../find-outside is outside the repository".
+- 4: carried out and holds. `in no git repository` appears only in that refusal's line, so the case fails without it.
+- 5: carried out, but not in the row itself (Spec 1).
+- 6: carried out. The `docs/docs/` assertion is gone. The case still runs `expect_pass` and asserts the note's line `adr not set, default 'docs/adr' at the repository root applies`. I judge only that this still proves the pass and the note, which it does.
+- 7: carried out.
+- 8: carried out and holds.
+- 9: carried out; see Standards 1.
+- 10: carried out; see Spec 1.
+
+Ruling 2 read whole (`skills/session-retro/SKILL.md`). Quick start lines 15-20, "What it reads" 1 and Steps 1 all put the folder first. A reader tells the forms apart as follows: `<folder>/<entry>` has one argument that is no folder; `<folder> session <id>` has a folder first, then the word `session`; `<folder> <start> <end>` has a folder first, then two times; the forms without a folder have `session` or a time as the first argument. Both "What it reads" 1 and Steps 1 state "a first argument is the folder when it is a folder of the repository". No sentence is false. One residual ambiguity is Spec 2.
+
+Ruling 3, 4 and 6, judged by reading against `check_config.py` lines 262-264 and 286-288: cases 3 and 4 would fail with their behaviour taken out. Case 6's remaining assertions can fail only if the note's wording changes or the default stops passing, as the ruling intends.
+
+Ruling 9: the new row "A path refused" in `skills/plan/SKILL.md` Stops (line 207) states exactly the two refusals of "What it reads" 1 (outside the repository; `ledger_root` or `worktree_root` resolving to the root). It shows the file, the key and its value, and the value corrected plus `/plan` again resumes it. That is correct. The sentence is on the configuration row of 12 skills: code-comments, grill, land, ordo-help, plan-retro, refute, roadmap, session-retro, spec, plan-orchestration, and diagnose (on its "No ledger folder" row, which is the nearest configuration row it has). Each reads as one sentence. `ordo-init` has none: its Stops table has no configuration row, and its check prints these refusals as `error:` lines, which "A fix in the check" covers. I judge this acceptable.
+
+Cases:
+- C1 to C9: met (first review's runs; the round did not touch the script's behaviour; `check_config.test.sh` passes).
+- C10: met. The "no git repository" case now proves its refusal.
+- C10a: met by the first review's run. The test no longer asserts `docs/docs/`, by ruling, and my run of C15 shows no `docs/docs`.
+- C10b: met.
+- C10c: met. The `../outside` half now has a file to find.
+- C10d: met.
+- C11: met. C12: met (Spec 1 on the report row). C13: met. C13a: met.
+- C14: not verifiable in the worktree (nothing staged, `git ls-files` not allowed); `docs/plan.yaml` is present and `.agents/plan.yaml` is absent.
+- C15: met.
+- C16: partial, as before: ADR 0007 line 11 still names `.agents/plan.yaml` as Ordo's file, left by the brief to step 1.
+- C17: met.
+
+### Spec
+1. `.scratch/.../agents/reviews/3-report.md`, the table of the first report, line 254: "The unchanged script takes three arguments and reads `.agents/plan.yaml`; the test's first failing line is `FAIL: conflict exited 64, expected 2`". Line 94 also still reads "where the unchanged script lands the step". The round's section says the row "now reads" the new text and "replaces" the old one, but the row in the table was not edited. A reader of the table reaches the old claim. The same holds for ruling 10: the six before-and-after items stand only in the appended section "Repair round 1", not under `## User-visible changes, before and after` at line 470. A reader of that section sees only four items. Failure scenario: the orchestrator reading the section the ruling names concludes the six changes were not listed.
+2. `skills/session-retro/SKILL.md` "What it reads" 1: "A first argument is the folder when it is a folder of the repository". `/session-retro session <id>` in a repository that has a folder named `session` reads `session` as the folder and then `<id>` as an entry. The ruling dictates this text, so it is for the orchestrator to see whether it matters; I give it as a finding of low weight.
+
+### Proof
+None.
+
+### Standards
+1. Ruling 9's sentence on the rows "A required key missing" of `spec`, `refute`, `land`, `ordo-help`, `plan-retro`, `grill` and `roadmap` (for example `skills/spec/SKILL.md:478`): "...; a path of that file refused as `/plan`'s Stops row "A path refused" says is the same refusal here | The key | The key added, then `/spec` again". The row's cells say what a missing key shows and what resumes it, and the added sentence declares the path refusal the same refusal. For a refused path, "The key" is not what is shown (the file, the key and its value are), and "The key added" does not resume it (the value is corrected). A reader following the row after `ledger_root: ../../../elsewhere` is told to add a key that exists. The same applies to `diagnose` ("No ledger folder": resumes with `/plan`, then `/diagnose`) and `code-comments` (resumes with `/ordo-init`). The ruling dictated the sentence, and the cells remain from the rows; I judge this a text defect the ruling left.
+
+### Behaviour
+None. The six items of ruling 10 in the appended section each have a before and an after, and each is true of the diff: the `plan-orchestration` limit sentence ("every open plan" to "every open plan of the `plan.yaml` the call found") matches `git diff 0c93942`; `session-retro`'s `worktree_root` exception matches its "What it reads" 1; the `ordo-init` drafting rules (`docs/plan.yaml`, `--find .` then the check, no re-include line) match its diff; `plan-orchestration`'s new Stops row exists.
+
+### Declined to judge
+- C14 as the brief writes it (`git ls-files`): outside the commands allowed.
+- Whether any of the three changed test cases would fail with its behaviour removed, beyond reading: no script was broken or reverted.
+- The plan's whole verify list: not run.
+- Merge with steps 1 and 2: those worktrees were not read.
+- The reading of the skills' text as a model runs it: no skill was invoked.
+
+Agent usage: a5832b59f2e35e98e, claude-sonnet-5-5, 121493 tokens, 18 tool uses, 2.4 minutes.
+
+## Closed
+
+- First run, Spec 2, Proof 1, 2 and 4, Standards 1 and 2: closed by the builder in repair round 1, as the run over the round confirms.
+- First run, Spec 1 (a link at one of the three places of the search): no change, since no repository has such a link.
+- First run, Proof 3 and Behaviour 1, and round 1, Spec 1: the statements stand in the round's section of the builder's report; at landing the row of C12, the line of the first run's list and the section "User-visible changes" of `agents/reviews/3-report.md` were given the same text. Fixed at landing.
+- First run, Standards 3, and round 1, Standards 1: the sentence the round added to each skill's configuration row is reworded at landing, so the path refusal is shown and resumed as `/plan`'s row says. Fixed at landing.
+- Round 1, Spec 2: `session-retro` says at landing that the word `session` and a time are never read as a folder. Fixed at landing.
+- First run, C16, ADR 0007 line 11: closed by step 1, which rewrote the sentence on main.

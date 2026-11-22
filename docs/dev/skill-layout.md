@@ -79,7 +79,7 @@ No other `##` heading appears outside the place row 6 gives it.
 - A file of this skill's `references/` is named `references/<file>`, as a file of its `templates/` is named `templates/<file>`.
 - A file of this skill's `agents/` is named `agents/<file>`, and a file of its `examples/` is named `examples/<file>`.
 - A file of another skill is named with its skill: "the `plan` skill's `templates/plan.yaml`".
-- A repository path is relative to the repository root, and a key of `.agents/plan.yaml` is written as it appears there, in code.
+- A repository path is relative to the repository root, and a key of the plan configuration is written as it appears there, in code.
 - A skill is named by its `name` in code: `/plan` for the invocation, `plan` for the skill.
 
 ## A rewrite of a skill

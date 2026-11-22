@@ -2,7 +2,7 @@
 name: grill
 description: "Settle a roadmap entry's design decisions before its plan opens, by an interview in rounds: list the decisions the entry's goal and gate need, ask every decision whose prerequisites are settled in one round, each with its options, their pros and cons, a reference line for the configured design bar, one recommendation and the lazy option named, have facts looked up by agents instead of asked, and write each answer as it settles into the plan's Rulings or the entry's rulings file, each lookup agent into the Agents section of the same file, the roadmap entry, the glossary and a proposed ADR, written on the user's yes or, under `--self-rule`, on the orchestrator's recommendation. Triggers on: grill <entry>, grill me on the entry, settle the design decisions of an entry, interview me about the design, design decisions before the plan, stress-test the design of an entry."
 metadata:
-  version: "1.4.0"
+  version: "2.0.0"
 ---
 
 # Settle an entry's design decisions
@@ -15,6 +15,7 @@ metadata:
 /grill <entry>                                                  interview about the entry, by number or title, including one under "Not yet specified"
 /grill <entry> --bar <industry|state-of-the-art|novel>          the same, with this design bar in place of the configured one, for this interview only
 /grill <project>/<entry>                                        the same, in a repository whose plan.yaml lists several projects
+/grill <folder>/<entry>                                         the same, from the plan.yaml in <folder>, a path from the repository root
 /grill <entry> --ruling <ledger file> "<name>"                  the same, under a quoted ruling: a roadmap diff that is the ruled text is written without its decision
 /grill <entry> --self-rule                                      the same, run by plan-orchestration in next-entry mode: each decision outside the six kinds takes its recommendation
 ```
@@ -23,14 +24,14 @@ metadata:
 
 | When | Use |
 |---|---|
-| The repository has no `.agents/plan.yaml` | `/ordo-init` |
+| The repository has no plan configuration | `/ordo-init` |
 | The roadmap has no entry for the work yet | `/roadmap add <goal>` |
 | The design is settled and the plan is to be opened | `/plan <entry>` |
 | Where an open plan stands | `/ordo-help <entry>` |
 
 ## What it reads
 
-1. `.agents/plan.yaml` at the repository root.
+1. The plan configuration, found and its paths read as `/plan`'s "What it reads" 1 says, a folder named in front of `<entry>` as a path from the repository root.
    - The required keys are `roadmap`, `ledger_root`, `archive_root`, `rules`, `libraries` and `reviewer`.
    - The optional keys are `standards` (default `[]`), `adr` (default `docs/adr`), `design_bar` (default `industry`), `design_references` (default `[]`), `reviewer_effort` (default `high`), and `self_rule` and `next_entry` (default `off`, read only for `--self-rule`), and a key left out takes its default.
    - In the `projects:` form, the named project's keys.
@@ -86,7 +87,7 @@ metadata:
       - The bullet's first line ends with neither "(the user)" nor "(self-rule)", each with or without a full stop after it.
     - With no ruling, the skill says which of these it found, and every stop stands.
 12. The argument `--self-rule`, right after `<entry>`, before any other argument.
-    - It is refused ("Stops") unless `.agents/plan.yaml`, in the `projects:` form the project's keys, holds `self_rule: on` and `next_entry: on`.
+    - It is refused ("Stops") unless the `plan.yaml` found, in the `projects:` form the project's keys, holds `self_rule: on` and `next_entry: on`.
     - It is refused ("Stops") for an entry under "Not yet specified", since such an entry has no gate for `/plan` to draft from.
 
 ## Steps
@@ -374,10 +375,10 @@ The first three rows are stops, which wait on the user. The rest are refusals, w
 | A round | Every round, at Steps 6, or under `--self-rule` a round of decisions of the six kinds; the "record as ADR?" decisions and each roadmap diff no quoted ruling states ride in it | The frontier as decisions in the decision form, the answer form, and in the first round the decisions carried rulings settle and the archived plans a ruling sets aside | The user's answers |
 | The end | Steps 10, except under `--self-rule` | The decisions settled with where each was written, the step changes owed, and the question of the shared understanding and the commit | The user's confirmation and answer on the commit |
 | A lookup agent served another model | The runner served a lookup agent started as the effort agent a model that is not the configured one ("Steps / Looking up a fact") | The configured value of `reviewer` and the served model | The user's instruction, then the lookup started again |
-| No configuration | `.agents/plan.yaml` is missing | A refusal that names `/ordo-init` | `/ordo-init`, then `/grill` again |
+| No configuration | No `plan.yaml` is in the folder the call names or in the three places at the repository root | A refusal that names the places looked in and `/ordo-init` | `/ordo-init`, then `/grill` again |
 | No such entry | `<entry>` matches no roadmap entry | A refusal that names `/roadmap add <goal>` | `/grill` with an entry that exists |
-| A required key missing | A required key is not in `.agents/plan.yaml` | The key | The key added, then `/grill` again |
-| `--self-rule` without the keys | `--self-rule` is given and `.agents/plan.yaml` does not hold `self_rule: on` and `next_entry: on` | A refusal that names the two keys and their values | The two keys set to `on`, then `/grill` again, or `/grill` without `--self-rule` |
+| A required key missing | A required key is not in the `plan.yaml` found; a path of that file refused as `/plan`'s Stops row "A path refused" says is refused here too, and that row says what the refusal shows and what resumes it, with this skill's call in place of `/plan` | The key | The key added, then `/grill` again |
+| `--self-rule` without the keys | `--self-rule` is given and the `plan.yaml` found does not hold `self_rule: on` and `next_entry: on` | A refusal that names the two keys and their values | The two keys set to `on`, then `/grill` again, or `/grill` without `--self-rule` |
 | `--self-rule` for an entry under "Not yet specified" | `--self-rule` is given and `<entry>` stands under "Not yet specified" | A refusal that names the entry and `/roadmap add <entry>`, which names its gate | `/roadmap add <entry>`, then `/grill` again, or `/grill` without `--self-rule` |
 | An unknown bar | `design_bar` or `--bar` is not `industry`, `state-of-the-art` or `novel` | The three values | A value of the three, then `/grill` again |
 

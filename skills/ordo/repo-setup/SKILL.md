@@ -1,8 +1,8 @@
 ---
 name: repo-setup
-description: "Set up a new repository in the shape the plan skills expect: CLAUDE.md with the shared rules, docs/ with the change standard, the prose standard, the standards pages (design principles, coding standards, a UI standard), the building page, a roadmap, a glossary and an ADR folder, src/ and utils/, a .gitignore for the language, LICENSE, README, the project skills installed with skills-lock.json, and the plan configuration .agents/plan.yaml. Shows the whole tree and every file's text before writing. With sync, compares an existing repository's shared-rules block and its glossary's plan-terms block with their templates and rewrites them after approval. Triggers on: repo-setup, set up a new repo, scaffold a repository, new project repo, sync the shared rules, sync the glossary."
+description: "Set up a new repository in the shape the plan skills expect: CLAUDE.md with the shared rules, docs/ with the change standard, the prose standard, the standards pages (design principles, coding standards, a UI standard), the building page, a roadmap, a glossary and an ADR folder, src/ and utils/, a .gitignore for the language, LICENSE, README, the project skills installed with skills-lock.json, and the plan configuration docs/plan.yaml. Shows the whole tree and every file's text before writing. With sync, compares an existing repository's shared-rules block and its glossary's plan-terms block with their templates and rewrites them after approval. Triggers on: repo-setup, set up a new repo, scaffold a repository, new project repo, sync the shared rules, sync the glossary."
 metadata:
-  version: "5.3.2"
+  version: "6.0.0"
 ---
 
 # Set up a repository
@@ -94,24 +94,25 @@ metadata:
 6. Install the project skills from the repository root, per source: `npx skills add <source> --skill <name> [--skill <name>...] -a claude-code -y`.
    - The CLI copies them into `.agents/skills/`, links them under `.claude/skills/`, and writes `skills-lock.json`.
 7. List each installed skill with its description in the Skills section of `CLAUDE.md`.
-8. Run `/ordo-init`, with its own draft and approval: it writes `.agents/plan.yaml` and `docs/dev/building.md`.
+8. Run `/ordo-init`, with its own draft and approval: it writes `docs/plan.yaml` and `docs/dev/building.md`.
    - Its check passes.
    - Under a quoted ruling, `/ordo-init` is run with the same `--ruling` arguments.
    - It skips the stops the ruling covers, as its own text says.
    - The `standards` key it drafts lists every standards page written at Steps 5 except the change standard, which is the `rules` key.
    - The answer to question 5 is passed to it as the repository's commit rule, which its commit follows.
-   - The step is done when `/ordo-init` has written `.agents/plan.yaml` and its check passes.
+   - The step is done when `/ordo-init` has written `docs/plan.yaml` and its check passes.
 9. Fill the Build section of `CLAUDE.md` and the command block of `docs/dev/change-standard.md` from `docs/dev/building.md`.
 10. Run the checks:
 
     ```sh
     python3 <this skill's folder>/templates/sync_rules.py .
-    python3 <ordo-init's folder>/templates/check_config.py .
+    python3 <ordo-init's folder>/templates/check_config.py --find .
+    python3 <ordo-init's folder>/templates/check_config.py docs/plan.yaml
     LC_ALL=C grep -rn '[^ -~]' CLAUDE.md README.md docs/
-    git check-ignore -q --no-index .agents/skills/probe && ! git check-ignore -q --no-index .agents/plan.yaml
+    git check-ignore -q --no-index .agents/skills/probe && ! git check-ignore -q --no-index docs/plan.yaml
     ```
 
-    - The setup is done when the first two exit 0, the scan prints nothing and the `git check-ignore` line exits 0.
+    - The setup is done when the first three exit 0, the second prints `docs/plan.yaml`, the scan prints nothing and the `git check-ignore` line exits 0.
 11. Show the user each check's output.
     - The step is done when the outputs are shown.
     - The setup goes on to Steps 12 without waiting.
@@ -201,9 +202,9 @@ docs/roadmap.md                  the roadmap skill's templates/roadmap.md
 docs/glossary.md                 templates/docs/glossary.md, the plan-terms block filled from templates/plan-terms.md
 docs/adr/README.md               templates/docs/adr/README.md
 docs/adr/template.md             templates/docs/adr/template.md
+docs/plan.yaml                   written by /ordo-init
 src/                             the source tree, with the build files for the kind as far as question 3 fixed them
 utils/                           scripts the build and the checks run
-.agents/plan.yaml                written by /ordo-init
 ```
 
 ## Stops

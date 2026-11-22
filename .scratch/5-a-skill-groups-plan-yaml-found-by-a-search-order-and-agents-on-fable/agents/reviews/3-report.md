@@ -91,7 +91,7 @@ What the first run shows, per case:
 - C1, C6, C8, C9, C10a, C10b, C10d (check of a path): the path of the file was read as a repository root, and every run failed with `error: no .agents/plan.yaml in <the path>`.
 - C10: no argument and a repository root both passed with exit 0 on the configuration at `.agents/plan.yaml`; a file in no git repository failed for the reason above.
 - C11, C13, C13a: four arguments were refused with the usage line of three arguments, exit 64.
-- C12: three arguments in a repository with `docs/plan.yaml` only exited 64 with `configuration failed: .agents/plan.yaml not found`. The test's case therefore puts a sound `.agents/plan.yaml` in the repository, where the unchanged script lands the step.
+- C12: three arguments in a repository with `docs/plan.yaml` only exited 64 with `configuration failed: .agents/plan.yaml not found`. The test's case therefore puts a sound `.agents/plan.yaml` in the repository; that the unchanged script lands the step there is read from its code and was not run.
 - C14: `git ls-files docs/plan.yaml .agents/plan.yaml` printed `.agents/plan.yaml`.
 - C15: `python3 skills/ordo-init/templates/check_config.py docs/plan.yaml` printed `error: no .agents/plan.yaml in <worktree>/docs/plan.yaml`, exit 1.
 - C16: 161 lines in 39 files.
@@ -251,7 +251,7 @@ The behaviours whose failure costs something, each with its test case and the li
 | The argument errors (C10) | "no argument", "a repository root", "a file in no git repository" | `C10 no argument ...: exit 0` with `ok: .agents/plan.yaml carries every required key ...` |
 | A repository reached through a link (C10d) | `linked` | `error: no .agents/plan.yaml in <scratch>/c10d-link/docs/plan.yaml` |
 | `land.sh` reads the file given, from its folder, with the default worktree root (C11) | `land.test.sh`, `nested` | `Usage: sh <the land skill's folder>/templates/land.sh <state file> <step> <base>`, exit 64 |
-| Three arguments refused (C12) | `three` | The unchanged script takes three arguments and reads `.agents/plan.yaml`; the test's first failing line is `FAIL: conflict exited 64, expected 2` |
+| Three arguments refused (C12) | `three` | The first run was on a repository with `docs/plan.yaml` only, where the unchanged script exited 64 with `configuration failed: .agents/plan.yaml not found`. The fixture the test builds was not run on the unchanged script; that it lands the step there is read from its code, which takes three arguments and opens `.agents/plan.yaml`. |
 | A second file not read (C13) | `second` | The usage line above, exit 64 |
 | A root outside the repository, or the repository root, refused (C13a) | `outside-1` to `outside-4` | The usage line above, exit 64 |
 
@@ -473,6 +473,12 @@ C17, by reading:
 - `land.sh`. Before: three arguments, `.agents/plan.yaml` read, `worktree_root` required, refusals such as `configuration failed: no worktree_root in .agents/plan.yaml`. After: four arguments, the file given read, `worktree_root` optional, refusals such as `configuration failed: ledger_root in docs/plan.yaml must be a folder inside the repository and not its root: ..`, `configuration failed: the plan.yaml is not a file: <path>` and `configuration failed: no ledger_root in <path>`.
 - The example files: values written for `docs/plan.yaml` (`roadmap: roadmap.md`, `ledger_root: ../.scratch`, `adr: adr`), `worktree_root` optional.
 - Each skill's call: a folder in front of the entry, or alone for `/ordo-help`, `/plan-orchestration`, `/roadmap` and `/plan-retro`.
+- An existing `.agents/plan.yaml` whose paths are written from the repository root. Before: the skills and both scripts read it, each path from the repository root. After: the file is still found, in the fourth place of the search, and each path is read from `.agents/`, so `roadmap: docs/roadmap.md` names `.agents/docs/roadmap.md`; `check_config.py` reports each page as missing by that path, and `land.sh` reads `ledger_root: .scratch` as `.agents/.scratch`. The owner puts `../` in front of each path or moves the file to `docs/plan.yaml` with its paths rewritten (README).
+- What `ordo-init` and `repo-setup` draft and write. Before: `.agents/plan.yaml`, paths from the repository root, `worktree_root` written, and an ignore rule for the whole of `.agents/` drafted as `.agents/*` with `!.agents/plan.yaml`. After: `docs/plan.yaml`, each path relative to `docs/`, `worktree_root` left out unless the repository keeps its worktrees elsewhere, no re-include line, and the check run as `check_config.py --find .` followed by `check_config.py <the path it printed>`.
+- The count of steps in flight. Before: `workers_at_once` of `.agents/plan.yaml`, counted over every open plan of the repository. After: `workers_at_once` of the `plan.yaml` the call found, counted over the open plans of that file; the plans of a `plan.yaml` in a project folder are run, and counted, by naming the folder.
+- `plan-orchestration` with no configuration. Before: its Stops had no row for it, and "Use instead" sent the reader to `/ordo-init`. After: the Stops row "No configuration", a refusal that shows the places looked in and `/ordo-init`.
+- `session-retro` on a file without `worktree_root`. Before: a missing key of "What it reads" 1 was the refusal "No configuration". After: `worktree_root` left out is `.agents/worktrees` at the repository root, and the run goes on.
+- `/ordo-init` on a repository whose only `plan.yaml` is in a project folder. Before: no such file was read by any skill. After: `/ordo-init` names no folder, finds no file in the three places at the repository root, and drafts a new `docs/plan.yaml`; the file in the project folder is checked with `check_config.py <its path>`.
 
 ## Sentences about a changed file as a whole, reread
 
@@ -500,3 +506,49 @@ C17, by reading:
 ## Handed back
 
 Nothing.
+
+## Repair round 1
+
+NOT DONE: nothing. Each of the ten rulings is carried out. Under ruling 9, `ordo-init` gets no sentence: its Stops table has no row about a configuration the skill reads to work from, and its check reports the two refusals as errors ("Steps / Checking an existing file" 2), which the row "A fix in the check" covers.
+
+| Ruling | What changed |
+|---|---|
+| 1. A link at one of the three places | No change, as ruled. |
+| 2. `session-retro`, the folder in the two other forms | `skills/session-retro/SKILL.md`: Quick start gains `/session-retro <folder> session <session id>` and `/session-retro <folder> <start> <end>`; "What it reads" 1 names the folder "as the first argument in front of `session <session id>` and of `<start> <end>`" and says "A first argument is the folder when it is a folder of the repository, and the form is then told from the arguments after it."; Steps 1, which tells the forms apart, opens with the same rule. |
+| 3. `find-none`, the folder outside | `check_config.test.sh`: the case writes `find-outside/plan.yaml` beside the repository and asserts the line `the folder ../find-outside is outside the repository`. |
+| 4. A file in no git repository | `check_config.test.sh`: the case asserts that the output holds `in no git repository`. |
+| 5. The report's row for C12 | The row now reads: "Three arguments refused (C12), case `three`. The first run was made on a repository with `docs/plan.yaml` only, where the unchanged script exited 64 with `configuration failed: .agents/plan.yaml not found`. The fixture the test builds, with a `.agents/plan.yaml` whose roots are written from the repository root, was not run on the unchanged script; that the unchanged script lands the step there is read from its code, which takes three arguments and opens `.agents/plan.yaml`." This replaces the row of the table above, and the sentence "where the unchanged script lands the step" in the first run's list for C12 is a reading of the code, not a run. |
+| 6. `no-adr` | `check_config.test.sh`: the assertion on `docs/docs/` is removed; the case keeps the pass and the note's line. |
+| 7. The docstring | `check_config.py`: the paragraph on the second form now lists "when it is given no repository root or more than one folder (--find takes a repository root and at most one folder)". `check_config.py --find` and `check_config.py --find . a b` each print `error: --find takes a repository root and at most one folder` and exit 1. |
+| 8. Versions | `land` 6.0.0, `ordo-init` 3.0.0, `repo-setup` 6.0.0, `roadmap` 3.0.0, `plan-retro` 2.0.0, `session-retro` 3.0.0. No other version line changed. This replaces row 10 of the table above. |
+| 9. The two refusals of a path | `skills/plan/SKILL.md`, Stops, new row "A path refused": a refusal when a path of the `plan.yaml` found resolves outside the repository, or its `ledger_root` or `worktree_root` resolves to the repository root; it shows the file, the key and its value; the value corrected, then `/plan` again, resumes it. The Stops row about the configuration of `spec`, `refute`, `land`, `ordo-help`, `plan-retro`, `grill`, `roadmap`, `session-retro`, `plan-orchestration`, `diagnose` and `code-comments` ends with "a path of that file refused as `/plan`'s Stops row "A path refused" says is the same refusal here". |
+| 10. User-visible changes | Listed below. |
+
+User-visible changes added to the report's list, each before and after:
+
+- An existing `.agents/plan.yaml` whose paths are written from the repository root. Before: the skills and both scripts read it, each path from the repository root. After: the file is still found, in the fourth place of the search, and each path is read from `.agents/`, so `roadmap: docs/roadmap.md` names `.agents/docs/roadmap.md`; `check_config.py` reports each page as missing by that path, and `land.sh` reads `ledger_root: .scratch` as `.agents/.scratch`. The owner puts `../` in front of each path or moves the file to `docs/plan.yaml` with its paths rewritten (README).
+- What `ordo-init` and `repo-setup` draft and write. Before: `.agents/plan.yaml`, paths from the repository root, `worktree_root` written, and an ignore rule for the whole of `.agents/` drafted as `.agents/*` with `!.agents/plan.yaml`. After: `docs/plan.yaml`, each path relative to `docs/`, `worktree_root` left out unless the repository keeps its worktrees elsewhere, no re-include line, and the check run as `check_config.py --find .` followed by `check_config.py <the path it printed>`.
+- The count of steps in flight. Before: `workers_at_once` of `.agents/plan.yaml`, counted over every open plan of the repository. After: `workers_at_once` of the `plan.yaml` the call found, counted over the open plans of that file; the plans of a `plan.yaml` in a project folder are run, and counted, by naming the folder.
+- `plan-orchestration` with no configuration. Before: its Stops had no row for it, and "Use instead" sent the reader to `/ordo-init`. After: the Stops row "No configuration", a refusal that shows the places looked in and `/ordo-init`.
+- `session-retro` on a file without `worktree_root`. Before: a missing key of "What it reads" 1 was the refusal "No configuration". After: `worktree_root` left out is `.agents/worktrees` at the repository root, and the run goes on.
+- `/ordo-init` on a repository whose only `plan.yaml` is in a project folder. Before: no such file was read by any skill. After: `/ordo-init` names no folder, finds no file in the three places at the repository root, and drafts a new `docs/plan.yaml`; the file in the project folder is checked with `check_config.py <its path>`.
+
+The checks of "Verify before you report", run again:
+
+```
+$ sh skills/ordo-init/templates/check_config.test.sh 2>&1 | tail -1
+PASS: check_config.py scratch tests
+$ sh skills/land/templates/land.test.sh 2>&1 | tail -1
+PASS: land.sh scratch tests
+$ sh skills/repo-setup/templates/sync_rules.test.sh 2>&1 | tail -1
+PASS: sync_rules.py scratch tests
+$ python3 skills/repo-setup/templates/sync_rules.py . --only glossary
+ok: the plan-terms block equals the template
+exit 0
+$ LC_ALL=C grep -n '[^ -~]' skills/ordo-init/templates/check_config.py
+(no output) exit 1
+```
+
+The character-set check over the files the step changes printed nothing and exited 0. C15: `python3 skills/ordo-init/templates/check_config.py docs/plan.yaml` ends with `ok: docs/plan.yaml carries every required key, no unknown key, and every page it names exists`, exit 0. C16: `git grep -n --untracked -F '.agents/plan.yaml' -- ':!.scratch' | wc -l` prints 19, the lines listed above. C14 is as above: the move is not staged in the worktree.
+
+The three changed cases of `check_config.test.sh` were not run on the unchanged script; they are judged by reading.

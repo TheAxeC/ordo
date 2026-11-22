@@ -42,22 +42,7 @@ repair_reviewer: claude:sonnet  # the model the run of /refute over a repair rou
 ```
 
 ```yaml
-dispatch:
-- step: 3
-  executor: agent
-  worker: claude:fable
-  base: 0c93942
-  worktree: .agents/worktrees/5-a-skill-groups-plan-yaml-found-by-a-search-order-and-agents-on-fable-3
-  launched: 2026-11-22
-  report: .scratch/5-a-skill-groups-plan-yaml-found-by-a-search-order-and-agents-on-fable/agents/reviews/3-report.md
-  brief_check: .scratch/5-a-skill-groups-plan-yaml-found-by-a-search-order-and-agents-on-fable/agents/reviews/3-brief-check.md (a4d3ffc7dd382169a, claude-fable-5-2, 156175 tokens, 19 tool uses, 5.6 minutes)
-  shared_paths: "this step names files steps 1 and 2 of this plan also name (the SKILL.md of fourteen skills, the plan templates, the glossary and its source, the README, .agents/plan.yaml, the scripts step 2 moves): simple by the ruling Three steps in flight, since this step lands last and a path it writes in the old layout is fixed at its landing"
-  session_id: a235f7278dcf9dd9a (claude-fable-5-2)
-  builder_usage: 343849 tokens, 55 tool uses, 23.6 minutes
-  reviewer_report: ".scratch/5-a-skill-groups-plan-yaml-found-by-a-search-order-and-agents-on-fable/agents/reviews/3-refuter.md (a5a88f7bf8c87a8df, claude-fable-5-2, 288132 tokens, 29 tool uses, 10.1 minutes)"
-  landing: not-started
-  round: 1
-#                            # or the block /spec writes (a list when .agents/plan.yaml's workers_at_once is above 1). /spec writes the entry at the end of its preflight with step and `landing: preparing`, writes `"running: <agent id>"` into brief_check while the brief-check agent runs, base after its preparation commit and worktree before it creates the worktree, and fills the entry at its Steps 9, so that it holds: step, executor, worker, worktree (<worktree_root>/<slug>-<step>), base, launched, report (the builder's report, at the path the brief names), brief_check (the brief check's report path, with the agent's id, its served model, tokens, tool uses and time, or `none, a small text step` for a small text step), landing, round. `landing` is `preparing` while /spec runs, then `not-started`, `cherry-picking` while /land cherry-picks, and `backed-out` after a red line took the step back out of main. The orchestrator adds session_id, the builder's agent id followed by the model the runner served it (<agent id> (<served model>)), as soon as the builder is dispatched and its model read, builders_before (the agent id and served model of each builder it replaced, as <agent id> (<served model>, stopped) or <agent id> (<served model>, dead), one after another), builder_usage (the builder's tokens, tool uses and time from its completion notice) beside report when the builder's report is saved, and reviewer_report (the refuter report's path, with each reviewer's agent id, served model, tokens, tool uses and time, or, for a reviewer stopped for another model, its agent id, served model and stopped) at the review. A value that holds `: ` (brief_check while its agent runs, builder_usage after a repair round, reviewer_report after a run over a round) is written in double quotes, so the block stays valid YAML. A diagnosis agent has no key here: the session that starts it writes its id and role into plan.md's Agents section, as the diagnose skill's Rules say. A step dispatched while another in flight, of this plan or of another open plan, names a file its brief also names carries shared_paths: each shared file, the other step's plan and step, and why the merge at landing is simple, as plan-orchestration's "Two steps in flight" says; with no shared file the key is left out.
+dispatch: []
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled or, under `self_rule: on`, until the orchestrator closes it as `plan-orchestration`'s `references/self-rule.md`, "Closing an open item", says)
@@ -90,5 +75,5 @@ dispatch:
 ## Current position (rewritten before every step commit of this plan)
 
 - 2026-11-22. The plan is opened; nothing has landed.
-- Roadmap entry 5.A (Skill groups, plan.yaml found by a search order, and agents on Fable). Plan step 3 of 5: the search order, built and in review. Steps 1 and 2 landed. Next: the landing of step 3, its paths rewritten to the grouped layout.
+- Roadmap entry 5.A (Skill groups, plan.yaml found by a search order, and agents on Fable). Plan step 4 of 5: the checks on the pinned skills, with the user. Steps 1, 2 and 3 landed. Next: step 4, which tags and pins the new skills first, since the pinned skills read `.agents/plan.yaml`, which is no longer on main.
 - Open on Axel's side: none.

@@ -2,7 +2,7 @@
 name: ordo-help
 description: "Print the command sequence for running a plan step by step (open, spec, build, refute, diagnose, close, land, and the loop inside a step) with the choices awaiting review that the orchestrator took under self-rule, with no entry the position and open items of each open plan, and for the plan named, where it stands: the position, the open items, the step in flight, which of its artifacts exist, and the command that comes next. With the argument skills, print instead the name and the Quick start block of every skill in the folder that holds this skill, in folder-name order. Triggers on: ordo-help, ordo help, what do I type next, where is the plan, how does the plan loop work, which choices await my review, ordo-help skills, which skills are there, list every skill and its modes, what modes does a skill have."
 metadata:
-  version: "3.2.1"
+  version: "4.0.0"
 ---
 
 # Ordo help
@@ -14,6 +14,8 @@ metadata:
 ```
 /ordo-help            print the sequence and the choices awaiting review, then the position and open items of each open plan
 /ordo-help <entry>    print the sequence and the choices awaiting review, then the named plan's position and the command that comes next
+/ordo-help <folder>            the first line, for the plans of the plan.yaml in <folder>, a path from the repository root
+/ordo-help <folder>/<entry>    the second line, for a plan of the plan.yaml in <folder>
 /ordo-help skills     print each skill's name and its Quick start block, in folder-name order
 ```
 
@@ -31,14 +33,14 @@ metadata:
 
 1. The argument, read first.
    - An argument that is exactly `skills` is the `skills` mode, before `<entry>` is matched against the roadmap or a ledger folder.
-   - Any other argument is `<entry>`.
+   - Any other argument is `<entry>`, with the folder a call names in front of it, or is that folder alone ("What it reads" 4).
 2. For `/ordo-help skills`, the skills folder, found from this skill's folder after that folder is resolved to its real path.
    - This skill's folder is the base directory the runner states when the skill loads, resolved through any link by `cd <base directory> && pwd -P`.
    - A parent of the resolved path that is a folder directly inside a folder named `skills` is a group folder, as it is when the skills are links into a checkout that groups them. The folder named `skills` is then the skills folder, and the skill folders are the folders in each folder of it.
    - Any other parent of the resolved path is the skills folder, as it is when the skills are copied side by side, and the skill folders are the folders in it.
    - The parent of the base directory as stated is never the skills folder.
 3. For `/ordo-help skills`, the `SKILL.md` of each skill folder.
-4. For `/ordo-help` and `/ordo-help <entry>`, `.agents/plan.yaml`, its required keys and defaults as `/plan` states them.
+4. For `/ordo-help` and `/ordo-help <entry>`, the plan configuration, found and its paths read as `/plan`'s "What it reads" 1 says, a folder named alone or in front of `<entry>` as a path from the repository root; its required keys and defaults as `/plan` states them.
    - A required key missing is a refusal ("Stops").
 5. For `/ordo-help <entry>`, the ledger folder: `<entry>` resolves to the folder under `<ledger_root>/` whose `plan.md` opens with `# Plan: <entry>` (the number, or the number and title).
    - `/plan` names a new folder by the entry's slug, and an older plan keeps whatever folder it has.
@@ -47,8 +49,8 @@ metadata:
    - For `/ordo-help` with no entry, that of each open plan, in the roadmap's order.
    - For `/ordo-help <entry>`, that of the named plan's folder, and the brief, the report and the refuter report of the step in flight.
 7. For `/ordo-help` and `/ordo-help <entry>`, the choices file `<ledger_root>/choices.md`, when it exists.
-8. For `/ordo-help` with no entry, the roadmap file `.agents/plan.yaml`'s `roadmap:` names, for the order "Steps / The sequence and the plans" 3 prints the open plans in.
-   - In the `projects:` form, the order of the projects in `.agents/plan.yaml` comes first.
+8. For `/ordo-help` with no entry, the roadmap file the plan configuration's `roadmap:` names, for the order "Steps / The sequence and the plans" 3 prints the open plans in.
+   - In the `projects:` form, the order of the projects in the plan configuration comes first.
 
 ## Steps
 
@@ -95,7 +97,7 @@ metadata:
 
 ```
 /repo-setup                   once, for a new repository: the tree, the shared rules, the standards, then /ordo-init
-/ordo-init                    once per repository: writes .agents/plan.yaml, or checks the one there
+/ordo-init                    once per repository: writes docs/plan.yaml, or checks the plan.yaml there
 /roadmap add <goal>           an entry with its goal, gate and place in the order, for /plan to open
 /roadmap add <entry>          for an entry not yet specified: its gate and place in the order, before /plan can open it
 /grill <entry>                optional: an interview in rounds that settles the entry's design decisions, written as they settle
@@ -145,7 +147,7 @@ C<n> => <your ruling>         under self-rule: you replace a choice with your ru
 | Stop | When | What it shows | What resumes it |
 |---|---|---|---|
 | No stop | The skill never stops for a decision; the rows below are refusals of `/ordo-help` and `/ordo-help <entry>`, which name their cause and leave nothing, and `/ordo-help skills` refuses nothing | Nothing | Nothing |
-| A required key missing | A required key is not in `.agents/plan.yaml`; the refusal names it | The key | The key added, then `/ordo-help` again |
+| A required key missing | A required key is not in the `plan.yaml` found, in the folder the call names or else at the repository root; the refusal names it; a path of that file refused as `/plan`'s Stops row "A path refused" says is refused here too, and that row says what the refusal shows and what resumes it, with this skill's call in place of `/plan` | The key | The key added, then `/ordo-help` again |
 | No ledger folder | No folder under `<ledger_root>/` holds a `plan.md` that opens with `# Plan: <entry>` | A refusal that names `/plan` | `/plan <entry>`, or `/ordo-help` with an entry that has a plan |
 
 ## Anti-patterns

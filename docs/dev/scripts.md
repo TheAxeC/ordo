@@ -18,7 +18,7 @@ Every script in this repository outside `.scratch/` is listed here with its kind
 | `skills/code/code-comments/templates/strip_comments.py` | Prints the code of a C, C++ or CMake file without its comments, and with `--compare` says whether two files have the same code, so that a rewrite of comments is kept only when it changed no code |
 | `skills/orchestration/land/templates/checks.sh` | Runs a plan's verify list and says whether every command exited 0 |
 | `skills/orchestration/land/templates/land.sh` | Commits a step's work in its worktree, copies it onto main, runs the verify list there and prints the booking data |
-| `skills/ordo/ordo-init/templates/check_config.py` | Checks `.agents/plan.yaml` against the plan skill's template and prints each error and note |
+| `skills/ordo/ordo-init/templates/check_config.py` | Checks the `plan.yaml` at a path against the plan skill's template and prints each error and note, or with `--find` prints the `plan.yaml` the search order finds |
 | `skills/academic/paper/templates/anchorize_tex.py` | Writes the block manifest of a LaTeX manuscript beside it, with each block's offset and hash, and leaves the `.tex` unchanged |
 | `skills/academic/paper/templates/apply_tex_patch.py` | Applies a patch of replaced, inserted and deleted blocks to a LaTeX manuscript by the manifest's hashes, rejects a stale or structural patch, and writes the apply report |
 | `skills/academic/paper/templates/calibration_counts.py` | Counts the misses and false alarms per label against the limits 0.15 and 0.10. Its input is a table of pairs, each with its built label and the label the citation compliance agent's result gave |

@@ -2,12 +2,12 @@
 name: roadmap
 description: "Keep the roadmap, the ordered list of work a plan is opened for: show the open entries in order with what each waits on and which has a plan open, followed by the entries under \"Not yet specified\"; add an entry (goal, a gate that could not pass without the goal being reached, what it waits on) in the file's own format and in dependency order; put work whose gate cannot yet be named under \"Not yet specified\" with what must be known first; name the gate of such an entry and place it in the order; move an entry; mark one done with its gate's output; or drop one with the reason. Learns the format from the file, whether one file holds everything or an ordered build plan sits over a capability map of per-system files. Writes only after the user approves or under a quoted ruling. Triggers on: roadmap, add to the roadmap, new roadmap entry, what is next on the roadmap, not yet specified, park on the roadmap until its gate is known, name the gate of an entry, mark the entry done, drop the entry, reorder the roadmap."
 metadata:
-  version: "2.0.0"
+  version: "3.0.0"
 ---
 
 # Keep the roadmap
 
-`/roadmap` shows, adds, moves, marks done and drops the entries of the file `.agents/plan.yaml`'s `roadmap:` key names. It leaves behind each change written after the user's approval or under a quoted ruling, committed on its own.
+`/roadmap` shows, adds, moves, marks done and drops the entries of the file the plan configuration's `roadmap:` key names. It leaves behind each change written after the user's approval or under a quoted ruling, committed on its own.
 
 ## Quick start
 
@@ -19,6 +19,8 @@ metadata:
 /roadmap done <entry>                     marks it done with the gate's output; the closing step of a plan uses it
 /roadmap drop <entry> <reason>            moves the entry to where the file keeps dropped work, with the reason, after approval
 /roadmap <project> ...                    the same, for one project of a plan.yaml in the projects: form
+/roadmap <folder> ...                     the same, from the plan.yaml in <folder>, a path from the repository root
+/roadmap <folder>/<project> ...           the same, for one project of the plan.yaml in <folder>
 /roadmap <command> ... --ruling <ledger file> "<name>"   add, move, done or drop under a quoted ruling: a draft that is the ruled change is written without the stop
 ```
 
@@ -32,7 +34,7 @@ metadata:
 
 ## What it reads
 
-1. `.agents/plan.yaml`, its required keys and defaults as `/plan` states them: `roadmap`, `ledger_root`, `archive_root`, `verification`, `rules`.
+1. The plan configuration, found and its paths read as `/plan`'s "What it reads" 1 says, a folder named as the first argument, in front of a project's name when there is one, as a path from the repository root; its required keys and defaults as `/plan` states them: `roadmap`, `ledger_root`, `archive_root`, `verification`, `rules`.
    - In the `projects:` form, the named project's keys.
    - No file, and a required key missing, are refusals ("Stops").
 2. The roadmap file, whole, and every file its introduction links as part of the roadmap.
@@ -193,8 +195,8 @@ When the roadmap's introduction links an index as the map of what the product is
 | The level | Entries exist at two levels and neither the goal nor a quoted ruling settles which | The two levels | The user's choice |
 | The insertion form | The file has no insertion form yet, and no quoted ruling states the entry's number | The question, once | The user's answer, used from then on |
 | A missing dependency | The draft finds a dependency the roadmap does not hold | The dependency, as a question in the draft, not added as an entry | The user's answer |
-| No configuration | `.agents/plan.yaml` is missing | A refusal that names `/ordo-init` | `/ordo-init`, then `/roadmap` again |
-| A required key missing | A required key is not in `.agents/plan.yaml` | The key | The key added |
+| No configuration | No `plan.yaml` is in the folder the call names or in the three places at the repository root | A refusal that names the places looked in and `/ordo-init` | `/ordo-init`, then `/roadmap` again |
+| A required key missing | A required key is not in the `plan.yaml` found; a path of that file refused as `/plan`'s Stops row "A path refused" says is refused here too, and that row says what the refusal shows and what resumes it, with this skill's call in place of `/plan` | The key | The key added |
 | A place too early | `move` to a place ahead of something the entry waits on | What it waits on | `move` to a place after it |
 | Not yet specified | `move` in which the entry moved or the entry it is placed before or after stands under "Not yet specified" | That entry and `/roadmap add <entry>` for it | `/roadmap add <entry>` |
 | No gate output | `done` with no output of the gate | The gate | The gate run, its output given |

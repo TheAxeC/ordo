@@ -12,7 +12,7 @@ The open item names its kind by its number:
 
 1. Anything that reaches outside the repository or needs the user's hands or accounts, a model other than the configured one included.
 2. Anything that deletes data or touches a secret.
-3. A change to the user's written rules (the rules file, the standards pages, the shared rules, `CLAUDE.md`, `.agents/plan.yaml` and the configuration block), a clash between them, or the reversal of a ruling: an option that replaces, removes or contradicts a bullet of a Rulings section, whatever its ending, removes a step the user approved, or reverts a landed step the user approved or one a ruling of the user added.
+3. A change to the user's written rules (the rules file, the standards pages, the shared rules, `CLAUDE.md`, the plan configuration and the configuration block), a clash between them, or the reversal of a ruling: an option that replaces, removes or contradicts a bullet of a Rulings section, whatever its ending, removes a step the user approved, or reverts a landed step the user approved or one a ruling of the user added.
    - Rewriting an approved step's text to absorb a found premise or a ruling on a part not yet built, and adding a step, are no reversal.
    - Kind 3 also names a contradiction of an ADR in force, or an option that supersedes one.
    - Kind 3 also names an option that adds a command to the verification list.
@@ -54,7 +54,7 @@ An open item that "The six kinds left open" and "A skill with its own approval s
 Next-entry mode runs the next open roadmap entry that has no open plan after a plan's closing, under self-rule, while the steps of the other plans the invocation runs go on.
 
 - The plans the invocation runs are every open plan under `/plan-orchestration` with no entry and `continue the plan`, and the named plan and the plan of each next entry the run takes under `/plan-orchestration <entry>`.
-- It applies when, after a plan's closing step completes, `.agents/plan.yaml` (in the `projects:` form, the project's keys) holds `self_rule: on` and `next_entry: on`.
+- It applies when, after a plan's closing step completes, the `plan.yaml` the invocation found (in the `projects:` form, the project's keys) holds `self_rule: on` and `next_entry: on`.
   - The orchestrator reads the file itself, since the closed plan's state file has moved to `<archive_root>/`.
   - `/grill` and `/plan` check the same two keys.
 - The closing step is the same with and without next-entry mode: its `/roadmap done` diff stays with the user, as kind 4 of "The six kinds left open" says.
@@ -75,7 +75,7 @@ Next-entry mode runs the next open roadmap entry that has no open plan after a p
   1. `/grill <entry> --self-rule`.
   2. `/plan <entry> --self-rule`.
   3. The loop on the new plan, which runs under its own configuration block.
-  - In the `projects:` form `<entry>` is `<project>/<entry>`.
+  - In the `projects:` form `<entry>` is `<project>/<entry>`, and under an invocation that named a folder it has that folder in front.
   - The steps of the other plans the invocation runs go on while the first two run.
 - The taking of the next entry stops at an item of the six kinds, at a stop "The counts" names, at a stop that the `plan` skill's Steps 3 keeps with the user under `--self-rule`, and at a refusal of `/grill` or `/plan`.
   - Such a stop blocks only that entry, and the steps of the other plans the invocation runs go on.
@@ -91,7 +91,7 @@ Next-entry mode runs the next open roadmap entry that has no open plan after a p
   - Nothing of such a stop is lost when the session ends, since a decision not yet written is drawn again by the skill that raised it when it runs again.
 - The run ends when none of the plans the invocation runs has an unblocked step and no next entry can be taken.
 - A session that takes over reads what is written.
-  - `continue the plan` and `/plan-orchestration` with no entry, with no plan open and both keys in `.agents/plan.yaml` on, take the next entry as this section says.
+  - `continue the plan` and `/plan-orchestration` with no entry, with no plan open and both keys in the `plan.yaml` found on, take the next entry as this section says.
   - An entry with a rulings file and no plan resumes at `/grill <entry> --self-rule`, which draws its tree afresh from the rulings file (the `grill` skill's Steps 3).
   - An entry with a plan open resumes the loop on it.
   - A rulings file that holds the user's own bullets is read the same way.

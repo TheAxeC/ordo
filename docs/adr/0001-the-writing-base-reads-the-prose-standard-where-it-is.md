@@ -4,7 +4,7 @@ Status: proposed; superseded by 0030 in the `standards` key
 
 ## Context
 
-The writing skills (`literature`, `paper`, `paper-review`, `grant`) share one set of prose rules, the writing base of roadmap entry 3. Ordo already ships the prose standard as the `repo-setup` skill's `templates/docs/dev/prose-standard.md`, which `/repo-setup` installs as `docs/dev/prose-standard.md` and which a repository's `standards` key can name. Ordo's skills carry no project name and no path, and everything specific to a repository comes from its `.agents/plan.yaml` (`README.md`, opening). research-hub, where the writing skills are used, has no prose-standard page of its own.
+The writing skills (`literature`, `paper`, `paper-review`, `grant`) share one set of prose rules, the writing base of roadmap entry 3. Ordo already ships the prose standard as the `repo-setup` skill's `templates/docs/dev/prose-standard.md`, which `/repo-setup` installs as `docs/dev/prose-standard.md` and which a repository's `standards` key can name. Ordo's skills carry no project name and no path, and everything specific to a repository comes from its `plan.yaml` (`README.md`, opening). research-hub, where the writing skills are used, has no prose-standard page of its own.
 
 ## Decision
 

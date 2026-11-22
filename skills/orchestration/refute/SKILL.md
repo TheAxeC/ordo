@@ -2,7 +2,7 @@
 name: refute
 description: "Review a built step without changing anything: a fresh reviewer reads the diff against the brief and the repository's standards, reruns the checks the brief names and every command the builder's report quotes, treats an unreproduced claim as a finding (a count, a path or a measurement only when a decision rests on it), and writes a report that gives a verdict per item of the brief and per case (holds, violated or not applicable; met, partial, unmet or not verifiable) and findings under four headings (spec, proof, standards, behaviour), each with its failure scenario. Run once per step before its first repair round, and once alone for a small text step. Run again over each repair round when the configuration block says refute_after_repair: yes, up to repair_rounds. One more round is allowed only for a red verification command or an unbuilt acceptance item whose fix is too large for landing. Triggers on: refute <entry> <step>, review the step, refute the diff, run the refuter."
 metadata:
-  version: "5.1.0"
+  version: "6.0.0"
 ---
 
 # Refute a step
@@ -13,6 +13,7 @@ metadata:
 
 ```
 /refute <entry> <step>   a fresh reviewer reads the step's diff, reruns the checks the brief's "Verify before you report" names and every quoted command, never the plan's whole verify list, and writes verdicts and findings
+/refute <folder>/<entry> <step>   the same, from the plan.yaml in <folder>, a path from the repository root
 ```
 
 ## Use instead
@@ -28,7 +29,7 @@ metadata:
 
 ## What it reads
 
-1. `.agents/plan.yaml`, its required keys and defaults as `/plan` states them.
+1. The plan configuration, found and its paths read as `/plan`'s "What it reads" 1 says, a folder named in front of `<entry>` as a path from the repository root; its required keys and defaults as `/plan` states them.
    - A required key missing is a refusal ("Stops").
 2. The ledger folder: `<entry>` resolves to the folder under `<ledger_root>/` whose `plan.md` opens with `# Plan: <entry>` (the number, or the number and title).
    - `/plan` names a new folder by the entry's slug, and an older plan keeps whatever folder it has.
@@ -196,7 +197,7 @@ The first row is a stop, a decision for the user: it leaves an open item, booked
 | Stop | When | What it shows | What resumes it |
 |---|---|---|---|
 | A model other than the configured one | The runner served a reviewer dispatched as the effort agent a model that is not the configured one: a different model family, or an older version than the newest the configured alias names in the runner's model list (Steps 1) | The open item, booked in the open items, with the configured model (Steps 1), the served model and the Claude Code version | The user's ruling, then `/refute` again |
-| A required key missing | A required key is not in `.agents/plan.yaml`; the refusal names it | The key | The key added, then `/refute` again |
+| A required key missing | A required key is not in the `plan.yaml` found, in the folder the call names or else at the repository root; the refusal names it; a path of that file refused as `/plan`'s Stops row "A path refused" says is refused here too, and that row says what the refusal shows and what resumes it, with this skill's call in place of `/plan` | The key | The key added, then `/refute` again |
 | No ledger folder | No folder under `<ledger_root>/` holds a `plan.md` that opens with `# Plan: <entry>` | A refusal that names `/plan` | `/plan`, then the step prepared and built |
 | No report | No builder's report on disk | The report path the builder was told to write to | The report written, then `/refute` again |
 | The configured effort cannot apply | `CLAUDE_CODE_EFFORT_LEVEL` is set, which runs every agent at its level whatever the definition says (Steps 1) | The variable's value | The variable unset, then `/refute` again in a new session |
