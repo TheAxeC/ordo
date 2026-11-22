@@ -62,13 +62,6 @@ Status: `[ ]` open, `[~]` in progress, `[x]` done (its gate ran and passed, with
 - Gate: one `novelty` run on an idea you name, its page read by you, each work it cites printing `CONFIRMED` under `lookup.py resolve`; `diff -r` of the skill's folder against `research-hub/.agents/skills/academic-pipeline/` prints only differences the plan's Rulings name, read once by a fresh agent that lists each difference with the ruling that covers it, or none, and read by you; the plan's ledger holds a record for each `rebuild: researcher` row that the file of the skill the row names holds what the source file did, checked by reading both; `git ls-files utils/check_coverage.py` prints nothing and `docs/dev/scripts.md` does not name it; the verify list of `docs/dev/building.md` passes on main.
 - Waits on: 6, for the review its `manuscript` mode calls; 5.C, for the last change to `paper`'s coverage rows.
 
-## 17. review
-
-- Status: [ ]
-- Goal: A standalone `/review` of any diff since a commit, outside a plan, in the verdict form of `/refute`: a verdict per stated intent of the change and per claim of its commit messages, each finding with its failure scenario. Its design follows ConnorGriffin's `code-review`: the agents, phases, cycles and stops are kept as the source has them, and each deviation from them is made only with its reason and your ruling in the plan's Rulings.
-- Gate: one real run on a diff that holds a defect you know of, which the review finds with its failure scenario, reviewed by you; a blind comparison as `docs/dev/blind-comparison.md` says against ConnorGriffin's `code-review` on the same diff, wins or ties; the plan's ledger lists every deviation from the design of ConnorGriffin's `code-review`, each with its reason and the ruling that approved it, and nothing else differs, checked by reading both skills.
-- Waits on: 2.D, for the verdict form.
-
 ## 18. wait-what
 
 - Status: [ ]
@@ -155,3 +148,4 @@ Status: `[ ]` open, `[~]` in progress, `[x]` done (its gate ran and passed, with
 - 14. submit-manuscript: dropped, since each portal differs and a submission is made a few times a year; the cover letter is in `paper`, and the submission checks go to entry 5.C.
 - 15. submit-grant: dropped, since entry 14, whose portal notes it reused, is dropped.
 - 16. Switch over: dropped, since the user switches the installed skills over by hand; `utils/check_coverage.py` is deleted at the closing of entry 13.
+- 17. review: dropped, since the user reviews a step with `/refute` and asks for no review of a diff outside a plan.
