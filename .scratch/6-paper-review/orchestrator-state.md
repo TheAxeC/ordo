@@ -43,19 +43,6 @@ repair_reviewer: claude:sonnet  # the model the run of /refute over a repair rou
 
 ```yaml
 dispatch:
-- step: 3
-  executor: agent
-  worker: claude:fable
-  base: 78cc139
-  worktree: .agents/worktrees/6-paper-review-3
-  launched: 2026-11-22
-  report: .scratch/6-paper-review/agents/reviews/3-report.md
-  builder_usage: 163816 tokens, 49 tool uses, 25.8 minutes
-  reviewer_report: .scratch/6-paper-review/agents/reviews/3-refuter.md (a4244c99937ed072e, claude-fable-5-2, 276245 tokens, 28 tool uses, 5.8 minutes)
-  brief_check: .scratch/6-paper-review/agents/reviews/3-brief-check.md (afefa3411b72942e8, claude-fable-5-2, 120526 tokens, 11 tool uses, 3.9 minutes)
-  session_id: a57f5bfda7baf53ac (claude-fable-5-2)
-  landing: not-started
-  round: 1
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled or, under `self_rule: on`, until the orchestrator closes it as `plan-orchestration`'s `references/self-rule.md`, "Closing an open item", says)
@@ -89,6 +76,6 @@ dispatch:
 
 ## Current position (rewritten before every step commit of this plan)
 
-- 2026-11-22. Steps 1, 2 and 2.A are on main; the skill stands at `skills/academic/paper-review-panel/`. Step 3 has its brief and its brief check on disk, written before the rename; its `/spec` is taken over now, with the paths, the base and the counts of its brief put to the renamed folder.
-- Roadmap entry 6 (paper-review-panel). Plan step 2.A of 5, the name, landed. Next: step 3, the gate's reading, then step 4, the closing.
+- 2026-11-22. Steps 1, 2, 2.A and 3 are on main. The page of the gate's reading is `agents/reviews/3-diff-reading.md`, with the user's three rulings on what it found at its top. Step 4, the closing, is next: the orchestrator's step, with no `/spec` and no dispatch entry.
+- Roadmap entry 6 (paper-review-panel). Plan step 3 of 5, the gate's reading, landed. Next: step 4, the closing.
 - Open on Axel's side: none.

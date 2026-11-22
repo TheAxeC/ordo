@@ -1,5 +1,15 @@
 # The reading of `diff -r` of the source against `paper-review-panel`
 
+# The user's rulings after the reading
+
+The verdicts below were given before three rulings of the user, booked in `plan.md`, Rulings, on 2026-11-22. The verdicts are left as they were given. The rulings decide the group "None, nothing allows it":
+
+- "The two refusals": the refusals "Unknown mode" and "A missing input" stay.
+- "Version tags and the words beside them": a slight rewording of a sentence whose version tag or version plan is removed is accepted, and `Kong A1` and `SR` stay left out.
+- "The parts the layout requires": the steps with their `Done when` lines, the Stops table, the frontmatter limited to its keys and the layout's headings, written from what the source says, are part of the copy, as in `paper`.
+
+The review of this page (`3-refuter.md`) found that some entries under "None, a ruling allows it" and "None, ADR 0043, Decision 2" are of the same kind as those under "None, nothing allows it": the added steps of `### re-review` and `### guided`, four frontmatter keys left out, five headings left out, the column `#` of Anti-patterns left out, three added clauses. The third ruling covers them. The tables "Blocks left out" and "Blocks added" of `SKILL.md` are not the whole list of words left out or added; the hunks are.
+
 # Summary
 
 - Files: `diff -rq` prints 25 files that differ and one file that stands in the source alone, `references/changelog.md`.

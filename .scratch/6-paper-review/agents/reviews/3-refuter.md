@@ -162,3 +162,13 @@ Cases of the brief's "Cases":
 - `git diff --stat 6844dfd HEAD -- skills`, quoted in the builder's report: not rerun, since this review runs no git command beyond `git diff 78cc139`, `git status --short` and `git show 78cc139:<path>`.
 
 Reviewer usage: a4244c99937ed072e, claude-fable-5-2, 276245 tokens, 28 tool uses, 5.8 minutes.
+
+## Closed (the orchestrator's disposition of every finding above, appended before /land)
+
+Repair round 1 was sent to the builder with the four findings and was stopped on the user's word before it ended, since the user ruled on the differences the page found. The builder's unfinished changes to the page are not used; the page that lands is the one this review read.
+
+- Spec 1 (the added steps of re-review and guided under a ruling's verdict): closed by the user's ruling "The parts the layout requires" (`plan.md`, Rulings): the steps of a mode, written from what the source says, are part of the copy, so the group these entries stand in no longer decides anything. The page's opening section names the ruling.
+- Spec 2 (Decision 2 on words left out or added): closed by the same ruling for the frontmatter keys, the headings and the layout's parts, and named in the page's opening section.
+- Spec 3 (the tables "Blocks left out" and "Blocks added" incomplete as lists): not changed. Each missing word has its entry and verdict at its hunk, as the review says, and the page's opening section says that the hunks, not the two tables, are the whole list.
+- Spec 4 (the source's label line at `287,288c458,459` not quoted): no change needed. The page's entry of that hunk quotes both of the source's lines under "Source:", the label line among them (`sed -n '1118,1132p'` of the page).
+- Declined to judge, the six files whose non-shared entries no reviewer compared with their diff (152 hunks): not done. The run over the round was to read them, and the round was stopped.
