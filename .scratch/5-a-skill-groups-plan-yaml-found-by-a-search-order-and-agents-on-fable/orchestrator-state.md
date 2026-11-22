@@ -54,8 +54,9 @@ dispatch:
   shared_paths: "this step moves every skill folder and rewrites paths in files steps 1 and 3 of this plan also name: simple by the ruling Three steps in flight, since step 1 lands first and its edits are carried into the moved files, and step 3 lands on the grouped layout with its paths fixed at its landing"
   session_id: a8ad09548be32789f (claude-fable-5-2)
   builder_usage: 227863 tokens, 46 tool uses, 14.8 minutes
+  reviewer_report: ".scratch/5-a-skill-groups-plan-yaml-found-by-a-search-order-and-agents-on-fable/agents/reviews/2-refuter.md (a0017d39ad43dafa5, claude-fable-5-2, USAGE)"
   landing: not-started
-  round: 0
+  round: 1
 - step: 3
   executor: agent
   worker: claude:fable
