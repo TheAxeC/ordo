@@ -2,7 +2,7 @@
 name: writing
 description: "Review the prose of a draft with a script and four fresh agents that change nothing. The script computes the counts and word lists that have one right answer. The agents read a whole .tex file with the files it inputs and includes, a .md, a .txt or a .docx against the prose standard and the academic writing rules, each checking its own rules. The report shown to the user lists each break of a named rule, numbered, with its place, the quoted passage and what the rule asks for, the findings that leave the reader wrong or unsure first, grouped by rule, and proposes no replacement. Triggers on: /writing <file>, review the writing of a draft, check a draft against the prose standard, review the prose of a manuscript, review the prose of a grant, check the writing of a text."
 metadata:
-  version: "2.1.0"
+  version: "2.1.1"
 ---
 
 # Review the prose of a draft

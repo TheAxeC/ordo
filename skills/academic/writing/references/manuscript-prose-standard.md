@@ -10,7 +10,6 @@ These rules of the prose standard concern software documentation, a terminal, a 
 - Section B: ASCII throughout.
 - Section E: Spec-sheet voice.
 - Section E: Personified artifacts.
-- Section E, Sentence length: the exception for a sentence in the reason cell of a coverage table. The rest of the rule holds.
 - Section F: Inline code.
 - Section F: Source formatting.
 
