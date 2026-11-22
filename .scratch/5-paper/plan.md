@@ -428,6 +428,7 @@ Agents in no role the cost script prices:
 - ab52a493c09769d7b: builder of step 5.R, claude-fable-5-2
 - ab81666d6f5518ca9: reviewer of step 5.R over round 3, claude-sonnet-5-5
 - a7f240d919a101f50: the review of ruling 5.Q-no-rerun after step 5.R, claude-fable-5-2
+- ab27c9c9988b03b3f: the review of ruling 5.Q-no-rerun after repair round 3 of step 5.R, claude-fable-5-2
 
 ## Blocked, and by what
 
