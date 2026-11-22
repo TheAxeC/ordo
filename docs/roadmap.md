@@ -55,13 +55,6 @@ Status: `[ ]` open, `[~]` in progress, `[x]` done (its gate ran and passed, with
 - Gate: the checks for limits and required sections pass their tests; a side-by-side run on a section of a past application, compared with what was submitted.
 - Waits on: 3, for the writing base; 2, for the coverage: no file is marked `grant`, and the funder acknowledgement text reaches it through the paper row of `references/funding_statement_guide.md`.
 
-## 10. idea
-
-- Status: [ ]
-- Goal: The idea skill: the `grill` interview (entry 2.E) pointed at a research idea, and the novelty check with cited literature, its searches and lookups made with `paper`'s `lookup.py`. Its design follows academic-paper's plan mode: the agents, phases, cycles and stops are kept as the source has them, and each deviation from them is made only with its reason and your ruling in the plan's Rulings.
-- Gate: one real run that you review, whose novelty claim cites the sources it checked; a side-by-side run against academic-paper's plan mode (`agents/socratic_mentor_agent.md`) on a real idea, compared blind as `docs/dev/blind-comparison.md` says, wins or ties; the plan's ledger holds a record for each `rebuild: idea` row that the file of `skills/idea/` the row names holds what the source file did, checked by reading both; the plan's ledger lists every deviation from the design of academic-paper's plan mode, each with its reason and the ruling that approved it, and nothing else differs, checked by reading both skills.
-- Waits on: 2.E, for the `grill` interview; 5, for `lookup.py`.
-
 ## 11. scaffold
 
 - Status: [ ]
@@ -191,3 +184,4 @@ Status: `[ ]` open, `[~]` in progress, `[x]` done (its gate ran and passed, with
 - 2.J. The session retro's text changes: dropped, since entry 2.K replaces it: ten of its proposals, the two on a dictated script sentence merged into one, the reviewer's git rule widened to allow `git show <base>:<path>`, and the proposals on the scratchpad and on sleep loops left out because Claude Code already sends temporary files to the scratchpad and blocks a foreground `sleep`.
 - 5.B. plan.yaml found by a search order: dropped, since merged into entry 5.A.
 - 20. improve-codebase-architecture: dropped, since merged into entry 19.
+- 10. idea: dropped, since the interview is `/paper plan`, and the novelty check is the `novelty` mode of entry 13.
