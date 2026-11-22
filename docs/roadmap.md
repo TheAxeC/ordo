@@ -93,6 +93,11 @@ Status: `[ ]` open, `[~]` in progress, `[x]` done (its gate ran and passed, with
 - Must be known: <what must be known before its gate can be named>
 -->
 
+## 24. researcher: the research and full modes
+
+- Goal: The `research` mode of `researcher`, which takes an idea to results: it builds the code, runs the experiments, SLURM jobs among them, and when a result does not beat the baseline it proposes a new method and runs the next experiments, never writing up a negative result; it states where a project's code, results, logs and draft live, and an adopt mode reads a project already underway and continues from the first stage not done. The `full` mode runs the interview of `/paper plan`, then `novelty`, `research` and `manuscript`, and leaves out the modes a run does not need, as for a review paper or for results that exist.
+- Must be known: what one real run from an idea to a result looks like, stage by stage, with the files each stage reads and writes; what the loop does when a result does not beat the baseline, and when it stops; which project a first real run is made on.
+
 # Done
 
 <!-- - [x] <n>. <title>: <the gate's command> printed <its summary line> -->
