@@ -58,9 +58,11 @@ dispatch:
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled or, under `self_rule: on`, until the orchestrator closes it as `plan-orchestration`'s `references/self-rule.md`, "Closing an open item", says)
 
-- Open item 1 (step 1, raised 2026-11-22): does `paper-review-panel` name `referee`? Its triggers hold the phrase "referee report" (`skills/academic/paper-review-panel/SKILL.md`, the description and "What it reads" 3) and its "Use instead" does not name `referee`, so a plain request for a referee report can start the panel; `docs/dev/skill-layout.md`, "Frontmatter", puts a phrase for a neighbouring skill's case in that skill's triggers. Step 1 as briefed changes no file of the panel. (a) Remove the phrase from the panel's triggers and add a "Use instead" row for `referee`: a plain request reaches the right skill; it changes two places of the copy ruled in entry 6. (b) Leave the panel as it is: the copy stays untouched; the overlap stays. Recommended: (a). The lazy option is (b). The build of step 1 does not wait on it.
+- none
 
 ## Closed items (the log of what was raised and how it ended; no report carries it)
+
+- Open item 1 (step 1, raised and ruled 2026-11-22): whether `paper-review-panel` names `referee`; ruled (a) by the user, as part of step 1.
 
 ## The standing demands (from Axel, in force)
 
@@ -86,4 +88,4 @@ dispatch:
 
 - 2026-11-22. Step 1, the skill, is in flight: its builder is launched in `.agents/worktrees/7-a-referee-1` from base 21f0793.
 - Roadmap entry 7.A (referee). Plan step 1 of 3: the skill. Next: step 2, the gate's two runs, with the user.
-- Open on Axel's side: Open item 1, whether `paper-review-panel` names `referee`.
+- Open on Axel's side: none.

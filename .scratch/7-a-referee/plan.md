@@ -42,6 +42,7 @@ Independent of each other; the standing rule of one agent at a time still serial
 - The run folder (2026-11-22): `referee-runs/<round>-<date>/` beside the manuscript (the user).
 - The journal's fields by default (2026-11-22): when the user names none at the intake, the report holds a recommendation, the comments to the author (general comments, then the major and the minor points) and the confidential comments to the editor (the user).
 - What the second round runs (2026-11-22): the panel's re-review protocol for checking the revision against the response, then the same selection, stop and report; all five reviewers again only when the user asks at the intake (the user).
+- Open item 1 (2026-11-22): (a), the phrase "referee report" is removed from the triggers of `paper-review-panel` and its "Use instead" gains a row for `referee`, as part of step 1; the lazy option was (b) (the user).
 
 ## Agents
 
