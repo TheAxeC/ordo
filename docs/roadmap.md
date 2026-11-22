@@ -83,13 +83,6 @@ Status: `[ ]` open, `[~]` in progress, `[x]` done (its gate ran and passed, with
 - Gate: one real run for a project's manual setup you name, the script run by you, reviewed by you.
 - Waits on: 2.D, for the layout rules.
 
-## 23. Pruning pass
-
-- Status: [ ]
-- Goal: Every Ordo skill held to the writing-for-agents rules of `docs/dev/skill-layout.md`: each sentence that changes no behaviour deleted, each prohibition written as the behaviour wanted, each step ending on its "done when".
-- Gate: you read and approve the whole diff; a reviewer's report lists every deleted sentence with the behaviour it carried and where that behaviour still stands, or why it carried none, read by you.
-- Waits on: every other open entry, so each skill is pruned once, in its final form.
-
 # Not yet specified
 
 <!-- An entry:
@@ -143,3 +136,4 @@ Status: `[ ]` open, `[~]` in progress, `[x]` done (its gate ran and passed, with
 - 16. Switch over: dropped, since the user switches the installed skills over by hand; `utils/check_coverage.py` is deleted at the closing of entry 13.
 - 17. review: dropped, since the user reviews a step with `/refute` and asks for no review of a diff outside a plan.
 - 22. teach: dropped, since nothing in the roadmap needs it and the user expects no use of it.
+- 23. Pruning pass: dropped, since every sentence of the skills was ruled, and a pass that deletes sentences risks the behaviour they carry.
