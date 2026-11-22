@@ -16,9 +16,20 @@ one first-round referee review of `research-hub/tmp/BIOINF-2026-1778-review/manu
 
 ## Steps, in execution order
 
-- 1 the skill: `skills/academic/referee/` with its `SKILL.md` in the skill layout and its own pages for what a referee adds (the intake, the selection with the file of left-out comments, the stop that shows both lists, the report in the journal's fields, the second round), the reviewers run from the `paper-review-panel` skill's pages, and the skill listed where the skills are listed (README, glossary, the dev pages, its figure); a reviewer reads `SKILL.md` against each ruling of this plan and finds it carried out, reads both folders and finds no copy of a page of `paper-review-panel`, and the verify list of `docs/dev/building.md` passes (1 commit) (approved)
+- ✅ 1 the skill: `skills/academic/referee/` with its `SKILL.md` in the skill layout and its own pages for what a referee adds (the intake, the selection with the file of left-out comments, the stop that shows both lists, the report in the journal's fields, the second round), the reviewers run from the `paper-review-panel` skill's pages, and the skill listed where the skills are listed (README, glossary, the dev pages, its figure); a reviewer reads `SKILL.md` against each ruling of this plan and finds it carried out, reads both folders and finds no copy of a page of `paper-review-panel`, and the verify list of `docs/dev/building.md` passes (1 commit) (approved)
 - 2 the gate's two runs, with the user: one first-round referee review of `research-hub/tmp/BIOINF-2026-1778-review/manuscript.txt` and one second-round review of `research-hub/tmp/BIOINF-2026-1778-review/round2/BIOINF-2026-1778.R1_Proof_hi.txt` with `round2/Response_to_Reviewers.txt`, the user answering the intake and the stop of each run; the user reads each report against the comments sent, as the gate words it (0 commit; orchestrator, no agent) (approved)
 - 3 the closing: the closing report written (the cost script's output, or that the plan started no agent), the roadmap entry ticked with the gate's output, this folder moved to the archive (orchestrator, no agent) (approved)
+
+## Step 1, landed (2026-11-22)
+
+- What landed: `skills/academic/referee/` (`SKILL.md`, `agents/referee_agent.md`, `references/second_round.md`, `templates/selection_template.md`, `templates/referee_report_template.md`); the listings in `README.md`, `docs/dev/building.md`, `docs/dev/scripts.md` and `docs/glossary.md` (the entry **referee review** and the new entry **round, of a referee review**); `docs/figures/gen_figures.py` with `referee()` and the written `docs/figures/referee.svg`; `skills/academic/paper/SKILL.md` (the "Use instead" row, version 4.1.2); `skills/academic/paper-review-panel/SKILL.md` (Open item 1: the phrase "referee report" out of its triggers, a "Use instead" row for `/referee`, version 1.0.1).
+  - Premise corrections: the brief check found eleven files under the panel's `references/`, ADR 0043 touching `skills/academic/paper/SKILL.md`, and three README places the brief had not named; each was corrected in the brief before the build. The builder's first read found the entry **round, of an interview** inside the plan-terms block, a plain request with no round named before the run folder, and the EIC of a second round with all five left unsaid; each was ruled in `agents/briefs/1-cases.md`.
+  - Findings outside the brief: none raised as an open item. The reviewer left to the user whether the round is also asked inside the intake; it was put to the user in the session and is not blocking.
+  - Verification: `sh /Users/axelfaes/.claude/skills/land/templates/checks.sh .scratch/7-a-referee/orchestrator-state.md`, run on main after the fixes at landing, ended `checks: 12 commands passed`.
+  - A/B: none, the configuration names no benchmark. Look: none, the configuration names no view.
+  - The builder's first report did not pass its bar: the first review gave five findings (two lines of Steps equal to the panel's; the second round's EIC not given the re-review page; that page's Priority items and commitment section not fitted to a referee's points; no writer named for a comment the user moves; no place for a resolved first-round point), all closed in repair round 1.
+  - Fixes at landing, four, each from the review over round 1: `references/second_round.md` maps the re-review page's four values to the three statuses; `references/second_round.md` and `agents/referee_agent.md` say "each call" where they said two; `agents/referee_agent.md`, "The user's changes", covers the list "First-round points resolved"; the saved builder's report had its out-of-date lines corrected.
+  - Agents: the brief check abb679c2d2f988485 (claude-fable-5-2, 176151 tokens, 19 tool uses, 5.5 minutes); the builder a9dad9cfb0f9e82db (claude-fable-5-2: the hand-back before the build 166349 tokens, 13 tool uses, 2.0 minutes; the build 225420 tokens, 13 tool uses, 6.3 minutes; round 1 239752 tokens, 3 tool uses, 1.3 minutes); the reviewer ade192054e78b1aaa (claude-fable-5-2, 216060 tokens, 26 tool uses, 9.6 minutes); the reviewer over round 1 a9633d2af5c6d3428 (claude-sonnet-5-5, 121187 tokens, 18 tool uses, 2.0 minutes).
 
 ## Could run in parallel
 
@@ -47,6 +58,11 @@ Independent of each other; the standing rule of one agent at a time still serial
 ## Agents
 
 Each agent a plan skill started for this plan has one bullet, with its agent id, its role and the model the runner served it, except an agent the plan leaves unpriced, which has a numbered item under the heading "Agents the cost script leaves unpriced:"; `/land` writes a step's agents at its booking and when it takes a step back out of main, `/grill` writes its lookup agents, `/spec` writes a brief-check agent it stopped for another model or found dead when it took a run over, the orchestrator writes a brief-check agent it stopped under "The review of a choice", the session that starts a diagnosis agent writes its numbered item right after the start, and `/plan` copies the bullets of a rulings file.
+
+- abb679c2d2f988485: brief check of step 1, claude-fable-5-2
+- a9dad9cfb0f9e82db: builder of step 1, claude-fable-5-2
+- ade192054e78b1aaa: reviewer of step 1, claude-fable-5-2
+- a9633d2af5c6d3428: reviewer of step 1 over round 1, claude-sonnet-5-5
 
 ## Blocked, and by what
 

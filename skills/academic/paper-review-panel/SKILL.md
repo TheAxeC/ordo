@@ -1,8 +1,8 @@
 ---
 name: paper-review-panel
-description: "Multi-perspective academic paper review with dynamic reviewer personas. Simulates 5 independent reviewers (EIC + 3 peer reviewers + Devil's Advocate) with field-specific expertise. Supports full review, re-review (verification), quick assessment, methodology focus, Socratic guided, and calibration modes. Triggers on: /paper-review-panel, review paper, peer review, manuscript review, referee report, review my paper, critique paper, simulate review, editorial review, calibrate reviewer, reviewer calibration, measure reviewer accuracy."
+description: "Multi-perspective academic paper review with dynamic reviewer personas. Simulates 5 independent reviewers (EIC + 3 peer reviewers + Devil's Advocate) with field-specific expertise. Supports full review, re-review (verification), quick assessment, methodology focus, Socratic guided, and calibration modes. Triggers on: /paper-review-panel, review paper, peer review, manuscript review, review my paper, critique paper, simulate review, editorial review, calibrate reviewer, reviewer calibration, measure reviewer accuracy."
 metadata:
-  version: "1.0.0"
+  version: "1.0.1"
 ---
 
 # Academic Paper Reviewer: Multi-Perspective Academic Paper Review Agent Team
@@ -35,6 +35,7 @@ Review this paper: [paste paper or provide file]                                
 |---|---|
 | Need to write a paper (not review) | `/paper` |
 | Need to revise a paper (already have review comments) | `/paper revision` |
+| Someone else's paper to review as its referee | `/referee` |
 
 | Skill | Relationship |
 |-------|-------------|
@@ -44,7 +45,7 @@ Review this paper: [paste paper or provide file]                                
 
 1. The manuscript, as a file or as pasted text, read in every mode but calibration. A call of such a mode that gives none is the refusal "A missing input".
 2. The inputs of the mode. Re-review reads what its **Input** line gives ("re-review" under Steps), and calibration the gold set its section gives ("calibration" under Steps), as a folder. A call that lacks a required one is the refusal "A missing input".
-3. The plain request, matched on the Trigger Keywords. **English**: review paper, peer review, manuscript review, referee report, review my paper, critique paper, simulate review, editorial review, calibrate reviewer, reviewer calibration, measure reviewer accuracy
+3. The plain request, matched on the Trigger Keywords. **English**: review paper, peer review, manuscript review, review my paper, critique paper, simulate review, editorial review, calibrate reviewer, reviewer calibration, measure reviewer accuracy
 4. The reference pages, each read by the roles its row names.
 
    | Reference | Purpose | Used By |

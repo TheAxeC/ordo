@@ -21,7 +21,7 @@ On the unchanged tree `ls skills/academic/referee` printed `ls: skills/academic/
 | Panel shrunk to the EIC and the methodology reviewer | no skill | "first round" item 4: the methodology-focus contract, two calls each, "A reviewer the intake left out is not started" |
 | Panel shrunk to the methodology and the domain reviewer | no skill | "first round" item 4: "Any other shrunk panel runs each of its reviewers in one call, with no contract" |
 | 60 comments, the default budget | no skill | `agents/referee_agent.md`, "The selection" 1, 5, 7, 8 and its closing paragraph; "first round" item 5's completion criterion |
-| The user moves a left-out comment | no skill | "first round" item 6 (both files rewritten) and item 7 with `agents/referee_agent.md`, "The report" ("take the selection as it now stands") |
+| The user moves a left-out comment | no skill | "first round" item 6 (the referee is resumed with the user's changes) and `agents/referee_agent.md`, "The user's changes" |
 | The report shows no panel, holds no roadmap | no skill | `agents/referee_agent.md`, "The report", bullets 3 to 5 and its last paragraph; Anti-patterns rows 2 and 4 |
 | Second round, the all-five question unanswered | no skill | `references/second_round.md` items 2, 3, 4 ("Start no editorial synthesizer") and 5 ("Without that answer, start none of them") |
 | Second round without the first-round comments | no skill | `references/second_round.md` item 1, fourth bullet |
@@ -108,10 +108,10 @@ Each new or changed item was read against `docs/dev/skill-layout.md`, "Lists and
 
 ## The files, with line counts
 
-- `skills/academic/referee/SKILL.md`: 136 lines, new.
-- `skills/academic/referee/agents/referee_agent.md`: 50 lines, new.
-- `skills/academic/referee/references/second_round.md`: 46 lines, new.
-- `skills/academic/referee/templates/selection_template.md`: 47 lines, new.
+- `skills/academic/referee/SKILL.md`: 137 lines, new.
+- `skills/academic/referee/agents/referee_agent.md`: 64 lines, new.
+- `skills/academic/referee/references/second_round.md`: 54 lines, new.
+- `skills/academic/referee/templates/selection_template.md`: 53 lines, new.
 - `skills/academic/referee/templates/referee_report_template.md`: 31 lines, new.
 - `docs/figures/referee.svg`: 63 lines, new, written by the script.
 - `docs/figures/gen_figures.py`: 46 added, 0 removed.
@@ -128,7 +128,7 @@ Each new or changed item was read against `docs/dev/skill-layout.md`, "Lists and
 2. The brief's first-round item 6 (no synthesizer, no roadmap, no coaching) is no action, so it has no item of its own. It stands as a bullet of item 5, a bullet of item 8 and the Anti-patterns row on the revision roadmap.
 3. The rules of the selection and of the report stand whole in `agents/referee_agent.md`, the page the referee is given, and items 5 and 7 of "first round" name its sections, since the layout has a rule written once. Item 5's completion criterion keeps the two facts the session checks: both files stand, and the selection is within the budget.
 4. The refusal of a second-round call without a response letter is raised at Steps 1, before the run folder, and `references/second_round.md` item 1 names it there.
-5. The second round writes no file of first-round points: the EIC is given the first-round comments when the call gave them, and otherwise reads the points from the response letter.
+5. The second round writes the EIC's check as `revision-check.md`, and its `selection.md` holds the list "First-round points resolved".
 6. The intake also asks the values of the journal's recommendation, which the brief's report bullet takes from the intake.
 7. `templates/selection_template.md` has a count line (comments in the reports, under a selected point, left out) and a Status line for a second round, and `left-out.md` is its section "Left-out comments" as it stands.
 8. The Rules on how an agent starts and on the run folder say what the brief dictates in sentences of this skill's own, so no passage of the panel's Rules longer than a sentence stands in the skill.
@@ -150,3 +150,24 @@ Each new or changed item was read against `docs/dev/skill-layout.md`, "Lists and
 
 - The two cases handed back, with their rulings, under "The cases' first run".
 - Outside the step's paths and not changed: the entry **panel review** of `docs/glossary.md` still ends "`docs/roadmap.md`, the entry of `referee`" (`grep -n 'panel review' docs/glossary.md`, line 153), and the entry **round, of an interview** still says the bare "round" outside `grill` is a repair round. The first is no part of any brief item; the second is ruling 1.
+
+## Repair round 1
+
+Each of the five rulings of `agents/briefs/1-round-1.md` is carried out. Only the files under `skills/academic/referee/` and this report changed in the round; `templates/referee_report_template.md` needed no change.
+
+1. Spec 1, `SKILL.md`, Steps 2 and 3. They now read: "2. Create the run folder before the intake, at the place and under the name the first three bullets of Rules give." with "Done when the folder is there and holds no file.", and "3. Go on with the settled round: "first round" for a first round, "re-review" for a second round." with "Done when that subsection's last item is done."
+2. Standards 1, `references/second_round.md`, item 4. The EIC is now also given the `paper-review-panel` skill's `references/re_review_mode_protocol.md`, and a new bullet tells it that in this call its output is the check of the revision, written as `revision-check.md`, in place of the EIC Review Card. The item's completion criterion and item 6 name `revision-check.md`. `SKILL.md`, Rules, has a new bullet: "A second round also holds `revision-check.md`, the EIC's check of the revision."
+3. Standards 2, the same item. It names only "Verification Logic" and "New Issue Detection", "and in no other section of it"; `grep -c 'Commitment' skills/academic/referee/references/second_round.md` prints 0. New bullets say a first-round major point is checked as a Priority 1 item, a first-round minor point as a Priority 2 item, there is no Priority 3 item, points read from the response letter with no grade are each checked as a Priority 1 item, and the check gives each first-round point one of three statuses: resolved, resolved in part, or not resolved.
+4. Standards 3. `SKILL.md`, "first round" item 6: the session no longer writes the files. When the user changes anything it resumes the same referee agent with the changes, shows the rewritten lists, which the user confirms or changes again, and with no change the referee is not resumed there. The item is done "when the user has confirmed and, where the user changed anything, the referee has rewritten the two files". `agents/referee_agent.md` has the new section "The user's changes" between "The selection" and "The report", with the five bullets of the ruling; its Role says it is started once and resumed once or twice; "What you are given" lists the user's changes; "The report" opens "Take the confirmed selection as it stands, also where it goes past the budget." `docs/figures/gen_figures.py` is not changed.
+5. Standards 4. `templates/selection_template.md` has the section "First-round points resolved", marked second round only in its opening paragraph, and its count line ends "Resolved first-round points: [n]." `references/second_round.md`, "The selection and the report": a first-round point whose status is resolved goes in that third list with one clause on how the revision resolved it, every listed comment stands once in one of the three lists, the report's general comments name the resolved points from that list, and the selection stop shows the list beside the other two. `agents/referee_agent.md`, "The report", second bullet, now ends "In a second round the general comments also name the points of the list "First-round points resolved"." `SKILL.md`, the Stops row "The selection", shows the third list in a second round.
+
+One repeat the round adds, read against the layout's rule on repeats: after the referee rewrites the two files the user is shown them and confirms or changes again, a repeat the user ends by answering.
+
+The checks, run from the worktree's root after the last change:
+
+- Check 1, `python3 skills/ordo/repo-setup/templates/sync_rules.py . --only glossary`: prints `ok: the plan-terms block equals the template`, exit 0.
+- Check 1, the brief's character-set command over its 13 files: prints nothing, exit 0. The same command over the five files of the skill: prints nothing, exit 0.
+- Check 3, the brief's `python3 -c ...`: prints `referee 882 1.0.0`.
+- Check 4, `grep -n '^## ' skills/academic/referee/SKILL.md`: prints `12:## Quick start`, `20:## Use instead`, `27:## What it reads`, `37:## Steps`, `103:## Stops`, `117:## Anti-patterns`, `126:## Rules`.
+
+Line counts after the round (`wc -l`): `SKILL.md` 137, `agents/referee_agent.md` 61, `references/second_round.md` 52, `templates/selection_template.md` 53, `templates/referee_report_template.md` 31. `git status --short` outside `.scratch/` lists the same paths as before the round.

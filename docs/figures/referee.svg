@@ -1,0 +1,63 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1270 903" width="1270" height="903" role="img" aria-label="The first round of the referee skill. Boxes: You answer the intake (stop); Field analyst: the Reviewer Configuration Card (agent); You confirm the reviewer configuration (stop); EIC, 2 calls (agent); Methodology reviewer, 2 calls (agent); Domain reviewer, 2 calls (agent); Perspective reviewer, 2 calls (agent); Devil&#x27;s Advocate reviewer, 2 calls (agent); Referee: the selection and the left-out comments (agent); You confirm the selection or move comments (stop); Referee, resumed: the referee report (agent).">
+<title>The first round of the referee skill. Boxes: You answer the intake (stop); Field analyst: the Reviewer Configuration Card (agent); You confirm the reviewer configuration (stop); EIC, 2 calls (agent); Methodology reviewer, 2 calls (agent); Domain reviewer, 2 calls (agent); Perspective reviewer, 2 calls (agent); Devil's Advocate reviewer, 2 calls (agent); Referee: the selection and the left-out comments (agent); You confirm the selection or move comments (stop); Referee, resumed: the referee report (agent).</title>
+<defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#4f46e5"/></marker></defs>
+<rect x="0" y="0" width="1270" height="903" rx="10" fill="#f8fafc" stroke="#64748b"/>
+<path d="M635,90 L635,136" fill="none" stroke="#4f46e5" stroke-width="1.8" marker-end="url(#arrow)" stroke-linejoin="round"/>
+<path d="M635,182 L635,228" fill="none" stroke="#4f46e5" stroke-width="1.8" marker-end="url(#arrow)" stroke-linejoin="round"/>
+<path d="M635,274 L139,338" fill="none" stroke="#4f46e5" stroke-width="1.8" marker-end="url(#arrow)" stroke-linejoin="round"/>
+<path d="M635,274 L387,332" fill="none" stroke="#4f46e5" stroke-width="1.8" marker-end="url(#arrow)" stroke-linejoin="round"/>
+<path d="M635,274 L635,338" fill="none" stroke="#4f46e5" stroke-width="1.8" marker-end="url(#arrow)" stroke-linejoin="round"/>
+<path d="M635,274 L883,332" fill="none" stroke="#4f46e5" stroke-width="1.8" marker-end="url(#arrow)" stroke-linejoin="round"/>
+<path d="M635,274 L1131,332" fill="none" stroke="#4f46e5" stroke-width="1.8" marker-end="url(#arrow)" stroke-linejoin="round"/>
+<path d="M139,372 L635,436" fill="none" stroke="#4f46e5" stroke-width="1.8" marker-end="url(#arrow)" stroke-linejoin="round"/>
+<path d="M387,378 L635,436" fill="none" stroke="#4f46e5" stroke-width="1.8" marker-end="url(#arrow)" stroke-linejoin="round"/>
+<path d="M635,372 L635,436" fill="none" stroke="#4f46e5" stroke-width="1.8" marker-end="url(#arrow)" stroke-linejoin="round"/>
+<path d="M883,378 L635,436" fill="none" stroke="#4f46e5" stroke-width="1.8" marker-end="url(#arrow)" stroke-linejoin="round"/>
+<path d="M1131,378 L635,436" fill="none" stroke="#4f46e5" stroke-width="1.8" marker-end="url(#arrow)" stroke-linejoin="round"/>
+<path d="M635,482 L635,528" fill="none" stroke="#4f46e5" stroke-width="1.8" marker-end="url(#arrow)" stroke-linejoin="round"/>
+<path d="M635,574 L635,620" fill="none" stroke="#4f46e5" stroke-width="1.8" marker-end="url(#arrow)" stroke-linejoin="round"/>
+<rect x="528" y="56" width="214" height="34" rx="8" fill="#fff1e6" stroke="#b45309" stroke-width="2"/>
+<text x="635" y="76.4" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#7c2d12" font-weight="400" text-anchor="middle">You answer the intake</text>
+<rect x="528" y="136" width="214" height="46" rx="8" fill="#ffffff" stroke="#64748b" stroke-width="1.5"/>
+<text x="635" y="155.4" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="middle">Field analyst: the Reviewer</text>
+<text x="635" y="169.4" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="middle">Configuration Card</text>
+<rect x="528" y="228" width="214" height="46" rx="8" fill="#fff1e6" stroke="#b45309" stroke-width="2"/>
+<text x="635" y="247.4" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#7c2d12" font-weight="400" text-anchor="middle">You confirm the reviewer</text>
+<text x="635" y="261.4" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#7c2d12" font-weight="400" text-anchor="middle">configuration</text>
+<rect x="32" y="338" width="214" height="34" rx="8" fill="#ffffff" stroke="#64748b" stroke-width="1.5"/>
+<text x="139" y="358.4" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="middle">EIC, 2 calls</text>
+<rect x="280" y="332" width="214" height="46" rx="8" fill="#ffffff" stroke="#64748b" stroke-width="1.5"/>
+<text x="387" y="351.4" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="middle">Methodology reviewer, 2</text>
+<text x="387" y="365.4" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="middle">calls</text>
+<rect x="528" y="338" width="214" height="34" rx="8" fill="#ffffff" stroke="#64748b" stroke-width="1.5"/>
+<text x="635" y="358.4" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="middle">Domain reviewer, 2 calls</text>
+<rect x="776" y="332" width="214" height="46" rx="8" fill="#ffffff" stroke="#64748b" stroke-width="1.5"/>
+<text x="883" y="351.4" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="middle">Perspective reviewer, 2</text>
+<text x="883" y="365.4" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="middle">calls</text>
+<rect x="1024" y="332" width="214" height="46" rx="8" fill="#ffffff" stroke="#64748b" stroke-width="1.5"/>
+<text x="1131" y="351.4" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="middle">Devil's Advocate reviewer, 2</text>
+<text x="1131" y="365.4" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="middle">calls</text>
+<rect x="528" y="436" width="214" height="46" rx="8" fill="#ffffff" stroke="#64748b" stroke-width="1.5"/>
+<text x="635" y="455.4" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="middle">Referee: the selection and</text>
+<text x="635" y="469.4" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="middle">the left-out comments</text>
+<rect x="528" y="528" width="214" height="46" rx="8" fill="#fff1e6" stroke="#b45309" stroke-width="2"/>
+<text x="635" y="547.4" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#7c2d12" font-weight="400" text-anchor="middle">You confirm the selection or</text>
+<text x="635" y="561.4" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#7c2d12" font-weight="400" text-anchor="middle">move comments</text>
+<rect x="528" y="620" width="214" height="46" rx="8" fill="#ffffff" stroke="#64748b" stroke-width="1.5"/>
+<text x="635" y="639.4" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="middle">Referee, resumed: the</text>
+<text x="635" y="653.4" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="middle">referee report</text>
+<text x="16" y="706" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#475569" font-weight="400" text-anchor="start">The five reviewers start at once from the pages of the paper-review-panel skill, each in 2 calls under its sprint contract. A panel shrunk at the intake starts only the reviewers you</text>
+<text x="16" y="721" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#475569" font-weight="400" text-anchor="start">name. The second round starts the field analyst and the EIC, which checks the revision against the authors' response, and the five reviewers only when you ask for them at the intake. Its</text>
+<text x="16" y="736" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#475569" font-weight="400" text-anchor="start">selection, its stop and its report follow as in the first round. A plain request that does not say the round is asked which round it is.</text>
+<text x="16" y="773" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="10" fill="#475569" font-weight="700" text-anchor="start">HOW TO READ THE FIGURE</text>
+<rect x="16" y="787" width="28" height="14" rx="4" fill="#ffffff" stroke="#64748b" stroke-width="1.5"/>
+<text x="56" y="798" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#0f172a" font-weight="400" text-anchor="start">Solid box: an agent start, or a task of a resumed agent, that always runs</text>
+<rect x="16" y="807" width="28" height="14" rx="4" fill="#ffffff" stroke="#64748b" stroke-width="1.5" stroke-dasharray="6 4"/>
+<text x="56" y="818" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#0f172a" font-weight="400" text-anchor="start">Dashed box: an agent start, or a task of a resumed agent, that runs only when needed</text>
+<rect x="16" y="827" width="28" height="14" rx="4" fill="#fff1e6" stroke="#b45309" stroke-width="2"/>
+<text x="56" y="838" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#0f172a" font-weight="400" text-anchor="start">Orange box: the run stops for you</text>
+<path d="M16,854 L44,854" fill="none" stroke="#4f46e5" stroke-width="1.8" stroke-dasharray="2 4" marker-end="url(#arrow)" stroke-linejoin="round"/>
+<text x="56" y="858" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#0f172a" font-weight="400" text-anchor="start">Dotted arrow: a cycle, with its cap</text>
+<path d="M16,869 L36,869 L36,879 L16,879" fill="none" stroke="#4f46e5" stroke-width="1.8" stroke-dasharray="2 4" marker-end="url(#arrow)" stroke-linejoin="round"/>
+<text x="56" y="878" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#0f172a" font-weight="400" text-anchor="start">Dotted loop on one agent: a check it repeats inside its own start, with its cap</text>
+</svg>

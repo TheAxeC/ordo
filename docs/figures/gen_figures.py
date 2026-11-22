@@ -9,6 +9,8 @@ Writes, beside this file:
 - grill.svg, writing.svg, code-comments.svg: the agents, stops and cycles of each skill.
 - paper-review-panel.svg: the agents and stops of the full mode of the paper-review-panel skill, with the
   roles the other five modes start in its note.
+- referee.svg: the agents and stops of the first round of the referee skill, with what the
+  second round starts in its note.
 - paper/full.svg, paper/revision.svg, paper/lit-review.svg, paper/outline-only.svg,
   paper/abstract-only.svg, paper/citation-check.svg, paper/disclosure.svg, paper/plan.svg,
   paper/format-convert.svg, paper/revision-coach.svg, paper/rebuttal-audit.svg,
@@ -1913,6 +1915,49 @@ def paper_review_panel() -> str:
     )
 
 
+def referee() -> str:
+    """The first round of the referee skill: its agents in order and its three stops."""
+    reviewers = (
+        Node("E", "EIC, 2 calls"),
+        Node("M", "Methodology reviewer, 2 calls"),
+        Node("D", "Domain reviewer, 2 calls"),
+        Node("P", "Perspective reviewer, 2 calls"),
+        Node("A", "Devil's Advocate reviewer, 2 calls"),
+    )
+    nodes = (
+        Node("I", "You answer the intake", "stop"),
+        Node("F", "Field analyst: the Reviewer Configuration Card"),
+        Node("C", "You confirm the reviewer configuration", "stop"),
+        *reviewers,
+        Node("R", "Referee: the selection and the left-out comments"),
+        Node("S", "You confirm the selection or move comments", "stop"),
+        Node("W", "Referee, resumed: the referee report"),
+    )
+    edges = (
+        Edge("I", "F"),
+        Edge("F", "C"),
+        *(Edge("C", reviewer.key) for reviewer in reviewers),
+        *(Edge(reviewer.key, "R") for reviewer in reviewers),
+        Edge("R", "S"),
+        Edge("S", "W"),
+    )
+    note = (
+        "The five reviewers start at once from the pages of the paper-review-panel skill, "
+        "each in 2 calls under its sprint contract. A panel shrunk at the intake starts only "
+        "the reviewers you name. The second round starts the field analyst and the EIC, "
+        "which checks the revision against the authors' response, and the five reviewers "
+        "only when you ask for them at the intake. Its selection, its stop and its report "
+        "follow as in the first round. A plain request that does not say the round is asked "
+        "which round it is."
+    )
+    return _single(
+        "referee.svg",
+        "The first round of the referee skill",
+        _graph(nodes, edges),
+        note,
+    )
+
+
 def code_comments() -> str:
     nodes = (
         Node("F", "Finding agent"),
@@ -2144,6 +2189,7 @@ def figures() -> tuple[tuple[str, str], ...]:
         ("grill.svg", grill()),
         ("writing.svg", writing()),
         ("paper-review-panel.svg", paper_review_panel()),
+        ("referee.svg", referee()),
         ("code-comments.svg", code_comments()),
         *paper_figures(),
         ("paper/lifecycle.svg", paper_lifecycle()),

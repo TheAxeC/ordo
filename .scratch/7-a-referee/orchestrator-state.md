@@ -43,19 +43,6 @@ repair_reviewer: claude:sonnet  # the model the run of /refute over a repair rou
 
 ```yaml
 dispatch:
-- step: 1
-  executor: agent
-  worker: claude:fable
-  base: 21f0793
-  worktree: .agents/worktrees/7-a-referee-1
-  launched: 2026-11-22
-  report: .scratch/7-a-referee/agents/reviews/1-report.md
-  builder_usage: the hand-back before the build 166349 tokens, 13 tool uses, 2.0 minutes; the build 225420 tokens, 13 tool uses, 6.3 minutes
-  brief_check: .scratch/7-a-referee/agents/reviews/1-brief-check.md (abb679c2d2f988485, claude-fable-5-2, 176151 tokens, 19 tool uses, 5.5 minutes)
-  session_id: a9dad9cfb0f9e82db (claude-fable-5-2)
-  reviewer_report: .scratch/7-a-referee/agents/reviews/1-refuter.md (ade192054e78b1aaa, claude-fable-5-2, 216060 tokens, 26 tool uses, 9.6 minutes)
-  landing: not-started
-  round: 1
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled or, under `self_rule: on`, until the orchestrator closes it as `plan-orchestration`'s `references/self-rule.md`, "Closing an open item", says)
@@ -88,6 +75,6 @@ dispatch:
 
 ## Current position (rewritten before every step commit of this plan)
 
-- 2026-11-22. Step 1, the skill, is in flight in `.agents/worktrees/7-a-referee-1` from base 21f0793: built, reviewed, and repair round 1 sent to the builder with five findings.
-- Roadmap entry 7.A (referee). Plan step 1 of 3: the skill. Next: step 2, the gate's two runs, with the user.
+- 2026-11-22. Step 1, the skill, has landed. Step 2, the gate's two runs with the user, is next: it needs the user at the intake, at the reviewer configuration and at the selection of each run. `research-hub` is read only, so the manuscript and the round-2 files are copied to a folder outside it for the runs.
+- Roadmap entry 7.A (referee). Plan step 2 of 3: the gate's two runs, with the user. Next: step 3, the closing.
 - Open on Axel's side: none.

@@ -291,3 +291,128 @@ none. Each user-visible change in the diff is in the report's "User-visible chan
 - ADRs: 0043 was read in full; of the others, the lines naming `paper-review-panel`, a figure, `README.md`, the skill layout or the glossary were read (0001, 0019, 0022, 0025, 0027, 0035 and the grep hits in 0004 and 0036 to 0042), and none decides the panel's `SKILL.md`, a skill's figure or `referee`. They were not each read whole.
 
 Reviewer usage: ade192054e78b1aaa, claude-fable-5-2, 216060 tokens, 26 tool uses, 9.6 minutes.
+
+## Repair round 1, refuted
+
+```
+$ cd /Users/axelfaes/workspace/ordo/.agents/worktrees/7-a-referee-1
+$ diff -q <snapshot copy> <worktree file>   (README.md, docs/dev/building.md, docs/dev/scripts.md, docs/figures/gen_figures.py, docs/glossary.md, skills/academic/paper/SKILL.md, docs/figures/referee.svg)
+(no output: all seven identical to the snapshot)
+(the snapshot's files.txt is a `git status --short` listing; the paths changed since the snapshot are the five files under skills/academic/referee/ only, read in full)
+
+Check 1
+$ python3 skills/ordo/repo-setup/templates/sync_rules.py . --only glossary
+ok: the plan-terms block equals the template
+exit 0
+$ printf '%s\0' <the 13 files of the brief> | xargs -0 perl -CSD -ne '...'   (the brief's command, unchanged)
+(no output)
+exit 0
+
+Check 3
+$ python3 -c 'import yaml; d=yaml.safe_load(open("skills/academic/referee/SKILL.md").read().split("---")[1]); print(d["name"], len(d["description"]), d["metadata"]["version"])'
+referee 882 1.0.0
+
+Check 4
+$ grep -n '^## ' skills/academic/referee/SKILL.md
+12:## Quick start
+20:## Use instead
+27:## What it reads
+37:## Steps
+103:## Stops
+117:## Anti-patterns
+126:## Rules
+
+Check 5
+$ git status --short skills/academic/paper-review-panel
+ M skills/academic/paper-review-panel/SKILL.md
+$ git diff 21f0793 -- skills/academic/paper-review-panel/SKILL.md | grep -c '^+[^+]'
+4
+$ git diff 21f0793 -- skills/academic/paper-review-panel/SKILL.md | grep -c '^-[^-]'
+3
+
+Other reruns
+$ grep -c 'Commitment' skills/academic/referee/references/second_round.md
+0
+$ wc -l skills/academic/referee/SKILL.md skills/academic/referee/*/*.md
+ 137 SKILL.md / 61 referee_agent.md / 52 second_round.md / 31 referee_report_template.md / 53 selection_template.md  (the report's counts reproduce)
+$ grep -n 'two calls\|both calls\|once or twice' skills/academic/referee/*.md skills/academic/referee/*/*.md
+SKILL.md:71 and 72 (the panel's contracts, "each in two calls"); references/second_round.md:46: "The referee adds this to the two calls of `agents/referee_agent.md`:"; agents/referee_agent.md:7: "...started once, for the selection, and resumed once or twice..."; agents/referee_agent.md:14: "...adds to both calls."
+$ python3 -I (sentences of 7 or more words of the five referee files that occur verbatim in any panel .md)
+SKILL.md: "Done when the Reviewer Configuration Card stands in the run folder." and the two table header rows (Stop/When/..., Anti-pattern/Why it fails/Do instead). No other hit.
+```
+
+### Verdicts
+
+The five findings:
+
+1. Spec 1 (Steps 2 and 3): closed as ruled. `SKILL.md`, Steps 2 reads "Create the run folder before the intake, at the place and under the name the first three bullets of Rules give." with "Done when the folder is there and holds no file."; Steps 3 reads "Go on with the settled round: ...". Meaning kept (place and name from Rules, before the intake, empty when done, then the round's items). The Rules bullets 1 to 3 are the folder, pasted text and the second run, so the pointer is right. The sentence-run script above finds no run of two sentences shared with the panel.
+2. Standards 1 (EIC given the protocol page, output `revision-check.md`): closed as ruled. `references/second_round.md`, item 4, bullets 2 and 3; `SKILL.md`, Rules, the bullet "A second round also holds `revision-check.md`..."; item 4's Done line and item 6 name the file.
+3. Standards 2 (sections, Priority mapping, three statuses): closed as ruled in its text (`second_round.md`, item 4, bullets 4 to 7; "Commitment" count 0). It leaves a conflict between the page's four statuses and the three statuses of the ruling, Standards finding 1 below.
+4. Standards 3 (user's changes): closed as ruled for the left-out comment moved in and the selected point moved out. `agents/referee_agent.md`, "The user's changes", has the five bullets of the ruling; `SKILL.md`, first round item 6, resumes the same agent and ends as the ruling says; the Role says "resumed once or twice". Two sentences still say two calls (Standards finding 2) and the third list is not covered (Standards finding 3).
+5. Standards 4 (third list): closed as ruled. `templates/selection_template.md` has the section and the count; `second_round.md`, "The selection and the report", bullets 2, 3 and 5 and item 6's bullet on the stop; `agents/referee_agent.md`, "The report", second bullet; `SKILL.md`, Stops row "The selection". No finding is closed by removing what it guarded. One addition beyond the ruling's words: item 6 shows the rewritten lists for a second confirmation (the round's report states it; see "Declined to judge").
+
+Items of "What to build":
+
+- Files 1 to 5 of the skill: holds.
+- First round behaviour 1 to 10: holds.
+- Second round 1 to 5: holds, with Standards finding 1 on item 3.
+- Rules of the skill, Stops, Anti-patterns: holds.
+- Places that list a skill 1 to 7: holds (the seven files are identical to the snapshot; check 5 above reproduces 4 and 3).
+
+Cases:
+
+- `/referee paper.pdf` with the panel: met.
+- No panel folder: met.
+- `re-review` without the response letter: met.
+- An intake with nothing named: met.
+- Panel shrunk to the EIC and the methodology reviewer: met.
+- Panel shrunk to the methodology and domain reviewers: met.
+- 60 comments, default budget: met.
+- The user moves a left-out comment into the selected points: met (`The user's changes`, first bullet), for the first-round list; Standards finding 3 for the third list.
+- The report shows no panel, holds no roadmap: met.
+- Second round, all-five question unanswered: met.
+- Second round without first-round comments: met.
+- Both folders read side by side, after the rewrite of Steps 2 and 3: met. The sentence-run script prints one shared Done line and two table header rows, none of two sentences; Steps 2 and 3 now differ from the panel's.
+
+### Findings
+
+#### 1. Spec
+
+none
+
+#### 2. Proof
+
+1. `.scratch/7-a-referee/agents/reviews/1-report.md`, the sections before "Repair round 1". The report keeps lines it says are false: line counts of 136, 50, 46 and 47 (now 137, 61, 52 and 53), judgment call 5 ("The second round writes no file of first-round points", while `revision-check.md` and the third list of `selection.md` now exist), and the case row on a moved left-out comment. The last line of the round names them as out of date. Failure scenario: the orchestrator booking the step from the report copies the line counts or judgment call 5, and the booking states a file layout the skill no longer has. (The rules file, rule 7, asks for the end state only.)
+
+#### 3. Standards
+
+1. `references/second_round.md`, "The check of the revision", item 4, bullets 3 and 7:
+   ```
+   - It checks each first-round point ... as that page gives it in "Verification Logic" and "New Issue Detection", and in no other section of it.
+   - The check gives each first-round point one of three statuses: resolved, resolved in part, or not resolved.
+   ```
+   "Verification Logic" assesses each item as FULLY_ADDRESSED, PARTIALLY_ADDRESSED, NOT_ADDRESSED or MADE_WORSE and sets its Accept rule on them. The item sets four of the page's values against three of its own, with no map between them and no place for MADE_WORSE. Two places say different things. Failure scenario: the EIC follows the page and writes MADE_WORSE for a point; the referee then reads `revision-check.md` for resolved, resolved in part or not resolved, and the point fits none of the three lists of `selection.md`, so it is dropped or placed by guess.
+2. `references/second_round.md`, the line "The referee adds this to the two calls of `agents/referee_agent.md`:" and `agents/referee_agent.md`, "What you are given", "adds to both calls", against the Role's "resumed once or twice" and the new section "The user's changes". The referee now has up to three calls, and the second-round additions are said to apply to two. Failure scenario: a session resuming the referee for the user's changes in a second round does not give it `references/second_round.md`, since the page says that file adds to "both calls", and the referee rewrites `selection.md` without the third list.
+3. `agents/referee_agent.md`, "The user's changes", against `SKILL.md`, Stops row "The selection" (it shows the third list). The five bullets name only the selected points and the left-out comments. When the user moves a resolved first-round point to the selected points, or a selected point to the resolved list, nothing says who writes its passage or its clause, or how the count line is kept so that every listed comment stands once in one of three lists. A step an agent could not carry out as written. Failure scenario: the user, who sees the resolved list at the stop, moves a point out of it; the referee, with no bullet for the third list, leaves that point in two lists or in none, and the count line no longer adds up.
+
+#### 4. Behaviour
+
+none (the extra confirmation after a rewrite is stated in the round's report, last paragraph before the checks).
+
+### Declined to judge
+
+- Whether the second confirmation of item 6 (the user is shown the rewritten lists and confirms or changes again) is wanted: the ruling ends item 6 "when the user has confirmed and ... the referee has rewritten", which allows either order. It adds a stop, a repeat the user ends by answering, which the layout allows without a count. The user's or the orchestrator's call.
+- `git diff --numstat`: outside my three git commands; the counts above come from `git diff 21f0793 -- <path>`.
+- `docs/figures/referee.svg`: identical to the snapshot, not opened as an image. The ruling keeps the figure's labels as they are; the figure draws the report call as "Referee, resumed" and shows no call for the user's changes.
+- Whether sentence lengths and list shapes of the new bullets meet the prose standard, one by one: not measured.
+- Whether the glossary now holds two statements on the bare "round" (**round, of an interview** and **round, of a referee review**): unchanged by this round, with the user, as the first review said.
+
+Reviewer usage: a9633d2af5c6d3428, claude-sonnet-5-5, 121187 tokens, 18 tool uses, 2.0 minutes.
+
+## Closed
+
+- First run, Spec 1 and Standards 1 to 4: closed by the builder in repair round 1, each confirmed closed by the run over the round.
+- Round 1, Proof 1, the builder's report keeps lines the round made out of date: fixed at landing, in the saved report `agents/reviews/1-report.md` (the line counts, judgment call 5 and the case row on a moved comment).
+- Round 1, Standards 1, four values of the panel's page against three statuses: fixed at landing in `skills/academic/referee/references/second_round.md`, item 4, which now maps each of the page's four values to one of the three statuses.
+- Round 1, Standards 2, "the two calls" and "both calls": fixed at landing in `references/second_round.md` and `agents/referee_agent.md`, which now say each call.
+- Round 1, Standards 3, the third list at the user's changes: fixed at landing in `agents/referee_agent.md`, "The user's changes", which now covers a point moved into or out of the list "First-round points resolved".
