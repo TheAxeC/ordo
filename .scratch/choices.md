@@ -737,3 +737,37 @@ The brief check of step 5.Q (`.scratch/5-paper/agents/reviews/5.Q-brief-check.md
 Taken: (a)
 Booked: `.scratch/5-paper/agents/briefs/5.Q.md`, "Decisions taken in this brief" 7
 Builds on it: step 5.Q
+
+## C133. A folder and a project name share the place in front of the entry, in the brief of step 3 of plan 5.A (2026-11-22)
+
+The ruling "The folder in a call" puts the folder that holds `plan.yaml` in front of the entry, where a project name of the `projects:` form goes today, and does not say how the two are told apart.
+
+- Options: (a) the longest leading part that is a folder holding a `plan.yaml` is the folder, and what is left before the entry names a project of that file: `/plan apps/web/12` reads `apps/web/plan.yaml`, `/plan tools/a/12` reads `tools/plan.yaml`, project `a`, and `/plan x/12` with no folder `x/plan.yaml` reads the root file's project `x`. Pro: every call that works today reads as before, and a nested file may use the `projects:` form. Con: a project named like a folder that holds a `plan.yaml` is read as the folder. (b) the part in front of the entry is always a folder, and the `projects:` form goes. Pro: one reading. Con: it removes a form the goal keeps.
+- Recommendation: (a). The lazy option: (b), which has less to state.
+
+Taken: (a)
+Booked: `.scratch/5-a-skill-groups-plan-yaml-found-by-a-search-order-and-agents-on-fable/agents/briefs/3.md`, "Decisions taken in this brief" 1 and 2
+Builds on it: step 3
+
+## C134. A new configuration is written to `docs/plan.yaml`, in the brief of step 3 of plan 5.A (2026-11-22)
+
+The goal reads every path of a `plan.yaml` from the file's folder and moves Ordo's file to `docs/plan.yaml`. The example files and `ordo-init` write a new file to `.agents/plan.yaml` with paths from the repository root, which the goal makes wrong. The brief check raised it (`agents/reviews/3-brief-check.md`, 2).
+
+- Options: (a) `ordo-init`, `repo-setup` and the example files write `docs/plan.yaml`, with values read from `docs/` (`roadmap: roadmap.md`, `ledger_root: ../.scratch`); the README says what the owner of an existing `.agents/plan.yaml` does. Pro: a new repository is set up as Ordo is, and no text tells a reader the configuration is at `.agents/plan.yaml`, which the gate's reading of each line asks. Con: more text changes. (b) they keep writing `.agents/plan.yaml`, with values such as `../docs/roadmap.md`. Pro: fewer changes. Con: every path of a new file starts with `../`, and the place Ordo left stays the documented one.
+- Recommendation: (a). The lazy option: (b).
+
+Taken: (a)
+Booked: `.scratch/5-a-skill-groups-plan-yaml-found-by-a-search-order-and-agents-on-fable/agents/briefs/3.md`, "What to build" 8 and "Decisions taken in this brief" 3
+Builds on it: step 3
+
+## C135. How the two scripts are given the configuration, in the brief of step 3 of plan 5.A (2026-11-22)
+
+The goal has `land.sh` and `check_config.py` given the path of the file found, and the gate asks `check_config.test.sh` for a case per place of the search order.
+
+- Options: (a) `check_config.py <path of plan.yaml>` checks that file, `check_config.py --find <repository root> [<folder>]` prints the first file of the order, and `land.sh` takes the path as a required fourth argument. Pro: the order has one executable form the gate's cases run, and each script opens only the file it is given. Con: a second form of `check_config.py`. (b) no `--find`; the test builds the order itself. Pro: one form. Con: the gate's cases would then test the test.
+- Recommendation: (a). The lazy option: (b).
+
+Taken: (a)
+Booked: `.scratch/5-a-skill-groups-plan-yaml-found-by-a-search-order-and-agents-on-fable/agents/briefs/3.md`, "What to build" 5 and 6 and "Decisions taken in this brief" 4 and 5
+Builds on it: step 3
+

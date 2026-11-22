@@ -56,8 +56,17 @@ dispatch:
   landing: not-started
   round: 0
 - step: 2
-  landing: preparing
-  brief_check: "running: a4acb97b2cf90ba34"
+  executor: agent
+  worker: claude:fable
+  base: 06dacd6
+  worktree: .agents/worktrees/5-a-skill-groups-plan-yaml-found-by-a-search-order-and-agents-on-fable-2
+  launched: 2026-11-22
+  report: .scratch/5-a-skill-groups-plan-yaml-found-by-a-search-order-and-agents-on-fable/agents/reviews/2-report.md
+  brief_check: .scratch/5-a-skill-groups-plan-yaml-found-by-a-search-order-and-agents-on-fable/agents/reviews/2-brief-check.md (a4acb97b2cf90ba34, claude-fable-5-2, 172921 tokens, 25 tool uses, 7.0 minutes)
+  shared_paths: "this step moves every skill folder and rewrites paths in files steps 1 and 3 of this plan also name: simple by the ruling Three steps in flight, since step 1 lands first and its edits are carried into the moved files, and step 3 lands on the grouped layout with its paths fixed at its landing"
+  session_id: a8ad09548be32789f (claude-fable-5-2)
+  landing: not-started
+  round: 0
 - step: 3
   landing: preparing
   brief_check: "running: a4d3ffc7dd382169a"
