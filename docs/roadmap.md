@@ -118,19 +118,12 @@ Status: `[ ]` open, `[~]` in progress, `[x]` done (its gate ran and passed, with
 - Gate: runs on three real messages you name as not landed, each re-explanation read by you and judged clear.
 - Waits on: 2.D, for the glossary.
 
-## 19. codebase-design
+## 19. codebase-design and improve-codebase-architecture
 
 - Status: [ ]
-- Goal: A `codebase-design` skill that adapts `repo-setup`'s default design-principles page to an existing repository: each principle stated in the concrete form it takes there, with the check that enforces it where one exists. Its design follows mattpocock's `codebase-design`: the agents, phases, cycles and stops are kept as the source has them, and each deviation from them is made only with its reason and your ruling in the plan's Rulings.
-- Gate: one real run on a repository you name that fills its design-standard page, reviewed by you; one run on Cathedra whose page holds every point of its existing "Design principles" section, checked by reading both; a blind comparison as `docs/dev/blind-comparison.md` says against mattpocock's `codebase-design` on the same repository, wins or ties; the plan's ledger lists every deviation from the design of mattpocock's `codebase-design`, each with its reason and the ruling that approved it, and nothing else differs, checked by reading both skills.
-- Waits on: 2.E, for the design-principles page.
-
-## 20. improve-codebase-architecture
-
-- Status: [ ]
-- Goal: An `improve-codebase-architecture` skill that reads a repository against its design-standard page and writes candidates, each naming the principle it breaks, its files and lines, the problem, the fix, the benefit and how strongly it is recommended, then grills through the one you pick into a roadmap entry. Its design follows mattpocock's `improve-codebase-architecture`: the agents, phases, cycles and stops are kept as the source has them, and each deviation from them is made only with its reason and your ruling in the plan's Rulings.
-- Gate: one real run on Cathedra, each candidate reviewed by you, the one you pick written into its roadmap entry through `grill`; a blind comparison as `docs/dev/blind-comparison.md` says against mattpocock's `improve-codebase-architecture` on the same repository, wins or ties; the plan's ledger lists every deviation from the design of mattpocock's `improve-codebase-architecture`, each with its reason and the ruling that approved it, and nothing else differs, checked by reading both skills.
-- Waits on: 19, for the design-standard page; 2.E, for `grill`.
+- Goal: A `codebase-design` skill that adapts `repo-setup`'s default design-principles page to an existing repository: each principle stated in the concrete form it takes there, with the check that enforces it where one exists. Its design follows mattpocock's `codebase-design`: the agents, phases, cycles and stops are kept as the source has them, and each deviation from them is made only with its reason and your ruling in the plan's Rulings. An `improve-codebase-architecture` skill that reads a repository against its design-standard page and writes candidates, each naming the principle it breaks, its files and lines, the problem, the fix, the benefit and how strongly it is recommended, then grills through the one you pick into a roadmap entry. Its design follows mattpocock's `improve-codebase-architecture`: the agents, phases, cycles and stops are kept as the source has them, and each deviation from them is made only with its reason and your ruling in the plan's Rulings.
+- Gate: one real run of `codebase-design` on a repository you name that fills its design-standard page, reviewed by you; one run on Cathedra whose page holds every point of its existing "Design principles" section, checked by reading both; one real run of `improve-codebase-architecture` on Cathedra, each candidate reviewed by you, the one you pick written into its roadmap entry through `grill`; the plan's ledger lists every deviation from the design of mattpocock's two skills, each with its reason and the ruling that approved it, and nothing else differs, checked by reading both.
+- Waits on: 5.A, which sets the folder the skills are built in.
 
 ## 21. wizard
 
@@ -197,3 +190,4 @@ Status: `[ ]` open, `[~]` in progress, `[x]` done (its gate ran and passed, with
 - 2.G. git guard: dropped, since entry 2.1 deleted the guard: its hook script, its test, its settings text and `repo-setup`'s offer of it are removed, and its plan folder with them.
 - 2.J. The session retro's text changes: dropped, since entry 2.K replaces it: ten of its proposals, the two on a dictated script sentence merged into one, the reviewer's git rule widened to allow `git show <base>:<path>`, and the proposals on the scratchpad and on sleep loops left out because Claude Code already sends temporary files to the scratchpad and blocks a foreground `sleep`.
 - 5.B. plan.yaml found by a search order: dropped, since merged into entry 5.A.
+- 20. improve-codebase-architecture: dropped, since merged into entry 19.
