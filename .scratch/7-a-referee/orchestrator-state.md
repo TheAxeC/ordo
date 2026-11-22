@@ -43,11 +43,14 @@ repair_reviewer: claude:sonnet  # the model the run of /refute over a repair rou
 
 ```yaml
 dispatch:
+- step: 1
+  brief_check: "running: abb679c2d2f988485"
+  landing: preparing
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled or, under `self_rule: on`, until the orchestrator closes it as `plan-orchestration`'s `references/self-rule.md`, "Closing an open item", says)
 
-- none
+- Open item 1 (step 1, raised 2026-11-22): does `paper-review-panel` name `referee`? Its triggers hold the phrase "referee report" (`skills/academic/paper-review-panel/SKILL.md`, the description and "What it reads" 3) and its "Use instead" does not name `referee`, so a plain request for a referee report can start the panel; `docs/dev/skill-layout.md`, "Frontmatter", puts a phrase for a neighbouring skill's case in that skill's triggers. Step 1 as briefed changes no file of the panel. (a) Remove the phrase from the panel's triggers and add a "Use instead" row for `referee`: a plain request reaches the right skill; it changes two places of the copy ruled in entry 6. (b) Leave the panel as it is: the copy stays untouched; the overlap stays. Recommended: (a). The lazy option is (b). The build of step 1 does not wait on it.
 
 ## Closed items (the log of what was raised and how it ended; no report carries it)
 
