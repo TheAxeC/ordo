@@ -400,7 +400,7 @@ The first five rows are stops. The cause not found, inside a plan, is a decision
 - The session, not the diagnosis agent, writes what Steps 20 says into the step's Step 0 for `red line` and `premise`.
 - Right after the diagnosis agent's start, the session writes the agent's numbered item into `plan.md`'s Agents section.
   - The item reads `<n>. <agent id>: diagnosis of step <k>, <served model>`.
-  - It stands under the heading "Agents in no role the cost script prices:", which the session makes when the section has none.
+  - It stands under the heading "Agents the cost script leaves unpriced:", which the session makes when the section has none.
   - An agent stopped for another model is written `<n>. <agent id>: diagnosis of step <k>, <served model>, stopped`.
 - The record's head holds the agent's id, its served model, and its tokens, tool uses and time from its completion notice, which the session fills.
 - Inside a plan, the step's worktree, when the step has one, is never changed and every probe runs on the scratch copy of Steps 3, so `plan-orchestration`'s rule that a finding whose cause is not known is diagnosed read-only holds.
