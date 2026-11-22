@@ -44,8 +44,16 @@ repair_reviewer: claude:sonnet  # the model the run of /refute over a repair rou
 ```yaml
 dispatch:
 - step: 1
-  brief_check: "running: abb679c2d2f988485"
-  landing: preparing
+  executor: agent
+  worker: claude:fable
+  base: 21f0793
+  worktree: .agents/worktrees/7-a-referee-1
+  launched: 2026-11-22
+  report: .scratch/7-a-referee/agents/reviews/1-report.md
+  brief_check: .scratch/7-a-referee/agents/reviews/1-brief-check.md (abb679c2d2f988485, claude-fable-5-2, 176151 tokens, 19 tool uses, 5.5 minutes)
+  session_id: a9dad9cfb0f9e82db (claude-fable-5-2)
+  landing: not-started
+  round: 0
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled or, under `self_rule: on`, until the orchestrator closes it as `plan-orchestration`'s `references/self-rule.md`, "Closing an open item", says)
@@ -76,6 +84,6 @@ dispatch:
 
 ## Current position (rewritten before every step commit of this plan)
 
-- 2026-11-22. The plan is open. Step 1, the skill, is next.
+- 2026-11-22. Step 1, the skill, is in flight: its builder is launched in `.agents/worktrees/7-a-referee-1` from base 21f0793.
 - Roadmap entry 7.A (referee). Plan step 1 of 3: the skill. Next: step 2, the gate's two runs, with the user.
-- Open on Axel's side: none.
+- Open on Axel's side: Open item 1, whether `paper-review-panel` names `referee`.
