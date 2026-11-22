@@ -115,7 +115,7 @@ The response letter check in revision mode:
    - Were the places claimed as "modified" actually changed? (truthfulness)
 
 2. New citation verification:
-   - New references added during revision enter the citation check of `references/citation-compliance.md`
+   - New references added during revision enter the citation check of `agents/citation_compliance_agent.md`
 
 3. Things NOT done (different from internal review):
    - Do not reassess paper quality (that is the human reviewers' job)

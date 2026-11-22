@@ -1,6 +1,6 @@
 # 0042. Paper's literature search is academic-paper's, with the report and the .bib written by the strategist
 
-Status: proposed
+Status: proposed; superseded by 0043 in lit-review item 7, the formatter for a target other than `markdown`
 
 ## Context
 
@@ -13,7 +13,7 @@ Paper's literature search had grown rules that academic-paper 3.2.0 does not hav
 
 ## Decision
 
-1. `skills/paper/references/literature-strategist.md` is academic-paper's `agents/literature_strategist_agent.md`, copied section by section with the same words in the same order. The only edits are these:
+1. `skills/paper/agents/literature_strategist_agent.md` is academic-paper's `agents/literature_strategist_agent.md`, copied section by section with the same words in the same order. The only edits are these:
    - `paper`'s names for academic-paper's files and roles;
    - the sentences on roles, skills and mechanisms `paper` has none of, left out, among them the Chinese-language search rules;
    - references to academic-paper's other files pointed at `paper`'s page or left out;
@@ -48,7 +48,7 @@ Paper's literature search had grown rules that academic-paper 3.2.0 does not hav
 
 The strategist follows academic-paper's page, and the session writes each brief from the request. A run's structure can differ from run to run, as academic-paper's two runs differ, and `config.md` records the structure chosen. The files the change reaches are:
 
-- `skills/paper/SKILL.md`, `skills/paper/references/literature-strategist.md`, `skills/paper/references/intake.md` and `skills/paper/references/modes.md`;
+- `skills/paper/SKILL.md`, `skills/paper/agents/literature_strategist_agent.md`, `skills/paper/agents/intake_agent.md` and `skills/paper/references/modes.md`;
 - the status lines of ADRs 0017, 0027, 0032, 0036, 0037, 0038, 0040 and 0041, and `docs/adr/README.md`;
 - `docs/glossary.md`, `docs/academic-coverage.md` and `README.md`;
 - both figure scripts and the figures they write.

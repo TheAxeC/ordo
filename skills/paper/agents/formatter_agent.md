@@ -42,7 +42,7 @@ If content changes are needed, raise them to the caller; do not silently revise.
 - Tables in markdown format
 
 ### 2. LaTeX (.tex + .bib)
-Reference: `references/latex-template-reference.md`
+Reference: `references/latex_template_reference.md`
 
 **Main .tex file**:
 - Document class: `article` (default) or journal-specific
@@ -78,8 +78,8 @@ Preferred behavior:
 When a target journal is specified:
 
 ### Step 1: Identify Requirements
-Reference: `references/credit-authorship-guide.md`
-Reference: `references/funding-statement-guide.md`
+Reference: `references/credit_authorship_guide.md`
+Reference: `references/funding_statement_guide.md`
 
 Common journal requirements to check:
 - [ ] Word/page limit
@@ -765,7 +765,7 @@ Quality gate not passed ->
 
 ## Paper's addition: the LaTeX manuscript
 
-This section is `paper`'s addition to academic-paper's agent. The manuscript is a LaTeX file and its `.bib`, so the formatter prepares the `.tex` for each target and changes it only by patches, in the form of `references/revision-patch-protocol.md`, which the session applies with `templates/apply_tex_patch.py`. It writes each patch with the Write tool, reading the block manifest, the `.aux` and the `.bbl` itself, and runs no conversion: the session runs `pandoc` and `latexmk` for the target formats. The formatter writes `format-report.md` in the run folder, in the form of the Output Package above.
+This section is `paper`'s addition to academic-paper's agent. The manuscript is a LaTeX file and its `.bib`, so the formatter prepares the `.tex` for each target and changes it only by patches, in the form of `references/revision_patch_protocol.md`, which the session applies with `templates/apply_tex_patch.py`. It writes each patch with the Write tool, reading the block manifest, the `.aux` and the `.bbl` itself, and runs no conversion: the session runs `pandoc` and `latexmk` for the target formats. The formatter writes `format-report.md` in the run folder, in the form of the Output Package above.
 
 ### The two patches
 
@@ -840,19 +840,8 @@ The numbers and the list come from the compile of the conversion copy before the
 
 The session made the `.tex` from the input. The `.tex` holds the reference list as text and the citations as the input wrote them. It names its figures by relative paths in `figures/`.
 
-- A `.md` that cites its sources by key, as `[key]`, may be given with the `.bib` of those keys. Lit-review mode gives `review.md` so, with `refs.bib`. Such a `.md`, given with its `.bib`, takes no new `.bib`, and the formatter writes no `refs.bib`. The bullets below on making `refs.bib` do not apply to it.
-- For such a `.md`, the `format-convert` patch gives each `[key]` the cite command with that key. It names the given `.bib` and removes the reference list held as text.
-- A bracket of several keys, as `[keyA, keyB]`, becomes one cite command with those keys, in the order the bracket gives them.
-- A key named in running text without brackets, as "keyA reports", becomes the cite command of that key in the same place. No other word changes.
-- Bracketed text inside a code span, such as a field tag of a search string, stays as text.
-- Bracketed text outside a code span that is not a key of the `.bib` stays as it is. A number in square brackets is such a text. It goes to the report as an issue about the text of the `.md`. In a numbered style it would read as a citation number.
-- Each table of such a `.md` is a `longtable` that breaks across pages.
-- Its `p{}` columns are sized to the page as `p{(\linewidth - N\tabcolsep) * \real{<share>}}`, where N is 2 times (the number of columns minus 1). The shares of the columns add up to 1, so that the padding between columns is counted.
-- A table too wide for the page is set in landscape with `pdflscape`.
-- A BibTeX error that only a change of an entry would end goes to the report as an issue. The `.bib` stays as it is.
-- In lit-review mode the formatter runs the word-sequence preservation check after each conversion (SKILL.md, lit-review item 7). It compares the words of `review.md` with the words of the `.tex` body before the AI disclosure, in order, by `difflib.SequenceMatcher` with `autojunk=False`, and prints the word counts, the count of differing spans and each span.
 - The formatter writes `refs.bib` beside the new `.tex`, once, and never over an existing file. When a `refs.bib` stands there, it writes `refs-2.bib`, the `.tex` names that file, and the report names it.
-- It makes each entry from the reference text. It runs `lookup.py resolve` for the reference, and with a DOI or an arXiv ID `lookup.py bibtex`, whose standard output is the entry. A `{?}` in the entry `bibtex` prints is replaced as `SKILL.md`, Rules, says. For a preprint with a published version, the entry is the one `references/latex-template-reference.md`, "The `.bib` entry forms", gives, with the one web search for its venue's page that section allows.
+- It makes each entry from the reference text. It runs `lookup.py resolve` for the reference, and with a DOI or an arXiv ID `lookup.py bibtex`, whose standard output is the entry. A `{?}` in the entry `bibtex` prints is replaced as `SKILL.md`, Rules, says. For a preprint with a published version, the entry is the one `references/latex_template_reference.md`, "The `.bib` entry forms", gives, with the one web search for its venue's page that section allows.
 - An entry that neither command gives is written from the reference text as the formatter reads it, and the report lists it under "Entries written from the reference text". No entry is dropped.
 - The `format-convert` patch gives each citation of the text a cite command with the entry's key, names the `.bib`, and removes the reference list held as text.
 - The patch changes no wording of the text.

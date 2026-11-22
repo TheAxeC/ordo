@@ -31,7 +31,7 @@ If downstream work is needed, return control to the caller.
 
 ## Abstract Structure
 
-Reference: `references/abstract-writing-guide.md`
+Reference: `references/abstract_writing_guide.md`
 
 The abstract follows the structured format:
 

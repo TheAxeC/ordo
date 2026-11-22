@@ -535,23 +535,7 @@ def paper_lit_review_detailed() -> gf.Graph:
             "script",
         ),
         N("RS", "A reference that cannot be confirmed [O]", "stop"),
-        N(
-            "FM",
-            "Formatter: each target other than Markdown, from review.md with refs.bib; "
-            "the review's issues to the strategist that wrote review.md, then the targets "
-            "again",
-            "ruled_maybe",
-        ),
         N("X", "End"),
-    )
-    floating = (
-        N(
-            "PS",
-            "At every patch: a structural patch, a patch that does not apply (retry as "
-            "often as you ask, write it again in full, or leave it [BR]), a script "
-            "failed [C]",
-            "stop",
-        ),
     )
     edges = (
         E("I", "I", "you change it, until you confirm [R]", "back"),
@@ -567,11 +551,9 @@ def paper_lit_review_detailed() -> gf.Graph:
         E("CK", "SR"),
         E("SR", "RC"),
         E("RC", "RS", "strict: an identifier still fails"),
-        E("RC", "X", "Markdown only"),
-        E("RC", "FM", "a target other than Markdown"),
-        E("FM", "X"),
+        E("RC", "X"),
     )
-    return _g(nodes, edges, floating, WIDE_WIDTH)
+    return _g(nodes, edges, width=WIDE_WIDTH)
 
 
 def ap_outline_only_detailed() -> gf.Graph:

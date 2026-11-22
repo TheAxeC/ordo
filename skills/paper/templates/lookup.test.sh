@@ -399,7 +399,7 @@ put("l2/refs.bib", bib_of("a", "b"))
 result = command(["cite-keys", "../l2/main.tex", "../l2/refs.bib"])
 check("L2 cite-keys with nothing to print", result == (0, [], []), repr(result))
 
-# L2b: the natbib and biblatex commands of references/latex-template-reference.md are all read, a \nocite is not.
+# L2b: the natbib and biblatex commands of references/latex_template_reference.md are all read, a \nocite is not.
 put("l2b/main.tex", "Text \\textcite{a} and \\parencite[see][p. 3]{b}, \\autocite{c}, \\Parencite{d}, \\citet{e}, \\citeauthor*{f}, \\nocite{g}.\n")
 put("l2b/refs.bib", bib_of("a", "b", "c", "d", "e", "f"))
 result = command(["cite-keys", "../l2b/main.tex", "../l2b/refs.bib"])

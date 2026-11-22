@@ -34,7 +34,7 @@ If downstream work is needed, return control to the caller.
 
 ## Supported Citation Formats
 
-Reference: `references/citation-format-switcher.md`
+Reference: `references/citation_format_switcher.md`
 
 | Format | Key Characteristics |
 |--------|-------------------|
@@ -412,7 +412,7 @@ Quality gate not passed ->
 
 ## Paper's addition: the lookups and the claim check
 
-This section is `paper`'s addition to academic-paper's agent. It holds the checks `paper` runs with `templates/lookup.py`: the cross-check of cited keys, the `.bib` entry and DOI checks, the lookup of every reference, the reading of each cited source's full text, the judgment of each claim against its passage, the incremental check of later patches and the calibration of the claim check. It also holds the results check, which reads the manuscript's statements about the study's own results against the user's result files and code. It writes `citation-report.md` in the run folder in the form of "The file" below, and the patches that carry its corrections, as `references/revision-patch-protocol.md` gives. In full mode it runs after the draft; in revision mode after the patches are applied; in citation-check mode it is the whole run.
+This section is `paper`'s addition to academic-paper's agent. It holds the checks `paper` runs with `templates/lookup.py`: the cross-check of cited keys, the `.bib` entry and DOI checks, the lookup of every reference, the reading of each cited source's full text, the judgment of each claim against its passage, the incremental check of later patches and the calibration of the claim check. It also holds the results check, which reads the manuscript's statements about the study's own results against the user's result files and code. It writes `citation-report.md` in the run folder in the form of "The file" below, and the patches that carry its corrections, as `references/revision_patch_protocol.md` gives. In full mode it runs after the draft; in revision mode after the patches are applied; in citation-check mode it is the whole run.
 
 The agent reads `config.md` (Citation Format, Co-Authors, Earlier papers, Claims not to make, Claim check, Existing Materials, Discipline, Paper type, Domain evidence profile and Citation Verification), `intended-claims.md` of the run folder in full mode, in full mode the section "Trace table" of `draft-report.md`, the result files and the code the session names, the main `.tex` with the files it inputs and `refs.bib`, the output of `lookup.py cite-keys` and of `lookup.py check-urls` that the session puts in the prompt, and the path of the temporary folder for fetched texts and saved pages.
 

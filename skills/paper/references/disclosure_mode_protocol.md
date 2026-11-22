@@ -12,10 +12,10 @@ The `disclosure` mode dispatches on the author-supplied selector:
 
 | Selector | Track | Lookup source | Output shape |
 |---|---|---|---|
-| `--venue=<v>` (default) | Venue track | `references/venue-disclosure-policies.md` database (ICLR / NeurIPS / Nature / Science / ACL / EMNLP) | Single venue-tailored disclosure paragraph + placement instruction |
-| `--policy-anchor=<a>` | Anchor track | `references/policy-anchor-table.md` 4-anchor x 16-field matrix | 4-anchor-conditioned render per `references/policy-anchor-disclosure-protocol.md` |
+| `--venue=<v>` (default) | Venue track | `references/venue_disclosure_policies.md` database (ICLR / NeurIPS / Nature / Science / ACL / EMNLP) | Single venue-tailored disclosure paragraph + placement instruction |
+| `--policy-anchor=<a>` | Anchor track | `references/policy_anchor_table.md` 4-anchor x 16-field matrix | 4-anchor-conditioned render per `references/policy_anchor_disclosure_protocol.md` |
 
-The two tracks are **selector-mutually-exclusive by default**: one selector picks one track. When the author supplies **both** selectors in the same invocation, the renderer evaluates compatibility: a consistent pair (Nature venue + nature anchor) proceeds; any other pair is **rejected with an explicit error** listing the policy conflict. Silent precedence between selectors is forbidden. See [references/policy-anchor-disclosure-protocol.md section 5](references/policy-anchor-disclosure-protocol.md) for the full conflict-resolution detail.
+The two tracks are **selector-mutually-exclusive by default**: one selector picks one track. When the author supplies **both** selectors in the same invocation, the renderer evaluates compatibility: a consistent pair (Nature venue + nature anchor) proceeds; any other pair is **rejected with an explicit error** listing the policy conflict. Silent precedence between selectors is forbidden. See [references/policy_anchor_disclosure_protocol.md section 5](references/policy_anchor_disclosure_protocol.md) for the full conflict-resolution detail.
 
 If neither selector is supplied, the mode prompts the user to specify which selector applies. The venue track remains the default for explicit journal submissions; the anchor track applies when targeting policy frameworks (e.g., compliance reporting to ICMJE-adopting journals collectively, or pre-submission alignment to IEEE author guidelines).
 
@@ -39,7 +39,7 @@ The venue track closes the venue-specific gap. The anchor track closes the polic
 
 2. **Selector** (one of):
    - **Target venue (`--venue=<v>`)**: journal or conference name (venue path). If the venue is in the database (ICLR, NeurIPS, Nature, Science, ACL, EMNLP), use the cached policy. If not, refuse to guess; prompt the user to paste the venue's current AI policy text from the venue's submission page.
-   - **Policy anchor (`--policy-anchor=<a>`)**: one of `prisma-trAIce, icmje, nature, ieee`. Anchor lookup follows `references/policy-anchor-disclosure-protocol.md`.
+   - **Policy anchor (`--policy-anchor=<a>`)**: one of `prisma-trAIce, icmje, nature, ieee`. Anchor lookup follows `references/policy_anchor_disclosure_protocol.md`.
 
 3. **Cold-start input** (anchor path only): `--policy-anchor=prisma-trAIce` requires an explicit `mode=<value>` parameter; silent fallback to general track is forbidden.
 
@@ -58,14 +58,14 @@ The venue track closes the venue-specific gap. The anchor track closes the polic
 - Neither supplied -> prompt the user to specify selector.
 
 **Step 1b: venue lookup (venue path, unchanged):**
-- If venue is in the database -> load policy from `references/venue-disclosure-policies.md`.
+- If venue is in the database -> load policy from `references/venue_disclosure_policies.md`.
 - If venue is unknown -> halt. Print: "I do not have a cached policy for {venue}. Please paste the venue's current AI-usage / generative-AI policy text so I don't guess." Do NOT fabricate a policy.
 - If the user pastes a policy for an unknown venue, use it for this session only. Do NOT auto-persist it to the database; policies drift, and the database needs curation.
 
 **Step 1c: anchor lookup:**
 - Validate `--policy-anchor=<a>` in `{prisma-trAIce, icmje, nature, ieee}`. Other values -> reject with the closed-enum error.
 - For `--policy-anchor=prisma-trAIce`: confirm `mode=systematic-review` (cold-start input) per the G2 invariant track gate. Otherwise refuse with G2 invariant citation.
-- Delegate Phase 3 + Phase 4 to `references/policy-anchor-disclosure-protocol.md` per-anchor render flows. Phase 2 (AI usage categorization) and Phase 5 (placement instructions) are shared with the venue path with the anchor-specific routing applied inside Phase 3/4.
+- Delegate Phase 3 + Phase 4 to `references/policy_anchor_disclosure_protocol.md` per-anchor render flows. Phase 2 (AI usage categorization) and Phase 5 (placement instructions) are shared with the venue path with the anchor-specific routing applied inside Phase 3/4.
 
 ### Phase 2: Categorize AI usage
 
@@ -135,8 +135,8 @@ If the venue requires placement in multiple locations (e.g., Methods + cover let
 
 ## References
 
-- `references/venue-disclosure-policies.md`: policy database (ICLR, NeurIPS, Nature, Science, ACL, EMNLP)
-- `references/policy-anchor-table.md`: 4-anchor x 16-field matrix (PRISMA-trAIce, ICMJE, Nature, IEEE) for the policy-anchor track
-- `references/policy-anchor-disclosure-protocol.md`: policy-anchor track render protocol (per-anchor flows, G10 7-row precedence table, auto-promotion forbiddance)
-- `references/credit-authorship-guide.md`: existing CRediT authorship best practices
+- `references/venue_disclosure_policies.md`: policy database (ICLR, NeurIPS, Nature, Science, ACL, EMNLP)
+- `references/policy_anchor_table.md`: 4-anchor x 16-field matrix (PRISMA-trAIce, ICMJE, Nature, IEEE) for the policy-anchor track
+- `references/policy_anchor_disclosure_protocol.md`: policy-anchor track render protocol (per-anchor flows, G10 7-row precedence table, auto-promotion forbiddance)
+- `references/credit_authorship_guide.md`: existing CRediT authorship best practices
 - Lu et al. (2026). Towards end-to-end automation of AI research. *Nature* 651, 914-919: the ethics statement for Lu 2026 was drafted in compliance with Nature's policy; their methodology is a worked example of what this mode should produce.

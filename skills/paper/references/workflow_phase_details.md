@@ -43,7 +43,7 @@ Detailed per-phase agent behavior and output descriptions for the 8-phase orches
 **Agent**: the structure architect
 **Output**: Paper Outline + Evidence Map
 
-- Structure pattern selection (from references/paper-structure-patterns.md)
+- Structure pattern selection (from references/paper_structure_patterns.md)
 - Section-by-section outline with word count allocation
 - Evidence-to-section assignment
 - Transition logic between sections

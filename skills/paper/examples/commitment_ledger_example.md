@@ -1,8 +1,8 @@
 # Commitment Ledger Worked Example
 
-This example traces three reviewer comments through the commitment ledger of `references/revision-tracking-template.md`, from the revision coach Step 3.5 extraction through revision execution.
+This example traces three reviewer comments through the commitment ledger of `templates/revision_tracking_template.md`, from the revision coach Step 3.5 extraction through revision execution.
 
-> Companion to `references/revision-recovery-example.md`. Where that example focuses on RESOLVED/UNRESOLVABLE *outcomes*, this one focuses on per-promise *lifecycle*.
+> Companion to `examples/revision_recovery_example.md`. Where that example focuses on RESOLVED/UNRESOLVABLE *outcomes*, this one focuses on per-promise *lifecycle*.
 
 ## Setup
 
@@ -116,4 +116,4 @@ Both values exist because `commitment_type` already carries an `other` escape ha
 A commitment-fulfillment gap is measurable: persuasive rebuttal text + matrix saying "Verified: Y" can still hide that the actual experiment was not run. The commitment ledger forces per-promise lifecycle traceability (extracted promises, classified outcomes, mandated rationale), closing the gap at the artifact level instead of relying on reviewer vigilance.
 
 ---
-**See also:** `references/revision-recovery-example.md`, `references/revision-coach.md` Step 3.5, `references/revision-tracking-template.md` Commitment Ledger.
+**See also:** `examples/revision_recovery_example.md`, `agents/revision_coach_agent.md` Step 3.5, `templates/revision_tracking_template.md` Commitment Ledger.

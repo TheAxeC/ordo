@@ -1,9 +1,9 @@
 # Policy Anchor Table
 
 **Parent skill**: `paper`
-**Consumer**: `references/policy-anchor-disclosure-protocol.md` (the LLM-prose renderer reads this table at runtime when in `disclosure` mode with `--policy-anchor=<a>` selector).
+**Consumer**: `references/policy_anchor_disclosure_protocol.md` (the LLM-prose renderer reads this table at runtime when in `disclosure` mode with `--policy-anchor=<a>` selector).
 
-**Nature <-> venue de-dup**: the Nature anchor below shares its substantive policy content with the Nature venue renderer in `references/venue-disclosure-policies.md`.
+**Nature <-> venue de-dup**: the Nature anchor below shares its substantive policy content with the Nature venue renderer in `references/venue_disclosure_policies.md`.
 
 **Forbidden (renderer must honour these):**
 - G1: no `ai_disclosure` field is added to the corpus entry schema; the renderer reads this table at runtime, no schema change.
@@ -15,7 +15,7 @@
 
 **Snapshot:** `prisma-trAIce:wayback=20260513075443` (sha256: f95fc59f...)
 **Anchor caveat:** PRISMA-trAIce is a **pre-Delphi proposal** (Holst et al. 2025). It has not undergone formal consensus; no item carries `explicit-mandate` strength. Item-level directives use reporting-guideline verbs ("describe", "report", "include") classified here as `explicit-recommend` within the proposed framework. The framework itself is `conditional-mandate` on "AI tool used as methodological tool in an SLR"; outside that condition the framework does not apply.
-**Track gate:** the renderer routes to this anchor only when the cold-start `mode=` input is `systematic-review`. See `references/policy-anchor-disclosure-protocol.md`.
+**Track gate:** the renderer routes to this anchor only when the cold-start `mode=` input is `systematic-review`. See `references/policy_anchor_disclosure_protocol.md`.
 
 | # | Field | Source strength | Verbatim quote | Locator | Value type |
 |---|---|---|---|---|---|
@@ -142,6 +142,6 @@
 
 ## Related
 
-- Renderer protocol (consumer): `references/policy-anchor-disclosure-protocol.md`
-- venue policy database (Nature de-dup peer): `references/venue-disclosure-policies.md`
-- disclosure mode protocol (extension target): `references/disclosure-mode-protocol.md`
+- Renderer protocol (consumer): `references/policy_anchor_disclosure_protocol.md`
+- venue policy database (Nature de-dup peer): `references/venue_disclosure_policies.md`
+- disclosure mode protocol (extension target): `references/disclosure_mode_protocol.md`

@@ -425,6 +425,8 @@ Agents in no role the cost script prices:
 - ad46188dd11d72cae: reviewer of step 5.R, claude-fable-5-2
 - a92c3d6a2c1309493: reviewer of step 5.R over round 1, claude-sonnet-5-5
 - a501ef8a51c551ad3: reviewer of step 5.R over round 2, claude-sonnet-5-5
+- ab52a493c09769d7b: builder of step 5.R, claude-fable-5-2
+- ab81666d6f5518ca9: reviewer of step 5.R over round 3, claude-sonnet-5-5
 - a7f240d919a101f50: the review of ruling 5.Q-no-rerun after step 5.R, claude-fable-5-2
 
 ## Blocked, and by what
@@ -1043,3 +1045,14 @@ Agents in no role the cost script prices:
   - a vague research question or too broad a discipline: before, listed for the user; after, the strategist takes one direction and names the rest in `review.md`;
   - a revision run compares no claims against a writer's list.
 - Usage: builder ae46e3f2b8d82155e round 2, 227597 tokens, 65 tool uses, 13.7 min; reviewer over round 2 a501ef8a51c551ad3 claude-sonnet-5-5, 233182 tokens, 53 tool uses, 5.9 min; the review a7f240d919a101f50 claude-fable-5-2, 384485 tokens, 44 tool uses, 12.8 min.
+
+### Step 5.R, repair round 3: paper from academic-paper's files, in its folders (landed 2026-11-22)
+
+- What it carries: ruling Open item 5.R-source. The script round first sent as round 3 and ruling Open item 5.R-wordseq are withdrawn; builder ae46e3f2b8d82155e was stopped and changed nothing that landed.
+- The round (`agents/briefs/5.R-round-3.md`, cases ruling `agents/briefs/5.R-round-3-cases.md`): the 50 pages and the LaTeX template moved to `skills/paper/agents/` (12), `references/` (22), `templates/` (10 beside the scripts) and `examples/` (7) under academic-paper's file names, every mention changed in the skill, `README.md`, `docs/academic-coverage.md`, `docs/glossary.md`, the figure scripts and the ADRs; `docs/dev/skill-layout.md` allows `agents/` and `examples/`; lit-review item 7 removed with the eleven bullets of the formatter's page, the mode's stops and programs for other targets, "with no `.bib`" of format-convert item 4 and the lit-review engine sentence of Steps 11, and four figures drawn again; ADR 0043 states resuming as `paper`'s own choice with its reason, and ADR 0042 is marked superseded in lit-review item 7.
+- The cases ruling: the builder handed back case C5 before changing anything, since its grep matched `skills/paper/templates/lookup.py:406`, the title ratio of the reference checks; ruled that the grep reads the pages only and no script changes.
+- Review over round 3: `agents/reviews/5.R-refuter.md`. Parts 2 and 3 hold, part 1 violated in one line, cases C1 to C6 met. The builder's report did not pass its bar; 2 fixes at landing: `SKILL.md`, "Agent prompts", names the agent's page under `agents/`; the sentence that lit-review takes no Output Format, which the round's brief had asked for, is removed, since academic-paper's files make no exception for lit-review at intake.
+- Verification on main: `sh ~/.claude/skills/land/templates/land.sh .scratch/5-paper/orchestrator-state.md 5-paper-5.R 0cd05f2` printed `checks: 12 commands passed`. After the fixes at landing, `env -u CLAUDE_CONFIG_DIR -u ORDO_SKILL_DIRS -u ORDO_STABLE sh ~/.claude/skills/land/templates/checks.sh .scratch/5-paper/orchestrator-state.md` printed `checks: 12 commands passed`. The five test commands print a `PASS:` line, not `ok` as the round's brief said.
+- No look and no A/B: the configuration names none.
+- Usage: builder ab52a493c09769d7b, 149998 tokens, 20 tool uses, 2.8 min to the hand-back, then 236749 tokens, 45 tool uses, 8.1 min; reviewer ab81666d6f5518ca9, 165470 tokens, 41 tool uses, 4.3 min.
+- Next: the review of ruling 5.Q-no-rerun, once, under the rules of ruling Open item 5.R-source.

@@ -4,7 +4,7 @@
 
 Use this template to record author contributions using the CRediT (Contributor Roles Taxonomy) framework. Fill in the contribution matrix, then use the output format to generate the CRediT statement for your manuscript.
 
-Reference: `references/credit-authorship-guide.md`
+Reference: `references/credit_authorship_guide.md`
 
 ---
 
@@ -89,7 +89,7 @@ share first authorship.
 | At least one author marked as "Lead" for Writing - original draft | [ ] |
 | At least one author marked for Writing - review & editing | [ ] |
 | Corresponding author identified | [ ] |
-| All authors meet ICMJE criteria (see `references/credit-authorship-guide.md`) | [ ] |
+| All authors meet ICMJE criteria (see `references/credit_authorship_guide.md`) | [ ] |
 | AI tools are NOT listed as authors | [ ] |
 | Equal contribution properly noted (if applicable) | [ ] |
 | CRediT statement language matches manuscript language | [ ] |

@@ -4,7 +4,7 @@
 
 Use this template to record all funding sources for your research and generate a properly formatted funding statement for your manuscript. Also includes COI (Conflict of Interest) statement templates.
 
-Reference: `references/funding-statement-guide.md`
+Reference: `references/funding_statement_guide.md`
 
 ---
 
@@ -223,7 +223,7 @@ This study was approved by the Institutional Review Board of [University Name]
 (Approval No. [Number]).
 
 ### Author Contributions
-[See CRediT statement from references/credit-statement-template.md]
+[See CRediT statement from templates/credit_statement_template.md]
 ```
 
 ---

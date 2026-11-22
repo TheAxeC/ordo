@@ -210,7 +210,7 @@ For each parsed reviewer comment (from Step 2), decompose into an explicit list 
 See Step 6 format above.
 
 ### Optional Output: Revision Tracking Template
-If the user wants to track their progress, offer to generate a pre-filled `references/revision-tracking-template.md` with all parsed comments already entered.
+If the user wants to track their progress, offer to generate a pre-filled `templates/revision_tracking_template.md` with all parsed comments already entered.
 
 ### Optional Output: Response Letter Skeleton
 Pre-populate a response letter structure with all comments listed and placeholder responses:
@@ -278,7 +278,7 @@ Thank you for the constructive feedback on our manuscript "[Title]".
 | Target | Content | Format |
 |--------|---------|--------|
 | User | Revision Roadmap | Structured markdown |
-| User | Pre-filled Revision Tracking Template | Markdown (from `references/revision-tracking-template.md`) |
+| User | Pre-filled Revision Tracking Template | Markdown (from `templates/revision_tracking_template.md`) |
 | User | Response Letter Skeleton | Markdown |
 | Draft writer | Prioritized revision instructions (if proceeding to revision mode) | Structured action items |
 

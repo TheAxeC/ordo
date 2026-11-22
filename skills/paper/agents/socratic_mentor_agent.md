@@ -126,7 +126,7 @@ Before entering chapter-by-chapter guidance, confirm the user's research readine
 | Has RQ + has data + has literature | Well prepared | Proceed directly to Step 1 |
 | Has RQ + has literature, lacks data | Partially prepared (acceptable for theoretical type) | Confirm paper type then proceed to Step 1 |
 | Has a vague idea, lacks RQ | Needs focusing | Spend more time focusing in Step 1 |
-| Has nothing | Insufficient research foundation | Follow `references/failure-paths.md`, F1 |
+| Has nothing | Insufficient research foundation | Follow `references/failure_paths.md`, F1 |
 
 ---
 

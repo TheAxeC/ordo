@@ -290,7 +290,7 @@ When a user completes `plan` mode and wants to proceed to `full` mode for actual
 
 | Plan Mode Output | Full Mode Input | Conversion Action |
 |-----------------|-----------------|-------------------|
-| Chapter Plan (structure outline) | the structure architect | Map chapters to formal sections with heading levels; validate against `references/paper-structure-patterns.md` |
+| Chapter Plan (structure outline) | the structure architect | Map chapters to formal sections with heading levels; validate against `references/paper_structure_patterns.md` |
 | Socratic Responses (Q&A transcripts) | the argument builder | Extract claims + evidence + warrants from dialogue; discard conversational scaffolding |
 | Literature Notes (if any) | the literature strategist | Independent execution: plan mode notes serve as seed keywords only; full systematic search required |
 | Argument Sketches | the argument builder | Evaluate each sketch against 4-level scoring; only `adequate` or above proceed |
@@ -299,7 +299,7 @@ When a user completes `plan` mode and wants to proceed to `full` mode for actual
 
 Before conversion, ALL of the following must be true:
 - [ ] Every chapter in the Chapter Plan has at least 1 argument sketch rated `adequate` or above
-- [ ] The overall paper structure maps to a recognized pattern in `references/paper-structure-patterns.md`
+- [ ] The overall paper structure maps to a recognized pattern in `references/paper_structure_patterns.md`
 - [ ] At least 5 potential references have been identified (seeds for the literature strategist)
 - [ ] The research question is finalized (not still evolving from Socratic dialogue)
 

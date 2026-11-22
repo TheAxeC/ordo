@@ -365,7 +365,7 @@ Note. [Additional details]
 - **Remaining issues**: [list or "none"]
 
 ### Figure/Table Trace
-Reference: `references/vlm-figure-verification.md` (Figure/Table Trace section).
+Reference: `references/vlm_figure_verification.md` (Figure/Table Trace section).
 Emit one `figure_table_trace[]` entry per artifact, linking the rendered output back to its data and the claims it supports.
 ```yaml
 figure_table_trace:
@@ -421,7 +421,7 @@ Step 6: Quality Check
   6.3 Confirm data accuracy (plotted values match source)
 
 Step 6.5: VLM Figure Verification (Optional)
-  Reference: `references/vlm-figure-verification.md`
+  Reference: `references/vlm_figure_verification.md`
   6.5.1 Check if multimodal/vision capability is available
   6.5.2 If available AND (figure is complex OR the run is in final-check mode):
     - Render the figure from generated code
@@ -431,7 +431,7 @@ Step 6.5: VLM Figure Verification (Optional)
   6.5.3 If not available or figure is simple: skip (note "VLM verification: skipped" in Figure Package)
 
 Step 6.6: Figure/Table Trace
-  Reference: `references/vlm-figure-verification.md` (Figure/Table Trace section)
+  Reference: `references/vlm_figure_verification.md` (Figure/Table Trace section)
   6.6.1 For each artifact (figure, and any manuscript table you produced data for), emit a
         figure_table_trace[] entry with: source_data (dataset_id + file), transformation
         ({script, hash} OR a precise manual-derivation pointer, never vague), caption_claim
@@ -461,7 +461,7 @@ Step 7: Package Output
 
 ## Paper's addition: the figures in the LaTeX manuscript
 
-This section is `paper`'s addition to academic-paper's agent. The manuscript is a LaTeX file changed only by patches, so the agent writes each Figure Package with its LaTeX environment into `figures.md` in the run folder, and places the figures by a patch in the form of `references/revision-patch-protocol.md`, which the session applies. In full mode the agent places the figures the outline plans; in the figures call it adds figures to an existing manuscript.
+This section is `paper`'s addition to academic-paper's agent. The manuscript is a LaTeX file changed only by patches, so the agent writes each Figure Package with its LaTeX environment into `figures.md` in the run folder, and places the figures by a patch in the form of `references/revision_patch_protocol.md`, which the session applies. In full mode the agent places the figures the outline plans; in the figures call it adds figures to an existing manuscript.
 
 ### The LaTeX environments
 
@@ -525,10 +525,10 @@ A full-page landscape figure, with `\usepackage{pdflscape}` in the preamble:
 
 In full mode the first draft holds a marker where each planned figure goes and no figure environment. The marker is the line `% FIGURE: <label>`, standing alone between blank lines. After the draft writer has ended, the session copies the images into the manuscript's `figures/` folder, anchorizes `main.tex` and gives the agent, resumed, the manifest and the path of the patch.
 
-- The patch has the id `figures`, as `references/revision-patch-protocol.md` gives, and the form of that page.
+- The patch has the id `figures`, as `references/revision_patch_protocol.md` gives, and the form of that page.
 - The marker is a block of its own, so the patch has one `replace_block` op for each figure drawn. The op replaces the marker block with the environment of the figure from `figures.md`, with the image name that `figures.md` gives under "Names".
 - Each op names `figures` in `roadmap_item_ids`, and its rationale names the label.
-- The agent copies `base_sha256` and each `old_hash` from the manifest, as `references/revision-patch-protocol.md` says.
+- The agent copies `base_sha256` and each `old_hash` from the manifest, as `references/revision_patch_protocol.md` says.
 - A figure listed under "Not drawn" gets one `delete_block` op for its marker. A block that refers to `fig:<label>` gets one `replace_block` op that states the same result without the reference, and changes no other word.
 - A marker whose label `figures.md` lists neither as drawn nor as not drawn is named in the agent's report, and its block is left unchanged.
 - The agent changes no other block and does not apply its patch.

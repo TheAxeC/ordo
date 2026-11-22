@@ -8,7 +8,7 @@ Roadmap entry 5 builds `paper` on academic-paper, which runs 12 agents, one per 
 
 ## Decision
 
-A `paper` run is done by academic-paper's agent roles: literature strategist, structure architect, argument builder, draft writer, citation compliance, abstract, peer reviewer, integrity verification and visualization. Each role is a fresh agent started through the Agent tool, with its own page under `skills/paper/references/`, run as `ordo-<reviewer_effort>` on the model the configuration's `reviewer` names. Intake is the session's interview with the user. The run stops for the user at the approval of the outline, at a reference that cannot be confirmed, at the ethics stop and at the acknowledgement of a structural patch.
+A `paper` run is done by academic-paper's agent roles: literature strategist, structure architect, argument builder, draft writer, citation compliance, abstract, peer reviewer, integrity verification and visualization. Each role is a fresh agent started through the Agent tool, with its own page under `skills/paper/agents/`, run as `ordo-<reviewer_effort>` on the model the configuration's `reviewer` names. Intake is the session's interview with the user. The run stops for the user at the approval of the outline, at a reference that cannot be confirmed, at the ethics stop and at the acknowledgement of a structural patch.
 
 ## Alternatives rejected
 

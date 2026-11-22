@@ -41,10 +41,10 @@ Before writing, confirm you have:
 - [ ] Literature Search Report with annotated bibliography (from the literature strategist)
 - [ ] Paper Outline with word count allocation (from the structure architect)
 - [ ] Argument Blueprint with CER chains (from the argument builder)
-- [ ] Citation format reference (from `references/apa7-extended-guide.md` or `references/citation-format-switcher.md`)
+- [ ] Citation format reference (from `references/apa7_extended_guide.md` or `references/citation_format_switcher.md`)
 - [ ] Style Profile: check `style_profile` field in `config.md`. If `null`, skip all style-related steps below. Only if non-null: apply it as soft guide
 - [ ] Writing Quality Check reference (`/writing`)
-- [ ] Anti-Leakage Protocol: check if Knowledge Isolation should be activated (from `references/anti-leakage-protocol.md`). Activate if user provided Annotated Bibliography AND mode is `full` or `revision`. When activated, prepend the Knowledge Isolation Directive to your working context. When not activated (plan/socratic mode, or minimal materials), skip.
+- [ ] Anti-Leakage Protocol: check if Knowledge Isolation should be activated (from `references/anti_leakage_protocol.md`). Activate if user provided Annotated Bibliography AND mode is `full` or `revision`. When activated, prepend the Knowledge Isolation Directive to your working context. When not activated (plan/socratic mode, or minimal materials), skip.
 
 ### Step 2: Section-by-Section Writing
 
@@ -481,7 +481,7 @@ Your task is to write the complete paper draft, then self-score it against your 
 
 ## Claim Intent Manifest Emission
 
-Pre-commitment baseline read by the citation compliance agent ("Claims against the list" of `references/citation-compliance.md`).
+Pre-commitment baseline read by the citation compliance agent ("Claims against the list" of `agents/citation_compliance_agent.md`).
 
 Before drafting the first prose block of the paper draft, write ONE manifest to `intended-claims.md` in the run folder, listing the substantive claims the draft intends to make and any author-declared "must not" rules. The citation compliance agent reads this baseline to compare the claims of the text with it.
 
@@ -513,7 +513,7 @@ Canonical example (single manifest with one MNC and one claim-level NC):
 Three firm rules:
 
 - **R-CIM-A (one-shot pre-commitment):** Emit exactly ONE manifest entry per writer invocation, BEFORE the first prose block. No later mutation, no append, no re-emission within the same invocation. Drafting that introduces a claim not in the manifest is reported downstream as a claim "not on the list"; that detection is the design intent (drift is surfaced, not silenced). The manifest is the pre-commitment artifact the audit diffs against; rewriting it mid-draft would hide the signal.
-- **R-CIM-B (no audit responsibility):** The writer emits manifests; it does NOT detect drift, re-judge supported / unsupported, or read other manifests. The comparison lives in "Claims against the list" of `references/citation-compliance.md`. Narrative-side emits, audit-side reads.
+- **R-CIM-B (no audit responsibility):** The writer emits manifests; it does NOT detect drift, re-judge supported / unsupported, or read other manifests. The comparison lives in "Claims against the list" of `agents/citation_compliance_agent.md`. Narrative-side emits, audit-side reads.
 - **R-CIM-C (no frontmatter reading):** Generate `claim_text`, `intended_evidence_kind`, `planned_refs`, and any `negative_constraints[].rule` values from the outline, the argument blueprint and the sources already provided. The session allocates a fresh `manifest_id` per invocation; never copy a `manifest_id` from a sibling manifest.
 
 The writer's job still ends at emission. The citation compliance agent reads the manifest downstream and compares it with the text. Manifest-side mutation by this writer would erase the pre-commitment signal the comparison depends on.
@@ -565,9 +565,9 @@ Do not mutate `refs.bib` to store version-family state. The version family lives
 
 ## Patch-Document Revision Emission
 
-In **revision mode**, your draft deliverable is NOT a re-emitted complete paper. It is a **patch document**: a JSON list of block operations against the anchored base draft, in the form `references/revision-patch-protocol.md` gives. Full re-emission exposes every character of the paper to silent-distortion on every round (DELEGATE-52, arXiv:2604.15597); the patch shape confines exposure to the blocks your operations explicitly touch. Protocol: `references/revision-patch-protocol.md`. This section governs revision-mode invocations only; Phase 4 initial drafting is unchanged, and the next paragraph gives the in-pair Phase 6 to 4 rewrite of `/paper full`.
+In **revision mode**, your draft deliverable is NOT a re-emitted complete paper. It is a **patch document**: a JSON list of block operations against the anchored base draft, in the form `references/revision_patch_protocol.md` gives. Full re-emission exposes every character of the paper to silent-distortion on every round (DELEGATE-52, arXiv:2604.15597); the patch shape confines exposure to the blocks your operations explicitly touch. Protocol: `references/revision_patch_protocol.md`. This section governs revision-mode invocations only; Phase 4 initial drafting is unchanged, and the next paragraph gives the in-pair Phase 6 to 4 rewrite of `/paper full`.
 
-**Paper's addition: the full-mode rewrite as one patch.** The first draft is written whole to `main.tex`. In `/paper full`, every later change to it, the in-pair Phase 6 to 4 rewrite among them, is one patch over the blocks the change touches, and a rewrite of the whole draft is one patch over every block, as "A patch over every block" of `references/revision-patch-protocol.md` gives. The session applies it with `templates/apply_tex_patch.py`.
+**Paper's addition: the full-mode rewrite as one patch.** The first draft is written whole to `main.tex`. In `/paper full`, every later change to it, the in-pair Phase 6 to 4 rewrite among them, is one patch over the blocks the change touches, and a rewrite of the whole draft is one patch over every block, as "A patch over every block" of `references/revision_patch_protocol.md` gives. The session applies it with `templates/apply_tex_patch.py`.
 
 Your revision-invocation context carries the `.tex` and its **block manifest** (`<tex>.block-manifest.json`, written by `templates/anchorize_tex.py`: `base_sha256` + one entry per block with its id, hash, section and first line). The `.tex` carries no block markers, since a marker would land in the LaTeX output. The manifest is the ONLY legitimate source for every hash you emit.
 
@@ -577,7 +577,7 @@ Your revision-invocation context carries the `.tex` and its **block manifest** (
 2. **Copy hashes, never compute them.** `base_sha256` and every per-op `old_hash` are mechanical copies from the block manifest. You do not compute SHA-256; an invented or "remembered" hash fails at apply exactly like a stale one. Use the block's first line to sanity-check you are naming the block you think you are.
 3. **Closed op vocabulary**: `replace_block` / `insert_after` / `delete_block`. Each `block_id` appears in at most ONE op, in any role. Multi-block insertion goes inside one `insert_after.new_text`. No move op; express relocation as `delete_block` + `insert_after`.
 4. **`insert_after` carries the anchor's `old_hash`** (position is meaningful only relative to the anchor's content).
-5. **Citation discipline is NOT relaxed**: every new citation in `new_text` is a `\cite` of a key in the `.bib`, and the citation compliance agent checks it after the patch is applied ("The incremental check" of `references/citation-compliance.md`).
+5. **Citation discipline is NOT relaxed**: every new citation in `new_text` is a `\cite` of a key in the `.bib`, and the citation compliance agent checks it after the patch is applied ("The incremental check" of `agents/citation_compliance_agent.md`).
 6. **`roadmap_item_ids` is required and non-empty on every op**: each edit publicly claims which reviewer concern it serves (Anti-Pattern 7 made visible).
 
 **Pre-drafting escalation classification.** BEFORE emitting any op, classify the round's roadmap items. If any item demands restructuring (section split/merge/reorder) or a change you cannot express in the op vocabulary, do NOT emit a patch and do NOT silently fall back to a full draft. Emit only:
@@ -586,7 +586,7 @@ Your revision-invocation context carries the `.tex` and its **block manifest** (
 [PATCH-ESCALATION-REQUIRED: layer=pre_drafting, items=<comma-separated roadmap item IDs>, reason=<one line per item>]
 ```
 
-and return control to the caller. The escalation decision (re-emit in full vs narrow the items) belongs to the user at the stop "A revision item that needs restructuring", which the session raises, never to you. Only when the caller explicitly re-dispatches you with full re-emission confirmed do you write the whole file again, as one patch over every block of the manifest (`references/revision-patch-protocol.md`, "A patch over every block"; that round is provenance-stamped `mode: full_reemission_escalated` downstream).
+and return control to the caller. The escalation decision (re-emit in full vs narrow the items) belongs to the user at the stop "A revision item that needs restructuring", which the session raises, never to you. Only when the caller explicitly re-dispatches you with full re-emission confirmed do you write the whole file again, as one patch over every block of the manifest (`references/revision_patch_protocol.md`, "A patch over every block"; that round is provenance-stamped `mode: full_reemission_escalated` downstream).
 
 **Apply-failure retry (once).** If the caller feeds back a structured apply rejection (stale hash, unknown target, schema failure), re-emit the ENTIRE patch once against the manifest provided in the retry context. Do not patch the patch. A second failure escalates to the user; that path is the caller's, not yours.
 
@@ -594,7 +594,7 @@ and return control to the caller. The escalation decision (re-emit in full vs na
 
 ## Paper's addition: the LaTeX manuscript
 
-This section is `paper`'s addition to academic-paper's agent. The manuscript is a LaTeX file and its `.bib`, and every change after the first draft is a patch, so the Output Format above is written as `main.tex` in the manuscript's folder, and the Draft Metadata and the word counts go into the agent's report. The agent reads the manuscript prose standard (the prose standard with the differences that `references/manuscript-prose-standard.md` of the `writing` skill folder lists), and the pages `references/rules.md` and `references/registers.md` of that folder, at the paths the session gives, and writes every sentence of the manuscript under them. It reads `references/latex-template-reference.md` for the preamble, the table widths, the `.bib` entry forms and the citation commands.
+This section is `paper`'s addition to academic-paper's agent. The manuscript is a LaTeX file and its `.bib`, and every change after the first draft is a patch, so the Output Format above is written as `main.tex` in the manuscript's folder, and the Draft Metadata and the word counts go into the agent's report. The agent reads the manuscript prose standard (the prose standard with the differences that `references/manuscript-prose-standard.md` of the `writing` skill folder lists), and the pages `references/rules.md` and `references/registers.md` of that folder, at the paths the session gives, and writes every sentence of the manuscript under them. It reads `references/latex_template_reference.md` for the preamble, the table widths, the `.bib` entry forms and the citation commands.
 
 ### The file
 
@@ -649,7 +649,7 @@ The patch with the id `reference-fix` answers the `missing:` lines of `lookup.py
 
 - A `missing:` line whose key is a typing slip of an existing key, with the same author and year, is corrected in the `.tex`.
 - A `missing:` line for a source that `refs.bib` of the run holds is answered by adding, after the last block of the `.bib`, that source's entry copied whole from the run's `refs.bib`.
-- A `missing:` line for a source that `review.md` of the run names and its `refs.bib` does not hold is answered by adding, after the last block of the `.bib`, the entry that `lookup.py bibtex` prints on standard output. For a preprint with a published version, the entry is the one `references/latex-template-reference.md`, "The `.bib` entry forms", gives, with the one web search for its venue's page that section allows. A `{?}` in the entry `bibtex` prints is replaced as `SKILL.md`, Rules, says.
+- A `missing:` line for a source that `review.md` of the run names and its `refs.bib` does not hold is answered by adding, after the last block of the `.bib`, the entry that `lookup.py bibtex` prints on standard output. For a preprint with a published version, the entry is the one `references/latex_template_reference.md`, "The `.bib` entry forms", gives, with the one web search for its venue's page that section allows. A `{?}` in the entry `bibtex` prints is replaced as `SKILL.md`, Rules, says.
 - A line the agent cannot answer is left unchanged and named in its report with the lookups tried.
 - The agent adds no source from memory.
 
@@ -663,13 +663,13 @@ The patch with the id `compile-fix` answers the compile lines that the session g
 
 ### The trace table
 
-In full mode the agent writes a section "Trace table" in `draft-report.md`, which the citation compliance agent reads as the index of its results check (`references/citation-compliance.md`, "The results check").
+In full mode the agent writes a section "Trace table" in `draft-report.md`, which the citation compliance agent reads as the index of its results check (`agents/citation_compliance_agent.md`, "The results check").
 
 - The table has one row for each statement the manuscript makes about the study's own results: a single number, a count, a list or a bound.
 - It has one row for each description of how the data were handled: the missing values, the imputation, the recoding, the cohort selection and what a variable is.
 - A row gives the statement as the manuscript words it, its section, the result file or code file it rests on, and the row or line of that file.
 - A number the agent computes from a result file has the command that computed it in its row.
-- A statement that no file of the user's materials bears out is not written, as the Knowledge Isolation Directive of `references/anti-leakage-protocol.md` says for the Methods section.
+- A statement that no file of the user's materials bears out is not written, as the Knowledge Isolation Directive of `references/anti_leakage_protocol.md` says for the Methods section.
 - A later patch of the agent that adds or changes such a statement adds or changes its row in `draft-report.md`.
 - A manuscript with no result of its own has the section with the line "no statement about the study's own results".
 

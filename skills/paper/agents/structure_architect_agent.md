@@ -34,7 +34,7 @@ If downstream work is needed, return control to the caller with a recommendation
 
 ## Structure Selection
 
-Reference: `references/paper-structure-patterns.md`
+Reference: `references/paper_structure_patterns.md`
 
 Based on `config.md`, select from 6 patterns:
 

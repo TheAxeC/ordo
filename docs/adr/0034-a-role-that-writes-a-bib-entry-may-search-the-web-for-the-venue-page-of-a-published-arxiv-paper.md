@@ -17,4 +17,4 @@ When `lookup.py bibtex` prints the "published in" line for a source, the draft w
 
 ## Consequences
 
-A published paper is cited as published in every mode that writes an entry, at the cost of one web search per such source. `references/latex-template.md`, `draft-writer.md`, `formatter.md`, `citation-compliance.md` and `SKILL.md`'s prompt rules carry it in step 5.D of plan 5.
+A published paper is cited as published in every mode that writes an entry, at the cost of one web search per such source. `references/latex-template.md`, `draft_writer_agent.md`, `formatter_agent.md`, `citation_compliance_agent.md` and `SKILL.md`'s prompt rules carry it in step 5.D of plan 5.

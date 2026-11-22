@@ -7,7 +7,7 @@
 
 ## How to use this file
 
-This file is consumed by `references/disclosure-mode-protocol.md`. The mode looks up the venue by name, reads the structured fields below, and generates a tailored disclosure. Do NOT use this file as a standalone template; use disclosure mode.
+This file is consumed by `references/disclosure_mode_protocol.md`. The mode looks up the venue by name, reads the structured fields below, and generates a tailored disclosure. Do NOT use this file as a standalone template; use disclosure mode.
 
 If the venue is not listed here, the mode halts and asks the user to paste the current policy.
 

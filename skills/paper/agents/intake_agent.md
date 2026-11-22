@@ -92,7 +92,7 @@ Default: IMRaD (for empirical research) or Literature Review (for synthesis topi
 - If yes, note journal name for formatting agent
 - If no, skip (use generic academic format)
 
-**Venue-profile follow-up (optional, only when a target journal was named):** offer to record the venue's submission limits as a venue profile, consumed by the formatter ("Conflict precedence: venue compliance wins" of `references/formatter.md`):
+**Venue-profile follow-up (optional, only when a target journal was named):** offer to record the venue's submission limits as a venue profile, consumed by the formatter ("Conflict precedence: venue compliance wins" of `agents/formatter_agent.md`):
 
 > "Do you want to record the venue's declared limits (word limit, abstract limit, keyword range, required sections, reference ceiling, blind-review model)? I will only record values you state; I never look up or infer limits from the journal name. Without a profile, the formatter checks no venue limit."
 
@@ -152,7 +152,7 @@ Ask what the user already has:
 - [ ] Style guide or template from target journal
 
 ### Step 9: Co-Authors & Contributions
-Reference: `references/credit-authorship-guide.md`
+Reference: `references/credit_authorship_guide.md`
 
 - Ask if this is a single-author or multi-author paper
 - If multi-author:
@@ -183,7 +183,7 @@ Ask the user:
 - Different language from target paper: extract transferable dimensions only (paragraph structure, citation style, modifier density)
 
 ### Step 11: Funding Sources
-Reference: `references/funding-statement-guide.md`
+Reference: `references/funding_statement_guide.md`
 
 - Ask if the research received any funding
 - If funded:
@@ -196,7 +196,7 @@ Reference: `references/funding-statement-guide.md`
 
 ### Step 12: Domain Evidence Profile
 
-Reference: `references/domain-evidence-profiles.md`
+Reference: `references/domain_evidence_profiles.md`
 
 The domain evidence profile lets the scholar tell the literature strategist which discipline's evidence standards to screen by, so it does not apply one Western evidence-based-medicine pyramid to every field. **Advisory only**: it changes which evidence types the literature screening *admits*; it never changes the A-F grade and never blocks ship. **Scholar-confirmed only: nothing auto-activates** (you MAY *suggest* a default inferred from the Step 1 topic interview, but the scholar must confirm).
 
@@ -230,7 +230,7 @@ The domain evidence profile lets the scholar tell the literature strategist whic
 
 ### Step 13: Citation Verification Level
 
-The citation check always *detects* unverifiable citations ("Looking a reference up" of `references/citation-compliance.md`); whether a detection *blocks* output is the scholar's choice. Ask:
+The citation check always *detects* unverifiable citations ("Looking a reference up" of `agents/citation_compliance_agent.md`); whether a detection *blocks* output is the scholar's choice. Ask:
 
 > "Citation verification: **mark only** (default: unverifiable citations are marked in the citation report; output is never blocked) / **strict** (a citation whose exact DOI/arXiv ID provably fails lookup blocks finalization). Strict suits DOI-dense fields; mark-only suits fields citing reports, standards, or grey literature, where real-but-unindexed citations are common."
 
@@ -247,7 +247,7 @@ This step is `paper`'s addition to academic-paper's interview. It asks the rows 
 | Row | What is asked | Modes |
 |---|---|---|
 | Number of sources | Optional. How many sources the literature search should end with. Left empty, the session decides the search as academic-paper's session does. Given, the session splits it into one target range per literature strategist start, the ranges summing to the number. | lit-review, full, outline-only |
-| Claims not to make | The claims the paper must not make, each as a sentence, or "none". The citation compliance agent reads it ("Claims the paper must not make" of `references/citation-compliance.md`). | full |
+| Claims not to make | The claims the paper must not make, each as a sentence, or "none". The citation compliance agent reads it ("Claims the paper must not make" of `agents/citation_compliance_agent.md`). | full |
 | Earlier papers | The authors' earlier papers that the paper may repeat passages of, each as a path, a DOI or a citation, or "none". The citation compliance agent reads it ("Passages that repeat an earlier paper"). | full |
 | Internal only | Whether the user asks for the manuscript as an internal record, such as a record of every attempt, and not as work to publish. Default: no. The intake agent never sets it from the materials. | full, outline-only, abstract-only |
 | Closing review | Whether the run ends with the `/writing` review of the manuscript, whose report a one-line reply answers. With no, the run ends after the compile, and the final message names `/writing` and `/paper revision <main.tex> <report>` for a later review. Default: yes. | full |
@@ -258,7 +258,7 @@ This step is `paper`'s addition to academic-paper's interview. It asks the rows 
 - In revision mode, which has no intake agent, the session asks the Closing review, Claim check and Incremental checks questions itself, each as the table words it, and the rows Claims not to make and Earlier papers with them.
 - In citation-check mode the session asks the rows Claims not to make and Earlier papers (`SKILL.md`, Steps 6). The mode always runs the claim check and has no later patch.
 - The question on Incremental checks says, in its own words, that with this row no and Closing review yes the patches of the `/writing` pass get no check.
-- The results check of `references/citation-compliance.md` runs under either answer to Claim check.
+- The results check of `agents/citation_compliance_agent.md` runs under either answer to Claim check.
 - In revision and citation-check mode the session also asks where the study's result files and code are, or "none", and writes the answer into the row Existing Materials.
 
 ## Output Format

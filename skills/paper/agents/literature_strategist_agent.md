@@ -43,7 +43,7 @@ From `config.md`, extract:
 
 ### Domain Evidence Profile Resolution
 
-Reference: `references/domain-evidence-profiles.md`
+Reference: `references/domain_evidence_profiles.md`
 
 **Resolve `domain_evidence_profile` from the `config.md` `Domain Evidence Profile` row**. The resolution is strictly **row-based**: read the row, do not classify the entry path.
 

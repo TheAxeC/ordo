@@ -1466,7 +1466,6 @@ def paper_lit_review_graph() -> Graph:
         Node("LR", "You review the sources, optional", "stop"),
         Node("RC", "Script: each corrected or added entry's DOI or arXiv ID resolved again", "script"),
         Node("SR", "A reference that cannot be confirmed", "stop"),
-        Node("F", "Formatter: each target other than Markdown, the review's issues back to the strategist that wrote review.md", "maybe"),
     )
     edges = (
         Edge("I", "S"),
@@ -1484,7 +1483,6 @@ def paper_lit_review_graph() -> Graph:
         Edge("CK", "LR"),
         Edge("LR", "RC"),
         Edge("RC", "SR", "strict: an identifier still fails"),
-        Edge("RC", "F", "a target other than Markdown"),
     )
     return _graph(nodes, edges)
 
@@ -1821,13 +1819,12 @@ def paper_run_folder() -> str:
             ("response-letter-check.md", "revision, response-letter"),
             ("rebuttal-audit.md", "rebuttal-audit"),
             ("disclosure.md", "disclosure"),
-            ("format-report.md", "full, lit-review, format-convert"),
+            ("format-report.md", "full, format-convert"),
             ("dialogue.md, chapter-summaries.md, insights.md, chapter-plan.md", "plan"),
             (
                 "The parsed comments, the roadmap, the tracking template, the letter skeleton",
                 "revision-coach",
             ),
-            ("Each target of the conversion", "lit-review"),
         ),
         columns=4,
     )

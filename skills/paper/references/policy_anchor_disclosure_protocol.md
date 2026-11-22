@@ -1,9 +1,9 @@
 # Policy-Anchor Disclosure Protocol
 
 **Parent skill**: `paper`
-**Mode name**: `disclosure` with `--policy-anchor=<a>` selector (parallel track to `--venue=<v>` venue path; see `references/disclosure-mode-protocol.md` for the dispatch).
+**Mode name**: `disclosure` with `--policy-anchor=<a>` selector (parallel track to `--venue=<v>` venue path; see `references/disclosure_mode_protocol.md` for the dispatch).
 **Anchor inventory**: `prisma-trAIce, icmje, nature, ieee` (closed enum).
-**Data source**: `references/policy-anchor-table.md` (read at runtime; LLM looks up the row for `--policy-anchor=<a>` x field-N).
+**Data source**: `references/policy_anchor_table.md` (read at runtime; LLM looks up the row for `--policy-anchor=<a>` x field-N).
 
 This protocol document is the runtime instruction set the LLM follows when the user invokes `disclosure` mode with a policy-anchor selector. It encodes the 8 frozen invariants, the G10 7-row precedence table for whole-disclosure output decision, the auto-promotion forbiddance, and the per-anchor render flows (PRISMA-trAIce / ICMJE / Nature / IEEE).
 
@@ -22,7 +22,7 @@ This protocol document is the runtime instruction set the LLM follows when the u
 3. **Cold-start fallback**: the author supplies `mode=<value>` explicitly. Silent fallback to general track on missing input is **forbidden** by the G2 invariant.
 4. **Phase 2 AI usage categorization**: the same input shape as the venue path. Each AI usage category carries state in `{USED, NOT USED, UNCERTAIN}`.
 5. **Optional `ai_used: true | false`**: explicit author-supplied flag layered on top of category state. Composes with category state per section 2 G10 7-row precedence table below.
-6. **Tool identity per AI tool**: auto-detected from session metadata (mirror `references/disclosure-mode-protocol.md` Phase 4 detection); explicit fallback per tool when session metadata absent or non-Claude tools are involved.
+6. **Tool identity per AI tool**: auto-detected from session metadata (mirror `references/disclosure_mode_protocol.md` Phase 4 detection); explicit fallback per tool when session metadata absent or non-Claude tools are involved.
 
 ---
 
@@ -46,7 +46,7 @@ Rows are evaluated in priority order from top to bottom; the renderer emits the 
 
 ## 3. Per-anchor render flows
 
-For each anchor, the renderer reads `references/policy-anchor-table.md` rows 1..16 and applies the field-level rules below. The 4 anchors share the row-4 dispatcher above; the per-anchor sections only describe **what to emit** after row 4 fires.
+For each anchor, the renderer reads `references/policy_anchor_table.md` rows 1..16 and applies the field-level rules below. The 4 anchors share the row-4 dispatcher above; the per-anchor sections only describe **what to emit** after row 4 fires.
 
 ### 3.1 `--policy-anchor=prisma-trAIce`
 
@@ -60,7 +60,7 @@ For each anchor, the renderer reads `references/policy-anchor-table.md` rows 1..
 When gate 3 fails (SLR manuscript whose only LLM use is editorial), the renderer routes to the section 3.5 copyediting-carve-out path instead. PRISMA-trAIce track does not own the copyediting case.
 
 **Render fields:**
-- Per `references/policy-anchor-table.md` row 1-3: emit one **tool identity tuple** per AI tool (auto-detect from session, fallback explicit). Identity tuple = (tool name, version if applicable, developer/provider).
+- Per `references/policy_anchor_table.md` row 1-3: emit one **tool identity tuple** per AI tool (auto-detect from session, fallback explicit). Identity tuple = (tool name, version if applicable, developer/provider).
 - Row 4-5: emit one **(tool x task) record** per (tool, task) tuple across the M3.a 6-stage enum. Missing tuples produce "not supplied" annotation per tuple. Per-task prompt disclosure follows M6.a granularity.
 - Row 8: emit prompt records per (tool x task) tuple per gate G5.
 - Row 9: emit human oversight description per M8 sub-items.
@@ -158,6 +158,6 @@ The invariants constrain the evaluation:
 
 ## 8. Related
 
-- Anchor data table (consumer of this protocol): `references/policy-anchor-table.md`
-- disclosure mode protocol (parallel track): `references/disclosure-mode-protocol.md`
-- venue disclosure policies (Nature dedup peer): `references/venue-disclosure-policies.md`
+- Anchor data table (consumer of this protocol): `references/policy_anchor_table.md`
+- disclosure mode protocol (parallel track): `references/disclosure_mode_protocol.md`
+- venue disclosure policies (Nature dedup peer): `references/venue_disclosure_policies.md`

@@ -8,7 +8,7 @@ ADR 0022 gave `paper` five roles. The literature strategist ran only when no `.b
 
 ## Decision
 
-`paper` is the counterpart of academic-paper, and its runs hold no integrity check and no ethics check. A full run is done by six roles. Each is a fresh agent started through the Agent tool with its own page under `skills/paper/references/`. It runs as `ordo-<reviewer_effort>` on the model the configuration's `reviewer` names:
+`paper` is the counterpart of academic-paper, and its runs hold no integrity check and no ethics check. A full run is done by six roles. Each is a fresh agent started through the Agent tool with its own page under `skills/paper/agents/`. It runs as `ordo-<reviewer_effort>` on the model the configuration's `reviewer` names:
 
 - the literature strategist, which runs always in outline-only and lit-review mode and by default in full mode. Full mode skips it only when the user says so at intake or takes an earlier lit-review or outline-only run's outputs. In full, outline-only and lit-review mode the user reviews its sources before the run goes on
 - a planner, which writes the outline and the argument map

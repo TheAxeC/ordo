@@ -68,7 +68,8 @@ No other `##` heading appears outside the place row 6 gives it.
 - Every repeat a skill asks for states its count and what happens when the count is reached: the work goes on as it is, or the skill stops for the user. A repeat that ends only when a condition holds, such as "until it passes" or "asked again", is given a count.
   - A repeat the work itself bounds, one pass per item of a list or per part removed, needs no count.
   - A repeat the user ends by answering, such as the rounds of an interview, needs no count.
-- Material a step needs only in some runs (a long format, a table of cases, a protocol) goes in a file `references/<name>.md` beside `SKILL.md`, named by its path from the step that reads it. Reference material goes in `references/`, never in `templates/`, which holds the files a skill copies into a repository or runs from its own folder.
+- Material a step needs only in some runs (a long format, a table of cases, a protocol) goes in a file `references/<name>.md` beside `SKILL.md`, named by its path from the step that reads it. Reference material goes in `references/`, never in `templates/`, which holds the files a skill copies into a repository or runs from its own folder, with the exceptions the next bullet gives.
+- A skill whose roles are agents keeps each role's page in `agents/` and its worked examples in `examples/`, and its `templates/` may hold the template pages a role fills beside the files the skill copies or runs.
 - A reference section of row 6 of "Sections, in order" holds only material every run reads.
 - The rules of this section apply to a skill's text when it is written or rewritten. Roadmap entry 23, the pruning pass, applies them to every existing skill.
 
@@ -76,6 +77,7 @@ No other `##` heading appears outside the place row 6 gives it.
 
 - A file of this skill is named from the skill's folder: `templates/<file>`.
 - A file of this skill's `references/` is named `references/<file>`, as a file of its `templates/` is named `templates/<file>`.
+- A file of this skill's `agents/` is named `agents/<file>`, and a file of its `examples/` is named `examples/<file>`.
 - A file of another skill is named with its skill: "the `plan` skill's `templates/plan.yaml`".
 - A repository path is relative to the repository root, and a key of `.agents/plan.yaml` is written as it appears there, in code.
 - A skill is named by its `name` in code: `/plan` for the invocation, `plan` for the skill.

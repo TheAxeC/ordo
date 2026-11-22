@@ -93,11 +93,11 @@ The ids are:
 | `D<r>-<m>` | The draft writer | Issue `m` of the review numbered `r`, such as `D1-2` for issue 2 of `review-1.md` |
 | `C<m>` | The citation compliance agent | Issue `m` of the citation report, in full, revision and citation-check mode, and issue `m` of a `citation-report-<nn>.md` for the patch with the number `<nn>` |
 | `figures` | The visualization agent | The placement of each planned figure at its marker `% FIGURE: <label>` in full mode, and in the figures call the insertion of each figure after the block that discusses its result |
-| `R<m>` | The draft writer | Issue `m` of the results check in the citation report, in full and revision mode (`references/draft-writer.md`, "The results-check patch") |
+| `R<m>` | The draft writer | Issue `m` of the results check in the citation report, in full and revision mode (`agents/draft_writer_agent.md`, "The results-check patch") |
 | `reference-fix` | The draft writer | The `missing:` lines of `lookup.py cite-keys` after the last writer pass of full and revision |
 | `compile-fix` | The draft writer | The compile lines of a failed compile, or of an `Overfull \hbox` or `Overfull \vbox` of more than 10pt |
 | `abstract` | The abstract agent | The abstract and the keywords, in place of the `% ABSTRACT` lines of the first draft in full mode, and of the abstract of the `.tex` in abstract-only mode |
-| `disclosure` | The formatter | The AI disclosure statement of disclosure mode, at the place `references/disclosure-mode-protocol.md` gives |
+| `disclosure` | The formatter | The AI disclosure statement of disclosure mode, at the place `references/disclosure_mode_protocol.md` gives |
 | `format-convert` | The formatter | The format conversion: the citation style, the venue's template and its required elements, and the fields of the format profile in LaTeX, with the cite commands of a `.tex` made from a `.md` or a `.docx` |
 | `format-convert-copy` | The formatter | The changes that make what `pandoc` drops readable: a table's wrapper, an algorithm, a cross-reference, a drawing, a numbered citation style, and, when the run does not change the citation style, also the same changes as `format-convert` for each block. The session applies it to the conversion copy only, never to the manuscript |
 | `full` | The literature strategist | The entries that full mode adds to an existing `refs.bib` |
