@@ -44,8 +44,16 @@ repair_reviewer: claude:sonnet  # the model the run of /refute over a repair rou
 ```yaml
 dispatch:
 - step: 4.A
-  brief_check: "running: abe740866c4b4563f"
-  landing: preparing
+  executor: agent
+  worker: claude:fable
+  worktree: .agents/worktrees/5-a-skill-groups-plan-yaml-found-by-a-search-order-and-agents-on-fable-4.A
+  base: 521141c
+  launched: 2026-11-22
+  report: .scratch/5-a-skill-groups-plan-yaml-found-by-a-search-order-and-agents-on-fable/agents/reviews/4.A-report.md
+  brief_check: ".scratch/5-a-skill-groups-plan-yaml-found-by-a-search-order-and-agents-on-fable/agents/reviews/4.A-brief-check.md (abe740866c4b4563f, claude-fable-5-2, 180274 tokens, 30 tool uses, 6.1 minutes)"
+  round: 0
+  session_id: a92f129df7f7c8dad (claude-fable-5-2)
+  landing: not-started
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled or, under `self_rule: on`, until the orchestrator closes it as `plan-orchestration`'s `references/self-rule.md`, "Closing an open item", says)
@@ -78,5 +86,5 @@ dispatch:
 ## Current position (rewritten before every step commit of this plan)
 
 - 2026-11-22. The plan is opened; nothing has landed.
-- Roadmap entry 5.A (Skill groups, plan.yaml found by a search order, and agents on Fable). Plan step 4 of 6: the checks on the pinned skills; `v9.0.0-rc.1` is tagged and pinned and five checks are recorded in `agents/reviews/4-pinned-checks.md`; the user read the 18 lines and found them fine (2026-11-22); the run on the scratch repository is made by the session in a new Claude Code session. Step 4.A, the submission checks in paper, is added by the ruling "Submission checks folded in" and comes next, before the closing. Steps 1, 2 and 3 landed. Next: step 4, which tags and pins the new skills first, since the pinned skills read `.agents/plan.yaml`, which is no longer on main.
+- Roadmap entry 5.A (Skill groups, plan.yaml found by a search order, and agents on Fable). Plan step 4.A of 6: the submission checks in paper, in build. Steps 1, 2 and 3 landed; step 4, the checks on the pinned skills, is recorded in `agents/reviews/4-pinned-checks.md`, with the user's review of the run on the scratch repository open. Next: the review and the landing of step 4.A, then the closing.
 - Open on Axel's side: none.
