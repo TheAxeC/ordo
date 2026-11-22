@@ -46,7 +46,8 @@ dispatch:                    # or the block /spec writes (a list when .agents/pl
 - step: 5.R
   executor: agent
   worker: claude:fable
-  session_id: ae46e3f2b8d82155e (claude-fable-5-2)
+  session_id: ab52a493c09769d7b (claude-fable-5-2)
+  builders_before: ae46e3f2b8d82155e (claude-fable-5-2, stopped)
   worktree: .agents/worktrees/5-paper-5.R
   base: 0cd05f2
   launched: 2026-11-22
