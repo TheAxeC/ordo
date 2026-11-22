@@ -1,0 +1,10 @@
+# Rulings of entry 7.A referee, written while no plan is open
+
+- A small skill on the panel's pages (2026-11-22): `referee` is a small skill of its own that runs the reviewers of `paper-review-panel` from that skill's pages and adds only what differs for a referee: the stance (someone else's paper, so no revision roadmap and no coaching of the author), the last step, and the second round. It is not a copy of the panel's 25 files. This replaces the part of D35 (plan of entry 5) and of the roadmap entry's goal that has it built as a full copy; it stays a skill of its own, as D34 and D35 rule (the user).
+- The last step selects (2026-11-22): the referee's report does not carry every comment of the panel. A proper review is not too long and does not hold too many points, so the last step first selects which comments go in and which do not, and writes the report from the selected ones only, in one voice, in the journal's fields (the user).
+- An intake direction (2026-11-22): the run takes a direction at its intake, such as a methodological focus, which steers the review and the selection (the user).
+- All five by default (2026-11-22): the run starts all five reviewers by default and selects afterwards; the direction shrinks the panel only when the user says so at the intake (the user).
+- A stop before the writing (2026-11-22): the selected comments are shown to the user with the left-out comments beside them, and the user moves items between the two before the report is written (the user).
+- The left-out comments are kept (2026-11-22): every comment of the panel that is not selected is written to a file of the run folder, with one clause saying why it was left out (the user).
+- A default budget (2026-11-22): by default the report holds about 5 to 7 major points, about 7 minor points and about 1,200 words, the size of the review sent for BIOINF-2026-1778; the user changes it at the intake (the user).
+- What the intake asks (2026-11-22): beside the direction, the intake asks the severity of the review, the journal's fields and its length limit, and whether the run is a first review or a re-review with the authors' response (the user).
