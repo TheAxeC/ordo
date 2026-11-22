@@ -56,12 +56,12 @@ PIPELINE_LEGEND = (
     L("rev", "Purple: academic-paper-reviewer"),
     L("pipe", "Grey: academic-pipeline itself"),
     L("dr", "Sand: deep-research"),
-    L("paper", "Teal: paper"),
+    L("paper", "Teal: paper and paper-review-panel"),
     L("todo", "Dashed box: not built yet, with its roadmap entry"),
     L("none", "Red dotted box: no skill takes it"),
     L(
         "dotted",
-        "Dotted arrow: goes to a skill not built yet or to none; a solid arrow goes to paper",
+        "Dotted arrow: goes to a skill not built yet or to none; a solid arrow goes to a built skill",
     ),
 )
 
@@ -125,7 +125,7 @@ STAGES = (
     Stage("1 Research: deep-research", "dr", "RS", False),
     Stage("2 Write: academic-paper", "ap", "P1", True),
     Stage("2.5 Integrity check", "pipe", "RS", False),
-    Stage("3 Review", "rev", "PRV", False),
+    Stage("3 Review", "rev", "PRV", True),
     Stage("4, 3', 4' Revise and re-review", "ap", "P2", True),
     Stage("4.5 Final integrity check", "pipe", "RS", False),
     Stage("5 Finalize", "ap", "FC", True),
@@ -134,7 +134,7 @@ STAGES = (
 
 TARGETS = {
     "P1": ("paper plan and paper full", "paper"),
-    "PRV": ("paper-review-panel, entry 6", "todo"),
+    "PRV": ("paper-review-panel", "paper"),
     "RS": ("researcher, entry 13: integrity and ethics checks, the stage loop", "todo"),
     "P2": ("paper revision", "paper"),
     "FC": ("paper format-convert", "paper"),
