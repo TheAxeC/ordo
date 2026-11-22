@@ -1,0 +1,16 @@
+# Step 1, repair round 1
+
+The review of step 1 (`agents/reviews/1-refuter.md`) found the points below. Each has its ruling, which says what to change. Change nothing else. The rules of the brief `agents/briefs/1.md` hold unchanged: its conventions, its path list, and no git command that changes state.
+
+1. `docs/adr/0030-...md`, Decision and Consequences. The sentence "Each skill names in its own text the model and the effort of each agent it starts" says of `writing` what the next sentence denies, and "A change of model or effort is a change of the skill's text." is false for `writing`. Ruling: word both so that they speak of `paper` alone, and so that the record says once what `writing` does.
+2. `docs/adr/0035-...md`, Alternatives rejected: "The default agent at the session's effort: the run cannot name an effort it does not read." The record now decides that alternative for `writing`. Ruling: word the alternative as rejected for `paper`, whose run names its effort, so that it does not contradict the decision for `writing`.
+3. `docs/adr/0035-...md`, Context: it quotes ADR 0030 as deciding that every agent of `writing` "runs as `ordo-medium` on opus", which ADR 0030 no longer says. Ruling: word the sentence so that it says nothing of ADR 0030 that ADR 0030 does not say.
+4. `skills/repo-setup/templates/plan-terms.md` and `docs/glossary.md`, entry **reviewer**: "An agent started with the warning the entry **effort agent** gives runs on none of these models." Such an agent runs on the session's model, which may be one of them. Ruling: say that such an agent follows the session and is not held to these models. Change the template first and sync.
+5. The same two files, entry **brief check**: it gives the brief-check agent the model `reviewer:` names and not the warning case, which the entry **diagnosis agent** gives. Ruling: add the warning case in the words the entry **diagnosis agent** uses for it.
+6. `skills/plan-orchestration/SKILL.md`, "The two tiers, and the models": "The `plan` skill's `templates/plan.yaml` names Claude Opus for each of those keys." It tells an orchestrator nothing it acts on and goes false when the template changes. Ruling: remove the sentence.
+7. `docs/adr/0007-...md`, Alternatives rejected: the two rejections argue from price and measurement ("the price per token does not change, and the saving in tokens is not measured", "the cost is not cut, and nothing is measured."), which the Context no longer names. Ruling: word each rejection by what the alternative fails to give against the Context as it now reads: a model for the run over a repair round that is set apart from the first run's.
+8. `skills/code-comments/SKILL.md`, "The rewrite" 5: "start the rewrite agent as Steps 5 starts the finding agent" now starts it in the background, which the item did not say before. Ruling: word the item so that it says how the agent starts (the runner's default agent, no model and no effort in the prompt) and adds nothing on the background.
+
+The widened path list: the paths of the brief, no new one.
+
+Then run the checks of the brief's "Verify before you report" again and the cases C1 to C10, and add a section "Repair round 1" to your report `agents/reviews/1-report.md`: one line per point above with what changed and where, and the lines the checks printed.

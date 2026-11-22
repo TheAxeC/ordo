@@ -53,8 +53,10 @@ dispatch:
   brief_check: .scratch/5-a-skill-groups-plan-yaml-found-by-a-search-order-and-agents-on-fable/agents/reviews/1-brief-check.md (a3baabc725c3d4805, claude-fable-5-2, 136624 tokens, 17 tool uses, 3.8 minutes)
   shared_paths: "steps 2 and 3 of this plan name files this step names (the SKILL.md of nine skills, the plan templates, the glossary and its source, the README, ADR 0007, 0014 and 0030, .agents/plan.yaml): simple by the ruling Three steps in flight, since this step lands first and steps 2 and 3 move or reword the same files on top of it"
   session_id: ad35ad4cb7d6e0618 (claude-fable-5-2)
+  builder_usage: 263337 tokens, 42 tool uses, 10.2 minutes
+  reviewer_report: .scratch/5-a-skill-groups-plan-yaml-found-by-a-search-order-and-agents-on-fable/agents/reviews/1-refuter.md (af9bdf0f24d9b60a2, claude-fable-5-2, 222767 tokens, 29 tool uses, 5.4 minutes)
   landing: not-started
-  round: 0
+  round: 1
 - step: 2
   executor: agent
   worker: claude:fable
