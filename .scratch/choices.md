@@ -2,7 +2,7 @@
 
 Each choice the orchestrator took under self-rule waits here for the user's review, grouped by roadmap entry. The user agrees with a choice by typing `C<n> Agree`, or replaces it by typing `C<n> => <ruling>`, in any session on the repository. A reviewed choice leaves this file.
 
-Last number: C110
+Last number: C143
 
 # Entry 2.I Several plans in one session
 
@@ -830,3 +830,37 @@ Taken: (a)
 Booked: `.scratch/5-a-skill-groups-plan-yaml-found-by-a-search-order-and-agents-on-fable/plan.md`, Rulings, "Open item 4.B-sync"
 Builds on it: step 4.B
 
+# Entry 6 paper-review
+
+## C141. Where the scoring contracts come from, at /spec of step 2 of plan 6 (2026-11-22)
+
+The source's two-call scoring protocol places a contract in front of each reviewer and names its templates as `shared/contracts/reviewer/full.json` and `shared/contracts/reviewer/methodology_focus.json`. Neither file is in the source's folder or anywhere in research-hub (`find` and `mdfind` for both names print nothing). Without a contract the protocol has no dimensions and no failure conditions to run on. The source's lock file names its upstream repository, `imbad0202/academic-research-skills` on GitHub, which holds both files; the versions committed there on 2026-04-23 carry `baseline_version` v3.6.2, the version the source's protocol names, and match its section 9 (F1, F2, F3 and F0 for the full panel; F1, F2 and F0 on D1 for methodology focus).
+
+- Options: (a) take the two contracts from the upstream repository at that version and write them into `SKILL.md`. Pro: the protocol runs on the contract its own text describes, and nothing is invented. Con: 140 lines of text that is not in the source's folder. (b) take the upstream's current contracts. Pro: the newest. Con: they add a `fatal` trigger and a sixth dimension that the copied protocol does not describe. (c) write contracts from the dimensions the source's pages name. Con: invented text. (d) leave the protocol with no contract. Con: the two-call protocol cannot run.
+- Recommendation: (a). The lazy option: (d).
+
+Taken: (a)
+Booked: `.scratch/6-paper-review/plan.md:38` (Open item 2-contracts)
+Builds on it: step 2
+
+## C142. The three contribution questions of the coaching step, at /spec of step 2 of plan 6 (2026-11-22)
+
+Phase 2.5 step 3 of the source asks the questions L5-W1, L5-W2 and L5-W3 and says to read their text in deep-research's `agents/socratic_mentor_agent.md`. deep-research is not wanted, so no page of this repository holds the text.
+
+- Options: (a) write the three questions into the step, with the source's anchor "the revised paper". Pro: the step asks what the source asks. Con: three sentences from a page of another skill. (b) leave the step out. Con: a part of the source's coaching is cut. (c) keep the ids with no text. Con: the step cannot be carried out.
+- Recommendation: (a). The lazy option: (b).
+
+Taken: (a)
+Booked: `.scratch/6-paper-review/plan.md:39` (Open item 2-questions)
+Builds on it: step 2
+
+## C143. The form of the call, at /spec of step 2 of plan 6 (2026-11-22)
+
+The source has no slash command of its own: it starts on a plain request and picks the mode from the words. The skill layout asks for a Quick start block with every invocation.
+
+- Options: (a) `/paper-review <mode> <manuscript>`, the six mode names of the source, `full` when no mode is named, and the source's plain requests kept as triggers with its mode selection table. Pro: the form `paper` has, and the source's requests still work. (b) plain requests only. Con: no invocation to list, against the skill layout.
+- Recommendation: (a). The lazy option: (b).
+
+Taken: (a)
+Booked: `.scratch/6-paper-review/plan.md:40` (Open item 2-call)
+Builds on it: step 2

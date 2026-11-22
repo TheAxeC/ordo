@@ -42,7 +42,13 @@ repair_reviewer: claude:sonnet  # the model the run of /refute over a repair rou
 ```
 
 ```yaml
-dispatch: []
+dispatch:
+- step: 1
+  landing: preparing
+  brief_check: "running: a7158d80e8b21c9c4"
+- step: 2
+  landing: preparing
+  brief_check: "running: a10369c9579256655"
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled or, under `self_rule: on`, until the orchestrator closes it as `plan-orchestration`'s `references/self-rule.md`, "Closing an open item", says)
@@ -50,8 +56,9 @@ dispatch: []
 - none
 
 ## Closed items (the log of what was raised and how it ended; no report carries it)
-
-- none yet.
+- 2026-11-22: Open item 2-contracts, the source's scoring contracts are not in its folder: closed under self-rule, C141.
+- 2026-11-22: Open item 2-questions, the three coaching questions stand only in deep-research: closed under self-rule, C142.
+- 2026-11-22: Open item 2-call, the form of the call: closed under self-rule, C143.
 
 ## The standing demands (from Axel, in force)
 
