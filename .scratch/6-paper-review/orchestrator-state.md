@@ -42,20 +42,7 @@ repair_reviewer: claude:sonnet  # the model the run of /refute over a repair rou
 ```
 
 ```yaml
-dispatch:
-- step: 2
-  executor: agent
-  worker: claude:fable
-  base: 90fe644
-  worktree: .agents/worktrees/6-paper-review-2
-  launched: 2026-11-22
-  report: .scratch/6-paper-review/agents/reviews/2-report.md
-  builder_usage: 314218 tokens, 30 tool uses, 11.1 minutes; round 1: 326086 tokens at its end, 3 tool uses, 1.7 minutes
-  brief_check: .scratch/6-paper-review/agents/reviews/2-brief-check.md (a10369c9579256655, claude-fable-5-2, 183232 tokens, 21 tool uses, 6.9 minutes)
-  session_id: a21f2ad5c98eaac0b (claude-fable-5-2)
-  landing: not-started
-  reviewer_report: .scratch/6-paper-review/agents/reviews/2-refuter.md (a915fb8ba1219bbe2, claude-fable-5-2, 232088 tokens, 24 tool uses, 6.3 minutes)
-  round: 1
+dispatch: []
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled or, under `self_rule: on`, until the orchestrator closes it as `plan-orchestration`'s `references/self-rule.md`, "Closing an open item", says)
@@ -89,6 +76,6 @@ dispatch:
 
 ## Current position (rewritten before every step commit of this plan)
 
-- 2026-11-22. Step 1, the pages, is on main. Step 2 is built and reviewed in `.agents/worktrees/6-paper-review-2`, its repair round done and refuted, and lands next.
-- Roadmap entry 6 (paper-review). Plan step 1 of 4 landed: the pages. Next: the landing of step 2, `SKILL.md` and the places that list the skills, then step 3, the gate's reading.
+- 2026-11-22. Steps 1 and 2 are on main: the skill `paper-review` stands whole under `skills/academic/paper-review/`. Nothing is in flight.
+- Roadmap entry 6 (paper-review). Plan step 2 of 4 landed: `SKILL.md` and the places that list the skills. Next: step 3, the gate's reading.
 - Open on Axel's side: none.

@@ -18,7 +18,7 @@ a fresh agent reads `diff -r` of the skill's folder against `research-hub/.agent
 ## Steps, in execution order
 
 - ✅ 1 the pages: each file of `research-hub/.agents/skills/academic-paper-reviewer/` under `agents/`, `references/`, `templates/` and `examples/`, except `references/changelog.md`, copied into `skills/academic/paper-review/` under its own folder and name, with the edits of ADR 0043, Decision 1, and no others; `diff` of each page against its source shows only those edits, and the character-set check of `docs/dev/building.md` prints nothing for the folder (1 commit) (approved)
-- 2 `SKILL.md` and the places that list the skills: the source's `SKILL.md` carried section by section, with its words, into the layout of `docs/dev/skill-layout.md` as `skills/academic/paper-review/SKILL.md`, with the three things the source does not state taken as `paper` has them (ruling The three things the source does not state); the README's row and its count of skills, `paper`'s Use instead row, the glossary's entry "panel review" and the skill's figure; the reviewer reads the source's `SKILL.md` against the new one, and the verify list of `docs/dev/building.md` passes on main (1 commit) (approved) (ruling 2-contracts) (ruling 2-questions) (ruling 2-call)
+- ✅ 2 `SKILL.md` and the places that list the skills: the source's `SKILL.md` carried section by section, with its words, into the layout of `docs/dev/skill-layout.md` as `skills/academic/paper-review/SKILL.md`, with the three things the source does not state taken as `paper` has them (ruling The three things the source does not state); the README's row and its count of skills, `paper`'s Use instead row, the glossary's entry "panel review" and the skill's figure; the reviewer reads the source's `SKILL.md` against the new one, and the verify list of `docs/dev/building.md` passes on main (1 commit) (approved) (ruling 2-contracts) (ruling 2-questions) (ruling 2-call)
 - 3 the gate's reading: a fresh agent reads `diff -r` of `skills/academic/paper-review/` against `research-hub/.agents/skills/academic-paper-reviewer/` once and writes `agents/reviews/3-diff-reading.md`, which lists each difference with which edit of ADR 0043, Decision 1, it is, or none; the user reads that list (0 commit) (approved)
 - 4 the closing: the closing report written (the cost script's output, or that the plan started no agent), the roadmap entry ticked with the gate's output, this folder moved to the archive (orchestrator, no agent) (approved)
 
@@ -46,10 +46,14 @@ Each agent a plan skill started for this plan has one bullet, with its agent id,
 - a840c1d8f45ecd55f: builder of step 1, claude-fable-5-2
 - a8df6fcc33e1a61cf: reviewer of step 1, claude-fable-5-2
 - ae4197d6f7ce23142: reviewer of step 1 over round 1, claude-sonnet-5-5
+- a10369c9579256655: brief check of step 2, claude-fable-5-2
+- a21f2ad5c98eaac0b: builder of step 2, claude-fable-5-2
+- a915fb8ba1219bbe2: reviewer of step 2, claude-fable-5-2
+- ab963ce95a5408f40: reviewer of step 2 over round 1, claude-sonnet-5-5
 
 ## Blocked, and by what
 
-- 3: waits for steps 1 and 2 on main.
+- nothing.
 
 ### Step 1, the pages (landed 2026-11-22)
 
@@ -63,3 +67,16 @@ Each agent a plan skill started for this plan has one bullet, with its agent id,
 - Verification on main: `env -u CLAUDE_CONFIG_DIR -u ORDO_SKILL_DIRS -u ORDO_STABLE sh ~/.claude/skills/land/templates/land.sh .scratch/6-paper-review/orchestrator-state.md 6-paper-review-1 ea700fc docs/plan.yaml` exited 0 and printed `checks: 12 commands passed`.
 - Look: none, the configuration block's `look:` is empty. A/B: none, `bench: []`.
 - Usage: brief check a7158d80e8b21c9c4 claude-fable-5-2 234992 tokens, 29 tool uses, 7.2 minutes; builder a840c1d8f45ecd55f claude-fable-5-2 154702 tokens, 65 tool uses, 13.5 minutes, and its round 1 ended at 164616 tokens, 3 tool uses, 1.0 minutes; reviewer a8df6fcc33e1a61cf claude-fable-5-2 201785 tokens, 28 tool uses, 5.4 minutes; reviewer over round 1 ae4197d6f7ce23142 claude-sonnet-5-5 117692 tokens, 18 tool uses, 1.4 minutes.
+
+### Step 2, `SKILL.md` and the places that list the skills (landed 2026-11-22)
+
+- Landed: 8 files, 653 insertions(+), 10 deletions(-) against the base 90fe644, before the two fixes at landing: `skills/academic/paper-review/SKILL.md` (534 lines) and `docs/figures/paper-review.svg` new; `README.md`, `skills/academic/paper/SKILL.md`, `docs/glossary.md`, `docs/dev/building.md`, `docs/dev/scripts.md` and `docs/figures/gen_figures.py` changed. No conflict with step 1.
+- Ticked: every item of the brief holds after the fixes at landing and every case is met, by the run over round 1; the two cases that run a figure script were run at landing, where `python3 docs/figures/gen_figures.py` and `python3 docs/figures/academic-pipeline/gen_academic_pipeline.py` left `git status --short` with no changed figure.
+- Premise corrections: none in `plan.md`. The brief check's points were closed in the brief before the build (`agents/reviews/2-brief-check.md`, "Closed"). Open items 2-contracts, 2-questions and 2-call were closed under self-rule before the build (C141 to C143).
+- Review: `agents/reviews/2-refuter.md`; the first run found Spec 1 to 5 and declined the glossary's "Stated in:", sent back as the six rulings of repair round 1 (`agents/briefs/2-round-1.md`) and closed there. The run over round 1 found Spec 1 and 2.
+- Fixes at landing: 2, both in `skills/academic/paper-review/SKILL.md`. Steps, "quick", item 2 says the EIC starts in one call, with no sprint contract, since `references/sprint_contract_protocol.md` gives a contract to `reviewer_full` and `reviewer_methodology_focus` only. Quick start, the line of `full`, reads "the same review, with the mode named", so it no longer disagrees with Steps 1.
+- The builder's first report did not pass its bar: five findings went back in the round.
+- Findings outside the brief: `docs/figures/academic-pipeline/gen_academic_pipeline.py` and `docs/roadmap.md` entry 13 say "paper-review, entry 6 (not built yet)"; they become false at the closing and are step 4's.
+- Verification on main: `env -u CLAUDE_CONFIG_DIR -u ORDO_SKILL_DIRS -u ORDO_STABLE sh ~/.claude/skills/land/templates/land.sh .scratch/6-paper-review/orchestrator-state.md 6-paper-review-2 90fe644 docs/plan.yaml` exited 0 and printed `checks: 12 commands passed`; `checks.sh` run again after the fixes printed `checks: 12 commands passed`.
+- Look: the configuration block's `look:` is empty. The orchestrator rendered `docs/figures/paper-review.svg` with `rsvg-convert` and read it: every box, arrow and the three note lines are inside the canvas. A/B: none, `bench: []`.
+- Usage: brief check a10369c9579256655 claude-fable-5-2 183232 tokens, 21 tool uses, 6.9 minutes; builder a21f2ad5c98eaac0b claude-fable-5-2 314218 tokens, 30 tool uses, 11.1 minutes, and its round 1 ended at 326086 tokens, 3 tool uses, 1.7 minutes; reviewer a915fb8ba1219bbe2 claude-fable-5-2 232088 tokens, 24 tool uses, 6.3 minutes; reviewer over round 1 ab963ce95a5408f40 claude-sonnet-5-5 111059 tokens, 15 tool uses, 1.7 minutes.

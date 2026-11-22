@@ -477,3 +477,56 @@ The legend is the one `writing.svg` and `grill.svg` carry.
 2. A label outside this step's paths still calls the skill unbuilt. `docs/figures/academic-pipeline/gen_academic_pipeline.py:137` reads `"PRV": ("paper-review, entry 6", "todo"),` and its figure draws that box as not built. The file is not among the paths this step writes, and the brief's case asks that `git status --short docs/figures/academic-pipeline` print nothing, so it is unchanged. It is a different file from the ones the step lists, and it turns false when the entry closes, not at this step.
 3. The contracts stand in a reference section. `docs/dev/skill-layout.md`, "Writing for an agent", asks that material only some runs read stand in `references/`, and a reference section hold only material every run reads. The two contracts are read only by full and methodology-focus runs. They stand in `## Sprint Contract Protocol` all the same, as the brief decides under ruling Open item 2-contracts, since the entry adds no file to the source's set.
 4. The source disagrees with itself on when Phase 2.5 runs: the diagram says "Decision = Minor/Major Revision" and Checkpoint Rule 5 says "Decision is not Accept". Both are carried, as a copy keeps them.
+
+## Round 1
+
+Every ruling of `.scratch/6-paper-review/agents/briefs/2-round-1.md` is done. Where this section and a section above differ, this section gives the text as it now stands. One point is not covered by a ruling and is unchanged: "quick" item 2 starts the EIC and names no contract, and quick has no contract either; ruling 1 names "re-review" and "calibration" only.
+
+### Per finding, the change and the text as it now reads
+
+1. Spec 1, `skills/academic/paper-review/SKILL.md`, Steps.
+   - "guided" item 1 now reads: "Run Phase 0 as full items 1 and 2 say, then start the five reviewers at once, each in one call, with no sprint contract, with what `references/guided_mode_protocol.md`, "How It Works", changes." Its last line reads: "Done when the five reports stand in the run folder."
+   - "re-review" item 1 now reads: "Start the agents of the row `re-review` of the modes table, in the phases `references/re_review_mode_protocol.md`, "How It Works", gives, each in one call, with no sprint contract."
+   - "calibration" item 2 now reads: "Run the phases after the intake as that page gives them, each reviewer in one call, with no sprint contract."
+   - No item of the three modes names a stop of the contract.
+2. Spec 2, `docs/figures/gen_figures.py`, the note of `paper_review()`. It now reads: "The five reviewers start at once, each in 2 calls under the sprint contract. The other modes start these roles. Re-review: the field analyst, the EIC and the editorial synthesizer. Quick: the field analyst and the EIC. Methodology-focus: the field analyst, the EIC and the methodology reviewer. Guided: the field analyst and the five reviewers, then the EIC's dialogue. Calibration: all seven, 5 times per gold paper."
+   - The other modes' sentences were read against their steps and stand unchanged: re-review item 1 starts the agents of its row (the field analyst, the EIC, the editorial synthesizer); quick items 1 and 2 start the field analyst and the EIC; methodology-focus items 1 and 2 start the field analyst, the EIC and the methodology reviewer; calibration runs `full` 5x per paper, all 7 agents, as its row and its section say.
+   - `python3 docs/figures/gen_figures.py` was run again and wrote `docs/figures/paper-review.svg`; `git status --short docs/figures` shows no other figure changed.
+3. Spec 3, `skills/academic/paper-review/SKILL.md`.
+   - Steps 1, the bullets now read: "In a call `/paper-review <mode> ...` the first argument, one of the six mode names, is the mode." / "A call whose first argument is one word that is neither one of the six mode names nor a path that exists, followed by a path that exists, is the refusal "Unknown mode"." / "Every other call whose first argument is no mode name takes all its arguments as the manuscript, a path or pasted text, and runs `full`." / "A plain request gets its mode from the mode selection logic above and the Quick Mode Selection Guide below." / "A call that lacks an input its mode's line of Quick start requires, or whose revision roadmap or gold set folder does not exist, is the refusal "A missing input"."
+   - Stops, the row "Unknown mode", When: "The first argument is one word that is neither one of the six mode names nor a path that exists, and a path that exists follows it (Steps 1)".
+   - Stops, the row "A missing input", When: "The call lacks an input its mode's line of Quick start requires, or its revision roadmap or gold set folder does not exist (Steps 1)". This row and its bullet of Steps 1 no longer refuse a manuscript argument that names no existing file, since ruling 3 takes such an argument as pasted text; the change is the agreement ruling 3 asks of the bullets of Steps 1.
+   - Quick start, the comment of the first line: "review the paper, a path or pasted text, with the full panel: 5 review reports, the Editorial Decision and the Revision Roadmap". The comment of the second line: "the same review, with the mode named; a first word that is no mode name is taken as the manuscript".
+4. Spec 4, What it reads 1 now reads: "The manuscript, as a file or as pasted text, read in every mode but calibration. A call of such a mode that gives none is the refusal "A missing input"."
+5. Spec 5, Agent prompts: the sentence "Each reviewer's page states them under `## Phase Boundary` and `## Sprint Contract Protocol`, with the two calls under `### Phase 1: Paper-content-blind pre-commitment` and `### Phase 2: Paper-visible review`." is removed. The paragraph ends on the source's "both apply: neither overrides the other."
+6. The glossary entry **panel review**, `docs/glossary.md:153`, now ends: "Stated in: `skills/academic/paper-review/SKILL.md`, the opening paragraph." The definition's words are unchanged.
+
+### Every sentence the round wrote
+
+- "Run Phase 0 as full items 1 and 2 say, then start the five reviewers at once, each in one call, with no sprint contract, with what `references/guided_mode_protocol.md`, "How It Works", changes."
+- "Done when the five reports stand in the run folder."
+- The clause ", each in one call, with no sprint contract" in "re-review" item 1.
+- The clause ", each reviewer in one call, with no sprint contract" in "calibration" item 2.
+- "A call whose first argument is one word that is neither one of the six mode names nor a path that exists, followed by a path that exists, is the refusal "Unknown mode"."
+- "Every other call whose first argument is no mode name takes all its arguments as the manuscript, a path or pasted text, and runs `full`."
+- "A call that lacks an input its mode's line of Quick start requires, or whose revision roadmap or gold set folder does not exist, is the refusal "A missing input"."
+- The two When cells of Stops and the two Quick start comments quoted under finding 3.
+- "The manuscript, as a file or as pasted text, read in every mode but calibration. A call of such a mode that gives none is the refusal "A missing input"."
+- In the figure's note: "Guided: the field analyst and the five reviewers, then the EIC's dialogue."
+- In the glossary: "Stated in: `skills/academic/paper-review/SKILL.md`, the opening paragraph."
+
+### The checks, as printed
+
+- The character-set check of "Verify before you report" 1 printed no line; exit status 0.
+- `python3 skills/ordo/repo-setup/templates/sync_rules.py . --only glossary`: `ok: the plan-terms block equals the template`
+- `env -u CLAUDE_CONFIG_DIR -u ORDO_SKILL_DIRS -u ORDO_STABLE sh utils/pin.test.sh 2>&1 | tail -1`: `PASS: pin.sh scratch tests`
+- The contracts' ids, the command of the case: `2`, `reviewer/reviewer_full/v1 5 ['F1', 'F2', 'F3', 'F0']`, `reviewer/reviewer_methodology_focus/v1 2 ['F1', 'F2', 'F0']`
+- The frontmatter, the command of the case: `paper-review 532 {'version': '1.0.0'}`
+- `grep -n '^## ' skills/academic/paper-review/SKILL.md`: `12:## Quick start`, `32:## Use instead`, `43:## What it reads`, `77:## Steps`, `256:## Agent prompts`, `280:## Sprint Contract Protocol`, `435:## Review output`, `453:## Integration`, `475:## Quality standards`, `489:## Stops`, `506:## Anti-patterns`, `520:## Rules`
+- `grep -c 'sixteen' README.md`: `0`. `grep -c 'seventeen' README.md`: `2`
+- The contracts equal to the two files, the command of the case: `True`
+- Anti-patterns rows and Quality standards rows, the two commands of row 4b above: `7` and `9`
+- The Checkpoint Rules and the Devil's Advocate's 8 bullets, by reading: unchanged by the round, as rows 4c and 4d above say.
+- `python3 docs/figures/academic-pipeline/gen_academic_pipeline.py`: `wrote docs/figures/academic-pipeline/academic-pipeline.svg (22040 bytes)`, exit 0; `git status --short docs/figures/academic-pipeline` printed nothing.
+- `python3 docs/figures/gen_figures.py`: among its lines `wrote docs/figures/paper-review.svg (12421 bytes)`, exit 0; `git status --short docs/figures` printed ` M docs/figures/gen_figures.py` and `?? docs/figures/paper-review.svg`.
+- The grep for names that do not exist here ("Verify before you report" 5) printed nothing.

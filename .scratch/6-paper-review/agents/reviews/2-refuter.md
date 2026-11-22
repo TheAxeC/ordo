@@ -196,3 +196,114 @@ Cases:
 - The 24 pages of step 1 are absent from this worktree. Each page and heading the new file names was checked against the source's pages and the heading texts the brief gives, not against step 1's output.
 
 Reviewer usage: a915fb8ba1219bbe2, claude-fable-5-2, 232088 tokens, 24 tool uses, 6.3 minutes.
+
+## Repair round 1, refuted
+
+```
+Round delta: diff -u <snapshot>/<path> <worktree>/<path> for the 8 paths of files.txt
+  README.md, docs/dev/building.md, docs/dev/scripts.md, skills/academic/paper/SKILL.md: no difference
+  docs/figures/gen_figures.py: 1 hunk (the note of paper_review(), Guided sentence)
+  docs/figures/paper-review.svg: 1 hunk (the two note lines)
+  docs/glossary.md: 1 hunk (panel review, "Stated in:")
+  skills/academic/paper-review/SKILL.md: 9 hunks (Quick start x2 comments, What it reads 1, Steps 1 bullets, re-review item 1, guided item 1, calibration item 2, Agent prompts sentence, Stops x2 rows)
+  git status --short: the same 8 paths as files.txt, plus the untracked round brief .scratch/6-paper-review/agents/briefs/2-round-1.md and reviews/2-report.md. No other path changed.
+
+Verify 1, the character-set check over the step's 8 files (brief's command): no line printed; exit 0
+Verify 2: python3 skills/ordo/repo-setup/templates/sync_rules.py . --only glossary
+  ok: the plan-terms block equals the template   (exit 0)
+Verify 3: NOT RUN (writes scratch directories); see Declined to judge
+Case, contract ids:
+  2
+  reviewer/reviewer_full/v1 5 ['F1', 'F2', 'F3', 'F0']
+  reviewer/reviewer_methodology_focus/v1 2 ['F1', 'F2', 'F0']   (exit 0)
+Case, frontmatter: paper-review 532 {'version': '1.0.0'}   (exit 0)
+Case: grep -n '^## ' skills/academic/paper-review/SKILL.md
+  12 Quick start, 32 Use instead, 43 What it reads, 77 Steps, 256 Agent prompts, 280 Sprint Contract Protocol, 435 Review output, 453 Integration, 475 Quality standards, 489 Stops, 506 Anti-patterns, 520 Rules   (exit 0)
+Case: grep -c 'sixteen' README.md -> 0 ; grep -c 'seventeen' README.md -> 2
+Case, contracts equal to the two ledger files without baseline_version: True   (exit 0)
+Case: git status --short docs/figures/academic-pipeline -> (no line); exit 0
+  (python3 docs/figures/academic-pipeline/gen_academic_pipeline.py NOT RUN: it writes a file)
+Verify 5: grep -nE 'v[0-9]+\.[0-9]+|deep-research|academic-pipeline|academic-paper|shared/|scripts/|docs/design|ARS|ars-|[Oo]rchestrator' skills/academic/paper-review/SKILL.md -> no line; grep exit 1
+Case, figure: python3 docs/figures/gen_figures.py NOT RUN (writes). In its place, the module was imported in memory (python3 -I, bytecode off) and each (name, text) pair of figures() compared with the file on disk:
+  20 []      (20 figures, none differing from disk)
+  git status --short docs/figures -> " M docs/figures/gen_figures.py" and "?? docs/figures/paper-review.svg"
+Anti-patterns 7 and Quality standards 9: unchanged by the round (no hunk touches those sections).
+```
+
+### Verdicts
+
+Items of "What to build", `skills/academic/paper-review/SKILL.md`:
+
+- Opening rule (carried with its words; nothing added beyond what the brief and rulings name): violated, Findings 1 and 2. The sentence of Spec 5 is gone, and the round's sentences are the six rulings' text.
+- Frontmatter: holds (frontmatter case output above).
+- Title and first paragraph: holds, no hunk.
+- `## Quick start`: violated, Finding 2 (the comment of line 2 disagrees with Steps 1).
+- `## Use instead`: holds, no hunk.
+- `## What it reads`: holds. Item 1 now excepts calibration; item 2 still refuses a missing required input; item 1 and Steps 1 agree for calibration.
+- `## Steps`, the lead: violated, Finding 2 (Quick start comment against the Steps 1 bullet). The three bullets of Steps 1, the Stops rows "Unknown mode" and "A missing input" agree with each other and with ruling 3.
+- `### full`: holds, no hunk.
+- Phase 2.5 point 3: holds, no hunk.
+- `### re-review`, `### guided`, `### calibration`: holds. Each item that starts reviewers says no sprint contract holds (re-review item 1, guided item 1, calibration item 2), none names a stop of the contract, and guided "Done when" names the five reports and no `[PANEL-SHRUNK]`. Statements agree with `references/guided_mode_protocol.md`, `references/re_review_mode_protocol.md` and `references/calibration_mode_protocol.md`, each "v3.6.2 sprint contract status": "runs without contract enforcement".
+- `### quick` and `### methodology-focus`: violated for quick, Finding 1. Methodology-focus holds (it names its two-call contract).
+- The Socratic dialogues, a part carried once, a rule stated in several places, bold rows, "Done when" on each item: holds, no hunk against them.
+- `## Agent prompts`: holds. The Spec 5 sentence is removed; the paragraph ends on "neither overrides the other."
+- `## Sprint Contract Protocol`: holds (bullet 5 names the three reserved modes; see Finding 1 for quick).
+- `## Review output`, `## Integration`, `## Quality standards`: holds, no hunk.
+- `## Stops`: holds. The Reviewer Configuration row names full, quick, methodology-focus and guided; `[PANEL-SHRUNK]` names full and methodology-focus only; the two refusal rows agree with Steps 1 and What it reads 1.
+- `## Anti-patterns`, `## Rules`, left out whole, no `##` outside the layout's order: holds.
+
+Items of "The places that list the skills":
+
+- `README.md`, `skills/academic/paper/SKILL.md`, `docs/dev/building.md`, `docs/dev/scripts.md`: holds, no hunk since the snapshot.
+- `docs/glossary.md`: holds. The definition's words are unchanged; "Stated in:" reads `skills/academic/paper-review/SKILL.md`, the opening paragraph, and that paragraph states the panel and the Editorial Decision with the Revision Roadmap.
+- `docs/figures/gen_figures.py` and `docs/figures/paper-review.svg`: holds. The note's Guided sentence now reads "the field analyst and the five reviewers, then the EIC's dialogue", which is what guided items 1 and 2 start. Re-review (field analyst, EIC, editorial synthesizer: modes-table row and item 1), quick (field analyst, EIC: items 1 and 2), methodology-focus (field analyst, EIC, methodology reviewer: items 1 and 2) and calibration (all seven, 5 times per gold paper: modes-table row) each agree with their steps. The svg's text equals the function's (in-memory comparison) and its note lines carry the new sentence. No other figure differs from disk.
+
+Cases:
+
+- Every `##` and `###` heading of the source placed: met, by reading; the round moved no section.
+- 7 Anti-Patterns rows and 9 Quality Standards rows: met, no hunk in those sections.
+- 7 Checkpoint Rules, each once; 8 bullets under the Devil's Advocate: met, no hunk in full items 2, 3, 5 or Rules.
+- Contract ids; frontmatter; `##` headings; sixteen 0 and seventeen 2; contracts equal to the two files: met (outputs above).
+- The academic-pipeline figure: not verifiable here (the script writes a file); `git status --short docs/figures/academic-pipeline` prints nothing.
+- `gen_figures.py` writes only the new figure: not verifiable by its run; the in-memory comparison and `git status --short docs/figures` agree with the case.
+
+### Findings
+
+Spec
+
+1. `skills/academic/paper-review/SKILL.md`, Steps, "quick", item 2: "Start the EIC, the second agent of the row `quick` of the modes table." and `## Sprint Contract Protocol`, bullet 5: "Reserved modes (`reviewer_re_review`, `reviewer_calibration`, `reviewer_guided`) have no contract and run without the two-call protocol."; what is wrong: quick starts a reviewer (the EIC) and neither the item nor the protocol section says whether a contract holds. The round gave re-review, guided and calibration the clause "with no sprint contract" and left quick without it. The builder's report states the omission as a point no ruling covers. The same file now says, for every other mode that starts a reviewer, whether a contract holds. Quick is the one that is silent, and the contract list (full and methodology-focus only, `references/sprint_contract_protocol.md`, the table of modes) is the only place that implies it has none; failure scenario: a session running `/paper-review quick paper.tex` reads full item 3 and the Sprint Contract Protocol bullet 1 ("All reviewer modes that ship with contracts...") and cannot tell from the file whether the EIC is started in two calls under the full contract or in one call; verdict: `### quick` violated, and the opening rule (mode items agreeing on contract status) partial for it.
+
+2. `skills/academic/paper-review/SKILL.md`, Quick start, line 2: "the same review, with the mode named; a first word that is no mode name is taken as the manuscript"; what is wrong: Steps 1, bullet 2, says that a call whose first argument is one word that is neither a mode name nor an existing path, followed by an existing path, is the refusal "Unknown mode". Ruling 3 asks that the Quick start comments agree with it. The comment states the unqualified opposite; failure scenario: a user who reads only Quick start types `/paper-review fulll paper.tex` (a mistyped mode), expects it taken as the manuscript and gets the refusal "Unknown mode", or a session reading the comment as the rule runs `full` on the text "fulll paper.tex"; verdict: `## Quick start` and the Steps lead violated.
+
+Proof
+
+- none. Every command that writes nothing printed what the builder's Round 1 section says. The two figure-script lines and the `pin.test.sh` line of that section are under Declined to judge.
+
+Standards
+
+- none. The character-set check printed nothing; the grep for version tags and names that do not exist printed nothing; the round's sentences contain no history or date.
+
+Behaviour
+
+- none. Each user-visible change of the round (guided, re-review and calibration contract status, the "Unknown mode" and "A missing input" rules, calibration's call needing no manuscript, the figure note, the glossary's "Stated in:") is listed in the builder's "Per finding" and "Every sentence the round wrote".
+
+### Declined to judge
+
+- `utils/pin.test.sh` (`PASS: pin.sh scratch tests`) and the two figure scripts (`wrote docs/figures/paper-review.svg (12421 bytes)`, `wrote docs/figures/academic-pipeline/academic-pipeline.svg (22040 bytes)`, their exit statuses): not run, since each writes files. The in-memory comparison of the 20 figures with disk stands in for the second; the two other lines are not reproduced.
+- The rendered picture of `docs/figures/paper-review.svg`: its text was read, not looked at; the lengthened second note line (about 175 characters at font-size 11 in a 16px-margin canvas) is not checked for clipping at the canvas edge. A look at the rendered file settles it.
+- Whether calibration item 2's "each reviewer in one call" is the page's wording: `references/calibration_mode_protocol.md` says the mode "runs without contract enforcement" and runs the standard full review pipeline 5 times; it does not say "one call". The clause follows from no contract but is not stated by the page.
+- The point of the first refuter report left to the orchestrator (Reject decision and Phase 2.5; "Schema 13"; the second sense of "reviewer" in the glossary; the ADR for the three things; the pipeline figure's "paper-review, entry 6"): unchanged by the round and not re-judged.
+- Whether Calibration runs the Reviewer Configuration stop (calibration item 2 says "the phases after the intake as that page gives them"; the Stops row for the Reviewer Configuration lists four modes without calibration): the page's text, not the round, decides; not checked further.
+
+Reviewer usage: ab963ce95a5408f40, claude-sonnet-5-5, 111059 tokens, 15 tool uses, 1.7 minutes.
+
+## Closed (the orchestrator's disposition of every finding above, appended before /land)
+
+- Spec 1 (guided under the full contract): closed in the round, `SKILL.md`, Steps, "guided", item 1, which starts the five reviewers each in one call with no sprint contract.
+- Spec 2 (the figure's note for guided): closed in the round, `docs/figures/gen_figures.py`, the note of `paper_review()`, and `docs/figures/paper-review.svg`.
+- Spec 3 (pasted text refused as "Unknown mode"): closed in the round, `SKILL.md`, Steps 1 and the Stops row "Unknown mode".
+- Spec 4 (calibration refused for a missing manuscript): closed in the round, `SKILL.md`, "What it reads", item 1.
+- Spec 5 (the added sentence in "Agent prompts"): closed in the round, the sentence is removed.
+- The glossary's "Stated in:" for **panel review**, declined by the first run: closed in the round, `docs/glossary.md`, which names the opening paragraph.
+- Spec 1 of the run over round 1 (quick says nothing on the contract): fixed at landing, `SKILL.md`, Steps, "quick", item 2.
+- Spec 2 of the run over round 1 (the Quick start comment against Steps 1): fixed at landing, `SKILL.md`, Quick start, the line of `full`.

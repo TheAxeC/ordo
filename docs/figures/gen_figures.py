@@ -7,6 +7,8 @@ Writes, beside this file:
 - plan-loop.svg: the commands of one step, /spec, build it, /refute, close them, /refute over
   the round and /land, with the /plan-orchestration band.
 - grill.svg, writing.svg, code-comments.svg: the agents, stops and cycles of each skill.
+- paper-review.svg: the agents and stops of the full mode of the paper-review skill, with the
+  roles the other five modes start in its note.
 - paper/full.svg, paper/revision.svg, paper/lit-review.svg, paper/outline-only.svg,
   paper/abstract-only.svg, paper/citation-check.svg, paper/disclosure.svg, paper/plan.svg,
   paper/format-convert.svg, paper/revision-coach.svg, paper/rebuttal-audit.svg,
@@ -1872,6 +1874,45 @@ def writing() -> str:
     return _single("writing.svg", "The writing skill", _graph(nodes, edges), note)
 
 
+def paper_review() -> str:
+    """The full mode of the paper-review skill: its agents in order and its two stops."""
+    reviewers = (
+        Node("E", "EIC, 2 calls"),
+        Node("M", "Methodology reviewer, 2 calls"),
+        Node("D", "Domain reviewer, 2 calls"),
+        Node("P", "Perspective reviewer, 2 calls"),
+        Node("A", "Devil's Advocate reviewer, 2 calls"),
+    )
+    nodes = (
+        Node("F", "Field analyst: the Reviewer Configuration Card"),
+        Node("C", "You confirm the reviewer configuration", "stop"),
+        *reviewers,
+        Node("S", "Editorial synthesizer: the Editorial Decision and the Revision Roadmap"),
+        Node("Q", "EIC, resumed: the coaching question, only for a revision decision", "stop"),
+    )
+    edges = (
+        Edge("F", "C"),
+        *(Edge("C", reviewer.key) for reviewer in reviewers),
+        *(Edge(reviewer.key, "S") for reviewer in reviewers),
+        Edge("S", "Q", "Minor or Major Revision"),
+        Edge("Q", "Q", "until the dialogue ends or you say just fix it", "back"),
+    )
+    note = (
+        "The five reviewers start at once, each in 2 calls under the sprint contract. The "
+        "other modes start these roles. Re-review: the field analyst, the EIC and the "
+        "editorial synthesizer. Quick: the field analyst and the EIC. Methodology-focus: the "
+        "field analyst, the EIC and the methodology reviewer. Guided: the field analyst and "
+        "the five reviewers, then the EIC's dialogue. Calibration: all seven, 5 times per "
+        "gold paper."
+    )
+    return _single(
+        "paper-review.svg",
+        "The full mode of the paper-review skill",
+        _graph(nodes, edges),
+        note,
+    )
+
+
 def code_comments() -> str:
     nodes = (
         Node("F", "Finding agent"),
@@ -2102,6 +2143,7 @@ def figures() -> tuple[tuple[str, str], ...]:
         ("plan-loop.svg", plan_loop()),
         ("grill.svg", grill()),
         ("writing.svg", writing()),
+        ("paper-review.svg", paper_review()),
         ("code-comments.svg", code_comments()),
         *paper_figures(),
         ("paper/lifecycle.svg", paper_lifecycle()),
