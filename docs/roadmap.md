@@ -131,8 +131,6 @@ Status: `[ ]` open, `[~]` in progress, `[x]` done (its gate ran and passed, with
 - 3.A. Landing checks the brief and the review: dropped, since it is a script that polices the orchestrator: whether a step is ready to land is judged by reading its reports (`/land`, the Stops row "The step not ready"), and under the rule "scripts compute facts; judgment is read" no script gates that judgment.
 - 2.G. git guard: dropped, since entry 2.1 deleted the guard: its hook script, its test, its settings text and `repo-setup`'s offer of it are removed, and its plan folder with them.
 - 2.J. The session retro's text changes: dropped, since entry 2.K replaces it: ten of its proposals, the two on a dictated script sentence merged into one, the reviewer's git rule widened to allow `git show <base>:<path>`, and the proposals on the scratchpad and on sleep loops left out because Claude Code already sends temporary files to the scratchpad and blocks a foreground `sleep`.
-- 5.B. plan.yaml found by a search order: dropped, since merged into entry 5.A.
-- 20. improve-codebase-architecture: dropped, since merged into entry 19.
 - 10. idea: dropped, since the interview is `/paper plan`, and the novelty check is the `novelty` mode of entry 13.
 - 11. scaffold: dropped, since the rename of `repo-setup` gains nothing, and no entry left needs a second tree.
 - 12. project-docs: dropped, since no entry left needs it.
@@ -140,5 +138,7 @@ Status: `[ ]` open, `[~]` in progress, `[x]` done (its gate ran and passed, with
 - 15. submit-grant: dropped, since entry 14, whose portal notes it reused, is dropped.
 - 16. Switch over: dropped, since the user switches the installed skills over by hand; `utils/check_coverage.py` is deleted at the closing of entry 13.
 - 17. review: dropped, since the user reviews a step with `/refute` and asks for no review of a diff outside a plan.
+- 20. improve-codebase-architecture: dropped, since merged into entry 19.
+- 5.B. plan.yaml found by a search order: dropped, since merged into entry 5.A.
 - 22. teach: dropped, since nothing in the roadmap needs it and the user expects no use of it.
 - 23. Pruning pass: dropped, since every sentence of the skills was ruled, and a pass that deletes sentences risks the behaviour they carry.
