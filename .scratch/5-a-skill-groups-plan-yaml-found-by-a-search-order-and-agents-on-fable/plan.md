@@ -26,16 +26,36 @@ The skill folders grouped under `skills/`: `skills/orchestration/` holds `roadma
 
 ## Could run in parallel
 
-Nothing: steps 1 to 3 each change a rule file or a configuration file, and such a step runs alone.
+- 1, 2 and 3 with each other (ruling Three steps in flight); they land in the order 1, 2, 3.
 
 ## Rulings (2026-11-22)
 
 - The pins of plan 5.A (2026-11-22): step 4 may tag a release candidate of main and pin it with `utils/pin.sh <tag>`, and the closing may tag the final release and pin it, each without asking again (the user).
+- Three steps in flight (2026-11-22): steps 1, 2 and 3 are prepared, built and reviewed at once, although each touches a rule file or a configuration file, since their changes meet in few lines and the later landing takes a moved file by git's rename detection; they land in the order 1, 2, 3, step 3 last because the pinned skills read `.agents/plan.yaml` until step 4 pins the new ones; a path step 3 writes in the old layout is fixed at its landing (the user).
+- ADR 0007 holds no configuration value (2026-11-22): Ordo's `plan.yaml` names `claude:fable` for `repair_reviewer`, as the goal says; which model a key of Ordo's own configuration names is no architecture decision, so step 1 takes the sentence "Ordo's `.agents/plan.yaml` sets it to `claude:sonnet`." and the Sonnet-specific consequences out of ADR 0007, whose decision stays the optional key `repair_reviewer` with its default (the user).
 - The Fable check (2026-11-22): no scratch run shows the Fable settings; the steps of this plan, built and refuted on Fable with each dispatch entry recording the served model, show them, and the roadmap's gate says so (40995ba) (the user).
+
+## Step 0 of step 1
+
+- Open item A (step 1, 2026-11-22): which model the agents of `/writing` run on. The goal says the agents of `/writing` may run on Claude Fable. `skills/writing/SKILL.md` names the model in its own text and reads no `plan.yaml`: its four agents run as `ordo-medium` on opus, and a served model outside the opus family is its stop (lines 42 to 92 and 296); ADR 0030's decision lists that value ("every agent of `writing` runs as `ordo-medium` on opus") and ADR 0035 names the stop. `/paper` runs `/writing` itself.
+  - Option (a), recommended: `writing` names fable where it names opus, at `ordo-medium` as now; the stop then fires on a model outside the fable family; the two ADRs are edited in place to the current state, as the ADR folder's `README.md` allows for a refinement that keeps the decision. Pro: one model named, the stop keeps one rule, the goal's sentence is true. Con: Fable costs twice Opus per token (8 and 40 against 4 and 20 dollars per million tokens), on every `/writing` run, those `/paper` starts included.
+  - Option (b): `writing` keeps opus as the model it starts its agents on, and its stop accepts the opus and the fable family. Pro: no cost change. Con: no `/writing` agent runs on Fable unless the runner serves it unasked, so the goal's sentence changes nothing a person sees.
+  - Recommendation: (a), a judgment: the goal names `/writing` beside the agents that the configuration puts on Fable. The lazy option is (b).
+
+## Step 0 of step 3
+
+- Open item B (step 3, 2026-11-22): how a call names the folder that holds `plan.yaml`. The goal's search order starts with "the folder named in the call", and no skill has a form for it. Today a call names a project of the `projects:` form before the entry: `/plan <project>/<entry>`, `/roadmap <project> ...`.
+  - Option (a), recommended: the folder stands where the project stands, before the entry: `/plan apps/web/12`, `/spec apps/web/12 2`, `/land apps/web/12 2`, `/roadmap apps/web add ...`. The text before the last `/` is read first as a folder, relative to the repository root, that holds a `plan.yaml`; when it is none, it is a project of the file the search order finds, as today. Every later call on that plan names the folder the same way, and nothing records it. Pro: one form, the `projects:` form unchanged. Con: a folder and a project of one name read as the folder.
+  - Option (b): an argument on every skill, `--config <folder>`. Pro: one reading. Con: a second form beside `<project>/<entry>`, typed on every call.
+  - Recommendation: (a). The lazy option is (b).
+  - With either option the scripts take the found file as an argument: `land.sh <plan.yaml> <state file> <branch> <base>` and `check_config.py <plan.yaml>`.
+  - One consequence of the goal as written, whatever the option: a path in `.agents/plan.yaml` is then read from `.agents/`, so `roadmap: docs/roadmap.md` in a repository's existing file becomes `roadmap: ../docs/roadmap.md`. Each repository that has such a file needs it rewritten when the new skills are pinned; `check_config.py` names each path that no longer resolves.
 
 ## Agents
 
 Each agent a plan skill started for this plan has one bullet, with its agent id, its role and the model the runner served it, except an agent the plan leaves unpriced, which has a numbered item under the heading "Agents the cost script leaves unpriced:"; `/land` writes a step's agents at its booking and when it takes a step back out of main, `/grill` writes its lookup agents, `/spec` writes a brief-check agent it stopped for another model or found dead when it took a run over, the orchestrator writes a brief-check agent it stopped under "The review of a choice", the session that starts a diagnosis agent writes its numbered item right after the start, and `/plan` copies the bullets of a rulings file.
+
+- aeda38946d35cdd95: brief check of step 1, claude-fable-5-2
 
 ## Blocked, and by what
 
