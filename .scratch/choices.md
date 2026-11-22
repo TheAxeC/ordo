@@ -771,3 +771,14 @@ Taken: (a)
 Booked: `.scratch/5-a-skill-groups-plan-yaml-found-by-a-search-order-and-agents-on-fable/agents/briefs/3.md`, "What to build" 5 and 6 and "Decisions taken in this brief" 4 and 5
 Builds on it: step 3
 
+
+## C136. The folder in the two calls of session-retro that take no entry, in repair round 1 of step 3 of plan 5.A (2026-11-22)
+
+The ruling "The folder in a call" puts the folder in front of the entry. `/session-retro session <session id>` and `/session-retro <start> <end>` read the plan configuration and take no entry, so a repository whose only `plan.yaml` is in a project folder has no call of those two forms that reads its file.
+
+- Options: (a) the folder stands first in both, `/session-retro <folder> session <session id>` and `/session-retro <folder> <start> <end>`, as it stands alone in `/ordo-help <folder>` and `/roadmap <folder>`. Pro: every call of every skill can name the folder, one rule. Con: one more form per call. (b) Leave the two forms to the three places at the repository root. Pro: nothing to write. Con: those two calls cannot be used on a `plan.yaml` in a project folder.
+- Recommendation: (a). The lazy option: (b).
+
+Taken: (a)
+Booked: `.scratch/5-a-skill-groups-plan-yaml-found-by-a-search-order-and-agents-on-fable/agents/briefs/3-round-1.md`, ruling 2
+Builds on it: step 3
