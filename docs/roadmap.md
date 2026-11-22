@@ -55,13 +55,6 @@ Status: `[ ]` open, `[~]` in progress, `[x]` done (its gate ran and passed, with
 - Gate: the checks for limits and required sections pass their tests; a side-by-side run on a section of a past application, compared with what was submitted.
 - Waits on: 3, for the writing base; 2, for the coverage: no file is marked `grant`, and the funder acknowledgement text reaches it through the paper row of `references/funding_statement_guide.md`.
 
-## 12. project-docs
-
-- Status: [ ]
-- Goal: A skill that writes and keeps the main README and `code/README.md` of a project, readable by someone new to it: each page opens with an introduction (what the project or folder is, who it is for, what to read first), explains each idea before using it, defines each term where it first appears, shows how to run things with a worked example, and follows the writing base's prose standard.
-- Gate: a fresh reader with no context answers a fixed set of questions from the pages alone (what the project does, how to run the main experiment, where results go, what each folder holds), and each question it cannot answer is a finding; one real run on a research project that you review.
-- Waits on: 11, for the profiles.
-
 ## 13. researcher
 
 - Status: [ ]
@@ -179,3 +172,4 @@ Status: `[ ]` open, `[~]` in progress, `[x]` done (its gate ran and passed, with
 - 20. improve-codebase-architecture: dropped, since merged into entry 19.
 - 10. idea: dropped, since the interview is `/paper plan`, and the novelty check is the `novelty` mode of entry 13.
 - 11. scaffold: dropped, since the rename of `repo-setup` gains nothing, and no entry left needs a second tree.
+- 12. project-docs: dropped, since no entry left needs it.
