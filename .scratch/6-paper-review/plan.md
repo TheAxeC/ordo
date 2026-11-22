@@ -17,7 +17,7 @@ a fresh agent reads `diff -r` of the skill's folder against `research-hub/.agent
 
 ## Steps, in execution order
 
-- 1 the pages: each file of `research-hub/.agents/skills/academic-paper-reviewer/` under `agents/`, `references/`, `templates/` and `examples/`, except `references/changelog.md`, copied into `skills/academic/paper-review/` under its own folder and name, with the edits of ADR 0043, Decision 1, and no others; `diff` of each page against its source shows only those edits, and the character-set check of `docs/dev/building.md` prints nothing for the folder (1 commit) (approved)
+- ✅ 1 the pages: each file of `research-hub/.agents/skills/academic-paper-reviewer/` under `agents/`, `references/`, `templates/` and `examples/`, except `references/changelog.md`, copied into `skills/academic/paper-review/` under its own folder and name, with the edits of ADR 0043, Decision 1, and no others; `diff` of each page against its source shows only those edits, and the character-set check of `docs/dev/building.md` prints nothing for the folder (1 commit) (approved)
 - 2 `SKILL.md` and the places that list the skills: the source's `SKILL.md` carried section by section, with its words, into the layout of `docs/dev/skill-layout.md` as `skills/academic/paper-review/SKILL.md`, with the three things the source does not state taken as `paper` has them (ruling The three things the source does not state); the README's row and its count of skills, `paper`'s Use instead row, the glossary's entry "panel review" and the skill's figure; the reviewer reads the source's `SKILL.md` against the new one, and the verify list of `docs/dev/building.md` passes on main (1 commit) (approved) (ruling 2-contracts) (ruling 2-questions) (ruling 2-call)
 - 3 the gate's reading: a fresh agent reads `diff -r` of `skills/academic/paper-review/` against `research-hub/.agents/skills/academic-paper-reviewer/` once and writes `agents/reviews/3-diff-reading.md`, which lists each difference with which edit of ADR 0043, Decision 1, it is, or none; the user reads that list (0 commit) (approved)
 - 4 the closing: the closing report written (the cost script's output, or that the plan started no agent), the roadmap entry ticked with the gate's output, this folder moved to the archive (orchestrator, no agent) (approved)
@@ -42,7 +42,24 @@ Independent of each other; the standing rule of one agent at a time still serial
 ## Agents
 
 Each agent a plan skill started for this plan has one bullet, with its agent id, its role and the model the runner served it, except an agent the plan leaves unpriced, which has a numbered item under the heading "Agents the cost script leaves unpriced:"; `/land` writes a step's agents at its booking and when it takes a step back out of main, `/grill` writes its lookup agents, `/spec` writes a brief-check agent it stopped for another model or found dead when it took a run over, the orchestrator writes a brief-check agent it stopped under "The review of a choice", the session that starts a diagnosis agent writes its numbered item right after the start, and `/plan` copies the bullets of a rulings file.
+- a7158d80e8b21c9c4: brief check of step 1, claude-fable-5-2
+- a840c1d8f45ecd55f: builder of step 1, claude-fable-5-2
+- a8df6fcc33e1a61cf: reviewer of step 1, claude-fable-5-2
+- ae4197d6f7ce23142: reviewer of step 1 over round 1, claude-sonnet-5-5
 
 ## Blocked, and by what
 
 - 3: waits for steps 1 and 2 on main.
+
+### Step 1, the pages (landed 2026-11-22)
+
+- Landed: 24 files, 5245 insertions(+) against the base ea700fc: the seven pages of `agents/`, the eleven of `references/` (`changelog.md` left out), the three of `templates/` and the three of `examples/`, under `skills/academic/paper-review/`.
+- Ticked: every edit of the brief holds (edit 6 applies nowhere) and every case is met, by the run over round 1.
+- Premise corrections: none in `plan.md`. The brief check's points were closed in the brief before the build (`agents/reviews/1-brief-check.md`, "Closed").
+- Review: `agents/reviews/1-refuter.md`; the first run found Spec 1 to 3, Proof 1 and Standards 1, sent back as the five rulings of repair round 1 (`agents/briefs/1-round-1.md`) and closed there. The run over round 1 found no finding in the pages and two in the builder's report (Proof 1 and 2, statements the round had made stale).
+- Fixes at landing: 2, both in the builder's report in the ledger: the list "Per page, what is left out" of the calibration page, and the sentence under check 6 with judgment calls 1 and 11. No page changed at landing.
+- The builder's first report did not pass its bar: five findings went back in the round.
+- Findings outside the brief: none raised as an open item.
+- Verification on main: `env -u CLAUDE_CONFIG_DIR -u ORDO_SKILL_DIRS -u ORDO_STABLE sh ~/.claude/skills/land/templates/land.sh .scratch/6-paper-review/orchestrator-state.md 6-paper-review-1 ea700fc docs/plan.yaml` exited 0 and printed `checks: 12 commands passed`.
+- Look: none, the configuration block's `look:` is empty. A/B: none, `bench: []`.
+- Usage: brief check a7158d80e8b21c9c4 claude-fable-5-2 234992 tokens, 29 tool uses, 7.2 minutes; builder a840c1d8f45ecd55f claude-fable-5-2 154702 tokens, 65 tool uses, 13.5 minutes, and its round 1 ended at 164616 tokens, 3 tool uses, 1.0 minutes; reviewer a8df6fcc33e1a61cf claude-fable-5-2 201785 tokens, 28 tool uses, 5.4 minutes; reviewer over round 1 ae4197d6f7ce23142 claude-sonnet-5-5 117692 tokens, 18 tool uses, 1.4 minutes.

@@ -138,3 +138,100 @@ Cases of the brief's "Cases":
 - Whether the state of `HEAD` equals `ea700fc`: not checked; `git rev-parse HEAD` would settle it.
 
 Reviewer usage: a8df6fcc33e1a61cf, claude-fable-5-2, 201785 tokens, 28 tool uses, 5.4 minutes.
+
+## Repair round 1, refuted
+
+```
+cd /Users/axelfaes/workspace/ordo/.agents/worktrees/6-paper-review-1
+
+Delta: diff -u <snapshot>/<path> <worktree>/<path> for every path of files.txt (files.txt is a git-status listing of the 24 pages' folder, the round brief and the report), plus a cmp of all 24 pages against the snapshot.
+Pages changed since the snapshot: 8 (the 6 agents pages, examples/interdisciplinary_review_example.md, references/calibration_mode_protocol.md). The other 16 pages are byte-equal to the snapshot.
+
+Check 1: find skills/academic/paper-review -type f -print0 | xargs -0 perl -CSD -ne '<the brief's program>'
+(prints nothing)
+exit 0
+Check 1, second line: LC_ALL=C grep -rn '[^ -~]' skills/academic/paper-review
+(prints nothing)
+exit 1
+Check 2: find skills/academic/paper-review -type f | sort | wc -l
+24
+(the 24 paths, no SKILL.md, no changelog.md: `ls skills/academic/paper-review/references/changelog.md` -> No such file or directory)
+Check 3: grep -rnE 'v[0-9]+\.[0-9]+' skills/academic/paper-review
+(prints nothing)
+exit 1
+Check 4: grep -rnE '<the brief's pattern>' skills/academic/paper-review
+prints 18 lines (the pipe I added to shorten them hid the grep's own exit status; the grep matched, so its exit is 0):
+references/review_quality_thinking.md:18 ("If #5 is yes")
+references/calibration_mode_protocol.md:65 ("&#124;")
+agents/field_analyst_agent.md:165-168 ("[Card #1: EIC]" to "[Card #4: ...]")
+agents/eic_agent.md:10, methodology_reviewer_agent.md:10, domain_reviewer_agent.md:10, perspective_reviewer_agent.md:10 ("Reviewer Configuration Card #n")
+examples/interdisciplinary_review_example.md:48,61,74,87 and examples/hei_paper_review_example.md:49,62,75,88 ("### Reviewer Configuration Card #n")
+None is an issue number; each is the source's text, and the same 18 as in the first review.
+
+grep -n 'M [>!]=' .scratch/6-paper-review/agents/reviews/1-report.md
+116:  "... where M != 1" (and "where M != 2" for the synthesizer)
+351:  Finding 4 ... reads `where M != 1`, and `where M != 2` for the synthesizer's page.
+(the ">=" form no longer appears)
+grep -rn -i 'alignment judge' skills -> prints nothing now (page no longer holds it)
+git status --short | grep -v '^??' -> prints nothing (all work untracked, as at the first review)
+```
+
+### Verdicts
+
+Items of the brief's "What to build", in its numbering:
+
+- 1 (names): holds. Frontmatter names of the seven agents pages are as the brief gives; check 4 prints no `academic-paper`, `ARS`, `orchestrator`; the six hunks of the round introduce no agent stem.
+- 2 (a sentence on a mechanism that does not exist is left out): holds. The round's hunks leave out only the clause of ruling 3 (": the citation-claim alignment judge already supports a non-default judge model, and the suite is designed to work single-model") and the directory words of the Phase Boundary bullets; the parenthesis of the Phase 1 pointer is back. Proof 1 concerns the report's list, not the pages.
+- 3 (references to other files): holds, unchanged by the round.
+- 4 (character set and no history): holds. Checks 1 and 3 print nothing; the dash in "Strengths" item 1 of `examples/interdisciplinary_review_example.md` (line 150) is now a colon, as ruling 2 words it.
+- 5 (Chinese-language text): holds, page unchanged since the snapshot.
+- 6 (a rule that contradicts the manuscript prose standard): not applicable; no hunk of the page or the round is an edit of this kind.
+
+Cases of the brief's "Cases":
+
+- `agents/eic_agent.md`: met. `name: eic`; no tag on the two headings; pipeline clause gone, single-phase clause and the sole-deliverable sentence there; the first bullet reads "- WRITE files of a phase other than Phase 1 (no inflate into Phase 2 editorial synthesis: that's the editorial synthesizer's work)", the four other bullets there; the Enforcement paragraph names no script, hook or issue (`diff` read whole).
+- `agents/devils_advocate_reviewer_agent.md`: met (`diff` read whole; the deep-research section and the cross-model subsection are absent; check 4 prints no "deep-research").
+- `references/sprint_contract_protocol.md`: met, page unchanged since the snapshot and read in the first review.
+- `references/top_journals_by_field.md`, the 8 rows: met, unchanged since the snapshot.
+- `references/integration_guide.md`: met, unchanged since the snapshot.
+- `references/calibration_mode_protocol.md`: met (`diff` read whole: no Status line, no `ARS_CROSS_MODEL`, no cache folder, no roadmap item; "Cross-model:" line, runs and limits there).
+- Every one of the 24 pages, each hunk one of the six edits: met for the 24 pages' hunks (the eight of this round read whole again; the 16 others are byte-equal to the snapshot the first review read). The report is not a page; see Proof 1.
+- The list of headings: met (headings of the eight pages read in their diffs).
+- `ls skills/academic/paper-review/references/changelog.md` finds no file: met (output above).
+
+### Findings
+
+Spec: none. Each of the five rulings is done and worded as the round's brief gives it:
+- Ruling 1: `references/calibration_mode_protocol.md`, "Same-family / rubric-aware judging": "- **Calibration mode is the exception**: calibration itself is opt-in (see "Cross-model verification" under Phase 1); at least one of the runs should use a different family when configured."
+- Ruling 2: `examples/interdisciplinary_review_example.md`, Strengths item 1: "... industry-academia collaboration: five major dimensions, more comprehensive than most similar studies".
+- Ruling 3: same calibration page: "- In ordinary reviewer / judge paths, cross-model is **opt-in, "for best results"**."
+- Ruling 5: the first bullet under "You MUST NOT:" on the six pages, as the round brief words each of the three forms.
+- No hunk of the delta goes beyond a ruling; no finding was closed by removing something other than the clause of ruling 3, which the ruling orders.
+
+Proof:
+- 1. `.scratch/6-paper-review/agents/reviews/1-report.md`, "Per page, what is left out", `references/calibration_mode_protocol.md`, the line at 194: "Same subsection: ", but once invoked `ARS_CROSS_MODEL` is **default-on** (see "Cross-model verification" under Phase 1)". Edit 2." What is wrong: the report lists the parenthesis "(see "Cross-model verification" under Phase 1)" as left out, and the page now keeps it (`diff` of the page: the bullet reads "opt-in (see "Cross-model verification" under Phase 1);"). Only ", but once invoked `ARS_CROSS_MODEL` is **default-on**" is left out. The ruling-3 clause is not in this per-page list either; it is only in "Round 1", item 3. Failure scenario: a reader of the per-page list at the gate takes the pointer to be gone and the page's own lines to disagree with the record, or looks for the "alignment judge" clause on the page and the list. Verdict: none of the items; a stale claim in the report.
+- 2. Same report, stale text the round's replacement notes do not correct in place. Line 322, "Judgment calls" item 11: "`references/calibration_mode_protocol.md` keeps "the suite" and "the citation-claim alignment judge" in the sentence on ordinary reviewer paths"; the page no longer holds either (`grep -rn -i 'alignment judge' skills` prints nothing). Line 312, item 1: the bullet "is restated as "- No inflate into Phase 2 synthesis" (EIC: ...; synthesizer: ...)"; the pages now read "- WRITE files of a phase other than Phase 1 (no inflate into Phase 2 synthesis)". Line 104, check 6: "One departs from plain grammar: the bullet "- No inflate into Phase 2 synthesis" (and its two variants)". Line 116: "The bullet reads as "## Round 1" below gives it." is correct. What is wrong: the round's brief asked for a correction in place only for the quotes of finding 4, but the section "Round 1" says only "This replaces judgment call 11" and "This replaces judgment call 1 and the sentence on that bullet under check 6"; three statements of what is on the pages remain in the report body that the pages contradict. Failure scenario: the orchestrator reading the report's judgment calls to rule on the bullet or the "alignment judge" clause reads a state that is not on the tree. Verdict: none of the items; stale claims, to be named by the orchestrator at landing or sent back.
+
+Standards: none. The new bullet on the six pages is one clause with the source's own parenthesis; it is a forbidden action followed by its gloss, as the other four bullets of each list are forbidden actions (`docs/dev/change-standard.md`, "The rules", rule 17 holds). The colon in item 1 of the example follows the prose standard's section B.
+
+Behaviour: none. No file a user or a run reads today changes (`git status --short` shows only the new folder, the round brief and the report as untracked).
+
+### Declined to judge
+
+- Edit 6 on unchanged text: whether any unchanged rule of the eight pages contradicts `skills/academic/writing/references/manuscript-prose-standard.md` was not checked; I read the diffs, not the pages whole against that standard.
+- The 16 pages not changed in the round: I confirmed they are byte-equal to the snapshot (`cmp`), not that I read their diffs again; the first review read them.
+- Whether the report's "Round 1" section lists the exact lines of each page (line numbers 189, 190, 150): not rerun line by line; the page text was read in the diffs.
+- The DA, perspective and synthesizer diffs were read as the added lines (the `>` side) cut to 200 characters, with the changed line numbers; the removed side was read for the calibration, EIC, methodology and domain pages in full.
+- Whether HEAD equals `ea700fc`: not checked beyond the allowed `git diff ea700fc --stat`, which printed nothing for tracked files.
+
+Reviewer usage: ae4197d6f7ce23142, claude-sonnet-5-5, 117692 tokens, 18 tool uses, 1.4 minutes.
+
+## Closed (the orchestrator's disposition of every finding above, appended before /land)
+
+- Spec 1 (the parenthesis on "Cross-model verification"): closed in the round, `references/calibration_mode_protocol.md`, "Same-family / rubric-aware judging", second bullet; `diff` of the snapshot against the worktree shows the parenthesis back.
+- Spec 2 (the comma before "five major dimensions"): closed in the round, `examples/interdisciplinary_review_example.md`, Strengths item 1, which has the colon.
+- Spec 3 (the citation-claim alignment judge): closed in the round, `references/calibration_mode_protocol.md`, the same subsection, first bullet; `grep -rn -i 'alignment judge' skills/academic/paper-review` prints nothing.
+- Proof 1 of the first run (the comparison sign in the report's quote): closed in the round, the builder's report, "Per page, what is left out".
+- Standards 1 (the first bullet under "You MUST NOT:"): closed in the round, the six agent pages, "Phase Boundary"; `grep -n -A1 'You MUST NOT:'` shows the bullet.
+- Proof 1 of the run over round 1 (the report lists the parenthesis as left out and not the clause on the judge): fixed at landing, the builder's report in the main ledger, "Per page, what is left out", the two bullets "Same subsection" of the calibration page.
+- Proof 2 of the run over round 1 (three stale statements in the report): fixed at landing, the builder's report in the main ledger, the sentence under check 6 and judgment calls 1 and 11.

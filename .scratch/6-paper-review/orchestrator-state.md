@@ -43,19 +43,6 @@ repair_reviewer: claude:sonnet  # the model the run of /refute over a repair rou
 
 ```yaml
 dispatch:
-- step: 1
-  executor: agent
-  worker: claude:fable
-  base: ea700fc
-  worktree: .agents/worktrees/6-paper-review-1
-  launched: 2026-11-22
-  report: .scratch/6-paper-review/agents/reviews/1-report.md
-  builder_usage: 154702 tokens, 65 tool uses, 13.5 minutes; round 1: 164616 tokens at its end, 3 tool uses, 1.0 minutes
-  brief_check: .scratch/6-paper-review/agents/reviews/1-brief-check.md (a7158d80e8b21c9c4, claude-fable-5-2, 234992 tokens, 29 tool uses, 7.2 minutes)
-  session_id: a840c1d8f45ecd55f (claude-fable-5-2)
-  landing: not-started
-  reviewer_report: .scratch/6-paper-review/agents/reviews/1-refuter.md (a8df6fcc33e1a61cf, claude-fable-5-2, 201785 tokens, 28 tool uses, 5.4 minutes)
-  round: 1
 - step: 2
   executor: agent
   worker: claude:fable
@@ -63,7 +50,7 @@ dispatch:
   worktree: .agents/worktrees/6-paper-review-2
   launched: 2026-11-22
   report: .scratch/6-paper-review/agents/reviews/2-report.md
-  builder_usage: 314218 tokens, 30 tool uses, 11.1 minutes
+  builder_usage: 314218 tokens, 30 tool uses, 11.1 minutes; round 1: 326086 tokens at its end, 3 tool uses, 1.7 minutes
   brief_check: .scratch/6-paper-review/agents/reviews/2-brief-check.md (a10369c9579256655, claude-fable-5-2, 183232 tokens, 21 tool uses, 6.9 minutes)
   session_id: a21f2ad5c98eaac0b (claude-fable-5-2)
   landing: not-started
@@ -102,6 +89,6 @@ dispatch:
 
 ## Current position (rewritten before every step commit of this plan)
 
-- 2026-11-22. Nothing has landed. Step 1 is with its builder in `.agents/worktrees/6-paper-review-1`; step 2 is with its builder in `.agents/worktrees/6-paper-review-2`.
-- Roadmap entry 6 (paper-review). Plan step 1 of 4: the pages. Next: step 2, `SKILL.md` and the places that list the skills, in parallel with it.
+- 2026-11-22. Step 1, the pages, is on main. Step 2 is built and reviewed in `.agents/worktrees/6-paper-review-2`, its repair round done and refuted, and lands next.
+- Roadmap entry 6 (paper-review). Plan step 1 of 4 landed: the pages. Next: the landing of step 2, `SKILL.md` and the places that list the skills, then step 3, the gate's reading.
 - Open on Axel's side: none.

@@ -101,7 +101,7 @@ Why each line of check 4 stays:
 
 Check 5: `diff <source page> <page>` was read whole for each of the 24 pages. Every hunk is one of the six edits.
 
-Check 6: the sentences an edit wrote are listed under "Sentences rewritten under edit 4" and "Judgment calls". Each is one short declarative sentence in the source's vocabulary. One departs from plain grammar: the bullet "- No inflate into Phase 2 synthesis" (and its two variants). It keeps the source's own words from the parenthesis of the bullet it replaces, because the brief's case asks that the bullet keep the rule of its parenthesis and that the source's words stay where an edit does not need to change them.
+Check 6: the sentences an edit wrote are listed under "Sentences rewritten under edit 4" and "Judgment calls". Each is one short declarative sentence in the source's vocabulary. The first bullet under "You MUST NOT:" on the six agent pages reads as "## Round 1" below gives it.
 
 Heading lists, compared per page with `diff <(grep '^#' source) <(grep '^#' page)`: the differences are a version tag, an issue number, a date, a dash, a section sign, a comparison sign or an emoji replaced inside a heading, the two headings "## Relationship with deep-research devil's_advocate_agent" and "### Cross-Model DA (Optional, v3.0)" left out, and "(Kong A1 / v3.11)" left out of "### Commitment Ledger Verification" and "(acceptance for #214)" out of "## What this example demonstrates". Pages with no heading difference: `agents/field_analyst_agent.md`, `examples/hei_paper_review_example.md`, `references/integration_guide.md`, `templates/peer_review_report_template.md`, `templates/revision_response_template.md`.
 
@@ -191,7 +191,8 @@ When `ARS_CROSS_MODEL` is set, do not send the paper automatically. First ask fo
 - Under "### Phase 3.5": "The reference shapes are anchored to the first-party regression fixture at `evals/gold/field_norm_severity/` (W1 + <section sign>F.3.4 cases extracted verbatim from Kim et al. 2026); a finding that matches a fixture shape but lacks grounding is `high`." Edit 2.
 - Under "## What this does NOT do": "(that's the AI Research Failure Mode Checklist, ROADMAP_v3.2.md item 2)". Edit 2.
 - Under "### Same-family / rubric-aware judging": "This is the citation-integrity risk documented in the Anti-Hallucination Mandate (`academic-pipeline/agents/integrity_verification_agent.md`), countered there by independent reference lookup." Edit 2.
-- Same subsection: ", but once invoked `ARS_CROSS_MODEL` is **default-on** (see "Cross-model verification" under Phase 1)". Edit 2.
+- Same subsection: ", but once invoked `ARS_CROSS_MODEL` is **default-on**". Edit 2. The parenthesis (see "Cross-model verification" under Phase 1) that follows it in the source stays on the page.
+- Same subsection: ": the citation-claim alignment judge already supports a non-default judge model, and the suite is designed to work single-model" (the source has an em dash where this quote has the colon). Edit 2.
 - Same subsection: "in `shared/cross_model_verification.md`". Edit 2.
 - Under "## Resolved design decisions (2026-04-09)": the date in the heading (edit 4), ", no `~/.ars_calibration_cache/`" (edit 2), "for v3.2" (edit 4).
 - Under "## References": "- ARS `shared/cross_model_verification.md` <em dash> cross-model reviewer integration." Edit 2.
@@ -309,7 +310,7 @@ The four differences: the Devil's Advocate page (two sections left out, 17 lines
 
 ## Judgment calls
 
-1. The `phase{M}_*/` bullet is restated as "- No inflate into Phase 2 synthesis" (EIC: "- No inflate into Phase 2 editorial synthesis: that's the editorial synthesizer's work"; synthesizer: "- No regress into Phase 1 reviewer territory: do not rewrite or augment reviewer cards; if a reviewer's card is incomplete, flag it, do not silently fix"). The words are the source's parenthesis, with a capital on the first word since it now opens the bullet.
+1. The `phase{M}_*/` bullet reads "- WRITE files of a phase other than Phase 1 (no inflate into Phase 2 synthesis)" on the methodology, domain, perspective and Devil's Advocate pages, with the source's own parenthesis on the EIC's and the synthesizer's page, as "## Round 1" below gives it.
 2. `paper` and `paper-review` are written in backticks where an edit writes them in prose, as `paper`'s pages do, and plain inside the code block of `references/integration_guide.md`.
 3. Devil's Advocate page, Enforcement line: with the disambiguation section gone two things remain in the list, so "all ALSO apply" reads "both ALSO apply".
 4. `references/sprint_contract_protocol.md` section 8 keeps "`$defs.score` values": it names the score type of the contract, which `SKILL.md` gives in step 2, and the brief says the source's words stay where it is unclear whether an edit applies.
@@ -319,7 +320,7 @@ The four differences: the Devil's Advocate page (two sections left out, 17 lines
 8. The emoji in the two headings of `examples/subclaim_decomposition_example.md` are written as the words "Wrong:" and "Right:", since without a word the two headings lose which behaviour is the wrong one; the emoji in the re-review table stand beside the words "Cannot verify", "Yes" and "Partial" and are removed.
 9. An em dash that stands as a table value is `-` (`references/sprint_contract_protocol.md` section 7, `references/top_journals_by_field.md` line 100, `templates/editorial_decision_template.md` line 89, `templates/revision_response_template.md` line 187, the sub-claim example's table).
 10. In `references/calibration_mode_protocol.md` the cross-model sentences that do not name the variable or the page under `shared/` stay, as decision 4 of the brief says, and the report line "Cross-model:" stays.
-11. `references/calibration_mode_protocol.md` keeps "the suite" and "the citation-claim alignment judge" in the sentence on ordinary reviewer paths: it is unclear whether edit 2 applies, so the source's words stay.
+11. `references/calibration_mode_protocol.md` leaves out the clause on the citation-claim alignment judge and the suite in the sentence on ordinary reviewer paths, as "## Round 1" below gives it.
 12. Edit 6 applied nowhere: no rule of the 24 pages contradicts the manuscript prose standard.
 
 ## Anything in the brief that was wrong or impossible
