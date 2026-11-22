@@ -51,8 +51,10 @@ dispatch:
   launched: 2026-11-22
   report: .scratch/5-a-skill-groups-plan-yaml-found-by-a-search-order-and-agents-on-fable/agents/reviews/4.A-report.md
   brief_check: ".scratch/5-a-skill-groups-plan-yaml-found-by-a-search-order-and-agents-on-fable/agents/reviews/4.A-brief-check.md (abe740866c4b4563f, claude-fable-5-2, 180274 tokens, 30 tool uses, 6.1 minutes)"
-  round: 0
+  reviewer_report: ".scratch/5-a-skill-groups-plan-yaml-found-by-a-search-order-and-agents-on-fable/agents/reviews/4.A-refuter.md (ac48bcc73303d1ab2, claude-fable-5-2, 183539 tokens, 24 tool uses, 6.0 minutes)"
+  round: 1
   session_id: a92f129df7f7c8dad (claude-fable-5-2)
+  builder_usage: "202167 tokens, 18 tool uses, 1.5 minutes (the first read, handed back on case C12); after the cases ruling: 232163 tokens in all, 23 tool uses, 5.0 minutes"
   landing: not-started
 ```
 
