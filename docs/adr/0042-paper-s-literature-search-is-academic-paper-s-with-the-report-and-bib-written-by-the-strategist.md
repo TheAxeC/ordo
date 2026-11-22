@@ -50,7 +50,7 @@ The strategist follows academic-paper's page, and the session writes each brief 
 
 - `skills/academic/paper/SKILL.md`, `skills/academic/paper/agents/literature_strategist_agent.md`, `skills/academic/paper/agents/intake_agent.md` and the `paper` skill's `references/modes.md`;
 - the status lines of ADRs 0017, 0027, 0032, 0036, 0037, 0038, 0040 and 0041, and `docs/adr/README.md`;
-- `docs/glossary.md`, `docs/academic-coverage.md` and `README.md`;
+- `docs/glossary.md` and `README.md`;
 - both figure scripts and the figures they write.
 
 ADRs 0037 and 0041 are superseded whole. ADR 0017 is superseded in the strategist's search, ADR 0038 in lit-review mode's split and the strategist's use of the parts, ADR 0040 in the entries the strategist writes from the record it confirmed, and ADR 0032 in the confirmation of each kept reference by a live lookup, which lit-review's identifier check alone keeps. ADR 0036's refinement by 0040 on ASCII entries ends, so the strategist writes its entries under no character rule, as academic-paper's strategist does. ADR 0032's search through each database's own interface and ADR 0036's sentence that the session decides the starts are restored for the search.

@@ -4,7 +4,7 @@ Status: superseded by 0023
 
 ## Context
 
-Roadmap entry 5's goal says the paper skill "applies the `/writing` findings you accept to the manuscript". `/writing` reports each break of a named rule, "proposes no replacement and applies nothing" and leaves "the decision on it to the user" (`skills/academic/writing/SKILL.md:127` and `:130`), and its Use instead table sends the findings of a manuscript to `paper` (`skills/academic/writing/SKILL.md:23`). The revision mode edits a manuscript through anchorize, patch and apply (`docs/academic-coverage.md`, row 94), as academic-paper's revision mode does (`research-hub/.agents/skills/academic-paper/SKILL.md:326`). The arguments of each mode leave no place for a `/writing` report (rulings of entry 5, D26).
+Roadmap entry 5's goal says the paper skill "applies the `/writing` findings you accept to the manuscript". `/writing` reports each break of a named rule, "proposes no replacement and applies nothing" and leaves "the decision on it to the user" (`skills/academic/writing/SKILL.md:127` and `:130`), and its Use instead table sends the findings of a manuscript to `paper` (`skills/academic/writing/SKILL.md:23`). The revision mode edits a manuscript through anchorize, patch and apply, as academic-paper's revision mode does (`research-hub/.agents/skills/academic-paper/SKILL.md:326`). The arguments of each mode leave no place for a `/writing` report (rulings of entry 5, D26).
 
 ## Decision
 

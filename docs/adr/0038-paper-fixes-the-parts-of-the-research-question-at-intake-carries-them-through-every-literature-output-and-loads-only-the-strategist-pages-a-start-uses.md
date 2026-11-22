@@ -42,4 +42,4 @@ Each item below is a deviation from academic-paper 3.2.0, whose text leaves the 
 
 ## Consequences
 
-The run's shape follows the research question in every run that searches the literature. Each annotation carries one more field per part, and the matrix one more column per part. The run folder holds two more kinds of file, `search-log.md` and `search-log-theme-<k>.md`. The strategist page is ten pages, and `skills/academic/paper/SKILL.md`, its Agent prompts row, `agents/intake_agent.md`, `references/planner.md`, `references/ai-disclosure.md`, `docs/academic-coverage.md`, the glossary and ADRs 0032 and 0037 carry the change.
+The run's shape follows the research question in every run that searches the literature. Each annotation carries one more field per part, and the matrix one more column per part. The run folder holds two more kinds of file, `search-log.md` and `search-log-theme-<k>.md`. The strategist page is ten pages, and `skills/academic/paper/SKILL.md`, its Agent prompts row, `agents/intake_agent.md`, `references/planner.md`, `references/ai-disclosure.md`, the glossary and ADRs 0032 and 0037 carry the change.

@@ -33,8 +33,8 @@ table, and for paper/lifecycle.svg also from the paper skill's mode selection gu
 reads no skill file and no other input. A change to a Stops table, to a skill's agents, its
 cycles or its name is made in the labels below, and the script is run again.
 
-This file is also the layout code of gen_comparison.py, which imports it from its own folder's
-parent.
+This file is also the layout code of academic-pipeline/gen_academic_pipeline.py, which imports
+it from its own folder's parent.
 
 Run, from the repository root: python3 docs/figures/gen_figures.py
 The script finds its files from its own location, so it also runs from any other directory when
