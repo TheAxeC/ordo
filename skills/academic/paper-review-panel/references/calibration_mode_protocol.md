@@ -1,6 +1,6 @@
 # Calibration Mode Protocol
 
-**Parent skill**: `paper-review`
+**Parent skill**: `paper-review-panel`
 **Mode name**: `calibration`
 **Purpose**: Measure this reviewer's own false-negative rate (FNR), false-positive rate (FPR), balanced accuracy, and **severity-miscalibration rate** against a user-supplied gold-standard set, then attach the resulting error profile as a confidence disclosure to subsequent reviews in the same session.
 
@@ -12,7 +12,7 @@ A single LLM reviewer produces an absolute 0-100 rubric score, but that score is
 
 Lu et al. (2026, Nature 651:914-919) demonstrated in Table 1 that an LLM-based Automated Reviewer can approach human balanced accuracy (0.65 vs human 0.67-0.73 on 500 ICLR 2022 papers) while having a dramatically different error profile: FNR 0.17 vs human 0.52, at the cost of FPR 0.50 vs human 0.17-0.34. Human reviewers miss half of the papers that should be rejected; the Automated Reviewer misses very few but over-rejects more.
 
-Translation for `paper-review`: **our reviewer has an error profile too, and we do not currently measure it.** Calibration mode closes that gap. It does not try to make the reviewer perfect; it makes the reviewer's imperfections legible.
+Translation for `paper-review-panel`: **our reviewer has an error profile too, and we do not currently measure it.** Calibration mode closes that gap. It does not try to make the reviewer perfect; it makes the reviewer's imperfections legible.
 
 ---
 
@@ -158,7 +158,7 @@ This is non-negotiable in calibration-enabled sessions: the user cannot hide the
 Lu 2026 Methods A.1.1 describes reviewer ensembling across 5 independent runs with majority voting. This mode follows that spec with two changes:
 
 1. **Median instead of mean for rubric scores**: mean is vulnerable to single-run outliers (e.g., a run that hallucinates a methodological flaw); median is robust.
-2. **Fresh context per run**: Lu 2026 allowed within-session memory across runs. `paper-review` uses fresh context to prevent cascading errors from a single run's misreading.
+2. **Fresh context per run**: Lu 2026 allowed within-session memory across runs. `paper-review-panel` uses fresh context to prevent cascading errors from a single run's misreading.
 
 Users with token budget concerns can reduce `runs_per_paper` to 3. Below 3, ensembling is meaningless: do not allow 1 or 2.
 
@@ -182,7 +182,7 @@ There is a second reason a measured profile can be optimistic, independent of th
 - **Factual form**, *same-source hallucination*: when the model that wrote the work and the model verifying it share training data, a fabricated reference that "feels right" passes undetected.
 - **Behavioral form**, *same-family rubric optimization* (rubric-aware judging): an evaluator may, to some degree, optimize toward *what the rubric appears to reward* rather than toward the correct judgment. When the produced-work model and the evaluator model are from the same family and may be rubric-aware, the calibration error you measure can be **optimistic: read it as a possible under-estimate of the true error, not a ceiling.**
 
-This is an interpretive caveat only. `paper-review` does **not** detect, prevent, or correct rubric-aware judging: the behavior can be unverbalized and is not reliably visible in chain-of-thought. The note changes how you *read* the numbers; it does not change any threshold or gate.
+This is an interpretive caveat only. `paper-review-panel` does **not** detect, prevent, or correct rubric-aware judging: the behavior can be unverbalized and is not reliably visible in chain-of-thought. The note changes how you *read* the numbers; it does not change any threshold or gate.
 
 **Cross-model evaluation: stronger evidence where available.** Running the evaluation across model families provides **stronger evidence** than a same-family-only run; it still does **not** detect or rule out rubric-aware judging. Positioning:
 
@@ -209,7 +209,7 @@ This is an interpretive caveat only. `paper-review` does **not** detect, prevent
 
 ## Resolved design decisions
 
-- **Activation**: opt-in only. User invokes `calibration` mode explicitly. `paper-review` does not auto-calibrate on first use in a new domain.
+- **Activation**: opt-in only. User invokes `calibration` mode explicitly. `paper-review-panel` does not auto-calibrate on first use in a new domain.
 - **Persistence**: session-scoped only. No cross-session caching of profiles, no privacy questions about storing paper content on disk.
 - **Shipped gold sets**: not planned. Users bring their own gold set. Shipping a built-in ML gold set was considered and rejected to avoid domain-coverage bias and staleness.
 - **Continuous/self-calibration**: rejected. Using the reviewer's own historical decisions as pseudo-ground-truth is circular and would make the error profile look better over time without actually improving accuracy.

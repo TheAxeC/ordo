@@ -1,4 +1,4 @@
-# Plan: 6. paper-review
+# Plan: 6. paper-review-panel
 
 Execution ledger for roadmap entry 6, paper-review (`docs/roadmap.md`). One bullet is one step: a part of the entry. A step is built by one dispatch of its executor (a builder agent by default), or run by the orchestrator without an agent (marked). A step is ticked only after its verification commands ran and the whole diff was read; the commands are in `orchestrator-state.md`, and nothing is ticked on inspection. The green checkmark is this file's status vocabulary; everything else in this folder is ASCII. Read `orchestrator-state.md` first after any context compaction.
 
@@ -19,7 +19,7 @@ a fresh agent reads `diff -r` of the skill's folder against `research-hub/.agent
 
 - ✅ 1 the pages: each file of `research-hub/.agents/skills/academic-paper-reviewer/` under `agents/`, `references/`, `templates/` and `examples/`, except `references/changelog.md`, copied into `skills/academic/paper-review/` under its own folder and name, with the edits of ADR 0043, Decision 1, and no others; `diff` of each page against its source shows only those edits, and the character-set check of `docs/dev/building.md` prints nothing for the folder (1 commit) (approved)
 - ✅ 2 `SKILL.md` and the places that list the skills: the source's `SKILL.md` carried section by section, with its words, into the layout of `docs/dev/skill-layout.md` as `skills/academic/paper-review/SKILL.md`, with the three things the source does not state taken as `paper` has them (ruling The three things the source does not state); the README's row and its count of skills, `paper`'s Use instead row, the glossary's entry "panel review" and the skill's figure; the reviewer reads the source's `SKILL.md` against the new one, and the verify list of `docs/dev/building.md` passes on main (1 commit) (approved) (ruling 2-contracts) (ruling 2-questions) (ruling 2-call)
-- 2.A the name: the skill is renamed `paper-review-panel`: its folder `skills/academic/paper-review-panel/`, the name in its frontmatter, its call `/paper-review-panel`, its run folder `paper-review-panel-runs/`, its figure `docs/figures/paper-review-panel.svg`, and every place of the repository outside the ledgers that names it (the README, `paper`, the glossary, the roadmap, the ADRs, the figure scripts and the pages on them); `git grep -nE '(^|[^-a-z])paper-review([^-a-z]|$)' -- . ':!.scratch'` and `git grep -n 'paper-review-runs' -- . ':!.scratch'` print nothing, and the verify list of `docs/dev/building.md` passes (1 commit) (ruling The skill's name)
+- ✅ 2.A the name: the skill is renamed `paper-review-panel`: its folder `skills/academic/paper-review-panel/`, the name in its frontmatter, its call `/paper-review-panel`, its run folder `paper-review-panel-runs/`, its figure `docs/figures/paper-review-panel.svg`, and every place of the repository outside the ledgers that names it (the README, `paper`, the glossary, the roadmap, the ADRs, the figure scripts and the pages on them); `git grep -nE '(^|[^-a-z])paper-review([^-a-z]|$)' -- . ':!.scratch'` and `git grep -n 'paper-review-runs' -- . ':!.scratch'` print nothing, and the verify list of `docs/dev/building.md` passes (1 commit) (ruling The skill's name)
 - 3 the gate's reading: a fresh agent reads `diff -r` of `skills/academic/paper-review-panel/` against `research-hub/.agents/skills/academic-paper-reviewer/` once and writes `agents/reviews/3-diff-reading.md`, which lists each difference with which edit of ADR 0043, Decision 1, it is, or none; the user reads that list (0 commit) (approved) (ruling The skill's name)
 - 4 the closing: the closing report written (the cost script's output, or that the plan started no agent), the roadmap entry ticked with the gate's output, this folder moved to the archive (orchestrator, no agent) (approved)
 
@@ -52,10 +52,13 @@ Each agent a plan skill started for this plan has one bullet, with its agent id,
 - a21f2ad5c98eaac0b: builder of step 2, claude-fable-5-2
 - a915fb8ba1219bbe2: reviewer of step 2, claude-fable-5-2
 - ab963ce95a5408f40: reviewer of step 2 over round 1, claude-sonnet-5-5
+- a44ce4cabb3f13e0e: brief check of step 2.A, claude-fable-5-2
+- ac00f95bb01eebccf: builder of step 2.A, claude-fable-5-2
+- a545e898ed137ea94: reviewer of step 2.A, claude-fable-5-2
 
 ## Blocked, and by what
 
-- 3: waits for step 2.A on main.
+- nothing.
 
 ### Step 1, the pages (landed 2026-11-22)
 
@@ -82,3 +85,17 @@ Each agent a plan skill started for this plan has one bullet, with its agent id,
 - Verification on main: `env -u CLAUDE_CONFIG_DIR -u ORDO_SKILL_DIRS -u ORDO_STABLE sh ~/.claude/skills/land/templates/land.sh .scratch/6-paper-review/orchestrator-state.md 6-paper-review-2 90fe644 docs/plan.yaml` exited 0 and printed `checks: 12 commands passed`; `checks.sh` run again after the fixes printed `checks: 12 commands passed`.
 - Look: the configuration block's `look:` is empty. The orchestrator rendered `docs/figures/paper-review.svg` with `rsvg-convert` and read it: every box, arrow and the three note lines are inside the canvas. A/B: none, `bench: []`.
 - Usage: brief check a10369c9579256655 claude-fable-5-2 183232 tokens, 21 tool uses, 6.9 minutes; builder a21f2ad5c98eaac0b claude-fable-5-2 314218 tokens, 30 tool uses, 11.1 minutes, and its round 1 ended at 326086 tokens, 3 tool uses, 1.7 minutes; reviewer a915fb8ba1219bbe2 claude-fable-5-2 232088 tokens, 24 tool uses, 6.3 minutes; reviewer over round 1 ab963ce95a5408f40 claude-sonnet-5-5 111059 tokens, 15 tool uses, 1.7 minutes.
+
+### Step 2.A, the name (landed 2026-11-22)
+
+- Landed: 40 files, 72 insertions(+), 72 deletions(-) against the base a988ed2, before the fix at landing: the 25 files of the skill moved from `skills/academic/paper-review/` to `skills/academic/paper-review-panel/`, the name written in them, in `README.md`, `skills/academic/paper/SKILL.md`, `docs/glossary.md`, `docs/roadmap.md`, `docs/dev/building.md`, `docs/dev/scripts.md`, ADRs 0001, 0019, 0022, 0025 and 0027, `docs/figures/gen_figures.py` (the function `paper_review_panel()`) and `docs/figures/academic-pipeline/gen_academic_pipeline.py` with its figure; `docs/figures/paper-review.svg` became `docs/figures/paper-review-panel.svg`. The run folder reads `paper-review-panel-runs/`.
+- Ticked: every item of the brief holds and nine of the ten cases are met by the reviewer's rerun; the tenth, the two figure scripts, was run at landing, where both exited 0 and left `git status --short` with no figure changed. `git grep -nE '(^|[^-a-z])paper-review([^-a-z]|$)' -- . ':!.scratch'` on the staged tree prints nothing.
+- Premise corrections: none in `plan.md`. The brief check's seven points were closed in the brief before the build (`agents/reviews/2.A-brief-check.md`, "Closed").
+- Review: `agents/reviews/2.A-refuter.md`; one run, four findings, none making an item violated, each closed under its "Closed" heading. No repair round.
+- Fixes at landing: 2. `docs/glossary.md`, the entry **panel review**: its "Stated in" names `skills/academic/paper/SKILL.md`, "Cross-session resume scope and known limitations", and `docs/roadmap.md`, the entry of `referee`, the two places that hold the term, since the opening paragraph of the skill's `SKILL.md` does not. `plan.md`, the first line: `# Plan: 6. paper-review-panel`, the roadmap's heading of the entry.
+- The builder's first report passed its bar: nothing went back.
+- Findings outside the brief: none new. The label "paper-review-panel, entry 6" with its value "todo" in `gen_academic_pipeline.py` and roadmap entry 13 stay step 4's.
+- Decisions inside the rename: the run folder and the figure take the new name; the ledger folder `.scratch/6-paper-review/` keeps the old one.
+- Verification on main: `env -u CLAUDE_CONFIG_DIR -u ORDO_SKILL_DIRS -u ORDO_STABLE sh ~/.claude/skills/land/templates/land.sh .scratch/6-paper-review/orchestrator-state.md 6-paper-review-2.A a988ed2 docs/plan.yaml` exited 0; `checks.sh` run again after the fix printed `checks: 12 commands passed`.
+- Look: the configuration block's `look:` is empty. A/B: none, `bench: []`.
+- Usage: brief check a44ce4cabb3f13e0e claude-fable-5-2 144130 tokens, 22 tool uses, 5.0 minutes; builder ac00f95bb01eebccf claude-fable-5-2 143476 tokens, 21 tool uses, 4.7 minutes; reviewer a545e898ed137ea94 claude-fable-5-2 135375 tokens, 26 tool uses, 5.0 minutes.

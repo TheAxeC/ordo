@@ -1,6 +1,6 @@
 ---
-name: paper-review
-description: "Multi-perspective academic paper review with dynamic reviewer personas. Simulates 5 independent reviewers (EIC + 3 peer reviewers + Devil's Advocate) with field-specific expertise. Supports full review, re-review (verification), quick assessment, methodology focus, Socratic guided, and calibration modes. Triggers on: /paper-review, review paper, peer review, manuscript review, referee report, review my paper, critique paper, simulate review, editorial review, calibrate reviewer, reviewer calibration, measure reviewer accuracy."
+name: paper-review-panel
+description: "Multi-perspective academic paper review with dynamic reviewer personas. Simulates 5 independent reviewers (EIC + 3 peer reviewers + Devil's Advocate) with field-specific expertise. Supports full review, re-review (verification), quick assessment, methodology focus, Socratic guided, and calibration modes. Triggers on: /paper-review-panel, review paper, peer review, manuscript review, referee report, review my paper, critique paper, simulate review, editorial review, calibrate reviewer, reviewer calibration, measure reviewer accuracy."
 metadata:
   version: "1.0.0"
 ---
@@ -12,14 +12,14 @@ Simulates a complete international journal peer review process: automatically id
 ## Quick start
 
 ```
-/paper-review <manuscript>                                                                 review the paper, a path or pasted text, with the full panel: 5 review reports, the Editorial Decision and the Revision Roadmap
-/paper-review full <manuscript>                                                            the same review, with the mode named
-/paper-review re-review <revised manuscript> <revision roadmap> [<response to reviewers>]  verify whether the revisions address the review comments
-/paper-review quick <manuscript>                                                           the EIC quick assessment and the key issues list
-/paper-review methodology-focus <manuscript>                                               the in-depth methodology review report
-/paper-review guided <manuscript>                                                          the Socratic guided review, issue by issue
-/paper-review calibration <gold set folder>                                                measure the reviewer's error profile against papers with known outcomes
-Review this paper: [paste paper or provide file]                                           the simplest command, a plain request: this one runs full (Steps 1)
+/paper-review-panel <manuscript>                                                                 review the paper, a path or pasted text, with the full panel: 5 review reports, the Editorial Decision and the Revision Roadmap
+/paper-review-panel full <manuscript>                                                            the same review, with the mode named
+/paper-review-panel re-review <revised manuscript> <revision roadmap> [<response to reviewers>]  verify whether the revisions address the review comments
+/paper-review-panel quick <manuscript>                                                           the EIC quick assessment and the key issues list
+/paper-review-panel methodology-focus <manuscript>                                               the in-depth methodology review report
+/paper-review-panel guided <manuscript>                                                          the Socratic guided review, issue by issue
+/paper-review-panel calibration <gold set folder>                                                measure the reviewer's error profile against papers with known outcomes
+Review this paper: [paste paper or provide file]                                                 the simplest command, a plain request: this one runs full (Steps 1)
 ```
 
 **Output:**
@@ -104,7 +104,7 @@ The mode selection logic:
 Steps 1 to 3 run in order, in every mode.
 
 1. Read the call and pick the mode.
-   - In a call `/paper-review <mode> ...` the first argument, one of the six mode names, is the mode.
+   - In a call `/paper-review-panel <mode> ...` the first argument, one of the six mode names, is the mode.
    - A call whose first argument is one word that is neither one of the six mode names nor a path that exists, followed by a path that exists, is the refusal "Unknown mode".
    - Every other call whose first argument is no mode name takes all its arguments as the manuscript, a path or pasted text, and runs `full`.
    - A plain request gets its mode from the mode selection logic above and the Quick Mode Selection Guide below.
@@ -265,11 +265,11 @@ Opt-in mode that measures this reviewer's FNR / FPR / balanced accuracy against 
 | 6 | **the Devil's Advocate reviewer (`agents/devils_advocate_reviewer_agent.md`)** | **Devil's Advocate: core argument challenges, logical fallacy detection, strongest counter-arguments** | **Phase 1** |
 | 7 | the editorial synthesizer (`agents/editorial_synthesizer_agent.md`) | Synthesizes all reviews, identifies consensus and disagreements, makes editorial decision | Phase 2 |
 
-`paper-review` runs in 3 phases internally (Phase 0 field analysis -> Phase 1 panel review -> Phase 2 editorial synthesis). Each agent inside the reviewer skill is single-phase relative to the skill's own phase numbering.
+`paper-review-panel` runs in 3 phases internally (Phase 0 field analysis -> Phase 1 panel review -> Phase 2 editorial synthesis). Each agent inside the reviewer skill is single-phase relative to the skill's own phase numbering.
 
-**Phase-by-phase (cross-session resume):** User invokes one reviewer agent per phase across sessions, by a plain request, or runs the full reviewer panel standalone via `/paper-review`.
+**Phase-by-phase (cross-session resume):** User invokes one reviewer agent per phase across sessions, by a plain request, or runs the full reviewer panel standalone via `/paper-review-panel`.
 
-In phase-by-phase invocation, **single-phase agents stay strictly within their assigned phase for writes**. The 6 single-phase agents in `paper-review` are: the EIC, the methodology reviewer, the domain reviewer, the perspective reviewer, the Devil's Advocate reviewer (all Phase 1 panel) + the editorial synthesizer (Phase 2 synthesis). Reading the full paper draft is **expected** for all reviewers: without context they cannot evaluate.
+In phase-by-phase invocation, **single-phase agents stay strictly within their assigned phase for writes**. The 6 single-phase agents in `paper-review-panel` are: the EIC, the methodology reviewer, the domain reviewer, the perspective reviewer, the Devil's Advocate reviewer (all Phase 1 panel) + the editorial synthesizer (Phase 2 synthesis). Reading the full paper draft is **expected** for all reviewers: without context they cannot evaluate.
 
 The field analyst at Phase 0 is meta: it configures the panel; no boundary fence needed.
 
@@ -455,8 +455,8 @@ The Editorial Decision Letter structure is detailed in `templates/editorial_deci
 ### Upstream/Downstream Relationships
 
 ```
-paper --> [integrity check] --> paper-review --> paper (revision) --> paper-review (re-review) --> [final integrity] --> finalize
-(writing)  (integrity audit)    (review)         (revision)           (verification review)        (final verification)  (finalization)
+paper --> [integrity check] --> paper-review-panel --> paper (revision) --> paper-review-panel (re-review) --> [final integrity] --> finalize
+(writing)  (integrity audit)    (review)               (revision)           (verification review)              (final verification)  (finalization)
 ```
 
 ### Specific Integration Methods
@@ -498,10 +498,10 @@ The rows up to "Fewer than 3 runs per paper" wait for the user. The two rows wit
 | The guided review's question | Guided: the run's EIC agent asks a question or waits for the author's response (guided item 2) | The agent's message | The user's answer, sent to the agent, until the dialogue's wrap-up |
 | A gold set with labels on one side | Calibration: the gold set lacks an `accept` or a `reject` label (`references/calibration_mode_protocol.md`, "Phase 0: Intake") | The refusal to proceed and the request for at least one counter-example | A gold set with the counter-example; the calibration goes on |
 | Fewer than 3 runs per paper | Calibration: the user asks for 1 or 2 runs per paper (`references/calibration_mode_protocol.md`, "Ensembling methodology notes") | That 1 or 2 runs are not allowed, and that 3 is the fewest | A number of 3 or more; the calibration goes on |
-| `[PANEL-SHRUNK]` | Full and methodology-focus: a reviewer is marked unusable, so fewer usable Phase 2 outputs than `panel_size` are left (`references/sprint_contract_protocol.md`, "6. Multi-reviewer orchestration") | The tag `[PANEL-SHRUNK: usable=<k>, panel_size=<N>]` and each `[PROTOCOL-VIOLATION]` tag | Nothing: the session aborts the editorial round, and the review starts again with `/paper-review` |
-| `[EXPRESSION-UNRECOGNISED]` | The editorial synthesizer cannot parse the `expression` of a failure condition (`agents/editorial_synthesizer_agent.md`, "Sprint Contract Synthesizer Protocol") | The tag `[EXPRESSION-UNRECOGNISED: condition_id=<F>, expression=<...>]` | Nothing: the synthesizer aborts, and the review starts again with `/paper-review` |
-| Unknown mode | The first argument is one word that is neither one of the six mode names nor a path that exists, and a path that exists follows it (Steps 1) | The six modes | `/paper-review` again with a listed mode |
-| A missing input | The call lacks an input its mode's line of Quick start requires, or its revision roadmap or gold set folder does not exist (Steps 1) | The mode's line of Quick start, or the path | The call corrected, then `/paper-review` again |
+| `[PANEL-SHRUNK]` | Full and methodology-focus: a reviewer is marked unusable, so fewer usable Phase 2 outputs than `panel_size` are left (`references/sprint_contract_protocol.md`, "6. Multi-reviewer orchestration") | The tag `[PANEL-SHRUNK: usable=<k>, panel_size=<N>]` and each `[PROTOCOL-VIOLATION]` tag | Nothing: the session aborts the editorial round, and the review starts again with `/paper-review-panel` |
+| `[EXPRESSION-UNRECOGNISED]` | The editorial synthesizer cannot parse the `expression` of a failure condition (`agents/editorial_synthesizer_agent.md`, "Sprint Contract Synthesizer Protocol") | The tag `[EXPRESSION-UNRECOGNISED: condition_id=<F>, expression=<...>]` | Nothing: the synthesizer aborts, and the review starts again with `/paper-review-panel` |
+| Unknown mode | The first argument is one word that is neither one of the six mode names nor a path that exists, and a path that exists follows it (Steps 1) | The six modes | `/paper-review-panel` again with a listed mode |
+| A missing input | The call lacks an input its mode's line of Quick start requires, or its revision roadmap or gold set folder does not exist (Steps 1) | The mode's line of Quick start, or the path | The call corrected, then `/paper-review-panel` again |
 
 ## Anti-patterns
 
@@ -527,7 +527,7 @@ Explicit prohibitions to prevent common failure modes, especially during long co
 - Each of the seven roles starts as a fresh agent on the runner's general-purpose agent with the runner's defaults.
 - A role's agent is given its page and the files of its task.
 - The prompt sets no model and no effort.
-- The run folder is `paper-review-runs/<mode>-<date>/` in the parent of the manuscript's folder, with `<date>` the local date, `date +%Y-%m-%d`.
+- The run folder is `paper-review-panel-runs/<mode>-<date>/` in the parent of the manuscript's folder, with `<date>` the local date, `date +%Y-%m-%d`.
 - For pasted text and for calibration, the run folder stands in the folder the session runs in.
 - A further run of the same mode on the same day takes `<mode>-<date>-2`, then `-3`.
 - Each report is a file of its own in the run folder: the Reviewer Configuration Card, one report per reviewer, the two outputs of each reviewer's two calls, the Editorial Decision with the Revision Roadmap, and the coaching's outputs.

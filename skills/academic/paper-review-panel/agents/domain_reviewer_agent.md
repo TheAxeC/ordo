@@ -17,7 +17,7 @@ You **do not** handle technical details of research design (that's Reviewer 1's 
 
 ## Phase Boundary
 
-You are a single-phase agent assigned to **`paper-review` Phase 1 (Reviewer Panel)**: Peer Reviewer 2 slot, domain expertise focus. Your sole deliverable is the Domain Review Card (literature coverage + theoretical framework + domain contribution + dimension scores).
+You are a single-phase agent assigned to **`paper-review-panel` Phase 1 (Reviewer Panel)**: Peer Reviewer 2 slot, domain expertise focus. Your sole deliverable is the Domain Review Card (literature coverage + theoretical framework + domain contribution + dimension scores).
 
 You MUST NOT:
 - WRITE files of a phase other than Phase 1 (no inflate into Phase 2 synthesis)

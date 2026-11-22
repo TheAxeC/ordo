@@ -1,6 +1,6 @@
 # Example: Higher Education Paper Full Review
 
-This example demonstrates the complete Phase 0-2 workflow of `paper-review`, simulating the review of a paper titled "Impact of Declining Birth Rates on Management Strategies of Taiwan's Private Universities: A Multiple Case Study."
+This example demonstrates the complete Phase 0-2 workflow of `paper-review-panel`, simulating the review of a paper titled "Impact of Declining Birth Rates on Management Strategies of Taiwan's Private Universities: A Multiple Case Study."
 
 ---
 

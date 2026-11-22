@@ -1,6 +1,6 @@
 # Sprint Contract Protocol
 
-> Authoritative orchestration reference for the `paper-review` sprint-contract hard gate.
+> Authoritative orchestration reference for the `paper-review-panel` sprint-contract hard gate.
 >
 > **Cross-reference**: a parallel generator-evaluator protocol runs inside `paper` for the in-pair writer / evaluator pair (see the `paper` skill's `SKILL.md`, "Generator-Evaluator Contract Protocol").
 

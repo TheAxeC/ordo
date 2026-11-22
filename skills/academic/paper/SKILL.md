@@ -65,7 +65,7 @@ The `<manuscript>` of format-convert is a main `.tex`, a `.md`, a `.docx` or a `
 
 | When | Use |
 |---|---|
-| Reviewing a paper (structured review by a panel of reviewers and an editor), a different kind of review from `/paper draft-review` | `paper-review` |
+| Reviewing a paper (structured review by a panel of reviewers and an editor), a different kind of review from `/paper draft-review` | `paper-review-panel` |
 | Someone else's paper to review as its referee | `referee` (roadmap entry 7.A, not built yet) |
 | Full research-to-paper pipeline: the research stage, the integrity check of a finished manuscript's references, claims, numbers and figures, and its ethics check | `researcher` (roadmap entry 13, not built yet) |
 | The prose of a draft to check | `writing` |
@@ -889,7 +889,7 @@ When a writer or evaluator phase becomes unusable (Phase Na lint twice fail OR P
 
 - The generator-evaluator round (Phase 4a + Phase 4b + Phase 6a + Phase 6b + in-pair revision loop) is an **in-session atomic unit**. Manual session split mid-round -> writer Phase 4a output is lost; the new session must restart `full` mode from Phase 0.
 - **No graceful-degradation fallback**: when the writer or evaluator phase aborts via `[GENERATOR-PHASE-ABORTED]`, `full` mode aborts and routes to user intervention.
-- **In-pair Phase 6 evaluator vs external review**: the in-pair peer reviewer (Phase 6 evaluator with the contract gate) and an external panel review (`paper-review`) serve different review layers.
+- **In-pair Phase 6 evaluator vs external review**: the in-pair peer reviewer (Phase 6 evaluator with the contract gate) and an external panel review (`paper-review-panel`) serve different review layers.
 
 ## Failure paths
 

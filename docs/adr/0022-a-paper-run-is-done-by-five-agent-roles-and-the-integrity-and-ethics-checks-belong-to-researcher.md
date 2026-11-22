@@ -19,4 +19,4 @@ ADR 0019 gave a `paper` run the nine agent roles of academic-paper and the integ
 
 ## Consequences
 
-A full run starts at most five roles and makes at most three writer passes driven by other agents' issues. No full, revision or lit-review run checks claims against their sources until `researcher` exists; citation-check mode does, as ADR 0024 says. `references/integrity-verification.md` and `references/ethics.md` leave `skills/academic/paper/`, and `researcher` takes what they held. The later writing skills (`paper-review`, `rebuttal`, `grant`) have this record to follow or supersede.
+A full run starts at most five roles and makes at most three writer passes driven by other agents' issues. No full, revision or lit-review run checks claims against their sources until `researcher` exists; citation-check mode does, as ADR 0024 says. `references/integrity-verification.md` and `references/ethics.md` leave `skills/academic/paper/`, and `researcher` takes what they held. The later writing skills (`paper-review-panel`, `rebuttal`, `grant`) have this record to follow or supersede.

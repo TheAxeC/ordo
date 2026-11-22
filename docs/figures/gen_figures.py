@@ -7,7 +7,7 @@ Writes, beside this file:
 - plan-loop.svg: the commands of one step, /spec, build it, /refute, close them, /refute over
   the round and /land, with the /plan-orchestration band.
 - grill.svg, writing.svg, code-comments.svg: the agents, stops and cycles of each skill.
-- paper-review.svg: the agents and stops of the full mode of the paper-review skill, with the
+- paper-review-panel.svg: the agents and stops of the full mode of the paper-review-panel skill, with the
   roles the other five modes start in its note.
 - paper/full.svg, paper/revision.svg, paper/lit-review.svg, paper/outline-only.svg,
   paper/abstract-only.svg, paper/citation-check.svg, paper/disclosure.svg, paper/plan.svg,
@@ -1874,8 +1874,8 @@ def writing() -> str:
     return _single("writing.svg", "The writing skill", _graph(nodes, edges), note)
 
 
-def paper_review() -> str:
-    """The full mode of the paper-review skill: its agents in order and its two stops."""
+def paper_review_panel() -> str:
+    """The full mode of the paper-review-panel skill: its agents in order and its two stops."""
     reviewers = (
         Node("E", "EIC, 2 calls"),
         Node("M", "Methodology reviewer, 2 calls"),
@@ -1906,8 +1906,8 @@ def paper_review() -> str:
         "gold paper."
     )
     return _single(
-        "paper-review.svg",
-        "The full mode of the paper-review skill",
+        "paper-review-panel.svg",
+        "The full mode of the paper-review-panel skill",
         _graph(nodes, edges),
         note,
     )
@@ -2143,7 +2143,7 @@ def figures() -> tuple[tuple[str, str], ...]:
         ("plan-loop.svg", plan_loop()),
         ("grill.svg", grill()),
         ("writing.svg", writing()),
-        ("paper-review.svg", paper_review()),
+        ("paper-review-panel.svg", paper_review_panel()),
         ("code-comments.svg", code_comments()),
         *paper_figures(),
         ("paper/lifecycle.svg", paper_lifecycle()),

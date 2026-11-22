@@ -1,6 +1,6 @@
 # Example: Cross-Disciplinary Paper Review
 
-This example demonstrates how `paper-review` configures reviewer roles and handles inter-disciplinary tensions when faced with a highly cross-disciplinary paper. It simulates the review of a paper titled "Using Machine Learning to Predict University Closure Risk in Taiwan: An Institutional Research Data Approach."
+This example demonstrates how `paper-review-panel` configures reviewer roles and handles inter-disciplinary tensions when faced with a highly cross-disciplinary paper. It simulates the review of a paper titled "Using Machine Learning to Predict University Closure Risk in Taiwan: An Institutional Research Data Approach."
 
 ---
 

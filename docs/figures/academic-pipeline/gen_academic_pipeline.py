@@ -134,7 +134,7 @@ STAGES = (
 
 TARGETS = {
     "P1": ("paper plan and paper full", "paper"),
-    "PRV": ("paper-review, entry 6", "todo"),
+    "PRV": ("paper-review-panel, entry 6", "todo"),
     "RS": ("researcher, entry 13: integrity and ethics checks, the stage loop", "todo"),
     "P2": ("paper revision", "paper"),
     "FC": ("paper format-convert", "paper"),

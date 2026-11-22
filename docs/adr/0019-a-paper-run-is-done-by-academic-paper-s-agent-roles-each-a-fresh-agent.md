@@ -4,7 +4,7 @@ Status: superseded by 0022
 
 ## Context
 
-Roadmap entry 5 builds `paper` on academic-paper, which runs 12 agents, one per phase of its pipeline, from intake to formatting (`research-hub/.agents/skills/academic-paper/SKILL.md`, the agent table). The user's global rules send all manuscript content through a skill whose agents are dispatched through the Agent tool, and limit the orchestrating session to reading, deciding and briefing. Ordo's `/writing` reviews a draft with fresh read-only agents, since a session that wrote a draft would otherwise review its own work (ADR 0013). `paper` takes the abstract, argument builder, citation compliance, draft writer, literature strategist, peer reviewer, structure architect, visualization and integrity verification agents. The peer reviewer is one reviewer of the author's own draft inside full mode, sending it back to the draft writer at most twice; the five-reviewer panel of academic-paper-reviewer is a separate skill, `paper-review` (roadmap entry 6).
+Roadmap entry 5 builds `paper` on academic-paper, which runs 12 agents, one per phase of its pipeline, from intake to formatting (`research-hub/.agents/skills/academic-paper/SKILL.md`, the agent table). The user's global rules send all manuscript content through a skill whose agents are dispatched through the Agent tool, and limit the orchestrating session to reading, deciding and briefing. Ordo's `/writing` reviews a draft with fresh read-only agents, since a session that wrote a draft would otherwise review its own work (ADR 0013). `paper` takes the abstract, argument builder, citation compliance, draft writer, literature strategist, peer reviewer, structure architect, visualization and integrity verification agents. The peer reviewer is one reviewer of the author's own draft inside full mode, sending it back to the draft writer at most twice; the five-reviewer panel of academic-paper-reviewer is a separate skill, `paper-review-panel` (roadmap entry 6).
 
 ## Decision
 
@@ -17,4 +17,4 @@ A `paper` run is done by academic-paper's agent roles: literature strategist, st
 
 ## Consequences
 
-A full run starts up to nine agents, and each mode starts only the roles its phases need. Each role's rules sit on one page, so a rule is changed in one place. The later writing skills (`paper-review`, `rebuttal`, `grant`) face the same choice and either follow this record or supersede it.
+A full run starts up to nine agents, and each mode starts only the roles its phases need. Each role's rules sit on one page, so a rule is changed in one place. The later writing skills (`paper-review-panel`, `rebuttal`, `grant`) face the same choice and either follow this record or supersede it.
