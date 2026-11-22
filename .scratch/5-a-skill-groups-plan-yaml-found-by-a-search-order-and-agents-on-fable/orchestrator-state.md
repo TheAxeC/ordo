@@ -75,5 +75,5 @@ dispatch: []
 ## Current position (rewritten before every step commit of this plan)
 
 - 2026-11-22. The plan is opened; nothing has landed.
-- Roadmap entry 5.A (Skill groups, plan.yaml found by a search order, and agents on Fable). Plan step 5 of 7: the closing. Steps 1, 2, 3, 4, 4.A and 4.B are done. Next: the closing, with the final tag and pin, the closing report and the roadmap diff that ticks 5.A, which is the user's to approve.
+- Roadmap entry 5.A (Skill groups, plan.yaml found by a search order, and agents on Fable). Roadmap entry 5.A (Skill groups, plan.yaml found by a search order, and agents on Fable). Plan step 7 of 7: the closing. Next: the roadmap diff of `/roadmap done 5.A`, for the user's approval, with the user's reading of the one new line that names `.agents/plan.yaml` (`skills/orchestration/plan/SKILL.md`, Steps 4); then the move of the folder to the archive, the final tag and the pin. The closing report is `agents/reviews/closing.md`, and the gate's output on main is `agents/reviews/5-gate.md`.
 - Open on Axel's side: none.
