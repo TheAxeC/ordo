@@ -75,5 +75,5 @@ dispatch: []
 ## Current position (rewritten before every step commit of this plan)
 
 - 2026-11-22. The plan is opened; nothing has landed.
-- Roadmap entry 5.A (Skill groups, plan.yaml found by a search order, and agents on Fable). Plan step 4 of 5: the checks on the pinned skills; `v9.0.0-rc.1` is tagged and pinned and five checks are recorded in `agents/reviews/4-pinned-checks.md`; two are the user's (the run on the scratch repository, the reading of the 18 lines). Steps 1, 2 and 3 landed. Next: step 4, which tags and pins the new skills first, since the pinned skills read `.agents/plan.yaml`, which is no longer on main.
+- Roadmap entry 5.A (Skill groups, plan.yaml found by a search order, and agents on Fable). Plan step 4 of 6: the checks on the pinned skills; `v9.0.0-rc.1` is tagged and pinned and five checks are recorded in `agents/reviews/4-pinned-checks.md`; the user read the 18 lines and found them fine (2026-11-22); the run on the scratch repository is made by the session in a new Claude Code session. Step 4.A, the submission checks in paper, is added by the ruling "Submission checks folded in" and comes next, before the closing. Steps 1, 2 and 3 landed. Next: step 4, which tags and pins the new skills first, since the pinned skills read `.agents/plan.yaml`, which is no longer on main.
 - Open on Axel's side: none.
