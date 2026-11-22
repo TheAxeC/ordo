@@ -75,6 +75,6 @@ dispatch:
 
 ## Current position (rewritten before every step commit of this plan)
 
-- 2026-11-22. Step 1, the skill, has landed. Step 2, the gate's two runs with the user, is next: it needs the user at the intake, at the reviewer configuration and at the selection of each run. `research-hub` is read only, so the manuscript and the round-2 files are copied to a folder outside it for the runs.
-- Roadmap entry 7.A (referee). Plan step 2 of 3: the gate's two runs, with the user. Next: step 3, the closing.
+- 2026-11-22. Step 1, the skill, has landed, and `v9.1.0-rc.1` is tagged on 0b4f269 and pinned. Step 2, the gate's two runs, is next: each run is made by a separate agent that invokes `/referee`, never in this session, and this session answers its stops with the skill's defaults and asks the user nothing (ruling "How every run is made"). The inputs are copied to `.agents/gate-7a/round1/` and `.agents/gate-7a/round2/`, since `research-hub` is read only.
+- Roadmap entry 7.A (referee). Plan step 2 of 3: the gate's two runs. Next: step 3, the closing.
 - Open on Axel's side: none.
