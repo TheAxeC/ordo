@@ -38,6 +38,8 @@ The failing line of each new case of `utils/pin.test.sh` on the unchanged `pin.s
 
 The whole test on the unchanged `pin.sh`: `FAIL: pinning a grouped tag failed:  pin: tag g1 holds no skill`.
 
+In four cases the failing line `pin: tag g1 holds no skill` is not the case's own assertion: in "a flat tag pinned over a grouped pin", "check mode names a link at the flat place on a grouped pin" and "a grouped tag that drops a skill removes its link" it comes from the case's setup pin of `g1`, and in "a grouped tag pinned over a flat pin" from the pin of `g1` the case is about. The unchanged run stops there, so it does not show the assertions on the links, on check mode's line and on the removal failing.
+
 ## DONE / NOT DONE
 
 | # | Item | State | What changed, and the proof |
@@ -150,6 +152,7 @@ Lines added and removed, from `git diff --numstat` and, for the moved files, a `
 - `pin.sh` check mode, an entry of a skill of the pinned tag linking elsewhere inside the pinned worktree: before two lines ("does not link to" and "which the pinned tag does not have"); after the first line only.
 - `pin.sh` reads the skills of the pinned worktree from the commit it is checked out at; before, from the folders on disk.
 - `check_config.py` with no `plan` skill beside it or in a sibling group: before a Python traceback; after the `error:` line, exit 1.
+- `check_config.py` in a flat installation that holds `ordo-init` and no `plan` skill beside it: before, a Python traceback; after, it reads `templates/plan.yaml` from a folder `plan` in a sibling folder of the skills folder when one holds it (`<skills folder's parent>/*/plan`, the first in sorted order), and prints the `error:` line only when none does.
 - The README's copy loop: before, a missing skill folder made `cp` fail and the loop went on; after, the loop stops with its message. Its `rm -rf` reads `"${dir:?}/${name:?}"`.
 
 ## Judgments taken
@@ -167,3 +170,53 @@ Lines added and removed, from `git diff --numstat` and, for the moved files, a `
 
 - The state file `.scratch/5-a-skill-groups-plan-yaml-found-by-a-search-order-and-agents-on-fable/orchestrator-state.md` holds, in its configuration block, the `verify:` commands at lines 7 to 16 (`sh skills/code-comments/templates/strip_comments.test.sh 2>&1 | tail -1` through `python3 skills/repo-setup/templates/sync_rules.py . --only glossary`) and `standards:` at line 21 with `skills/repo-setup/templates/docs/dev/prose-standard.md`. After this step those paths do not exist, so the landing's verify list fails until the block names the paths `docs/dev/building.md` now gives. The ledger is the orchestrator's, so the builder did not change it. The state files of other open plans were not read.
 - Steps 1 and 3 edit files this step moves; their changes apply to the new paths.
+
+## Repair round 1
+
+Every ruling of the round is done. Nothing is NOT DONE.
+
+| # | Ruling | State | What changed |
+|---|---|---|---|
+| 1 | Check mode accepts a skill whose folder holds no `SKILL.md` on disk | DONE | New case in `utils/pin.test.sh`, with its line in the head comment: on a grouped pin the folder of `beta` is moved out of the pinned worktree, and `pin.sh` with no tag must exit 1 and print, for each skill folder, `pin: <dir>/beta links to <pinned worktree>/skills/one/beta, which holds no SKILL.md`; with the folder back, check mode passes. The first loop of `check_links` in `utils/pin.sh` now tests `[ -f "$target/SKILL.md" ]` for a link that points at the skill's folder and prints that line when the file is missing. The head comment's sentence on check mode names the report. |
+| 2 | `docs/academic-coverage.md` lines 230, 234, 248 and 266 | DONE | Each reads "Commit `f9a00ab` holds ... as the `paper` skill's `references/integrity-verification.md`" (230, 234, 248) or "`references/ethics.md`" (266). |
+| 3 | Rewritten paths that name no file | DONE | Each is named by its skill: in `docs/roadmap.md`, "the `plan-orchestration` skill's `templates/launch.sh`", "`templates/launch.test.sh`" and "`templates/plan_cost.test.sh`", and "the `land` skill's `templates/verify.sh`"; in the ADRs, "the `paper` skill's `references/ai-disclosure.md`", "`references/literature-strategist-theme-run.md`", "`references/literature-strategist-merge-run.md`", "`references/literature-strategist-synthesis.md`" and "`references/modes.md`". Nothing else of those sentences changed. Every `skills/<group>/...` path on a line the step adds (the `+` lines of `git diff -U0 --diff-filter=M` and the added lines of the four edited files under `skills/`), tested with `[ -e ]`: 0 do not exist. Before the rulings 2 and 3 the same test printed 11 paths that did not exist, in 16 places. |
+| 4 | `utils/pin.sh`, the head comment's long line | DONE | The paragraph on the layouts and the paragraph on check mode and the refusals are wrapped at 100; no line the step adds to `utils/pin.sh` is longer than 100 characters. |
+| 5 | The table of first runs | DONE | The sentence, which belongs under the table of failing lines above: in "a flat tag pinned over a grouped pin", "check mode names a link at the flat place on a grouped pin" and "a grouped tag that drops a skill removes its link", the failing line `pin: tag g1 holds no skill` comes from the case's setup pin of `g1`, and in "a grouped tag pinned over a flat pin" it comes from the pin of `g1` the case is about, so in these four the unchanged run stops before the assertions on the links, on check mode's line and on the removal, which the unchanged run therefore does not show failing. |
+| 6 | `check_config.py`, a flat installation without `plan` | DONE, report only | Added to "User-visible changes": a flat installation that holds `ordo-init` and no `plan` skill beside it, such as `~/.claude/skills/ordo-init` alone. Before: a Python traceback, `FileNotFoundError` on `<skills folder>/plan/templates/plan.yaml`. After: `check_config.py` reads `templates/plan.yaml` from a folder `plan` in a sibling folder of the skills folder when one holds it (`<skills folder's parent>/*/plan`, the first in sorted order), and prints the `error:` line with exit 1 only when no such folder holds it. The script is unchanged in this round. |
+
+Ruling 1, the new case on `pin.sh` as it stood before the fix, `sh utils/pin.test.sh 2>&1`:
+
+```
+ok: a SKILL.md inside a ledger folder is no skill
+FAIL: check mode exited 0 with a skill's folder missing in the pinned worktree: pinned: g1, 2 skills linked in: <scratch>/my home/.claude/skills, <scratch>/my home/.claude-work/skills
+```
+
+The checks of "Verify before you report", run again after the round:
+
+```
+$ sh skills/code/code-comments/templates/strip_comments.test.sh 2>&1 | tail -1
+PASS: strip_comments.py scratch tests
+$ sh skills/orchestration/land/templates/land.test.sh 2>&1 | tail -1
+PASS: land.sh scratch tests
+$ sh skills/ordo/ordo-init/templates/check_config.test.sh 2>&1 | tail -1
+PASS: check_config.py scratch tests
+$ sh skills/ordo/repo-setup/templates/sync_rules.test.sh 2>&1 | tail -1
+PASS: sync_rules.py scratch tests
+$ sh utils/pin.test.sh 2>&1
+ok: a grouped tag is pinned
+ok: a grouped tag pinned over a flat pin
+ok: one skill name in two groups is refused
+ok: one skill name in the flat and the grouped place is refused
+ok: a flat tag pinned over a grouped pin
+ok: check mode names a link at the flat place on a grouped pin
+ok: a grouped tag that drops a skill removes its link
+ok: a SKILL.md inside a ledger folder is no skill
+ok: check mode names a link to a skill folder missing in the pinned worktree
+PASS: pin.sh scratch tests
+$ python3 skills/ordo/repo-setup/templates/sync_rules.py . --only glossary
+ok: the plan-terms block equals the template
+```
+
+The five tests of `skills/academic/paper/templates/` (`anchorize_tex`, `apply_tex_patch`, `calibration_counts`, `lookup`, `reference_docx`) each printed its `PASS:` line. `sync_rules.py` exited 0. The character-set check over the 45 changed files printed nothing, exit 0. The gate's `perl` line (C3) prints 0 lines. `python3 skills/ordo/ordo-init/templates/check_config.py .` prints its `ok:` line. `ls skills` prints `academic code orchestration ordo`, and `find skills -name SKILL.md | wc -l` prints 16. C2, C5 and C8 were not run again: the round changed no file they read.
+
+`utils/pin.test.sh` now has nine new cases. User-visible change of the round: `pin.sh` with no tag, and the check after linking, exit 1 with `pin: <dir>/<skill> links to <folder>, which holds no SKILL.md` when a skill of the pinned commit has no `SKILL.md` on disk in the pinned worktree; before, they passed.

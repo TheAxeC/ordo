@@ -4,7 +4,7 @@ Status: proposed
 
 ## Context
 
-Roadmap entry 2.I has one session run every open plan, with one limit on steps in flight, a path comparison across plans and one landing at a time. Each plan's state file holds the dispatch block of its own steps in flight (`skills/plan/templates/orchestrator-state.md`), and the ledger is the whole handoff of a plan (`skills/plan-orchestration/SKILL.md`, "Resuming, and handing the plan over").
+Roadmap entry 2.I has one session run every open plan, with one limit on steps in flight, a path comparison across plans and one landing at a time. Each plan's state file holds the dispatch block of its own steps in flight (`skills/orchestration/plan/templates/orchestrator-state.md`), and the ledger is the whole handoff of a plan (`skills/orchestration/plan-orchestration/SKILL.md`, "Resuming, and handing the plan over").
 
 ## Decision
 

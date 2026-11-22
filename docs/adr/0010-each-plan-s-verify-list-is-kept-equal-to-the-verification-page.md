@@ -4,7 +4,7 @@ Status: proposed
 
 ## Context
 
-`/plan` copies the verification page's commands into the plan's configuration block when the plan opens (`skills/plan/SKILL.md`, Steps 4), and `checks.sh` runs that copy (`skills/land/templates/checks.sh`). Nothing updates the copy afterwards. A test the page gained while plans 2.F, 2.G and 2.H were open, `plan_cost.test.sh`, was missing from all three plans' lists until it was added by hand. Roadmap entry 2.I requires that every open plan runs the list the verification page holds now.
+`/plan` copies the verification page's commands into the plan's configuration block when the plan opens (`skills/orchestration/plan/SKILL.md`, Steps 4), and `checks.sh` runs that copy (`skills/orchestration/land/templates/checks.sh`). Nothing updates the copy afterwards. A test the page gained while plans 2.F, 2.G and 2.H were open, `plan_cost.test.sh`, was missing from all three plans' lists until it was added by hand. Roadmap entry 2.I requires that every open plan runs the list the verification page holds now.
 
 ## Decision
 

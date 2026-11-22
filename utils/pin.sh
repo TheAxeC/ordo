@@ -18,13 +18,22 @@
 # folder is linked to another. The default folders are read one per line, so a home folder holding a
 # space needs nothing. Every skill folder must be an absolute path, or the run is refused before
 # anything changes. The summary line names the folders joined by ", ".
-# A skill is a folder under skills/ in the tag that holds SKILL.md, or a top-level folder that
-# holds one in a tag from before the skills moved under skills/ (v1.0.0).
-# Check mode reports every link into the live clone, once each, and every link into the pinned
-# worktree whose skill the tag lacks. Pin mode refuses, before anything changes, a link into the
-# live clone for a skill the tag lacks, a skill folder entry that is a real directory, and a link
-# to anywhere outside Ordo; each is left as it is. It replaces a link into the live clone for a
-# skill the tag holds and prints a line for each, and removes a link into the pinned worktree
+# A skill is a folder that holds SKILL.md, in one of three layouts of the tag: grouped, a folder
+# skills/<group>/<name>; flat, a folder skills/<name>; and top level, a folder <name>, as in v1.0.0.
+# A tag may hold skills in the grouped and the flat layout at once. The top level is read only when
+# skills/ holds no skill. A SKILL.md anywhere else in the tag is no skill. A skill is named by the
+# folder that holds its SKILL.md, and its link is <skill folder>/<name>, pointing at that folder in
+# the pinned worktree, whatever its group. The skills of the pinned worktree are read from the
+# commit it is checked out at. A link into the pinned worktree at a skill's place in another layout
+# is replaced on a pin by the link to the skill's folder in the tag.
+# Check mode reports every link into the live clone, once each, every entry of a skill of the pinned
+# worktree that does not link to that skill's folder there, every such entry that links to that
+# folder while the folder holds no SKILL.md on disk, and every link into the pinned worktree under a
+# name that is no skill of it and to a folder that holds no SKILL.md. Pin mode refuses, before
+# anything changes, a tag that holds two skills of one name, with a line that names both folders, a
+# link into the live clone for a skill the tag lacks, a skill folder entry that is a real directory,
+# and a link to anywhere outside Ordo; each is left as it is. It replaces a link into the live clone
+# for a skill the tag holds and prints a line for each, and removes a link into the pinned worktree
 # whose skill the tag lacks and prints a line for each.
 # ~/.agents/skills is not a default folder, so a link there into Ordo is not one of the pin's
 # links. When ORDO_SKILL_DIRS is not set and no folder of the list is ~/.agents/skills (compared by
@@ -161,16 +170,26 @@ $agent_sources
 EOF
 shown_agent_dirs=$(printf '%s\n' "$agent_dirs" | awk 'NR > 1 { printf ", " } { printf "%s", $0 }')
 
-# The folder that holds the skills in a checkout: skills/ when it exists, the top level otherwise.
-skill_root() {
-    if [ -d "$1/skills" ]; then printf '%s/skills' "$1"; else printf '%s' "$1"; fi
+# Reads the files of a commit, one path per line, and prints the folder of each skill, one per line,
+# as a path from the root: skills/<group>/<name> and skills/<name>, or <name> at the top level when
+# skills/ holds no skill.
+skill_paths() {
+    paths_files=$(cat)
+    paths_found=$(printf '%s\n' "$paths_files" | sed -n \
+        -e 's#^\(skills/[^/]*/[^/]*\)/SKILL\.md$#\1#p' -e 's#^\(skills/[^/]*\)/SKILL\.md$#\1#p')
+    [ -n "$paths_found" ] ||
+        paths_found=$(printf '%s\n' "$paths_files" | sed -n 's#^\([^/]*\)/SKILL\.md$#\1#p')
+    [ -z "$paths_found" ] || printf '%s\n' "$paths_found"
 }
 
-skills_of() {
-    for entry in "$(skill_root "$1")"/*/SKILL.md; do
-        [ -f "$entry" ] || continue
-        basename "$(dirname "$entry")"
-    done
+# Prints the folder of each skill of the commit the pinned worktree is checked out at.
+stable_skill_paths() {
+    git -C "$stable" ls-tree -r --name-only HEAD | skill_paths
+}
+
+# Prints the name of each skill of the list of skill folders $1, one per line.
+skill_names() {
+    printf '%s\n' "$1" | sed '/^$/d; s#.*/##'
 }
 
 # The agents of a checkout, one per line: each file agents/<name>.md, <name> not starting with a dot.
@@ -222,17 +241,25 @@ links_into_ordo() {
 # The folder loops read $skill_dirs one line at a time on descriptor 3, so no path is split.
 check_links() {
     problems=0
-    for skill in $(skills_of "$stable"); do
+    stable_paths=$(stable_skill_paths)
+    stable_skills=$(skill_names "$stable_paths")
+    for path in $stable_paths; do
+        skill=${path##*/}
         while IFS= read -r dir <&3; do
             target=$(readlink "$dir/$skill" 2>/dev/null) || target=""
-            [ "$target" = "$(skill_root "$stable")/$skill" ] && continue
+            if [ "$target" = "$stable/$path" ]; then
+                [ -f "$target/SKILL.md" ] && continue
+                printf 'pin: %s/%s links to %s, which holds no SKILL.md\n' \
+                    "$dir" "$skill" "$target" >&2
+                problems=$((problems + 1))
+                continue
+            fi
             # A link into the live clone is reported by the loop below.
             case "$target" in
                 "$stable"/*) ;;
                 "$repo"/*) continue ;;
             esac
-            printf 'pin: %s/%s does not link to %s/%s\n' \
-                "$dir" "$skill" "$(skill_root "$stable")" "$skill" >&2
+            printf 'pin: %s/%s does not link to %s/%s\n' "$dir" "$skill" "$stable" "$path" >&2
             problems=$((problems + 1))
         done 3<<EOF
 $skill_dirs
@@ -244,7 +271,8 @@ EOF
             target=$(readlink "$link")
             case "$target" in
                 "$stable"/*)
-                    [ -f "$target/SKILL.md" ] || {
+                    # An entry named for a skill of the pinned worktree is judged by the loop above.
+                    [ -f "$target/SKILL.md" ] || in_list "$stable_skills" "${link##*/}" || {
                         printf 'pin: %s links to %s, which the pinned tag does not have\n' \
                             "$link" "$target" >&2
                         problems=$((problems + 1))
@@ -329,7 +357,7 @@ if [ $# -eq 0 ]; then
         pinned=$(git -C "$stable" rev-parse --short HEAD)
     check_links || fail "the links do not match the pin at $pinned"
     printf 'pinned: %s, %s skills linked in: %s\n' \
-        "$pinned" "$(skills_of "$stable" | wc -l | tr -d ' ')" "$shown_dirs"
+        "$pinned" "$(stable_skill_paths | wc -l | tr -d ' ')" "$shown_dirs"
     print_agents_line
     exit 0
 fi
@@ -338,10 +366,14 @@ tag=$1
 git -C "$repo" rev-parse -q --verify "refs/tags/$tag^{commit}" >/dev/null ||
     fail "no tag $tag in $repo"
 tag_files=$(git -C "$repo" ls-tree -r --name-only "$tag")
-tag_skills=$(printf '%s\n' "$tag_files" | sed -n 's#^skills/\([^/]*\)/SKILL\.md$#\1#p')
-[ -n "$tag_skills" ] ||
-    tag_skills=$(printf '%s\n' "$tag_files" | sed -n 's#^\([^/]*\)/SKILL\.md$#\1#p')
-[ -n "$tag_skills" ] || fail "tag $tag holds no skill"
+tag_paths=$(printf '%s\n' "$tag_files" | skill_paths)
+[ -n "$tag_paths" ] || fail "tag $tag holds no skill"
+tag_skills=$(skill_names "$tag_paths")
+# A skill name the tag holds twice is refused, with the first two folders of that name.
+doubled=$(printf '%s\n' "$tag_skills" | sort | uniq -d | sed -n 1p)
+[ -z "$doubled" ] || fail "tag $tag holds the skill $doubled twice, in $(
+    printf '%s\n' "$tag_paths" | awk -F/ -v name="$doubled" '$NF == name' |
+        sed -n '1p; 2p' | awk 'NR > 1 { printf " and " } { printf "%s", $0 }')"
 tag_agents=$(printf '%s\n' "$tag_files" | sed -n 's#^agents/\([^/.][^/]*\)\.md$#\1#p')
 
 # Succeeds when the tag holds the skill named $1.
@@ -434,9 +466,10 @@ fi
 
 while IFS= read -r dir <&3; do
     mkdir -p "$dir"
-    for skill in $tag_skills; do
+    for path in $tag_paths; do
+        skill=${path##*/}
         old=$(readlink "$dir/$skill" 2>/dev/null) || old=""
-        ln -sfn "$(skill_root "$stable")/$skill" "$dir/$skill" || continue
+        ln -sfn "$stable/$path" "$dir/$skill" || continue
         case "$old" in
             "$stable"/*) ;;
             "$repo"/*)
@@ -447,7 +480,7 @@ while IFS= read -r dir <&3; do
     done
     for link in "$dir"/*; do
         [ -L "$link" ] || continue
-        [ -f "$(skill_root "$stable")/$(basename "$link")/SKILL.md" ] && continue
+        tag_holds "$(basename "$link")" && continue
         case "$(readlink "$link")" in
             "$stable"/*)
                 rm "$link" || continue
@@ -500,5 +533,5 @@ fi
 check_links || fail "the links do not match the pin after linking"
 printf 'pinned: %s (%s), %s skills linked in: %s\n' \
     "$tag" "$(git -C "$stable" rev-parse --short HEAD)" \
-    "$(skills_of "$stable" | wc -l | tr -d ' ')" "$shown_dirs"
+    "$(stable_skill_paths | wc -l | tr -d ' ')" "$shown_dirs"
 print_agents_line

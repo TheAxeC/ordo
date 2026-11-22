@@ -8,12 +8,12 @@ The writing skills (`literature`, `paper`, `paper-review`, `grant`) share one se
 
 ## Decision
 
-`/writing` and the skills that read the writing base read the prose standard where it is: the page the repository's `standards` key lists, or `docs/dev/prose-standard.md`, and in a repository with neither, the `repo-setup` skill's `templates/docs/dev/prose-standard.md`. `skills/writing/` holds no copy of it.
+`/writing` and the skills that read the writing base read the prose standard where it is: the page the repository's `standards` key lists, or `docs/dev/prose-standard.md`, and in a repository with neither, the `repo-setup` skill's `templates/docs/dev/prose-standard.md`. `skills/academic/writing/` holds no copy of it.
 
 ## Alternatives rejected
 
-- A copy in `skills/writing/references/` kept equal to the template by a compare script: two copies of one rule set, and a script whose only job is to keep them from drifting.
-- The only copy moved into `skills/writing/references/`, installed by `repo-setup` from there: `repo-setup` would depend on `writing`, and every path that names the template would change.
+- A copy in `skills/academic/writing/references/` kept equal to the template by a compare script: two copies of one rule set, and a script whose only job is to keep them from drifting.
+- The only copy moved into `skills/academic/writing/references/`, installed by `repo-setup` from there: `repo-setup` would depend on `writing`, and every path that names the template would change.
 
 ## Consequences
 

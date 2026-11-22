@@ -32,10 +32,12 @@ metadata:
 1. The argument, read first.
    - An argument that is exactly `skills` is the `skills` mode, before `<entry>` is matched against the roadmap or a ledger folder.
    - Any other argument is `<entry>`.
-2. For `/ordo-help skills`, the skills folder, which is the parent of this skill's folder after that folder is resolved to its real path.
+2. For `/ordo-help skills`, the skills folder, found from this skill's folder after that folder is resolved to its real path.
    - This skill's folder is the base directory the runner states when the skill loads, resolved through any link by `cd <base directory> && pwd -P`.
+   - A parent of the resolved path that is a folder directly inside a folder named `skills` is a group folder, as it is when the skills are links into a checkout that groups them. The folder named `skills` is then the skills folder, and the skill folders are the folders in each folder of it.
+   - Any other parent of the resolved path is the skills folder, as it is when the skills are copied side by side, and the skill folders are the folders in it.
    - The parent of the base directory as stated is never the skills folder.
-3. For `/ordo-help skills`, the `SKILL.md` of each folder in the skills folder.
+3. For `/ordo-help skills`, the `SKILL.md` of each skill folder.
 4. For `/ordo-help` and `/ordo-help <entry>`, `.agents/plan.yaml`, its required keys and defaults as `/plan` states them.
    - A required key missing is a refusal ("Stops").
 5. For `/ordo-help <entry>`, the ledger folder: `<entry>` resolves to the folder under `<ledger_root>/` whose `plan.md` opens with `# Plan: <entry>` (the number, or the number and title).
@@ -78,8 +80,8 @@ metadata:
 `/ordo-help skills` runs these steps.
 
 1. Find the skills folder as "What it reads" 2 says.
-   - The step is done when the parent of the resolved path is known as the skills folder.
-2. Sort the names of the folders in the skills folder bytewise, as `LC_ALL=C ls -1` sorts them, so `plan` comes before `plan-orchestration` and `plan-retro`.
+   - The step is done when the skills folder and the skill folders are known.
+2. Sort the names of the skill folders bytewise, as `LC_ALL=C ls -1` sorts them, so `plan` comes before `plan-orchestration` and `plan-retro`.
    - The step is done when the sorted names are known.
 3. For each folder in the sorted order, print the skill's name line and its Quick start block.
    - A folder with no `SKILL.md` is skipped.

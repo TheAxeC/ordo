@@ -8,6 +8,13 @@
 # Check mode fails with no pinned worktree, names a link into the live clone and a missing link, and passes on a fresh pin.
 # CLAUDE_CONFIG_DIR names a folder the glob also finds, which pins, or another folder that is linked; ORDO_SKILL_DIRS, split on spaces and tabs, replaces the list.
 # ~/.agents/skills: pin mode removes each link to the pinned worktree or the live clone and keeps a real folder and a link to anywhere else; check mode names such a link; the folder is left alone when ORDO_SKILL_DIRS is set.
+# The grouped layout, each skill in a group folder under the skills folder. A tag with two groups and a skill in each is pinned, each skill linked under its own name to its folder inside its group, and check mode passes: a failure leaves a grouped tag unpinnable.
+# A pin of a grouped tag over a pin of a flat tag, and of a flat tag over a grouped one, puts each link at the skill's place in the tag pinned: a failure leaves a link to a folder the pinned worktree no longer has, so the skill does not load.
+# A tag with one skill name in two groups, or in the flat and the grouped place, is refused before anything changes: a failure links one of the two folders unseen.
+# On a grouped pin, check mode names a link to the skill's place in the flat layout with one line: a failure reports a broken installation as sound, or tells the user the tag lacks a skill it holds.
+# A grouped tag without a skill an earlier grouped tag held removes that skill's links and keeps the others: a failure leaves a link to a missing folder, or removes a skill the tag holds.
+# On any pin, check mode names a link whose skill folder is missing on disk in the pinned worktree: a failure reports as sound an installation whose skill does not load.
+# A SKILL.md a tag tracks inside a ledger folder gives no skill and no doubled name: a failure refuses every tag of a repository that archives a skill's text in a ledger.
 # The agents: pin mode links every agent of the tag into the agents folder beside each skill folder, skips a file not ending .md, a file in a subfolder and a hidden file, replaces an agent link into the live clone, removes the links of an agent the tag drops, refuses a real file, a link outside Ordo and a link into the live clone for an agent the tag lacks, refuses an agent folder that is a file or is also a skill folder, and leaves a user's own agent file alone.
 
 set -u
@@ -94,7 +101,9 @@ expect_refused() {
 }
 
 repo=$test_root/ordo
-mkdir -p "$repo/utils" "$repo/skills/alpha" "$repo/skills/beta"
+# The folder of the scratch repository that holds its skills, each skill directly in it until the grouped tags below.
+flat=skills
+mkdir -p "$repo/utils" "$repo/$flat/alpha" "$repo/$flat/beta"
 cp "$script_dir/pin.sh" "$repo/utils/pin.sh"
 printf -- '---\nname: alpha\n---\n' >"$repo/skills/alpha/SKILL.md"
 printf -- '---\nname: beta\n---\n' >"$repo/skills/beta/SKILL.md"
@@ -126,7 +135,7 @@ run_pin
 [ "$status" -eq 0 ] || fail "check mode failed on a fresh pin: $err"
 
 # The live clone moves on; the pin does not until asked.
-git -C "$repo" rm -q -r skills/alpha
+git -C "$repo" rm -q -r "$flat/alpha"
 mkdir -p "$repo/skills/gamma"
 printf -- '---\nname: gamma\n---\n' >"$repo/skills/gamma/SKILL.md"
 git -C "$repo" add -A
@@ -183,7 +192,7 @@ run_pin v1
 expect_refused v2 "a pin over a worktree with local changes"
 expect_in "$err" "has local changes; the pinned worktree is never edited" \
     "the local-changes refusal has no message"
-git -C "$ORDO_STABLE" checkout -q -- skills/beta/SKILL.md
+git -C "$ORDO_STABLE" checkout -q -- "$flat/beta/SKILL.md"
 
 # A link to a folder outside Ordo is refused before the worktree or a link changes.
 rm "$d1/beta"
@@ -421,5 +430,150 @@ for dir in "$a1" "$a2"; do
 done
 [ "$(cat "$a1/mine.md")" = "mine" ] && [ ! -L "$a1/mine.md" ] || fail "pin mode changed the user's own agent file"
 expect_line "$out" "pinned: 1 agents linked in: $a1, $a2" "the agents line does not count 1 agent"
+
+# The grouped tags, built from the flat tag v4, which holds beta and gamma. g1 holds beta in the group one and gamma in the group two. g1-ledger adds a SKILL.md inside a ledger folder, under the name beta. g2 drops gamma. g-two-groups holds beta in both groups, and g-flat-and-grouped holds beta in the flat place and in the group one.
+commit_tag() {
+    git -C "$repo" add -A
+    git -C "$repo" -c user.name=t -c user.email=t@t commit -q -m "$1"
+    git -C "$repo" tag "$1"
+}
+mkdir "$repo/$flat/one" "$repo/$flat/two"
+mv "$repo/$flat/beta" "$repo/$flat/one/beta"
+mv "$repo/$flat/gamma" "$repo/$flat/two/gamma"
+commit_tag g1
+mkdir -p "$repo/.scratch/archive/done/briefs/skills/beta"
+printf -- '---\nname: beta\n---\n' >"$repo/.scratch/archive/done/briefs/skills/beta/SKILL.md"
+commit_tag g1-ledger
+git -C "$repo" rm -q -r .scratch "$flat/two/gamma"
+commit_tag g2
+mkdir -p "$repo/$flat/two"
+cp -R "$repo/$flat/one/beta" "$repo/$flat/two/beta"
+commit_tag g-two-groups
+mv "$repo/$flat/two/beta" "$repo/$flat/beta"
+commit_tag g-flat-and-grouped
+
+# expect_links <what failed> <skill> <folder in the pinned worktree> ...: in both skill folders, each skill links to its folder, given from the root of the pinned worktree.
+expect_links() {
+    what=$1
+    shift
+    while [ $# -gt 0 ]; do
+        for dir in "$d1" "$d2"; do
+            [ "$(readlink "$dir/$1")" = "$ORDO_STABLE/$2" ] ||
+                fail "$what: $dir/$1 links to $(readlink "$dir/$1"), expected $ORDO_STABLE/$2"
+        done
+        shift 2
+    done
+}
+
+# A grouped tag is pinned: each skill is linked under its own name to its folder inside its group, the skills line counts both, and check mode passes.
+run_pin g1
+[ "$status" -eq 0 ] || fail "pinning a grouped tag failed: $out $err"
+expect_links "a pin of a grouped tag" beta "$flat/one/beta" gamma "$flat/two/gamma"
+expect_line "$out" "pinned: g1 ($(git -C "$repo" rev-parse --short g1)), 2 skills linked in: $d1, $d2" \
+    "the skills line of a grouped pin does not count 2 skills"
+run_pin
+[ "$status" -eq 0 ] || fail "check mode failed on a grouped pin: $err"
+expect_line "$out" "pinned: g1, 2 skills linked in: $d1, $d2" \
+    "the skills line of check mode on a grouped pin does not count 2 skills"
+printf 'ok: a grouped tag is pinned\n'
+
+# A pin of a flat tag followed by a pin of a grouped tag of the same skills: each link points into the group folder, and no link to the flat place is left.
+run_pin v4
+[ "$status" -eq 0 ] || fail "pinning the flat tag before the grouped one failed: $out $err"
+expect_links "a pin of a flat tag" beta "$flat/beta" gamma "$flat/gamma"
+run_pin g1
+[ "$status" -eq 0 ] || fail "pinning a grouped tag over a flat pin failed: $out $err"
+expect_links "a pin of a grouped tag over a flat pin" beta "$flat/one/beta" gamma "$flat/two/gamma"
+case "$(links_state)" in
+    *" -> $ORDO_STABLE/$flat/beta"*|*" -> $ORDO_STABLE/$flat/gamma"*)
+        fail "a link to the flat place is left after a grouped pin: $(links_state)" ;;
+esac
+printf 'ok: a grouped tag pinned over a flat pin\n'
+
+# A tag with one skill name in two groups is refused before anything changes, with a line that names both folders.
+run_pin v4
+[ "$status" -eq 0 ] || fail "pinning the flat tag before the doubled one failed: $out $err"
+skill_links_before=$(links_state)
+agent_links_before=$(agent_links_state)
+run_pin g-two-groups
+expect_refused v4 "a pin of a tag with one skill name in two groups"
+expect_line "$err" "pin: tag g-two-groups holds the skill beta twice, in $flat/one/beta and $flat/two/beta" \
+    "the skill name in two groups was not refused with its message"
+printf 'ok: one skill name in two groups is refused\n'
+
+# A tag with one skill name in the flat and the grouped place is refused the same way.
+run_pin v4
+[ "$status" -eq 0 ] || fail "pinning the flat tag before the tag doubled across the two places failed: $out $err"
+skill_links_before=$(links_state)
+agent_links_before=$(agent_links_state)
+run_pin g-flat-and-grouped
+expect_refused v4 "a pin of a tag with one skill name in the flat and the grouped place"
+expect_line "$err" "pin: tag g-flat-and-grouped holds the skill beta twice, in $flat/beta and $flat/one/beta" \
+    "the skill name in the flat and the grouped place was not refused with its message"
+printf 'ok: one skill name in the flat and the grouped place is refused\n'
+
+# A pin of a grouped tag followed by a pin of a flat tag of the same skills: each link points at the flat place, and check mode passes.
+run_pin g1
+[ "$status" -eq 0 ] || fail "pinning the grouped tag before the flat one failed: $out $err"
+run_pin v4
+[ "$status" -eq 0 ] || fail "pinning a flat tag over a grouped pin failed: $out $err"
+expect_links "a pin of a flat tag over a grouped pin" beta "$flat/beta" gamma "$flat/gamma"
+run_pin
+[ "$status" -eq 0 ] || fail "check mode failed on a flat pin over a grouped pin: $err"
+printf 'ok: a flat tag pinned over a grouped pin\n'
+
+# On a grouped pin, a link moved by hand to the skill's place in the flat layout: check mode exits 1 and names the link in one line, which says it does not link to the skill's folder.
+run_pin g1
+[ "$status" -eq 0 ] || fail "pinning the grouped tag before moving a link failed: $out $err"
+ln -sfn "$ORDO_STABLE/$flat/beta" "$d1/beta"
+run_pin
+[ "$status" -eq 1 ] || fail "check mode exited $status with a link at the flat place on a grouped pin: $out $err"
+expect_line "$err" "pin: $d1/beta does not link to $ORDO_STABLE/$flat/one/beta" \
+    "check mode did not name the link at the flat place"
+[ "$(printf '%s\n' "$err" | grep -c -F -e "$d1/beta")" -eq 1 ] ||
+    fail "check mode names the link at the flat place in more than one line: $err"
+run_pin g1
+[ "$status" -eq 0 ] || fail "pinning again over a link at the flat place failed: $out $err"
+expect_links "a pin over a link at the flat place" beta "$flat/one/beta" gamma "$flat/two/gamma"
+printf 'ok: check mode names a link at the flat place on a grouped pin\n'
+
+# A grouped tag that lacks a skill an earlier grouped tag held: the link is removed with its line, and the link of the skill held stays.
+run_pin g1
+[ "$status" -eq 0 ] || fail "pinning the grouped tag before the one that drops a skill failed: $out $err"
+run_pin g2
+[ "$status" -eq 0 ] || fail "pinning a grouped tag that drops a skill failed: $out $err"
+for dir in "$d1" "$d2"; do
+    [ -L "$dir/gamma" ] && fail "$dir/gamma still linked after the grouped tag dropped it"
+    expect_line "$out" "pin: removed $dir/gamma, which the tag g2 does not hold" \
+        "the removal of $dir/gamma printed no line"
+done
+expect_links "a pin of a grouped tag that drops a skill" beta "$flat/one/beta"
+printf 'ok: a grouped tag that drops a skill removes its link\n'
+
+# A tag that tracks a SKILL.md inside a ledger folder: it pins, and that file gives no skill and no doubled name.
+run_pin g1-ledger
+[ "$status" -eq 0 ] || fail "pinning a tag with a SKILL.md inside a ledger folder failed: $out $err"
+[ -f "$ORDO_STABLE/.scratch/archive/done/briefs/skills/beta/SKILL.md" ] ||
+    fail "the tag g1-ledger does not hold the SKILL.md inside its ledger folder"
+expect_links "a pin of a tag with a SKILL.md inside a ledger folder" beta "$flat/one/beta" gamma "$flat/two/gamma"
+expect_line "$out" "pinned: g1-ledger ($(git -C "$repo" rev-parse --short g1-ledger)), 2 skills linked in: $d1, $d2" \
+    "the skills line counts the SKILL.md inside a ledger folder"
+[ "$(ls "$d1" | tr '\n' ' ')" = "beta gamma " ] || fail "$d1 holds $(ls "$d1" | tr '\n' ' '), expected beta and gamma"
+printf 'ok: a SKILL.md inside a ledger folder is no skill\n'
+
+# A skill of the pinned tag whose folder is missing on disk in the pinned worktree: check mode exits 1 and names each link to it with its target.
+run_pin g1
+[ "$status" -eq 0 ] || fail "pinning the grouped tag before removing a skill's folder failed: $out $err"
+mv "$ORDO_STABLE/$flat/one/beta" "$test_root/beta-moved"
+run_pin
+mv "$test_root/beta-moved" "$ORDO_STABLE/$flat/one/beta"
+[ "$status" -eq 1 ] || fail "check mode exited $status with a skill's folder missing in the pinned worktree: $out $err"
+for dir in "$d1" "$d2"; do
+    expect_line "$err" "pin: $dir/beta links to $ORDO_STABLE/$flat/one/beta, which holds no SKILL.md" \
+        "check mode did not name the link to a folder missing in the pinned worktree"
+done
+run_pin
+[ "$status" -eq 0 ] || fail "check mode failed with the skill's folder back in the pinned worktree: $err"
+printf 'ok: check mode names a link to a skill folder missing in the pinned worktree\n'
 
 printf 'PASS: pin.sh scratch tests\n'

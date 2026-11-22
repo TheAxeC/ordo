@@ -5,7 +5,7 @@ How a change is made in this tree, whoever makes it: a session working inline, o
 ## Read before changing anything
 
 1. The brief for the step, in full: it is the specification. Where the brief and the tree disagree, stop and report the disagreement with the evidence; do not pick a side and do not invent a substitute.
-2. The standards the brief lists, in full. `docs/dev/skill-layout.md` is the standard for every `skills/*/SKILL.md`.
+2. The standards the brief lists, in full. `docs/dev/skill-layout.md` is the standard for every `skills/*/*/SKILL.md`.
 3. Every file the brief names, in full, and every caller a grep finds for a name the change moves or renames.
 
 ## Scripts compute facts; judgment is read
@@ -67,21 +67,21 @@ Every rule on this page that names a script, a test or a check is read under thi
 Every build, test or check command runs in the foreground with a long timeout, one configuration per command, and each test's output goes through a filter for its summary lines so raw build output never enters the context; the glossary check and the ASCII check take no filter:
 
 ```
-sh skills/code-comments/templates/strip_comments.test.sh 2>&1 | tail -1
-sh skills/land/templates/land.test.sh 2>&1 | tail -1
-sh skills/ordo-init/templates/check_config.test.sh 2>&1 | tail -1
-sh skills/paper/templates/anchorize_tex.test.sh 2>&1 | tail -1
-sh skills/paper/templates/apply_tex_patch.test.sh 2>&1 | tail -1
-sh skills/paper/templates/calibration_counts.test.sh 2>&1 | tail -1
-sh skills/paper/templates/lookup.test.sh 2>&1 | tail -1
-sh skills/paper/templates/reference_docx.test.sh 2>&1 | tail -1
-sh skills/repo-setup/templates/sync_rules.test.sh 2>&1 | tail -1
-python3 skills/repo-setup/templates/sync_rules.py . --only glossary
+sh skills/code/code-comments/templates/strip_comments.test.sh 2>&1 | tail -1
+sh skills/orchestration/land/templates/land.test.sh 2>&1 | tail -1
+sh skills/ordo/ordo-init/templates/check_config.test.sh 2>&1 | tail -1
+sh skills/academic/paper/templates/anchorize_tex.test.sh 2>&1 | tail -1
+sh skills/academic/paper/templates/apply_tex_patch.test.sh 2>&1 | tail -1
+sh skills/academic/paper/templates/calibration_counts.test.sh 2>&1 | tail -1
+sh skills/academic/paper/templates/lookup.test.sh 2>&1 | tail -1
+sh skills/academic/paper/templates/reference_docx.test.sh 2>&1 | tail -1
+sh skills/ordo/repo-setup/templates/sync_rules.test.sh 2>&1 | tail -1
+python3 skills/ordo/repo-setup/templates/sync_rules.py . --only glossary
 sh utils/pin.test.sh 2>&1 | tail -1
 git ls-files -coz --exclude-standard | xargs -0 sh -c 'for f; do if [ -e "$f" ]; then printf "%s\0" "$f"; fi; done' sh | xargs -0 perl -CSD -ne 'my $bad_char = $ARGV =~ /\.md\z/ ? qr/[^\x20-\x7E\x{2705}\n]/ : qr/[^\x20-\x7E\n]/; if (/$bad_char/) { print "$ARGV:$.: $_"; $bad = 1 } close ARGV if eof; END { $? ||= 1 if $bad }'
 ```
 
-The plan's whole verify list runs once, at landing on main, through the `land` skill's runner, `sh skills/land/templates/checks.sh <state file>`. The booking quotes the lines the runner printed, never a count. Before landing, the builder and the reviewer run the checks the brief names for the files the step changes, and the report quotes their output. Each command in the verify list exits non-zero when it fails, as written, and a command with long output uses its tool's quiet mode or a filter under `pipefail`.
+The plan's whole verify list runs once, at landing on main, through the `land` skill's runner, `sh skills/orchestration/land/templates/checks.sh <state file>`. The booking quotes the lines the runner printed, never a count. Before landing, the builder and the reviewer run the checks the brief names for the files the step changes, and the report quotes their output. Each command in the verify list exits non-zero when it fails, as written, and a command with long output uses its tool's quiet mode or a filter under `pipefail`.
 
 When a test is red, rerun that test without the filter and read its output. The ASCII check prints the offending lines themselves; empty output is the pass. A claim about behaviour, cost or memory names the command that produced it, or is written as not verified.
 
@@ -90,4 +90,4 @@ When a test is red, rerun that test without the filter and read its output. The 
 - The skills carry no project name and no path; everything specific to a repository comes from its `.agents/plan.yaml` (`README.md`, first paragraph).
 - A script under a skill's `templates/` or under `utils/` has a test beside it only for behaviour whose failure costs something, as the bullet on tests in "Scripts compute facts; judgment is read" says, run on scratch repositories or scratch files (`docs/dev/building.md`).
 - The pinned worktree `~/.local/share/ordo-stable` is never edited; the installed skills and agents change only through `utils/pin.sh <tag>` (`README.md`, Working on Ordo).
-- A skill's rules state the rule; no dates, incidents or history (`skills/repo-setup/templates/shared-rules.md`, last rule).
+- A skill's rules state the rule; no dates, incidents or history (`skills/ordo/repo-setup/templates/shared-rules.md`, last rule).

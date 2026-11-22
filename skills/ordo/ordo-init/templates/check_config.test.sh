@@ -15,13 +15,19 @@ test_root=$(mktemp -d "${TMPDIR:-/tmp}/check-config-test.XXXXXX") || fail "could
 trap 'rm -rf "$test_root"' 0 1 2 3 15
 script_dir=$(CDPATH= cd "$(dirname "$0")" && pwd -P)
 check=$script_dir/check_config.py
+# The plan skill's templates: in the folder plan beside this skill's folder, or else in a group folder beside this skill's group folder.
+plan_templates=$script_dir/../../plan/templates
+[ -f "$plan_templates/plan.yaml" ] || for folder in "$script_dir"/../../../*/plan/templates; do
+    [ -f "$folder/plan.yaml" ] && plan_templates=$folder && break
+done
+[ -f "$plan_templates/plan.yaml" ] || fail "no templates/plan.yaml of the plan skill beside $script_dir/../.. or in a group folder beside its group folder"
 
 # A repository whose configuration is the one-project example, with its pages present and its worktree root ignored.
 make_repo() {
     repo=$test_root/$1
     mkdir -p "$repo/.agents" "$repo/docs/dev"
     git -C "$repo" init -q
-    cp "$script_dir/../../plan/templates/plan.yaml" "$repo/.agents/plan.yaml"
+    cp "$plan_templates/plan.yaml" "$repo/.agents/plan.yaml"
     : >"$repo/docs/roadmap.md"
     : >"$repo/docs/dev/building.md"
     : >"$repo/docs/dev/change-standard.md"
@@ -37,7 +43,7 @@ make_projects_repo() {
         : >"$repo/tools/$tool/docs/building.md"
         : >"$repo/tools/$tool/docs/change-standard.md"
     done
-    cp "$script_dir/../../plan/templates/plan.projects.yaml" "$repo/.agents/plan.yaml"
+    cp "$plan_templates/plan.projects.yaml" "$repo/.agents/plan.yaml"
 }
 
 # One-project form: write key $2 of $1's configuration with the value $3, in place of the line the example has.

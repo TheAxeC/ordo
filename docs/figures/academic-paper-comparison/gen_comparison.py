@@ -15,7 +15,7 @@ Writes, beside this file, 25 figures:
 - academic-pipeline.svg: the stages of academic-pipeline and the skill each goes to.
 
 Every box, arrow and label is written in this file, taken from the files of academic-paper
-3.2.0 and academic-pipeline in research-hub and from skills/paper and its ADRs, which keep the
+3.2.0 and academic-pipeline in research-hub and from skills/academic/paper and its ADRs, which keep the
 rulings of plan 5. The script reads none of them and no other input.
 
 Run, from the repository root: python3 docs/figures/academic-paper-comparison/gen_comparison.py

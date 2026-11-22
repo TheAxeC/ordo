@@ -196,4 +196,122 @@ No non-ASCII, no history in a comment, no leftover `skill_root` or `skills_of`. 
 - Whether Claude Code states a linked skill's base directory by the link or by its resolved path. The texts of `paper`, `writing`, `code-comments`, `repo-setup` and `ordo-init` reach another skill as "the folder beside this skill's folder", unchanged by the brief's decision 1. If the runner states the resolved path, that folder under a grouped pin is `<pinned worktree>/skills/academic/repo-setup`, which does not exist, and `paper` refuses for a missing prose standard. Step 4's run on the pinned skills is where this shows.
 - The plan's whole verify list, and the state file's `verify:` and `standards:` values the builder hands back: the ledger is the orchestrator's.
 
-Agent usage: a0017d39ad43dafa5, claude-fable-5-2, USAGE.
+Agent usage: a0017d39ad43dafa5, claude-fable-5-2, 186474 tokens, 26 tool uses, 9.8 minutes.
+
+## Repair round 1, refuted
+
+### Verification
+
+Run from the worktree root under `env -u CLAUDE_CONFIG_DIR -u ORDO_SKILL_DIRS -u ORDO_STABLE`. Each test through `2>&1 | tail -1`, with the line cut at 90 characters here:
+
+```
+strip_comments: PASS: strip_comments.py scratch tests
+land: PASS: land.sh scratch tests
+check_config: PASS: check_config.py scratch tests
+anchorize_tex: PASS: anchorize_tex.py leaves the .tex byte-identical, makes one block of a paragraph run ...
+apply_tex_patch: PASS: apply_tex_patch.py replaces, inserts after and deletes only the blocks a patch names
+calibration_counts: PASS: calibration_counts.py counts misses and false alarms per label, exits 0 below the li
+lookup: PASS: lookup.py parses recorded bodies, matches titles, merges records, reads passage line
+reference_docx: PASS: reference_docx.py writes the layout defaults into the styles and the section propert
+sync_rules: PASS: sync_rules.py scratch tests
+utils/pin.test.sh: PASS: pin.sh scratch tests
+```
+
+- `sync_rules.py . --only glossary` printed `ok: the plan-terms block equals the template`, exit 0.
+- `pin.test.sh` printed nine `ok:` lines, eight old and a ninth `ok: check mode names a link to a skill folder missing in the pinned worktree`, then `PASS: pin.sh scratch tests`.
+- `check_config.py .` printed six `note: ... default ... applies` lines and `ok: .agents/plan.yaml carries every required key, no unknown key, and every page it names exists`, exit 0.
+- The character-set check over the files of `git status --short` and every file under `skills/` printed nothing, exit 0.
+- The gate's `perl` line over `git ls-files -coz --exclude-standard -- ':!.scratch'` with absent paths dropped printed nothing.
+- `ls skills` printed `academic code orchestration ordo`; `find skills -name SKILL.md | wc -l` printed `16`.
+- C2, C5 and C8 were not rerun: the round changed no file they read.
+- The delta (`diff -ru` of snapshot against worktree, for the paths of `files.txt`) shows 9 changed files: `docs/academic-coverage.md`, ADRs 0035, 0037, 0038, 0039, 0040 and 0042, `docs/roadmap.md`, `utils/pin.sh`, `utils/pin.test.sh`. No file under `skills/` changed in the round.
+- ruling 3 test: of the added `skills/<group>/...` paths in `docs/`, `README.md`, `.agents/plan.yaml` and `utils/`, 104 distinct (wildcard and `<group>` forms skipped), 0 fail `[ -e ]`. Before the round the first review found 11.
+
+### Verdicts
+
+Rulings of the round:
+
+1. Carried out and holds. Reading below. `pin.test.sh` printed its `ok:` line.
+2. Carried out and holds. Lines 230, 234, 248 and 266 now read "as the `paper` skill's `references/<file>`", like the eight table rows. The delta of the page is those four sentences only.
+3. Carried out and holds. The 11 sentences name the file by skill (`launch.sh`, `launch.test.sh`, `plan_cost.test.sh`, `verify.sh`, `ai-disclosure.md`, `literature-strategist-theme-run.md`, `-merge-run.md`, `-synthesis.md`, `modes.md`). Each reads sensibly. The rest of each sentence is unchanged in the diff.
+4. Carried out and holds. The added lines of `pin.sh` that start with `#` and exceed 100 characters: none. The line-length check over all added lines of `pin.sh` printed 0.
+5. Partly carried out, finding Proof 1.
+6. Not carried out as worded, finding Spec 1. No change to `check_config.py`, as ruled.
+
+Items of "What to build":
+
+1. Holds.
+2. Holds.
+3. Holds. The Behaviour 1 finding of the first review is closed by ruling 1.
+4. Holds.
+5. Holds.
+6. Holds. The Standards findings 1 and 2 of the first review are closed. Finding 3 of the first review (the long line) is closed.
+7. Holds. No `version` line in the diffs of the files under `skills/`.
+
+Cases:
+
+- C1: met. `pin.test.sh` printed the name line of each of the nine cases, then `PASS:`. The first-run lines on the unchanged `pin.sh` were not rerun.
+- C2: met in the first review. Not rerun, and the round touched no file it reads.
+- C3: met, with the `git ls-files -co` variant.
+- C4: met.
+- C5: not verifiable.
+- C6: met.
+- C7: met.
+- C8: met in the first review. Not rerun.
+- C9: met. `check_config.py .` printed `ok:`, exit 0. The flat, linked and neither-place runs were not repeated and the script is unchanged.
+
+### Ruling 1, read
+
+`check_links` first loop, `utils/pin.sh` about lines 249 to 265. The new block:
+
+```
+if [ "$target" = "$stable/$path" ]; then
+    [ -f "$target/SKILL.md" ] && continue
+    printf 'pin: %s/%s links to %s, which holds no SKILL.md\n' ...
+    problems=$((problems + 1))
+    continue
+fi
+```
+
+- Layouts: `$path` is `skills/<group>/<name>`, `skills/<name>` or `<name>`, and the target is `$stable/$path`, so the test reads the folder of the skill as found in each layout. Check mode and the check after linking (line 533) run the same function.
+- A missing folder with an exact link: one line, count 1. The second loop skips the name because `in_list "$stable_skills"` holds, so there is no double line.
+- A link to a different place in the worktree, such as the old flat place: reported once by the unchanged "does not link to" line, as before.
+- A link into the live clone: unchanged.
+- A true false positive would need a folder on disk without a `SKILL.md` for a skill the commit holds. That is exactly what the check is for.
+- The new case:
+  - It pins `g1`, moves `one/beta` out of the pinned worktree and runs check mode.
+  - It expects exit 1 and, for each of the two skill folders, the whole line `pin: <dir>/beta links to <ORDO_STABLE>/<flat>/one/beta, which holds no SKILL.md`.
+  - It then moves the folder back and expects exit 0.
+- Read against `pin.sh` with the new block taken out, check mode exits 0 on the missing folder and the case's `[ "$status" -eq 1 ]` fails. The case would not pass without the check. This is read only. The script was not broken.
+
+### Spec
+
+1. `.scratch/5-a-skill-groups-plan-yaml-found-by-a-search-order-and-agents-on-fable/agents/reviews/2-report.md`, section "User-visible changes, before and after" (lines 146 to 153). Ruling 6 says the report states, under "User-visible changes", with before and after, the new reading of `plan` from a sibling folder. Row 6 of "Repair round 1" says "Added to 'User-visible changes'". The section does not hold it: `grep -n 'sibling folder'` on the report prints only line 182, the row of the round table. The section still has the old line "`check_config.py` with no `plan` skill beside it or in a sibling group: before a Python traceback; after the `error:` line, exit 1."
+   Failure scenario: a reader of the "User-visible changes" section does not learn that an installation without `plan` beside `ordo-init` now reads a template from `<skills parent>/*/plan` (for example `~/.claude/skills-backup/plan`), and the row's claim of an addition does not hold. The row text itself does carry before and after, so the information exists in the report, but not where the ruling put it.
+
+### Proof
+
+1. Same report, under the table "The cases' first run" (lines 30 to 37). Ruling 5 asks for one sentence under the table. The text after the table is still `The whole test on the unchanged pin.sh: FAIL: pinning a grouped tag failed:  pin: tag g1 holds no skill.` The sentence for the four cases is only in row 5 of the round table, which calls itself "the sentence, which belongs under the table of failing lines above", and is a long sentence in a table cell, not under the table. A reader of the first-run table still takes `pin: tag g1 holds no skill` for the proof of the one-line check, the removal and the ledger rule in the four cases. The sentence's content is correct against the table (lines 31, 34, 35 and 36 quote the setup or case pin of `g1`).
+
+### Standards
+
+none.
+
+### Behaviour
+
+none. The reading of ruling 1 above found no input of the three layouts that gives a wrong line, a double line or a missed report.
+
+### Declined to judge
+
+- C5 (`npx skills add . --list`): `npx` is not run.
+- The first-run failing line of the ninth case on the unchanged `pin.sh`, quoted in the report as `FAIL: check mode exited 0 with a skill's folder missing in the pinned worktree: ...`: a rerun on the unchanged script is a revert run, which rule 22 excludes. It is judged by reading, above.
+- C2 and C8 reruns, and C9's flat, linked and neither-place runs of the first review: not repeated, because the round changed none of their inputs.
+- The plan's whole verify list and the state file's `verify:` and `standards:` values.
+
+Agent usage: af5606dff19e38bc4, claude-sonnet-5-5, 118133 tokens, 19 tool uses, 3.2 minutes.
+
+## Closed
+
+- First run, Behaviour 1 and Spec 1, Standards 1 to 3: closed by the builder in repair round 1, as the run over the round confirms.
+- First run, Proof 1 and Behaviour 2: the builder wrote both statements into the round's table of its report; at landing they were put where rulings 5 and 6 ask, under the table of first runs and under "User-visible changes" (round 1, Proof 1 and Spec 1). Fixed at landing, in `agents/reviews/2-report.md`.
+- First run, the points on a skill folder name with a space and on `[` in the clone's path: no change, since neither input has happened and the base behaved the same for the first.

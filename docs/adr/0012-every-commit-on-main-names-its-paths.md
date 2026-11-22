@@ -4,7 +4,7 @@ Status: proposed
 
 ## Context
 
-The plan skills stage named paths with `git add -- <path> ...` and then commit the whole index (`skills/plan-orchestration/SKILL.md`, Steps 4; `skills/land/SKILL.md`, Steps 12). `/land` stages a step on main with `git cherry-pick -n` and runs the verify list before its commit. A scratch run showed that a commit made in that window by `git add -- <path>` and a bare `git commit` also records the staged step, and that `git commit -- <path>` records only the path named. With several plans in one session (roadmap entry 2.I), another plan's commit can fall in that window.
+The plan skills stage named paths with `git add -- <path> ...` and then commit the whole index (`skills/orchestration/plan-orchestration/SKILL.md`, Steps 4; `skills/orchestration/land/SKILL.md`, Steps 12). `/land` stages a step on main with `git cherry-pick -n` and runs the verify list before its commit. A scratch run showed that a commit made in that window by `git add -- <path>` and a bare `git commit` also records the staged step, and that `git commit -- <path>` records only the path named. With several plans in one session (roadmap entry 2.I), another plan's commit can fall in that window.
 
 ## Decision
 

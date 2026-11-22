@@ -3,9 +3,10 @@
 
 Usage: check_config.py [repository root]
 
-The keys, which of them are required and each optional key's default come from the plan skill's templates/plan.yaml, found beside this skill's folder; the default of repair_reviewer is the configured reviewer. Prints one line per error and per note, and exits 1 when there is an error, 0 otherwise. The errors:
+The keys, which of them are required and each optional key's default come from the plan skill's templates/plan.yaml. The plan skill's folder is the folder plan beside this skill's folder, as in an installation, or, when that folder holds no templates/plan.yaml, the folder plan in a group folder beside this skill's group folder, as in the repository; this skill's folder is read with every link resolved. The default of repair_reviewer is the configured reviewer. Prints one line per error and per note, and exits 1 when there is an error, 0 otherwise. The errors:
 
 - no .agents/plan.yaml in the repository;
+- the plan skill's templates/plan.yaml is in neither <folder>/plan nor <folder>/*/plan, the two places named with their paths; nothing is then checked;
 - key written twice: <key>, a key written twice in one mapping, after its project's name and a colon when the mapping is a project under projects:; the file is then not checked further;
 - keys beside projects: [...], a key other than projects at the top of the projects: form;
 - a required key missing, or an unknown key;
@@ -20,6 +21,7 @@ The keys, which of them are required and each optional key's default come from t
 
 For adr, design_bar, design_references, worker_effort, reviewer_effort, self_rule, next_entry and repair_reviewer the value check above replaces the kind check, so a wrong value gives one error. The notes: each optional key left out, with the default that applies (self_rule and next_entry name default off, repair_reviewer says the reviewer's value applies); next_entry on while self_rule is off or left out, which acts only under self-rule and is not noted when self_rule has an error; and the default adr folder docs/adr when it does not exist yet.
 """
+import glob
 import os
 import re
 import subprocess
@@ -87,9 +89,26 @@ class UniqueKeyLoader(yaml.SafeLoader):
         return super().construct_mapping(node, deep)
 
 
+class NoPlanSkill(Exception):
+    def __init__(self, beside, grouped):
+        super().__init__(beside)
+        self.beside = beside
+        self.grouped = grouped
+
+
+def plan_skill():
+    """Return the plan skill's folder: beside this skill's folder, or else in a group folder beside this skill's group folder."""
+    parent = os.path.dirname(os.path.dirname(os.path.dirname(os.path.realpath(__file__))))
+    beside = os.path.join(parent, "plan")
+    grouped = os.path.join(os.path.dirname(parent), "*", "plan")
+    for folder in [beside] + sorted(glob.glob(grouped)):
+        if os.path.isfile(os.path.join(folder, "templates", "plan.yaml")):
+            return folder
+    raise NoPlanSkill(beside, grouped)
+
+
 def example_keys():
-    here = os.path.dirname(os.path.realpath(__file__))
-    example = os.path.join(here, "..", "..", "plan", "templates", "plan.yaml")
+    example = os.path.join(plan_skill(), "templates", "plan.yaml")
     keys = {}
     for line in open(example):
         m = re.match(r"^([a-z_]+):\s*(.*?)\s+#\s*(required\.|optional, default (.*?)\.\s)", line)
@@ -208,7 +227,11 @@ def main():
     except KeyWrittenTwice as duplicate:
         print(f"error: {duplicate.prefix}key written twice: {duplicate.key}")
         return 1
-    keys = example_keys()
+    try:
+        keys = example_keys()
+    except NoPlanSkill as missing:
+        print(f"error: the plan skill's templates/plan.yaml is in neither {missing.beside} nor {missing.grouped}")
+        return 1
     errors, notes = [], []
     if git(root, "check-ignore", "-q", "--no-index", ".agents/plan.yaml") == 0:
         errors.append(".agents/plan.yaml is ignored by git")

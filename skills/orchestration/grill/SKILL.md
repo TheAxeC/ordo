@@ -199,7 +199,7 @@ metadata:
     - List each lookup agent written to an Agents section ("Steps / Looking up a fact" 4), with its bullet and its `<path>:<line>`.
     - An entry changed under a quoted ruling is listed with the ruling's name and its ledger file.
     - List each change owed to an open plan ("Steps / A plan already open"): a step whose text an answer changed, and the lines of `plan.md`'s "## Goal" or "## Gate" an answer changed.
-    - List each clash with a term of the plan-terms block as a change for the user to make in the Ordo repository's `skills/repo-setup/templates/plan-terms.md`.
+    - List each clash with a term of the plan-terms block as a change for the user to make in the Ordo repository's `skills/ordo/repo-setup/templates/plan-terms.md`.
     - Name `/roadmap add <entry>` when the interview settled the gate of an entry under "Not yet specified", since `grill` does not move that entry.
     - Print that gate's text whole beside the command, for the user to give it.
     - Without `--self-rule`, ask, in the same message, whether the user confirms a shared understanding and whether the skill may commit.

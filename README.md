@@ -27,6 +27,8 @@ Around that loop, `repo-setup` and `ordo-init` set a repository up for it. `road
 | `code-comments` | Reviews the comments a git diff adds or changes, the uncommitted changes or a range, with a finding agent and a checking agent that change nothing. It reports each comment that breaks a named rule with its place, the quoted comment and what the rule asks for, the false comments first, and proposes no replacement. On `apply <numbers>` or `apply all` a fresh agent rewrites the picked comments in C, C++ and CMake files, and a rewrite is kept only when `templates/strip_comments.py` finds the code unchanged |
 | `paper` | Writes, revises, plans and formats a LaTeX manuscript in academic-paper's twelve modes (full, outline-only, revision, abstract-only, lit-review, format-convert, citation-check, plan, revision-coach, disclosure, rebuttal-audit and response-letter) and two calls, `/paper draft-review` and `/paper figures`. Its twelve roles are academic-paper's, each a fresh agent: intake, literature strategist, structure architect, argument builder, draft writer, citation compliance, abstract, peer reviewer, formatter, Socratic mentor, visualization and revision coach, and each role's page is academic-paper's page copied. A plain request picks the mode. Full mode runs academic-paper's eight phases, with the outline approval, the draft writer and the peer reviewer as the Generator-Evaluator Contract's four calls, and at most two reviews with one rewrite between them. Plan mode guides you chapter by chapter with the Socratic mentor to a chapter plan. Revision-coach parses reviewer comments into a revision roadmap, rebuttal-audit checks a response you wrote, and revision and response-letter write the response letter and check it against the revised manuscript. Format-convert converts a manuscript to DOCX, PDF, Markdown or LaTeX, to another citation style or to a venue's template, with `pandoc`, `latexmk`, `pdftocairo`, `pdftotext` and, for a `.bib`, `latex` and `bibtex` when they are installed. Every change to the manuscript is a patch applied by script. Full, revision and citation-check runs judge each cited claim against a passage read from the source in the run, and full and revision runs check the cited sentences of each later patch, unless you answer no at intake to the claim check or to the incremental checks. The same three modes read what the manuscript says about the study's own results against your result files and code. A lit-review run writes an annotated bibliography, a literature matrix and a synthesis analysis, and the session resolves the DOI or arXiv ID of every entry of its `.bib` with `lookup.py resolve`. Intake takes an optional number of sources, which the session splits over the strategist starts. The run's records stay in `paper-runs/` beside the manuscript's folder. Full and revision runs end with `/writing`, and you reply with the findings to apply as patches or ask for an autonomous writer pass |
 
+In the repository, each skill's folder stands in one of four group folders under `skills/`: `skills/orchestration/` holds `roadmap`, `grill`, `plan`, `spec`, `refute`, `land`, `plan-orchestration` and `plan-retro`; `skills/ordo/` holds `repo-setup`, `ordo-init`, `ordo-help` and `session-retro`; `skills/code/` holds `code-comments` and `diagnose`; `skills/academic/` holds `paper` and `writing`. Installed, the sixteen skills stand side by side in one folder, each under its own name, such as `~/.claude/skills/plan`.
+
 The order of use, shortened from what `/ordo-help` prints:
 
 ```
@@ -107,7 +109,7 @@ Two more figures of `paper` show how its modes and its files connect. The first 
 
 ## Requirements
 
-- git, POSIX `sh`, and `python3` with PyYAML. The verify runner, `skills/land/templates/checks.sh`, also needs `bash`.
+- git, POSIX `sh`, and `python3` with PyYAML. The verify runner, `skills/orchestration/land/templates/checks.sh`, also needs `bash`.
 - `perl`, for the ASCII check of `docs/dev/building.md` and for `sync_rules.test.sh`.
 - `node` and `npx` on `PATH`, for the skills CLI only. Both the CLI install and `repo-setup`'s project skills use that CLI.
 - Claude Code.
@@ -124,7 +126,7 @@ The plan skills and `grill` launch their agents through five agent definitions, 
 npx skills add TheAxeC/ordo --skill '*' -g -a claude-code
 ```
 
-This copies each skill folder into `~/.agents/skills` and links it from `$CLAUDE_CONFIG_DIR/skills`, or `~/.claude/skills` when that variable is unset. For a second Claude Code account, run it again with that account's `CLAUDE_CONFIG_DIR` set. Updating is `npx skills update -g`. After an update, `npx skills ls -g` lists the installed skills, and `npx skills remove --global <skill>` removes a skill a newer version of Ordo no longer ships.
+The CLI finds each skill in its group folder, copies each skill folder into `~/.agents/skills` under the skill's own name, and links it from `$CLAUDE_CONFIG_DIR/skills`, or `~/.claude/skills` when that variable is unset. For a second Claude Code account, run it again with that account's `CLAUDE_CONFIG_DIR` set. Updating is `npx skills update -g`. After an update, `npx skills ls -g` lists the installed skills, and `npx skills remove --global <skill>` removes a skill a newer version of Ordo no longer ships.
 
 The CLI installs and updates skills only. After `npx skills add`, and after each `npx skills update -g`, copy the agents from a clone:
 
@@ -143,8 +145,10 @@ For a second Claude Code account, run the last three commands again with `$CLAUD
 rm -rf /tmp/ordo && git clone --depth 1 https://github.com/TheAxeC/ordo.git /tmp/ordo
 for dir in ~/.claude/skills; do
     mkdir -p "$dir"
-    for skill in code-comments diagnose grill land ordo-help ordo-init paper plan plan-orchestration plan-retro refute repo-setup roadmap session-retro spec writing; do
-        rm -rf "$dir/$skill" && cp -R /tmp/ordo/skills/$skill "$dir/"
+    for skill in orchestration/roadmap orchestration/grill orchestration/plan orchestration/spec orchestration/refute orchestration/land orchestration/plan-orchestration orchestration/plan-retro ordo/repo-setup ordo/ordo-init ordo/ordo-help ordo/session-retro code/code-comments code/diagnose academic/paper academic/writing; do
+        name=${skill##*/}
+        [ -f "/tmp/ordo/skills/$skill/SKILL.md" ] || { echo "no skill at /tmp/ordo/skills/$skill; the copy stopped before $name" >&2; break 2; }
+        rm -rf "${dir:?}/${name:?}" && cp -R "/tmp/ordo/skills/$skill" "$dir/"
     done
     agents=$(dirname "$dir")/agents
     mkdir -p "$agents"
@@ -152,15 +156,15 @@ for dir in ~/.claude/skills; do
 done
 ```
 
-The loop copies the agents into the `agents` folder beside each skill folder. For a second Claude Code account, add that account's `$CLAUDE_CONFIG_DIR/skills` to the list of folders, and its agents go to `$CLAUDE_CONFIG_DIR/agents`. Updating is the same commands again: each skill folder is replaced whole, and the agents are replaced the same way, the old `ordo-*.md` removed first, so a file a newer version removes does not linger. The loop replaces only the skill folders it copies. Remove a skill a newer version of Ordo no longer ships from each folder of the list by hand: `rm -rf ~/.claude/skills/<skill>`, and for a second account `rm -rf "$CLAUDE_CONFIG_DIR/skills/<skill>"`.
+The loop copies each of the sixteen skills from its group folder into the folder of the list, under the skill's own name. A skill it does not find stops the loop with a message that names the missing folder, and the skills after it and the agents are then not copied. The loop copies the agents into the `agents` folder beside each folder of the list. For a second Claude Code account, add that account's `$CLAUDE_CONFIG_DIR/skills` to the list of folders, and its agents go to `$CLAUDE_CONFIG_DIR/agents`. Updating is the same commands again: each skill folder is replaced whole, and the agents are replaced the same way, the old `ordo-*.md` removed first, so a file a newer version removes does not linger. The loop replaces only the skill folders it copies. Remove a skill a newer version of Ordo no longer ships from each folder of the list by hand: `rm -rf ~/.claude/skills/<skill>`, and for a second account `rm -rf "$CLAUDE_CONFIG_DIR/skills/<skill>"`.
 
 ## Configuring a repository
 
 A new repository is set up with `/repo-setup` from an empty folder. It asks for the name, the kind, the license, the commit rule, the standards pages, whether the repository has a user interface, and the project skills. It then shows the whole tree and every file's text. After your approval it writes `CLAUDE.md`, the change and prose standards, the standards pages (by default the design principles, the coding standards for its languages and, with a user interface, the UI standard), a roadmap, a glossary, an ADR folder, `.gitignore`, `LICENSE` and `README.md`. It then installs the project skills, which writes `skills-lock.json`, and runs `/ordo-init`. It writes no Claude Code settings file.
 
-The shared rules in `CLAUDE.md` sit between `<!-- ordo:shared-rules begin -->` and `<!-- ordo:shared-rules end -->`. They are a copy of `skills/repo-setup/templates/shared-rules.md`. The plan terms in `docs/glossary.md` sit between `<!-- ordo:plan-terms begin -->` and `<!-- ordo:plan-terms end -->`. They are a copy of `skills/repo-setup/templates/plan-terms.md`, and the project's own terms follow them.
+The shared rules in `CLAUDE.md` sit between `<!-- ordo:shared-rules begin -->` and `<!-- ordo:shared-rules end -->`. They are a copy of `skills/ordo/repo-setup/templates/shared-rules.md`. The plan terms in `docs/glossary.md` sit between `<!-- ordo:plan-terms begin -->` and `<!-- ordo:plan-terms end -->`. They are a copy of `skills/ordo/repo-setup/templates/plan-terms.md`, and the project's own terms follow them.
 
-`/repo-setup sync` compares both blocks with their templates, shows the diff of each block that differs and rewrites it after approval. On a repository with no block yet, it drafts where the block goes and which existing rules or glossary entries it replaces. The same comparison runs on its own (`<skills>` is `~/.claude/skills`, or `skills/` in a clone), and `--only glossary` compares the plan-terms block alone, for a repository whose `CLAUDE.md` has no shared-rules block:
+`/repo-setup sync` compares both blocks with their templates, shows the diff of each block that differs and rewrites it after approval. On a repository with no block yet, it drafts where the block goes and which existing rules or glossary entries it replaces. The same comparison runs on its own (`<skills>` is `~/.claude/skills`; in a clone, a skill's folder is `skills/<group>/<name>`, such as `skills/ordo/repo-setup` for `<skills>/repo-setup`), and `--only glossary` compares the plan-terms block alone, for a repository whose `CLAUDE.md` has no shared-rules block:
 
 ```sh
 python3 <skills>/repo-setup/templates/sync_rules.py <repository>
@@ -192,7 +196,7 @@ A plan's verify list is the `verify:` key of the first `yaml` or `yml` block of 
 
 Each command runs through `bash -o pipefail -c` and passes when it exits 0. Every command runs; each failure is printed after its command's output, and a run with a failure ends with the count of failures.
 
-Commands that depend on each other are written as one item joined with `&&`, so the later one runs only when the earlier one passes. Each command in the list exits non-zero when it fails, as written, and a command with long output uses its tool's quiet mode or a filter under `pipefail`. The head comment of `skills/land/templates/checks.sh` states what it prints and its exit statuses.
+Commands that depend on each other are written as one item joined with `&&`, so the later one runs only when the earlier one passes. Each command in the list exits non-zero when it fails, as written, and a command with long output uses its tool's quiet mode or a filter under `pipefail`. The head comment of `skills/orchestration/land/templates/checks.sh` states what it prints and its exit statuses.
 
 When a plan started an agent, its closing step runs the cost script, which prices the usage of each agent role. It takes each response's counts from the response body Claude Code keeps when `CLAUDE_CODE_ENABLE_TELEMETRY=1` and `OTEL_LOG_RAW_API_BODIES=file:<folder>` are set in its settings. Where it kept no body, the script takes the counts from the agents' transcripts and marks the cost as a lower bound. The folder grows with every request and holds each request's prompt.
 
@@ -204,11 +208,11 @@ python3 <skills>/plan-orchestration/templates/plan_cost.py <ledger folder> [<tra
 
 ## The landing script
 
-`skills/land/templates/land.sh` does the cherry-pick and the checks on `main` as one command, run from the repository root as `sh <the land skill's folder>/templates/land.sh <state file> <slug>-<step> <base>`, `<slug>` being the name of the plan's ledger folder. It runs from the `land` skill itself, and nothing is copied into the ledger.
+`skills/orchestration/land/templates/land.sh` does the cherry-pick and the checks on `main` as one command, run from the repository root as `sh <the land skill's folder>/templates/land.sh <state file> <slug>-<step> <base>`, `<slug>` being the name of the plan's ledger folder. It runs from the `land` skill itself, and nothing is copied into the ledger.
 
 `land.sh` reads `worktree_root` and `ledger_root` from `.agents/plan.yaml`, and refuses with exit 64 when either is missing. In the `projects:` form it reads those of the project whose `ledger_root` holds the state file. After main's cherry-pick it runs the verify list through the `checks.sh` in its own folder. It then prints the data for the step's booking in the plan: the diff stat against the base and the staged paths.
 
-A ledger file left uncommitted in the worktree, such as a builder's report, never reaches `main`, while one that a commit of the step holds does. `land.test.sh` proves `land.sh` on scratch repositories. The land skill's section "The landing script" in `skills/land/SKILL.md` states the rest, including the refusals and the exit statuses.
+A ledger file left uncommitted in the worktree, such as a builder's report, never reaches `main`, while one that a commit of the step holds does. `land.test.sh` proves `land.sh` on scratch repositories. The land skill's section "The landing script" in `skills/orchestration/land/SKILL.md` states the rest, including the refusals and the exit statuses.
 
 ## Working on Ordo
 
@@ -221,13 +225,13 @@ utils/pin.sh v1.1.0      # the worktree ~/.local/share/ordo-stable at v1.1.0, ev
 utils/pin.sh             # checks that every link points into the pinned worktree; changes nothing
 ```
 
-`pin.sh` links the skills into `~/.claude/skills`, into the `skills` folder of each `~/.claude-*` folder that holds one, and, when `CLAUDE_CONFIG_DIR` is set, into `$CLAUDE_CONFIG_DIR/skills`, each folder once. Each entry in those folders is a link into the pinned worktree, and no folder is linked to another. `ORDO_SKILL_DIRS` replaces that list of folders. `pin.sh` links the agents into these `agents` folders, each once: `~/.claude/agents`, the `agents` folder of each `~/.claude-*` folder that holds a `skills` folder (one whose `skills` folder is a link to another skills folder included), and `$CLAUDE_CONFIG_DIR/agents` when that variable is set. With `ORDO_SKILL_DIRS` set it links the `agents` folder beside each folder the variable names instead. A `~/.claude-*` folder with no `skills` folder gets no `agents` folder. `ORDO_STABLE` moves the pinned worktree to another path.
+`pin.sh` links the skills into `~/.claude/skills`, into the `skills` folder of each `~/.claude-*` folder that holds one, and, when `CLAUDE_CONFIG_DIR` is set, into `$CLAUDE_CONFIG_DIR/skills`, each folder once. Each entry in those folders is a link into the pinned worktree, and no folder is linked to another. A skill is linked under its own name to its folder in the pinned worktree, which is `skills/<group>/<name>` in a tag that groups its skills, `skills/<name>` in an earlier tag and `<name>` in `v1.0.0`. A tag that holds two skills of one name is refused, and nothing changes. `ORDO_SKILL_DIRS` replaces that list of folders. `pin.sh` links the agents into these `agents` folders, each once: `~/.claude/agents`, the `agents` folder of each `~/.claude-*` folder that holds a `skills` folder (one whose `skills` folder is a link to another skills folder included), and `$CLAUDE_CONFIG_DIR/agents` when that variable is set. With `ORDO_SKILL_DIRS` set it links the `agents` folder beside each folder the variable names instead. A `~/.claude-*` folder with no `skills` folder gets no `agents` folder. `ORDO_STABLE` moves the pinned worktree to another path.
 
 Check mode, `utils/pin.sh` with no tag, changes nothing and fails on each link into the clone and on each link into the pinned worktree for a skill or an agent the pinned tag lacks. Pin mode, `utils/pin.sh <tag>`, checks the links first and refuses, changing nothing, a link into the clone for a skill or an agent the tag lacks. It then links every skill and every agent of the tag, replaces each link into the clone, and removes each link into the pinned worktree for a skill or an agent the tag lacks.
 
 Moving to a new version is a tag on `main` and `utils/pin.sh <tag>`; going back is `utils/pin.sh <older tag>`. The pinned worktree is never edited, and `pin.sh` refuses to move one that has local changes. A pinned worktree deleted by hand is created again at the next `utils/pin.sh <tag>`, through `git worktree add --force`, which leaves the registration of every other worktree of the clone as it is.
 
-`pin.sh` also removes the links into Ordo that it finds in `~/.agents/skills`. The head comment of `utils/pin.sh` states the rest: the format of `ORDO_SKILL_DIRS`, what an agent of a tag is, the refusals, the rules for `~/.agents/skills` and the lines each mode prints.
+`pin.sh` also removes the links into Ordo that it finds in `~/.agents/skills`. The head comment of `utils/pin.sh` states the rest: the layouts of a tag, the format of `ORDO_SKILL_DIRS`, what an agent of a tag is, the refusals, the rules for `~/.agents/skills` and the lines each mode prints.
 
 `docs/dev/building.md` lists the tests and checks to run before a change is committed.
 

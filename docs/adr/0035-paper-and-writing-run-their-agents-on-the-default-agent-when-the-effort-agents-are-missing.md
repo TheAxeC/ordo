@@ -4,7 +4,7 @@ Status: proposed; superseded by the ruling The briefs of academic-paper's run of
 
 ## Context
 
-ADR 0030 decides that every role of `paper` "runs as `ordo-medium` on opus", and `paper` refuses to start with "The configured effort cannot apply" when the runner lists no `ordo-medium` agent or `CLAUDE_CODE_EFFORT_LEVEL` is set (`skills/paper/SKILL.md`, Steps 4), so it does not run in a Claude Code setup without Ordo's agents. It also stops a run at "A model other than the configured one" when a role is served any model other than the identifier the model list gave, a newer version of the same family included (Steps 8). The user ruled both in plan 5: open item BN (a), item (3) of the ruling The fourth repair of paper, and the ruling The writing skill in step 5.E, which carries both into `writing`.
+ADR 0030 decides that every role of `paper` "runs as `ordo-medium` on opus", and `paper` refuses to start with "The configured effort cannot apply" when the runner lists no `ordo-medium` agent or `CLAUDE_CODE_EFFORT_LEVEL` is set (`skills/academic/paper/SKILL.md`, Steps 4), so it does not run in a Claude Code setup without Ordo's agents. It also stops a run at "A model other than the configured one" when a role is served any model other than the identifier the model list gave, a newer version of the same family included (Steps 8). The user ruled both in plan 5: open item BN (a), item (3) of the ruling The fourth repair of paper, and the ruling The writing skill in step 5.E, which carries both into `writing`.
 
 ## Decision
 
@@ -18,4 +18,4 @@ When the runner lists no `ordo-medium` agent, or `CLAUDE_CODE_EFFORT_LEVEL` is s
 
 ## Consequences
 
-`paper` and `writing` run in any Claude Code setup. `paper` runs at an effort the run records, and its stop for another model family stays. `writing` records no effort and has no such stop. `skills/paper/SKILL.md`, `skills/paper/references/ai-disclosure.md` and `skills/writing/SKILL.md` carry it.
+`paper` and `writing` run in any Claude Code setup. `paper` runs at an effort the run records, and its stop for another model family stays. `writing` records no effort and has no such stop. `skills/academic/paper/SKILL.md`, the `paper` skill's `references/ai-disclosure.md` and `skills/academic/writing/SKILL.md` carry it.

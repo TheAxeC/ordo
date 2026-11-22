@@ -4,21 +4,21 @@ The catch-up note for roadmap entry 5.A, skill groups, plan.yaml found by a sear
 
 ```yaml
 verify:                      # commands run once, at landing on main, in order; all must pass. The builder and the reviewer run the checks the brief names for the files the step changes before landing. Copied from docs/dev/building.md by /plan, with the filters of docs/dev/change-standard.md.
-- sh skills/code-comments/templates/strip_comments.test.sh 2>&1 | tail -1
-- sh skills/land/templates/land.test.sh 2>&1 | tail -1
-- sh skills/ordo-init/templates/check_config.test.sh 2>&1 | tail -1
-- sh skills/paper/templates/anchorize_tex.test.sh 2>&1 | tail -1
-- sh skills/paper/templates/apply_tex_patch.test.sh 2>&1 | tail -1
-- sh skills/paper/templates/calibration_counts.test.sh 2>&1 | tail -1
-- sh skills/paper/templates/lookup.test.sh 2>&1 | tail -1
-- sh skills/paper/templates/reference_docx.test.sh 2>&1 | tail -1
-- sh skills/repo-setup/templates/sync_rules.test.sh 2>&1 | tail -1
-- python3 skills/repo-setup/templates/sync_rules.py . --only glossary
+- sh skills/code/code-comments/templates/strip_comments.test.sh 2>&1 | tail -1
+- sh skills/orchestration/land/templates/land.test.sh 2>&1 | tail -1
+- sh skills/ordo/ordo-init/templates/check_config.test.sh 2>&1 | tail -1
+- sh skills/academic/paper/templates/anchorize_tex.test.sh 2>&1 | tail -1
+- sh skills/academic/paper/templates/apply_tex_patch.test.sh 2>&1 | tail -1
+- sh skills/academic/paper/templates/calibration_counts.test.sh 2>&1 | tail -1
+- sh skills/academic/paper/templates/lookup.test.sh 2>&1 | tail -1
+- sh skills/academic/paper/templates/reference_docx.test.sh 2>&1 | tail -1
+- sh skills/ordo/repo-setup/templates/sync_rules.test.sh 2>&1 | tail -1
+- python3 skills/ordo/repo-setup/templates/sync_rules.py . --only glossary
 - sh utils/pin.test.sh 2>&1 | tail -1
 - >-
   git ls-files -coz --exclude-standard | xargs -0 sh -c 'for f; do if [ -e "$f" ]; then printf "%s\0" "$f"; fi; done' sh | xargs -0 perl -CSD -ne 'my $bad_char = $ARGV =~ /\.md\z/ ? qr/[^\x20-\x7E\x{2705}\n]/ : qr/[^\x20-\x7E\n]/; if (/$bad_char/) { print "$ARGV:$.: $_"; $bad = 1 } close ARGV if eof; END { $? ||= 1 if $bad }'
 rules: docs/dev/change-standard.md # the repository's change standard: the rules every builder works under; every brief points at it.
-standards: [docs/dev/skill-layout.md, skills/repo-setup/templates/docs/dev/prose-standard.md, docs/glossary.md] # files every brief tells the builder to read in full, from .agents/plan.yaml.
+standards: [docs/dev/skill-layout.md, skills/ordo/repo-setup/templates/docs/dev/prose-standard.md, docs/glossary.md] # files every brief tells the builder to read in full, from .agents/plan.yaml.
 worktree_root: .agents/worktrees # where a step's worktree is created, relative to the repository root; gitignored.
 worktree_paths: []           # sparse-checkout paths for a step's worktree; empty means the whole tree.
 executor: agent              # the plan's default: a builder is dispatched in the step's worktree for every step not marked orchestrator.
@@ -43,20 +43,6 @@ repair_reviewer: claude:sonnet  # the model the run of /refute over a repair rou
 
 ```yaml
 dispatch:
-- step: 2
-  executor: agent
-  worker: claude:fable
-  base: 06dacd6
-  worktree: .agents/worktrees/5-a-skill-groups-plan-yaml-found-by-a-search-order-and-agents-on-fable-2
-  launched: 2026-11-22
-  report: .scratch/5-a-skill-groups-plan-yaml-found-by-a-search-order-and-agents-on-fable/agents/reviews/2-report.md
-  brief_check: .scratch/5-a-skill-groups-plan-yaml-found-by-a-search-order-and-agents-on-fable/agents/reviews/2-brief-check.md (a4acb97b2cf90ba34, claude-fable-5-2, 172921 tokens, 25 tool uses, 7.0 minutes)
-  shared_paths: "this step moves every skill folder and rewrites paths in files steps 1 and 3 of this plan also name: simple by the ruling Three steps in flight, since step 1 lands first and its edits are carried into the moved files, and step 3 lands on the grouped layout with its paths fixed at its landing"
-  session_id: a8ad09548be32789f (claude-fable-5-2)
-  builder_usage: 227863 tokens, 46 tool uses, 14.8 minutes
-  reviewer_report: ".scratch/5-a-skill-groups-plan-yaml-found-by-a-search-order-and-agents-on-fable/agents/reviews/2-refuter.md (a0017d39ad43dafa5, claude-fable-5-2, USAGE)"
-  landing: not-started
-  round: 1
 - step: 3
   executor: agent
   worker: claude:fable
@@ -67,6 +53,7 @@ dispatch:
   brief_check: .scratch/5-a-skill-groups-plan-yaml-found-by-a-search-order-and-agents-on-fable/agents/reviews/3-brief-check.md (a4d3ffc7dd382169a, claude-fable-5-2, 156175 tokens, 19 tool uses, 5.6 minutes)
   shared_paths: "this step names files steps 1 and 2 of this plan also name (the SKILL.md of fourteen skills, the plan templates, the glossary and its source, the README, .agents/plan.yaml, the scripts step 2 moves): simple by the ruling Three steps in flight, since this step lands last and a path it writes in the old layout is fixed at its landing"
   session_id: a235f7278dcf9dd9a (claude-fable-5-2)
+  builder_usage: 343849 tokens, 55 tool uses, 23.6 minutes
   landing: not-started
   round: 0
 #                            # or the block /spec writes (a list when .agents/plan.yaml's workers_at_once is above 1). /spec writes the entry at the end of its preflight with step and `landing: preparing`, writes `"running: <agent id>"` into brief_check while the brief-check agent runs, base after its preparation commit and worktree before it creates the worktree, and fills the entry at its Steps 9, so that it holds: step, executor, worker, worktree (<worktree_root>/<slug>-<step>), base, launched, report (the builder's report, at the path the brief names), brief_check (the brief check's report path, with the agent's id, its served model, tokens, tool uses and time, or `none, a small text step` for a small text step), landing, round. `landing` is `preparing` while /spec runs, then `not-started`, `cherry-picking` while /land cherry-picks, and `backed-out` after a red line took the step back out of main. The orchestrator adds session_id, the builder's agent id followed by the model the runner served it (<agent id> (<served model>)), as soon as the builder is dispatched and its model read, builders_before (the agent id and served model of each builder it replaced, as <agent id> (<served model>, stopped) or <agent id> (<served model>, dead), one after another), builder_usage (the builder's tokens, tool uses and time from its completion notice) beside report when the builder's report is saved, and reviewer_report (the refuter report's path, with each reviewer's agent id, served model, tokens, tool uses and time, or, for a reviewer stopped for another model, its agent id, served model and stopped) at the review. A value that holds `: ` (brief_check while its agent runs, builder_usage after a repair round, reviewer_report after a run over a round) is written in double quotes, so the block stays valid YAML. A diagnosis agent has no key here: the session that starts it writes its id and role into plan.md's Agents section, as the diagnose skill's Rules say. A step dispatched while another in flight, of this plan or of another open plan, names a file its brief also names carries shared_paths: each shared file, the other step's plan and step, and why the merge at landing is simple, as plan-orchestration's "Two steps in flight" says; with no shared file the key is left out.
@@ -102,5 +89,5 @@ dispatch:
 ## Current position (rewritten before every step commit of this plan)
 
 - 2026-11-22. The plan is opened; nothing has landed.
-- Roadmap entry 5.A (Skill groups, plan.yaml found by a search order, and agents on Fable). Plan step 2 of 5: the skill groups, built and in review; step 3, the search order, is being built. Step 1 landed. Next: the landing of step 2.
+- Roadmap entry 5.A (Skill groups, plan.yaml found by a search order, and agents on Fable). Plan step 3 of 5: the search order, built and in review. Steps 1 and 2 landed. Next: the landing of step 3, its paths rewritten to the grouped layout.
 - Open on Axel's side: none.

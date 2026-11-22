@@ -4,7 +4,7 @@ Status: proposed
 
 ## Context
 
-Under self-rule the orchestrator closes an open item with the option it recommends, except for six kinds of item that stay open for the user (`docs/roadmap.md`, entry 2.E.A). The plan skills take a step's authority, a quoted ruling and a carried ruling only from a bullet whose first line ends "(the user)" (`skills/spec/SKILL.md:44`, `skills/plan/SKILL.md:56`, `skills/grill/SKILL.md:55`). The user reviews each such decision later in the choices file and agrees or disagrees with it.
+Under self-rule the orchestrator closes an open item with the option it recommends, except for six kinds of item that stay open for the user (`docs/roadmap.md`, entry 2.E.A). The plan skills take a step's authority, a quoted ruling and a carried ruling only from a bullet whose first line ends "(the user)" (`skills/orchestration/spec/SKILL.md:44`, `skills/orchestration/plan/SKILL.md:56`, `skills/orchestration/grill/SKILL.md:55`). The user reviews each such decision later in the choices file and agrees or disagrees with it.
 
 ## Decision
 

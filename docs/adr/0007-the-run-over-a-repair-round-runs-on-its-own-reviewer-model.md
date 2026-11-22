@@ -4,7 +4,7 @@ Status: proposed
 
 ## Context
 
-`/refute` runs a fresh reviewer on a step's diff and, with `refute_after_repair: yes`, again over each repair round (`skills/plan/templates/plan.yaml`). The run over a repair round checks the round's delta against findings the first run already named, a narrower job than the first run of a step. A repository may want that run on another model than the first run's. The reviewer is still an agent that did not do the work, which is what the review is for.
+`/refute` runs a fresh reviewer on a step's diff and, with `refute_after_repair: yes`, again over each repair round (`skills/orchestration/plan/templates/plan.yaml`). The run over a repair round checks the round's delta against findings the first run already named, a narrower job than the first run of a step. A repository may want that run on another model than the first run's. The reviewer is still an agent that did not do the work, which is what the review is for.
 
 ## Decision
 

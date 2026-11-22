@@ -4,7 +4,7 @@ Status: proposed; superseded by 0029 in what follows the findings pass; supersed
 
 ## Context
 
-ADR 0021 had full mode and revision mode invoke `/writing`, stop for the user's one-line answer before the compile, and apply each accepted finding as a patch. `/writing` reports breaks of named rules, each a judgment a careful person could dispute, and leaves the decision on each to the user (`skills/writing/SKILL.md`). A stop before the compile leaves the run unfinished while it waits. academic-paper applies its writing-quality check inside the draft without asking (`research-hub/.agents/skills/academic-paper/references/writing_quality_check.md`).
+ADR 0021 had full mode and revision mode invoke `/writing`, stop for the user's one-line answer before the compile, and apply each accepted finding as a patch. `/writing` reports breaks of named rules, each a judgment a careful person could dispute, and leaves the decision on each to the user (`skills/academic/writing/SKILL.md`). A stop before the compile leaves the run unfinished while it waits. academic-paper applies its writing-quality check inside the draft without asking (`research-hub/.agents/skills/academic-paper/references/writing_quality_check.md`).
 
 ## Decision
 

@@ -17,4 +17,4 @@ Intake asks in full and revision mode whether the run ends with the `/writing` r
 
 ## Consequences
 
-A run whose user answers no is shorter by the four `/writing` agents and what a reply starts. `skills/paper/SKILL.md` and `agents/intake_agent.md` carry the row.
+A run whose user answers no is shorter by the four `/writing` agents and what a reply starts. `skills/academic/paper/SKILL.md` and `agents/intake_agent.md` carry the row.
