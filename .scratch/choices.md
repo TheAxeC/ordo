@@ -782,3 +782,27 @@ The ruling "The folder in a call" puts the folder in front of the entry. `/sessi
 Taken: (a)
 Booked: `.scratch/5-a-skill-groups-plan-yaml-found-by-a-search-order-and-agents-on-fable/agents/briefs/3-round-1.md`, ruling 2
 Builds on it: step 3
+
+
+## C137. The differences of the copied submission guide, at /spec of step 4.A of plan 5.A (2026-11-22)
+
+Step 4.A copies academic-paper's `references/journal_submission_guide.md` into `paper`, changed only where a ruling says so. The file holds 14 lines with a character outside this repository's character set (a check mark, an em dash, an en dash), which the character-set check of the verify list refuses.
+
+- Options: (a) the copy changes those characters only: the check mark to `yes`, the em dash to a colon or a comma, the en dash to a hyphen. Line 3, which names the roles that use the page, is written in `paper`'s names as every copied page has it: "Used by the formatter." Pro: the edit ADR 0043 Decision 1 already allows for a copied page, and `diff` against the source shows 14 lines. Con: none found. (b) The copy also leaves out the parts the coverage row calls of no use, the higher-education journal tables. Pro: a shorter page. Con: a judgment on content nobody asked for, and a larger diff against the source. (c) The copy keeps the characters and the character-set check gets an exception for the file. Pro: `diff` prints nothing. Con: a change to the verification list, and the only page outside the character set.
+- Recommendation: (a). The lazy option: (c).
+
+Taken: (a)
+Booked: `.scratch/5-a-skill-groups-plan-yaml-found-by-a-search-order-and-agents-on-fable/plan.md`, Rulings, "Open item 4.A-copy"
+Builds on it: step 4.A
+
+
+## C138. Who runs the submission checks and how a result is written, at /spec of step 4.A of plan 5.A (2026-11-22)
+
+The entry's goal says format-convert runs the checks of the guide's three lists and its report gives each check with its result. It names no role and no form of a result. Some checks rest on facts no file of the run holds, such as the journal's review turnaround.
+
+- Options: (a) the formatter runs them, when the venue of the run is a journal, and writes one row per check into a section "Pre-submission checks" of `format-report.md`, with the result `met`, `not met`, `not applicable` or `for the author`. `for the author` is the result of a check whose fact stands in none of the files the formatter is given, with what the author verifies. Pro: academic-paper's formatter is the role that reads this guide for a target journal; no check is marked met on a guess. Con: a quarter or so of the rows are left to the author. (b) The session runs them after the conversion. Pro: the session holds the outputs. Con: academic-paper gives the journal's requirements to the formatter, and the session would judge the manuscript's content. (c) Only the checks the formatter can settle are listed. Pro: a shorter section. Con: the goal asks for each check with its result.
+- Recommendation: (a). The lazy option: (c).
+
+Taken: (a)
+Booked: `.scratch/5-a-skill-groups-plan-yaml-found-by-a-search-order-and-agents-on-fable/plan.md`, Rulings, "Open item 4.A-results"
+Builds on it: step 4.A
