@@ -62,13 +62,6 @@ Status: `[ ]` open, `[~]` in progress, `[x]` done (its gate ran and passed, with
 - Gate: one `novelty` run on an idea you name, its page read by you, each work it cites printing `CONFIRMED` under `lookup.py resolve`; `diff -r` of the skill's folder against `research-hub/.agents/skills/academic-pipeline/` prints only differences the plan's Rulings name, read once by a fresh agent that lists each difference with the ruling that covers it, or none, and read by you; the plan's ledger holds a record for each `rebuild: researcher` row that the file of the skill the row names holds what the source file did, checked by reading both; `git ls-files utils/check_coverage.py` prints nothing and `docs/dev/scripts.md` does not name it; the verify list of `docs/dev/building.md` passes on main.
 - Waits on: 6, for the review its `manuscript` mode calls; 5.C, for the last change to `paper`'s coverage rows.
 
-## 15. submit-grant
-
-- Status: [ ]
-- Goal: The same for grant portals, reusing the per-portal notes.
-- Gate: one real run on a grant portal up to its last page, with the record written.
-- Waits on: 14, for the portal notes; 8, for the documents.
-
 ## 16. Switch over
 
 - Status: [ ]
@@ -167,3 +160,4 @@ Status: `[ ]` open, `[~]` in progress, `[x]` done (its gate ran and passed, with
 - 11. scaffold: dropped, since the rename of `repo-setup` gains nothing, and no entry left needs a second tree.
 - 12. project-docs: dropped, since no entry left needs it.
 - 14. submit-manuscript: dropped, since each portal differs and a submission is made a few times a year; the cover letter is in `paper`, and the submission checks go to entry 5.C.
+- 15. submit-grant: dropped, since entry 14, whose portal notes it reused, is dropped.
