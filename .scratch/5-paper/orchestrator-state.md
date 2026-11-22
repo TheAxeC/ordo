@@ -48,7 +48,7 @@ dispatch:                    # or the block /spec writes (a list when .agents/pl
   worker: claude:fable
   session_id: ae46e3f2b8d82155e (claude-fable-5-2)
   worktree: .agents/worktrees/5-paper-5.R
-  base: 93a22a0
+  base: 0cd05f2
   launched: 2026-11-22
   report: .scratch/5-paper/agents/reviews/5.R-report.md
   builder_usage: "251005 tokens, 175 tool uses, 21.6 min; round 1: 314619 tokens, 22 tool uses, 5.1 min; round 2: 227597 tokens, 65 tool uses, 13.7 min"
