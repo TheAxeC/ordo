@@ -6,7 +6,7 @@ Every script in this repository outside `.scratch/` is listed here with its kind
 
 | Script | Job |
 |---|---|
-| `docs/figures/gen_figures.py` | Writes the SVG figures of the README from the labels written in the file: `pipeline.svg`, `plan-loop.svg`, `grill.svg`, `writing.svg`, `code-comments.svg` and, under `docs/figures/paper/`, one figure for each of the twelve modes of `paper`, `lifecycle.svg` for the stages of a manuscript and `run-folder.svg` for the files a run leaves |
+| `docs/figures/gen_figures.py` | Writes the SVG figures of the README from the labels written in the file: `pipeline.svg`, `plan-loop.svg`, `grill.svg`, `writing.svg`, `code-comments.svg` and, under `docs/figures/paper/`, one figure for each of the twelve modes of `paper`, `lifecycle.svg` for the path of a manuscript through the modes and `run-folder.svg` for the files of a full run from agent to agent |
 | `docs/figures/academic-paper-comparison/gen_comparison.py` | Writes the 25 SVG figures that set `paper` beside academic-paper 3.2.0 and academic-pipeline into its own folder, from the labels written in the file, using the layout code of `gen_figures.py` |
 | `utils/check_coverage.py` | Checks that a coverage list names every file of the named skill folders once, with a mark and a reason |
 | `utils/pin.sh` | Pins the installed skills and agents to a tag of this repository, or checks the pin |

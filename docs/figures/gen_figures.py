@@ -11,10 +11,11 @@ Writes, beside this file:
   paper/abstract-only.svg, paper/citation-check.svg, paper/disclosure.svg, paper/plan.svg,
   paper/format-convert.svg, paper/revision-coach.svg, paper/rebuttal-audit.svg,
   paper/response-letter.svg: one figure per mode of the paper skill.
-- paper/lifecycle.svg: the stages of a manuscript, each with example requests and the mode of
-  the paper skill each request runs.
-- paper/run-folder.svg: the files a run of the paper skill leaves, each with the modes that
-  write it.
+- paper/lifecycle.svg: the path of a manuscript through the modes of the paper skill, from a
+  plan to resubmission: full mode and revision mode each hold the parts one run does, each
+  part with the mode or call that runs it alone.
+- paper/run-folder.svg: the agents of a full run in order, each arrow with the files the agent
+  writes, and the path of a patch from an agent to the manuscript.
 
 Every figure but the last two shows the order of a run. A box is an agent start or a task of a
 resumed agent, solid when it always runs and dashed when it runs only when needed. A stop that
@@ -22,8 +23,10 @@ waits on the user is an orange box. A cycle is a dotted arrow with its cap, and 
 repeats inside one start is a dotted loop on that agent with its cap. Scripts and the session's
 own steps are left out, except where a paper figure draws them: a script the session runs is a
 grey box, and a step where the session reads and judges is a rounded box, each with its legend
-line. paper/lifecycle.svg and paper/run-folder.svg draw no run: their boxes are requests, modes
-and files, as their own legends say.
+line. paper/lifecycle.svg draws no run: a frame is a mode or what you do outside the skill, and
+a box in it is a part of that mode. paper/run-folder.svg draws the agents
+of a full run with the files each writes on its arrows, and stops and cycles are left out of
+it. Each of the two has its own legend.
 
 Every box, arrow and label is written in this file, taken from each skill's SKILL.md and Stops
 table, and for paper/lifecycle.svg also from the paper skill's mode selection guide; the script
@@ -156,8 +159,6 @@ STYLES = {
     "pipe": Style(SCRIPT_FILL, EDGE, "", INK, 1.5, False),
     "dr": Style("#f6eedc", "#a16207", "", "#422006", 1.5, False),
     "paper": Style("#dff3f1", "#0f766e", "", "#134e4a", 1.5, False),
-    "request": Style(PANEL, EDGE, "", MUTED, 1, True),
-    "nomode": Style(PANEL, EDGE, DASHED, MUTED, 1.5, False),
 }
 
 
@@ -1658,24 +1659,6 @@ def paper_figures() -> tuple[tuple[str, str], ...]:
     )
 
 
-def _asks(*pairs: tuple[str, str]) -> tuple[Node, ...]:
-    """Boxes for a one-column lane: each request in plain words above the mode it runs."""
-    nodes = []
-    for index, (request, mode) in enumerate(pairs):
-        nodes.append(Node(f"q{index}", request, "request"))
-        nodes.append(Node(f"m{index}", mode))
-    return tuple(nodes)
-
-
-def _asks_across(*pairs: tuple[str, str]) -> tuple[Node, ...]:
-    """Boxes for a lane with one column per pair: the requests in a row above their modes."""
-    requests = tuple(
-        Node(f"q{index}", request, "request") for index, (request, _) in enumerate(pairs)
-    )
-    modes = tuple(Node(f"m{index}", mode) for index, (_, mode) in enumerate(pairs))
-    return requests + modes
-
-
 def _lanes_label(title: str, rows: Sequence[Row]) -> str:
     """The text a lanes figure carries for a reader who cannot see it: each lane's boxes."""
     lanes = [
@@ -1687,184 +1670,164 @@ def _lanes_label(title: str, rows: Sequence[Row]) -> str:
 
 
 LIFECYCLE_LEGEND = (
-    Legend("request", "Rounded box: what you ask, in plain words"),
-    Legend("agent", "Solid box: the mode or the call of /paper that the request above it runs"),
-    Legend("nomode", "Dashed box: work the session does on request, with no mode behind it"),
+    Legend("agent", "Solid box: a part of the mode named above it, and the mode or call that runs that part alone"),
+    Legend("maybe", "Dashed box: work the session does on request, with no mode behind it"),
 )
 
 
+def _flow_label(title: str, panels: Sequence[Panel]) -> str:
+    """The text a flow of files carries for a reader who cannot see it: each hand-off."""
+    parts = []
+    for panel in panels:
+        names = {
+            node.key: node.label for node in (*panel.graph.nodes, *panel.graph.floating)
+        }
+        steps = [
+            f"{names[edge.src]} to {names[edge.dst]}"
+            + (f" ({edge.label})" if edge.label else "")
+            for edge in panel.graph.edges
+        ]
+        prefix = f"{panel.caption}: " if panel.caption else ""
+        parts.append(prefix + "; ".join(steps))
+    return f"{title}. " + " | ".join(parts) + "."
+
+
+def _parts(*labels: str, kind: str = "agent") -> tuple[Node, ...]:
+    """A box per part of a mode, in the order the mode runs them."""
+    return tuple(Node(f"p{index}", label, kind) for index, label in enumerate(labels))
+
+
 def paper_lifecycle() -> str:
-    write = Lane(
-        "Write",
-        _asks(
-            ("Help me plan my paper", "/paper plan"),
-            ("Review the literature on a topic", "/paper lit-review"),
-            ("Outline a paper", "/paper outline-only"),
-            ("Write a paper", "/paper full"),
-        ),
+    plan = Lane(
+        "/paper plan",
+        _parts("Help me plan my paper: a chapter plan, worked out in a dialogue"),
     )
-    submit = Lane(
-        "Submit",
-        _asks(
-            ("Write an abstract", "/paper abstract-only"),
-            (
-                "Convert my paper to DOCX, or the citations to another style",
-                "/paper format-convert",
-            ),
-            ("Write an AI disclosure statement", "/paper disclosure"),
-        ),
-    )
-    desk = Lane(
-        "Desk reject",
-        _asks(
-            ("Revise the manuscript on the editor's comments", "/paper revision"),
-            ("Format it for another journal", "/paper format-convert"),
-        ),
-    )
-    referee = Lane(
-        "Referee revision",
-        _asks(
-            ("Parse the reviewer comments", "/paper revision-coach"),
-            ("Revise the manuscript on the referee comments", "/paper revision"),
-            (
-                "Write the response letter for a revision already made",
-                "/paper response-letter",
-            ),
-            ("Audit my rebuttal", "/paper rebuttal-audit"),
-        ),
-    )
-    any_stage = Lane(
-        "Any stage",
-        _asks_across(
-            ("Check the citations", "/paper citation-check, a mode"),
-            ("Review my draft", "/paper draft-review, a call"),
-            ("Draw the figures", "/paper figures, a call"),
+    full = Lane(
+        "/paper full: one run does every part, in this order",
+        _parts(
+            "1. The literature search. Alone: /paper lit-review",
+            "2. The outline. Alone: /paper outline-only",
+            "3. The arguments and the draft. Only in full mode",
+            "4. The figures. Alone: /paper figures, a call",
+            "5. The citation check. Alone: /paper citation-check",
+            "6. The abstract. Alone: /paper abstract-only",
+            "7. The review of the draft. Alone: /paper draft-review, a call",
+            "8. The format and the cover letter. Alone: /paper format-convert",
+            "9. The AI disclosure statement. Alone: /paper disclosure",
         ),
         columns=3,
+        node_width=218,
+    )
+    submit = Lane(
+        "You submit",
+        _parts(
+            "Write the highlights",
+            "Describe a graphical abstract",
+            kind="maybe",
+        ),
+    )
+    revision = Lane(
+        "/paper revision: one run does every part, in this order",
+        _parts(
+            "1. The comments read into a list of items. Alone, as a roadmap: /paper revision-coach",
+            "2. The manuscript revised, and the citations of the changes checked. Only in revision mode",
+            "3. The response letter and its check, for referee comments. Alone: /paper response-letter",
+        ),
+        columns=3,
+        node_width=218,
+    )
+    resubmit = Lane(
+        "You resubmit",
+        _parts("A response you wrote yourself, checked before you send it: /paper rebuttal-audit"),
     )
     internal = Lane(
         "Internal documents",
-        _asks_across(
-            (
-                "A record of every attempt, for my own reference",
-                "/paper full, outline-only or abstract-only, with the intake row Internal "
-                "only set to yes",
-            ),
-            (
-                "An outline or a literature review to pass to my co-authors",
-                "/paper outline-only or /paper lit-review",
-            ),
+        _parts(
+            "A record of every attempt, for my own reference: /paper full, outline-only or "
+            "abstract-only, with the intake row Internal only set to yes",
+            "An outline or a literature review to pass to my co-authors: /paper outline-only "
+            "or /paper lit-review",
         ),
         columns=2,
-    )
-    no_mode = Lane(
-        "No mode",
-        (
-            Node("a", "Write the highlights", "nomode"),
-            Node("b", "Describe a graphical abstract", "nomode"),
-        ),
-        columns=2,
+        node_width=330,
     )
     rows = (
-        Row("THE STAGES OF A MANUSCRIPT, IN ORDER", (write, submit, desk, referee)),
-        Row("AT ANY STAGE", (any_stage,), arrows=False),
-        Row(
-            "INTERNAL DOCUMENTS, AND WORK WITH NO MODE BEHIND IT",
-            (internal, no_mode),
-            arrows=False,
-        ),
+        Row("FROM A PLAN TO A SUBMITTED MANUSCRIPT", (plan, full, submit)),
+        Row("WHEN THE JOURNAL'S COMMENTS COME BACK", (revision, resubmit)),
+        Row("DOCUMENTS THAT ARE NOT SUBMITTED", (internal,), arrows=False),
     )
     note = (
-        "A revision run on referee comments also writes the response letter and checks it. "
-        "The mode guide ties no mode to a desk reject: that column is a reading of each mode's use."
+        "Full mode's intake offers the latest plan run (chapter-plan.md, insights.md, "
+        "dialogue.md) and the latest lit-review run (review.md, refs.bib), so work done alone "
+        "is not done twice. An outline-only run also makes the literature search. Format-convert "
+        "also formats a manuscript for another journal. A revision on an editor's comments "
+        "writes no response letter."
     )
-    label = _lanes_label("The stages of a manuscript and the mode of the paper skill each request runs", rows)
+    label = _lanes_label("The path of a manuscript through the modes of the paper skill", rows)
     return lanes_figure("paper/lifecycle.svg", label, rows, LIFECYCLE_LEGEND, note)
 
 
 RUN_FOLDER_LEGEND = (
-    Legend("agent", "Solid box: a file or a folder, and after the colon the modes and calls that write it"),
-    Legend("script", "Grey box: one of the four files each patch keeps"),
+    Legend("agent", "Solid box: an agent of the run"),
+    Legend("script", "Grey box: a script the session runs"),
+    Legend("choice", "Rounded box: a folder, with the files that end up in it"),
 )
 
 
-def _files(*pairs: tuple[str, str], kind: str = "agent") -> tuple[Node, ...]:
-    """A box per file: its name, and after a colon the modes that write it."""
-    return tuple(
-        Node(f"f{index}", f"{name}: {modes}", kind)
-        for index, (name, modes) in enumerate(pairs)
-    )
-
-
 def paper_run_folder() -> str:
-    records = Lane(
-        "paper-runs/<mode>-<date>/, beside the manuscript's folder",
-        _files(
-            ("config.md", "every mode and call"),
-            ("final.md", "every mode and call"),
-            ("checks.md", "full, revision, citation-check, draft-review, lit-review, format-convert"),
-            ("review.md", "full, outline-only, lit-review"),
-            ("refs.bib", "full, outline-only, lit-review"),
-            ("outline.md", "full, outline-only, plan"),
-            ("arguments.md", "full"),
-            ("intended-claims.md", "full"),
-            ("existing-main.tex", "full, the copy of a main.tex that stood there"),
-            ("draft-report.md", "full, with the trace table"),
-            ("figures/ and figures.md", "full, figures"),
-            ("citation-report.md", "full, revision, citation-check"),
-            ("citation-report-<nn>.md", "full, revision, one per incremental check"),
-            ("review-<r>.md", "full, one per round; review-2.md: revision; review-1.md: draft-review"),
-            ("items.md", "revision"),
-            ("revision-log.md", "revision"),
-            ("response-letter-check.md", "revision, response-letter"),
-            ("rebuttal-audit.md", "rebuttal-audit"),
-            ("disclosure.md", "disclosure"),
-            ("format-report.md", "full, format-convert"),
-            ("dialogue.md, chapter-summaries.md, insights.md, chapter-plan.md", "plan"),
-            (
-                "The parsed comments, the roadmap, the tracking template, the letter skeleton",
-                "revision-coach",
-            ),
-        ),
-        columns=4,
+    run = (
+        Node("I", "Intake agent"),
+        Node("S", "Literature strategist"),
+        Node("A", "Structure architect"),
+        Node("B", "Argument builder"),
+        Node("W", "Draft writer"),
+        Node("V", "Visualization agent"),
+        Node("C", "Citation compliance agent"),
+        Node("AB", "Abstract agent"),
+        Node("R", "Peer reviewer"),
+        Node("F", "Formatter"),
+        Node("M", "The manuscript's folder: main.tex, refs.bib, figures/, the PDF and the other targets", "choice"),
     )
-    patches = Lane(
-        "patches/, in the run folder: the four files of each patch, named by its number",
-        _files(
-            ("<nn>-<file name>.block-manifest.json", "the manifest"),
-            ("<nn>-<file name>.patch.json", "the patch an agent writes"),
-            ("<nn>-<file name>.patched", "the patched file"),
-            ("<nn>-<file name>.patched.apply-report.json", "the apply report"),
-            kind="script",
-        ),
-        columns=2,
-        node_width=402,
+    run_edges = (
+        Edge("I", "S", "config.md"),
+        Edge("S", "A", "review.md, refs.bib"),
+        Edge("A", "B", "outline.md"),
+        Edge("B", "W", "arguments.md"),
+        Edge("B", "V", "arguments.md"),
+        Edge("W", "C", "main.tex, intended-claims.md, draft-report.md"),
+        Edge("W", "AB", "main.tex"),
+        Edge("V", "R", "figures/, figures.md, a patch"),
+        Edge("C", "R", "citation-report.md, patches"),
+        Edge("AB", "R", "a patch"),
+        Edge("R", "F", "review-<r>.md"),
+        Edge("F", "M", "format-report.md, patches"),
     )
-    manuscript = Lane(
-        "The manuscript's folder",
-        _files(
-            ("main.tex", "full"),
-            ("refs.bib", "full, when none stands there"),
-            ("figures/", "full, figures"),
-            ("response-letter.md", "revision, response-letter"),
-            ("cover-letter.tex", "format-convert, for a journal venue with none there"),
-            ("<main>.pdf", "full, revision, format-convert"),
-            ("<main>.docx and <main>.md", "full, format-convert"),
-            ("<name>.tex, refs.bib and figures/", "format-convert, from a .md or a .docx"),
-        ),
-        columns=4,
+    patch = (
+        Node("PA", "An agent"),
+        Node("PS", "Script: the patch applied to the file by its block hashes", "script"),
+        Node("PM", "The manuscript's folder: the changed file", "choice"),
+        Node("PP", "patches/ in the run folder: the manifest, the patch, the patched file and the apply report", "choice"),
     )
-    rows = (
-        Row("THE RECORDS OF A RUN, EACH WITH THE MODES THAT WRITE IT", (records,), arrows=False),
-        Row("THE PATCHES", (patches,), arrows=False),
-        Row("WRITTEN IN THE MANUSCRIPT'S FOLDER", (manuscript,), arrows=False),
+    patch_edges = (
+        Edge("PA", "PS", "<nn>-<file name>.patch.json"),
+        Edge("PS", "PM", "the patched file"),
+        Edge("PS", "PP", "the four files of the patch"),
     )
+    panels = [
+        Panel("A FULL RUN: EACH AGENT AND THE FILES IT HANDS ON", _graph(run, run_edges)),
+        Panel("EVERY CHANGE AFTER THE FIRST DRAFT IS A PATCH", _graph(patch, patch_edges)),
+    ]
     note = (
-        "A lit-review run has no manuscript: its folder is paper-runs/lit-review-<date>/ in the "
-        "folder the session runs in. The run folder holds no compile folder."
+        "Every file named on an arrow stays in the run folder, paper-runs/<mode>-<date>/ "
+        "beside the manuscript's folder, with config.md, checks.md and final.md; main.tex, "
+        "refs.bib and figures/ stand in the manuscript's folder. The other modes run a part of "
+        "this flow: outline-only ends at outline.md, lit-review at review.md and refs.bib, "
+        "abstract-only, citation-check and format-convert start one agent on a manuscript given, "
+        "and revision runs the peer reviewer, the draft writer and the citation compliance "
+        "agent on the comments, leaving items.md, revision-log.md and review-2.md."
     )
-    label = _lanes_label("What a run of the paper skill leaves behind", rows)
-    return lanes_figure("paper/run-folder.svg", label, rows, RUN_FOLDER_LEGEND, note)
+    label = _flow_label("The files of a full run of the paper skill, from agent to agent", panels)
+    return compose("paper/run-folder.svg", label, panels, RUN_FOLDER_LEGEND, note)
 
 
 def grill() -> str:
