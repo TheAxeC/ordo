@@ -44,8 +44,16 @@ repair_reviewer: claude:sonnet  # the model the run of /refute over a repair rou
 ```yaml
 dispatch:
 - step: 4.B
-  brief_check: "running: a47ecb618ac9075df"
-  landing: preparing
+  executor: agent
+  worker: claude:fable
+  worktree: .agents/worktrees/5-a-skill-groups-plan-yaml-found-by-a-search-order-and-agents-on-fable-4.B
+  base: 804bb73
+  launched: 2026-11-22
+  session_id: a37581bb6bc0695fb (claude-fable-5-2)
+  report: .scratch/5-a-skill-groups-plan-yaml-found-by-a-search-order-and-agents-on-fable/agents/reviews/4.B-report.md
+  brief_check: ".scratch/5-a-skill-groups-plan-yaml-found-by-a-search-order-and-agents-on-fable/agents/reviews/4.B-brief-check.md (a47ecb618ac9075df, claude-fable-5-2, 205426 tokens, 24 tool uses, 5.5 minutes)"
+  round: 0
+  landing: not-started
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled or, under `self_rule: on`, until the orchestrator closes it as `plan-orchestration`'s `references/self-rule.md`, "Closing an open item", says)
@@ -78,5 +86,5 @@ dispatch:
 ## Current position (rewritten before every step commit of this plan)
 
 - 2026-11-22. The plan is opened; nothing has landed.
-- Roadmap entry 5.A (Skill groups, plan.yaml found by a search order, and agents on Fable). Plan step 4.B of 7: the four places the scratch run found unclear, added by the ruling "The scratch run's four places". Steps 1, 2, 3 and 4.A landed; step 4 is recorded on `v9.0.0-rc.1`. Next: `/spec 5.A 4.B`, its build, review and landing, then a release candidate with steps 4.A and 4.B pinned and one format-convert run for ADR 0043, then the closing.
+- Roadmap entry 5.A (Skill groups, plan.yaml found by a search order, and agents on Fable). Plan step 4.B of 7: the four places the scratch run found unclear, in build. Steps 1, 2, 3, 4 and 4.A are done. Next: the builder's report, `/refute 5.A 4.B`, `/land 5.A 4.B`, then the closing, with no format-convert run (ruling No format-convert run in this entry).
 - Open on Axel's side: none.
