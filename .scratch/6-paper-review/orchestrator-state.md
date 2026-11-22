@@ -50,10 +50,12 @@ dispatch:
   worktree: .agents/worktrees/6-paper-review-1
   launched: 2026-11-22
   report: .scratch/6-paper-review/agents/reviews/1-report.md
+  builder_usage: 154702 tokens, 65 tool uses, 13.5 minutes
   brief_check: .scratch/6-paper-review/agents/reviews/1-brief-check.md (a7158d80e8b21c9c4, claude-fable-5-2, 234992 tokens, 29 tool uses, 7.2 minutes)
   session_id: a840c1d8f45ecd55f (claude-fable-5-2)
   landing: not-started
-  round: 0
+  reviewer_report: .scratch/6-paper-review/agents/reviews/1-refuter.md (a8df6fcc33e1a61cf, claude-fable-5-2, 201785 tokens, 28 tool uses, 5.4 minutes)
+  round: 1
 - step: 2
   executor: agent
   worker: claude:fable
@@ -61,6 +63,7 @@ dispatch:
   worktree: .agents/worktrees/6-paper-review-2
   launched: 2026-11-22
   report: .scratch/6-paper-review/agents/reviews/2-report.md
+  builder_usage: 314218 tokens, 30 tool uses, 11.1 minutes
   brief_check: .scratch/6-paper-review/agents/reviews/2-brief-check.md (a10369c9579256655, claude-fable-5-2, 183232 tokens, 21 tool uses, 6.9 minutes)
   session_id: a21f2ad5c98eaac0b (claude-fable-5-2)
   landing: not-started
