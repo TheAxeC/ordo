@@ -53,6 +53,9 @@ dispatch:
 - 2026-11-22: Open item 2-contracts, the source's scoring contracts are not in its folder: closed under self-rule, C141.
 - 2026-11-22: Open item 2-questions, the three coaching questions stand only in deep-research: closed under self-rule, C142.
 - 2026-11-22: Open item 2-call, the form of the call: closed under self-rule, C143.
+- 2026-11-22: C141, where the scoring contracts come from: agreed by the user.
+- 2026-11-22: C142, the three contribution questions of the coaching step: agreed by the user.
+- 2026-11-22: C143, the form of the call: agreed by the user.
 
 ## The standing demands (from Axel, in force)
 

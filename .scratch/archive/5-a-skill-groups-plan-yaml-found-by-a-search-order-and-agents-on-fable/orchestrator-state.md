@@ -52,6 +52,11 @@ dispatch: []
 ## Closed items (the log of what was raised and how it ended; no report carries it)
 
 - none yet.
+- 2026-11-22: C136, the folder in the two calls of session-retro that take no entry: agreed by the user.
+- 2026-11-22: C137, the differences of the copied submission guide: agreed by the user.
+- 2026-11-22: C138, who runs the submission checks and how a result is written: agreed by the user.
+- 2026-11-22: C139, where /grill creates a glossary: agreed by the user.
+- 2026-11-22: C140, how /repo-setup sync finds the glossary: agreed by the user.
 
 ## The standing demands (from Axel, in force)
 
