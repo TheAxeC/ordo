@@ -55,8 +55,16 @@ dispatch:
   landing: not-started
   round: 0
 - step: 2
-  landing: preparing
-  brief_check: "running: a10369c9579256655"
+  executor: agent
+  worker: claude:fable
+  base: 90fe644
+  worktree: .agents/worktrees/6-paper-review-2
+  launched: 2026-11-22
+  report: .scratch/6-paper-review/agents/reviews/2-report.md
+  brief_check: .scratch/6-paper-review/agents/reviews/2-brief-check.md (a10369c9579256655, claude-fable-5-2, 183232 tokens, 21 tool uses, 6.9 minutes)
+  session_id: a21f2ad5c98eaac0b (claude-fable-5-2)
+  landing: not-started
+  round: 0
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled or, under `self_rule: on`, until the orchestrator closes it as `plan-orchestration`'s `references/self-rule.md`, "Closing an open item", says)
@@ -90,6 +98,6 @@ dispatch:
 
 ## Current position (rewritten before every step commit of this plan)
 
-- 2026-11-22. Nothing has landed. Step 1 is with its builder in `.agents/worktrees/6-paper-review-1`; step 2 is in `/spec`, waiting on its brief check.
+- 2026-11-22. Nothing has landed. Step 1 is with its builder in `.agents/worktrees/6-paper-review-1`; step 2 is with its builder in `.agents/worktrees/6-paper-review-2`.
 - Roadmap entry 6 (paper-review). Plan step 1 of 4: the pages. Next: step 2, `SKILL.md` and the places that list the skills, in parallel with it.
 - Open on Axel's side: none.
