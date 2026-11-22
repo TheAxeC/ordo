@@ -51,10 +51,6 @@ dispatch:
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled or, under `self_rule: on`, until the orchestrator closes it as `plan-orchestration`'s `references/self-rule.md`, "Closing an open item", says)
 
-- Open item A (step 1, 2026-11-22): which model the agents of `/writing` run on. The goal says the agents of `/writing` may run on Claude Fable. `skills/writing/SKILL.md` names the model in its own text and reads no `plan.yaml`: its four agents run as `ordo-medium` on opus, and a served model outside the opus family is its stop (lines 42 to 92 and 296); ADR 0030's decision lists that value ("every agent of `writing` runs as `ordo-medium` on opus") and ADR 0035 names the stop. `/paper` runs `/writing` itself.
-  - Option (a), recommended: `writing` names fable where it names opus, at `ordo-medium` as now; the stop then fires on a model outside the fable family; the two ADRs are edited in place to the current state, as the ADR folder's `README.md` allows for a refinement that keeps the decision. Pro: one model named, the stop keeps one rule, the goal's sentence is true. Con: Fable costs twice Opus per token (8 and 40 against 4 and 20 dollars per million tokens), on every `/writing` run, those `/paper` starts included.
-  - Option (b): `writing` keeps opus as the model it starts its agents on, and its stop accepts the opus and the fable family. Pro: no cost change. Con: no `/writing` agent runs on Fable unless the runner serves it unasked, so the goal's sentence changes nothing a person sees.
-  - Recommendation: (a), a judgment: the goal names `/writing` beside the agents that the configuration puts on Fable. The lazy option is (b).
 - Open item B (step 3, 2026-11-22): how a call names the folder that holds `plan.yaml`. The goal's search order starts with "the folder named in the call", and no skill has a form for it. Today a call names a project of the `projects:` form before the entry: `/plan <project>/<entry>`, `/roadmap <project> ...`.
   - Option (a), recommended: the folder stands where the project stands, before the entry: `/plan apps/web/12`, `/spec apps/web/12 2`, `/land apps/web/12 2`, `/roadmap apps/web add ...`. The text before the last `/` is read first as a folder, relative to the repository root, that holds a `plan.yaml`; when it is none, it is a project of the file the search order finds, as today. Every later call on that plan names the folder the same way, and nothing records it. Pro: one form, the `projects:` form unchanged. Con: a folder and a project of one name read as the folder.
   - Option (b): an argument on every skill, `--config <folder>`. Pro: one reading. Con: a second form beside `<project>/<entry>`, typed on every call.
@@ -64,7 +60,7 @@ dispatch:
 
 ## Closed items (the log of what was raised and how it ended; no report carries it)
 
-- none yet.
+- 2026-11-22: Open item A, which model the agents of `/writing` run on: closed by the user's ruling Only the ban.
 
 ## The standing demands (from Axel, in force)
 
