@@ -113,7 +113,7 @@ In the quotes a character outside ASCII is written by its name in angle brackets
 
 Under "## Phase Boundary (v3.9.2)":
 
-- "WRITE files in the reviewer skill's `phase{M}_*/` directories where M <greater-or-equal sign> 1 (" and the closing parenthesis (in the synthesizer "where M <not-equal sign> 2 ("). Edit 2: the skill has no such directories. The rule inside the parenthesis is kept as the bullet.
+- "in the reviewer skill's `phase{M}_*/` directories where M != 1" (in the synthesizer's page "where M != 2"; the source has the not-equal sign). Edit 2: the skill has no such directories. The bullet reads as "## Round 1" below gives it.
 - "Advisory verifier (`scripts/check_pipeline_integrity.py`) can detect violations post-hoc." Edit 2.
 - "Deterministic PreToolUse hook deferred to v3.10 active conductor (#134)." Edits 2 and 4.
 - "(v3.9.2)" in the heading and after "Enforcement", and "v3.6.2" in front of "Sprint Contract Protocol". Edit 4.
@@ -325,3 +325,102 @@ The four differences: the Devil's Advocate page (two sections left out, 17 lines
 ## Anything in the brief that was wrong or impossible
 
 Nothing. Check 4 prints one line the brief's examples do not foresee, the HTML entity `&#124;` at `references/calibration_mode_protocol.md:65`, which is the source's text and stays.
+
+## Round 1
+
+Every ruling of `.scratch/6-paper-review/agents/briefs/1-round-1.md` is done. The lines below are printed from the pages.
+
+1. Finding 1, `references/calibration_mode_protocol.md` line 190, the parenthesis put back:
+
+```
+- **Calibration mode is the exception**: calibration itself is opt-in (see "Cross-model verification" under Phase 1); at least one of the runs should use a different family when configured.
+```
+
+2. Finding 2, `examples/interdisciplinary_review_example.md` line 150, a colon before "five major dimensions":
+
+```
+1. 47 feature variables cover enrollment, finance, faculty, research, and industry-academia collaboration: five major dimensions, more comprehensive than most similar studies
+```
+
+3. Finding 3, `references/calibration_mode_protocol.md` line 189. Left out under edit 2, under "### Same-family / rubric-aware judging": ": the citation-claim alignment judge already supports a non-default judge model, and the suite is designed to work single-model" (the source has an em dash where this quote has the colon). This replaces judgment call 11 above. The bullet now reads:
+
+```
+- In ordinary reviewer / judge paths, cross-model is **opt-in, "for best results"**.
+```
+
+4. Finding 4: the quote of the left-out bullet under "Per page, what is left out" is corrected in place and reads `where M != 1`, and `where M != 2` for the synthesizer's page.
+
+5. Finding 5, the first bullet under "You MUST NOT:" in the six pages, as `grep -n -A1 "You MUST NOT:"` prints it. This replaces judgment call 1 and the sentence on that bullet under check 6 above:
+
+```
+skills/academic/paper-review/agents/domain_reviewer_agent.md:22:You MUST NOT:
+skills/academic/paper-review/agents/domain_reviewer_agent.md-23-- WRITE files of a phase other than Phase 1 (no inflate into Phase 2 synthesis)
+skills/academic/paper-review/agents/devils_advocate_reviewer_agent.md:22:You MUST NOT:
+skills/academic/paper-review/agents/devils_advocate_reviewer_agent.md-23-- WRITE files of a phase other than Phase 1 (no inflate into Phase 2 synthesis)
+skills/academic/paper-review/agents/editorial_synthesizer_agent.md:20:You MUST NOT:
+skills/academic/paper-review/agents/editorial_synthesizer_agent.md-21-- WRITE files of a phase other than Phase 2 (no regress into Phase 1 reviewer territory: do not rewrite or augment reviewer cards; if a reviewer's card is incomplete, flag it, do not silently fix)
+skills/academic/paper-review/agents/eic_agent.md:20:You MUST NOT:
+skills/academic/paper-review/agents/eic_agent.md-21-- WRITE files of a phase other than Phase 1 (no inflate into Phase 2 editorial synthesis: that's the editorial synthesizer's work)
+skills/academic/paper-review/agents/methodology_reviewer_agent.md:22:You MUST NOT:
+skills/academic/paper-review/agents/methodology_reviewer_agent.md-23-- WRITE files of a phase other than Phase 1 (no inflate into Phase 2 synthesis)
+skills/academic/paper-review/agents/perspective_reviewer_agent.md:22:You MUST NOT:
+skills/academic/paper-review/agents/perspective_reviewer_agent.md-23-- WRITE files of a phase other than Phase 1 (no inflate into Phase 2 synthesis)
+```
+
+The `diff` of each of the eight pages against its source was read whole after the changes; every hunk is one of the six edits or a ruling of this round.
+
+Checks 1 to 4 again, from the worktree root, as printed (each block followed by the line `exit status: <n>` the run added):
+
+```
+--- check 1
+exit status: 0
+--- check 1b
+exit status: 1
+--- check 2
+skills/academic/paper-review/agents/devils_advocate_reviewer_agent.md
+skills/academic/paper-review/agents/domain_reviewer_agent.md
+skills/academic/paper-review/agents/editorial_synthesizer_agent.md
+skills/academic/paper-review/agents/eic_agent.md
+skills/academic/paper-review/agents/field_analyst_agent.md
+skills/academic/paper-review/agents/methodology_reviewer_agent.md
+skills/academic/paper-review/agents/perspective_reviewer_agent.md
+skills/academic/paper-review/examples/hei_paper_review_example.md
+skills/academic/paper-review/examples/interdisciplinary_review_example.md
+skills/academic/paper-review/examples/subclaim_decomposition_example.md
+skills/academic/paper-review/references/calibration_mode_protocol.md
+skills/academic/paper-review/references/editorial_decision_standards.md
+skills/academic/paper-review/references/guided_mode_protocol.md
+skills/academic/paper-review/references/integration_guide.md
+skills/academic/paper-review/references/quality_rubrics.md
+skills/academic/paper-review/references/re_review_mode_protocol.md
+skills/academic/paper-review/references/review_criteria_framework.md
+skills/academic/paper-review/references/review_quality_thinking.md
+skills/academic/paper-review/references/sprint_contract_protocol.md
+skills/academic/paper-review/references/statistical_reporting_standards.md
+skills/academic/paper-review/references/top_journals_by_field.md
+skills/academic/paper-review/templates/editorial_decision_template.md
+skills/academic/paper-review/templates/peer_review_report_template.md
+skills/academic/paper-review/templates/revision_response_template.md
+--- check 3
+exit status: 1
+--- check 4
+skills/academic/paper-review/references/review_quality_thinking.md:18:**If #5 is yes**: The argument depends on a single linchpin. Flag it: the paper's contribution is only as strong as that one piece of evidence.
+skills/academic/paper-review/references/calibration_mode_protocol.md:65:| Calibration error | Mean &#124;rubric_score - ground_truth_severity&#124; | Per-dimension |
+skills/academic/paper-review/agents/methodology_reviewer_agent.md:10:You are a research methodology expert, serving as Peer Reviewer 1. Your specific identity is dynamically configured by the field analyst's Reviewer Configuration Card #2.
+skills/academic/paper-review/agents/domain_reviewer_agent.md:10:You are a senior researcher in the paper's field, serving as Peer Reviewer 2. Your specific identity is dynamically configured by the field analyst's Reviewer Configuration Card #3.
+skills/academic/paper-review/agents/field_analyst_agent.md:165:[Card #1: EIC]
+skills/academic/paper-review/agents/field_analyst_agent.md:166:[Card #2: Peer Reviewer 1, Methodology]
+skills/academic/paper-review/agents/field_analyst_agent.md:167:[Card #3: Peer Reviewer 2, Domain]
+skills/academic/paper-review/agents/field_analyst_agent.md:168:[Card #4: Peer Reviewer 3, Cross-disciplinary/Practical]
+skills/academic/paper-review/agents/eic_agent.md:10:You are the Editor-in-Chief of a top-tier international academic journal. Your specific identity is dynamically configured by the field analyst's Reviewer Configuration Card #1.
+skills/academic/paper-review/agents/perspective_reviewer_agent.md:10:You are a cross-disciplinary / practical perspective reviewer, serving as Peer Reviewer 3. Your specific identity is dynamically configured by the field analyst's Reviewer Configuration Card #4.
+skills/academic/paper-review/examples/interdisciplinary_review_example.md:48:### Reviewer Configuration Card #1
+skills/academic/paper-review/examples/interdisciplinary_review_example.md:61:### Reviewer Configuration Card #2
+skills/academic/paper-review/examples/interdisciplinary_review_example.md:74:### Reviewer Configuration Card #3
+skills/academic/paper-review/examples/interdisciplinary_review_example.md:87:### Reviewer Configuration Card #4
+skills/academic/paper-review/examples/hei_paper_review_example.md:49:### Reviewer Configuration Card #1
+skills/academic/paper-review/examples/hei_paper_review_example.md:62:### Reviewer Configuration Card #2
+skills/academic/paper-review/examples/hei_paper_review_example.md:75:### Reviewer Configuration Card #3
+skills/academic/paper-review/examples/hei_paper_review_example.md:88:### Reviewer Configuration Card #4
+exit status: 0
+```

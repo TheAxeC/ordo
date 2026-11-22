@@ -50,7 +50,7 @@ dispatch:
   worktree: .agents/worktrees/6-paper-review-1
   launched: 2026-11-22
   report: .scratch/6-paper-review/agents/reviews/1-report.md
-  builder_usage: 154702 tokens, 65 tool uses, 13.5 minutes
+  builder_usage: 154702 tokens, 65 tool uses, 13.5 minutes; round 1: 164616 tokens at its end, 3 tool uses, 1.0 minutes
   brief_check: .scratch/6-paper-review/agents/reviews/1-brief-check.md (a7158d80e8b21c9c4, claude-fable-5-2, 234992 tokens, 29 tool uses, 7.2 minutes)
   session_id: a840c1d8f45ecd55f (claude-fable-5-2)
   landing: not-started
@@ -67,7 +67,8 @@ dispatch:
   brief_check: .scratch/6-paper-review/agents/reviews/2-brief-check.md (a10369c9579256655, claude-fable-5-2, 183232 tokens, 21 tool uses, 6.9 minutes)
   session_id: a21f2ad5c98eaac0b (claude-fable-5-2)
   landing: not-started
-  round: 0
+  reviewer_report: .scratch/6-paper-review/agents/reviews/2-refuter.md (a915fb8ba1219bbe2, claude-fable-5-2, 232088 tokens, 24 tool uses, 6.3 minutes)
+  round: 1
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled or, under `self_rule: on`, until the orchestrator closes it as `plan-orchestration`'s `references/self-rule.md`, "Closing an open item", says)
