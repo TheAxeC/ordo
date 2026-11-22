@@ -37,9 +37,9 @@ Status: `[ ]` open, `[~]` in progress, `[x]` done (its gate ran and passed, with
 ## 6. paper-review
 
 - Status: [ ]
-- Goal: The internal review skill: the reviewer roles, the editor's synthesis and the re-review mode, with the calibration mode, the guided mode and the sprint contracts of academic-paper-reviewer. Its design follows academic-paper-reviewer's: the agents, phases, cycles and stops are kept as the source has them, and each deviation from them is made only with its reason and your ruling in the plan's Rulings. The comparison with the source, file by file, is made at the grill, before any brief, and each difference is a grill question that shows what the source does.
-- Gate: every finding cites a line; a side-by-side run against academic-paper-reviewer on a paper with known referee reports, compared blind as `docs/dev/blind-comparison.md` says, wins or ties; the plan's ledger holds a record for each `rebuild: paper-review` row that the file of `skills/paper-review/` the row names holds what the source file did, checked by reading both; the plan's ledger lists every deviation from the design of academic-paper-reviewer, each with its reason and the ruling that approved it, and nothing else differs, checked by reading both skills.
-- Waits on: 3, for the writing base; 2, for the coverage.
+- Goal: The internal review skill, a copy of academic-paper-reviewer's files (`research-hub/.agents/skills/academic-paper-reviewer/`): its `SKILL.md` and every file of its `agents/`, `references/`, `templates/` and `examples/`, each under its own folder and name, with its seven agents and its modes (full, re-review, quick, methodology-focus, guided and calibration) as the source has them, changed only where a ruling of yours in the plan's Rulings says so, each with its reason. The comparison with the source, file by file, is made at the grill, before any brief, and each difference is a grill question that shows what the source does.
+- Gate: `diff -r` of the skill's folder against `research-hub/.agents/skills/academic-paper-reviewer/` prints only differences the plan's Rulings name, read once by a fresh agent that lists each difference with the ruling that covers it, or none, and read by you; the plan's ledger holds a record for each `rebuild: paper-review` row that the file of the skill the row names holds what the source file did, checked by reading both; the verify list of `docs/dev/building.md` passes on main.
+- Waits on: 5.A, which sets the folder the skill is built in.
 
 ## 7.A referee
 
