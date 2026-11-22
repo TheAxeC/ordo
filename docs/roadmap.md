@@ -62,13 +62,6 @@ Status: `[ ]` open, `[~]` in progress, `[x]` done (its gate ran and passed, with
 - Gate: one `novelty` run on an idea you name, its page read by you, each work it cites printing `CONFIRMED` under `lookup.py resolve`; `diff -r` of the skill's folder against `research-hub/.agents/skills/academic-pipeline/` prints only differences the plan's Rulings name, read once by a fresh agent that lists each difference with the ruling that covers it, or none, and read by you; the plan's ledger holds a record for each `rebuild: researcher` row that the file of the skill the row names holds what the source file did, checked by reading both; `git ls-files utils/check_coverage.py` prints nothing and `docs/dev/scripts.md` does not name it; the verify list of `docs/dev/building.md` passes on main.
 - Waits on: 6, for the review its `manuscript` mode calls; 5.C, for the last change to `paper`'s coverage rows.
 
-## 14. submit-manuscript
-
-- Status: [ ]
-- Goal: A skill that fills a submission portal from the project and the venue file, stops for every approval, never presses the final Submit, and writes a submission record. It also writes the cover letter, with suggested and excluded reviewers, and removes what identifies the authors for a blind review, from the venue file. Its design follows academic-paper's formatter and journal submission guide, for the parts its `rebuild: submit-manuscript` rows name: the agents, phases, cycles and stops are kept as the source has them, and each deviation from them is made only with its reason and your ruling in the plan's Rulings.
-- Gate: one real run on a portal up to its last page, with the record written; the plan's ledger holds a record for each `rebuild: submit-manuscript` row that the file of `skills/submit-manuscript/` the row names holds what the source file did, checked by reading both; the plan's ledger lists every deviation from the design of academic-paper, each with its reason and the ruling that approved it, and nothing else in the parts that rebuild it differs, checked by reading both skills.
-- Waits on: 13, for the venue files; 5, for the documents.
-
 ## 15. submit-grant
 
 - Status: [ ]
@@ -173,3 +166,4 @@ Status: `[ ]` open, `[~]` in progress, `[x]` done (its gate ran and passed, with
 - 10. idea: dropped, since the interview is `/paper plan`, and the novelty check is the `novelty` mode of entry 13.
 - 11. scaffold: dropped, since the rename of `repo-setup` gains nothing, and no entry left needs a second tree.
 - 12. project-docs: dropped, since no entry left needs it.
+- 14. submit-manuscript: dropped, since each portal differs and a submission is made a few times a year; the cover letter is in `paper`, and the submission checks go to entry 5.C.
