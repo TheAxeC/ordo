@@ -110,7 +110,7 @@ Detailed per-phase agent behavior and output descriptions for the 8-phase orches
   Argument Coherence (15%) | Writing Quality (15%)
 - Verdict: Accept / Minor Revision / Major Revision / Reject
 - Line-level feedback with suggested fixes
-- Max 2 revision loops -> back to Phase 4 [draft writer]
+- At most two reviews and one rewrite between them -> back to Phase 4 [draft writer]
 
 ---
 

@@ -51,9 +51,11 @@ python3 templates/apply_tex_patch.py main.tex patch.json \
     --output main.rev1.tex --acknowledge-structural
 ```
 
-`--acknowledge-structural` is a deliberate user decision, never a default; the flags stay recorded in the apply report either way.
+`--acknowledge-structural` is the user's acknowledgment at the stop "A structural patch", never a default. The session applies it without a stop only for the rewrite of full mode's revision loop and for the conversion patches of format-convert's copy, and after the user chose a full re-emission at a stop. The flags stay recorded in the apply report either way.
 
-**Full re-emission (escalated rounds only):** when a round genuinely demands restructuring, the round runs as legacy full re-emission after explicit confirmation, never as a silent fallback. Afterwards, re-anchorize from scratch (a NEW ID generation; the old manifest and any old patches are dead) and record the round as `mode: full_reemission_escalated`.
+A patch the user refuses at the stop is narrowed once. A narrowed patch that is structural again raises the stop again, where the user acknowledges it or ends the change, and no change is dropped without the user's answer.
+
+**Full re-emission (escalated rounds only):** when a round genuinely demands restructuring, the round runs as legacy full re-emission after the user chose it at the stop "A revision item that needs restructuring", never as a silent fallback. Afterwards, re-anchorize from scratch (a NEW ID generation; the old manifest and any old patches are dead) and record the round as `mode: full_reemission_escalated`.
 
 ## Paper's addition: the patch file
 
@@ -104,11 +106,11 @@ The ids are:
 
 ### A patch over every block
 
-When the user confirms full re-emission at the escalation of "On exit 2" or "On exit 3" above, the agent writes the whole file again as one patch over every block of the manifest the session gives it.
+When the user chooses full re-emission, at the stop "A patch that does not apply" (the second failure of "On exit 2" above) or at the stop "A revision item that needs restructuring", the agent writes the whole file again as one patch over every block of the manifest the session gives it.
 
 - The patch has one op for each block of the manifest, in the manifest's order, and no block is left without an op.
 - A block the file keeps, changed or not, takes a `replace_block` op whose `new_text` is the block as the file should read.
 - A block the change removes takes a `delete_block` op.
 - Text the change adds between two blocks goes into the `new_text` of the block before it.
 - Each op names the ids of the change in `roadmap_item_ids`, the ids of the patch that did not apply.
-- The patch is structural, and the session applies it with `--acknowledge-structural`, since the user's answer is the confirmation of the full rewrite.
+- The patch is structural, and the session applies it with `--acknowledge-structural`. The user's choice of the full re-emission is the confirmation, and the rewrite of full mode's revision loop needs none.

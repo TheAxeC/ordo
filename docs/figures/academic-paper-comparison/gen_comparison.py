@@ -972,6 +972,8 @@ INCREMENTAL = (
     f"at intake {GOAL}"
 )
 CLOSING = f"/writing review, unless you said no at intake {GOAL}"
+REPLY_STOP = "The reply to the closing review"
+REPLACE_STOP = "A converted file to replace, when a converted output already stands"
 FINDINGS = f"Draft writer: the findings you pick, or the autonomous pass, as a patch {GOAL}"
 
 
@@ -1037,7 +1039,9 @@ def paper_full_detailed() -> gf.Graph:
             "Final checklist: content, format, required elements, DOIs; compile errors "
             "fixed, warnings accepted",
         ),
+        N("SO", REPLACE_STOP, "stop"),
         N("WG", CLOSING, "ruled_maybe"),
+        N("WR", REPLY_STOP, "stop"),
         N("WA", FINDINGS, "ruled_maybe"),
         N("X7", "Output package"),
     )
@@ -1084,10 +1088,12 @@ def paper_full_detailed() -> gf.Graph:
         E("CK", "F7"),
         E("F7", "K7"),
         E("K7", "F7", "an item fails: fix it and check it again, no cap", "back"),
+        E("F7", "SO"),
         E("K7", "WG"),
-        E("WG", "WA", "your reply"),
+        E("WG", "WR"),
+        E("WR", "WA", "the findings you name"),
         E("K7", "X7", "no /writing review"),
-        E("WG", "X7"),
+        E("WR", "X7", "none, or no reply"),
         E("WA", "X7"),
     )
     return _g(nodes, edges, PATCH_STOPS, WIDE_WIDTH)
@@ -1106,7 +1112,18 @@ def paper_revision_detailed() -> gf.Graph:
         N("RW", "Draft writer: a patch per item, never a full draft"),
         N("AP", "Script: apply the patch to a new file", "script"),
         N("D1", "You decide: retry, full re-emission or abort", "stop"),
-        N("D2", "You acknowledge it, or the patch is narrowed", "stop"),
+        N(
+            "D2",
+            "You acknowledge it, or the patch is narrowed once; structural again, you "
+            "acknowledge it or end the change",
+            "stop",
+        ),
+        N(
+            "DX",
+            "A revision item that needs restructuring: you choose a full re-emission or "
+            "narrowed items",
+            "stop",
+        ),
         N("RC", f"{CLAIMS}, new references among them", "ruled"),
         N("SS", STYLE_STOP, "stop"),
         N("CS", CLAIM_STOP, "stop"),
@@ -1128,6 +1145,7 @@ def paper_revision_detailed() -> gf.Graph:
             "ruled_maybe",
         ),
         N("WG", CLOSING, "ruled_maybe"),
+        N("WR", REPLY_STOP, "stop"),
         N("WA", FINDINGS, "ruled_maybe"),
         N("RX", "Revised draft, apply reports, revision log, the rest as limitations"),
     )
@@ -1135,6 +1153,8 @@ def paper_revision_detailed() -> gf.Graph:
         E("SQ", "RP"),
         E("RP", "AN"),
         E("AN", "RW"),
+        E("RW", "DX", "the writer's tag in place of a patch"),
+        E("DX", "RW", "your choice", "back"),
         E("RW", "AP"),
         E("AP", "RW", "exit 2: the writer emits the patch once more", "back"),
         E("AP", "D1", "a second rejection"),
@@ -1156,8 +1176,9 @@ def paper_revision_detailed() -> gf.Graph:
         E("RL", "LC"),
         E("LC", "WG"),
         E("CK", "WG", "a /writing report as the comments"),
-        E("WG", "WA", "your reply"),
-        E("WG", "RX"),
+        E("WG", "WR"),
+        E("WR", "WA", "the findings you name"),
+        E("WR", "RX", "none, or no reply"),
         E("WA", "RX"),
     )
     return _g(nodes, edges, width=WIDE_WIDTH)
@@ -1336,6 +1357,7 @@ def paper_plan_detailed() -> gf.Graph:
 def paper_format_convert_detailed() -> gf.Graph:
     nodes = (
         N("Q", "Session asks: the targets, the format profile, the materials", "stop"),
+        N("ST", "The target to settle, with the supported targets listed", "stop"),
         N(
             "PD",
             f"Script, run by the session: pandoc, a .md or a .docx to the .tex every "
@@ -1366,9 +1388,14 @@ def paper_format_convert_detailed() -> gf.Graph:
             f"counted in each output {GOAL}",
             "script",
         ),
+        N("SO", REPLACE_STOP, "stop"),
         N("X", "Formatted document"),
     )
     edges = (
+        E("Q", "ST", "a target that is not supported"),
+        E("ST", "F"),
+        E("CV", "SO"),
+        E("SO", "CV", "you confirm", "back"),
         E("Q", "PD", "a .md or a .docx"),
         E("Q", "F"),
         E("PD", "F"),

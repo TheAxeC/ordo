@@ -173,7 +173,7 @@ Steps 1 to 6 run once, in order, before the items of the mode. Steps 7 to 14 are
    - Full, outline-only, abstract-only, lit-review and plan run the intake agent. See `references/intake.md` for the complete field definitions of the configuration interview. The interview covers 9 core items: paper type, discipline, target journal, citation format, output format, language, abstract, word count, and existing materials, plus co-authors, funding, optional style calibration, the domain evidence profile (Step 12), the citation-verification level (Step 13: mark only by default / strict opt-in, recorded in the row Citation Verification) and the rows of `paper`'s checks (Step 14). Plan mode runs the simplified interview of `references/intake.md`, "Plan Mode Detection". It outputs `config.md`, awaiting user confirmation.
    - Start the intake agent (Steps 8), given the call with its arguments, the earlier outputs of "What it reads" 6 and the files of "What it reads" 5. It writes `config.md` in the run folder.
    - Put its questions to the user, give the answers to the agent, resumed (Steps 8), and show `config.md` whole at the stop "The intake confirmation" (Checkpoint Rules 1). A change the user asks for goes to the agent the same way.
-   - The modes with no intake agent (revision, response-letter, format-convert, citation-check, disclosure, revision-coach, rebuttal-audit, and the two calls) take what they need from the call; the session asks the user only for what the mode's items name, in one message, and writes the answers into `config.md`. Revision asks the rows Closing review, Claim check, Incremental checks, Claims not to make and Earlier papers of `references/intake.md`, Step 14, and citation-check the rows Claims not to make and Earlier papers. Both also ask where the study's result files and code are, or "none", and write the answer into the row Existing Materials.
+   - The modes with no intake agent (revision, response-letter, format-convert, citation-check, disclosure, revision-coach, rebuttal-audit, and the two calls) take what they need from the call; the session asks the user only for what the mode's items name, in one message, and writes the answers into `config.md`. That message is the stop "The session's questions". Revision asks the rows Closing review, Claim check, Incremental checks, Claims not to make and Earlier papers of `references/intake.md`, Step 14, and citation-check the rows Claims not to make and Earlier papers. Both also ask where the study's result files and code are, or "none", and write the answer into the row Existing Materials.
    - Done when the user has confirmed the record, or, in a mode with no intake agent, `config.md` holds the answers.
 7. Make the temporary folder.
    - It is made with `mktemp -d` before the first compile, the first fetch or the first start of the literature strategist.
@@ -219,7 +219,11 @@ Steps 1 to 6 run once, in order, before the items of the mode. Steps 7 to 14 are
     - Exit 2 with the field `kind` `validation` or `schema`: the session gives the role that wrote the patch the rejection as printed, resumed (Steps 8 and 9), for ONE re-emission of the whole patch against the current manifest. A second rejection is the stop "A patch that does not apply".
     - Exit 2 with the field `kind` `stale-manifest`: anchorize again (Steps 9), and the agent writes the patch once more. It counts as that one re-emission.
     - Exit 2 with the field `kind` `output`, or with a usage message on standard error: the session's own call is wrong, and the session corrects its call.
-    - Exit 3: the stop "A structural patch". When the user acknowledges it, the session runs the apply with `--acknowledge-structural`. When the user refuses it, the agent narrows the patch once. A narrowed patch that is structural again is not applied, and the final message lists the change as not applied.
+    - Exit 3: the stop "A structural patch". When the user acknowledges it, the session runs the apply with `--acknowledge-structural`. When the user refuses it, the agent narrows the patch once.
+    - A narrowed patch that is structural again raises the stop "A structural patch" again, where the user acknowledges it or ends the change.
+    - A change the user ends is not applied, and the final message lists it.
+    - No change is dropped without the user's answer.
+    - The rewrite of full mode's revision loop and the patches of format-convert's copy are applied with `--acknowledge-structural` and raise no stop (full item 10, format-convert items 5 and 8).
     - Exit 4 or exit 1: the stop "A script failed", with the output as printed. The file stays as it was.
     - At the stop "A patch that does not apply" the user decides: re-anchorize and retry the round, escalate to full re-emission, or abort.
       - Retry: the session anchorizes again (Steps 9), and the agent writes the patch again for the current manifest, checked and applied as above. `checks.md` lists each try with its rejection.
@@ -244,6 +248,7 @@ Steps 1 to 6 run once, in order, before the items of the mode. Steps 7 to 14 are
     - A log line `Overfull \hbox` or `Overfull \vbox` of more than 10pt goes to the draft writer the same way. `grep '^Overfull \\[hv]box' '<log>' | awk -F'[(p]' '{v=$2+0; if (v>10) print}'` prints each such line.
     - A box of 10pt or less and a line `LaTeX Warning: Float too large` start no fix.
     - The compile runs once more in a new copy of the temporary folder, and what is left is named in the final message.
+    - The reference fix and the compile fix each run once for each use of this step, not once for the run.
     - A patch of the reference fix or of the compile fix that adds or changes a cited sentence gets the incremental check of Steps 12 once it is applied.
     - In figures the compile runs once, and what it prints is named in the final message.
     - A runner without `latexmk` is named in the final message.
@@ -262,7 +267,9 @@ Steps 1 to 6 run once, in order, before the items of the mode. Steps 7 to 14 are
     - The agent left the entries' format as it was, and its patches for the claims are applied before the stop.
     - Append the user's answer to `config.md` under "Decisions".
     - After the answer, resume the agent (Steps 8 and 9) for the format work only, given the confirmed style. It corrects the entries as one patch and reads no source again. Apply the patch (Steps 10).
-    - The agent judges each claim of the manuscript (`references/citation-compliance.md`, "Judging a claim"). A claim not in its source is flagged as potential fabrication and the check stops there, as academic-paper's "Per-Citation Verification Algorithm" says. That claim, with each claim whose source no way could read and each claim the paper must not make that the agent found by then, goes to the stop "A claim the run cannot support", raised once the agent has ended and its patches are applied. When the user has answered, the agent is resumed (Steps 8 and 9) for the claims after the one that stopped the check.
+    - The agent judges each claim of the manuscript (`references/citation-compliance.md`, "Judging a claim"). A claim not in its source is flagged as potential fabrication and the check stops there, as academic-paper's "Per-Citation Verification Algorithm" says. That claim, with each sentence the agent found by then that states a claim of the row Claims not to make, goes to the stop "A claim the run cannot support", raised once the agent has ended and its patches are applied. When the user has answered, the agent is resumed (Steps 8 and 9) for the claims after the one that stopped the check.
+    - A source that no way of `references/citation-compliance.md`, "Reading the source", could read stops nothing.
+    - `citation-report.md` lists it under "Sources not read", with each address tried and its status, and the final message names it.
     - The results check runs in full, revision and citation-check, whatever the row Claim check says (`references/citation-compliance.md`, "The results check"). The agent reads each statement about the study's own results and each description of the data handling against the result files and the code, and lists each one they do not bear out as an issue `R<m>` of its report.
       - In full and revision, resume the draft writer (Steps 8 and 9) once with those issues. It writes a patch with the ids `R<m>` (`references/draft-writer.md`, "The results-check patch"). Apply it (Steps 10).
       - In citation-check, which has no draft writer, the issues stand in the report and the final message names them.
@@ -272,7 +279,7 @@ Steps 1 to 6 run once, in order, before the items of the mode. Steps 7 to 14 are
     - Every other reference no lookup confirms, and under mark only a failing DOI or arXiv ID too, is marked "unconfirmed" in `citation-report.md` and named in the final message, and the run goes on.
     - Run `lookup.py cite-keys`, `check-urls` and `quote-check '<run folder>/citation-report.md' '<.bib>' '<temporary folder>'` after the patches, and write the runs to `checks.md` (Steps 11). A failure of these checks is named in the final message.
     - The incremental check follows each later patch of the draft writer in a full or revision run that adds or changes a cited sentence, once the first check above has run (`references/citation-compliance.md`, "The incremental check"). It runs only when the rows Claim check and Incremental checks of `config.md` are both yes. With either row no, no check runs after the later patches.
-      - The patches are the draft writer's rewrite of each revision loop of full mode, the results-check patch above, the reference fix and the compile fix (Steps 11), and the findings pass (Steps 13). Each check starts after its patch is applied (Steps 10).
+      - The patches are the draft writer's one rewrite of full mode's revision loop, the results-check patch above, the reference fix and the compile fix (Steps 11), and the findings pass (Steps 13). Each check starts after its patch is applied (Steps 10).
       - A patch whose operations have no cite command in their `new_text` gets no check, and `checks.md` names the patch's number and says it holds no cited sentence.
       - Resume the citation compliance agent (Steps 8 and 9), given the patch file, the outputs of `cite-keys` and `check-urls` on the patched files and the temporary folder. It writes `citation-report-<nn>.md`, with `<nn>` the patch's number, and patches with the ids `C<m>`.
       - Apply its patches (Steps 10), run `quote-check '<run folder>/citation-report-<nn>.md' '<.bib>' '<temporary folder>'`, `cite-keys` and `check-urls`, and write the runs to `checks.md`.
@@ -281,6 +288,8 @@ Steps 1 to 6 run once, in order, before the items of the mode. Steps 7 to 14 are
       - An issue of an incremental check starts no writer pass. The agent closes it with its own `C<m>` patch or lists it in `citation-report-<nn>.md`, a drift item with suggested wording and no patch.
       - The session sends no item of `citation-report-<nn>.md` to the draft writer, and the final message names each item the report leaves.
     - When the user asks to calibrate the claim check, the session runs the procedure of "Calibration" in `references/citation-compliance.md` in a run of its own, with no manuscript, and tells the user the counts that `templates/calibration_counts.py` prints.
+      - The calibration reaches two stops. At "The calibration's folder" the session asks the user for the folder that holds the pairs.
+      - At "The calibration's pairs" the user reads the 25 pairs and how each was built, and confirms or drops each.
     - Done when `citation-report.md` exists, its patches are applied, `checks.md` holds the runs of the checks, the stop "A claim the run cannot support" is answered when the report lists such a claim, and each results-check issue is patched or named in the final message. An incremental check is done when `citation-report-<nn>.md` exists, its patches are applied and `checks.md` holds the runs, or when `checks.md` says the patch holds no cited sentence.
 13. The closing review: review the manuscript with `/writing` in full and revision, when the row Closing review of `config.md` is yes.
     - With the row no, nothing of this step runs: the run ends after the compile of Steps 11, and the final message says, in a sentence of its own, that `/writing` can be run on the manuscript and that `/paper revision <main.tex> <report>` takes its report.
@@ -288,6 +297,7 @@ Steps 1 to 6 run once, in order, before the items of the mode. Steps 7 to 14 are
     - The final message (Steps 14) shows its numbered report whole, with the numbers `/writing` prints before its findings.
     - The final message says, in a sentence of its own, what a one-line reply starts: the draft writer for those findings, the incremental citation check of its patches when Steps 12 gives them one, and the compile again. The sentence gives the forms `all`, `all but 3, 7`, `2, 5` and `none`.
     - The final message says, in a sentence of its own, that the user can instead ask for an autonomous writer pass, in which the draft writer judges each finding, applies the ones it accepts and lists the rest with its reason.
+    - The wait for that reply is the stop "The reply to the closing review". With no reply the run stays ended as the final message left it.
     - A reply goes to the draft writer of the run, resumed (Steps 8 and 9), with the named findings, each with its number and text, as `references/draft-writer.md`, "The `/writing` findings", gives. Each op of its patch names `F<k>` for the finding `k` it answers, and the patches are applied as Steps 10 says. The autonomous pass goes to the draft writer the same way with every finding.
     - After the findings pass is applied, make a new temporary folder (Steps 7), run the incremental check of the pass's patches when Steps 12 gives them one, and compile (Steps 11). The folder is removed after the compile. A reply `none` runs none of this.
     - A number the report does not have is answered by naming the numbers it has, up to 3 answers in all. A third answer with a number the report does not have is taken as `none`.
@@ -299,6 +309,7 @@ Steps 1 to 6 run once, in order, before the items of the mode. Steps 7 to 14 are
     - Each report line that returns something to the user (Steps 8) stands in it.
     - In full and revision it lists each `citation-report-<nn>.md` the run wrote, and `<main>.pdf`.
     - It also lists every issue that goes to the user: `unused:` lines, and references and checks left failing; acknowledged limitations and gaps; each `[GAP: ...]` of a statement only the authors can give; every change not applied.
+    - In full, revision and citation-check it names each source a citation report lists under "Sources not read", with each address tried and its status (Steps 12).
     - In full, revision and citation-check it lists the results-check issues no patch answered, or says that the statements about the study's own results were not checked for want of result files and code (Steps 12).
     - In full and revision it lists each item an incremental check's report leaves (Steps 12), and says so when the row Claim check or Incremental checks was no.
     - The final message of full and revision also lists the sources that only a preprint server or no index matched, taken from the Summary and the Lookups table of `citation-report.md`.
@@ -316,11 +327,11 @@ Phase 3: ARGUMENTATION -> [the argument builder]           -> Argument Blueprint
 Phase 4: DRAFTING      -> [the draft writer]               -> Complete Draft
 Phase 5a: CITATIONS    -> [the citation compliance agent]  -> Citation Audit Report
 Phase 5b: ABSTRACT     -> [the abstract agent]             -> Abstract + Keywords  (parallel)
-Phase 6: PEER REVIEW   -> [the peer reviewer]              -> Review Report (max 2 revision loops)
+Phase 6: PEER REVIEW   -> [the peer reviewer]              -> Review Report (at most two reviews, one rewrite between them)
 Phase 7: FORMAT        -> [the formatter]                  -> Final Output Package
 ```
 
-Stops this mode can reach: the mode to run (only for a plain request), the intake confirmation, the sources' review, the outline's approval, a generator phase aborted, the draft review does not pass, a claim the run cannot support, a reference that cannot be confirmed (only under strict), the citation style to confirm, a structural patch, a patch that does not apply, and a script failed.
+Stops this mode can reach: the mode to run (only for a plain request), the intake confirmation, the sources' review, the outline's approval, a generator phase aborted, the draft review does not pass, a claim the run cannot support, a reference that cannot be confirmed (only under strict), the citation style to confirm, a structural patch, a patch that does not apply, a converted file to replace (only for a target other than `latex` and `pdf`), the reply to the closing review (only with the row Closing review yes), and a script failed.
 
 1. Phase 1: start the literature strategist (Steps 8), as the literature search of Steps 8 says, unless the user skips Phase 1 by providing own sources (Checkpoint Rules 5), such as an earlier lit-review run taken at intake.
    - It is given `config.md` and the sources given: the `refs.bib` of `<project folder>/manuscript/` with its manifest (Steps 9) when one stands, and the `.bib` the Existing Materials row names.
@@ -361,8 +372,8 @@ Stops this mode can reach: the mode to run (only for a plain request), the intak
     - Phase 6a: start the peer reviewer (Steps 8) with the Phase 6a sub-section of `references/peer-reviewer.md` and its user content, the writer's most recent `<phase4a_output>` among it. A lint failure is retried once with the gap hinted, and a second failure is the stop "A generator phase aborted".
     - Phase 6b: start a fresh peer reviewer with the Phase 6b sub-section and its user content, the contract's inputs alone: the `evaluator_full` contract, the Phase 6a output in `<phase6a_output>` delimiters, the writer's `<phase4a_output>` and the draft. It writes `review-<r>.md`, with `<r>` the round. A failure of the Phase 6b lint is the stop "A generator phase aborted".
     - An Evaluator Decision `accept` or `accept_with_dissent_note` goes on to item 11.
-    - A `request_revision` is a revision loop (Checkpoint Rules 3: at most 2). The Phase 4b draft writer, resumed (Steps 8 and 9) with the review, the revision log and the files with their manifests, rewrites the whole draft as one patch over every block of the manifest (`references/revision-patch-protocol.md`, "A patch over every block"), its ops naming the review's issues `D<r>-<m>`, and handles all Critical and Major issues. Apply it with `--acknowledge-structural` (Steps 10), run the incremental check when Steps 12 gives the patch one, and resume the Phase 6b peer reviewer (Steps 8) with the rewritten draft for round `<r+1>`. Phase 6a is not run again.
-    - After round 2 the peer reviewer's decision follows `references/peer-reviewer.md`, "Revision Progress Tracking (Max 2 Rounds)": an Overall Score of 6.5 or more goes on to item 11; a score below 6.5 with every Critical issue resolved goes on with the remaining issues as "Acknowledged Limitations"; a score below 6.5 with a Critical issue unresolved, or an Evaluator Decision `flag_for_reviewer_stage`, is the stop "The draft review does not pass", since Critical-severity issues block progression to Phase 7 (Checkpoint Rules 4).
+    - Full mode has at most two reviews and one rewrite between them (Checkpoint Rules 3). A `request_revision` of the first review starts that rewrite, the revision loop. The Phase 4b draft writer, resumed (Steps 8 and 9) with the review, the revision log and the files with their manifests, rewrites the whole draft as one patch over every block of the manifest (`references/revision-patch-protocol.md`, "A patch over every block"), its ops naming the review's issues `D<r>-<m>`, and handles all Critical and Major issues. Apply it with `--acknowledge-structural` (Steps 10), run the incremental check when Steps 12 gives the patch one, and resume the Phase 6b peer reviewer (Steps 8) with the rewritten draft for the second review, round 2. Phase 6a is not run again.
+    - After the second review no rewrite and no third review follow, unless the user chooses an expanded revision at the stop "The draft review does not pass": the stop "The draft review does not pass" or item 11 and Phase 7 follows. The peer reviewer's decision follows `references/peer-reviewer.md`, "Revision Progress Tracking (Max 2 Rounds)": an Overall Score of 6.5 or more goes on to item 11; a score below 6.5 with every Critical issue resolved goes on with the remaining issues as "Acknowledged Limitations"; a score below 6.5 with a Critical issue unresolved, or an Evaluator Decision `flag_for_reviewer_stage`, is the stop "The draft review does not pass", since Critical-severity issues block progression to Phase 7 (Checkpoint Rules 4).
     - Done when the decision goes on to item 11, or the stop is answered.
 11. Check the references after the last writer pass, then compile (Steps 11).
     - Done when the done criteria of Steps 11 hold.
@@ -393,17 +404,23 @@ In revision mode the draft writer does NOT re-emit the complete paper. The round
 
 - **Anchorize** the draft (`anchorize_tex.py`, content-neutral): a block manifest (`base_sha256` + per-block hash) is written. Nothing may rewrite the draft between this step and apply.
 - **The writer emits a patch document** in the run folder's `patches/`: block ops with hash preconditions copied from the manifest, each op tracing to `roadmap_item_ids`. See `references/revision-patch-protocol.md`.
-- **Deterministic apply** (`apply_tex_patch.py`): two-phase fail-closed: one stale hash rejects the whole patch with the base byte-untouched; untouched blocks are preserved byte-identical by construction. Structural shapes (heading rewrites/deletes, section-count change, touched-ratio > 0.6) refuse without an explicit acknowledge that only the escalation checkpoint may grant. The apply report (`preserved_ratio`, ops, structural flags) is a **required input to re-review** alongside the revised draft.
-- **Escalation, never silent fallback:** restructure-demanding rounds go to a MANDATORY user checkpoint; a confirmed full re-emission round is recorded as `mode: full_reemission_escalated` and the draft is re-anchorized afterwards (new ID generation).
+- **Deterministic apply** (`apply_tex_patch.py`): two-phase fail-closed: one stale hash rejects the whole patch with the base byte-untouched; untouched blocks are preserved byte-identical by construction. Structural shapes (heading rewrites/deletes, section-count change, touched-ratio > 0.6) refuse without `--acknowledge-structural`, which the session gives only as Steps 10 says. The apply report (`preserved_ratio`, ops, structural flags) is a **required input to re-review** alongside the revised draft.
+- **Escalation, never silent fallback:** restructure-demanding rounds go to the stop "A revision item that needs restructuring"; a confirmed full re-emission round is recorded as `mode: full_reemission_escalated` and the draft is re-anchorized afterwards (new ID generation).
 
 The session runs the scripts; the exact commands are in `references/revision-patch-protocol.md`. Honest boundary, stated once: patch mode removes the silent-distortion channel for text the revision does not touch; it does not make the revision itself better.
 
-Stops this mode can reach: the mode to run (only for a plain request), a claim the run cannot support, a reference that cannot be confirmed (only under strict), the citation style to confirm, a structural patch, a patch that does not apply, and a script failed.
+Stops this mode can reach: the mode to run (only for a plain request), the session's questions, a revision item that needs restructuring, a claim the run cannot support, a reference that cannot be confirmed (only under strict), the citation style to confirm, a structural patch, a patch that does not apply, the reply to the closing review (only with the row Closing review yes), and a script failed.
 
 1. Start the peer reviewer (Steps 8), given `config.md`, the main `.tex` and the comments file. It writes `items.md`, the comments as a revision roadmap.
    - A comments file that is a `/writing` report gives items `W<k>`, with `<k>` the number the report gives the finding. Any other comments file gives items `R<n>-<m>`.
    - Done when `items.md` holds each comment as an item with its id.
 2. Start the draft writer (Steps 8 and 9), given `config.md`, `items.md`, the draft's files with their manifests and `references/revision-tracking-template.md`. It writes one patch per item or group of items, its ops naming the ids of the items they answer, never a full draft, and the revision log in the tracking template's form as `revision-log.md` in the run folder. An item it does not address is logged with its status and reason. A new reference it adds is an entry `lookup.py bibtex` prints, in the `.bib` patch.
+   - A writer that answers with the tag `[PATCH-ESCALATION-REQUIRED: layer=pre_drafting, items=<ids>, reason=<one line per item>]` writes no patch (`references/draft-writer.md`, "Pre-drafting escalation classification"). The session raises the stop "A revision item that needs restructuring", which shows each item the tag names with its reason.
+     - Full re-emission: the writer, resumed (Steps 8 and 9), writes the whole file again as one patch over every block of the manifest (`references/revision-patch-protocol.md`, "A patch over every block").
+     - The session applies it with `--acknowledge-structural`, anchorizes the file again from scratch (Steps 9) and appends `mode: full_reemission_escalated` for the round to `config.md` under "Decisions".
+     - Narrowed items: the user gives each named item in a narrower wording or takes it out. The session writes the narrowed items into `items.md`, and the writer, resumed (Steps 8 and 9), writes its patches for them.
+     - An item the user takes out is named in the revision log as not changed, with the user's answer as the reason.
+     - A narrowed item the writer tags again raises the stop again.
    - Apply the patches (Steps 10).
    - Done when each item is changed or named in the revision log as not changed, with the reason.
 3. Check the citations of the revised draft with the citation compliance agent (Steps 12), the new references of the revision among them.
@@ -550,14 +567,14 @@ Lit-review mode gives an annotated bibliography, a literature matrix and a synth
 
 Text formats: LaTeX (.tex + .bib), DOCX (via Pandoc), PDF (via LaTeX or Pandoc), Markdown. Citation formats: APA 7.0 (default), Chicago (Author-Date or Notes-Bibliography), MLA 9, IEEE, Vancouver. The formatter supports late-stage citation format conversion between any two supported formats via "Convert citations to [format]".
 
-Stops this mode can reach: the mode to run (only for a plain request), a structural patch, a patch that does not apply, and a script failed.
+Stops this mode can reach: the mode to run (only for a plain request), the session's questions, the target to settle, a converted file to replace, a structural patch, a patch that does not apply, and a script failed.
 
-Format-convert has no intake agent. The session asks the user, in one message, for what the items below name and the call does not give, and writes the answers into `config.md` (Steps 6): the targets, the Format Profile of `references/intake.md`, Step 5, and the Existing Materials, such as a reference `.docx`, a CSL file or a venue's template.
+Format-convert has no intake agent. The session asks the user, in one message, the stop "The session's questions", for what the items below name and the call does not give, and writes the answers into `config.md` (Steps 6): the targets, the Format Profile of `references/intake.md`, Step 5, and the Existing Materials, such as a reference `.docx`, a CSL file or a venue's template.
 
 1. Settle the targets from the call and the session's question (Steps 6).
    - A call with no target takes Markdown, and the session's question names it.
-   - A target outside `docx`, `pdf`, `markdown` and `latex`, the citation styles of the table in `references/intake.md` and a venue, such as HTML or Harvard, is asked again with the supported targets listed.
-   - A `.bib` given takes one citation style and the targets `docx` and `markdown`. Item 10 makes its reference list, and items 2 to 9 do not run. A `.bib` with no citation style, or with another target, is asked again.
+   - A target outside `docx`, `pdf`, `markdown` and `latex`, the citation styles of the table in `references/intake.md` and a venue, such as HTML or Harvard, raises the stop "The target to settle", which lists the supported targets.
+   - A `.bib` given takes one citation style and the targets `docx` and `markdown`. Item 10 makes its reference list, and items 2 to 9 do not run. A `.bib` with no citation style, or with another target, raises the stop "The target to settle".
    - The run changes the citation style when a target is a citation style other than the one the manuscript states by its `\bibliographystyle` line or its `biblatex` style, and for a `.tex` made from a `.md` or a `.docx` when a target is any citation style. A run that does not change the style leaves the manuscript's own style as it stands.
    - Done when every target is a supported one.
 2. For a `.md` or a `.docx` given, make the LaTeX source every target is converted from.
@@ -630,7 +647,9 @@ Format-convert has no intake agent. The session asks the user, in one message, f
    - A numbered style leaves out `--citeproc` and `--bibliography`, since the patch prints its numbers and its list.
    - Every other case gives them, with `--csl` when a CSL file is held: a label with a year or a label that is no number, an `.aux` with no `\bibcite` line (`biblatex` writes `\abx@aux@cite` lines in its place, and a `.tex` made from a `.md` or a `.docx` cites nothing before its patch), and no `.aux`.
    - Every path and value in these commands (the main `.tex`, the `.bib`, the CSL file, the reference `.docx`, each figure, each output and each option value of `reference_docx.py`) is one single-quoted argument, and a quote inside it is written `'\''` (Steps 2).
-   - A converted file that already stands beside the main `.tex` is replaced only after the session's question (Steps 6) has named it and the user has confirmed it.
+   - A converted file that already stands beside the main `.tex` raises the stop "A converted file to replace", which names it.
+   - It is replaced only after the user has confirmed it.
+   - A file the user does not confirm stays as it is, and the final message names its target as not written.
    - An output whose path equals the input's takes `<name>-2.<extension>`, named in the final message, and the input is never replaced.
    - Each command, its output and its exit status go to `checks.md`.
    - With an author-year style and no CSL file among the Existing Materials, `pandoc` renders the citations in Chicago author-date, its default style.
@@ -682,7 +701,10 @@ Format-convert has no intake agent. The session asks the user, in one message, f
      ```
    - Run `pandoc 'list-md.tex' -s -t gfm -o '<.bib folder>/<name>-<style>.md'` and the same with `-o '<.bib folder>/<name>-<style>.docx'` and no `-t`, with `<name>` the `.bib`'s name without `.bib` and `<style>` one of `apa7`, `chicago`, `mla9`, `ieee` and `vancouver`.
    - The CSL route: write `list/list.md` with the Write tool, holding a YAML block with the lines `nocite: '@*'`, `bibliography: refs.bib` and `csl: '<csl file>'` between two lines of `---`. Run `pandoc 'list.md' --citeproc -t gfm -o '<.bib folder>/<name>-<style>.md'` and the same for `.docx` without `-t`.
-   - A file of those names that already stands is replaced only after the session's question (Steps 6) has named it and the user has confirmed it. Each command, its output and its exit status go to `checks.md`. A runner without `pandoc`, `latex` or `bibtex` gets no list, and the final message names the program as missing.
+   - A file of those names that already stands raises the stop "A converted file to replace", which names it.
+   - It is replaced only after the user has confirmed it, and a file the user does not confirm stays as it is and is named in the final message as not written.
+   - Each command, its output and its exit status go to `checks.md`.
+   - A runner without `pandoc`, `latex` or `bibtex` gets no list, and the final message names the program as missing.
    - Done when `<name>-<style>.md` and `<name>-<style>.docx` stand beside the `.bib`, or the final message names why not.
 11. End the run (Steps 14).
    - After the conversion, append to `format-report.md` a section "Conversion commands" with each command the session ran and its exit status, read from `checks.md`.
@@ -697,7 +719,7 @@ Format-convert has no intake agent. The session asks the user, in one message, f
 
 ### citation-check
 
-Stops this mode can reach: the mode to run (only for a plain request), a claim the run cannot support, a reference that cannot be confirmed (only under strict), the citation style to confirm, a structural patch, a patch that does not apply, and a script failed.
+Stops this mode can reach: the mode to run (only for a plain request), the session's questions, a claim the run cannot support, a reference that cannot be confirmed (only under strict), the citation style to confirm, a structural patch, a patch that does not apply, and a script failed.
 
 1. Check the citations with the citation compliance agent (Steps 12): the cross-check, the format, the DOI, the retractions, each claim against its source and the results check. The rows Claims not to make and Earlier papers of `config.md` are given to it, and it flags the passages that closely repeat the earlier papers, as `references/citation-compliance.md` says.
    - Done when the done criterion of Steps 12 holds.
@@ -705,9 +727,9 @@ Stops this mode can reach: the mode to run (only for a plain request), a claim t
 
 ### disclosure
 
-Stops this mode can reach: the mode to run (only for a plain request), the venue's policy, the uncertain AI use, a structural patch, a patch that does not apply, and a script failed.
+Stops this mode can reach: the mode to run (only for a plain request), the session's questions (only for a call with no selector), the venue's policy, the uncertain AI use, a structural patch, a patch that does not apply, and a script failed.
 
-1. Read the selector of the call. A call with neither `--venue=<v>` nor `--policy-anchor=<a>` is asked for one (Steps 6), as `references/disclosure-mode-protocol.md` gives.
+1. Read the selector of the call. A call with neither `--venue=<v>` nor `--policy-anchor=<a>` is asked for one at the stop "The session's questions" (Steps 6), as `references/disclosure-mode-protocol.md` gives.
    - A venue outside `references/venue-disclosure-policies.md` is the stop "The venue's policy": the user pastes the venue's current policy, which is used for this run only.
    - Done when the selector and its policy are known.
 2. Start the formatter (Steps 8 and 9), given `config.md`, `references/disclosure-mode-protocol.md`, the manuscript's files, the run folders beside the manuscript and the model identifier of Steps 4. It marks each category of AI use USED, NOT USED or UNCERTAIN, as that page gives, and writes `disclosure.md` in the run folder with each category marked.
@@ -776,7 +798,7 @@ Stops this call can reach: the mode to run (only for a plain request), a structu
 | 5 | the draft writer (`references/draft-writer.md`) | Section-by-section full draft writing, discipline register adjustment, word count tracking | Phase 4 |
 | 6 | the citation compliance agent (`references/citation-compliance.md`) | Citation format verification, reference list completeness, DOI checking | Phase 5a |
 | 7 | the abstract agent (`references/abstract-bilingual.md`) | Abstract (EN), 5-7 keywords | Phase 5b |
-| 8 | the peer reviewer (`references/peer-reviewer.md`) | Simulated double-blind review, five-dimension scoring, revision suggestions (max 2 rounds) | Phase 6 |
+| 8 | the peer reviewer (`references/peer-reviewer.md`) | Simulated double-blind review, five-dimension scoring, revision suggestions (at most two reviews, one rewrite between them) | Phase 6 |
 | 9 | the formatter (`references/formatter.md`) | Convert to LaTeX/DOCX (via Pandoc)/PDF/Markdown, journal formatting, cover letter, citation format conversion (APA 7 / Chicago / MLA / IEEE / Vancouver) | Phase 7 |
 | 10 | the Socratic mentor (`references/socratic-mentor.md`) | Plan mode Socratic mentor: chapter-by-chapter guidance, convergence criteria (4 signals), question taxonomy (4 types), INSIGHT extraction | Plan Step 0-3 |
 | 11 | the visualization agent (`references/visualization.md`) | Parse paper data and generate publication-quality figure code (Python matplotlib / R ggplot2) with APA 7.0 formatting, colorblind-safe palettes, and LaTeX integration | Phase 4 / Phase 7 |
@@ -821,7 +843,7 @@ The load-bearing mechanism is the **physical separation of calls**: writer Phase
 
 ### Four-call structure
 
-For each `full` run, Phase 4 + Phase 6 expand from two single calls into four separate agent starts. Each call has its own system prompt and user content per the system-vs-user content discipline below. A revision loop adds no start: the Phase 4b writer and the Phase 6b evaluator are resumed (full item 10).
+For each `full` run, Phase 4 + Phase 6 expand from two single calls into four separate agent starts. Each call has its own system prompt and user content per the system-vs-user content discipline below. The revision loop adds no start: the Phase 4b writer and the Phase 6b evaluator are resumed (full item 10).
 
 1. **Phase 4a: writer paper-blind pre-commitment.**
    - System prompt: `### Phase 4a: Writer paper-blind pre-commitment` sub-section in `references/draft-writer.md`, "Generator-Evaluator Contract Protocol".
@@ -830,7 +852,7 @@ For each `full` run, Phase 4 + Phase 6 expand from two single calls into four se
    - Lint: 3 structural checks (see "Phase 4a / 6a output lint" below).
 2. **Phase 4b: writer paper-visible drafting + self-scoring.**
    - System prompt: `### Phase 4b: Writer paper-visible drafting + self-scoring` sub-section in the same page.
-   - User content: `writer_full` contract (re-injected) + Phase 4a output wrapped in `<phase4a_output>...</phase4a_output>` data delimiter + upstream drafting artefacts (`config.md`, Paper Outline, Argument Blueprint, Annotated Bibliography, optional Style Profile, optional Knowledge Isolation Directive).
+   - User content: `writer_full` contract (re-injected) + Phase 4a output wrapped in `<phase4a_output>...</phase4a_output>` data delimiter + upstream drafting artefacts (`config.md`, Paper Outline, Argument Blueprint, Annotated Bibliography, `refs.bib`, the Existing Materials, the model identifier of Steps 4, optional Style Profile, optional Knowledge Isolation Directive).
    - Output: `## Draft Body` -> `## Dimension Scores` -> `## Failure Condition Checks` -> `## Writer Decision`.
    - Lint: 4 structural checks (see "Phase 4b / 6b output lint" below).
 3. **Phase 6a: evaluator paper-blind pre-commitment.**
@@ -867,7 +889,7 @@ Retry semantics: lint failure on the first attempt -> retry once with the specif
 - **Writer Phase 4b (4 checks)**: required sections in order: `## Draft Body`, `## Dimension Scores`, `## Failure Condition Checks`, `## Writer Decision`; Dimension Scores one-to-one across the seven writer dimensions D1-D7; Failure Condition Checks one-to-one across F1 / F4 / F2 / F3 / F0; Writer Decision derivable from F-condition severity precedence. **No multi-dissent retry** (writer has no scoring_plan to dissent against). **No consistency check** (writer Phase 4a emits no scoring_plan trigger tokens).
 - **Evaluator Phase 6b (5 checks)**: required sections in order: `## Dimension Scores`, `## Failure Condition Checks`, `## Review Body`, `## Evaluator Decision`; Dimension Scores one-to-one across the five evaluator dimensions D1-D5; Failure Condition Checks one-to-one across F1 / F2 / F3 / F6 / F4 / F5 / F0; consistency check (Phase 6b score substring-matches Phase 6a scoring plan trigger tokens); Evaluator Decision derivable from F-condition severity precedence. **No multi-dissent retry** (evaluator's intra-phase disagreement is encoded as F-condition action, not as a retry trigger).
 
-In `paper` the Phase 4b Draft Body is `main.tex`, written whole, and the three other sections go to `draft-report.md`; in a revision loop the rewrite is one patch over every block, and its report holds the three sections.
+In `paper` the Phase 4b Draft Body is `main.tex`, written whole, and the three other sections go to `draft-report.md`; in the revision loop the rewrite is one patch over every block, and its report holds the three sections.
 
 | Phase | Writer | Evaluator |
 |---|---|---|
@@ -909,29 +931,36 @@ See `references/failure-paths.md` for details. Quick reference:
 
 1. **IRON RULE**: User must confirm `config.md` before proceeding to Phase 1
 2. **Phase 2 -> 3**: User must approve outline (can request restructuring)
-3. **IRON RULE**: Max 2 revision loops; unresolved items -> "Acknowledged Limitations"
+3. **IRON RULE**: At most two reviews and one rewrite between them; unresolved items -> "Acknowledged Limitations"
 4. **Peer Review** Critical-severity issues block progression to Phase 7
 5. User can skip Phase 1 (literature) if providing own sources
 
-A run stops only at the stops its mode lists under its heading in "Steps". Any other choice a role or the session meets is taken with the option that follows from the run's goal and written to `config.md` under "Decisions" with its reason. The rows up to "A script failed" are stops, decisions for the user; the rows after it are refusals, which name their cause and leave nothing.
+A run stops only at the stops its mode lists under its heading in "Steps", and the calibration, a run of its own, only at the two stops Steps 12 names. Any other choice a role or the session meets is taken with the option that follows from the run's goal and written to `config.md` under "Decisions" with its reason. The rows up to "A script failed" are stops, decisions for the user; the rows after it are refusals, which name their cause and leave nothing.
 
 | Stop | When | What it shows | What resumes it |
 |---|---|---|---|
 | The mode to run | A plain request fits two modes, or asks for help with a revision (Steps 1) | The modes and what each would do | The user's choice; the run goes on |
+| The session's questions | A mode with no intake agent needs what its items name and the call does not give: revision, citation-check, format-convert, and disclosure called with no selector (Steps 6) | One message with each question | The user's answers, written into `config.md`; the run goes on |
 | The intake confirmation | `config.md` is written (Steps 6, Checkpoint Rules 1) | `config.md` whole | The user confirms or changes the record, as often as the user wants; the run goes on |
 | The sources' review | The literature strategist's `review.md` is written (Phase 1 checkpoint) | The sources it includes | The user adds or removes sources, or goes on |
 | The outline's approval | The outline is written (Checkpoint Rules 2) | `outline.md` with its evidence map | The user approves, or requests restructuring as often as the user wants; the run goes on |
 | A generator phase aborted | A Phase 4a or 6a lint fails twice, or a Phase 4b or 6b lint fails (full items 7 and 10) | The `[GENERATOR-PHASE-ABORTED]` tag with its role and reason, and the failing output | The user decides retry, fallback, or regression to Phase 3 (writer) or Phase 5 (evaluator) |
-| The draft review does not pass | After round 2 the Overall Score is below 6.5 with a Critical issue unresolved, or the decision is `flag_for_reviewer_stage` (full item 10, Checkpoint Rules 4) | The last `review-<r>.md`, its root cause analysis and its estimate of the additional workload, and the options of `references/peer-reviewer.md`, "Handling Strategy After Round 2 Still Not Passing" | Accept the current state with the unresolved issues as "Acknowledged Limitations" and go on to Phase 7, an expanded revision that returns to the phase the root cause names, or end the run |
+| The draft review does not pass | After the second review the Overall Score is below 6.5 with a Critical issue unresolved, or the decision is `flag_for_reviewer_stage` (full item 10, Checkpoint Rules 4) | The last `review-<r>.md`, its root cause analysis and its estimate of the additional workload, with every option of `references/peer-reviewer.md`. "Revision Progress Tracking (Max 2 Rounds)" gives (a) manually revise and resubmit, (b) lower the paper's ambitions, such as a lower-tier journal, and (c) accept the current state and record the issues in Limitations. "Handling Strategy After Round 2 Still Not Passing" gives option A, accept the current state, option B, an expanded revision, and option C, terminate the workflow | The user's choice, recorded in `config.md` under "Decisions". Under (c) and A the unresolved issues become "Acknowledged Limitations" and the run goes on to Phase 7. Under (b) the user names the lower target, the row Target Journal of `config.md` is changed, and the run goes on as under (c). Under B the run returns to the phase the root cause names. Under (a) and C the run ends with the draft and every review report kept, and after (a) the user revises by hand and calls `/paper` again |
+| A revision item that needs restructuring | Revision: the draft writer answers with the tag `[PATCH-ESCALATION-REQUIRED: layer=pre_drafting, ...]` and no patch (revision item 2) | Each item the tag names, with its reason | The user chooses a full re-emission, which is recorded as `mode: full_reemission_escalated` in `config.md` under "Decisions", gives narrowed items, or takes an item out; the run goes on |
 | The parsed comments | Revision-coach: the comments are parsed | The parsed comments with their classification | The user confirms or corrects the parsing; the run goes on |
 | The mentor's question | Plan: the Socratic mentor's final message asks a question | The final message whole | The user's answer, given to the mentor; the run goes on |
 | The venue's policy | Disclosure: the venue is not in the policy database | The venue named and the request to paste its current AI-usage policy | The pasted policy, used for this run only; the run goes on |
 | The uncertain AI use | Disclosure: a category of AI use is marked UNCERTAIN | Each uncertain category | The user confirms each; the run goes on |
 | The citation style to confirm | Full, revision and citation-check: the citation compliance agent reports a format error in more than half of the cited entries, and the entries follow another style than the Citation Format row names (Steps 12) | The pattern as the report states it, the Citation Format row and the style the entries follow | The user confirms the style or gives another; the agent is resumed for the format work only, and the run goes on |
 | A reference that cannot be confirmed | Only under strict, for a reference whose exact DOI or arXiv ID provably fails lookup. Full, revision and citation-check: such an identifier in the citation check, or left after the reference fix. Under mark only, and for every other reference no lookup confirms, the reference is marked "unconfirmed" in `citation-report.md` and named in the final message. Lit-review: an identifier that still provably fails the identifier check (lit-review items 4 and 6) | The reference, each lookup tried and each index left out with its reason | A corrected identifier, the removal of the reference, or an override with reasons recorded under "Decisions"; the run goes on |
-| A claim the run cannot support | Full, revision and citation-check (Steps 12), except a full or revision run whose row Claim check is no. The citation compliance agent's check stops at the first cited claim whose passage does not hold it (possible fabrication). The stop is raised once the agent has ended and its patches are applied. It holds that claim, each claim whose source no way of `references/citation-compliance.md`, "Reading the source", could read, and each sentence found by then that states a claim of the row Claims not to make | Each such claim of the report, with the evidence that is missing; a source that could not be read shown apart as "not read", with each address tried and its status | For each claim, the user supplies the evidence, revises the passage, or overrides with reasons recorded under "Decisions"; the check goes on with the claims after it |
-| A structural patch | `apply_tex_patch.py` exits 3 (Steps 10) | The structural flags as printed | The user acknowledges the patch or refuses it; the run goes on |
+| A claim the run cannot support | Full, revision and citation-check (Steps 12), except a full or revision run whose row Claim check is no. The citation compliance agent's check stops at the first cited claim whose passage does not hold it (possible fabrication). The stop is raised once the agent has ended and its patches are applied. It holds that claim and each sentence found by then that states a claim of the row Claims not to make. A source that could not be read raises no stop: `citation-report.md` lists it as not read, with each address tried and its status, and the final message names it | Each such claim of the report, with the evidence that is missing | For each claim, the user supplies the evidence, revises the passage, or overrides with reasons recorded under "Decisions"; the check goes on with the claims after it |
+| A structural patch | `apply_tex_patch.py` exits 3 (Steps 10), for a patch as the agent wrote it and again for a patch narrowed after a refusal | The structural flags as printed | The user acknowledges the patch or refuses it. A refused patch is narrowed once. At the stop a narrowed patch raises, the user acknowledges it or ends the change, which the final message lists as not applied; the run goes on |
 | A patch that does not apply | A second rejection with the field `kind` set to `validation`, `schema` or `stale-manifest` (Steps 10) | The rejection as printed, the ids of the patch and the tries so far | The user decides: re-anchorize and retry the round, escalate to full re-emission, or abort (Steps 10); the run goes on |
+| The target to settle | Format-convert: a target is outside the supported ones, or a `.bib` is given with no citation style or with another target than `docx` and `markdown` (format-convert item 1) | The target given and the supported targets | The user's target; the run goes on |
+| A converted file to replace | Format-convert, and full mode's Phase 7 for a target other than `latex` and `pdf`: an output of the run already stands at its place (format-convert items 8 and 10, full item 12) | The file's path | The user confirms, and the file is replaced. A file not confirmed stays as it is, and the final message names its target as not written; the run goes on |
+| The reply to the closing review | Full and revision with the row Closing review yes: the final message holds the `/writing` report (Steps 13) | The numbered report and the two sentences on what a reply starts | A one-line reply `all`, `all but 3, 7`, `2, 5` or `none`, or the request for an autonomous writer pass; the findings pass, its checks and the compile run. With no reply the run stays ended |
+| The calibration's folder | The calibration (Steps 12): the session needs the folder that holds the pairs | The request for the folder | The folder the user names; the calibration goes on |
+| The calibration's pairs | The calibration (Steps 12): the 25 pairs are built | The 25 pairs and how each was built | The user confirms or drops each pair; the calibration goes on with the confirmed pairs |
 | A script failed | `anchorize_tex.py` or `apply_tex_patch.py` exits 1, or `apply_tex_patch.py` exits 4 | The output as printed and the file left as it was | The cause put right, then `/paper` again |
 | Unknown mode | The mode is none of the twelve modes or the two calls, or the request is about something other than a paper | The twelve modes and the two calls | `/paper` again with a listed mode |
 | An argument that does not exist | An argument is missing, or names a file or folder that does not exist | The mode's line of Quick start, or the path | The call corrected, then `/paper` again |
@@ -990,7 +1019,7 @@ A run stops only at the stops its mode lists under its heading in "Steps". Any o
 
 - **Five dimensions**: Originality (20%), Methodological Rigor (25%), Evidence Sufficiency (25%), Argument Coherence (15%), Writing Quality (15%)
 - **Actionable feedback**: every criticism must include a specific suggestion
-- **Max 2 revision rounds**: unresolved items become Acknowledged Limitations
+- **At most two reviews, one rewrite between them**: unresolved items become Acknowledged Limitations
 
 **Mandatory Inclusions:**
 

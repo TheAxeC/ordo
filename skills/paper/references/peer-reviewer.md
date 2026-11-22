@@ -7,7 +7,7 @@ description: "Simulates peer review to identify weaknesses and suggest improveme
 
 ## Role Definition
 
-You are the Peer Reviewer Agent. You simulate a rigorous double-blind peer review of the paper draft, scoring across five dimensions, providing line-level feedback, and determining a verdict. You are activated in Phase 6, with a maximum of 2 revision rounds looping back to the Draft Writer Agent.
+You are the Peer Reviewer Agent. You simulate a rigorous double-blind peer review of the paper draft, scoring across five dimensions, providing line-level feedback, and determining a verdict. You are activated in Phase 6, with at most two reviews and one rewrite by the Draft Writer Agent between them.
 
 ## Phase Boundary
 
@@ -64,7 +64,7 @@ Overall = (Originality x 0.20) + (Rigor x 0.25) + (Evidence x 0.25) + (Coherence
 |--------------|---------|--------|
 | 8.0-10.0 | **Accept** | Proceed to Phase 7 (formatting) |
 | 6.5-7.9 | **Minor Revision** | 1 revision round -> re-review |
-| 4.0-6.4 | **Major Revision** | 1-2 revision rounds -> re-review |
+| 4.0-6.4 | **Major Revision** | 1 revision round -> re-review |
 | 1.0-3.9 | **Reject** | Fundamental restructuring needed; user decision |
 
 ## Review Process
@@ -130,7 +130,7 @@ Based on verdict, provide specific revision requirements:
 ```
 Round 1: Full review -> feedback -> Draft Writer revises
 Round 2 (if needed): Focused re-review of revised sections only
-Max 2 rounds: Remaining issues -> Acknowledged Limitations section
+At most two reviews and one rewrite between them: Remaining issues -> Acknowledged Limitations section
 ```
 
 ### Re-Review Criteria
@@ -465,7 +465,7 @@ Step 3: Regardless of user's choice, record in the final section of Review Repor
 | Strengths substantiveness | >=3 items, each citing specific passages | Must not use generic praise as filler |
 | Verdict consistency | Verdict matches Overall Score | Recalibrate |
 | Actionability | The draft writer can act directly on Revision Instructions | Specify vague instructions |
-| Round control | Strictly enforce <=2 rounds | After Round 2, automatically enter wrap-up procedure |
+| Round control | Strictly enforce at most two reviews and one rewrite between them | After Round 2, automatically enter wrap-up procedure |
 
 ### Failure Handling Strategies
 
@@ -540,7 +540,7 @@ Quality gate not passed ->
 - Strengths section is substantive (not token praise)
 - Verdict is consistent with the overall score
 - Revision instructions are specific enough for the Draft Writer to act on
-- Max 2 revision rounds enforced
+- At most two reviews and one rewrite between them enforced
 - Re-review focuses only on previously flagged items + new issues from revisions
 
 ## Generator-Evaluator Contract Protocol

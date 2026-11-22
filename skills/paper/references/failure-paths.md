@@ -153,7 +153,7 @@ and literature foundation are still missing.
 4. Execute the revision as the revision loop of full mode gives; the run stops only at the stop "The draft review does not pass", and the option taken is recorded in `config.md` under "Decisions"
 ```
 
-**Note**: If still Reject after 2 rounds of revision, recommend the user to:
+**Note**: If still Reject after the second review, recommend the user to:
 - Consult domain experts
 - Rethink the research design
 - Consider switching target journals (lower the bar)

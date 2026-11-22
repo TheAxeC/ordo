@@ -117,11 +117,11 @@ For each reference:
 
 #### Retraction Watch Protocol
 For all journal article references:
-1. Cross-reference against Retraction Watch Database (http://retractionwatch.com)
+1. Read the retraction notices of the lookups already made, as "Retractions" below gives. Crossref lists the notices of the publishers and of Retraction Watch, and the agent makes no other retraction check.
 2. If a cited source has been retracted:
-   - **Option A (Preferred)**: Remove the citation and find an alternative source
-   - **Option B**: If the retracted paper is cited to discuss the retraction event itself, keep with explicit notation: "[Retracted]" after the citation
-   - **Option C**: If only specific findings were retracted and the cited finding was not affected, keep with notation: "[Partial retraction; cited findings unaffected]"
+   - **Option A (Preferred)**: Replace the citation by a patch when a candidate source holds the claim, as "Retractions" gives
+   - **Option B**: If the retracted paper is cited to discuss the retraction event itself, flag it with the suggested notation "[Retracted]" after the citation
+   - **Option C**: If only specific findings were retracted and the cited finding was not affected, flag it with the suggested notation "[Partial retraction; cited findings unaffected]"
 3. If a cited source has an "Expression of Concern": flag for author review, recommend finding corroborating evidence from independent sources
 
 #### Citation Auto-Correction Decision Tree
@@ -140,7 +140,7 @@ Is the issue formatting-only (e.g., missing DOI, incorrect italics)?
 ## Auto-Correction Protocol
 
 When errors are found:
-1. **Fix directly** in the draft text
+1. **Fix directly**, by a patch, each error that "Both ways", "The `.bib` entries" and "DOI and URL" below give a correction for
 2. **Log** each correction in the audit report
 3. **Flag** ambiguous cases for human review
 
@@ -149,13 +149,12 @@ When errors are found:
 | Error | Correction |
 |-------|-----------|
 | Missing "et al." for 3+ authors | Add "et al." |
-| "&" in narrative citation | Change to "and" |
-| "and" in parenthetical citation | Change to "&" |
-| Wrong alphabetical order in multi-cite | Reorder |
+| "&" in narrative citation | Left to the bibliography style, not checked or changed |
+| "and" in parenthetical citation | Left to the bibliography style, not checked or changed |
 | Missing DOI | Add if findable |
 | dx.doi.org | Change to doi.org |
 | Period after DOI | Remove |
-| Title Case in article title | Change to sentence case |
+| Title Case in article title | Left to the bibliography style, not checked or changed |
 
 ## Output Format
 
@@ -277,12 +276,12 @@ Step 3: If unable to determine -> take the Citation Format row of `config.md`; w
 |---|---------|---------|----------|
 | 1 | Missing year | In-text has author but no year | Look up from RefList -> Yes |
 | 3 | Wrong DOI format | dx.doi.org or DOI: prefix | Yes -> https://doi.org/ |
-| 4 | Secondary citation unmarked | Cited in text but not in RefList | Flag -> ask if secondary citation |
+| 4 | Secondary citation unmarked | Cited in text but not in RefList | Flag as possibly secondary; no question is asked |
 | 5 | et al. on first citation | APA 7th uses et al. from first citation (correct) | Old APA 6th requires full list on first use -> remind |
-| 6 | & vs and mixed use | Parenthetical uses "and", Narrative uses "&" | Yes -> swap |
-| 7 | Wrong multi-source ordering | (B, 2024; A, 2023) | Yes -> reorder alphabetically |
+| 6 | & vs and mixed use | Parenthetical uses "and", Narrative uses "&" | No: left to the bibliography style |
+| 7 | Wrong multi-source ordering | (B, 2024; A, 2023) | No -> the bibliography style orders them |
 | 8 | Direct quote missing page number | Quoted text but no p./pp. | Flag -> user to provide |
-| 9 | Title Case error | Article title uses Title Case (APA requires sentence case) | Yes (auto-convert) |
+| 9 | Title Case error | Article title uses Title Case (APA requires sentence case) | No: left to the bibliography style |
 | 10 | Period after DOI | https://doi.org/xxxxx. | Yes -> remove period |
 
 ### Citation Consistency Check (Cross-Reference)
@@ -328,8 +327,8 @@ Each correction uses a three-column structure:
 | Check Item | Pass Criteria | Failure Handling |
 |--------|---------|-----------|
 | Orphan citations (in-text) | 0 entries | Add to Reference List or remove in-text citation |
-| Orphan citations (reference) | 0 entries | Add in-text citation or remove from Reference List |
-| Format compliance rate | 100% | Correct all format errors one by one |
+| Orphan citations (reference) | 0 entries | List each unused entry in the report; the entry is not removed (see "Both ways") |
+| Format compliance rate | 100% | Correct each format error, as "A format error in most entries" gives |
 | DOI completeness | All sources with DOIs are included | Find and add missing DOIs |
 | Self-citation ratio | <=15% (or flagged) | Flag and alert user, suggest replacing some self-citations |
 | Correction log | 100% of corrections are logged | Log any missed corrections |
@@ -342,9 +341,12 @@ Quality gate not passed ->
 +-- Many orphan citations (> 5 entries) ->
 |   Likely cause: the draft writer used sources not in Annotated Bibliography
 |   Handling: List all orphans in the report as issues; the final message names them; no question is asked
-+-- Format error rate > 20% ->
++-- The same format check fails in more than half of the cited entries ->
 |   Likely cause: the draft writer mixed formats or used outdated rules
-|   Handling: Re-run full format conversion (rather than correcting one by one)
+|   Handling: the systematic error of "A format error in most entries": one patch for the entries,
+|   or the stop "The citation style to confirm" when they follow another style than the row names
++-- The same format check fails in half of the cited entries or fewer ->
+|   Handling: Correct each failure one by one
 +-- Many missing DOIs ->
     Handling: Flag only, do not block workflow (some older literature genuinely has no DOI)
 ```
@@ -412,7 +414,7 @@ Quality gate not passed ->
 
 This section is `paper`'s addition to academic-paper's agent. It holds the checks `paper` runs with `templates/lookup.py`: the cross-check of cited keys, the `.bib` entry and DOI checks, the lookup of every reference, the reading of each cited source's full text, the judgment of each claim against its passage, the incremental check of later patches and the calibration of the claim check. It also holds the results check, which reads the manuscript's statements about the study's own results against the user's result files and code. It writes `citation-report.md` in the run folder in the form of "The file" below, and the patches that carry its corrections, as `references/revision-patch-protocol.md` gives. In full mode it runs after the draft; in revision mode after the patches are applied; in citation-check mode it is the whole run.
 
-The agent reads `config.md` (Citation Format, Co-Authors, Earlier papers, Claims not to make, Claim check, Existing Materials, Discipline, Paper type, Domain evidence profile and Citation Verification), `intended-claims.md` of the run folder in full and revision modes, in full mode the section "Trace table" of `draft-report.md`, the result files and the code the session names, the main `.tex` with the files it inputs and `refs.bib`, the output of `lookup.py cite-keys` and of `lookup.py check-urls` that the session puts in the prompt, and the path of the temporary folder for fetched texts and saved pages.
+The agent reads `config.md` (Citation Format, Co-Authors, Earlier papers, Claims not to make, Claim check, Existing Materials, Discipline, Paper type, Domain evidence profile and Citation Verification), `intended-claims.md` of the run folder in full mode, in full mode the section "Trace table" of `draft-report.md`, the result files and the code the session names, the main `.tex` with the files it inputs and `refs.bib`, the output of `lookup.py cite-keys` and of `lookup.py check-urls` that the session puts in the prompt, and the path of the temporary folder for fetched texts and saved pages.
 
 ### Both ways
 
@@ -452,7 +454,7 @@ The agent checks each cited entry. A deterministic error is corrected by a patch
 - The agent compares the `\bibliographystyle` line with the Citation Format row. A mismatch is reported and never changed, since the style file belongs to the venue.
 - The way a style renders author lists, "&" or "and", the order of the reference list and the capitalization of titles belongs to the bibliography style. The agent does not check or change it.
 - A quotation in the text with a `\cite` that carries no page is flagged for the user to supply the page: `\cite[p.~45]{key}` is the form.
-- A secondary citation, written "<Original> (as cited in~\cite{citing})", is flagged when the original is not in the `.bib`, and the agent asks whether it is secondary.
+- A secondary citation, written "<Original> (as cited in~\cite{citing})", is flagged when the original is not in the `.bib`. The agent marks the entry as possibly secondary in its report and asks nothing.
 
 ### DOI and URL
 
@@ -640,8 +642,8 @@ The table applies only after every way of "Reading the source" that applies to t
 | Situation | What the ways show | What the agent does |
 |---|---|---|
 | Only the abstract was read | No way gave the full text, and an abstract was read: `<stem>.abstract.txt` exists, written by `fetch` or by `text --abstract` | The locator is `abstract`, and the claim is marked "abstract only". The source supports what the abstract says and nothing beyond it. |
-| An access restriction | Every way answered with a restriction: the indexes list no open copy for `fetch`, and each saved address answers 402 or 403 or gives a sign-in, payment or bot check page | The verdict is UNVERIFIABLE_ACCESS. The claim goes to the user through the stop "A claim the run cannot support", with each address tried and its status. |
-| An outage | An index is left out, or a URL or an address fails to connect or answers 429 or a 5xx status | The agent fetches or saves that address again once. A URL or an index left out with a reason "retry after <n> s" is not fetched again and is not waited for. If the second try fails, or is not made for that reason, the claim is marked "tool failure" with the reason as printed, and goes to the user with each address tried. The agent, resumed after the stop, judges it again. |
+| An access restriction | Every way answered with a restriction: the indexes list no open copy for `fetch`, and each saved address answers 402 or 403 or gives a sign-in, payment or bot check page | The verdict is UNVERIFIABLE_ACCESS. The report lists the claim under "Sources not read", with each address tried and its status. It raises no stop, and the check goes on with the next claim. |
+| An outage | An index is left out, or a URL or an address fails to connect or answers 429 or a 5xx status | The agent fetches or saves that address again once. A URL or an index left out with a reason "retry after <n> s" is not fetched again and is not waited for. If the second try fails, or is not made for that reason, the claim is marked "tool failure" with the reason as printed. The report lists it under "Sources not read" with each address tried. It raises no stop, and the check goes on with the next claim. |
 
 - The agent never judges a source it did not read, and it never says it read a source whose text no way of "Reading the source" returned.
 - A source that no way gives the text of supports nothing, whatever the abstract suggests about the rest.
@@ -662,11 +664,12 @@ The agent splits the claim into its atomic sub-claims and judges each one agains
 | MINOR_DISTORTION | The claim paraphrases the source and keeps its meaning. | MINOR | Drift | The paper says "about 15%", the source says "15.2%". |
 | MAJOR_DISTORTION | The claim oversimplifies, exaggerates or misrepresents the source. | SERIOUS | Not held | The paper says "declined sharply", the source says "declined by 2.1%". |
 | UNVERIFIABLE | The source does not contain the claimed information. | SERIOUS | Not held | The paper cites Smith (2020) for a claim, and Smith (2020) does not discuss the topic. |
-| UNVERIFIABLE_ACCESS | The source exists and its full text cannot be read. | MEDIUM | Not held | A paywalled journal article. |
+| UNVERIFIABLE_ACCESS | The source exists and its full text cannot be read. | MEDIUM | Not read | A paywalled journal article. |
 | AMBIGUOUS | The passage is related and neither supports nor contradicts the claim. | MINOR | Drift | The source studies the same population with a different measure. |
 
 - A claim marked "Drift" gets suggested wording in the report and no patch.
-- A claim marked "Not held" is marked Critical and flagged as potential fabrication, and the check stops there, as the decision tree of "Per-Citation Verification Algorithm" says. The report lists the claim under "Claims the run cannot support", and the session raises the stop "A claim the run cannot support" for it. A claim marked UNVERIFIABLE_ACCESS is shown at the stop as "not read", with each address tried and its status.
+- A claim marked "Not held" is marked Critical and flagged as potential fabrication, and the check stops there, as the decision tree of "Per-Citation Verification Algorithm" says. The report lists the claim under "Claims the run cannot support", and the session raises the stop "A claim the run cannot support" for it.
+- A claim marked "Not read" stops nothing. The report lists it under "Sources not read", with each address tried and its status, and the final message names it.
 - An ambiguous passage is not forced into UNVERIFIABLE. The issue asks for wording that the passage supports, or for a more exact locator.
 - A source that holds the claim at another place than the page, section or table the manuscript names is a wrong locator. It is a MEDIUM issue, kept apart from a claim the source does not hold, and the issue gives the right locator.
 - A number from a different column or measure of the right table is a MAJOR_DISTORTION. The issue names both measures and gives the source's own figure for the measure the sentence names.
@@ -716,11 +719,10 @@ The checks of this section run in addition to the ones above when the Discipline
 
 #### Claims against the list
 
-In full and revision modes the agent compares the claims of the text with `intended-claims.md`. A claim is a sentence of the body that states a result, a finding, a causal or comparative statement, an interpretation or the paper's contribution. The agent compares claims and not wording.
+In full mode the agent compares the claims of the text with `intended-claims.md`, when the draft writer wrote one. A claim is a sentence of the body that states a result, a finding, a causal or comparative statement, an interpretation or the paper's contribution. The agent compares claims and not wording.
 
 - A claim the text makes that no line of the list states is listed as "not on the list", with its sentence quoted and its place.
 - A line of the list that no sentence of the text states is listed as "intended, not made", with the line quoted.
-- In a revision run the comparison covers the text the patches added or changed, and the list covers the claims of that text.
 - Each entry is a MEDIUM issue `C<m>` flagged for the user in the report, and the agent writes no patch for it, since the paper's argument is the author's.
 - The session names each entry in the final message.
 - A claim the list does not hold may still be right, and the report says only that the draft's text and its list differ.
@@ -813,13 +815,13 @@ Calibration measures how often the agent's judgment of a claim is wrong. The ses
    - Supported: a claim that states what one sentence of its cited passage states.
    - Unsupported: a real claim of one paper paired with a passage of another paper on the same topic.
    - Partly supported: a claim that joins a statement of the cited passage with a statement of a second source.
-2. The user reads the 25 pairs and how each was built, and confirms or drops each. A dropped pair is not counted.
+2. At the stop "The calibration's pairs" the user reads the 25 pairs and how each was built, and confirms or drops each. A dropped pair is not counted.
 3. The session starts the citation compliance agent with the claim and the passage of each confirmed pair, and no other source. The agent judges the claim against the passage as "Judging a claim" says and lists each sub-claim with its result.
 4. The session reads each result and gives the pair a judged label: supported when every sub-claim is supported, unsupported when none is, partly supported otherwise.
 5. The session writes a Markdown table with the columns `pair`, `label` and `judged`, one row per confirmed pair, and runs `python3 '<this skill's folder>/templates/calibration_counts.py' '<the table>'`.
 6. The script prints, per label, the pairs of that label that the agent judged as another label (misses). It also prints the pairs the agent judged as that label that are not of it (false alarms), with each rate. It exits 1 when any miss rate is 0.15 or more or any false-alarm rate is 0.10 or more.
 
-- The pairs are data that the user keeps with the calibration, outside this skill's text. The session asks the user for their folder.
+- The pairs are data that the user keeps with the calibration, outside this skill's text. The session asks the user for their folder at the stop "The calibration's folder".
 - A run that exits 1 is reported to the user with the table of counts. The agent's judgment is not relied on for the labels that failed until the page is changed and the calibration is run again.
 
 ### The results check
@@ -853,7 +855,7 @@ In full, revision and citation-check mode, when the user's materials hold result
 
 In full and revision modes, a patch of the draft writer that adds or changes a cited sentence after the first check has run gets a check of its own, when the rows Claim check and Incremental checks of `config.md` are both yes. A cited sentence is a sentence that holds a cite command.
 
-- The patches that get this check are the draft writer's rewrite of each revision loop of full mode, the results-check patch, the reference fix, the compile fix and the findings pass.
+- The patches that get this check are the draft writer's one rewrite of full mode's revision loop, the results-check patch, the reference fix, the compile fix and the findings pass.
 - A patch the agent writes itself, with the ids `C<m>`, gets no check, so a check never leads to another check.
 - An incremental check does not run the results check. The statements a results-check patch rewrites are not read again against the result files.
 - The session resumes the agent that made the first check, with one message for one patch. The agent reads the patch file `patches/<nn>-<file name>.patch.json` with the main `.tex` and its inputs as the patch left them, the outputs of `lookup.py cite-keys` and `check-urls`, and the path of the temporary folder.
@@ -863,7 +865,8 @@ In full and revision modes, a patch of the draft writer that adds or changes a c
 - It writes `citation-report-<nn>.md` in the run folder, where `<nn>` is the number of the patch. The file has the form of `citation-report.md`, and its Summary, Claims and Passage lines cover those sentences only.
 - Before it reports, it runs `lookup.py quote-check '<citation-report-<nn>.md>' '<the .bib>' '<temporary folder>'`, as "Reading the source" says.
 - Its patches carry ids `C<m>`, with `<m>` the number of the issue in its own report, and the session applies them as it applies the patches of the first check.
-- A claim that its source does not hold, or a source it cannot read, is the stop "A claim the run cannot support", as in the first check.
+- A claim that its source does not hold is the stop "A claim the run cannot support", as in the first check.
+- A source it cannot read raises no stop. The report lists it under "Sources not read", and the final message names it.
 - An issue of this check starts no pass of the draft writer. The agent closes it with its own `C<m>` patch, or lists it in the report: a claim marked "Drift" gets suggested wording and no patch.
 - The session sends no item of the report to the draft writer or to the peer reviewer, and names each item the report leaves in the final message.
 

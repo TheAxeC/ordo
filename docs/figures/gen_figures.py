@@ -1306,7 +1306,12 @@ CONFIRMED = "review.md and refs.bib written with its own edits"
 
 SEARCH_STOP = "search rounds: end at any 3 of 5 conditions, or after 4 rounds"
 PATCHED = "Script: each patch applied, the compile, the reference checks"
-WRITING = "/writing review, unless you said no; the draft writer applies what you pick"
+WRITING = "/writing review, unless you said no"
+REPLY_STOP = "The reply to the closing review"
+FINDINGS = "Draft writer, resumed: the findings you pick, as a patch"
+SESSION_STOP = "The session's questions, in one message"
+RESTRUCTURE_STOP = "A revision item that needs restructuring"
+REPLACE_STOP = "A converted file to replace"
 
 
 def _search(after: str) -> tuple[tuple[Node, ...], tuple[Edge, ...]]:
@@ -1358,7 +1363,10 @@ def paper_full_graph() -> Graph:
         Node("SR", REFERENCE_STOP, "stop"),
         Node("CF", PATCHED, "script"),
         Node("F", "Formatter: targets, cover letter, AI disclosure, checklist"),
+        Node("SO", REPLACE_STOP, "stop"),
         Node("WG", WRITING, "maybe"),
+        Node("WS", REPLY_STOP, "stop"),
+        Node("WA", FINDINGS, "maybe"),
     )
     edges = (
         Edge("I", "S"),
@@ -1390,15 +1398,20 @@ def paper_full_graph() -> Graph:
         Edge("CF", "SR", "a failure left after the reference fix"),
         Edge("CF", "F"),
         Edge("F", "F", "a checklist item fails, no cap", "back"),
+        Edge("F", "SO", "a converted output already stands"),
         Edge("F", "WG"),
+        Edge("WG", "WS"),
+        Edge("WS", "WA"),
     )
     return _graph(nodes, edges)
 
 
 def paper_revision_graph() -> Graph:
     nodes = (
+        Node("SQ", SESSION_STOP, "stop"),
         Node("P", "Peer reviewer: the comments as a roadmap"),
         Node("W", "Draft writer: a patch per item"),
+        Node("SX", RESTRUCTURE_STOP, "stop"),
         Node("C", CLAIM_CHECK),
         Node("SS", STYLE_STOP, "stop"),
         Node("SC", "A claim the run cannot support", "stop"),
@@ -1409,10 +1422,15 @@ def paper_revision_graph() -> Graph:
         Node("RL", "Draft writer, resumed: the response letter, for referee comments", "maybe"),
         Node("RC", "Peer reviewer, resumed: the letter checked, a verdict per point", "maybe"),
         Node("WG", WRITING, "maybe"),
+        Node("WS", REPLY_STOP, "stop"),
+        Node("WA", FINDINGS, "maybe"),
         Node("X", "Revised draft, the rest as limitations"),
     )
     edges = (
+        Edge("SQ", "P"),
         Edge("P", "W"),
+        Edge("W", "SX", "the writer's tag in place of a patch"),
+        Edge("SX", "W", "a full re-emission, or narrowed items", "back"),
         Edge("W", "C"),
         Edge("C", "SS", STYLE_EDGE),
         Edge("SS", "C", STYLE_BACK, "back"),
@@ -1427,7 +1445,9 @@ def paper_revision_graph() -> Graph:
         Edge("RL", "RC"),
         Edge("RC", "WG"),
         Edge("CF", "WG", "a /writing report as the comments"),
-        Edge("WG", "X"),
+        Edge("WG", "WS"),
+        Edge("WS", "WA"),
+        Edge("WA", "X"),
     )
     return _graph(nodes, edges)
 
@@ -1496,6 +1516,7 @@ def paper_abstract_only_graph() -> Graph:
 
 def paper_citation_check_graph() -> Graph:
     nodes = (
+        Node("SQ", SESSION_STOP, "stop"),
         Node("C", "Citation compliance: each claim against its source's full text"),
         Node(
             "SS",
@@ -1508,6 +1529,7 @@ def paper_citation_check_graph() -> Graph:
         Node("X", "Citation report"),
     )
     edges = (
+        Edge("SQ", "C"),
         Edge("C", "SS"),
         Edge("SS", "C", STYLE_BACK, "back"),
         Edge("C", "SC", CLAIM_NOT_HELD),
@@ -1557,6 +1579,8 @@ def paper_plan_graph() -> Graph:
 
 def paper_format_convert_graph() -> Graph:
     nodes = (
+        Node("SQ", SESSION_STOP, "stop"),
+        Node("ST", "The target to settle", "stop"),
         Node("F", "Formatter: LaTeX, DOCX, PDF, Markdown, citation style, as patches"),
         Node(
             "F2",
@@ -1564,9 +1588,15 @@ def paper_format_convert_graph() -> Graph:
             "maybe",
         ),
         Node("CF", "Script: patches applied, compile, pandoc, the counts", "script"),
+        Node("SO", REPLACE_STOP, "stop"),
         Node("X", "Formatted document"),
     )
     edges = (
+        Edge("SQ", "ST", "a target that is not supported"),
+        Edge("ST", "F"),
+        Edge("SQ", "F"),
+        Edge("CF", "SO", "an output already stands"),
+        Edge("SO", "CF", "you confirm", "back"),
         Edge("F", "F2"),
         Edge("F", "CF"),
         Edge("F2", "CF"),

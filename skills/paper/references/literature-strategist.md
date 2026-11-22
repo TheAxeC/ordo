@@ -501,7 +501,7 @@ Quality gate not passed ->
 
 | Missing Item | Handling |
 |--------|---------|
-| RQ not clearly defined | Search on the research question as `config.md` states it, and name what is unclear in `review.md` |
+| RQ not clearly defined | Take the search direction that follows from the run's goal, as "If `config.md`'s RQ is vague" below gives, and name what is unclear in `review.md` |
 | Discipline not specified | Use general databases (Google Scholar + Scopus) + broaden search scope |
 | Language preference not specified | Default to English |
 | Year range not specified | Use default 10 years + seminal works unrestricted |
@@ -517,8 +517,8 @@ Quality gate not passed ->
 
 ### Poor Quality Upstream (the intake agent output is poor)
 
-- If `config.md`'s RQ is vague -> infer 2-3 possible search directions from RQ, list for user to choose
-- If discipline definition is too broad (e.g., "social science") -> suggest narrowing to sub-field, or conduct exploratory search first then converge
+- If `config.md`'s RQ is vague -> infer 2-3 possible search directions from RQ, take the one that follows from the run's goal, and name the others in `review.md`
+- If discipline definition is too broad (e.g., "social science") -> conduct an exploratory search first, then converge on the sub-field it shows, and name the narrowing in `review.md`
 
 ## Collaboration Rules with Other Agents
 

@@ -422,6 +422,8 @@ Agents in no role the cost script prices:
 - ae46e3f2b8d82155e: builder of step 5.R, claude-fable-5-2
 - ad46188dd11d72cae: reviewer of step 5.R, claude-fable-5-2
 - a92c3d6a2c1309493: reviewer of step 5.R over round 1, claude-sonnet-5-5
+- a501ef8a51c551ad3: reviewer of step 5.R over round 2, claude-sonnet-5-5
+- a7f240d919a101f50: the review of ruling 5.Q-no-rerun after step 5.R, claude-fable-5-2
 
 ## Blocked, and by what
 
@@ -1017,3 +1019,25 @@ Agents in no role the cost script prices:
   - builder ae46e3f2b8d82155e claude-fable-5-2: 251005 tokens, 175 tool uses, 21.6 min; round 1 314619 tokens, 22 tool uses, 5.1 min;
   - reviewer ad46188dd11d72cae claude-fable-5-2, 283618 tokens, 48 tool uses, 9.8 min;
   - reviewer over round 1 a92c3d6a2c1309493 claude-sonnet-5-5, 157741 tokens, 45 tool uses, 3.5 min.
+
+### Step 5.R, repair round 2: what the review of ruling 5.Q-no-rerun found (landed 2026-11-22)
+
+- Landed in one commit on main against the base 2cd4c95: 26 paths from the round's range, with the fixes at landing in files of that range.
+- What it carries: ruling Open item 5.R-audit, on the review `agents/reviews/5.R-deviation-audit.md` (47 deviations, 17 with no covering ruling, 13 contradictions, 7 questions outside a stop).
+- The round (10 rulings, `agents/briefs/5.R-round-2.md`): the stop "A revision item that needs restructuring"; an unread source listed and no longer a stop; a narrowed structural patch raising its stop again; six options at the stop "The draft review does not pass"; the contradicting pairs; six named stops for questions asked before outside the table; two reviews and one rewrite in full mode; 13 kept additions named in ADR 0043; the figures and descriptions.
+- Review over round 2: `agents/reviews/5.R-refuter.md`. Rulings 2, 3, 4, 6, 9 and 10 carried out; findings on rulings 1, 5, 7 and 8, each fixed at landing: 17 line edits in `references/draft-writer.md`, `peer-reviewer.md`, `citation-compliance.md`, `literature-strategist.md`, `revision-coach.md`, `SKILL.md` and ADR 0043, and five bullets of `SKILL.md` split.
+- Raised as Open item 5.R-wordseq: the word-sequence check of lit-review's formatter contradicts the rule that a role runs no script.
+- Verification on main: `sh ~/.claude/skills/land/templates/land.sh .scratch/5-paper/orchestrator-state.md 5-paper-5.R 2cd4c95` printed `checks: 12 commands passed`. After the fixes at landing, `env -u CLAUDE_CONFIG_DIR -u ORDO_SKILL_DIRS -u ORDO_STABLE sh ~/.claude/skills/land/templates/checks.sh .scratch/5-paper/orchestrator-state.md` printed `checks: 12 commands passed`.
+- The verify list equals `docs/dev/building.md`; no change. A/B: none. Look: none configured.
+- Host-visible changes, before and after:
+  - a revision item that needs restructuring: before, no stop and the session decided; after, a stop where the user chooses a full re-emission, narrowed items or the item taken out;
+  - a source that could not be read: before, part of the stop "A claim the run cannot support"; after, listed under "Sources not read" in the report and the final message, with no stop;
+  - a refused structural patch still structural after narrowing: before, dropped; after, its stop again;
+  - the stop "The draft review does not pass": before, three options; after, the six of the reviewer's page;
+  - full mode: before, "at most 2 revision loops"; after, at most two reviews and one rewrite, a later review only by the expanded revision the user chooses;
+  - six questions are named stops: the session's questions, the target to settle, a converted file to replace, the reply to the closing review, the calibration's folder and its pairs; a converted file not confirmed stays, named as not written;
+  - no longer asked: whether a citation is secondary, whether very short comments are complete, what to do with comments that are the paper itself;
+  - the citation compliance agent no longer names Retraction Watch, no longer changes "&" or title case or reorders a multi-cite, and corrects scattered format errors one by one where it re-ran the conversion above 20%;
+  - a vague research question or too broad a discipline: before, listed for the user; after, the strategist takes one direction and names the rest in `review.md`;
+  - a revision run compares no claims against a writer's list.
+- Usage: builder ae46e3f2b8d82155e round 2, 227597 tokens, 65 tool uses, 13.7 min; reviewer over round 2 a501ef8a51c551ad3 claude-sonnet-5-5, 233182 tokens, 53 tool uses, 5.9 min; the review a7f240d919a101f50 claude-fable-5-2, 384485 tokens, 44 tool uses, 12.8 min.
