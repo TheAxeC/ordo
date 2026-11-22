@@ -806,3 +806,27 @@ The entry's goal says format-convert runs the checks of the guide's three lists 
 Taken: (a)
 Booked: `.scratch/5-a-skill-groups-plan-yaml-found-by-a-search-order-and-agents-on-fable/plan.md`, Rulings, "Open item 4.A-results"
 Builds on it: step 4.A
+
+## C139. Where /grill creates a glossary, at /spec of step 4.B of plan 5.A (2026-11-22)
+
+Step 4.B reads the glossary from the `standards` list. `/grill` creates a glossary at `docs/glossary.md` when a repository has none, which for a `plan.yaml` in a project folder is outside the project and in no list.
+
+- Options: (a) `glossary.md` in the folder that holds the rules file, its path added to the `standards` list, both shown with the term for the user's yes. It lands beside the project's other pages and every later brief names it; it changes the `plan.yaml`. (b) `docs/glossary.md` at the repository root, added to the list. One place for every project; outside the project's folder. (c) Leave `/grill` as it is. No work; the fixed place stays.
+- Recommendation: (a). The lazy option: (c).
+
+Taken: (a)
+Booked: `.scratch/5-a-skill-groups-plan-yaml-found-by-a-search-order-and-agents-on-fable/plan.md`, Rulings, "Open item 4.B-new-glossary"
+Builds on it: step 4.B
+
+## C140. How /repo-setup sync finds the glossary, at /spec of step 4.B of plan 5.A (2026-11-22)
+
+`sync_rules.py` reads `docs/glossary.md` under the root it is given, and `/repo-setup sync` writes a new glossary there when it finds none. In a repository whose glossary the `standards` list names elsewhere, that writes a second glossary.
+
+- Options: (a) the script takes `--glossary <path>`, and the skill passes the glossary of the `standards` list. The script stays free of the configuration; one option and its test cases are added. (b) the script reads the `plan.yaml` itself. No argument to pass; the script then parses the configuration, which `check_config.py` already does. (c) leave sync as it is. No work; a second glossary can be written.
+- With (a), the skill must find a `plan.yaml` in a project folder, which `/repo-setup sync [<path>]` cannot name. The call gets a second argument, `/repo-setup sync [<path>] [<folder>]`, the folder as the call of `/plan` names it.
+- Recommendation: (a). The lazy option: (c).
+
+Taken: (a)
+Booked: `.scratch/5-a-skill-groups-plan-yaml-found-by-a-search-order-and-agents-on-fable/plan.md`, Rulings, "Open item 4.B-sync"
+Builds on it: step 4.B
+
