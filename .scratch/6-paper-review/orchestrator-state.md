@@ -47,8 +47,16 @@ dispatch:
   landing: preparing
   brief_check: .scratch/6-paper-review/agents/reviews/3-brief-check.md (afefa3411b72942e8, claude-fable-5-2, 120526 tokens, 11 tool uses, 3.9 minutes)
 - step: 2.A
-  landing: preparing
-  brief_check: "running: a44ce4cabb3f13e0e"
+  executor: agent
+  worker: claude:fable
+  base: a988ed2
+  worktree: .agents/worktrees/6-paper-review-2.A
+  launched: 2026-11-22
+  report: .scratch/6-paper-review/agents/reviews/2.A-report.md
+  brief_check: .scratch/6-paper-review/agents/reviews/2.A-brief-check.md (a44ce4cabb3f13e0e, claude-fable-5-2, 144130 tokens, 22 tool uses, 5.0 minutes)
+  session_id: ac00f95bb01eebccf (claude-fable-5-2)
+  landing: not-started
+  round: 0
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled or, under `self_rule: on`, until the orchestrator closes it as `plan-orchestration`'s `references/self-rule.md`, "Closing an open item", says)
@@ -82,6 +90,6 @@ dispatch:
 
 ## Current position (rewritten before every step commit of this plan)
 
-- 2026-11-22. Steps 1 and 2 are on main: the skill `paper-review` stands whole under `skills/academic/paper-review/`. Nothing is in flight.
-- Roadmap entry 6 (paper-review). Plan step 2 of 4 landed: `SKILL.md` and the places that list the skills. Next: step 3, the gate's reading.
+- 2026-11-22. Steps 1 and 2 are on main. Step 2.A, the skill renamed `paper-review-panel`, is with its builder in `.agents/worktrees/6-paper-review-2.A`. Step 3 has its brief and its brief check on disk and waits for 2.A; its `/spec` is taken over after 2.A lands, with the paths of its brief put to the new name.
+- Roadmap entry 6 (paper-review). Plan step 2.A of 5: the name. Next: step 3, the gate's reading, then step 4, the closing.
 - Open on Axel's side: none.
