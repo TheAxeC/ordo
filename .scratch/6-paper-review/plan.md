@@ -19,7 +19,8 @@ a fresh agent reads `diff -r` of the skill's folder against `research-hub/.agent
 
 - ✅ 1 the pages: each file of `research-hub/.agents/skills/academic-paper-reviewer/` under `agents/`, `references/`, `templates/` and `examples/`, except `references/changelog.md`, copied into `skills/academic/paper-review/` under its own folder and name, with the edits of ADR 0043, Decision 1, and no others; `diff` of each page against its source shows only those edits, and the character-set check of `docs/dev/building.md` prints nothing for the folder (1 commit) (approved)
 - ✅ 2 `SKILL.md` and the places that list the skills: the source's `SKILL.md` carried section by section, with its words, into the layout of `docs/dev/skill-layout.md` as `skills/academic/paper-review/SKILL.md`, with the three things the source does not state taken as `paper` has them (ruling The three things the source does not state); the README's row and its count of skills, `paper`'s Use instead row, the glossary's entry "panel review" and the skill's figure; the reviewer reads the source's `SKILL.md` against the new one, and the verify list of `docs/dev/building.md` passes on main (1 commit) (approved) (ruling 2-contracts) (ruling 2-questions) (ruling 2-call)
-- 3 the gate's reading: a fresh agent reads `diff -r` of `skills/academic/paper-review/` against `research-hub/.agents/skills/academic-paper-reviewer/` once and writes `agents/reviews/3-diff-reading.md`, which lists each difference with which edit of ADR 0043, Decision 1, it is, or none; the user reads that list (0 commit) (approved)
+- 2.A the name: the skill is renamed `paper-review-panel`: its folder `skills/academic/paper-review-panel/`, the name in its frontmatter, its call `/paper-review-panel`, its run folder `paper-review-panel-runs/`, its figure `docs/figures/paper-review-panel.svg`, and every place of the repository outside the ledgers that names it (the README, `paper`, the glossary, the roadmap, the ADRs, the figure scripts and the pages on them); `git grep -nE '(^|[^-a-z])paper-review([^-a-z]|$)' -- . ':!.scratch'` and `git grep -n 'paper-review-runs' -- . ':!.scratch'` print nothing, and the verify list of `docs/dev/building.md` passes (1 commit) (ruling The skill's name)
+- 3 the gate's reading: a fresh agent reads `diff -r` of `skills/academic/paper-review-panel/` against `research-hub/.agents/skills/academic-paper-reviewer/` once and writes `agents/reviews/3-diff-reading.md`, which lists each difference with which edit of ADR 0043, Decision 1, it is, or none; the user reads that list (0 commit) (approved) (ruling The skill's name)
 - 4 the closing: the closing report written (the cost script's output, or that the plan started no agent), the roadmap entry ticked with the gate's output, this folder moved to the archive (orchestrator, no agent) (approved)
 
 ## Could run in parallel
@@ -38,6 +39,7 @@ Independent of each other; the standing rule of one agent at a time still serial
 - Open item 2-contracts (2026-11-22): the two scoring contracts the source's two-call protocol names, `shared/contracts/reviewer/full.json` and `methodology_focus.json`, which its folder does not hold, are taken from the source's upstream repository at the source's version (contract ids `reviewer/reviewer_full/v1` and `reviewer/reviewer_methodology_focus/v1`) and written into `SKILL.md`, which unblocks step 2 (self-rule).
 - Open item 2-questions (2026-11-22): the three contribution questions of Phase 2.5 step 3, which the source reads from deep-research's page, are written into the step with their text, which unblocks step 2 (self-rule).
 - Open item 2-call (2026-11-22): the skill is called as `/paper-review <mode> <manuscript>`, the source's six mode names under it and `full` when no mode is named, with the source's plain requests kept as triggers, as `paper` is called, which unblocks step 2 (self-rule).
+- The skill's name (2026-11-22): the skill is called `paper-review-panel`, not `paper-review`; the rename is step 2.A, before the gate's reading, and step 3 reads the folder under its new name (the user).
 
 ## Agents
 
@@ -53,7 +55,7 @@ Each agent a plan skill started for this plan has one bullet, with its agent id,
 
 ## Blocked, and by what
 
-- nothing.
+- 3: waits for step 2.A on main.
 
 ### Step 1, the pages (landed 2026-11-22)
 
