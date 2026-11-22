@@ -2,7 +2,7 @@
 name: paper
 description: "Write, revise, plan and format a LaTeX manuscript with twelve roles, each a fresh agent: intake, literature strategist, structure architect, argument builder, draft writer, citation compliance, abstract, peer reviewer, formatter, Socratic mentor, visualization and revision coach. Twelve modes: full, outline-only, revision, abstract-only, lit-review, format-convert, citation-check, plan, revision-coach, disclosure, rebuttal-audit and response-letter. Two calls, draft-review and figures, run one role. Every change to the manuscript is a patch applied by script, and every cited claim rests on a passage read in the run. Triggers on: /paper, write a paper, outline a paper, revise a manuscript, write the response letter, parse reviewer comments, audit my rebuttal, write an abstract, review the literature on a topic, check the citations, write an AI disclosure statement, help me plan my paper, convert my paper to DOCX, convert the citations to <style>, review my draft, draw the figures."
 metadata:
-  version: "4.0.0"
+  version: "4.1.0"
 ---
 
 # Write and revise a manuscript
@@ -95,7 +95,7 @@ The `<manuscript>` of format-convert is a main `.tex`, a `.md`, a `.docx` or a `
    - **Citation**: `references/apa7_extended_guide.md`, `references/citation_format_switcher.md`.
    - **Writing**: `/writing` for the writing style and the writing quality check.
    - **Structure**: `references/paper_structure_patterns.md` (6 types), `references/abstract_writing_guide.md`.
-   - **Domain**: `references/latex_template_reference.md`, `references/domain_evidence_profiles.md`.
+   - **Domain**: `references/latex_template_reference.md`, `references/domain_evidence_profiles.md`, `references/journal_submission_guide.md` (the pre-submission checks).
    - **Process**: `references/failure_paths.md` (10 scenarios), `references/mode_selection_guide.md` (12 modes), `references/plan_mode_protocol.md`, `references/workflow_phase_details.md`, `references/revision_patch_protocol.md` (commands and the patch file), `references/anti_leakage_protocol.md`, `references/vlm_figure_verification.md`, `references/external_review_protocol.md`.
    - **Ethics**: `references/credit_authorship_guide.md` (CRediT 14 roles), `references/funding_statement_guide.md`, `references/statistical_visualization_standards.md`.
    - **Disclosure**: `references/disclosure_mode_protocol.md` (venue-specific AI-usage statement generation), `references/venue_disclosure_policies.md` (database: ICLR, NeurIPS, Nature, Science, ACL, EMNLP), `references/policy_anchor_disclosure_protocol.md`, `references/policy_anchor_table.md`.
@@ -115,7 +115,7 @@ The `<manuscript>` of format-convert is a main `.tex`, a `.md`, a `.docx` or a `
 | `revision` | "Revise paper" | 8->5->6 | Patch document + deterministically applied revised draft + apply report (revision log via `templates/revision_tracking_template.md`), and the response letter and its check when the comments are referee comments |
 | `abstract-only` | "Write abstract" | 1->7 | Abstract + keywords |
 | `lit-review` | "Literature review" | 1->2 | Annotated bibliography + synthesis |
-| `format-convert` | "Convert to LaTeX" / "Convert citations to [format]" | 9 only | Formatted document; includes citation format conversion (APA 7 / Chicago / MLA / IEEE / Vancouver) |
+| `format-convert` | "Convert to LaTeX" / "Convert citations to [format]" | 9 only | Formatted document; includes citation format conversion (APA 7 / Chicago / MLA / IEEE / Vancouver); for a journal venue, the pre-submission checks with their results in `format-report.md` |
 | `citation-check` | "Check citations" | 6 only | Citation error report |
 | `plan` | "guide my paper" / "help me plan my paper" | 1->10->3->4 | Chapter Plan + INSIGHT Collection |
 | `revision-coach` | "parse reviews" / "revision roadmap" / "I got reviewer comments" / "should we push back" / "conference rebuttal" / "grant panel response" | 12 only | Revision Roadmap + optional Tracking Template + Response Letter Skeleton (covers pushback/disagreement posture + journal / conference / grant-panel / transfer-after-review scopes) |
@@ -539,14 +539,17 @@ Text formats: LaTeX (.tex + .bib), DOCX (via Pandoc), PDF (via LaTeX or Pandoc),
 
 Stops this mode can reach: the mode to run (only for a plain request), the session's questions, the target to settle, a converted file to replace, a structural patch, a patch that does not apply, and a script failed.
 
-Format-convert has no intake agent. The session asks the user, in one message, the stop "The session's questions", for what the items below name and the call does not give, and writes the answers into `config.md` (Steps 6): the targets, the Format Profile of `agents/intake_agent.md`, Step 5, and the Existing Materials, such as a reference `.docx`, a CSL file or a venue's template.
+Format-convert has no intake agent. The session asks the user, in one message, the stop "The session's questions", for what the items below name and the call does not give, and writes the answers into `config.md` (Steps 6): the targets, the Format Profile of `agents/intake_agent.md`, Step 5, and the Existing Materials, such as a reference `.docx`, a CSL file or a venue's template. The message also offers to record the declared limits of the run's venue as a venue profile, whether the call names the venue or the answer does, in the form `agents/intake_agent.md`, Step 3, "Venue-profile follow-up", gives. It says that the profile is optional and that the formatter holds the manuscript against the limits it declares, in the formatting and in the pre-submission checks. The session writes the profile as that step says, and its path into the row Venue Profile of `config.md`.
 
 1. Settle the targets from the call and the session's question (Steps 6).
    - A call with no target takes Markdown, and the session's question names it.
    - A target outside `docx`, `pdf`, `markdown` and `latex`, the citation styles of the table in `agents/intake_agent.md` and a venue, such as HTML or Harvard, raises the stop "The target to settle", which lists the supported targets.
    - A `.bib` given takes one citation style and the targets `docx` and `markdown`. Item 10 makes its reference list, and items 2 to 9 do not run. A `.bib` with no citation style, or with another target, raises the stop "The target to settle".
    - The run changes the citation style when a target is a citation style other than the one the manuscript states by its `\bibliographystyle` line or its `biblatex` style, and for a `.tex` made from a `.md` or a `.docx` when a target is any citation style. A run that does not change the style leaves the manuscript's own style as it stands.
-   - Done when every target is a supported one.
+   - The session writes a venue given as a target into the row Target Journal of `config.md`.
+   - The venue of the run is the venue the call's target names, or else the journal the row Target Journal names. A row that is empty, absent or reads "General" names no venue.
+   - The venue is taken as a journal unless the row Paper Type of `config.md`, a file of the run or the venue's own name says that it is a conference, a workshop, proceedings or a preprint server. A venue none of these settles is taken as a journal, whatever else is known of it.
+   - Done when every target is a supported one, a venue given as a target stands in the row Target Journal, and a venue profile the user gave stands in the row Venue Profile.
 2. For a `.md` or a `.docx` given, make the LaTeX source every target is converted from.
    - Run `pandoc '<manuscript file name>' -s --extract-media='figures' -o '<name>.tex'`, with `<name>` the input's name without its extension and each value one single-quoted argument (Steps 2).
    - The working folder is the manuscript's folder, so that the `.tex` names each image by a relative path.
@@ -566,7 +569,7 @@ Format-convert has no intake agent. The session asks the user, in one message, t
 4. Start the formatter (Steps 8 and 9).
    - It is given `config.md`, the manuscript's files with their manifests and their patch paths, the `.bib`, the path of `convert/` with its `.aux` and `.bbl` when item 3 made them, and the latest `citation-report.md` and `review-<r>.md` beside the manuscript when they stand. A file takes two patch paths when the run does not change the citation style and a DOCX or Markdown target stands, and one otherwise.
    - The manuscript's files are the main `.tex`, or the `.tex` of item 2, and the files it inputs.
-   - It reads these rows of `config.md`: Output Format, Citation Format, Target Journal, Format Profile, Existing Materials and Paper Type.
+   - It reads these rows of `config.md`: Output Format, Citation Format, Target Journal, Venue Profile, Format Profile, Existing Materials and Paper Type.
    - When it writes a cover letter it also reads the row Co-Authors (`agents/formatter_agent.md`, "Cover Letter Generation").
    - It writes the patches with the id `format-convert`, which carry these changes:
      - the citation style;
@@ -579,7 +582,8 @@ Format-convert has no intake agent. The session asks the user, in one message, t
    - A DOI that a `.bib` entry lacks gets no placeholder and is listed in `format-report.md`.
    - It writes each patch with the Write tool. It writes no script and runs none, reads the manifest, the `.aux` and the `.bbl` itself, and writes no file outside the run folder and `convert/` besides its patch files and the files its page names.
    - It also writes `format-report.md`, and `refs.bib` for a `.md` or a `.docx` given. For a journal venue it writes `cover-letter.tex` when none stands beside the manuscript.
-   - Done when `format-report.md` exists and each file the agent was to write exists.
+   - When the venue of the run (item 1) is a journal, it runs the pre-submission checks and writes the section "Pre-submission checks" of `format-report.md`, as `agents/formatter_agent.md`, "The pre-submission checks", gives. Otherwise the section holds the sentence that page gives for a run with no venue or for a venue that is no journal.
+   - Done when `format-report.md` exists with its section "Pre-submission checks" and each file the agent was to write exists.
 5. Apply the `format-convert` patches (Steps 10), then run `lookup.py cite-keys` and `check-urls` (Steps 11) and write the runs to `checks.md`.
    - They are applied to the manuscript's files when a target is `latex`, a citation style other than the manuscript's, or a venue.
    - They are always applied to the `.tex` made from a `.md` or a `.docx`.
@@ -685,6 +689,12 @@ Format-convert has no intake agent. The session asks the user, in one message, t
    - It lists each `.bib` entry without a DOI with the call `/paper citation-check`.
    - It lists each entry of the `.bib` the formatter wrote from the reference text.
    - It says when the citations were not checked against their sources, and when the last draft review's verdict was not Accept.
+   - In a run in which the formatter ran the pre-submission checks (item 4), it names each check with the result `not met`, or says that no check has that result.
+   - In such a run it gives the number of pre-submission checks with the result `for the author`, zero included.
+   - In such a run it names the section "Pre-submission checks" of `format-report.md`, which holds every check with its result.
+   - In such a run, when the file the user gave does not hold the `format-convert` patch (item 5 applied it to a copy only or listed it as not applied, or the manuscript given is a `.md` or a `.docx`), it says that the results describe the manuscript with the patch applied and names what the patch adds that the user's file does not hold.
+   - In a run with a formatter in which the pre-submission checks were not run, it says so in one sentence, with the reason the section gives.
+   - In a `.bib` run it says nothing on the pre-submission checks.
    - Done when `final.md` exists and the final message is shown.
 
 ### citation-check
@@ -769,7 +779,7 @@ Stops this call can reach: the mode to run (only for a plain request), a structu
 | 6 | the citation compliance agent (`agents/citation_compliance_agent.md`) | Citation format verification, reference list completeness, DOI checking | Phase 5a |
 | 7 | the abstract agent (`agents/abstract_bilingual_agent.md`) | Abstract (EN), 5-7 keywords | Phase 5b |
 | 8 | the peer reviewer (`agents/peer_reviewer_agent.md`) | Simulated double-blind review, five-dimension scoring, revision suggestions (at most two reviews, one rewrite between them) | Phase 6 |
-| 9 | the formatter (`agents/formatter_agent.md`) | Convert to LaTeX/DOCX (via Pandoc)/PDF/Markdown, journal formatting, cover letter, citation format conversion (APA 7 / Chicago / MLA / IEEE / Vancouver) | Phase 7 |
+| 9 | the formatter (`agents/formatter_agent.md`) | Convert to LaTeX/DOCX (via Pandoc)/PDF/Markdown, journal formatting, cover letter, citation format conversion (APA 7 / Chicago / MLA / IEEE / Vancouver), the pre-submission checks in format-convert | Phase 7 |
 | 10 | the Socratic mentor (`agents/socratic_mentor_agent.md`) | Plan mode Socratic mentor: chapter-by-chapter guidance, convergence criteria (4 signals), question taxonomy (4 types), INSIGHT extraction | Plan Step 0-3 |
 | 11 | the visualization agent (`agents/visualization_agent.md`) | Parse paper data and generate publication-quality figure code (Python matplotlib / R ggplot2) with APA 7.0 formatting, colorblind-safe palettes, and LaTeX integration | Phase 4 / Phase 7 |
 | 12 | the revision coach (`agents/revision_coach_agent.md`) | Parse unstructured reviewer comments into structured Revision Roadmap; classify, map, and prioritize comments; works standalone without an earlier run | Revision-Coach mode |

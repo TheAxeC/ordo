@@ -765,7 +765,7 @@ Quality gate not passed ->
 
 ## Paper's addition: the LaTeX manuscript
 
-This section is `paper`'s addition to academic-paper's agent. The manuscript is a LaTeX file and its `.bib`, so the formatter prepares the `.tex` for each target and changes it only by patches, in the form of `references/revision_patch_protocol.md`, which the session applies with `templates/apply_tex_patch.py`. It writes each patch with the Write tool, reading the block manifest, the `.aux` and the `.bbl` itself, and runs no conversion: the session runs `pandoc` and `latexmk` for the target formats. The formatter writes `format-report.md` in the run folder, in the form of the Output Package above.
+This section is `paper`'s addition to academic-paper's agent. The manuscript is a LaTeX file and its `.bib`, so the formatter prepares the `.tex` for each target and changes it only by patches, in the form of `references/revision_patch_protocol.md`, which the session applies with `templates/apply_tex_patch.py`. It writes each patch with the Write tool, reading the block manifest, the `.aux` and the `.bbl` itself, and runs no conversion: the session runs `pandoc` and `latexmk` for the target formats. The formatter writes `format-report.md` in the run folder, in the form of the Output Package above, followed in format-convert by the section "Pre-submission checks" that "The pre-submission checks" below gives.
 
 ### The two patches
 
@@ -846,3 +846,59 @@ The session made the `.tex` from the input. The `.tex` holds the reference list 
 - The `format-convert` patch gives each citation of the text a cite command with the entry's key, names the `.bib`, and removes the reference list held as text.
 - The patch changes no wording of the text.
 - The session compiles this `.tex` in the conversion copy before the patch, for its cross-reference numbers; its `.aux` holds no `\bibcite` line, since the `.tex` cites nothing yet. With no citation style among the targets its DOCX and Markdown outputs use `pandoc --citeproc`. With one, the run changes the citation style, the session compiles the copy after the first patch, and the formatter, resumed, reads the numbers or the author-year form from that compile.
+
+### The pre-submission checks
+
+This subsection applies in format-convert. When the venue of the run is a journal, the formatter runs the checks of the section "Pre-Submission Checklist" of `references/journal_submission_guide.md` and writes each with its result into the section "Pre-submission checks" of `format-report.md`.
+
+- **The venue.** `SKILL.md`, format-convert item 1, says which venue the run has and when it is taken as a journal.
+- **The checks.** They are the checks of the three lists of that section: "Journal Selection Criteria", "Manuscript Preparation" and the components of "Required Components", each component one check.
+- **The guide.** The formatter reads only the section "Pre-Submission Checklist" of the guide.
+  - The cover letter stays that of "Cover Letter Generation".
+  - Neither the guide's journal tables nor the Notes column of "Required Components" is a requirement of the venue.
+  - A component is `met` when it stands in the manuscript or beside it, whatever its note says of length or number.
+- **What a venue asks.** It is read only from a file the run gives, as `agents/intake_agent.md`, Step 3, says of a venue's limits ("I never look up or infer limits from the journal name") and "Apply it: declared fields only, best-effort per target" says of a missing layout field.
+- **The files a result rests on.** They are `config.md` with its rows, the row Venue Profile and the profile it names among them, the manuscript's files, the `.bib`, the venue's template and the other files of the row Existing Materials, and `cover-letter.tex` when it stands or the formatter writes it.
+  - A result never rests on text the formatter wrote in this run, its cover letter and its report among them.
+  - There are two exceptions: the manuscript as its patch leaves it, as the bullet "The manuscript" gives, and the word count of the row Word Count of "Format Specifications Applied", which a declared word limit is held against.
+  - A `cover-letter.tex` the formatter wrote settles the component "Cover letter" by standing beside the manuscript, and its text settles no check.
+- **The manuscript.** It is checked as the formatter's own `format-convert` patch leaves it, so the results describe the manuscript with that patch applied. A `[GAP: <element>]` placeholder the patch writes counts as the element missing.
+- **No web search.** The formatter makes no web search for these checks: a fact it would need one for gives the result `for the author`.
+
+The section is the last part of `format-report.md` that the formatter writes, after the Output Package and the lists this addition asks for. It holds the three list headings in the guide's order, and under each one row per check, in the guide's order. A row holds the check in the guide's words, its result and what the result rests on:
+
+```markdown
+## Pre-submission checks
+
+### Journal Selection Criteria
+| Check | Result | Rests on |
+|-------|--------|----------|
+| [the check, in the guide's words] | [met / not met / not applicable / for the author] | [the file and the place, or what the author verifies and where] |
+
+### Manuscript Preparation
+[the same table]
+
+### Required Components
+[the same table, one row per component]
+```
+
+The result is one of four:
+
+| Result | When | The row names |
+|---|---|---|
+| `met` | A file shows that the check holds | The place in the file |
+| `not met` | A file shows that the check does not hold | The place in the file, and the placeholder when the patch wrote one |
+| `not applicable` | A file of the run says that the venue does not ask for the check, such as a template that states that line numbers are not used for "Line numbers (if required)", or the manuscript has no table, no figure or no supplementary material for the component of that name | That file, or the manuscript |
+| `for the author` | No file of the run holds the fact the check rests on | What the author verifies and where |
+
+- A template or profile that says nothing on a check is no file that says the venue does not ask for it, and the check is then `for the author`.
+- A component is `not met` when it is missing from the manuscript and from beside it, and either the guide's column "Usually Required" marks it `yes` or a file of the run requires it.
+- A component that is content of the manuscript (Tables, Figures, Supplementary materials), and of which the manuscript has none, is `not applicable`, and the row names the manuscript.
+- Any other missing component that the guide marks "Often", "Sometimes", "Increasingly" or "If applicable", and that no file of the run requires, is `for the author`.
+- A check of "Journal Selection Criteria" that no file settles, such as the journal's review turnaround, is `for the author`.
+- The check "Correct citation format (may differ from your preferred style)" is `met` or `not met` only against a style the venue's template or profile states, and `for the author` otherwise.
+- The check "Word/page count within limits" has two rules, and with no limit declared in a file it is `for the author`.
+  - A word limit that a file of the run declares is held against the count of the row Word Count of "Format Specifications Applied", and the row names the count and the limit with its file.
+  - A page limit that a file of the run declares gives `for the author`, since the formatter has no page count, and the row names the limit and its file.
+- With no venue, the section holds one sentence: "The pre-submission checks were not run, since the run names no venue."
+- With a venue that `SKILL.md`, format-convert item 1, does not take as a journal, the section holds one sentence: "The pre-submission checks were not run, since the guide's checks are a journal's."
