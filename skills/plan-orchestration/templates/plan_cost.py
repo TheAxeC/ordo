@@ -15,7 +15,7 @@ The inputs read, and nothing else:
 
 An agent is a bullet `- <agent id>: <role>, <served model>`. A line that is not a bullet (a paragraph, a blank line, a heading) is passed over. A line that starts, after any spaces, with `-`, `*` or `+` and then a space or the end of the line is a bullet, and a bullet that is not of that form, after its leading spaces, is an error. The served model is not used: each response is priced at the model its own entry names.
 
-The role kinds, in this order: builder (`builder of step <n>`), brief check (`brief check of step <n>`), reviewer (`reviewer of step <n>`), reviewer over a round (`reviewer of step <n> over round <r>`), grill lookup (`grill lookup`). A step is a number with an optional lower-case letter, such as 6b, and a round is a number. Any other role text is an error.
+The role kinds, in this order: builder (`builder of step <n>`), brief check (`brief check of step <n>`), reviewer (`reviewer of step <n>`), reviewer over a round (`reviewer of step <n> over round <r>`), grill lookup (`grill lookup`), other (any other role text). A step is a number with an optional letter, with or without a dot before the letter, such as 6b or 5.R, and a round is a number.
 
 A response is a transcript line that is a JSON object with "type":"assistant" and a message.usage. A response written as several entries has the same message.id and requestId in each, and is counted once. Its five counts and its model come from its response body when the body folder holds <requestId>.response.json, and otherwise from its last entry in the file. The transcript can record a response's output count before the response ended, so a response priced from its transcript is a lower bound: it is a response without a body, and the cost of every row that holds one is written with >= in front. Per entry, the first of these checks that fails is its one error, and the entries after it are still read:
     1. usage is an object, and input_tokens, cache_creation_input_tokens, cache_read_input_tokens and output_tokens are each whole numbers of 0 or more, as are cache_creation.ephemeral_5m_input_tokens and cache_creation.ephemeral_1h_input_tokens.
@@ -32,7 +32,7 @@ The output, on success, is written for a person to read:
     the table's first comment line without its `# `
     Response bodies from <the body folder as given>.   (or, with no body folder, "Response bodies: none, so every cost is a lower bound.")
     a blank line, then a table with one row per role kind that has agents, in the order above, with the columns Role, Agents, No body, Input, Cache write 5m, Cache write 1h, Cache read, Output and Cost (USD), then a row Total
-    a blank line, then a table with one row per agent, with the columns Agent, Role, Model, No body, the five counts and Cost (USD), ordered by role kind, then step number as a number and then its letter, then round as a number, then agent id
+    a blank line, then a table with one row per agent, with the columns Agent, Role, Model, No body, the five counts and Cost (USD), ordered by role kind, then step number as a number and then its letter, then round as a number, then agent id; the agents of the kind other are ordered by their role text
 No body is the number of the row's responses priced from the transcript, and the Total row holds the sum. A Cost cell of a row whose No body is above 0 is written >= and then the cost, as >=1.87. Counts are whole numbers with no separators. Model lists each model of the agent's responses, comma-separated, in the order first met, and is - for an agent with no counted response, whose counts are 0 and cost 0.00. A cost has two decimals, rounded half up from the exact sum; the Total row is rounded from the exact total, not summed from rounded rows. Each column is padded with spaces so it lines up.
 
 The script reads every input before it prints anything. Each error is one line `error: <what>` on stderr, and stdout stays empty. An error names its file and line where it has them. The errors of the run, exit 1:
@@ -45,7 +45,6 @@ The script reads every input before it prints anything. Each error is one line `
     error: <settings file>: env.OTEL_LOG_RAW_API_BODIES is not a string
     error: OTEL_LOG_RAW_API_BODIES names <folder>, which is not a folder
     error: <file>:<line>: the bullet is not of the form "- <agent id>: <role>, <served model>"
-    error: agent <id> has an unknown role: <role>
     error: agent <id> is listed twice: <file>:<line> and <file>:<line>
     error: the ledger names no agent   (no bullet in plan.md's Agents section or in agent-roles.md)
     error: no transcript of agent <id> under <transcript root>
@@ -94,12 +93,12 @@ _PLAN_LINE = re.compile(r"# Plan: +(\S.*)")
 _BULLET = re.compile(r" *[-*+](?: |$)")
 _AGENT_BULLET = re.compile(r"- ([^:]*): (.+), ([^,]+)")
 _PRICE = re.compile(r"[0-9]+(?:\.[0-9]+)?")
-_KINDS = ("builder", "brief check", "reviewer", "reviewer over a round", "grill lookup")
+_KINDS = ("builder", "brief check", "reviewer", "reviewer over a round", "grill lookup", "other")
 _ROLES = (
-    re.compile(r"builder of step ([0-9]+)([a-z]?)"),
-    re.compile(r"brief check of step ([0-9]+)([a-z]?)"),
-    re.compile(r"reviewer of step ([0-9]+)([a-z]?)"),
-    re.compile(r"reviewer of step ([0-9]+)([a-z]?) over round ([0-9]+)"),
+    re.compile(r"builder of step ([0-9]+)(?:\.?([A-Za-z]))?"),
+    re.compile(r"brief check of step ([0-9]+)(?:\.?([A-Za-z]))?"),
+    re.compile(r"reviewer of step ([0-9]+)(?:\.?([A-Za-z]))?"),
+    re.compile(r"reviewer of step ([0-9]+)(?:\.?([A-Za-z]))? over round ([0-9]+)"),
     re.compile(r"grill lookup"),
 )
 _COLUMNS = ("Input", "Cache write 5m", "Cache write 1h", "Cache read", "Output")
@@ -175,17 +174,20 @@ def _read_table(errors: list[str]) -> tuple[dict[str, tuple[Decimal, ...]] | Non
     return prices, lines[0][1:].strip()
 
 
-def _role_parts(role: str) -> tuple[int, int, str, int] | None:
-    """The role kind, step number, step letter and round of a role text, or None."""
+def _role_parts(role: str) -> tuple[int, int, str, int]:
+    """The role kind, step number, step letter and round of a role text.
+
+    A role text of no listed kind is of the kind other, ordered by its text.
+    """
     for kind, pattern in enumerate(_ROLES):
         match = pattern.fullmatch(role)
         if match is not None:
             groups = match.groups()
             step = int(groups[0]) if groups else 0
-            letter = groups[1] if groups else ""
+            letter = (groups[1] or "") if groups else ""
             number = int(groups[2]) if len(groups) > 2 else 0
             return kind, step, letter, number
-    return None
+    return len(_ROLES), 0, role, 0
 
 
 def _read_bullets(
@@ -204,9 +206,7 @@ def _read_bullets(
             continue
         agent_id, role = match.group(1), match.group(2).strip()
         parts = _role_parts(role)
-        if parts is None:
-            errors.append(f"agent {agent_id} has an unknown role: {role}")
-        elif agent_id in agents:
+        if agent_id in agents:
             errors.append(f"agent {agent_id} is listed twice: {agents[agent_id].where} and {where}")
         else:
             agents[agent_id] = _Agent(agent_id, role, *parts, where)
