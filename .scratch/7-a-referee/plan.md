@@ -71,6 +71,12 @@ Independent of each other; the standing rule of one agent at a time still serial
 - The first-round run of step 2 (2026-11-23): the first-round report is close to the comments sent (the user).
 - The budget is a ceiling (2026-11-23): a report that finds exactly the budget's number of major points is bad, since it reads as a review that always finds that number; the number of major points comes from the paper, and the budget only cuts (the user).
 - What a second round is (2026-11-23): a second round is mainly about what improved and changed against round 1: how the authors responded to each of the referee's comments and whether that is satisfactory; separately, whether the revision introduced another extremely major defect, which is exceptional; a second-round report whose points are mostly other items than those of round 1 is wrong (the user).
+- The second pair of runs of step 2 (2026-11-23): not passed. The first round found exactly the budget's 7 major points and both reports fill the 1,200 words; the second round merged a new issue into a first-round point, kept points the authors had not answered, and recommended major revision. Each of the three is extremely bad, and the entry does not pass while a ceiling is hit as a target (the user).
+- Open item 4 (2026-11-23): (a), the referee never sees the budget or the word limit; the session cuts from the referee's ranking and checks the length afterwards, and only a report over the limit goes back to be shortened; the lazy option was (c), stronger wording (the user).
+- Open item 5 (2026-11-23): (a), in a second round a first-round point the authors left unanswered is let go, to the left-out list where the user can move it back in, unless a main claim still fails without it; the lazy option was (c), keeping it as a minor point (the user).
+- Open item 6 (2026-11-23): (d), the referee is not given the EIC's new issues, which a fresh agent judges on their own; every rule of the referee's pages is absolute, an agent that disagrees with a rule follows it and writes its objection for the user; and a fresh agent checks the selection and the report against the rules before the user sees them, an argument for an exception counting as a break; the lazy option was (c), a stricter sentence only (the user).
+- Rules are rules (2026-11-23): an agent never reasons its way past a rule (the user).
+- A repair round, not a step (2026-11-23): the changes of Open items 4 to 6 are made as repair round 2 of step 1b, by its builder, and not as a new step (the user).
 
 ## Agents
 
