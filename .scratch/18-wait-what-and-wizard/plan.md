@@ -54,6 +54,7 @@ Independent of each other; the standing rule of one agent at a time still serial
 - D12 (2026-11-23). D10 is recorded as an ADR, `docs/adr/0045-wait-what-and-wizard-are-copies-of-their-sources-with-the-differences-this-repository-forces.md`, status proposed (the user).
 - The step list (2026-11-23): both skills are built in one step, "one step" (the user).
 - The gate's runs (2026-11-23): `wait-what` is typed by the user in the user's own sessions, the next three times a message does not land, and the user gives the verdict for each; the `wizard` run is made by a separate agent that invokes the installed skill on the project the user names, the orchestrating session answering its stops except the stage list, which the user confirms, and the user runs the script: "(a)" (the user).
+- The gate, wait-what (2026-11-23): the `wait-what` part of the gate passes after one run in the orchestrating session, with the glossary line of the skill changed to name the glossary directly: "Change the glossary line and then I accept wait-what" (the user).
 
 ## Agents
 

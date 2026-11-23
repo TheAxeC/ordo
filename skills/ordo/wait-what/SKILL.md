@@ -25,7 +25,7 @@ disable-model-invocation: true
 ## What it reads
 
 1. The conversation so far.
-2. The glossary, found as the `plan` skill's "What it reads" 1 says.
+2. The glossary: the `glossary.md` that the `standards` list of the repository's `plan.yaml` names.
    - With no glossary the skill still runs, without the glossary's terms, and that is no refusal.
 
 ## Steps
