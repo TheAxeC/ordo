@@ -1916,7 +1916,7 @@ def paper_review_panel() -> str:
 
 
 def referee() -> str:
-    """The first round of the referee skill: its agents in order and its three stops."""
+    """The first round of the referee skill: its agents in order and its stops."""
     reviewers = (
         Node("E", "EIC, 2 calls"),
         Node("M", "Methodology reviewer, 2 calls"),
@@ -1929,24 +1929,43 @@ def referee() -> str:
         Node("F", "Field analyst: the Reviewer Configuration Card"),
         Node("C", "You confirm the reviewer configuration", "stop"),
         *reviewers,
-        Node("R", "Referee: the selection and the left-out comments"),
+        Node("R", "Referee: every point graded and ranked, and the left-out comments"),
+        Node("K", "Rule check: the selection against the referee's rules"),
+        Node("N", "Referee, resumed: the selected minor points in full", "maybe"),
+        Node("J", "Rule check: the selected points in full", "maybe"),
         Node("S", "You confirm the selection or move comments", "stop"),
         Node("W", "Referee, resumed: the referee report"),
+        Node("L", "Referee, resumed: the report shortened, only when over the length", "maybe"),
+        Node("Q", "Rule check: the report against the referee's rules"),
+        Node("B", "The breaks left in the report, only after 2 returns", "stop"),
     )
     edges = (
         Edge("I", "F"),
         Edge("F", "C"),
         *(Edge("C", reviewer.key) for reviewer in reviewers),
         *(Edge(reviewer.key, "R") for reviewer in reviewers),
-        Edge("R", "S"),
+        Edge("R", "K"),
+        Edge("K", "R", "a break, at most 2 times", "back"),
+        Edge("K", "N"),
+        Edge("N", "J"),
+        Edge("J", "N", "a break, at most 2 times", "back"),
+        Edge("J", "S"),
         Edge("S", "W"),
+        Edge("W", "L"),
+        Edge("L", "Q"),
+        Edge("Q", "W", "a break, at most 2 times", "back"),
+        Edge("Q", "B", "a break still named"),
     )
     note = (
         "The five reviewers start at once from the pages of the paper-review-panel skill, "
         "each in 2 calls under its sprint contract. A panel shrunk at the intake starts only "
-        "the reviewers you name. The second round starts the field analyst and the EIC, "
-        "which checks the revision against the authors' response, and the five reviewers "
-        "only when you ask for them at the intake. Its selection, its stop and its report "
+        "the reviewers you name. The session keeps the budget: it moves the points over it "
+        "out of the referee's ranking and counts the words of the report, and no agent is "
+        "given a number of it. A change you make at the selection that needs new text goes "
+        "to the referee and its rule check again. The second round starts the field analyst, "
+        "the five reviewers only when you ask for them at the intake, the EIC, which checks "
+        "the revision against the authors' response, and a new-issue agent with a rule check "
+        "of its own when the EIC wrote a new issue. Its selection, its stops and its report "
         "follow as in the first round. A plain request that does not say the round is asked "
         "which round it is."
     )

@@ -623,3 +623,9 @@ The referee's first-round call is given `referee_agent.md`, the manuscript, `int
 - The builder's `grep -rn` name tables: not rerun, except where I grepped the same names.
 
 Usage: agent a8d9eb6c178218674, claude-sonnet-5-5.
+
+## Closed, repair rounds 2 and 3
+
+- The ten findings of "Repair round 2, refuted": sent to the builder as repair round 3 on the ruling of Open item 7; six closed and four closed in part, as "Repair round 3, refuted" lists them.
+- "Repair round 3, refuted", Behaviour 1: closed by the ruling on Open item 8 (b); the skill states in `SKILL.md`, "The budget", what the referee can still work out.
+- "Repair round 3, refuted", Spec 1 and 2, Proof 1, Standards 1 and 2, Behaviour 2 to 8: fixed at landing, as the booking of `plan.md` names each.

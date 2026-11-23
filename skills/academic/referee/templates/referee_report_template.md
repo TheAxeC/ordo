@@ -1,6 +1,6 @@
 # Referee report template
 
-The referee fills this template as `referee-report.md`. Text in `[brackets]` is replaced. Each `##` heading is one field of the journal's form, so the user pastes each field from its heading.
+The referee fills this template as `referee-report.md`. Text in `[brackets]` is replaced. Each `##` heading is one field of the journal's form, so the user pastes each field from its heading. Every rule of this template holds whatever the reasons, as "The rules hold" of the referee's page says.
 
 The first block is the form of a first round. The second block is the form "Comments to the author" takes in a second round. The headings below are the default fields. When `intake.md` names the journal's fields, one `##` heading per named field replaces them, in the journal's order, and the content below goes under the field that takes it.
 
@@ -21,7 +21,7 @@ The first block is the form of a first round. The second block is the form "Comm
 
 [The major points, or "None."]
 
-1. [The point, tied to its passage: section, page, line, table or figure, or a short quotation. What is wrong, why it matters for the paper's claims, and what would settle it.]
+1. [The point, tied to its passage: section, page, line, table or figure, or a short quotation. What is wrong, which main claim fails or has no evidence, and what would settle it.]
 
 ### Minor points
 
@@ -41,14 +41,14 @@ In a second round, "Recommendation" and "Confidential comments to the editor" st
 
 ### General comments
 
-[What the revision changed, and which first-round points it resolved. Then the overall assessment of the revision.]
+[What the revision changed, and which first-round points it resolved. Then the overall assessment of the revision. No first-round point left out because the authors did not answer it.]
 
 ### Major points
 
-[The remaining first-round points first, then any new point, or "None."]
+[Any new point first, then the remaining first-round points, in the order of `selected-points.md`, or "None."]
 
-1. [First-round point [its first-round number]: the point, tied to its passage. What the revision and the response did for it, what is still missing, and what would settle it.]
-2. [New in the revision: the point, tied to its passage. What the revision added or changed, why a main claim fails or cannot be judged under it, and what would settle it.]
+1. [New in the revision: the point, tied to its passage. What the revision added or changed, which main claim fails or has no evidence under it, and what would settle it.]
+2. [First-round point [its first-round number]: the point, tied to its passage. What the revision and the response did for it, what is still missing, and what would settle it.]
 
 ### Minor points
 
