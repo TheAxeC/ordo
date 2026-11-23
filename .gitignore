@@ -2,3 +2,5 @@
 .agents/*
 # Python bytecode that running a script under a skill or under utils/ leaves beside it.
 __pycache__/
+
+CLAUDE.md

@@ -72,7 +72,7 @@ dispatch: []
 
 - Design: `docs/roadmap.md` entry 8, ADR 0044 and the rulings in `plan.md`. Ledger: `.scratch/8-grant/`, with `agents/briefs/` and `agents/reviews/`.
 - Plan configuration: `docs/plan.yaml`. In a call, in front of the entry: nothing.
-- The data the steps read, and who may change it: `skills/academic/paper/`, whose pages the skill runs and no step changes; `research-hub/funding/2024-fwo-postdoc-fbttr/` and `research-hub/funding/2026-fwo-senior-transplant/fwo-guidelines/`, the gate's application and call documents, read only and copied before a run.
+- The data the steps read, and who may change it: `skills/academic/paper/`, whose pages the skill runs and no step changes; `research-hub/funding/2026-fwo-senior-transplant/`, with its `fwo-guidelines/`, the gate's application and call documents, read only and copied before a run.
 - Anything running that a step must not disturb: nothing.
 
 ## Current position (rewritten before every step commit of this plan)

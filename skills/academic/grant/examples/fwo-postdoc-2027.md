@@ -1,27 +1,28 @@
 # Funder config: FWO, postdoctoral fellowship, 2027
 
-An example of a filled funder config, written from two documents of the Research Foundation Flanders (FWO) alone. No run reads it: `/grant config` drafts the config of an application from the call documents the user gives. Each document carries its own year, which "Call" states, so the example is the config of no single call.
+An example of a filled funder config, written from three documents of the Research Foundation Flanders (FWO) alone. No run reads it: `/grant config` drafts the config of an application from the call documents the user gives. Each document carries its own year, which "Call" states, so the example is the config of no single call.
 
 ## Call
 
 - Funder: Research Foundation Flanders (FWO)
-- Programme: Postdoctoral fellowship (junior/senior), fundamental research
+- Programme: Postdoctoral fellowship, fundamental research
 - Call year: 2027, the year the score grid is marked with
 - Documents read:
   - Score grid: "POSTDOCTORAL FELLOWSHIP FUNDAMENTAL RESEARCH EVALUATION: score grid with scoring descriptors - PRESELECTION", marked "v. 2027", 4 pages.
-  - Application form: the form "APPLICATION POSTDOCTORAL FELLOWSHIP (junior/senior)", as printed in the report of an application submitted in December 2024, 30 pages, of which page 10 holds the form's instructions for the project outline and pages 21 to 29 hold the project outline.
+  - Application form: the funder's online application form of the postdoctoral fellowship, its part "Project description".
+  - Project outline template: the funder's template of the project outline, with its four headings.
 
 ## Sections
 
 | Heading | Required | Limit | Unit | Source |
 |---|---|---|---|---|
-| (whole document) | yes | 10 | pages | Application form, p. 10: "The total project outline has a maximum of 10 A4 pages", tables, graphs and illustrations included, and p. 21: "PROJECT OUTLINE (MAX. 10 pages)" |
-| Changes to previous project proposal | no | | | Application form, p. 21. A limit: not stated in the documents given |
-| Rationale and positioning with regard to the state-of-the-art | yes | | | Application form, p. 21. A limit: not stated in the documents given |
-| Scientific research objectives | yes | | | Application form, p. 24. A limit: not stated in the documents given |
-| Research methodology and work plan | yes | | | Application form, p. 24. A limit: not stated in the documents given |
+| (whole document) | yes | 10 | pages | Application form, "Project description": "The total project outline has a maximum of 10 A4 pages", tables, graphs and illustrations included |
+| Rationale and positioning with respect to the state of the art | yes | | | Project outline template. A limit: not stated in the documents given |
+| Scientific research objectives | yes | | | Project outline template. A limit: not stated in the documents given |
+| Research methodology and work plan | yes | | | Project outline template. A limit: not stated in the documents given |
+| References | yes | | | Project outline template. A limit: not stated in the documents given |
 
-The form asks that the sequence of the topics follows the funder's template exactly (Application form, p. 10). Which headings every application carries is not stated in the documents given. The first heading is marked not required since it concerns a resubmission, and the other three are marked required.
+The form asks that the project description follows the funder's template, the sequence of its topics exactly as the template gives it (Application form, "Project description"). The four headings are those of the project outline template, each marked required on that sentence.
 
 ## Form fields
 
@@ -32,10 +33,10 @@ not stated in the documents given
 
 ## Layout
 
-- Font: Calibri (Application form, p. 10)
-- Font size: 11 (Application form, p. 10)
-- Line spacing: single (Application form, p. 10)
-- Margins: the original template's margins, not given as a measure in the documents given (Application form, p. 10)
+- Font: Calibri (Application form, "Project description")
+- Font size: 11 (Application form, "Project description")
+- Line spacing: single (Application form, "Project description")
+- Margins: the original template's margins, not given as a measure in the documents given (Application form, "Project description")
 
 ## Criteria
 
