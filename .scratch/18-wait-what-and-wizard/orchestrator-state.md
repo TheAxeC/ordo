@@ -85,5 +85,7 @@ dispatch: []
 - 2026-11-23. `v9.3.0-rc.2` (17201fb) is pinned. Step 2 is done on the user's verdicts. The user ruled the command stages: steps 3 and 4 added, ADR 0046 written.
 - 2026-11-23. Step 3 is dispatched: the builder a220b11af9b5f3798 works in `.agents/worktrees/18-wait-what-and-wizard-3` from base 3167b2e. Next: its report, then `/refute 18 3`.
 - 2026-11-23. Step 3 has landed: `wizard` writes stages that run commands. Next: a release candidate tagged and pinned on the user's word, then step 4, for a setup the user names.
-- Roadmap entry 18 (wait-what and wizard). Plan step 4 of 5: the gate's run for the command stages. Next: step 5, the closing.
+- 2026-11-23. `v9.3.0-rc.3` (f0a956a) is tagged and pinned on the user's word. Step 4's run is started in a scratch folder.
+- 2026-11-23. Step 4's run wrote its script; the user's verdict on it is open. The user ruled its seven findings fixed: step 5 added.
+- Roadmap entry 18 (wait-what and wizard). Plan step 5 of 6: what the gate's run found short in `wizard`. Step 4 waits on the user's verdict. Next: step 6, the closing.
 - Open on Axel's side: none.

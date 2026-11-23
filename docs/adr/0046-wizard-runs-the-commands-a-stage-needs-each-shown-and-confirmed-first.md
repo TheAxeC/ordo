@@ -8,7 +8,7 @@ ADR 0045 makes `wizard` a copy of its source: a script for the actions only a pe
 
 ## Decision
 
-`wizard` also writes stages that run commands. The library of `templates/template.sh` keeps the source's helpers as ADR 0045 leaves them and gains three things: a check whether a tool is installed, a helper that runs one command, and the operating system the script runs on. The helper shows the command, asks the person for a yes, runs it only on a yes, and ends the script with the command's status when the command fails. No command runs without being shown and confirmed. The skill is not for an action the session can take itself, now, on the machine it runs on. The library's added helpers have a test.
+`wizard` also writes stages that run commands. The library of `templates/template.sh` keeps the source's helpers as ADR 0045 leaves them, but for two lines: the opening screen's text in `banner`, which names the commands, and one expansion in `ask`, braced so that `shellcheck` prints nothing on the library. It gains a check whether a tool is installed, a helper that runs one command, the operating system the script runs on, a comparison of a version with a minimum, and a helper that records what is left to do by hand. The helper shows the command, asks the person for a yes, runs it only on a yes, and ends the script with the command's status when the command fails. No command runs without being shown and confirmed. The skill is not for an action the session can take itself, now, on the machine it runs on. The library's added helpers have a test.
 
 ## Alternatives rejected
 

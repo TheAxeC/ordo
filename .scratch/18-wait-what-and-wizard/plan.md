@@ -15,6 +15,7 @@ A `wait-what` skill you type when a message did not land: the message explained 
 - Step 2: could this pass without the goal being reached? no, it is the gate's run on the finished skills, judged by the user.
 - Step 3: could this pass without the goal being reached? no, the test runs the added helpers on a yes, a no and a failing command, and a reviewer reads the skill and the library against ADR 0046; whether a generated script installs a tool is step 4's.
 - Step 4: could this pass without the goal being reached? no, it is the gate's run on the finished skill, judged by the user.
+- Step 5: could this pass without the goal being reached? no, the test runs the two helpers on the inputs that matter, `shellcheck` is a fact a machine computes, and a reviewer reads each of the seven points in the skill and the library; it is checked once, with no further run of the gate.
 
 ## Steps, in execution order
 
@@ -22,7 +23,8 @@ A `wait-what` skill you type when a message did not land: the message explained 
 - ✅ 2 the gate's runs, on a release candidate tagged and pinned: `wait-what` typed by the user in the user's own sessions on three real messages that did not land, each re-explanation read by the user and judged clear; one run of `wizard` for a project's manual setup the user names, made by a separate agent that invokes the installed skill, the user confirming the stage list, running the script and reviewing it (orchestrator, no agent) (approved)
 - ✅ 3 the command stages: `skills/code/wizard/templates/template.sh` with the source's helpers unchanged and three additions, a check whether a tool is installed, a helper that shows one command, asks for a yes, runs it only on a yes and ends the script with the command's status when it fails, and the operating system the script runs on; `skills/code/wizard/SKILL.md` with a stage's commands in its scope, its stage list and its steps, the rule that no command runs without being shown and confirmed, and the rule that the skill is not for an action the session can take itself, now, on the machine it runs on; a test of the added helpers beside the template, with its command on `docs/dev/building.md`; the skill's rows in `README.md` and `docs/dev/scripts.md`; `bash -n` on the template exits 0, the ASCII check prints nothing, the test passes, and a reviewer reads the skill and the library against ADR 0046 (1 commit) (ruling The command stages)
 - 4 the gate's run for the command stages, on a release candidate tagged and pinned: one run of `wizard` for a setup that installs a tool on the user's machine, made by a separate agent that invokes the installed skill, the user confirming the stage list, running the script and reviewing it (orchestrator, no agent) (ruling The command stages)
-- 5 the closing: the closing report written (the cost script's output, or that the plan started no agent), the roadmap entry ticked with the gate's output, this folder moved to the archive (orchestrator, no agent) (approved)
+- 5 what the gate's run found short in `wizard`: `skills/code/wizard/SKILL.md` says that a stage ends on a pause, what a stage does when a tool an earlier stage installs is missing, how a command that needs a shell is written, that a check skips a stage's commands and never the reading of its value, and what the `shellcheck` run of Steps 6 must print; `skills/code/wizard/templates/template.sh` gains a comparison of a version with a minimum and a helper that records what is left to do by hand, its `shellcheck` run prints nothing, and its opening screen names the commands; the test covers the two helpers; `bash -n` exits 0, `shellcheck` on the template prints nothing, the test passes, and a reviewer reads the skill and the library against ADR 0046 (1 commit) (ruling The gate's seven findings)
+- 6 the closing: the closing report written (the cost script's output, or that the plan started no agent), the roadmap entry ticked with the gate's output, this folder moved to the archive (orchestrator, no agent) (approved)
 
 ## Step 1, landed (2026-11-23)
 
@@ -75,6 +77,8 @@ Independent of each other; the standing rule of one agent at a time still serial
 - The gate, wizard verdict (2026-11-23): the user ran the script the `wizard` run wrote and judged it: "It's awesome" (the user).
 - Step 2, done (2026-11-23): `wait-what` accepted after one run with its glossary line changed, and the script of the `wizard` run judged "It's awesome", as the two gate bullets above record (the user).
 - The command stages (2026-11-23): `wizard` also writes stages that run commands, each shown and confirmed first, inside entry 18: the goal and the gate changed in `docs/roadmap.md`, ADR 0046 written, which supersedes ADR 0045 for the library and the scope of `wizard`, steps 3 and 4 added before the closing, the gate's further run a setup that installs a tool on the user's machine: "yes and make the change, I approve already and start the step" (the user).
+- The gate, command stages (2026-11-23): the run of step 4 is for the dependencies of the user's game engine, read only there, the script written to a scratch folder so that no file of the project changes: "yes, and the game engine thing would be nice, but it needs to be in a scratch since I dont want to affect the actual files" (the user).
+- The gate's seven findings (2026-11-23): the seven gaps the run of step 4 showed in `wizard` are all fixed, in one new step before the closing, since the part landed in step 3 was found short: a pause at the end of a stage, a stage that depends on a declined one, a command that needs a shell, a minimum version, a stage that both runs a command and reads a value, the `shellcheck` run, and the opening screen's text. The last two change one line each of the source's `ask` and `banner`, which ADR 0046 now names: "I would like all 7 to be fixed" (the user).
 
 ## Agents
 
@@ -90,6 +94,7 @@ Each agent a plan skill started for this plan has one bullet, with its agent id,
 - a220b11af9b5f3798: builder of step 3, claude-fable-5-2
 - a35934f5ab790b7de: reviewer of step 3, claude-fable-5-2
 - a4b6a6a0a1e30749c: reviewer of step 3 over round 1, claude-sonnet-5-5
+- a7482350d02e2cd95: wizard run of step 4, claude-fable-5-2
 
 ## Blocked, and by what
 
