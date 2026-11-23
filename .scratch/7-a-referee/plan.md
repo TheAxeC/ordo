@@ -86,6 +86,8 @@ Each agent a plan skill started for this plan has one bullet, with its agent id,
 - af33cf9bca3b7181b: builder of step 1b, claude-fable-5-2
 - a7fa4b89e49397c7e: reviewer of step 1b, claude-fable-5-2
 - ae590f6a0158cac61: reviewer of step 1b over round 1, claude-sonnet-5-5
+- a2251a63e8f8c21d4: run of step 2 on v9.1.0-rc.2, first round, claude-fable-5-2
+- a34649d7e04f8a312: run of step 2 on v9.1.0-rc.2, second round, claude-fable-5-2
 
 ## Blocked, and by what
 
