@@ -53,10 +53,12 @@ dispatch:
   executor: agent
   worker: claude:fable
   report: .scratch/19-codebase-design/agents/reviews/4-report.md
-  round: 0
-  session_id: af1ee5368f50ec6e2
+  round: 1
+  session_id: af1ee5368f50ec6e2 (claude-fable-5-2)
+  builder_usage: 185956 tokens, 25 tool uses, 11.9 minutes
   shared_paths: "README.md and docs/figures/gen_figures.py with step 5 of this plan; simple, since step 4 writes README line 30 and the function codebase_design and step 5 every other line"
   brief_check: ".scratch/19-codebase-design/agents/reviews/4-brief-check.md (a3a640202fd2b636a, claude-fable-5-2, 171187 tokens, 27 tool uses, 5.7 minutes)"
+  reviewer_report: ".scratch/19-codebase-design/agents/reviews/4-refuter.md (a0f5e5d3a9d6b9ca8, claude-fable-5-2, 138507 tokens, 15 tool uses, 4.8 minutes)"
 - step: 5
   landing: not-started
   base: 7219d6c
@@ -65,7 +67,8 @@ dispatch:
   worker: claude:fable
   report: .scratch/19-codebase-design/agents/reviews/5-report.md
   round: 0
-  session_id: a8d73c9c4d7eaf570
+  session_id: a8d73c9c4d7eaf570 (claude-fable-5-2)
+  builder_usage: 239605 tokens, 44 tool uses, 15.9 minutes
   shared_paths: "README.md and docs/figures/gen_figures.py with step 4 of this plan; simple, since step 4 writes README line 30 and the function codebase_design and step 5 every other line"
   brief_check: ".scratch/19-codebase-design/agents/reviews/5-brief-check.md (adb032fec2fe9803e, claude-fable-5-2, 172993 tokens, 22 tool uses, 5.8 minutes)"
 ```
