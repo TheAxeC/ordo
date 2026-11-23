@@ -46,7 +46,16 @@ repair_reviewer: claude:sonnet  # the model the run of /refute over a repair rou
 ```yaml
 dispatch:
 - step: 1b
-  landing: preparing
+  executor: agent
+  worker: claude:fable
+  session_id: a738739e2662829f0
+  served_model: claude-fable-5-2
+  worktree: .agents/worktrees/8-grant-1b
+  base: b683b68
+  launched: 2026-11-23
+  report: .scratch/8-grant/agents/reviews/1b-report.md
+  landing: not-started
+  round: 0
   brief_check: ".scratch/8-grant/agents/reviews/1b-brief-check.md (a362fcb5d89d0e667, claude-fable-5-2, 219,055 tokens, 37 tool uses, 7.8 minutes)"
 ```
 
