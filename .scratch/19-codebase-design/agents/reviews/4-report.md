@@ -151,3 +151,108 @@ No glossary entry is added or changed.
 
 - Item 1 says the skill "tries them in the order below", with present defined as "the repository's pages hold a rule on the same requirement" and group 5 tried last. Read literally, case 5 comes out as present (a rule that says otherwise is a rule on the same requirement), and the tool rules of case 4 reach group 4 before group 5 (the code follows them in none of their places). The skill's text keeps the brief's order and makes the definitions exclusive, as item 1 also asks ("so that a session can tell them apart"): present is a rule that "asks the same on the same requirement"; a contradiction is one where "the two cannot both be followed"; the sentences that name a tool with no configuration are taken out of their rule before the order is tried, and group 5 is defined as those sentences. With that text every case gives its expected result. If the orchestrator wants the order itself changed instead, that is its ruling to make.
 - Nothing was impossible.
+
+## Round 1
+
+Everything the rulings of `agents/briefs/4-round-1.md` name is done. Two things in it are for the orchestrator's reading: judgment calls 1 and 2 below.
+
+### The rulings
+
+| Ruling | State | Where the change stands |
+|---|---|---|
+| 1 (F1) a rule that differs | DONE | Steps / standards 5: "Group 1, a difference: the repository's pages hold a rule on the same requirement that asks something else, such as a different limit, a different order or a different check, whether or not the two can both be followed." Groups 2 to 4 each open "the pages hold nothing on the requirement". Steps / standards 10: "The words of group 1 say that the two pages state the rule differently."; the example's heading reads "Your page and the default page state a rule differently. Choose one." `grep -n -i 'contradict' skills/code/codebase-design/SKILL.md` prints only the title of a default rule quoted in the example and two lines of the `review` mode on ADRs. |
+| 2 (F2) a tool | DONE | Steps / standards 5, the three bullets on a tool: the rule "is split by requirement, and each requirement is sorted on its own"; a requirement the code shows without the tool "is sorted like any other rule, even when its sentence names the tool or speaks of it by a pronoun"; "Only what cannot be met without the tool goes to group 5: that the tool runs, its configuration file, and a requirement that only the tool can check." |
+| 3 (F3, F4) a new page | DONE | Steps / standards 8 (the drafted text of each new page written beside the audit file as `standards-page-<subject>-<timestamp>.md`); Steps / standards 10 (the five bullets on a new page: one lettered line with its own yes or no, its contents, the prose standard's line, rules of groups 2 and 3 in that line only, a rule of group 4 kept as a numbered line); Steps / standards 11 (the bullets on groups 2, 3 and 4 and "A new page is written on its own yes and on nothing else, with every rule its line named"); the example's line B. |
+| 4 (F5) what one rule is | DONE | Steps / standards 5, first bullet: "One rule is one numbered item, one bullet, or one paragraph or block outside any list that states a requirement, such as a section that gives the commands to run." |
+| 5 (F6) the example | DONE | The example's default quote reads "The whole verify list runs once, at landing. Before that, the builder runs only the checks of the files the step changes."; the block's lead-in says every rule, quote, count and path in it is made up. Steps / standards 10: "Each quote of a difference is the sentence or the sentences that differ, never a whole item of several sentences." |
+| 6 (F7) other pages of rules | DONE | Steps / standards 10: "When Steps / standards 3 noted other pages of rules, one sentence names them and says that they were not compared, so a rule standing only there counts as missing." |
+| 7 (F9) what is left unanswered | DONE | Steps / standards 10: "Done when the user has answered or corrected the draft." Steps / standards 11: "A difference left without a choice, a yes or no left unanswered and a question left unanswered each count as no: nothing is written for it, and the last message names it." The rule stands once, in step 11. |
+| 8 (B1, B2) the report's rows | DONE | The two rows under "User-visible changes added in round 1" below. |
+| 9 the other texts, reread | DONE | Changed: the paragraph under the title (the drafted text of each new page is also left outside the repository), the Stops row "The draft" (a difference, one line per new page, yes or no for each new page), README line 30 ("a rule that differs from yours in full", and shortened to 1160 characters). Read and left as they are, each still true: the description, the Quick start line, the Anti-patterns row on placements, ADR 0047's sentence on a missing rule, the figure's note. |
+
+### The checks, as printed
+
+1. The character-set check printed no line, then `exit status 0`.
+2. `codebase-design 1019`
+3. `0`
+4. `12:## Quick start`, `20:## Use instead`, `28:## What it reads`, `65:## Steps`, `281:## Stops`, `294:## Anti-patterns`, `308:## Rules`
+5. `grep -c '^| .codebase-design. |' README.md` printed `1`; `awk 'NR==30{print length($0)}' README.md` printed `1160`. `git diff --stat` listed the same five files. `git diff --numstat` printed `1 1 README.md`, `5 5` for the ADR, `4 4 docs/figures/codebase-design.svg`, `3 2 docs/figures/gen_figures.py`, `149 42 skills/code/codebase-design/SKILL.md`. `python3 docs/figures/gen_figures.py >/dev/null; echo "gen exit $?"` printed `gen exit 0`, and `git status --short docs/figures` printed ` M docs/figures/codebase-design.svg` and ` M docs/figures/gen_figures.py`. `wc -l skills/code/codebase-design/SKILL.md` printed `315`.
+6. Departures of the new text from the rules on list items and sentence length: the bullet on group 1 in Steps / standards 5 and the bullet on what a new page's line gives in Steps / standards 10 are each one long sentence, since each lists what one form holds; the bullet on what counts as no in Steps / standards 11 joins three cases that share one rule. The departures of the first build stand.
+
+### Cases 1 to 16, read on the text as it stands
+
+1. Met. The five rules are ones the pages hold nothing on and the code cannot show: group 2, one line for the default change standard that names them by title, one yes or no.
+2. Met. The pointer requirement is one the code shows without the tool, so it is sorted on its own: group 3, one numbered line with "1,180 of 1,204".
+3. Met. 3 of 240 is half or fewer: group 4, a numbered line with what adopting it breaks; added only when named.
+4. Met. That the two tools run, and their configuration files, go to group 5, whose line names the tools; the pointer requirement is sorted on its own "even when its sentence names the tool or speaks of it by a pronoun".
+5. Met. The two rules ask something else on the same requirement: group 1, both quoted, what goes wrong under each, the choice; the default's is added only on the user's choice.
+6. Met. One sentence with the count and the audit file's path; no row of present rules.
+7. Met. The page is lacking ("What it reads" 4); it is a new page, shown in one line that names its rules of groups 2 and 3; the annotation rule stays a numbered line of group 4.
+8. Met. Steps / standards 7: beside the pages in `docs/dev/standards/`, added to the `standards` list.
+9. Met. Steps / standards 4 follows 3; the question is asked once.
+10. Met. Steps / standards 9: one message with the count and the path, no stop.
+11. Met as the rulings now have it: no line number stands alone, and no line says where a rule added to a page that exists will be placed. A new page's line gives the path of the page, as ruling 3 asks.
+12. Met. The grep prints `0`; no sentence cites a numbered item or a named section of the `ordo-init` skill beyond the Stops sentence the review left as it is (F8, not sent).
+13. Met. "A different limit" is named in the definition of group 1: both sentences quoted, the user chooses.
+14. Met. The `[[nodiscard]]` requirement is one the code shows without the linter: group 3, "40 of 44". The linter's warning is "a requirement that only the tool can check": group 5, whose line names the linter.
+15. Met. The page is new, so Steps / standards 9 does not end the run; the stop holds the opening line, one lettered line for the prose standard that says it is the default page unchanged, the sentence on the rules found present and the line on how to answer. The page's text is not printed.
+16. Met. Steps / standards 11: "A new page is written on its own yes and on nothing else, with every rule its line named" and "The rules of group 2 that go to pages that exist are added on the user's yes to group 2."
+
+### The stop for the made-up repository of the example
+
+It is the block of Steps / standards 10, 32 lines with its blank lines.
+
+```
+The draft. Nothing is written until you answer.
+
+Your page and the default page state a rule differently. Choose one.
+
+A. Which checks a builder runs before landing
+   Your change standard, section "Verification", says: "The builder runs the whole verify list on the whole tree before it reports."
+   The default says: "The whole verify list runs once, at landing. Before that, the builder runs only the checks of the files the step changes."
+   Under yours: every step waits for the whole list, also a step that changes one page.
+   Under the default: a failure outside the changed files shows only at landing.
+   Keep yours, or take the default's?
+
+Rules on how work is done that your pages lack. Add them all, yes or no?
+
+   From the default change standard: "A rewrite keeps the meaning of every rule it carries", "A change leaves no two statements that contradict each other", "Nothing is changed that no brief item asks for", "A secret in quoted command output is written `<REDACTED>`", "No breakage testing".
+
+Rules your code already follows. Each is added unless you strike its number.
+
+   1. A pointer binds to its type: `T* p`, never `T *p`. 1,180 of 1,204 declarations.
+
+Rules your code does not follow. None is added unless you name its number.
+
+   2. Every Python function annotates its parameters and its return type. 3 of 240 functions do, so adopting it leaves 237 breaking it. It would go into page B.
+
+Rules about tools the repository lacks, none added: clang-format, clang-tidy.
+
+New pages. Yes or no to each?
+
+B. The Python coding standards, at docs/dev/coding-standards/python.md, with 4 rules: "The code runs on Python 3.11 or newer", "Modules and functions are `snake_case`", "A handler names the exception class it catches", "A path is a `pathlib.Path`". Its text is in /tmp/standards-page-python-20260101-120000.md.
+
+61 default rules already stand in your pages. They are listed in /tmp/standards-audit-20260101-120000.md.
+
+Answer with: yours or the default's for A, yes or no for the rules on how work is done, the numbers to strike, the numbers to add, yes or no for B.
+```
+
+### User-visible changes added in round 1
+
+| Change | Before | After |
+|---|---|---|
+| When the `review` mode takes a language's page as lacking | A repository that used a language lacked its page when it had "no rules for that language in its pages" | The page is present only when a page of place 1 or 2 is a page for that language or holds a section for it; a sentence about that language's files inside a rule of another subject does not count. `review` then holds that language's code to the default page and marks those candidates as coming from it. |
+| Other pages of rules | The stop did not mention them | When the repository holds pages of rules that neither `plan.yaml` nor the fixed names under `docs/dev/` name, the stop names them in one sentence and says that they were not compared. |
+
+Round 1 also changes these, against the first build: a new page is one line with its own yes or no and is not printed; its drafted text is a file beside the audit file; a default rule that asks something else than the repository's is put to the user also when both could be followed.
+
+### Judgment calls the rulings left open
+
+1. The split by requirement is written for a default rule that names a tool the tree holds no configuration for, and for no other rule. Ruling 2 says "Each requirement of a default rule is sorted on its own"; applied to every rule it would undo item 2 of the brief, under which the sentences a default rule holds beyond the repository's are not drafted.
+2. A line of group 4 whose rule belongs to a new page names that page ("It would go into page B."), and Steps / standards 11 writes such a rule only when the page also has its yes. Without it the user cannot see that naming the number depends on the page.
+3. The new pages stand after group 5 in the stop, lettered on after the differences, in the order the brief's item 3 gives.
+4. The file of a new page's drafted text is named `standards-page-<subject>-<timestamp>.md`.
+5. The line of the prose standard names the page's sections in place of rules, since the page is copied whole and is not sorted into rules.
+6. The opening line of the stop no longer gives a count of rules to decide.
+7. The README row says "a rule that differs from yours in full" and "in one counted line", and does not mention the line of a new page, to stay within 1161 characters.
+8. The bullet "A default rule that holds more than the repository's rule" now adds "and asks nothing else on what both cover", so that it does not overlap with group 1.

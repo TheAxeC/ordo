@@ -132,3 +132,143 @@ B2. The stop names other pages of rules that were not read (line 149). It is new
 Files: /Users/axelfaes/workspace/ordo/.agents/worktrees/19-codebase-design-4/skills/code/codebase-design/SKILL.md, /Users/axelfaes/workspace/ordo/.agents/worktrees/19-codebase-design-4/docs/adr/0047-codebase-design-is-one-skill-made-from-two-sources-and-finds-the-standards-pages-by-a-search-order.md, /Users/axelfaes/workspace/ordo/.agents/worktrees/19-codebase-design-4/README.md, /Users/axelfaes/workspace/ordo/.agents/worktrees/19-codebase-design-4/docs/figures/gen_figures.py, /Users/axelfaes/workspace/ordo/.agents/worktrees/19-codebase-design-4/docs/figures/codebase-design.svg, /Users/axelfaes/workspace/ordo/.scratch/19-codebase-design/agents/reviews/4-report.md, /Users/axelfaes/workspace/ordo/.scratch/19-codebase-design/agents/briefs/4.md.
 
 Agent usage: a0f5e5d3a9d6b9ca8, claude-fable-5-2, 138507 tokens, 15 tool uses, 4.8 minutes.
+
+## Repair round 1, refuted
+
+Review of repair round 1 of step 4 (worktree .agents/worktrees/19-codebase-design-4, base 7219d6c). I changed nothing. I read everything in your order and ran the checks below from the worktree root. I did not run `python3 docs/figures/gen_figures.py`, because it writes files. The builder's "gen exit 0" is therefore not reproduced by me. `diff -u` of `docs/figures/codebase-design.svg`, `gen_figures.py` and the ADR against the round-1 snapshot printed nothing, so the round left those three unchanged. (`files.txt` lists the paths with a status prefix, so I ran each diff with the bare path.)
+
+## Checks as printed
+
+- Character-set check over the five files: printed no line, `exit status 0`.
+- Description check: `codebase-design 1019`.
+- `grep -c 'repo-setup' SKILL.md`: `0`.
+- `grep -n '^## '`: `12 Quick start`, `20 Use instead`, `28 What it reads`, `65 Steps`, `281 Stops`, `294 Anti-patterns`, `308 Rules`.
+- `grep -c '^| .codebase-design. |' README.md`: `1`. `awk 'NR==30{print length($0)}' README.md`: `1160`, which is at most 1161.
+- `git diff 7219d6c --stat`: the same five files, 162 insertions and 54 deletions. `git status --short docs/figures`: only `codebase-design.svg` and `gen_figures.py`.
+- `--numstat`: README `1 1`, ADR `5 5`, svg `4 4`, `gen_figures.py` `3 2`, SKILL.md `149 42`. This equals the report.
+- `wc -l SKILL.md`: `315`, equal to the report.
+- `grep -n -i 'kind'`: prints nothing.
+- `grep -n -i 'contradict'`: lines 178, 252 and 254. The first is a title of a default rule inside the example. The other two are the `review` mode on ADRs. This equals the report.
+- `grep -c 'ordo-init'`: `12`.
+
+## Rulings 1 to 9
+
+1. Carried out as written. Steps / standards 5 defines group 1 as a rule that "asks something else, such as a different limit, a different order or a different check, whether or not the two can both be followed". Groups 2 to 4 open with "the pages hold nothing on the requirement". Step 10 and the example say "state a rule differently". Nothing was closed by removal.
+2. Carried out. The split is by requirement, a pronoun does not keep a requirement in group 5, and only "that the tool runs, its configuration file, and a requirement that only the tool can check" goes to group 5. See judgment call 1 below for a narrowing.
+3. Carried out. A new page is one lettered line with its own yes or no, and its text is not printed. The drafted text goes to `standards-page-<subject>-<timestamp>.md` beside the audit file (Step 8). A rule of group 2 or 3 on a new page is decided by that page's line only. A rule of group 4 stays a numbered line. Steps 7, 10 and 11 agree. The example gains line B. Two additions beyond the ruling are findings S1 and S2.
+4. Carried out. "One paragraph or block outside any list that states a requirement, such as a section that gives the commands to run."
+5. Carried out. The example's default quote is the made-up "The whole verify list runs once, at landing. Before that, the builder runs only the checks of the files the step changes." The bullet says a quote is the sentence or sentences that differ.
+6. Carried out. The sentence is shown only "When Steps / standards 3 noted other pages of rules" and says they were not compared.
+7. Carried out. Step 10 is "Done when the user has answered or corrected the draft." Step 11 counts a difference without a choice, an unanswered yes or no and an unanswered question as no, and the last message names it. See S3 for a clash this creates.
+8. The two rows are in the report with before and after. Their content matches what I read in "What it reads" 4 and Step 10.
+9. Reread as claimed. The title paragraph, the Stops row "The draft" and the README row changed. The description, Quick start, the Anti-patterns row, the ADR sentence and the figure note are unchanged, and I find each still true. Two sentences are thinner than before:
+   - The ADR bullet says nothing about a rule that differs from the repository's.
+   - The README row does not mention the line of a new page. The builder names this in judgment call 7.
+
+No claim of closure in the report failed to reproduce by my reading. The builder's case 12 note is correct: line 292 ("stop as their own Stops tables say") remains and is not a numbered item or section citation.
+
+## Items 1 to 20 of the brief, on the whole diff
+
+- Item 1: holds. Group 5 is defined only as "what the bullets on a tool send there", so a session has to reread the three bullets above it to apply it (S4).
+- Item 2: holds (see judgment call 1).
+- Item 3: holds, with the forms changed by rulings 1 to 3.
+- Item 4: violated in part (S1). The group 4 line "It would go into page B." says where an addition goes.
+- Items 5 to 11: hold.
+- Item 12: holds.
+- Item 13: holds, with the condition added by ruling 6.
+- Items 14 to 18: hold.
+- Item 19: holds. The ADR bullet does not cover a rule that differs (a brief-defined text, not a defect of the round).
+- Item 20: holds. The svg and the note are unchanged by the round, and the body comparison was done by the first reviewer, not by me.
+
+## Cases 1 to 16, walked through the text as it stands
+
+- Cases 1, 2, 3, 5, 6, 8, 9, 10, 13, 14 and 16: met.
+  - Case 14: the `[[nodiscard]]` requirement goes to group 3 with "40 of 44", and the linter's warning is "a requirement that only the tool can check", so it goes to group 5.
+  - Case 16: "A new page is written on its own yes and on nothing else, with every rule its line named", and group 2 rules go only to pages that exist.
+- Case 4: met. The tools go to group 5, and the pointer requirement is sorted on its own.
+- Case 7: met. A new Python page lists its group 2 and 3 rules in line B, and the annotation rule stays a numbered group 4 line.
+- Case 11: partial (S1). The new page's line gives its path, which ruling 3 asks for, but the group 4 line also says where a rule will go.
+- Case 12: met. The grep prints 0, and the one sentence that names another skill's "Stops tables" is unchanged from the base.
+- Case 15: partial. A short stop is produced, with one lettered prose standard line saying "default page unchanged" and its yes or no. The text does not say which letter the first page takes when there is no group 1 difference (S5).
+
+## Judged by reading
+
+- Can a session sort every default rule into exactly one of present or the five groups without guessing? Nearly. The order is "present, 1, 2, 3, 4, 5", each group's opening is exclusive of the others, and paragraphs count as rules. Two guesses remain:
+  - Group 5 is defined only by reference to the tool bullets (S4).
+  - A non-tool default rule that holds two requirements, of which the repository holds one, is "present" as a whole (judgment call 1).
+- Do two bullets of Steps / standards 5 to 11 contradict each other? One pair does (S3). Steps 7, 10 and 11 agree on new-page rules.
+- Can a person who has not opened the pages answer the example's stop in a few minutes? Yes. The example has 32 lines, each heading says what answering does, and the last line lists the answers. Only the group 4 line is hard to read (S1).
+- Is any line cryptic? "It would go into page B." appears before B is introduced. "the numbers to strike, the numbers to add" is readable from the headings.
+- Does the example match the rules above it? Yes on order (1, 2, 3, 4, 5, new pages, present sentence, answer line), lettering (A, then B), numbering (1, 2 running on) and what each line holds. The `plan.yaml` change line, a question line, the other-pages sentence and the prose standard line are not shown, which the rules do not require.
+
+## The builder's eight judgment calls
+
+1. The split by requirement applies only to a default rule that names a tool, not to every rule. This is a decision that was not the builder's alone. Ruling 2 says "Each requirement of a default rule is sorted on its own", and the builder read that as limited to tool rules so as not to undo brief item 2. The reading is defensible, but the orchestrator should rule on it.
+2. The group 4 line names the new page, and Step 11 writes the rule only with the page's yes. This is outside the rulings. The ruling says only that the rule "stays a numbered line of group 4" and enters when named. See S1.
+3. The order of the new pages after group 5 is inside the rulings and the brief.
+4. The file name `standards-page-<subject>-<timestamp>.md` is inside ruling 3.
+5. The prose standard's line names sections in place of rules. This is inside ruling 3, which says it "says that it is the default page unchanged".
+6. The opening line lost its count "8 rules to decide". No ruling names it, but no count is true for the new form. Harmless. The text now has no bullet on the opening line at all.
+7. The README row wording is inside ruling 9, within 1161 characters.
+8. The added clause "and asks nothing else on what both cover" is inside ruling 1, because it removes an overlap with group 1.
+
+## Findings
+
+### Spec
+
+S1. Group 4 line names a page and where a rule goes.
+- Place: SKILL.md line 154 and the example line "2. ... 237 breaking it. It would go into page B."
+- Text: "A rule of group 4 that belongs to a new page stays a numbered line of group 4, and its line names the page."
+- What is wrong: this is the builder's addition (call 2). Brief item 4 and case 11 say no line says where an addition will be placed. Step 10's "No line says where a rule added to a page that exists will be placed" now carves out new pages. The example shows "page B" before page B appears.
+- Scenario: a session or reviewer reads item 4 and sees the stop saying where a rule goes. A user reads "page B" and cannot tell what it is until the end.
+- Small to fix? Yes. Either remove the sentence, or, as a decision for the orchestrator, keep it and state it in item 4's carve-out and in the example's ordering.
+
+S2. Step 11 makes a group 4 rule on a new page also depend on the page's yes.
+- Place: line 205.
+- Text: "and one that belongs to a new page only when that page also has its yes."
+- What is wrong: it follows from "a new page is written on its own yes", but it is a second rule the ruling did not state.
+- Scenario: none harmful, since a page without a yes is not written.
+- Small to fix? Yes, optional.
+
+S3. Two bullets of Step 11 contradict each other.
+- Place: lines 207 and 209.
+- Text: "A new page is written on its own yes and on nothing else, with every rule its line named" and "a question left unanswered ... counts as no: nothing is written for it".
+- Scenario: the page line for B holds a rule with an unanswered placeholder question. One session writes the page whole, another drops the rule or the page. Case 16 says the page is written "with every rule it was shown to hold".
+- Small to fix? Yes: one sentence saying whether an unanswered question under a page's line drops the rule or the page.
+
+S4. Group 5 is defined only by reference.
+- Place: line 100, "Group 5, a rule about a tool the repository lacks: what the bullets on a tool send there."
+- Scenario: a session reads this bullet alone and has no test for group 5 until it rereads the three bullets above it.
+- Small to fix? Yes, one clause.
+
+S5. The first letter of a new page is not specified when there is no difference.
+- Place: line 150, "lettered on after the differences".
+- Scenario: case 15 has no group 1. Sessions start at "A" or stop at an undefined point.
+- Small to fix? Yes.
+
+### Proof
+
+- None. Every command the round's report quotes reproduced (counts, grep results, README length, numstat, line count). The builder's "gen exit 0" is not reproduced by me, since I did not run the writer.
+
+### Standards
+
+- The list-item standard says one rule per bullet and a bullet is one sentence where it can be. Three added bullets are 41 words each (line 99 for group 1, line 151 for the new page's line, line 153 for new-page rules of groups 2 and 3). The report names the first two as departures. The bullet at line 153 is not named in the report's departure list. Each is a list of what one form holds. Small to fix? The 153 bullet could be split in two.
+- The ADR's bullet on the `standards` mode carries three semicolons in one sentence of more than 80 words. This was already named in the first review (S2) and is unchanged.
+
+### Behaviour
+
+- B1. The stop does not tell the user that silence counts as no. Step 11 says a difference, a yes or no or a question left unanswered counts as no, and the last message names each. The answer line at the end of the stop does not say so. Scenario: a user who skips lettered line B gets nothing written for it and learns only from the last message. Small to fix? Yes, one clause in the answer line.
+- B2. Judgment call 7 leaves the README row silent on the new page's one-line form. The row is not false. Not small, not required.
+
+## Declined to judge
+
+- Whether a stop that is thirty-odd lines in the example is short enough in the user's sense. I judged it readable in a few minutes, but "short" is the user's call.
+- Whether the split by requirement should apply to every default rule (judgment call 1): the orchestrator's ruling.
+- Whether the group 4 line should name its page (S1): the orchestrator's decision.
+- The exit status and output of `python3 docs/figures/gen_figures.py`: not run, since it writes files.
+- How the svg renders: not viewed.
+- Whether step 5 makes the ADR's `ordo-init` sentences true: outside this diff.
+
+Files: /Users/axelfaes/workspace/ordo/.agents/worktrees/19-codebase-design-4/skills/code/codebase-design/SKILL.md, /Users/axelfaes/workspace/ordo/.agents/worktrees/19-codebase-design-4/README.md, /Users/axelfaes/workspace/ordo/.agents/worktrees/19-codebase-design-4/docs/adr/0047-codebase-design-is-one-skill-made-from-two-sources-and-finds-the-standards-pages-by-a-search-order.md, /Users/axelfaes/workspace/ordo/.agents/worktrees/19-codebase-design-4/docs/figures/gen_figures.py, /Users/axelfaes/workspace/ordo/.agents/worktrees/19-codebase-design-4/docs/figures/codebase-design.svg
+
+Agent usage: a36ce253e9ce66cbf, claude-sonnet-5-5, 116459 tokens, 10 tool uses, 2.6 minutes.
