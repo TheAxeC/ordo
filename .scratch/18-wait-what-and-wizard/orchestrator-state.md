@@ -45,7 +45,10 @@ repair_reviewer: claude:sonnet  # the model the run of /refute over a repair rou
 ```
 
 ```yaml
-dispatch: []
+dispatch:
+- step: 5
+  landing: preparing
+  brief_check: "running: a8cdca0e12b1ca0ca"
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled or, under `self_rule: on`, until the orchestrator closes it as `plan-orchestration`'s `references/self-rule.md`, "Closing an open item", says)
@@ -87,5 +90,5 @@ dispatch: []
 - 2026-11-23. Step 3 has landed: `wizard` writes stages that run commands. Next: a release candidate tagged and pinned on the user's word, then step 4, for a setup the user names.
 - 2026-11-23. `v9.3.0-rc.3` (f0a956a) is tagged and pinned on the user's word. Step 4's run is started in a scratch folder.
 - 2026-11-23. Step 4's run wrote its script; the user's verdict on it is open. The user ruled its seven findings fixed: step 5 added.
-- Roadmap entry 18 (wait-what and wizard). Plan step 5 of 6: what the gate's run found short in `wizard`. Step 4 waits on the user's verdict. Next: step 6, the closing.
+- Roadmap entry 18 (wait-what and wizard). Plan step 5 of 6: what the gate's run found short in `wizard`. Step 4 is done on the user's verdict. Next: step 6, the closing.
 - Open on Axel's side: none.
