@@ -20,7 +20,7 @@ The `paper` skill's intake agent holds this intake. It asks only the questions b
 |---|---|
 | Which section is drafted, by the funder's heading, or the whole application | The whole application |
 | The materials to write from, each as a path: earlier applications, slides, notes, papers, result files | None |
-| The `.bib` the application cites from | `refs.bib` in the application's folder when it stands there, else none |
+| The `.bib` the application cites from | The `.bib` file in the application's folder when exactly one stands there, else none |
 | The language the application is written in | English |
 | The citation style | The first of these that an existing `main.tex` gives: the style of its `\bibliographystyle` line; the form the items of its `thebibliography` environment follow, named "the form of the reference list set by hand"; else IEEE, a numbered style |
 | Whether the funder wants a `.docx` beside the PDF | No |

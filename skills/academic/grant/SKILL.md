@@ -103,6 +103,7 @@ Items 1 to 5 run once, in order, before the items of the mode. Items 6 to 9 are 
    - Write the engine and the rule that gave it into `checks.md` in the run folder.
    - Every compile of the run takes that engine, with the flag `-pdf` for pdfLaTeX, `-xelatex` for XeLaTeX and `-lualatex` for LuaLaTeX.
    - Copy the application's folder to `compile-<k>/` in the temporary folder and run `latexmk <flag> -interaction=nonstopmode -halt-on-error '<main file name>'` there.
+   - Remove `<main>.pdf` from the copy with `rm -f` before the compile, so that the only PDF in a compile folder is the one that compile wrote.
    - `<k>` is 0 for the compile before a draft (`draft` item 2), 1 for the run's first compile otherwise, and one more for each later compile.
    - After each compile, read the log's lines on a font that TeX replaced with `grep -n 'Font shape\|Missing character\|not loadable' '<the compile folder>/<main>.log'`.
    - Write into `checks.md`, for each compile, its command, its exit status, its last 20 lines as printed, the log's line `Output written on`, which holds the page count, and those font lines, or "none".
@@ -177,6 +178,8 @@ Stops this mode can reach: the mode, which config, the intake, the outline, the 
    - The session adds two rows to `config.md`: Pages before the draft, with the count, and Page limit, with the limit of the row `(whole document)` when it is in pages, or "no limit stated".
    - The structure architect's direction gives both values and says that the length it plans keeps the whole application within the page limit, and that the outline states the room it assumed.
    - Its direction says that it may read an existing `main.tex`, so that the outline of one section fits the sections that stand.
+   - Its direction gives the path of the PDF of the compile before the draft, when that compile was made, and says that the room left on the last page is read from that PDF.
+   - Its direction says that it reads no other PDF of the application, since the PDF beside the main `.tex` can hold text the run is to replace.
    - Its direction says that the outline holds the sections of the funder config under the funder's headings, in the config's order, each with its limit and unit in place of a word allocation.
    - For a run on one section the outline holds that section only.
    - It writes `outline.md` in the run folder.
@@ -192,6 +195,8 @@ Stops this mode can reach: the mode, which config, the intake, the outline, the 
    - Its direction says that the start is one call outside the Generator-Evaluator Contract of its page, with no `intended-claims.md`.
    - Its direction says that it cites only entries of the `.bib`, and marks a claim whose source the `.bib` lacks `[GAP: citation needed]` and lists it in its report.
    - Its direction gives the rows Pages before the draft and Page limit, and says that the length it writes keeps the whole application within the page limit, and that its report states the room it assumed.
+   - Its direction gives the path of the PDF of the compile before the draft and forbids every other PDF of the application, as the structure architect's direction does.
+   - A patch of this item that the `paper` skill's patch script flags as structural only because it adds the subsection headings of the confirmed `outline.md` is applied with `--acknowledge-structural`, since the user confirmed those headings at the stop "The outline"; any other structural flag is the `paper` skill's stop "A structural patch".
    - With no `main.tex` in the application's folder it writes `main.tex` there whole, with the outline's sections under the funder's headings.
    - With a `main.tex` there it writes the section or sections as a patch with the id `draft` (Steps 8).
    - It writes its report, with each section's length against its limit, to `draft-report.md` in the run folder.
@@ -229,6 +234,7 @@ Stops this mode can reach: the mode, which config, the intake, the outline, the 
    - The message says that a one-line reply such as `all`, `2, 5` or `none` names the findings to apply.
    - The message says that the user can instead call for an autonomous writer pass, in which the draft writer judges each finding, applies the ones it accepts and lists the rest with its reason.
    - The reply goes to the run's draft writer, resumed (Steps 7 and 8), which writes each named finding's fix as an op of one patch that names `F<k>`, as the `paper` skill's `agents/draft_writer_agent.md`, "The `/writing` findings", says.
+   - In a run on one section the direction says that the patch changes lines of that section only, and the session reads the patch's ops against the section's line range before it applies the patch; an op outside the range goes back to the writer once.
    - A number the report does not have is answered as the `paper` skill's Steps 13 says.
    - After the patch is applied, the incremental check runs when the `paper` skill's Steps 12 gives the patch one, on the cited sentences the patch adds or changes, and Steps 9 runs again.
    - A reply `none` writes no patch and runs nothing more of this item.
@@ -320,6 +326,7 @@ Stops this mode can reach: the mode, and which config.
    - With a PDF that is not of this run's compile, the direction says so and has the review say so under "Files read". With no PDF, it has the review say that the reviewer read the `.tex` alone.
    - Done when `criteria-review.md` holds one entry per criterion of the funder config, each scored or "not scored: the files given hold nothing on it".
 3. End the run with a message that names `criteria-review.md` and gives each criterion with its score.
+   - The message repeats each file the reviewer's final message lists as named by a criterion and not given, such as a recommendation letter, with the criterion that names it.
    - The message names the engine and the font lines as Steps 9 says.
    - The message says that the PDF read is not of this run's compile, or that the reviewer read the `.tex` alone, when item 1 gave no PDF of this run.
    - The message says that `/grant revise <main.tex> <criteria-review.md>` takes the review as its comments file.
