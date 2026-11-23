@@ -18,12 +18,19 @@ The skill finds the standards pages by a search order, and no step of it refuses
 
 The skill names no path outside the repository it runs in and its own skills folder.
 
+The skill treats a repository's own pages in two ways:
+
+- the `standards` mode adds and rewrites nothing that exists: a rule of a default page that already stands in the repository's pages, wherever it stands, is left as written, and a missing rule is drafted in the form it takes there and written after the user's approval;
+- for a kind of page the repository lacks, the `review` mode holds the code to the default page, says in each such candidate that the rule comes from the default page, and skips a sentence that still holds an unfilled placeholder.
+
 ## Alternatives rejected
 
 - Two skills, as the sources have them: the review would load the other skill on every run, and the vocabulary and the pages would be described in two places.
 - The pages read only through `plan.yaml`: a repository without one is refused, and the `standards` mode exists for a repository that has nothing yet.
 - The fixed names under `docs/dev/` and then the defaults, as `paper` reads the prose standard: a repository that keeps filled pages elsewhere would be reviewed against the defaults, and its own rules ignored.
 - A copy of the default pages inside the skill: two copies of each page, which drift apart.
+- The `standards` mode rewriting each page into the default page's structure: it would rewrite rules the user already approved, and every record and brief that cites a line of them would go stale.
+- The `review` mode silent on a kind of page the repository lacks: the default pages are the standards the skill exists to hold a repository to.
 - The review ending in the source's grilling loop: the result would stay in the conversation, where the plan skills cannot run it.
 
 ## Consequences

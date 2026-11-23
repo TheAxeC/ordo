@@ -8,16 +8,16 @@ A `codebase-design` skill with two modes. The `standards` mode fills the standar
 
 ## Gate
 
-one real run of the `standards` mode on Cathedra whose pages hold every point of its existing "Design principles" section, checked by reading both; one real run of the `review` mode on Cathedra, each candidate reviewed by you, the one you pick written into its roadmap entry through `grill`; each run made by a separate agent; the plan's ledger lists every deviation from the design of mattpocock's two skills, each with its reason and the ruling that approved it, and nothing else differs, checked by reading both; the verify list of `docs/dev/building.md` passes on main.
+one real run of the `standards` mode on a scratch copy of Cathedra, where every point of Cathedra's existing "Design principles" section still stands and each addition the run proposes is reviewed by you, checked by reading both; one real run of the `review` mode on the same copy, each candidate reviewed by you, the one you pick written into the copy's roadmap through `grill`; no file of Cathedra itself is changed; each run made by a separate agent; the plan's ledger lists every deviation from the design of mattpocock's two skills, each with its reason and the ruling that approved it, and nothing else differs, checked by reading both; the verify list of `docs/dev/building.md` passes on main.
 
-- The gate: could this pass without the goal being reached? no, each mode has one real run on Cathedra that the user reads, the `standards` run is compared point by point with Cathedra's existing section, and the deviations are read against both sources.
+- The gate: could this pass without the goal being reached? no, each mode has one real run on a scratch copy of Cathedra that the user reads, the `standards` run is compared point by point with Cathedra's existing section, and the deviations are read against both sources.
 - Step 1: could this pass without the goal being reached? no, the check reads the skill text against the skill layout and against both sources with the list of deviations, and the verify list runs on main; whether the skill works in a repository is step 2's part.
 - Step 2: could this pass without the goal being reached? no, both runs are made by a separate agent that invokes the installed skill, and the user reads the pages and each candidate.
 
 ## Steps, in execution order
 
 - 1 the skill: `skills/code/codebase-design/` with its `SKILL.md` in the skill layout, the modes `standards` and `review`, the search order of ADR 0047 for the standards pages, the default page used for a kind of page the repository lacks (ruling D12), the review ending in a roadmap entry through `grill`, and the sources' vocabulary, deepening page, design-it-twice page and report page as its reference pages; `README.md` and `docs/dev/` wired in as the skill layout asks; the ledger's list of every deviation from the two sources, each with its reason and its ruling; check: the skill follows `docs/dev/skill-layout.md`, read by the user, the deviations list read against both sources, and the verify list passes on main (1 commit) (approved)
-- 2 the gate's runs, on a release candidate tagged and pinned on the user's word: one run of the `standards` mode on Cathedra, its pages compared with every point of Cathedra's existing "Design principles" section by reading both; one run of the `review` mode on Cathedra, each candidate reviewed by the user, the one the user picks written into Cathedra's roadmap through `grill`; each run made by a separate agent that invokes the installed skill, its stops answered by the orchestrator (orchestrator, no agent) (approved)
+- 2 the gate's runs, on a release candidate tagged and pinned on the user's word: one run of the `standards` mode on a scratch copy of Cathedra, where every point of Cathedra's existing "Design principles" section still stands and each addition the run proposes is reviewed by the user, by reading both; one run of the `review` mode on the same copy, each candidate reviewed by the user, the one the user picks written into the copy's roadmap through `grill`; no file of Cathedra itself is changed; each run made by a separate agent that invokes the installed skill, its stops answered by the orchestrator (orchestrator, no agent) (approved)
 - 3 the closing: the closing report written (the cost script's output, or that the plan started no agent), the roadmap entry ticked with the gate's output, this folder moved to the archive (orchestrator, no agent) (approved)
 
 ## Could run in parallel
@@ -38,6 +38,12 @@ Independent of each other; the standing rule of one agent at a time still serial
 - D11 record as ADR (2026-11-23): (a), yes: `docs/adr/0047-codebase-design-is-one-skill-made-from-two-sources-and-finds-the-standards-pages-by-a-search-order.md`, status proposed, holding D2, D5 and D7 (the user).
 - D12 what the review does for a kind of page the repository lacks (2026-11-23): (a), it reviews against Ordo's default page for the missing kind, each such candidate saying that the rule comes from the default page, and a sentence of the default page that still holds an unfilled placeholder is skipped; replaces D9, which was not answered (the user).
 - D13 carried, one skill (2026-09-29): "entry 19 shrinks to the `codebase-design` skill", carried from `.scratch/archive/2-e-grill/plan.md:94` (the user).
+- D14 where the standards mode writes a page (2026-11-23): (a), beside the pages the repository already has, and under `docs/dev/` when it has none; the page is added to the `standards` list of the repository's `plan.yaml` when it has one (the user).
+- D15 what the standards mode does with a page that exists (2026-11-23): (a), it compares and proposes additions only: a rule of the default page already in the repository's pages, wherever it stands, is left as written, and a missing rule is drafted in the form it takes there, at the place the repository keeps that kind of rule, written after the user's approval (the user).
+- D16 the form of the candidates report (2026-11-23): (a), the source's HTML report, written outside the repository and opened for the user, with every style and diagram inline in the file and the before and after picture per candidate kept (the user).
+- D17 where step 2's runs write (2026-11-23): (b), in a scratch copy of Cathedra; no file of the real repository is changed (the user).
+- D18 the roadmap diff, with the plan's gate and step 2 (2026-11-23): (a), written as shown: both runs are made on a scratch copy of Cathedra, the `standards` run leaves every existing point standing and its additions are reviewed by the user, and no file of Cathedra itself is changed (the user).
+- D19 record as ADR (2026-11-23): (a), D12 and D15 added to the decision of `docs/adr/0047-codebase-design-is-one-skill-made-from-two-sources-and-finds-the-standards-pages-by-a-search-order.md` as a refinement of the same record (the user).
 
 ## Agents
 
@@ -45,4 +51,4 @@ Each agent a plan skill started for this plan has one bullet, with its agent id,
 
 ## Blocked, and by what
 
-- 2: waits on the user's word to pin the release candidate, and on the user's word that the runs may write in Cathedra.
+- 2: waits on the user's word to pin the release candidate.

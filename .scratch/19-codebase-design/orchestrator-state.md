@@ -73,7 +73,7 @@ dispatch: []
 
 - Design: `docs/roadmap.md` entry 19, ADR 0047 and the rulings in `plan.md`. Ledger: `.scratch/19-codebase-design/`, with `agents/briefs/` and `agents/reviews/`.
 - Plan configuration: `docs/plan.yaml`. In a call, in front of the entry: nothing.
-- The data the steps read, and who may change it: the public repository mattpocock/skills, `skills/engineering/codebase-design/` and `skills/engineering/improve-codebase-architecture/`, read only; Cathedra, written only by step 2's runs on the user's word.
+- The data the steps read, and who may change it: the public repository mattpocock/skills, `skills/engineering/codebase-design/` and `skills/engineering/improve-codebase-architecture/`, read only; Cathedra, read only: step 2's runs work on a scratch copy of it.
 - Anything running that a step must not disturb: nothing.
 
 ## Current position (rewritten before every step commit of this plan)
