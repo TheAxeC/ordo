@@ -23,8 +23,8 @@ Status: `[ ]` open, `[~]` in progress, `[x]` done (its gate ran and passed, with
 ## 18. wait-what and wizard
 
 - Status: [ ]
-- Goal: A `wait-what` skill you type when a message did not land: the message explained again in simple English with the context it left out, using the glossary's terms. A `wizard` skill that writes a script walking a person through the steps only a person can do (open a dashboard, copy a key, paste it), writing each value to `.env`, a GitHub secret or a GitHub variable, asking before each irreversible action and never printing a secret.
-- Gate: `wait-what` runs on three real messages you name as not landed, each re-explanation read by you and judged clear; one real run of `wizard` for a project's manual setup you name, the script run by you, reviewed by you.
+- Goal: A `wait-what` skill you type when a message did not land: the message explained again in simple English with the context it left out, using the glossary's terms. A `wizard` skill that writes a script walking a person through the steps only a person can do (open a dashboard, copy a key, paste it), writing each value to `.env`, a GitHub secret or a GitHub variable, running the commands a stage needs, each shown and confirmed first, asking before each irreversible action and never printing a secret.
+- Gate: `wait-what` runs on three real messages you name as not landed, each re-explanation read by you and judged clear; one real run of `wizard` for a project's manual setup you name, the script run by you, reviewed by you; one real run of `wizard` for a setup that installs a tool on your machine, the script run by you, reviewed by you.
 - Waits on: 2.D, for the glossary and the layout rules.
 
 ## 19. codebase-design and improve-codebase-architecture

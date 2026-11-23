@@ -81,5 +81,6 @@ dispatch: []
 - 2026-11-23. Step 1 is dispatched: the builder a9fe20eeccf8024f2 works in `.agents/worktrees/18-wait-what-and-wizard-1` from base 12aa826. Next: its report, then `/refute 18 1`.
 - 2026-11-23. Step 1 has landed: both skills are on main. Next: a release candidate tagged and pinned on the user's word, then step 2, the gate's runs.
 - 2026-11-23. `v9.3.0-rc.1` (55d4464) is tagged and pinned on the user's word: 21 skills and 5 agents linked. Step 2 waits on the user: three `/wait-what` verdicts, and the project for the `wizard` run.
-- Roadmap entry 18 (wait-what and wizard). Plan step 2 of 3: the gate's runs. Next: step 3, the closing.
+- 2026-11-23. `v9.3.0-rc.2` (17201fb) is pinned. Step 2 is done on the user's verdicts. The user ruled the command stages: steps 3 and 4 added, ADR 0046 written.
+- Roadmap entry 18 (wait-what and wizard). Plan step 3 of 5: the command stages. Next: step 4, the gate's run for the command stages.
 - Open on Axel's side: none.

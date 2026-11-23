@@ -4,21 +4,25 @@ Execution ledger for roadmap entry 18, wait-what and wizard (`docs/roadmap.md`).
 
 ## Goal
 
-A `wait-what` skill you type when a message did not land: the message explained again in simple English with the context it left out, using the glossary's terms. A `wizard` skill that writes a script walking a person through the steps only a person can do (open a dashboard, copy a key, paste it), writing each value to `.env`, a GitHub secret or a GitHub variable, asking before each irreversible action and never printing a secret.
+A `wait-what` skill you type when a message did not land: the message explained again in simple English with the context it left out, using the glossary's terms. A `wizard` skill that writes a script walking a person through the steps only a person can do (open a dashboard, copy a key, paste it), writing each value to `.env`, a GitHub secret or a GitHub variable, running the commands a stage needs, each shown and confirmed first, asking before each irreversible action and never printing a secret.
 
 ## Gate
 
-`wait-what` runs on three real messages you name as not landed, each re-explanation read by you and judged clear; one real run of `wizard` for a project's manual setup you name, the script run by you, reviewed by you.
+`wait-what` runs on three real messages you name as not landed, each re-explanation read by you and judged clear; one real run of `wizard` for a project's manual setup you name, the script run by you, reviewed by you; one real run of `wizard` for a setup that installs a tool on your machine, the script run by you, reviewed by you.
 
 - The gate: could this pass without the goal being reached? no, each skill runs on real input the user names and the user judges each output; it is checked once, on the finished skills.
 - Step 1: could this pass without the goal being reached? no, a reviewer reads the text of both skills against their sources and ADR 0045, and the template's library line by line against the source; whether a re-explanation is clear and whether a script works is step 2's.
 - Step 2: could this pass without the goal being reached? no, it is the gate's run on the finished skills, judged by the user.
+- Step 3: could this pass without the goal being reached? no, the test runs the added helpers on a yes, a no and a failing command, and a reviewer reads the skill and the library against ADR 0046; whether a generated script installs a tool is step 4's.
+- Step 4: could this pass without the goal being reached? no, it is the gate's run on the finished skill, judged by the user.
 
 ## Steps, in execution order
 
 - ✅ 1 the two skills: `skills/ordo/wait-what/` with its `SKILL.md` in the skill layout, the source's one-sentence instruction and `disable-model-invocation: true`; `skills/code/wizard/` with its `SKILL.md` in the skill layout and the source's four steps, and `templates/template.sh`, the source's library in ASCII; `docs/dev/skill-layout.md`, "Frontmatter", with `disable-model-invocation` as an optional key; both skills listed where the skills are listed (`README.md`, `docs/dev/scripts.md` for the template, the install and pin text); `bash -n skills/code/wizard/templates/template.sh` exits 0, the ASCII check prints nothing, and a reviewer reads both skills against ADR 0045 and the two source files, and the library line by line against the source for any change beyond printed symbols (1 commit) (approved)
-- 2 the gate's runs, on a release candidate tagged and pinned: `wait-what` typed by the user in the user's own sessions on three real messages that did not land, each re-explanation read by the user and judged clear; one run of `wizard` for a project's manual setup the user names, made by a separate agent that invokes the installed skill, the user confirming the stage list, running the script and reviewing it (orchestrator, no agent) (approved)
-- 3 the closing: the closing report written (the cost script's output, or that the plan started no agent), the roadmap entry ticked with the gate's output, this folder moved to the archive (orchestrator, no agent) (approved)
+- ✅ 2 the gate's runs, on a release candidate tagged and pinned: `wait-what` typed by the user in the user's own sessions on three real messages that did not land, each re-explanation read by the user and judged clear; one run of `wizard` for a project's manual setup the user names, made by a separate agent that invokes the installed skill, the user confirming the stage list, running the script and reviewing it (orchestrator, no agent) (approved)
+- 3 the command stages: `skills/code/wizard/templates/template.sh` with the source's helpers unchanged and three additions, a check whether a tool is installed, a helper that shows one command, asks for a yes, runs it only on a yes and ends the script with the command's status when it fails, and the operating system the script runs on; `skills/code/wizard/SKILL.md` with a stage's commands in its scope, its stage list and its steps, the rule that no command runs without being shown and confirmed, and the rule that the skill is not for an action the session can take itself, now, on the machine it runs on; a test of the added helpers beside the template, with its command on `docs/dev/building.md`; the skill's rows in `README.md` and `docs/dev/scripts.md`; `bash -n` on the template exits 0, the ASCII check prints nothing, the test passes, and a reviewer reads the skill and the library against ADR 0046 (1 commit) (ruling The command stages)
+- 4 the gate's run for the command stages, on a release candidate tagged and pinned: one run of `wizard` for a setup that installs a tool on the user's machine, made by a separate agent that invokes the installed skill, the user confirming the stage list, running the script and reviewing it (orchestrator, no agent) (ruling The command stages)
+- 5 the closing: the closing report written (the cost script's output, or that the plan started no agent), the roadmap entry ticked with the gate's output, this folder moved to the archive (orchestrator, no agent) (approved)
 
 ## Step 1, landed (2026-11-23)
 
@@ -57,6 +61,8 @@ Independent of each other; the standing rule of one agent at a time still serial
 - The gate, wait-what (2026-11-23): the `wait-what` part of the gate passes after one run in the orchestrating session, with the glossary line of the skill changed to name the glossary directly: "Change the glossary line and then I accept wait-what" (the user).
 - The gate, wizard (2026-11-23): the `wizard` run of the gate is made in an empty scratch folder, for one setup, a GitHub personal access token saved to `.env`, in place of a project the user names: "(a), and tag and pin" (the user).
 - The gate, wizard verdict (2026-11-23): the user ran the script the `wizard` run wrote and judged it: "It's awesome" (the user).
+- Step 2, done (2026-11-23): `wait-what` accepted after one run with its glossary line changed, and the script of the `wizard` run judged "It's awesome", as the two gate bullets above record (the user).
+- The command stages (2026-11-23): `wizard` also writes stages that run commands, each shown and confirmed first, inside entry 18: the goal and the gate changed in `docs/roadmap.md`, ADR 0046 written, which supersedes ADR 0045 for the library and the scope of `wizard`, steps 3 and 4 added before the closing, the gate's further run a setup that installs a tool on the user's machine: "yes and make the change, I approve already and start the step" (the user).
 
 ## Agents
 

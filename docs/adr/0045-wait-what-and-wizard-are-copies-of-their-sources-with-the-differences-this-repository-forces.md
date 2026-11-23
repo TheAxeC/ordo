@@ -1,6 +1,6 @@
 # 0045. wait-what and wizard are copies of their sources, with the differences this repository forces
 
-Status: proposed
+Status: proposed; superseded by 0046 in the library of `wizard`'s template, which gains helpers for commands, in the scope of `wizard`, which now holds the commands a stage needs, and in its sentence that the library has no test
 
 ## Context
 

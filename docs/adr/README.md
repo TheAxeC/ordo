@@ -52,3 +52,4 @@ A record is `NNNN-<decision-as-a-phrase>.md` from `template.md`, numbered in ord
 | [0043](0043-paper-s-modes-are-academic-paper-s-copied-with-the-deviations-the-goal-and-the-rulings-keep.md) | Paper's modes are academic-paper's, copied, with the deviations the goal and the rulings keep |
 | [0044](0044-a-funder-config-lives-with-the-application-and-grant-ships-no-funder-s-facts.md) | A funder config lives with the application, and grant ships no funder's facts |
 | [0045](0045-wait-what-and-wizard-are-copies-of-their-sources-with-the-differences-this-repository-forces.md) | wait-what and wizard are copies of their sources, with the differences this repository forces |
+| [0046](0046-wizard-runs-the-commands-a-stage-needs-each-shown-and-confirmed-first.md) | wizard runs the commands a stage needs, each shown and confirmed first |
