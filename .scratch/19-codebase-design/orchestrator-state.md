@@ -53,8 +53,10 @@ dispatch:
   executor: agent
   worker: claude:fable
   report: .scratch/19-codebase-design/agents/reviews/1-report.md
-  round: 0
+  round: 1
   session_id: ab12944454eff9c48 (claude-fable-5-2)
+  builder_usage: "the build: 230741 tokens, 25 tool uses, 8.5 minutes"
+  reviewer_report: ".scratch/19-codebase-design/agents/reviews/1-refuter.md (aec236c414c8142fa, claude-fable-5-2, 207055 tokens, 21 tool uses, 5.8 minutes)"
   brief_check: ".scratch/19-codebase-design/agents/reviews/1-brief-check.md (abf99cfe27e48f423, claude-fable-5-2, 190305 tokens, 23 tool uses, 5.9 minutes)"
 ```
 
@@ -90,4 +92,5 @@ dispatch:
 
 - 2026-11-23. The plan is open; nothing has landed.
 - 2026-11-23. Step 1 is dispatched: the builder ab12944454eff9c48 works in `.agents/worktrees/19-codebase-design-1` from base 757fde1. Next: its report, then `/refute 19 1`.
+- 2026-11-23. Step 1 is built and reviewed: ten rulings sent to the builder as repair round 1. Next: the builder's reply, then `/refute 19 1` over the round, then `/land 19 1`.
 - Roadmap entry 19 (codebase-design). Plan step 1 of 3: the skill. Next: step 2, the gate's runs.

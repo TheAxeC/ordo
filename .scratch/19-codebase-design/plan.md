@@ -48,6 +48,7 @@ Independent of each other; the standing rule of one agent at a time still serial
 - Deviation 17 (2026-11-23): (a), the design terms of the vocabulary are defined only in the skill's `references/vocabulary.md` and are not added to `plan-terms.md` or the glossary (the user).
 - Deviation 18 (2026-11-23): (a), in a repository with no plan configuration the review invokes `/ordo-init` at the pick, with its own draft and approval, then `/roadmap add` and `/grill`; when the user declines `/ordo-init` the skill ends with the report and says no entry was written (the user).
 - ADR 0047 refined (2026-11-23): (a), its sentence on paths reads "The skill reads no standards page from a path outside the repository it runs in and its own skills folder.", so the report of D16 is written outside the repository (the user).
+- The release candidate for step 2 (2026-11-23): after step 1 lands, a release candidate is tagged and pinned with `utils/pin.sh <tag>` for the gate's runs (the user).
 
 ## Agents
 
@@ -55,4 +56,4 @@ Each agent a plan skill started for this plan has one bullet, with its agent id,
 
 ## Blocked, and by what
 
-- 2: waits on the user's word to pin the release candidate.
+- 2: waits on step 1's landing; the user's word to tag and pin the release candidate is given (ruling "The release candidate for step 2").
