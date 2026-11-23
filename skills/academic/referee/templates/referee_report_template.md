@@ -15,23 +15,23 @@ The first block is the form of a first round. The second block is the form "Comm
 
 ### General comments
 
-[A summary of the paper: what it claims and on what evidence. Then the overall assessment.]
+[A summary of the paper in two to four sentences: what it claims and on what evidence. Then the overall assessment, in two or three sentences.]
 
 ### Major points
 
 [The major points, or "None."]
 
-1. [The point, tied to its passage: section, page, line, table or figure, or a short quotation. What is wrong, which main claim fails or has no evidence, and what would settle it.]
+1. [The point, tied to its passage: section, page, line, table or figure, or a short quotation. What is wrong, which main claim fails or has no evidence, and what would settle it. One paragraph of at most five sentences.]
 
 ### Minor points
 
 [The minor points, or "None."]
 
-1. [The point, tied to its passage.]
+1. [The point, tied to its passage, in one or two sentences.]
 
 ## Confidential comments to the editor
 
-[What the referee tells the editor and not the authors: how sure the recommendation is and what it rests on.]
+[What the referee tells the editor and not the authors: how sure the recommendation is and what it rests on. At most four sentences.]
 ```
 
 In a second round, "Recommendation" and "Confidential comments to the editor" stand as above. "Comments to the author" takes this form:
@@ -47,8 +47,8 @@ In a second round, "Recommendation" and "Confidential comments to the editor" st
 
 [Any new point first, then the remaining first-round points, in the order of `selected-points.md`, or "None."]
 
-1. [New in the revision: the point, tied to its passage. What the revision added or changed, which main claim fails or has no evidence under it, and what would settle it.]
-2. [First-round point [its first-round number]: the point, tied to its passage, what is still missing, and what would settle it.]
+1. [New in the revision: the point, tied to its passage. What the revision added or changed, which main claim fails or has no evidence under it, and what would settle it. One paragraph of at most five sentences.]
+2. [First-round point [its first-round number]: the point, tied to its passage, what is still missing, and what would settle it. One paragraph of at most five sentences.]
 
 ### Minor points
 

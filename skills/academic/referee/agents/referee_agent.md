@@ -117,7 +117,10 @@ Write `referee-report.md` in the run folder, in the form of `templates/referee_r
 - Tie each point to its passage, as `selected-points.md` has it.
 - Number the major points and the minor points.
 - Say each point once, in the words it needs.
+- A major point is one paragraph of at most five sentences: its passage, what is wrong, which main claim fails or has no evidence, and what would settle it.
+- In a first round, a minor point is one or two sentences.
 - In a first round, open the general comments with a summary of the paper in your own words: what it claims and on what evidence.
+- In a first round, that summary is two to four sentences, and the overall assessment after it is two or three sentences.
 - In a second round, open the general comments with what the revision changed.
 - In a second round, name next the first-round points the revision resolved, from the list "First-round points resolved", in one sentence for all of them together.
 - In a second round, say next in one or two sentences whether the revision answers the first round.
@@ -131,6 +134,7 @@ Write `referee-report.md` in the run folder, in the form of `templates/referee_r
 - Give one recommendation: one of the journal's values when `intake.md` holds them, and otherwise one of accept, minor revision, major revision, reject.
 - In a second round, choose the recommendation as "The second round" says.
 - In the confidential comments to the editor, say what you would tell the editor and not the authors, such as how sure the recommendation is and what it rests on.
+- The confidential comments are at most four sentences.
 - Repeat no point of the comments to the author word for word in the confidential comments.
 - An objection to a rule of this section goes in the section "Objections" of `selected-points.md`, never in the report.
 
