@@ -19,6 +19,7 @@ metadata:
 - The first words of `description` name what the skill does, in the phrase a reader or a model matches a request on.
 - `Triggers on:` lists at least one phrase for each case the skill is for, and may list several phrasings of one case, so a request worded differently still finds the skill.
 - A phrase for a case a neighbouring skill is for goes in that skill's `Triggers on:`, not in this one.
+- `disable-model-invocation: true` is an optional key: a skill carries it when only the user may invoke it, since only the user knows when the skill is due, and every other skill leaves the key out.
 - The version lives in `metadata.version` only. The text of the skill carries no version, date or change history.
 - A plan that changes a skill raises one part of its `metadata.version` once, and sets the parts after it to 0.
 - The major part when, under the same inputs and the default keys, a run that worked before is refused, or its output is changed or removed.

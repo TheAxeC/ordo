@@ -152,3 +152,86 @@ none. The report states the two new invocations, the README, the layout bullet, 
 - `shellcheck` on the template: not a check of the brief, not run.
 
 Usage: acb5ec6652074faf9, claude-fable-5-2, 158072 tokens, 15 tool uses, 4.0 minutes
+
+## Repair round 1, refuted
+
+### Verification (the lines each check printed, verbatim)
+
+1. Character-set check of the brief's "Verify before you report" 1, with `template.LICENSE` left out of the file list (nine files): printed nothing; `charset exit=0`.
+2. `bash -n skills/code/wizard/templates/template.sh`: printed nothing; `bash -n exit=0`.
+3. `diff <fetched template.sh at abeeaf95> skills/code/wizard/templates/template.sh` (exit 1). Added lines `5a6,40` are the 35 head-comment lines (template lines 6 to 40). The other differences are exactly the fourteen lines of 3.2, each as 3.2 gives it:
+   - lines 11, 13, 194, 199, 218: box-drawing line becomes 74 `-`; line 207 becomes `# -- Example stage: replace with your real steps ---------------------------`
+   - 55: `printf '\n%s%s> Stage %s/%s: %s%s\n' \`
+   - 62: `step() { printf '  %s-%s %s\n' "$BLUE" "$RESET" "$1"; }`
+   - 64: `warn() { printf '  %s! %s%s\n' "$YELLOW" "$1" "$RESET"; }`
+   - 69: `printf '  %s> opening%s %s\n' "$GREEN" "$RESET" "$url"`
+   - 150: `printf '  %sok wrote%s %s to %s\n' ...`
+   - 160 and 173: `ok set`
+   - 184: `ok  Setup complete` as `  ok Setup complete`
+   
+   No `%` or backslash was added in a changed `printf`.
+4. License text: template lines 8 to 28, with the `# ` prefix stripped (`#` alone for an empty line), against the fetched `LICENSE`: `diff` printed nothing, `lic diff exit 0`; both have 21 lines; no trailing whitespace in either (`grep -c '[[:space:]]$'` printed 0 and 0).
+5. `python3 -c` description lengths, the two new lines: `803 skills/code/wizard/SKILL.md` and `208 skills/ordo/wait-what/SKILL.md`. Frontmatter command: `wait-what True 1.0.0`.
+6. `LC_ALL=C grep -n '[^ -~]'` over the template and both `SKILL.md`: printed nothing, `grep exit=1`. `stat -f '%Sp %N'`: `-rw-r--r-- skills/code/wizard/templates/template.sh`. A tab count in the template: `0`. `find skills -name openai.yaml`: printed nothing. `python3 skills/ordo/repo-setup/templates/sync_rules.py . --only glossary`: `ok: the plan-terms block equals the template`.
+7. Figure: `gen_figures.py` copied to a `mktemp -d` folder outside the worktree and run there (`python3 -I gen_figures.py`, `gen rc=0`, 22 `wrote` lines). `cmp` of its `pipeline.svg` with the worktree's: no output, `cmp pipeline exit=0`. The 8 top-level svg files all compared equal (`same=8`, no `DIFFERS` line). `git status --short docs/figures` printed ` M docs/figures/gen_figures.py` and ` M docs/figures/pipeline.svg`. The temp folder is deleted (`ls` on it: `No such file or directory`).
+8. `ls skills/code/wizard/templates` printed `template.sh`. `grep -rn 'template.LICENSE' skills docs README.md` printed nothing (exit 1).
+9. The report's Repair round 1 commands, rerun: `grep -n 'one focused task per stage' README.md` printed line 29; `grep -n "path the user confirmed\|script.s path" skills/code/wizard/SKILL.md` printed only line 67 (`   - Done when the message names the script's path and the command that runs it.`); `sed -n '16,19p'` of ADR 0045 printed the four items the report quotes; the license and head-comment checks are items 3 and 4 above.
+10. Plain `grep -rn -i 'nineteen\|twenty\|19 skills' skills utils docs README.md` printed four hits (`calibration_counts.test.sh:68`, ADR 0016 line 7, `README.md:35`, `README.md:170`); the first two are not counts of skills, the last two read "twenty-one". Plain `grep -rn 'session-retro'` hits (outside `session-retro/`, glossary and `plan-terms.md`) are unchanged lists of Use instead rows, the figure, `scripts.md:31`, `roadmap.md:74` and README lines 7, 25, 35, 61, 69, 159.
+
+### The rulings
+
+1. Carried out as ruled: ADR 0045 lines 16 to 19 hold the license item, the head-comment item, the GitHub variable item and the three-secret-rules item.
+2. Carried out as ruled: `skills/code/wizard/SKILL.md:41` and the Stops row no longer name the script's path; line 47 reads "Copy `templates/template.sh` to the target path, which Rules gives." and Rules lines 99 to 101 give the path.
+3. Carried out as ruled: README line 29, "fills a fixed template with the stages, one focused task per stage."
+4. Carried out as ruled: `gen_figures.py` and `pipeline.svg` line 110 read "/session-retro, /wizard, and /wait-what and /ordo-help, which have no stop."; only `pipeline.svg` changed among figures (checked above).
+5. Carried out as ruled: the Stops row (line 80) states "The ordered stages, the values each produces, where each is written and whether it is secret"; Steps 2 (line 41) points to the row and lists nothing.
+6. Carried out as ruled for the removal of `template.LICENSE`, the whole license text as comment lines (compared word for word), the origin line, the `SKILL.md` sentence (line 73) and the two ADR items. The inputs, warnings and exit-status block is carried out but is inexact in places: see Standards 1.
+
+No finding was closed by removing a check, no fix reaches beyond its ruling (the snapshot-to-now diff touches only README line 29, ADR list, `SKILL.md` lines 41, 47, 73, 80, the template head comment, the figure note and `pipeline.svg` line 110, and deletes `template.LICENSE`), and every claim of closure reproduced.
+
+### Verdicts
+
+#### Items
+- 1.1 holds. 1.2 holds. 1.3 holds (`wait-what/SKILL.md:33`, unchanged by the round). 1.4 holds. 1.5 holds.
+- 2.1 holds. 2.2 holds (the path is out of Steps 2 and the Stops row; Steps 4 cites Rules). 2.3 holds (Rules 99 to 101). 2.4 holds (Stops rows lines 80 and 81; Rules 94 to 98). 2.5 holds (line 74). 2.6 holds (`step` only as "Steps <n>", `stop` only in Stops tables, `bar` absent).
+- 3.1 holds. 3.2 holds. 3.3 holds. 3.4 holds with the 35 added lines of ruling 6. 3.5 as ruling 6 replaces it: holds for the removal, the license text, the origin line and the `SKILL.md` and ADR sentences; the inputs/warnings/exit block is under Standards 1.
+- 4.1 holds (`skill-layout.md:22`). 4.2 holds.
+- 5.1 holds (README lines 26 and 29, order as asked, "one focused task per stage"). 5.2 holds (line 35). 5.3 holds (lines 159 and 170). 5.4 holds (`scripts.md:18`). 5.5 holds as ruled in ruling 4. 5.6 holds by the plain greps of item 10; the two `git grep` forms are under "Declined to judge".
+- Section 6 holds (no test, no `openai.yaml`, no own figure, no glossary change; sync check ok).
+
+#### Cases
+- `bash -n`: met. `LC_ALL=C grep`: met. Diff of 3.4: met (fourteen lines plus the 35 added lines of ruling 6; no function differs except in printed characters). Description lengths: met (803, 208). Frontmatter command: met (`wait-what True 1.0.0`). Figure command: met by the copy run (top-level svg files and `pipeline.svg` equal; `docs/figures/paper/*.svg` not compared, see below).
+- Read, `wait-what` against the source: met (file unchanged by the round).
+- Read, `wizard` against the source: not verifiable this round (the wizard `SKILL.md` source was not among the sources to fetch); requirements, stops and rules read against the brief's 2.2 to 2.4: met.
+- Read, against ADR 0045: met. Each difference I found between `wizard`'s text and the brief (GitHub variable, three secret rules, license, head-comment block) is on the list.
+- Read, nothing private named: met. `grep -n -i '/Users\|axel\|\.scratch\|~/\|/tmp'` over the two skills and the template printed nothing; the template names mattpocock/skills and "Matt Pocock" as the public `LICENSE` prints them, and Stripe's public URL.
+
+### Spec
+none.
+
+### Proof
+none. Each command the "Repair round 1" section quotes reproduced.
+
+### Standards
+1. `skills/code/wizard/templates/template.sh:30` to `39`, the head comment's block, against change standard rule 14 ("lists every input it reads, every error it prints and every exit status it returns") and the brief's ruling 6 ("state these exactly; state nothing the code does not do"):
+   - Line 33: "the person's answers, read from the terminal." The code reads standard input (`read -r _` in `pause` and `confirm`, `read -e -r -p` in `ask`, `read -rs` in `ask_secret`), not the terminal. Scenario: a person runs `printf 'x\n' | ./setup.sh` or redirects a file; the comment says terminal and the script reads the pipe.
+   - Lines 30 to 33 omit inputs the library reads: `TERM` through `tput` and whether standard output is a terminal (`[[ -t 1 ]]` at line 50 decides colours and `_clear`), the current directory (a relative `ENV_FILE` and the repository `gh secret set` and `gh variable set` write to), and `gh`'s sign-in state (`gh auth status`, lines 192 and 206). Scenario: a person runs the script from a folder that is not the target repository, and the comment never says the GitHub secret goes to the repository of that folder.
+   - Line 39 omits the status when the person stops the script with Ctrl-C, which `banner` (line 80) invites: the script ends on the signal and the shell reports 130, not 0 and not "the status of the first command that fails". Scenario: a caller testing the status after an interrupted run finds a value the comment does not state.
+
+### Behaviour
+none. The warning strings, their conditions and the success status 0 (`finish` ends on `printf '\n'`, `run_wizard "$@"; exit` returns that status) match the code; line 6 and lines 8 to 28 are the public origin and license.
+
+### Declined to judge
+- The report's `git diff --numstat` lines and the two `git grep` forms of 5.6: not run (git commands outside the three allowed); the plain `grep -rn` equivalents were run (item 10 above).
+- `docs/figures/paper/*.svg` (14 files the generator also writes): not compared with the worktree's.
+- `wizard/SKILL.md` against its source `SKILL.md`: not fetched or compared this round.
+- Whether the MIT License's condition is met for a script copied out of the skill: a legal judgment; the text of the license now stands in the script's head comment, so the copy carries it.
+- Whether a generated script works, and whether the output of `/wait-what` is clear: the step's gate.
+- `shellcheck` on the template: not a check of the brief, not run.
+
+Usage: a0d93dacde474d366, claude-sonnet-5-5 with one recorded call on claude-opus-5-5, 131492 tokens, 16 tool uses, 2.4 minutes
+
+## Closed
+
+- First run, Spec 1 and 2 and Standards 1 to 4: closed in repair round 1, each as the round's brief `agents/briefs/1-round-1.md` rules it; the run over the round found each ruling carried out.
+- Round 1, Standards 1 (the head comment's block of inputs and exit status is inexact): fixed at landing. The block says the answers are read from standard input, names the further inputs (whether standard output is a terminal and `TERM`, the current folder, the sign-in state of `gh`), and gives the status after Ctrl-C.

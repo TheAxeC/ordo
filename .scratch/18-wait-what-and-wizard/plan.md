@@ -16,9 +16,22 @@ A `wait-what` skill you type when a message did not land: the message explained 
 
 ## Steps, in execution order
 
-- 1 the two skills: `skills/ordo/wait-what/` with its `SKILL.md` in the skill layout, the source's one-sentence instruction and `disable-model-invocation: true`; `skills/code/wizard/` with its `SKILL.md` in the skill layout and the source's four steps, and `templates/template.sh`, the source's library in ASCII; `docs/dev/skill-layout.md`, "Frontmatter", with `disable-model-invocation` as an optional key; both skills listed where the skills are listed (`README.md`, `docs/dev/scripts.md` for the template, the install and pin text); `bash -n skills/code/wizard/templates/template.sh` exits 0, the ASCII check prints nothing, and a reviewer reads both skills against ADR 0045 and the two source files, and the library line by line against the source for any change beyond printed symbols (1 commit) (approved)
+- ✅ 1 the two skills: `skills/ordo/wait-what/` with its `SKILL.md` in the skill layout, the source's one-sentence instruction and `disable-model-invocation: true`; `skills/code/wizard/` with its `SKILL.md` in the skill layout and the source's four steps, and `templates/template.sh`, the source's library in ASCII; `docs/dev/skill-layout.md`, "Frontmatter", with `disable-model-invocation` as an optional key; both skills listed where the skills are listed (`README.md`, `docs/dev/scripts.md` for the template, the install and pin text); `bash -n skills/code/wizard/templates/template.sh` exits 0, the ASCII check prints nothing, and a reviewer reads both skills against ADR 0045 and the two source files, and the library line by line against the source for any change beyond printed symbols (1 commit) (approved)
 - 2 the gate's runs, on a release candidate tagged and pinned: `wait-what` typed by the user in the user's own sessions on three real messages that did not land, each re-explanation read by the user and judged clear; one run of `wizard` for a project's manual setup the user names, made by a separate agent that invokes the installed skill, the user confirming the stage list, running the script and reviewing it (orchestrator, no agent) (approved)
 - 3 the closing: the closing report written (the cost script's output, or that the plan started no agent), the roadmap entry ticked with the gate's output, this folder moved to the archive (orchestrator, no agent) (approved)
+
+## Step 1, landed (2026-11-23)
+
+- What landed: `skills/ordo/wait-what/SKILL.md`; `skills/code/wizard/SKILL.md` and `skills/code/wizard/templates/template.sh`; the optional key `disable-model-invocation` in `docs/dev/skill-layout.md`, "Frontmatter"; the two rows, the group sentence, the install loop and the count "twenty-one" in `README.md`; the template's row in `docs/dev/scripts.md`; the note of `docs/figures/pipeline.svg` in `docs/figures/gen_figures.py`; four more differences in ADR 0045.
+  - Premise corrections: the brief check gave findings under all eight of its checks, each closed in the brief before the build (`agents/reviews/1-brief-check.md`, "Closed"): the `wait-what` instruction dictated word for word, the glossary found as `/plan` finds it with no fallback, the template's comments kept as the source's, every source read at commit `abeeaf9` of mattpocock/skills, the pipeline figure's note, `>` for the printed arrow.
+  - A decision of the session, told to the user: the source is under the MIT License, so its license text stands whole in the head comment of `template.sh`, and ADR 0045 lists it as a difference.
+  - The verify list: unchanged, equal to `docs/dev/building.md`.
+  - Findings outside the brief: none raised as an open item. The builder noted that `CLAUDE.md` is not tracked and so stands in no worktree; told to the user.
+  - Verification: `sh /Users/axelfaes/.claude/skills/land/templates/checks.sh .scratch/18-wait-what-and-wizard/orchestrator-state.md`, run on main after the fix at landing, ended `checks: 14 commands passed`. `bash -n skills/code/wizard/templates/template.sh` exits 0.
+  - A/B: none, the configuration names no benchmark. Look: none, the configuration names no view.
+  - The builder's first report did not pass its bar: the first review gave six findings (two differences missing from ADR 0045, the script's path in the stage-list confirmation, "one stage per action" in the README row, the figure note naming one skill without a stop, the stage-list stop stated twice, the template's head comment without its inputs, warnings and exit status), all closed in repair round 1, which also moved the license text from a file beside the template into its head comment.
+  - Fixes at landing, one, from the review over round 1: the head comment's block says the answers are read from standard input, names the further inputs (whether standard output is a terminal and `TERM`, the current folder, whether `gh` is installed and signed in) and gives the status after Ctrl-C.
+  - Agents: the brief check a866bbf579774b48d (claude-fable-5-2, 166799 tokens, 20 tool uses, 6.4 minutes); the builder a9fe20eeccf8024f2 (claude-fable-5-2: the build 186136 tokens, 25 tool uses, 4.7 minutes; round 1 207333 tokens, 5 tool uses, 1.7 minutes); the reviewer acb5ec6652074faf9 (claude-fable-5-2, 158072 tokens, 15 tool uses, 4.0 minutes); the reviewer over round 1 a0d93dacde474d366 (claude-sonnet-5-5 with one recorded call on claude-opus-5-5, 131492 tokens, 16 tool uses, 2.4 minutes).
 
 ## Could run in parallel
 
@@ -47,6 +60,10 @@ Independent of each other; the standing rule of one agent at a time still serial
 Each agent a plan skill started for this plan has one bullet, with its agent id, its role and the model the runner served it, except an agent the plan leaves unpriced, which has a numbered item under the heading "Agents the cost script leaves unpriced:"; `/land` writes a step's agents at its booking and when it takes a step back out of main, `/grill` writes its lookup agents, `/spec` writes a brief-check agent it stopped for another model or found dead when it took a run over, the orchestrator writes a brief-check agent it stopped under "The review of a choice", the session that starts a diagnosis agent writes its numbered item right after the start, and `/plan` copies the bullets of a rulings file.
 
 - a84939439ef3b0753: grill lookup, claude-fable-5-2
+- a866bbf579774b48d: brief check of step 1, claude-fable-5-2
+- a9fe20eeccf8024f2: builder of step 1, claude-fable-5-2
+- acb5ec6652074faf9: reviewer of step 1, claude-fable-5-2
+- a0d93dacde474d366: reviewer of step 1 over round 1, claude-sonnet-5-5
 
 ## Blocked, and by what
 

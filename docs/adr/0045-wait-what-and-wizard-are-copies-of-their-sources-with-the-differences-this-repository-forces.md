@@ -13,6 +13,10 @@ Roadmap entry 18's goal names two skills. Each has a public source in the reposi
 - the sections and the frontmatter of `docs/dev/skill-layout.md`;
 - the glossary found at the path the plan configuration lists, with `wait-what` still working when a repository has none;
 - `template.sh` in ASCII, and listed on `docs/dev/scripts.md`;
+- the source's license text in the head comment of `template.sh`;
+- the head comment of `template.sh` lists the script's inputs, warnings and exit status, as the change standard asks of every script;
+- the GitHub variable as a destination the scope of `wizard` names, which the template's `set_var` already writes;
+- the three rules on secrets in `wizard` (never asked for in the conversation, never printed, never written into the script), which the roadmap entry's goal asks for;
 - no `agents/openai.yaml`;
 - the prose standard applied to the skill text.
 
