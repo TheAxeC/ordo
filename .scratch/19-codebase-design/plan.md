@@ -17,14 +17,16 @@ one real run of the `standards` mode on a scratch copy of Cathedra, where every 
 ## Steps, in execution order
 
 - ✅ 1 the skill: `skills/code/codebase-design/` with its `SKILL.md` in the skill layout, the modes `standards` and `review`, the search order of ADR 0047 for the standards pages, the default page used for a kind of page the repository lacks (ruling D12), the review ending in a roadmap entry through `grill`, and the sources' vocabulary, deepening page, design-it-twice page and report page as its reference pages; `README.md` and `docs/dev/` wired in as the skill layout asks; the ledger's list of every deviation from the two sources, each with its reason and its ruling; check: the skill follows `docs/dev/skill-layout.md`, read by the user, the deviations list read against both sources, and the verify list passes on main (1 commit) (approved)
-- 2 the gate's runs, on a release candidate tagged and pinned on the user's word: one run of the `standards` mode on a scratch copy of Cathedra, where every point of Cathedra's existing "Design principles" section still stands and each addition the run proposes is reviewed by the user, by reading both; one run of the `review` mode on the same copy, each candidate reviewed by the user, the one the user picks written into the copy's roadmap through `grill`; no file of Cathedra itself is changed; each run made by a separate agent that invokes the installed skill, its stops answered by the orchestrator (orchestrator, no agent) (approved)
+- 4 the standards stop: `/codebase-design standards` shows its draft in the five groups and the forms of the ruling "The standards stop", with the rules found present in a file beside it, and has a rule for a default rule the code does not follow, for a default rule about a tool the repository lacks and for a default rule that contradicts a rule of the repository; it names `ordo-init`'s folder as the place of the default pages; check: the skill's text read against the ruling and the skill layout, and the verify list passes on main (1 commit) (ruling The standards stop)
+- 5 the merge: `ordo-init` covers the three cases of the ruling "repo-setup merged into ordo-init", `skills/ordo/repo-setup/` is removed with its `templates/` folder moved to `skills/ordo/ordo-init/templates/`, and every skill outside `skills/code/codebase-design/`, every page under `docs/`, the README and the figures name `ordo-init` where they named `repo-setup`; check: `grep -rn 'repo-setup' skills README.md docs/dev docs/glossary.md utils` prints nothing outside `skills/code/codebase-design/`, the skill's text read against the skill layout, and the verify list passes on main (1 commit) (ruling repo-setup merged into ordo-init)
+- 2 the gate's runs, on a release candidate tagged and pinned on the user's word: one run of the `standards` mode on a scratch copy of Cathedra, where every point of Cathedra's existing "Design principles" section still stands and each addition the run proposes is reviewed by the user, by reading both; one run of the `review` mode on the same copy, each candidate reviewed by the user, the one the user picks written into the copy's roadmap through `grill`; no file of Cathedra itself is changed; each run made by a separate agent that invokes the installed skill, its stops answered by the orchestrator; after steps 4 and 5, on a release candidate that holds both: the `standards` run made again on a fresh scratch copy, and one run of `/ordo-init` on an empty folder, one on a scratch copy of an existing repository and one on a configured scratch copy, each by a separate agent (orchestrator, no agent) (approved) (ruling repo-setup merged into ordo-init)
 - 3 the closing: the closing report written (the cost script's output, or that the plan started no agent), the roadmap entry ticked with the gate's output, this folder moved to the archive (orchestrator, no agent) (approved)
 
 ## Could run in parallel
 
 Independent of each other; the standing rule of one agent at a time still serialises them unless `plan.yaml`'s `workers_at_once` allows more.
 
-- None: step 2 needs step 1's landed skill, and step 3 needs step 2's runs.
+- 4 and 5: step 4 writes `skills/code/codebase-design/` and step 5 leaves that folder alone (ruling "Steps 4 and 5 run in parallel").
 
 ## Rulings (2026-11-23)
 
@@ -50,6 +52,10 @@ Independent of each other; the standing rule of one agent at a time still serial
 - ADR 0047 refined (2026-11-23): (a), its sentence on paths reads "The skill reads no standards page from a path outside the repository it runs in and its own skills folder.", so the report of D16 is written outside the repository (the user).
 - The release candidate for step 2 (2026-11-23): after step 1 lands, a release candidate is tagged and pinned with `utils/pin.sh <tag>` for the gate's runs (the user).
 - Open item A (2026-11-23): (a), the differences 19 to 26 from the two sources are approved as listed in `.scratch/19-codebase-design/deviations.md` (the user).
+- No new roadmap entry (2026-11-23): all work this entry's runs propose is done in this entry, whichever skill it changes, `repo-setup` included; no roadmap entry is added for it (the user).
+- The standards stop (2026-11-24): (a), `/codebase-design standards` keeps the whole comparison of a repository's pages with the default pages, and its stop "The draft" is short and not cryptic. It shows five groups: a default rule that contradicts a rule of the repository, in full (what the page says now, what the default says, what goes wrong with each), for the user's choice; the rules of the Ordo template that the page lacks, named in one line and not reprinted, with one yes or no for the group; a default rule the page lacks and the code already follows, one line each with its count, added unless the user strikes it; a default rule the page lacks and the code does not follow, one line each with what adopting it would break, not added unless the user names it; the default rules about a tool the repository lacks, in one line, not added. The rules found already present are one sentence in the stop, their list kept in a file the user is not asked to open. No line of the stop locates a rule by a line number alone (the user).
+- repo-setup merged into ordo-init (2026-11-24): one skill, `ordo-init`, covers three cases by what it finds: an empty folder, where it writes the whole tree `/repo-setup` writes now; an existing repository, where it offers what is missing, the shared rules in `CLAUDE.md` included; a configured repository, where it checks the configuration and compares the shared-rules block and the plan-terms block with their templates, as `/repo-setup sync` does now. The skill `repo-setup` is removed. Its `templates/` folder, with the default pages, `sync_rules.py` and its test, moves to `ordo-init`'s folder with its files' content unchanged, and every skill, page and figure that names `repo-setup` names `ordo-init` (the user).
+- Steps 4 and 5 run in parallel (2026-11-24): the step that fixes the standards stop and the step that merges `repo-setup` into `ordo-init` are built at the same time; step 2's runs follow both (the user).
 
 ## Agents
 
@@ -62,7 +68,8 @@ Each agent a plan skill started for this plan has one bullet, with its agent id,
 
 ## Blocked, and by what
 
-- 2: step 1 has landed; the release candidate is to be tagged and pinned; the user's word to tag and pin the release candidate is given (ruling "The release candidate for step 2").
+- 2: waits on steps 4 and 5 and on a release candidate that holds both; its first `standards` run, on `v9.4.0-rc.1`, reached the stop "The draft" and was not approved.
+- 3: waits on step 2.
 
 ## Step 1, booked (2026-11-23)
 

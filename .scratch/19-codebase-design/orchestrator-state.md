@@ -78,6 +78,5 @@ dispatch: []
 
 ## Current position (rewritten before every step commit of this plan)
 
-- 2026-11-23. Step 1 has landed: the skill `codebase-design` is on main. Next: the release candidate `v9.4.0-rc.1` tagged and pinned with `utils/pin.sh`, then step 2's two runs on a scratch copy of Cathedra, each by a separate agent.
-- 2026-11-23. The release candidate `v9.4.0-rc.1` is tagged at f03b8d6 and pinned. Step 2 is running: the agent ab9a7ef09ce1a15fc makes the `standards` run on the scratch copy of Cathedra in the session's scratchpad, folder `cathedra-copy`; what its stops show is written to the scratchpad folder `gate`. Next: its stops answered, the user's review of the draft, then the `review` run by a second agent.
-- Roadmap entry 19 (codebase-design). Plan step 2 of 3: the gate's runs. Next: step 3, the closing.
+- 2026-11-24. Step 1 has landed (f03b8d6). Step 2's first `standards` run on `v9.4.0-rc.1` reached the stop "The draft"; the user found the draft unreadable, and it was not approved. The scratch copy holds no change. Rulings of 2026-11-24 add step 4 (the standards stop) and step 5 (`repo-setup` merged into `ordo-init`), built in parallel. Next: `/spec 19 4` and `/spec 19 5`, their builders, reviews and landings, then a new release candidate and step 2's runs.
+- Roadmap entry 19 (codebase-design). Plan steps 4 and 5 of 5: the standards stop, and the merge. Next: step 2, the gate's runs.
