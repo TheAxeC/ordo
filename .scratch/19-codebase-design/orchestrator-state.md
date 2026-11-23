@@ -47,7 +47,14 @@ repair_reviewer: claude:sonnet  # the model the run of /refute over a repair rou
 ```yaml
 dispatch:
 - step: 1
-  landing: preparing
+  landing: not-started
+  base: 757fde1
+  worktree: .agents/worktrees/19-codebase-design-1
+  executor: agent
+  worker: claude:fable
+  report: .scratch/19-codebase-design/agents/reviews/1-report.md
+  round: 0
+  session_id: ab12944454eff9c48 (claude-fable-5-2)
   brief_check: ".scratch/19-codebase-design/agents/reviews/1-brief-check.md (abf99cfe27e48f423, claude-fable-5-2, 190305 tokens, 23 tool uses, 5.9 minutes)"
 ```
 
@@ -82,4 +89,5 @@ dispatch:
 ## Current position (rewritten before every step commit of this plan)
 
 - 2026-11-23. The plan is open; nothing has landed.
-- Roadmap entry 19 (codebase-design). Plan step 1 of 3: the skill. Next: `/spec 19 1`.
+- 2026-11-23. Step 1 is dispatched: the builder ab12944454eff9c48 works in `.agents/worktrees/19-codebase-design-1` from base 757fde1. Next: its report, then `/refute 19 1`.
+- Roadmap entry 19 (codebase-design). Plan step 1 of 3: the skill. Next: step 2, the gate's runs.
