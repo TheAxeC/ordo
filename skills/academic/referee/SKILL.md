@@ -58,7 +58,7 @@ Steps 1 to 3 run in order, in both rounds.
 1. Ask the intake in one message, before any agent starts: the stop "The intake".
    - Ask the direction of the review, such as a methodological focus. With none given, the direction is "balanced".
    - Ask the severity of the review. With none given, the severity is "medium".
-   - Ask the budget: the most major points, the most minor points and the length of the report in words. With none given, the budget is 7 major points, 7 minor points and 1,200 words.
+   - Ask the budget: the most major points, the most minor points and the length of the report in words. With none given, the budget is 7 major points, 7 minor points and 800 words.
    - Say in the question that each number of the budget is a ceiling, as "The budget" says.
    - Ask the journal's fields, the values of its recommendation and its length limit. With no fields named, the fields are the default ones of `templates/referee_report_template.md`.
    - Ask whether to shrink the panel, and to which reviewers. With no answer, all five reviewers run.
