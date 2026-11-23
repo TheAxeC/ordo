@@ -16,7 +16,7 @@ one real run of the `standards` mode on a scratch copy of Cathedra, where every 
 
 ## Steps, in execution order
 
-- 1 the skill: `skills/code/codebase-design/` with its `SKILL.md` in the skill layout, the modes `standards` and `review`, the search order of ADR 0047 for the standards pages, the default page used for a kind of page the repository lacks (ruling D12), the review ending in a roadmap entry through `grill`, and the sources' vocabulary, deepening page, design-it-twice page and report page as its reference pages; `README.md` and `docs/dev/` wired in as the skill layout asks; the ledger's list of every deviation from the two sources, each with its reason and its ruling; check: the skill follows `docs/dev/skill-layout.md`, read by the user, the deviations list read against both sources, and the verify list passes on main (1 commit) (approved)
+- ✅ 1 the skill: `skills/code/codebase-design/` with its `SKILL.md` in the skill layout, the modes `standards` and `review`, the search order of ADR 0047 for the standards pages, the default page used for a kind of page the repository lacks (ruling D12), the review ending in a roadmap entry through `grill`, and the sources' vocabulary, deepening page, design-it-twice page and report page as its reference pages; `README.md` and `docs/dev/` wired in as the skill layout asks; the ledger's list of every deviation from the two sources, each with its reason and its ruling; check: the skill follows `docs/dev/skill-layout.md`, read by the user, the deviations list read against both sources, and the verify list passes on main (1 commit) (approved)
 - 2 the gate's runs, on a release candidate tagged and pinned on the user's word: one run of the `standards` mode on a scratch copy of Cathedra, where every point of Cathedra's existing "Design principles" section still stands and each addition the run proposes is reviewed by the user, by reading both; one run of the `review` mode on the same copy, each candidate reviewed by the user, the one the user picks written into the copy's roadmap through `grill`; no file of Cathedra itself is changed; each run made by a separate agent that invokes the installed skill, its stops answered by the orchestrator (orchestrator, no agent) (approved)
 - 3 the closing: the closing report written (the cost script's output, or that the plan started no agent), the roadmap entry ticked with the gate's output, this folder moved to the archive (orchestrator, no agent) (approved)
 
@@ -53,7 +53,24 @@ Independent of each other; the standing rule of one agent at a time still serial
 ## Agents
 
 Each agent a plan skill started for this plan has one bullet, with its agent id, its role and the model the runner served it, except an agent the plan leaves unpriced, which has a numbered item under the heading "Agents the cost script leaves unpriced:"; `/land` writes a step's agents at its booking and when it takes a step back out of main, `/grill` writes its lookup agents, `/spec` writes a brief-check agent it stopped for another model or found dead when it took a run over, the orchestrator writes a brief-check agent it stopped under "The review of a choice", the session that starts a diagnosis agent writes its numbered item right after the start, and `/plan` copies the bullets of a rulings file.
+- ab12944454eff9c48: builder of step 1, claude-fable-5-2
+- abf99cfe27e48f423: brief check of step 1, claude-fable-5-2
+- aec236c414c8142fa: reviewer of step 1, claude-fable-5-2
+- a0f46fdedb82ed703: reviewer of step 1 over round 1, claude-sonnet-5-5
 
 ## Blocked, and by what
 
-- 2: waits on step 1's landing; the user's word to tag and pin the release candidate is given (ruling "The release candidate for step 2").
+- 2: step 1 has landed; the release candidate is to be tagged and pinned; the user's word to tag and pin the release candidate is given (ruling "The release candidate for step 2").
+
+## Step 1, booked (2026-11-23)
+
+- What landed: the skill `skills/code/codebase-design/` (`SKILL.md`, 208 lines, and `references/vocabulary.md`, `deepening.md`, `design-it-twice.md`, `report.md`), its figure `docs/figures/codebase-design.svg` with the function `codebase_design()` in `docs/figures/gen_figures.py`, its row, group sentence, figure sentence, image line and install loop in `README.md`, with "twenty-two" skills, and the figure's name in `docs/dev/building.md` and `docs/dev/scripts.md`. Ten files, 680 lines added and 7 removed against base 757fde1.
+- Premise corrections: none after the brief check.
+- The builder's first report did not pass its bar: the first review gave 13 findings, closed in repair round 1 by ten rulings (`agents/briefs/1-round-1.md`).
+- Fixes at landing, three, from the run over round 1: the prompt line of agent 2 in `references/design-it-twice.md` reads "support many uses and extension" (P1); the paragraph under the title of `SKILL.md` gives each mode its own sentence (S1); the "Never substitute" line of `references/report.md` is one sentence (S2).
+- Raised to the user: Open item A of the state file, the differences from the two sources that `deviations.md` does not list.
+- Verification on main, through `checks.sh`: the 15 commands of the verify list, last line `checks: 15 commands passed`. After the fixes at landing: `LC_ALL=C grep -rn '[^ -~]' skills/code/codebase-design README.md docs/dev/scripts.md docs/dev/building.md` printed nothing, the frontmatter check printed `codebase-design 1020`, and `python3 docs/figures/gen_figures.py` printed `wrote docs/figures/codebase-design.svg (11343 bytes)` and left the figure unchanged.
+- The verify list: equal to the verification page's commands; the step changed one sentence of the page and no command.
+- The look: `look:` names no place; the figure was rendered to an image and read, and every box and label is inside its frame.
+- A/B: no `bench:` line.
+- Usage: builder ab12944454eff9c48, 230741 tokens, 25 tool uses, 8.5 minutes for the build, and 263874 tokens, 8 tool uses, 2.2 minutes for round 1; brief check abf99cfe27e48f423, 190305 tokens, 23 tool uses, 5.9 minutes; reviewer aec236c414c8142fa, 207055 tokens, 21 tool uses, 5.8 minutes; reviewer over round 1 a0f46fdedb82ed703, 146291 tokens, 20 tool uses, 2.2 minutes.

@@ -145,3 +145,157 @@ none. The report states the new skill and each changed line of `README.md`, `doc
 - Whether the skill works in a repository: step 2's part.
 
 Reviewer usage: aec236c414c8142fa, claude-fable-5-2, 207055 tokens, 21 tool uses, 5.8 minutes.
+
+## Repair round 1, refuted
+
+```
+$ printf '%s\0' docs/figures/gen_figures.py docs/figures/codebase-design.svg docs/dev/building.md docs/dev/scripts.md skills/code/codebase-design/SKILL.md skills/code/codebase-design/references/{vocabulary,deepening,design-it-twice,report}.md README.md | xargs -0 perl -CSD -ne '...brief check 1...'; echo "exit=$?"
+exit=0                                   (no line printed)
+$ python3 -c 'import yaml; ...name, len(description)'
+codebase-design 1020
+$ grep -n 'https\?://' skills/code/codebase-design/references/report.md      (no line; grep exit 1)
+$ grep -c for README.md: 'code/codebase-design' 1 | 'twenty-two' 2 | 'twenty-one' 0 | '^| .codebase-design. |' 1 | 'diagnose., .wizard. and .codebase-design.' 1
+$ grep -n '^## ' skills/code/codebase-design/SKILL.md
+12:## Quick start
+20:## Use instead
+28:## What it reads
+60:## Steps
+175:## Stops
+188:## Anti-patterns
+201:## Rules
+$ python3 docs/figures/gen_figures.py | grep -c wrote
+23
+$ python3 docs/figures/gen_figures.py | grep codebase-design
+wrote docs/figures/codebase-design.svg (11343 bytes)
+$ git status --short docs/figures
+ M docs/figures/gen_figures.py
+?? docs/figures/codebase-design.svg
+$ git status --short
+ M README.md
+ M docs/dev/building.md
+ M docs/dev/scripts.md
+ M docs/figures/gen_figures.py
+?? .scratch/19-codebase-design/agents/briefs/1-round-1.md
+?? .scratch/19-codebase-design/agents/reviews/1-refuter.md
+?? .scratch/19-codebase-design/agents/reviews/1-report.md
+?? docs/figures/codebase-design.svg
+?? skills/code/codebase-design/
+```
+
+Commands quoted by "Round 1", rerun:
+
+```
+$ git diff 757fde1 --numstat
+8<char>5<char>README.md
+1<char>1<char>docs/dev/building.md
+1<char>1<char>docs/dev/scripts.md
+51<char>0<char>docs/figures/gen_figures.py
+$ wc -l SKILL.md references/*.md   : 208 SKILL.md, 37 deepening, 44 design-it-twice, 164 report, 111 vocabulary   (equals the report)
+$ grep -n ';' over the three prose pages         : only vocabulary.md:74 and :86 (code lines)
+$ grep -n ';' over report.md, CSS lines excluded : nothing outside the <style> element
+$ grep -n -i 'typically\|many\b\|often\|generally\|significantly' over the four pages : design-it-twice.md:27 "the most common caller" (superlative, not a qualifier); vocabulary.md:43 "Many methods" (inside the drawing); no "typically", no "many uses"
+$ grep -rn 'code-comments' README.md docs utils  : the hits the report's table lists (README 28, 36, 76, 88, 135, 162; docs/dev/scripts.md 9, 17, 39; building.md 6 and 40; change-standard.md 70; glossary.md 46; gen_figures.py 9, 2051, 2052, 2318; the svg; roadmap.md 87, 90; ADR 0014 x2; ADR 0047 line 38; utils none). Each is as the table says. (gen_figures.py line 2318 where the report says 2312; line shifted by the ADR-offer node, not a claim a decision rests on.)
+$ grep -rn -i '21 skills\|twenty.one' README.md docs skills utils : no hit outside docs/roadmap.md and .scratch
+$ LC_ALL=C grep -n '[^ -~]' .scratch/19-codebase-design/agents/reviews/1-report.md : no line
+```
+
+The figure script was run by me for check 6; it rewrote `docs/figures/codebase-design.svg` as the script writes it.
+
+### Verdicts
+
+Items of "What to build":
+
+- 1 (`SKILL.md`): holds. Version 1.0.0, no `disable-model-invocation`, sections 2 to 9 in order, the paragraph under the title is three sentences. See Standards S1 for its length.
+- 2 (`vocabulary.md`): holds.
+- 3 (`deepening.md`): holds.
+- 4 (`design-it-twice.md`): holds in structure; see Spec P1 for one changed prompt line.
+- 5 (`report.md`): holds. No address, one `<style>`, the header line now limited to subjects that apply.
+- 6 (`README.md`): holds (check 4, the row, the sentence on agents with `codebase-design` added at line 135, the image line with the ADR stop).
+- 7 (`gen_figures.py` and svg): holds. `codebase_design()` has the stop "The ADR offer" with the edge "you reject a candidate", drawn as `referee()` draws its conditional stop; the svg is the script's output.
+- 8 (`docs/dev/building.md`): holds.
+- "differs from the sources in nothing else": violated, unchanged from the first report 1.1 (the orchestrator's: the order of the three parts, the option to pick none), and now also the changes of Spec P1 and Standards S2, which `deviations.md` does not list.
+- The standards pages and the search order: holds. A language page is its own subject ("What it reads" 4, "Steps / standards" 3, "Steps / review" 4).
+- The call with no mode: holds, glossary and ADRs read before design-it-twice ("What it reads" 8, "Steps / The call with no mode" 3).
+- The mode `standards`: holds, including the `projects:` rule in item 6.
+- The mode `review`: holds, including the goal text in item 11 and the ADR folder path in item 12.
+- The README row: holds, names no private repository.
+- "What it must do" and "Conventions": hold. Stops now holds the stops "The draft", "The candidates", the user interface question, the refusal, and the ADR offer.
+
+Cases of "Cases":
+
+- `plan.yaml` pages in another folder: met.
+- No `plan.yaml`, a `docs/dev/design-principles.md`: met.
+- No `plan.yaml`, no standards page: met (`standards` drafts every page that applies; `review` holds the code to the defaults and says so).
+- Design principles as a section of the coding-standards page: met.
+- A default sentence with a placeholder, in `review`: met ("Steps / review" 4).
+- A repository without a user interface: met; the report header and "What it reads" 4 now never name the UI standard as lacking (first report 1.4 closed).
+- `review` with no plan configuration: met ("Steps / review" 11).
+- The `repo-setup` folder missing: met.
+- `standards` with every default rule present: met ("Steps / standards" 7).
+- The report opened with no network: met (check 3 prints nothing).
+- The frontmatter: met (`codebase-design 1020`).
+- A shipped file names nothing private: met; `grep -rn -i 'cathedra\|axel\|/Users\|pocock\|license\|credit' skills/code/codebase-design` over the delta shows none (not rerun beyond the character and address checks; the delta text was read in full).
+
+The ten rulings, each read against the delta:
+
+- 1 (language page): carried out. "What it reads" 4 and 7, "Steps / standards" 3, "Steps / review" 4 and the README row follow it.
+- 2 (subjects that apply): carried out in "What it reads" 4, "Steps / review" 4 and 8, `report.md` "Header".
+- 3 (two more places, hits): carried out. `docs/dev/scripts.md` line 9 and `README.md` line 135 hold `codebase-design`. Every hit of my own `code-comments` grep is in the report's table with the disposition I would give.
+- 4 (ADR folder path): carried out.
+- 5 (glossary for the no-mode call): carried out.
+- 6 (three sentences): carried out in count; see Standards S1.
+- 7 (ADR offer as a stop): carried out in SKILL, figure and README image line.
+- 8 (prose standard in the reference pages): semicolons and "typically" closed; the "many uses" fix is Spec P1.
+- 9 (goal text): carried out.
+- 10 (`projects:`): carried out.
+
+The swap of "Steps / standards" items 2 and 3: judged as correct and needed. Item 3's "each subject that applies" and its per-language rule need the languages and the interface answer known first. The only cite to the moved item ("Steps / standards 3" in item 6) was updated, and I found no other reference to either number.
+
+### Findings
+
+#### Spec
+
+- P1. `skills/code/codebase-design/references/design-it-twice.md:26`: "- Agent 2: "Maximise flexibility: support the uses of every current caller, and extension."" replaces the source's "support many uses and extension". What is wrong: ruling 8 asks for a specific claim in place of "many uses" while "keeping the sources' content", but the new claim narrows the prompt the design agent receives from open-ended flexibility to the current callers; the claim is the builder's invention and `deviations.md` does not list it. Failure scenario: a user who asks for other interfaces gets an agent 2 told to cover only today's callers, so the "maximise flexibility" design that design-it-twice compares against the minimal and the default-call designs is not the one the source describes, and the comparison the user reads is skewed. Verdict: "differs in nothing else", violated (adds to first report 1.1). For the orchestrator: a ruling to keep the source's wording as an exempt quotation, or to approve this one as a listed deviation.
+
+#### Proof
+
+none. Every claim of "Round 1" that I reran matched (counts, greps, check output). The one off-by-six line number (gen_figures.py 2312 against 2318) is not a claim a decision rests on.
+
+#### Standards
+
+- S1. `skills/code/codebase-design/SKILL.md:10`: "The mode `standards` fills ... and leaves behind the additions the user approved, and the mode `review` reads the code against those pages for friction that makes the code hard to understand and to test, and leaves behind an HTML report of candidates outside the repository and a roadmap entry for the candidate the user picks." Rule: prose standard E, sentence length under roughly 20 words, with `docs/dev/skill-layout.md` row 1 (one to three sentences). The paragraph is now three sentences, but the second runs about 70 words, with two modes and four outputs in it. Failure scenario: a later `/writing` run reports it, and a reader cannot tell which output belongs to which mode. Low. Not a ruling's text: ruling 6 fixed the count only.
+- S2. `skills/code/codebase-design/references/report.md:150` (the line the delta changes): "**Never substitute:** component, service, unit (for module). API, signature (for interface). Boundary (for seam). Layer, wrapper (for module, when you mean module)." Rule: prose standard E, stop-start fragments, and the same page's `vocabulary.md:7` quoting the same list inline. Splitting at the semicolons left four fragments, one capitalised as if a sentence ("Boundary (for seam)."). A comma-and-"and" form or a bulleted list keeps the content without fragments. Failure scenario: none that misleads a reader; a later prose review reports it. Low. The same applies to the changed "Wins bullets" sentence (line 159), which now reads "interface shrinks, implementation absorbs the wrappers" inside a quoted example and is fine.
+
+#### Behaviour
+
+none beyond Spec P1 (the changed prompt line) and the visible changes the report states: the fifth stop row, the figure with the ADR stop, the README sentence and image line.
+
+### Declined to judge
+
+- Whether the redrawn figure renders without overlapping labels (the label "you reject a candidate" at x=569, y=271 against the arrow to the ADR box and the dashed box): read from the coordinates only, and opening `docs/figures/codebase-design.svg` in a browser settles it.
+- Whether `referee()`'s conditional stop is the drawing the user wants for an event that happens in some runs only: the user's call (ruling 7 says "as it shows a stop that happens only in some runs", which the code matches).
+- The order of the three parts and the option to pick none (first report 1.1): the orchestrator's, as the round says.
+- Whether the skill works in a repository: step 2's part.
+
+Reviewer usage: a0f46fdedb82ed703, claude-sonnet-5-5, 146291 tokens, 20 tool uses, 2.2 minutes.
+
+## Closed (the orchestrator's disposition of every finding above, appended before /land)
+
+First run:
+
+- 1.1 and 3.2, differences from the sources that `deviations.md` does not list: raised to the user as Open item A of the state file.
+- 1.2, a language page of the coding standards: closed in round 1, ruling 1.
+- 1.3, 2.1 and 3.1, two more places that list the skills or the figures: closed in round 1, ruling 3.
+- 1.4, the subjects a repository lacks: closed in round 1, ruling 2.
+- 1.5, the folder of a new ADR: closed in round 1, ruling 4.
+- 1.6, the glossary for the call with no mode: closed in round 1, ruling 5.
+- 3.3, the sentences under the title: closed in round 1, ruling 6.
+- 3.4, the ADR offer as a stop: closed in round 1, ruling 7.
+- 3.5, "a good stretch back": the source's phrase is kept, since a number would be a further difference from the source; named in Open item A.
+- 3.6, the prose standard in the reference pages: closed in round 1, ruling 8.
+
+Run over round 1:
+
+- P1, the prompt line of agent 2 in `references/design-it-twice.md`: fixed at landing, the line reads "support many uses and extension", the source's claim.
+- S1, the second sentence under the title of `SKILL.md`: fixed at landing, the paragraph is three sentences with one mode each.
+- S2, the "Never substitute" line of `references/report.md`: fixed at landing, written as one sentence.

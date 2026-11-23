@@ -45,24 +45,12 @@ repair_reviewer: claude:sonnet  # the model the run of /refute over a repair rou
 ```
 
 ```yaml
-dispatch:
-- step: 1
-  landing: not-started
-  base: 757fde1
-  worktree: .agents/worktrees/19-codebase-design-1
-  executor: agent
-  worker: claude:fable
-  report: .scratch/19-codebase-design/agents/reviews/1-report.md
-  round: 1
-  session_id: ab12944454eff9c48 (claude-fable-5-2)
-  builder_usage: "the build: 230741 tokens, 25 tool uses, 8.5 minutes"
-  reviewer_report: ".scratch/19-codebase-design/agents/reviews/1-refuter.md (aec236c414c8142fa, claude-fable-5-2, 207055 tokens, 21 tool uses, 5.8 minutes)"
-  brief_check: ".scratch/19-codebase-design/agents/reviews/1-brief-check.md (abf99cfe27e48f423, claude-fable-5-2, 190305 tokens, 23 tool uses, 5.9 minutes)"
+dispatch: []
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled or, under `self_rule: on`, until the orchestrator closes it as `plan-orchestration`'s `references/self-rule.md`, "Closing an open item", says)
 
-- none
+- Open item A. The skill differs from the two sources in points that `.scratch/19-codebase-design/deviations.md` does not list, and the gate asks for the user's ruling on each deviation. The points: (19) after the pick, "design it twice" runs before `/roadmap add` and `/grill`, and the ADR offer after them, where the source runs both inside its grilling; (20) the user may pick no candidate, and no roadmap entry is then written; (21) the scan agent has a sixth question, "Where does the code break a rule of a standards page?"; (22) the goal given to `/roadmap add` names the source's grilling topics (constraints, dependencies with their categories, the shape of the deepened module, what sits behind the seam, which tests survive) in place of the source walking them itself; (23) words the glossary gives another sense are reworded ("tier-spanning slice", "technical brief", "use cases", "the default case", "Step 2"), and a sentence marks each example as made up; (24) the report's header names each subject that applies and that the repository lacks; (25) the review's aim reads "friction that makes the code hard to understand and to test" where the source says "testability and AI-navigability"; (26) "a good stretch back" for the commit history is kept as the source has it, against the prose standard's rule on vague qualifiers. Options: (a) approve 19 to 26, booked as one ruling and added to `deviations.md`. Pro: the gate's check of the deviations list can pass; 19, 21 and 22 follow from rulings D4 and D5. Con: none found. (b) name the points to change, and each is changed in a step the ruling adds. Pro: a point the user does not want is removed. Con: one more step before the gate. Recommendation: (a). The lazy option is to leave the list as it is, which fails the gate.
 
 ## Closed items (the log of what was raised and how it ended; no report carries it)
 
@@ -90,7 +78,5 @@ dispatch:
 
 ## Current position (rewritten before every step commit of this plan)
 
-- 2026-11-23. The plan is open; nothing has landed.
-- 2026-11-23. Step 1 is dispatched: the builder ab12944454eff9c48 works in `.agents/worktrees/19-codebase-design-1` from base 757fde1. Next: its report, then `/refute 19 1`.
-- 2026-11-23. Step 1 is built and reviewed: ten rulings sent to the builder as repair round 1. Next: the builder's reply, then `/refute 19 1` over the round, then `/land 19 1`.
-- Roadmap entry 19 (codebase-design). Plan step 1 of 3: the skill. Next: step 2, the gate's runs.
+- 2026-11-23. Step 1 has landed: the skill `codebase-design` is on main. Next: the release candidate `v9.4.0-rc.1` tagged and pinned with `utils/pin.sh`, then step 2's two runs on a scratch copy of Cathedra, each by a separate agent.
+- Roadmap entry 19 (codebase-design). Plan step 2 of 3: the gate's runs. Next: step 3, the closing.

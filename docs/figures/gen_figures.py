@@ -7,6 +7,8 @@ Writes, beside this file:
 - plan-loop.svg: the commands of one step, /spec, build it, /refute, close them, /refute over
   the round and /land, with the /plan-orchestration band.
 - grill.svg, writing.svg, code-comments.svg: the agents, stops and cycles of each skill.
+- codebase-design.svg: the agents and stops of the standards mode and the review mode of the
+  codebase-design skill.
 - paper-review-panel.svg: the agents and stops of the full mode of the paper-review-panel skill, with the
   roles the other five modes start in its note.
 - referee.svg: the agents and stops of the first round of the referee skill, with what the
@@ -2053,6 +2055,54 @@ def code_comments() -> str:
     )
 
 
+def codebase_design() -> str:
+    """The standards mode and the review mode of the codebase-design skill, side by side."""
+    standards = (
+        Node("D", "The draft", "stop"),
+        Node("W", "The end: the additions you approved, written"),
+    )
+    review = (
+        Node("S", "Scan agent: the code against the standards pages"),
+        Node("C", "The candidates", "stop"),
+        Node(
+            "A",
+            "Design agents, three or more at once, when you ask for other interfaces",
+            "maybe",
+        ),
+        Node("E", "The end: /roadmap add and /grill write the picked candidate as a roadmap entry"),
+        Node(
+            "O",
+            "The ADR offer, only for a candidate you reject for a reason a later review needs",
+            "stop",
+        ),
+    )
+    review_edges = (
+        Edge("S", "C", "the report of the candidates, opened"),
+        Edge("C", "A", "you ask for other interfaces"),
+        Edge("C", "E"),
+        Edge("A", "E"),
+        Edge("C", "O", "you reject a candidate"),
+    )
+    panels = [
+        Panel("THE STANDARDS MODE", _graph(standards, (Edge("D", "W"),))),
+        Panel("THE REVIEW MODE", _graph(review, review_edges)),
+    ]
+    note = (
+        "The standards mode starts no agent. Either mode asks once whether the repository has "
+        "a user interface, unless it uses Svelte or SvelteKit. In a repository with no plan "
+        "configuration the review mode invokes /ordo-init before /roadmap add. The skills it "
+        "invokes have their own stops. The call with no mode starts the design agents only "
+        "when you ask for other interfaces."
+    )
+    return compose(
+        "codebase-design.svg",
+        describe("The codebase-design skill", panels),
+        panels,
+        SIMPLE_LEGEND,
+        note,
+    )
+
+
 def plan_loop() -> str:
     spec = Lane(
         "/spec",
@@ -2266,6 +2316,7 @@ def figures() -> tuple[tuple[str, str], ...]:
         ("referee.svg", referee()),
         ("grant.svg", grant()),
         ("code-comments.svg", code_comments()),
+        ("codebase-design.svg", codebase_design()),
         *paper_figures(),
         ("paper/lifecycle.svg", paper_lifecycle()),
         ("paper/run-folder.svg", paper_run_folder()),

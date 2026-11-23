@@ -121,3 +121,62 @@ Each glossary term the diff uses in a new place, read against its entry in `docs
 Nothing was wrong or impossible.
 
 Not verified by a run: the three commands the skill names for opening the report (`xdg-open <path>`, `open <path>`, `start <path>`) and the `%TEMP%` folder on Windows. They are the source's sentences, kept as written, and running one opens a window on the user's machine. `git log --oneline` was run in the worktree and prints one line per commit.
+
+## Round 1
+
+Everything in the round's brief is done.
+
+Where this section and the parts above differ, this section holds: the Stops table now has five rows, `SKILL.md` has 208 lines, and "Steps / standards" 2 and 3 have changed places.
+
+### The rulings
+
+1. Ruling 1, a language's page as a subject of its own. `SKILL.md`, "What it reads" 4: the list of subjects names "the common page of the coding standards, the page of the coding standards of each language" and says "the common page is one subject and each language's page is a subject of its own"; a new bullet says "A repository that uses a language and has no rules for that language in its pages lacks that language's page, whatever its common page holds." The count "five subjects" is gone there and in "Steps / standards". "What it reads" 7 reads "a language's page of the coding standards only for a language the repository has". "Steps / standards": finding the languages and the user interface is now item 2 and finding the pages item 3, since the pages are judged for "each subject that applies"; item 3 has the bullet "Each language of the repository is judged on its own: its page is present only when a page or a section holds rules for that language." The cite in item 6 follows ("Steps / standards 3"). "Steps / review" 4 has the bullet "A language the repository has, with no rules for it in the repository's pages, is such a subject: the code in that language is held to the default page of that language." `README.md`, the row: it held no count of subjects; it now reads "against the default page for a subject the repository lacks, the page of a language it uses among them".
+2. Ruling 2, the subjects a repository lacks. `SKILL.md`, "What it reads" 4: "A subject the repository lacks is one that applies ("What it reads" 7) and that no page of place 1 or 2 holds." and "A subject that does not apply is never named as one the repository lacks: a repository with no user interface does not lack the UI standard." "Steps / review" 4 and 8 and "Steps / standards" 6 use "a subject the repository lacks" in that sense. `references/report.md`, "Header": the line names "each subject of standards page that applies to the repository and that its pages lack", and says a subject that does not apply is not named.
+3. Ruling 3, two more places. `docs/dev/scripts.md` line 9: `codebase-design.svg` added after `code-comments.svg`. `README.md` line 135: `codebase-design` added after `code-comments` in the sentence on the skills that start every agent on the runner's default agent. The hits read are listed below; none asked for a further line.
+4. Ruling 4, the folder of a new ADR. `SKILL.md`, "Steps / review" 12, a new bullet: "The new folder stands at the path the `adr` key of the repository's `plan.yaml` names when it has one, and otherwise at `docs/adr/`."
+5. Ruling 5, the glossary for the call with no mode. `SKILL.md`, "What it reads" 8 opens "For `review`, and wherever `references/design-it-twice.md` is followed, the call with no mode included". "Steps / The call with no mode" 3 reads the glossary and the ADRs first and then follows `references/design-it-twice.md`.
+6. Ruling 6, the paragraph under the title. It holds three sentences: the first names the two modes, the second says what `standards` and `review` each do and leave behind, and the third the call with no mode, which leaves nothing behind.
+7. Ruling 7, the ADR offer as a stop. `SKILL.md`, Stops: a fifth row "The ADR offer", and the bullet under the table on the offer is removed. `docs/figures/gen_figures.py`, `codebase_design()`: a stop box "The ADR offer, only for a candidate you reject for a reason a later review needs" with an arrow "you reject a candidate" from "The candidates", drawn as `referee.svg` draws "The breaks left in the report, only after 2 returns". The script was run, and `README.md`'s image line ends "; The ADR offer, only for a candidate you reject for a reason a later review needs, a stop."
+8. Ruling 8, the prose standard in the reference pages. The running prose of the four pages holds no semicolon: `grep -n ';'` over them prints only lines of the CSS scaffold of `references/report.md` and two lines of code in `references/vocabulary.md`. Changed: four sentences of `references/deepening.md`, three of `references/vocabulary.md` and four places of `references/report.md`, each joined with a comma and "and", or split at a full stop. "(typically production + test)" reads "(one for production and one for tests)", and "support many uses and extension" reads "support the uses of every current caller, and extension". `grep -n 'typically\|many\b'` over the four pages prints nothing. Content and order are as before.
+9. Ruling 9, the goal of `/roadmap add`. `SKILL.md`, "Steps / review" 11: "The goal names, for the picked candidate, its constraints, its dependencies with their categories as `references/deepening.md` gives them, the shape of the deepened module, what sits behind the seam and which tests survive.", and `/grill` "settles each of those, with the entry's other decisions, its glossary terms and its ADRs".
+10. Ruling 10, the `projects:` form. `SKILL.md`, "Steps / standards" 6: "In the `projects:` form, a new page is added to the `standards` list of the project whose pages it stands beside, and the draft names that project."
+
+### The hits of ruling 3
+
+`grep -rn 'code-comments' README.md docs utils`, every hit read. `utils/` has no hit.
+
+| Hit | What it is | What was done |
+|---|---|---|
+| `README.md:28` | the table row of `code-comments` | nothing: it describes that skill only |
+| `README.md:36` | the sentence on the group folders | changed in the first build |
+| `README.md:76` | the sentence on the skills that launch agents | changed in the first build |
+| `README.md:88` | the image line of `code-comments` | nothing: the image line of `codebase-design` follows it |
+| `README.md:135` | the skills that start every agent on the runner's default agent | `codebase-design` added |
+| `README.md:162` | the install loop | changed in the first build |
+| `docs/dev/scripts.md:9` | the figures `gen_figures.py` writes | `codebase-design.svg` added |
+| `docs/dev/scripts.md:17` and `:39` | the rows of `strip_comments.py` and its test | nothing: each names one file |
+| `docs/dev/building.md:6` | the command of the `strip_comments` test | nothing |
+| `docs/dev/building.md:40` | the figures the script writes | changed in the first build |
+| `docs/dev/change-standard.md:70` | the command of the `strip_comments` test | nothing |
+| `docs/glossary.md:46` | the entry **finding** | nothing: it names the skills that have findings, and `codebase-design` has candidates |
+| `docs/figures/gen_figures.py:9`, `:2051`, `:2052`, `:2312` | the head comment, `code_comments()` and the list of figures | the head comment and the list changed in the first build |
+| `docs/figures/code-comments.svg:1` and `:2` | the figure of `code-comments`, written by the script | nothing |
+| `docs/roadmap.md:87` and `:90` | the ticked entries 4 and 5.A, with their gates' output | nothing: a record of those entries |
+| `docs/adr/0014-...md`, 2 hits | the record of `code-comments` | nothing |
+| `docs/adr/0047-...md:38` | "as `paper`, `writing` and `code-comments` already do" | nothing: the sentence still holds |
+
+The two sentences about a changed file as a whole, reread after the change: "Every skill that launches agents has its figure under `docs/figures/`" (`docs/dev/building.md` line 40) holds, since `docs/figures/codebase-design.svg` exists; "Every figure but the last two shows the order of a run." (the head comment of `gen_figures.py`) holds, since the new figure draws the order of each mode and stands before the two figures of `paper` the sentence means.
+
+### The checks, as printed
+
+| Check | Command | Output as printed |
+|---|---|---|
+| 1 | the character-set command of the brief with `docs/dev/scripts.md` added to its file list, then `echo "exit status $?"` | it printed no line; `exit status 0` |
+| 2 | the `python3 -c` command of the brief | `codebase-design 1020` |
+| 3 | `grep -n 'https\?://' skills/code/codebase-design/references/report.md`; `grep -c 'xmlns=' skills/code/codebase-design/references/report.md` | the first printed no line; the second printed `0` |
+| 4 | the five `grep -c` commands of the brief | `1`, `2`, `0`, `1`, `1` |
+| 5 | `grep -n '^## ' skills/code/codebase-design/SKILL.md` | `12:## Quick start`, `20:## Use instead`, `28:## What it reads`, `60:## Steps`, `175:## Stops`, `188:## Anti-patterns`, `201:## Rules` |
+| 6 | `python3 docs/figures/gen_figures.py | grep codebase-design`; `python3 docs/figures/gen_figures.py >/dev/null; echo "exit status $?"`; `git status --short docs/figures` | `wrote docs/figures/codebase-design.svg (11343 bytes)`; `exit status 0`; ` M docs/figures/gen_figures.py` and `?? docs/figures/codebase-design.svg` |
+| 7 | read of each sentence the round adds or changes | the new sentences of "What it reads" 4 and of "Steps / review" 11 run past 20 words, since each lists the parts one rule names; no other departure |
+
+`git diff --numstat` now prints `8 5 README.md`, `1 1 docs/dev/building.md`, `1 1 docs/dev/scripts.md` and `51 0 docs/figures/gen_figures.py`, and `wc -l` gives `SKILL.md` 208 lines, `references/deepening.md` 37, `references/design-it-twice.md` 44, `references/report.md` 164 and `references/vocabulary.md` 111.
