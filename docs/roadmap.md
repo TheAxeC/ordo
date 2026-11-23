@@ -35,6 +35,13 @@ Status: `[ ]` open, `[~]` in progress, `[x]` done (its gate ran and passed, with
 - Waits on: 6, for the review its `manuscript` mode calls.
 - Figure: ![academic-pipeline: the 10 stages, and where each stage goes now. The stages: 1 Research: deep-research; 2 Write: academic-paper, plan or full; 2.5 Integrity check; 3 Review: academic-paper-reviewer; Back to stage 2, or end; 4 Revise: academic-paper revision; 3' Re-review; 4' Re-revise, no review after; 4.5 Final integrity check, zero issues to pass; 5 Finalize: DOCX, LaTeX, PDF; 6 Process summary. Where each goes now: 1 Research goes to researcher, entry 13 (not built yet); 2 Write goes to paper plan and paper full; 2.5 Integrity check goes to researcher, entry 13; 3 Review goes to paper-review-panel; 4, 3', 4' Revise and re-review go to paper revision; 4.5 Final integrity check goes to researcher, entry 13; 5 Finalize goes to paper format-convert; 6 Process summary goes to none. The integrity and ethics checks run in researcher, once on paper's finished draft and once after its revision.](figures/academic-pipeline/academic-pipeline.svg)
 
+## 24. researcher: the research and full modes
+
+- Status: [ ]
+- Goal: The `research` mode of `researcher`, which takes an idea to results: it builds the code, runs the experiments, SLURM jobs among them, and when a result does not beat the baseline it proposes a new method and runs the next experiments, never writing up a negative result; it states where a project's code, results, logs and draft live, and an adopt mode reads a project already underway and continues from the first stage not done. The `full` mode runs the interview of `/paper plan`, then `novelty`, `research` and `manuscript`, and leaves out the modes a run does not need, as for a review paper or for results that exist. At the end of the entry, `ordo-help` covers everything Ordo offers: the academic skills and the code skills beside the plan skills, each with what it is for and the command that starts it.
+- Gate: one real run of `research` on a project you name, from an idea to a result, the files each stage wrote read by you; one real run of its adopt mode on a project underway that you name, which continues from the first stage not done, read by you; one real run of `full` on a request you name, which runs the modes the request needs and leaves out the others, read by you; one run of `/ordo-help` whose output names every skill folder under `skills/`, checked by reading the output against `ls skills/*/`, and read by you; the verify list of `docs/dev/building.md` passes on main.
+- Waits on: 13, for the skill these modes are added to; 19, so that the `ordo-help` change covers every skill built before it.
+
 # Not yet specified
 
 <!-- An entry:
@@ -44,11 +51,6 @@ Status: `[ ]` open, `[~]` in progress, `[x]` done (its gate ran and passed, with
 - Goal: <what exists when it is done, in one or two sentences>
 - Must be known: <what must be known before its gate can be named>
 -->
-
-## 24. researcher: the research and full modes
-
-- Goal: The `research` mode of `researcher`, which takes an idea to results: it builds the code, runs the experiments, SLURM jobs among them, and when a result does not beat the baseline it proposes a new method and runs the next experiments, never writing up a negative result; it states where a project's code, results, logs and draft live, and an adopt mode reads a project already underway and continues from the first stage not done. The `full` mode runs the interview of `/paper plan`, then `novelty`, `research` and `manuscript`, and leaves out the modes a run does not need, as for a review paper or for results that exist.
-- Must be known: what one real run from an idea to a result looks like, stage by stage, with the files each stage reads and writes; what the loop does when a result does not beat the baseline, and when it stops; which project a first real run is made on.
 
 # Done
 
