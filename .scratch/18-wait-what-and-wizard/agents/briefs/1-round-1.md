@@ -1,0 +1,19 @@
+# Repair round 1 of step 1
+
+The reviewer's findings (`agents/reviews/1-refuter.md`), each with the orchestrator's ruling. The brief `agents/briefs/1.md` and the rules file hold unchanged. Change only what a ruling names.
+
+1. Spec 1, ADR 0045 does not list two differences of `wizard`. Ruling: in ADR 0045's list of differences, add one item for the GitHub variable as a destination the scope of `wizard` names, which the template's `set_var` already writes, and one item for the three rules on secrets in `wizard` (never asked for in the conversation, never printed, never written into the script), which the roadmap entry's goal asks for.
+2. Spec 2, the script's path in the confirmation of the stage list. Ruling: remove it. Steps 2 and the Stops row "The stage list" show the stages and their values only. Steps 4 copies the template to the target path, which is a scratch path or a `scripts/` path the user names, as Rules says; Steps 4 cites that rule and does not restate it.
+3. Standards 1, `README.md`, the `wizard` row, "one stage per action". Ruling: the row says the template is filled with the stages, one focused task per stage, in the row's own register.
+4. Standards 2, the figure note. Ruling: in `docs/figures/gen_figures.py`, the sentence ends "/session-retro, /wizard, and /wait-what and /ordo-help, which have no stop." Run `python3 docs/figures/gen_figures.py` again; `pipeline.svg` is the only figure it changes.
+5. Standards 3, what the stage-list stop shows is stated twice and differently. Ruling: the Stops row states it once and in full (the ordered stages, the values each produces, where each is written and whether it is secret). Steps 2 says the list is shown as that row gives it and does not list the content again.
+6. Standards 4 and the license point under "Declined to judge". Ruling, which replaces item 3.5 of the brief where it differs:
+   - The file `skills/code/wizard/templates/template.LICENSE` is removed (`rm`), since a script made from the template is a copy that leaves the skill's folder and the license text must travel with it.
+   - The head comment of `template.sh` holds, in place of the two lines added for 3.5, the source's `LICENSE` text whole, each line as a comment line (`# ` and the line, `#` alone for an empty line), under one comment line that says the wizard library is from the repository mattpocock/skills. Fetch the `LICENSE` again from the URL the brief names; its words are not changed.
+   - The head comment also gains, as change-standard rule 14 asks of every script, a short block that lists every input the script reads (the environment variable `ENV_FILE` and its default, the person's answers on the terminal, the existing `ENV_FILE`), every warning it prints when it cannot do something (no browser opened, `gh` missing or not signed in), and its exit status. Read the library to state these exactly; state nothing the code does not do.
+   - Nothing else of the source's head comment and nothing below it changes. The diff of 3.4 then shows the fourteen lines of 3.2 and these added comment lines.
+   - `skills/code/wizard/SKILL.md`, "The template": the license sentence says the library is from the repository mattpocock/skills under the MIT License, whose text stands in the template's head comment.
+   - ADR 0045: the license item reads that the source's license text stands in the head comment of `template.sh`; one more item says the head comment lists the script's inputs, warnings and exit status, as the change standard asks of every script.
+   - `docs/dev/scripts.md` needs no change.
+
+Verify again every check of the brief's "Verify before you report", with the file list of the character-set check without `template.LICENSE`. Rewrite the report at `.scratch/18-wait-what-and-wizard/agents/reviews/1-report.md` to the end state, in the brief's shape, with a section "Repair round 1" that gives, per finding number above, what changed and the command or reading that shows it.
