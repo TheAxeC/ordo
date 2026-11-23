@@ -16,6 +16,7 @@ sh skills/academic/grant/templates/check_sections.test.sh       # check_sections
 sh skills/ordo/repo-setup/templates/sync_rules.test.sh          # sync_rules.py --write on drifted shared-rules and plan-terms blocks, the bytes it keeps and its refusals, and --glossary on a glossary at another path, on a missing file and on the paths it refuses
 python3 skills/ordo/repo-setup/templates/sync_rules.py . --only glossary   # Ordo's glossary block equals plan-terms.md
 sh utils/pin.test.sh                                            # pin.sh in pin and check mode under a scratch HOME, its refusals included
+sh skills/code/wizard/templates/template.test.sh                # template.sh in scratch scripts: run_cmd on a yes, a no, the end of input, a failing command, a call with no command and an argument holding a space and a ;, have on an installed and a missing tool, and WIZARD_OS under scratch uname commands and with none
 git ls-files -coz --exclude-standard | xargs -0 sh -c 'for f; do if [ -e "$f" ]; then printf "%s\0" "$f"; fi; done' sh | xargs -0 perl -CSD -ne 'my $bad_char = $ARGV =~ /\.md\z/ ? qr/[^\x20-\x7E\x{2705}\n]/ : qr/[^\x20-\x7E\n]/; if (/$bad_char/) { print "$ARGV:$.: $_"; $bad = 1 } close ARGV if eof; END { $? ||= 1 if $bad }'
 ```
 

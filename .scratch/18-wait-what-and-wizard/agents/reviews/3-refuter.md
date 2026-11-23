@@ -151,3 +151,115 @@ none
 10. "a manual procedure" replaced by "a setup, a migration or a cutover" in the opening paragraph: stands; the case "no sentence says the script holds only actions a person must take" needs it.
 
 Usage: a35934f5ab790b7de, claude-fable-5-2, 173906 tokens, 13 tool uses, 5.0 minutes
+
+## Repair round 1, refuted
+### Verification (the lines each check printed, verbatim)
+All run from the worktree, tests under `env -u CLAUDE_CONFIG_DIR -u ORDO_SKILL_DIRS -u ORDO_STABLE`.
+
+1. Character-set check over the seven changed files, `; echo "exit $?"` appended. It printed no line of its own, then `exit 0`.
+2. `env -u CLAUDE_CONFIG_DIR -u ORDO_SKILL_DIRS -u ORDO_STABLE sh skills/code/wizard/templates/template.test.sh 2>&1` printed the lines below. `... | tail -1` printed `PASS: template.sh scratch tests, 8 cases`.
+   ```
+   ok: case_yes
+   ok: case_no
+   ok: case_end_of_input
+   ok: case_failing_command
+   ok: case_no_command
+   ok: case_one_word
+   ok: case_have
+   ok: case_wizard_os
+   PASS: template.sh scratch tests, 8 cases
+   exit 0
+   ```
+3. `bash -n skills/code/wizard/templates/template.sh; echo "bn exit $?"` printed `bn exit 0`.
+4. The description-length command printed `987`.
+5. Function loop against `git show 3167b2e:skills/code/wizard/templates/template.sh`, each body cut by `sed -n "/^$f()/,/^}/p"`. It printed `same:` for each of `_clear`, `banner`, `stage`, `say`, `step`, `note`, `warn`, `open_url`, `pause`, `confirm`, `_existing`, `ask`, `ask_secret`, `write_env`, `set_secret`, `set_var`, `finish`, `run_wizard`. That is 18 names, with no `DIFF:`. The `sed -n '/^run_wizard() {/,$p'` of base and worktree compared with `cmp` printed `cmp 0`.
+6. `git diff 3167b2e --stat | tail -1` printed ` 6 files changed, 89 insertions(+), 21 deletions(-)`. `git status --short` printed ` M README.md`, ` M docs/dev/building.md`, ` M docs/dev/change-standard.md`, ` M docs/dev/scripts.md`, ` M skills/code/wizard/SKILL.md`, ` M skills/code/wizard/templates/template.sh`, `?? .scratch/.../briefs/3-round-1.md`, `?? .scratch/.../reviews/3-report.md` and `?? skills/code/wizard/templates/template.test.sh`.
+7. `wc -l`: SKILL.md 113, template.sh 289, template.test.sh 245, README.md 257, scripts.md 51, building.md 42, change-standard.md 96. These match the report's "Files" section.
+8. Line numbers the report quotes, by `grep -n`: SKILL.md lines 64, 65 and 66 are the three bullets of rulings 2 and 4. The two 3.10 sentences are at 105 and 106, and `grep -c -F` of each printed `1`. `docs/dev/building.md` line 19 is the test line.
+9. The delta against the snapshot (`diff -u`, over each path of `files.txt`) shows changes in these files only. README.md, change-standard.md and scripts.md show none.
+   - `building.md`: one comment gains "a call with no command".
+   - `SKILL.md`: Steps 5 bullets 64 to 66.
+   - `template.sh`: lines 3 and 4, head comment lines 22 and 24, the `run_cmd` comment and guard, and marker lines 260 and 261.
+   - `template.test.sh`: the head-comment line, `case_no_command` and the case list.
+   - The report.
+10. My own runs of the `run_cmd` guard, in a `mktemp -d` folder outside the worktree, since removed. The library was the template's lines above `run_wizard() {`, followed by one stage line and `echo AFTER`, run under `bash` with `y` on standard input.
+    - `run_cmd`, `run_cmd ""` and `e=; run_cmd $e` each printed `  ! no command given to run_cmd`, then `status 2`. They asked no question and did not print AFTER.
+    - `run_cmd " "` printed `\ `, asked, then printed `command not found` and `! command failed with status 127: \ `, then `status 127`.
+    - `run_cmd " " x` and `run_cmd -- true` behaved the same, with status 127.
+
+### The rulings
+1. Carried out as ruled. Template line 3 and the marker comment (lines 260 and 261) now cover the commands. The 18 function bodies and `run_wizard() {` to the end are equal to the base (item 5 above).
+2. Carried out as ruled. SKILL.md lines 64 and 65 are one bullet per requirement.
+3. Carried out as ruled. The guard `[[ -z "${1:-}" ]]` comes first in `run_cmd`, before the quoting, `confirm` and the run. It warns and does `exit 2`.
+   - No word, an empty first word and an empty unquoted variable all end with status 2, with no question and no AFTER (item 10).
+   - A first word of one space is not empty. It is shown as `\ `, asked, and on a yes fails loudly with 127 through the existing failure path. It never prints "ok ran".
+   - The head comment lists the warning (line 22) and the status (line 24).
+   - `case_no_command` runs the unquoted-empty and quoted-empty-first-word forms. It asserts status 2, no later file, the warning, no `[y/N]` and no `ok ran`. Its head-comment line states the reason for keeping it.
+   - Read against the base `run_cmd`, which has no guard, both scripts would end 0 and 127. The test asserts 2, so it would fail there. This is by reading only (see Declined to judge).
+4. Carried out as ruled. Line 66 says the `run_cmd` line never holds the variable's expansion, and that the command reads the variable from its environment or asks for the secret itself. It is one requirement.
+
+The one change beyond the rulings' own lines is `docs/dev/building.md` line 19, which adds "a call with no command" to the test's comment. It keeps the listing equal to the test's cases, as 4.3 asks, so it holds.
+
+### Verdicts
+#### Items
+- 1.1 holds.
+- 1.2 holds.
+- 1.3 holds.
+- 1.4 holds.
+- 1.5 holds. The head comment lists the `uname -s` and `have` inputs, all three warnings with their conditions, the declined commands in "still to do by hand:", and exit status 2.
+- 1.6 holds.
+- 2 holds.
+- 3.1 holds. The description is 987 characters, the opening paragraph has three sentences, and the version is `1.0.0`.
+- 3.2 holds.
+- 3.3 holds.
+- 3.4 holds.
+- 3.5 holds.
+- 3.6 holds.
+- 3.7 holds.
+- 3.8 holds.
+- 3.9 holds.
+- 3.10 holds. Both sentences are word for word and counted once each.
+- 4.1 holds.
+- 4.2 holds.
+- 4.3 holds.
+
+#### Cases
+- test, a yes: met.
+- test, a no: met.
+- test, the end of input: met.
+- test, a failing command: met.
+- test, one word stays one word: met.
+- test, `have`: met.
+- test, `WIZARD_OS`: met.
+- run, `bash -n`: met.
+- run, the functions unchanged: met, against `3167b2e`.
+- run, `run_wizard() {` to the end: met, against `3167b2e`.
+- read, the head comment against the additions: met.
+- read, `SKILL.md` against 3.1 to 3.10: met.
+- read, no sentence says "only actions" or "no command": met. This is by reading `SKILL.md`, the README row and the scripts row, which all name commands beside the actions.
+- read, no private name in a shipped file: met. `git diff 3167b2e -- skills README.md docs/dev`, added lines, grepped for `/Users`, `.scratch`, `axel`, `manuscript` and `~/` printed nothing.
+
+### Spec
+none
+
+### Proof
+none. By reading, `case_no_command` is a proof and not an audit. Both its scratch scripts would fail against a `run_cmd` without the guard: one ends 0 after "ok ran ''", the other ends 127. The test asserts 2.
+
+### Standards
+none
+
+### Behaviour
+none
+
+### Declined to judge
+- The red run of `case_no_command` on the template as it stood before the guard, and the report's claim that the test was not edited after it. Reproducing it needs the pre-guard template, which the three allowed git commands cannot produce without writing outside the worktree, and I did not break code to test a test. The quoted failure agrees with the base `run_cmd`, which has no guard. The base is `git show 3167b2e:<path>` and the guard is not in it.
+- The comparison against `4d63a7f`, which the brief's own run cases name. I compared against `3167b2e`, the worktree's base, since `git show 4d63a7f:<path>` is outside the three commands I may run.
+- The first run of the cases on the unchanged tree, which is the builder's first task. I ran none on the base.
+- The state file's `verify:` list. ADR 0010 gives it to the session at landing.
+- Whether the banner text ("You drive the browser; this wizard tells you exactly what to do...") should change. It is inside `banner`, which ruling 1 keeps byte for byte.
+
+Usage: a4b6a6a0a1e30749c, claude-sonnet-5-5 with one recorded call on claude-opus-5-5, 118093 tokens, 12 tool uses, 1.4 minutes
+
+## Closed
+
+- First run, Standards 1 to 3 and the point on the secrets bullet under "Declined to judge": closed in repair round 1, each as `agents/briefs/3-round-1.md` rules it; the run over the round found each ruling carried out and gave no finding.

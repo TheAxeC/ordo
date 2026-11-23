@@ -15,7 +15,7 @@ Every script in this repository outside `.scratch/` is listed here with its kind
 | Script | Job |
 |---|---|
 | `skills/code/code-comments/templates/strip_comments.py` | Prints the code of a C, C++ or CMake file without its comments, and with `--compare` says whether two files have the same code, so that a rewrite of comments is kept only when it changed no code |
-| `skills/code/wizard/templates/template.sh` | The script the `wizard` skill copies and fills with stages. Run by a person, it walks that person through the actions only a person can take, reads each value, writes it to `.env`, a GitHub secret or a GitHub variable, and asks before an irreversible action |
+| `skills/code/wizard/templates/template.sh` | The script the `wizard` skill copies and fills with stages. Run by a person, it walks that person through a setup, both the actions only a person can take and the commands a stage runs, each shown and confirmed first, reads each value, writes it to `.env`, a GitHub secret or a GitHub variable, and asks before an irreversible action |
 | `skills/orchestration/land/templates/checks.sh` | Runs a plan's verify list and says whether every command exited 0 |
 | `skills/orchestration/land/templates/land.sh` | Commits a step's work in its worktree, copies it onto main, runs the verify list there and prints the booking data |
 | `skills/ordo/ordo-init/templates/check_config.py` | Checks the `plan.yaml` at a path against the plan skill's template and prints each error and note, or with `--find` prints the `plan.yaml` the search order finds |
@@ -48,3 +48,4 @@ Every script in this repository outside `.scratch/` is listed here with its kind
 | `skills/academic/grant/templates/check_sections.test.sh` | `skills/academic/grant/templates/check_sections.py` |
 | `skills/ordo/repo-setup/templates/sync_rules.test.sh` | `skills/ordo/repo-setup/templates/sync_rules.py` with `--write` and with `--glossary` |
 | `utils/pin.test.sh` | `utils/pin.sh` |
+| `skills/code/wizard/templates/template.test.sh` | `skills/code/wizard/templates/template.sh`: `run_cmd`, `have` and `WIZARD_OS` |

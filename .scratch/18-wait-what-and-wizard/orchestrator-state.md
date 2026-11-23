@@ -17,6 +17,7 @@ verify:                      # commands run once, at landing on main, in order; 
 - sh skills/ordo/repo-setup/templates/sync_rules.test.sh 2>&1 | tail -1
 - python3 skills/ordo/repo-setup/templates/sync_rules.py . --only glossary
 - sh utils/pin.test.sh 2>&1 | tail -1
+- sh skills/code/wizard/templates/template.test.sh 2>&1 | tail -1
 - >-
   git ls-files -coz --exclude-standard | xargs -0 sh -c 'for f; do if [ -e "$f" ]; then printf "%s\0" "$f"; fi; done' sh | xargs -0 perl -CSD -ne 'my $bad_char = $ARGV =~ /\.md\z/ ? qr/[^\x20-\x7E\x{2705}\n]/ : qr/[^\x20-\x7E\n]/; if (/$bad_char/) { print "$ARGV:$.: $_"; $bad = 1 } close ARGV if eof; END { $? ||= 1 if $bad }'
 rules: docs/dev/change-standard.md # the repository's change standard: the rules every builder works under; every brief points at it.
@@ -44,20 +45,7 @@ repair_reviewer: claude:sonnet  # the model the run of /refute over a repair rou
 ```
 
 ```yaml
-dispatch:
-- step: 3
-  executor: agent
-  worker: claude:fable
-  worktree: .agents/worktrees/18-wait-what-and-wizard-3
-  base: 3167b2e
-  launched: 2026-11-23
-  report: .scratch/18-wait-what-and-wizard/agents/reviews/3-report.md
-  brief_check: ".scratch/18-wait-what-and-wizard/agents/reviews/3-brief-check.md (a232eee9f9b9e14d4, claude-fable-5-2, 147945 tokens, 16 tool uses, 4.9 minutes)"
-  landing: not-started
-  round: 1
-  session_id: a220b11af9b5f3798 (claude-fable-5-2)
-  builder_usage: 154541 tokens, 16 tool uses, 5.6 minutes
-  reviewer_report: ".scratch/18-wait-what-and-wizard/agents/reviews/3-refuter.md (a35934f5ab790b7de, claude-fable-5-2, 173906 tokens, 13 tool uses, 5.0 minutes)"
+dispatch: []
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled or, under `self_rule: on`, until the orchestrator closes it as `plan-orchestration`'s `references/self-rule.md`, "Closing an open item", says)
@@ -96,5 +84,6 @@ dispatch:
 - 2026-11-23. `v9.3.0-rc.1` (55d4464) is tagged and pinned on the user's word: 21 skills and 5 agents linked. Step 2 waits on the user: three `/wait-what` verdicts, and the project for the `wizard` run.
 - 2026-11-23. `v9.3.0-rc.2` (17201fb) is pinned. Step 2 is done on the user's verdicts. The user ruled the command stages: steps 3 and 4 added, ADR 0046 written.
 - 2026-11-23. Step 3 is dispatched: the builder a220b11af9b5f3798 works in `.agents/worktrees/18-wait-what-and-wizard-3` from base 3167b2e. Next: its report, then `/refute 18 3`.
-- Roadmap entry 18 (wait-what and wizard). Plan step 3 of 5: the command stages. Next: step 4, the gate's run for the command stages.
+- 2026-11-23. Step 3 has landed: `wizard` writes stages that run commands. Next: a release candidate tagged and pinned on the user's word, then step 4, for a setup the user names.
+- Roadmap entry 18 (wait-what and wizard). Plan step 4 of 5: the gate's run for the command stages. Next: step 5, the closing.
 - Open on Axel's side: none.
