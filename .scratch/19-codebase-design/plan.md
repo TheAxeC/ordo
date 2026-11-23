@@ -1,0 +1,48 @@
+# Plan: 19. codebase-design
+
+Execution ledger for roadmap entry 19 of `docs/roadmap.md`. One bullet is one step: a part of the entry. A step is built by one dispatch of its executor (a builder agent by default), or run by the orchestrator without an agent (marked). A step is ticked only after its verification commands ran and the whole diff was read; the commands are in `orchestrator-state.md`, and nothing is ticked on inspection. The green checkmark is this file's status vocabulary; everything else in this folder is ASCII. Read `orchestrator-state.md` first after any context compaction.
+
+## Goal
+
+A `codebase-design` skill with two modes. The `standards` mode fills the standards pages of an existing repository from the default pages `repo-setup` ships (the change standard, the design principles, the coding standards, the UI standard when the repository has a user interface, and the prose standard as it is): each rule stated in the concrete form it takes there, with the check that enforces it where one exists. The `review` mode reads the repository against its standards pages and writes candidates, each naming the page and the rule it breaks, its files and lines, the problem, the fix, the benefit and how strongly it is recommended, then grills through the one you pick into a roadmap entry. The skill finds the pages through the repository's `plan.yaml` when there is one, then under `docs/dev/`, then in the `repo-setup` folder beside its own. Its design follows mattpocock's `codebase-design` and `improve-codebase-architecture`: the agents, phases, cycles and stops are kept as the sources have them, and each deviation from them is made only with its reason and your ruling in the plan's Rulings.
+
+## Gate
+
+one real run of the `standards` mode on Cathedra whose pages hold every point of its existing "Design principles" section, checked by reading both; one real run of the `review` mode on Cathedra, each candidate reviewed by you, the one you pick written into its roadmap entry through `grill`; each run made by a separate agent; the plan's ledger lists every deviation from the design of mattpocock's two skills, each with its reason and the ruling that approved it, and nothing else differs, checked by reading both; the verify list of `docs/dev/building.md` passes on main.
+
+- The gate: could this pass without the goal being reached? no, each mode has one real run on Cathedra that the user reads, the `standards` run is compared point by point with Cathedra's existing section, and the deviations are read against both sources.
+- Step 1: could this pass without the goal being reached? no, the check reads the skill text against the skill layout and against both sources with the list of deviations, and the verify list runs on main; whether the skill works in a repository is step 2's part.
+- Step 2: could this pass without the goal being reached? no, both runs are made by a separate agent that invokes the installed skill, and the user reads the pages and each candidate.
+
+## Steps, in execution order
+
+- 1 the skill: `skills/code/codebase-design/` with its `SKILL.md` in the skill layout, the modes `standards` and `review`, the search order of ADR 0047 for the standards pages, the default page used for a kind of page the repository lacks (ruling D12), the review ending in a roadmap entry through `grill`, and the sources' vocabulary, deepening page, design-it-twice page and report page as its reference pages; `README.md` and `docs/dev/` wired in as the skill layout asks; the ledger's list of every deviation from the two sources, each with its reason and its ruling; check: the skill follows `docs/dev/skill-layout.md`, read by the user, the deviations list read against both sources, and the verify list passes on main (1 commit) (approved)
+- 2 the gate's runs, on a release candidate tagged and pinned on the user's word: one run of the `standards` mode on Cathedra, its pages compared with every point of Cathedra's existing "Design principles" section by reading both; one run of the `review` mode on Cathedra, each candidate reviewed by the user, the one the user picks written into Cathedra's roadmap through `grill`; each run made by a separate agent that invokes the installed skill, its stops answered by the orchestrator (orchestrator, no agent) (approved)
+- 3 the closing: the closing report written (the cost script's output, or that the plan started no agent), the roadmap entry ticked with the gate's output, this folder moved to the archive (orchestrator, no agent) (approved)
+
+## Could run in parallel
+
+Independent of each other; the standing rule of one agent at a time still serialises them unless `plan.yaml`'s `workers_at_once` allows more.
+
+- None: step 2 needs step 1's landed skill, and step 3 needs step 2's runs.
+
+## Rulings (2026-11-23)
+
+- D2 one skill or two (2026-11-23): (a), one skill `codebase-design` with the modes `standards` and `review` (the user).
+- D3 the pages the standards mode fills (2026-11-23): (a), every default page `repo-setup` ships: the change standard, the design principles, the coding standards (common and each language found), the UI standard when the repository has a user interface, and the prose standard copied as it is (the user).
+- D4 what the review mode holds the code to (2026-11-23): (a), every filled standards page, each candidate naming the page and the rule it breaks, described in the source's vocabulary (the user).
+- D5 what the review ends in (2026-11-23): (a), a roadmap entry written through `grill` (the user).
+- D7 how the skill finds the standards pages (2026-11-23): (a), a search order that never refuses: the pages the repository's `plan.yaml` names when there is one, then the fixed names under `docs/dev/`, then the defaults in the `repo-setup` folder beside the skill's folder; replaces D1, which was not answered (the user).
+- D8 the gate's runs (2026-11-23): (a), Cathedra only: one `standards` run whose pages hold every point of Cathedra's existing "Design principles" section, then one `review` run whose picked candidate is written into Cathedra's roadmap through `grill`; replaces D6, which was not answered (the user).
+- D10 the roadmap diff of entry 19 (2026-11-23): (a), written as shown: the entry is titled `19. codebase-design`, with one skill of two modes, the search order and the two runs on Cathedra (the user).
+- D11 record as ADR (2026-11-23): (a), yes: `docs/adr/0047-codebase-design-is-one-skill-made-from-two-sources-and-finds-the-standards-pages-by-a-search-order.md`, status proposed, holding D2, D5 and D7 (the user).
+- D12 what the review does for a kind of page the repository lacks (2026-11-23): (a), it reviews against Ordo's default page for the missing kind, each such candidate saying that the rule comes from the default page, and a sentence of the default page that still holds an unfilled placeholder is skipped; replaces D9, which was not answered (the user).
+- D13 carried, one skill (2026-09-29): "entry 19 shrinks to the `codebase-design` skill", carried from `.scratch/archive/2-e-grill/plan.md:94` (the user).
+
+## Agents
+
+Each agent a plan skill started for this plan has one bullet, with its agent id, its role and the model the runner served it, except an agent the plan leaves unpriced, which has a numbered item under the heading "Agents the cost script leaves unpriced:"; `/land` writes a step's agents at its booking and when it takes a step back out of main, `/grill` writes its lookup agents, `/spec` writes a brief-check agent it stopped for another model or found dead when it took a run over, the orchestrator writes a brief-check agent it stopped under "The review of a choice", the session that starts a diagnosis agent writes its numbered item right after the start, and `/plan` copies the bullets of a rulings file.
+
+## Blocked, and by what
+
+- 2: waits on the user's word to pin the release candidate, and on the user's word that the runs may write in Cathedra.
