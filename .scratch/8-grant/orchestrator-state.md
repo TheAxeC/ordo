@@ -82,3 +82,5 @@ dispatch: []
 - Roadmap entry 8 (grant). Plan step 1 of 3: the skill. Next: step 2, the gate's run.
 - Open on Axel's side: none.
 - 2026-11-23. Step 1b has landed: the seven changes of the ruling "What the first run showed" are on main. Next: tag and pin `v9.2.0-rc.2`, then step 2, the gate's run again on a copy of the 2026 application, made by a separate agent.
+- 2026-11-23. `v9.2.0-rc.2` (3d5c2fa) is pinned. Step 2's second run is under way in `.agents/gate-8b/`, made by agent ab45245f5bb134bf8, its stops answered by the orchestrator.
+- 2026-11-23. Step 2's second run is made in `.agents/gate-8b/` on `v9.2.0-rc.2`: agent ab45245f5bb134bf8, 51.7 minutes, 74 tool uses, 14 agents started by it. `check` on the application as submitted: pdfLaTeX, 10 pages of 10, four headings and three form fields ok. `draft` of "Scientific research objectives": 10 pages before and after. `review`: 1.a 5, 1.b 5, 2.a 5, 2.b 3, 3 not scored. The run agent listed 26 places where the skill's text was unclear or silent. Next: the user reads the output and rules the gate.
