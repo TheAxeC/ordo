@@ -51,17 +51,18 @@ dispatch:
   report: .scratch/7-a-referee/agents/reviews/1b-report.md
   session_id: af33cf9bca3b7181b (claude-fable-5-2)
   landing: not-started
-  round: 2
+  round: 3
   builder_usage: round 2, 300626 tokens, 23 tool uses, 11.5 minutes
   reviewer_report: ".scratch/7-a-referee/agents/reviews/1b-refuter.md; over round 2: a3ca2ba385c8bda09, claude-sonnet-5-5, 114853 tokens, 12 tool uses, 2.6 minutes"
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled or, under `self_rule: on`, until the orchestrator closes it as `plan-orchestration`'s `references/self-rule.md`, "Closing an open item", says)
 
-- Open item 7 (step 1b, repair round 2, raised 2026-11-23): the review over round 2 names 10 findings (Spec 1, Proof 1, Standards 1, Behaviour 1 to 7, in `agents/reviews/1b-refuter.md`, "Repair round 2, refuted"), too large for the landing, and the round cap is spent. Options: (a) the builder closes them in one more round, reviewed once more; (b) the round lands as it is and the gate runs are made on it; (c) the round is thrown away. Recommended: (a). The lazy option is (b).
+- none
 
 ## Closed items (the log of what was raised and how it ended; no report carries it)
 
+- Open item 7 (step 1b, raised and ruled 2026-11-23): the findings of the review over repair round 2; ruled (a) by the user, one more round by the builder, reviewed once more.
 - Open items 4, 5 and 6 (step 2, raised and ruled 2026-11-23): the ceilings hit as targets, ruled (a); a second round keeping unanswered points, ruled (a); a new issue merged into a first-round point, ruled (d); each by the user.
 - Open item 1 (step 1, raised and ruled 2026-11-22): whether `paper-review-panel` names `referee`; ruled (a) by the user, as part of step 1.
 

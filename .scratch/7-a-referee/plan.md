@@ -77,6 +77,7 @@ Independent of each other; the standing rule of one agent at a time still serial
 - Open item 6 (2026-11-23): (d), the referee is not given the EIC's new issues, which a fresh agent judges on their own; every rule of the referee's pages is absolute, an agent that disagrees with a rule follows it and writes its objection for the user; and a fresh agent checks the selection and the report against the rules before the user sees them, an argument for an exception counting as a break; the lazy option was (c), a stricter sentence only (the user).
 - Rules are rules (2026-11-23): an agent never reasons its way past a rule (the user).
 - A repair round, not a step (2026-11-23): the changes of Open items 4 to 6 are made as repair round 2 of step 1b, by its builder, and not as a new step (the user).
+- Open item 7 (2026-11-23): (a), the builder closes the findings of the review over repair round 2 of step 1b in one more round, reviewed once more; the lazy option was (b), landing the round as it is (the user).
 
 ## Agents
 
@@ -92,6 +93,7 @@ Each agent a plan skill started for this plan has one bullet, with its agent id,
 - af33cf9bca3b7181b: builder of step 1b, claude-fable-5-2
 - a7fa4b89e49397c7e: reviewer of step 1b, claude-fable-5-2
 - ae590f6a0158cac61: reviewer of step 1b over round 1, claude-sonnet-5-5
+- a3ca2ba385c8bda09: reviewer of step 1b over round 2, claude-sonnet-5-5
 - a2251a63e8f8c21d4: run of step 2 on v9.1.0-rc.2, first round, claude-fable-5-2
 - a34649d7e04f8a312: run of step 2 on v9.1.0-rc.2, second round, claude-fable-5-2
 
