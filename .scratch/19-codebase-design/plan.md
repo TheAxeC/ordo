@@ -44,6 +44,10 @@ Independent of each other; the standing rule of one agent at a time still serial
 - D17 where step 2's runs write (2026-11-23): (b), in a scratch copy of Cathedra; no file of the real repository is changed (the user).
 - D18 the roadmap diff, with the plan's gate and step 2 (2026-11-23): (a), written as shown: both runs are made on a scratch copy of Cathedra, the `standards` run leaves every existing point standing and its additions are reviewed by the user, and no file of Cathedra itself is changed (the user).
 - D19 record as ADR (2026-11-23): (a), D12 and D15 added to the decision of `docs/adr/0047-codebase-design-is-one-skill-made-from-two-sources-and-finds-the-standards-pages-by-a-search-order.md` as a refinement of the same record (the user).
+- Deviations 8 to 16 (2026-11-23): approved as listed in `.scratch/19-codebase-design/deviations.md`: the skill layout with the sources' pages as `references/` files, `/grill` in place of the source's `grilling` and `domain-modeling`, the glossary and the ADR folder the repository's `plan.yaml` names, ASCII only, no `agents/openai.yaml`, the prose standard applied, agents on the runner's defaults, the user and the model may both invoke the skill, and the session reads each candidate's files and lines before the report (the user).
+- Deviation 17 (2026-11-23): (a), the design terms of the vocabulary are defined only in the skill's `references/vocabulary.md` and are not added to `plan-terms.md` or the glossary (the user).
+- Deviation 18 (2026-11-23): (a), in a repository with no plan configuration the review invokes `/ordo-init` at the pick, with its own draft and approval, then `/roadmap add` and `/grill`; when the user declines `/ordo-init` the skill ends with the report and says no entry was written (the user).
+- ADR 0047 refined (2026-11-23): (a), its sentence on paths reads "The skill reads no standards page from a path outside the repository it runs in and its own skills folder.", so the report of D16 is written outside the repository (the user).
 
 ## Agents
 

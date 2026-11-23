@@ -16,7 +16,7 @@ The skill finds the standards pages by a search order, and no step of it refuses
 2. the fixed names under `docs/dev/`;
 3. the default pages in the `repo-setup` skill's folder, which stands beside this skill's folder.
 
-The skill names no path outside the repository it runs in and its own skills folder.
+The skill reads no standards page from a path outside the repository it runs in and its own skills folder.
 
 The skill treats a repository's own pages in two ways:
 
