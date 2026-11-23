@@ -453,3 +453,173 @@ The report's quoted checks match my reruns. I did not rerun the report's `grep -
 - Whether `wc -w` on a markdown file is the right measure for a journal's length limit: a judgment for the user, not checked.
 
 Usage: agent a3ca2ba385c8bda09, claude-sonnet-5-5, 114853 tokens, 12 tool uses, 2.6 minutes.
+
+## Repair round 3, refuted
+
+Standards read: `docs/dev/skill-layout.md` in full. I did not open `prose-standard.md` or `change-standard.md`.
+
+## Commands rerun (worktree root)
+
+1. ASCII check, `LC_ALL=C grep -n '[^ -~]'` over the 7 skill files, `README.md`, `docs/figures/gen_figures.py` and `1b-report.md`: no output.
+2. `sed -n 5p skills/academic/referee/SKILL.md` printed `  version: "1.0.0"`.
+3. `env -u CLAUDE_CONFIG_DIR -u ORDO_SKILL_DIRS -u ORDO_STABLE python3 docs/figures/gen_figures.py`: exit 0. `git status --short docs/figures` printed ` M docs/figures/gen_figures.py` and ` M docs/figures/referee.svg` only.
+4. `env -u ... python3 skills/ordo/repo-setup/templates/sync_rules.py . --only glossary` printed `ok: the plan-terms block equals the template`.
+5. `grep -n -i 'budget\|words\|length' skills/academic/referee/agents/referee_agent.md` printed lines 25, 117, 118 and 136:
+   - 25 and 136 are the report to shorten. They give no number before the report exists.
+   - 117 and 118 read "the words it needs" and "your own words".
+   - None gives a number before the report.
+6. The description is 1,023 characters, from `yaml.safe_load`.
+
+The page set matches the report's quoted checks. The snapshot-to-worktree delta I read was `files.txt`'s ten paths, in part. Sections of `1b-report.md` outside "Repair round 3" were checked only by grep.
+
+## The ten earlier findings
+
+| Earlier finding | State | Place that closes it |
+|---|---|---|
+| Spec 1, referee told about sections it is not given | Closed | The referee is given `selected-points.md` and the two templates. `grep -rn "SKILL\|second_round" agents templates` prints nothing. |
+| Proof 1, parts of the selection reach the user unchecked | Closed | `SKILL.md` first round item 9, "The user's changes" (the rule check reads each rewrite). Residual: Behaviour 6 and 7 below. |
+| Standards 1, joined rules in bullets | Closed in part | Some bullets are split. Joined bullets remain: Standards 1 below. |
+| Behaviour 1, the referee can work out the budget | Closed in part | `selected-points.md` has no cut section, count or count line. Behaviour 1 below. |
+| Behaviour 2, "select no point and leave no point out" | Closed | `referee_agent.md` line 32 now reads "Every weakness that the rules below make a point is written as a point". The sentence was reworded, not dropped. Residual: Behaviour 4. |
+| Behaviour 3, a new point checked by nobody | Closed | `second_round.md` item 7, `rule_check_agent.md` row of `new-points.md`, `new_issue_agent.md` "A return from the rule check". |
+| Behaviour 4, where a worsened first-round point's added defect goes | Closed | `second_round.md` item 5, lines 43 to 44, with `new_issue_agent.md` condition 1. |
+| Behaviour 5, a new-issue comment reaches the referee | Closed in part | `second_round.md` items 4, 5 and 8 route the five reports to the EIC. Behaviour 3 below is a contradiction in that routing. |
+| Behaviour 6, order of a new point | Closed | Four places agree: `SKILL.md` 181, `second_round.md` 91 and 98, `referee_agent.md` 152 and 109, and the template's second block. |
+| Behaviour 7, counts in a second round | Closed in part | Behaviour 5 below. |
+
+- No finding is closed by removing the rule it guarded. The rule check's exemption of a new point is replaced by a check of `new-points.md`.
+- The round reaches beyond the findings in one place. A user's move of a whole entry is now the session's, and the referee no longer rewrites `selection.md` after a change. This adds the section "Points the user moved out" and the four-section `left-out.md`. It is needed to close finding 1, so I do not count it as a defect.
+
+## Verdicts per item of round 3
+
+| Item | Verdict | Finding |
+|---|---|---|
+| 1 | violated | Behaviour 1 |
+| 2 | holds | Behaviour 6 and 7 are edge gaps |
+| 3 | holds | |
+| 4 | holds | Behaviour 4 is a different sentence |
+| 5 | holds | |
+| 6 | holds | |
+| 7 | holds | Behaviour 3 |
+| 8 | holds | Spec 1 is a different pointer |
+| 9 | violated | Behaviour 5 |
+| 10 | violated | Standards 1, Standards 2 |
+
+## Verdicts per case
+
+| Case | Verdict | Finding |
+|---|---|---|
+| R1 to R2, R4 to R13 | met | R12 is met by `rule_check_agent.md` line 29. R13 is met by the section "Objections" shown at the stop (`SKILL.md` line 104). |
+| R3 | met | The referee can still count what remains: Behaviour 1. |
+| R14 | partial | Behaviour 1 |
+| R15 | met | `SKILL.md` first round item 9 reads the minor points in full before the stop. |
+| R16 | met | `second_round.md` item 7 |
+| R17 | partial | Behaviour 3 |
+
+## The walk, agent by agent
+
+The referee's first-round call is given `referee_agent.md`, the manuscript, `intake.md`, the reports and `selection_template.md`. Its resumed calls are given `selected-points.md`, and the report call also `referee_report_template.md`.
+
+| Call | Files the agent is given | What shows a number or a cut |
+|---|---|---|
+| Field analyst, reviewers | Manuscript, direction | Nothing |
+| EIC (second round) | Revised manuscript, response letter, first-round comments, card, protocol, and the five reports when asked | Nothing |
+| Referee, selection | As listed above; in a second round `revision-check.md`, the response letter and first-round comments, no reports | See below |
+| Rule check of `selection.md` | The referee's page, the selection template, in a second round `revision-check.md` | Nothing |
+| Referee, minor points in full | `selected-points.md` | The file shows fewer points than the referee found |
+| Rule check of `selected-points.md` | The same pages plus `revision-check.md` in a second round | Nothing |
+| New-issue agent | `new-issues.md`, the revised manuscript, the response letter, the template | Nothing |
+| Rule check of the report | `referee-report.md`, confirmed `selected-points.md` | Nothing |
+
+- Before the report is written, the files in the run folder include `selection.md` with "Points over the budget" and "Count after the cut", and, from step 10, `left-out.md` with the cut points. No prompt names them, but the folder is the referee's working folder.
+- No file or prompt holds the most major points, the most minor points or a length. The first-round page names "selected points ... which the session writes" and says "you drop none on account of how many points there are". This is a hint that a session selection exists.
+- Paths of a new issue to the referee: the second round has none other than `revision-check.md`, if the EIC sorts a new-material comment under a first-round point (Behaviour 3).
+- Text the user is shown or the report is written from, without a rule check:
+  - the EIC's "Other observations" (shown as left-out entries);
+  - a report corrected after the stop "The breaks left in the report" (Behaviour 7).
+- Missing inputs: a rule check "resumed" for a rewrite after the user's change, where none was started (Behaviour 6).
+- Contradictions of two rules: Behaviour 3 and 4.
+- Pages that point at a page the agent is not given: none found for the referee, rule check or new-issue agent.
+- `README.md` and the figure script: no sentence made false. The README row and alt text match `SKILL.md`.
+- Stale lines in `1b-report.md`: Proof 1.
+
+## Findings
+
+### Spec
+
+1. `SKILL.md` lines 253 and 240, "An agent that thinks a rule gives a wrong result follows the rule and writes its objection where its page's 'The rules hold' says".
+   - The reviewers, the field analyst and the EIC run from `paper-review-panel` pages, which have no "The rules hold" section. The EIC is told session-written rules (`second_round.md` items 5 and 39 to 41).
+   - Failure: the EIC that finds the two conditions wrong for a case has no place to put its objection. It decides alone, or the objection is lost.
+   - Small: one sentence naming the file `revision-check.md` or `new-issues.md` as the place.
+2. `SKILL.md` line 90, "Done when `selection.md` holds the session's sections".
+   - "The session's sections" no longer names a heading; the section it named was removed. A builder or session cannot tell which sections are meant.
+   - Small: name them (Selected points, Points over the budget, Count after the cut).
+
+### Proof
+
+1. `1b-report.md` lines 70, 507 and 514 still name "The session's sections of the selection", which no longer exists. The brief said to correct each earlier line the round makes out of date.
+   - Failure: a reader checking the report against `SKILL.md` finds a heading that is not there.
+   - Small.
+
+### Standards
+
+1. Bullets that join two rules, against "One rule per bullet" and "Steps: one action per item":
+   - `SKILL.md` 140 ("keeps the four numbers and shows them to the user at the stops").
+   - 155 ("counts the words again after that return, and again after the rule check of the report").
+   - 199 ("carries the text back, removes the section ... and writes `left-out.md` again").
+   - First-round items 10 and 14 each hold three or more actions in the item's first line.
+   - `referee_agent.md` 63 ("counts with its point and never stands among the left-out comments") and 66 ("Fill the count line ... and check it").
+   - `second_round.md` 38 ("as that page gives it ... and in no other section of it").
+   - Failure: a reviewer testing "Done when" cannot tell which half failed.
+   - Small each; about eight edits.
+2. `SKILL.md` "The user's changes" (lines 187 to 200) is a `##` reference section, but only a run where the user changes the selection reads it.
+   - Layout says a row-6 section holds "only material every run reads", and material needed in some runs goes in `references/<name>.md`, named by its path from the step.
+   - Failure: the standard is not met.
+   - Not small: a new `references/` page and the pointers in items 10 and 14.
+
+### Behaviour
+
+1. `agents/referee_agent.md` line 80 ("which you do not open again") against the run folder's contents.
+   - After the cut, `selection.md` (with "Points over the budget" and "Count after the cut") and, from item 10, `left-out.md` stand in the folder the referee writes into.
+   - The referee reads them if it chooses; only its own page's rule bars it. Round 3 item 1 asks that no call "lets it read that a cut was made or how many points it moved". The builder's report concedes the one inference from `selected-points.md`.
+   - Failure: a referee that lists the folder reads "Points over the budget" and the count, and learns the cut and the number. The page's own "Rules are rules" holds only if the agent complies.
+   - Also: `selected-points.md` with 7 majors shows the most major points to a referee that knows it found 9.
+   - Not small. The cut files would be written outside the folder the referee is given, or the referee's later calls would go to a fresh agent. That is a judgment for Axel.
+2. `referee_agent.md` line 32, "The selection finds every point the paper has", and line 53 ("how many major points the paper has") against the second round (lines 150 and 170: only remaining first-round points, observations left out).
+   - Line 143 says the second-round rules "add to each call", but they restrict.
+   - Failure: a second-round referee following line 32 raises a point for a baseline weakness.
+   - Small: "every point the paper has" becomes "every point of the comments you are given".
+3. `second_round.md` item 5, lines 39 to 41 against line 59.
+   - Lines 40 to 41 tell the EIC that "the two conditions narrow what 'New Issue Detection' has it write as a new issue".
+   - Line 59 says a reviewer's comment about changed material is a new issue "whatever the EIC finds of the two conditions".
+   - Failure: an EIC following 40 to 41 puts a reviewer's comment on a defect the revision introduced under "Other observations". The new-issue agent never judges it (R17 partial). If it sorts the comment as "still missing" of a first-round point, it reaches the referee through `revision-check.md`.
+   - Small: say that lines 40 to 41 bind the EIC's own findings, and line 59 binds reviewers' comments.
+4. `second_round.md` item 5, line 44, and `new_issue_agent.md` line 28, "to the degree the other condition gives".
+   - The phrase is circular, and the EIC can lean either way for a worsened first-round point.
+   - Small.
+5. The counts in a second round:
+   - The referee writes "Points found" and "Count" (`entries of revision-check.md`). The session writes "Count after the cut" (`SKILL.md` 169 to 172).
+   - "Count after the cut" counts new issues, new points and left-out new issues. It counts no entry of "Other observations", which is listed under "Left out of the check of the revision".
+   - It is not updated when the user moves a point at the stop.
+   - Failure: the user is shown a count that omits the observation entries and is stale after a move; the count line does not add up in a second round with observations.
+   - Small: one bullet on who counts "Other observations", and when "Count after the cut" is refreshed.
+6. `SKILL.md` line 215, "read by the same rule-check agent, resumed", where step 9 is skipped when no minor point stands in `selected-points.md`.
+   - No rule-check agent for `selected-points.md` exists to resume. A user change then has no agent to read the referee's rewrite.
+   - Small.
+7. `SKILL.md` line 229, the stop "The breaks left in the report".
+   - The referee's correction after the user's answer is never read by a rule check or counted for length.
+   - Failure: the text the user sends under their name has no check.
+   - Small: allow one further rule check, or state that it is unchecked.
+8. `SKILL.md` line 228, the stop "The selection", lists the shown items but not "Left out of the check of the revision" or "Points the user moved out". Item 10 of `second_round.md` adds the first.
+   - Failure: a session following the Stops row alone omits two sections.
+   - Small.
+
+## Declined to judge
+
+- The `paper-review-panel` pages: not changed. Whether the EIC follows the sorting rule is not checked.
+- The SVG layout: I read the labels and `gen_figures.py` only.
+- `docs/glossary.md`, `building.md` and `scripts.md` beyond the grep for `referee`.
+- Whether `wc -w` fits a journal's length limit: a judgment for Axel.
+- The builder's `grep -rn` name tables: not rerun, except where I grepped the same names.
+
+Usage: agent a8d9eb6c178218674, claude-sonnet-5-5.

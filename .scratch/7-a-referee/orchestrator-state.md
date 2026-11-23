@@ -52,13 +52,13 @@ dispatch:
   session_id: af33cf9bca3b7181b (claude-fable-5-2)
   landing: not-started
   round: 3
-  builder_usage: round 2, 300626 tokens, 23 tool uses, 11.5 minutes
-  reviewer_report: ".scratch/7-a-referee/agents/reviews/1b-refuter.md; over round 2: a3ca2ba385c8bda09, claude-sonnet-5-5, 114853 tokens, 12 tool uses, 2.6 minutes"
+  builder_usage: round 2, 300626 tokens, 23 tool uses, 11.5 minutes; round 3, 359309 tokens, 13 tool uses, 7.6 minutes
+  reviewer_report: ".scratch/7-a-referee/agents/reviews/1b-refuter.md; over round 2: a3ca2ba385c8bda09, claude-sonnet-5-5, 114853 tokens, 12 tool uses, 2.6 minutes; over round 3: a8d9eb6c178218674, claude-sonnet-5-5"
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled or, under `self_rule: on`, until the orchestrator closes it as `plan-orchestration`'s `references/self-rule.md`, "Closing an open item", says)
 
-- none
+- Open item 8 (step 1b, repair round 3, raised 2026-11-23): the review over round 3 leaves one finding that is not small, Behaviour 1: the referee is resumed after the cut, sees that `selected-points.md` holds fewer points than it found, and can open `selection.md` in the run folder. Options: (a) one more round in which a fresh agent writes the selected points in full and the report, with the small findings closed in the same round; (b) land with the small findings fixed at landing and the limit left as stated. Recommended: (a). The lazy option is (b).
 
 ## Closed items (the log of what was raised and how it ended; no report carries it)
 
