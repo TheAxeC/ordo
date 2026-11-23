@@ -44,7 +44,10 @@ repair_reviewer: claude:sonnet  # the model the run of /refute over a repair rou
 ```
 
 ```yaml
-dispatch: []
+dispatch:
+- step: 1b
+  landing: preparing
+  brief_check: ".scratch/8-grant/agents/reviews/1b-brief-check.md (a362fcb5d89d0e667, claude-fable-5-2, 219,055 tokens, 37 tool uses, 7.8 minutes)"
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled or, under `self_rule: on`, until the orchestrator closes it as `plan-orchestration`'s `references/self-rule.md`, "Closing an open item", says)
