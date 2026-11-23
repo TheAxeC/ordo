@@ -30,3 +30,14 @@ Rulings for points 17 and 18: "Deviation 17" and "Deviation 18" of plan.md.
 
 17. The design terms of the vocabulary are defined in `references/vocabulary.md` and are not added to the glossary. Reason: the plan-terms block is synced into every repository's glossary, where "module" and "interface" would clash with the repository's own use of those words.
 18. A repository with no plan configuration gets `/ordo-init` at the pick, before `/roadmap add` and `/grill`. Reason: the review ends in a roadmap entry (ADR 0047), and both skills need the configuration.
+
+Ruling for points 19 to 26: "Open item A" of plan.md.
+
+19. After the pick, "design it twice" runs before `/roadmap add` and `/grill`, and the ADR offer for a rejected candidate after them. The source runs both inside its grilling. Reason: `/grill` is a skill of its own, which the review invokes (point 6).
+20. The user may pick no candidate, and no roadmap entry is then written. The source asks only which candidate to explore. Reason: a run can end without a roadmap entry, and the ADR offer needs a way to reject.
+21. The scan agent has a sixth question, "Where does the code break a rule of a standards page?", beside the source's five. Reason: the review holds the code to every standards page (point 3).
+22. The goal given to `/roadmap add` names the source's grilling topics (constraints, dependencies with their categories, the shape of the deepened module, what sits behind the seam, which tests survive); the source walks them in its own grilling. Reason: `/grill` settles them from the entry's goal (point 6).
+23. Words the glossary gives another sense are reworded: "tier-spanning slice", "technical brief", "use cases", "the default case" and "Step 2". A sentence marks each example as made up. Reason: the glossary, and the rule that an example in a skill says whether it is made up or public.
+24. The report's header names each subject that applies to the repository and that its pages lack, with `/codebase-design standards` as the way to fill it. Reason: the review uses the default page for such a subject and says so (point 4).
+25. The review's aim reads "friction that makes the code hard to understand and to test"; the source says "testability and AI-navigability". Reason: the review holds the code to every standards page (point 3).
+26. "A good stretch back" for the commit history is kept as the source has it, against the prose standard's rule on vague qualifiers (point 13). Reason: a number would be a further difference from the source.

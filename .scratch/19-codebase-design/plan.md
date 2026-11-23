@@ -49,6 +49,7 @@ Independent of each other; the standing rule of one agent at a time still serial
 - Deviation 18 (2026-11-23): (a), in a repository with no plan configuration the review invokes `/ordo-init` at the pick, with its own draft and approval, then `/roadmap add` and `/grill`; when the user declines `/ordo-init` the skill ends with the report and says no entry was written (the user).
 - ADR 0047 refined (2026-11-23): (a), its sentence on paths reads "The skill reads no standards page from a path outside the repository it runs in and its own skills folder.", so the report of D16 is written outside the repository (the user).
 - The release candidate for step 2 (2026-11-23): after step 1 lands, a release candidate is tagged and pinned with `utils/pin.sh <tag>` for the gate's runs (the user).
+- Open item A (2026-11-23): (a), the differences 19 to 26 from the two sources are approved as listed in `.scratch/19-codebase-design/deviations.md` (the user).
 
 ## Agents
 
