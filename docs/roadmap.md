@@ -23,9 +23,9 @@ Status: `[ ]` open, `[~]` in progress, `[x]` done (its gate ran and passed, with
 ## 8. grant
 
 - Status: [ ]
-- Goal: The grant skill with per-funder config: required sections, page limits, evaluation criteria and the funding statement. It applies the `/writing` findings you accept to the grant.
-- Gate: the checks for limits and required sections pass their tests; a side-by-side run on a section of a past application, compared with what was submitted.
-- Waits on: 3, for the writing base; 5, for the funder acknowledgement text, which `paper` holds in `skills/academic/paper/references/funding_statement_guide.md`.
+- Goal: The grant skill: it drafts, revises, reviews and checks a grant application written in LaTeX, from a funder config that holds the funder's required sections, limits, layout rules and evaluation criteria. `/grant config` drafts that config from the call documents you give and saves it beside the application after your approval; the skill ships the config's format and one filled example, and holds no funder's facts. It is a small skill that runs `paper`'s roles from that skill's pages and adds the config, the checks of the limits and of the required sections, and the criteria review. It applies the `/writing` findings you accept to the application.
+- Gate: the tests of the two check scripts pass; one run on the 2024 FWO postdoc application of `research-hub/funding/2024-fwo-postdoc-fbttr/`, on a copy, made by a separate agent that invokes `/grant` as the installed skill, with its stops answered by the orchestrating session: `/grant config` writes the config from the call documents you give, `/grant draft` writes the section "Scientific research objectives" from the pitch slides and the 2022 submission and ends with the `/writing` findings applied as patches, and `/grant check` and `/grant review` run on the application you submitted; you read the config against the call, the drafted section against the one you submitted, and the criteria review, and find each score tied to its passages.
+- Waits on: 3, for the writing base; 5, for `paper`'s roles and patch scripts.
 
 ## 13. researcher
 
