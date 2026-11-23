@@ -28,12 +28,12 @@ Status: `[ ]` open, `[~]` in progress, `[x]` done (its gate ran and passed, with
 - Waits on: 6, for the review its `manuscript` mode calls.
 - Figure: ![academic-pipeline: the 10 stages, and where each stage goes now. The stages: 1 Research: deep-research; 2 Write: academic-paper, plan or full; 2.5 Integrity check; 3 Review: academic-paper-reviewer; Back to stage 2, or end; 4 Revise: academic-paper revision; 3' Re-review; 4' Re-revise, no review after; 4.5 Final integrity check, zero issues to pass; 5 Finalize: DOCX, LaTeX, PDF; 6 Process summary. Where each goes now: 1 Research goes to researcher, entry 13 (not built yet); 2 Write goes to paper plan and paper full; 2.5 Integrity check goes to researcher, entry 13; 3 Review goes to paper-review-panel; 4, 3', 4' Revise and re-review go to paper revision; 4.5 Final integrity check goes to researcher, entry 13; 5 Finalize goes to paper format-convert; 6 Process summary goes to none. The integrity and ethics checks run in researcher, once on paper's finished draft and once after its revision.](figures/academic-pipeline/academic-pipeline.svg)
 
-## 18. wait-what
+## 18. wait-what and wizard
 
 - Status: [ ]
-- Goal: A `wait-what` skill you type when a message did not land: the message explained again in simple English with the context it left out, using the glossary's terms.
-- Gate: runs on three real messages you name as not landed, each re-explanation read by you and judged clear.
-- Waits on: 2.D, for the glossary.
+- Goal: A `wait-what` skill you type when a message did not land: the message explained again in simple English with the context it left out, using the glossary's terms. A `wizard` skill that writes a script walking a person through the steps only a person can do (open a dashboard, copy a key, paste it), writing each value to `.env` or a GitHub secret, asking before each irreversible action and never printing a secret.
+- Gate: `wait-what` runs on three real messages you name as not landed, each re-explanation read by you and judged clear; one real run of `wizard` for a project's manual setup you name, the script run by you, reviewed by you.
+- Waits on: 2.D, for the glossary and the layout rules.
 
 ## 19. codebase-design and improve-codebase-architecture
 
@@ -41,13 +41,6 @@ Status: `[ ]` open, `[~]` in progress, `[x]` done (its gate ran and passed, with
 - Goal: A `codebase-design` skill that adapts `repo-setup`'s default design-principles page to an existing repository: each principle stated in the concrete form it takes there, with the check that enforces it where one exists. Its design follows mattpocock's `codebase-design`: the agents, phases, cycles and stops are kept as the source has them, and each deviation from them is made only with its reason and your ruling in the plan's Rulings. An `improve-codebase-architecture` skill that reads a repository against its design-standard page and writes candidates, each naming the principle it breaks, its files and lines, the problem, the fix, the benefit and how strongly it is recommended, then grills through the one you pick into a roadmap entry. Its design follows mattpocock's `improve-codebase-architecture`: the agents, phases, cycles and stops are kept as the source has them, and each deviation from them is made only with its reason and your ruling in the plan's Rulings.
 - Gate: one real run of `codebase-design` on a repository you name that fills its design-standard page, reviewed by you; one run on Cathedra whose page holds every point of its existing "Design principles" section, checked by reading both; one real run of `improve-codebase-architecture` on Cathedra, each candidate reviewed by you, the one you pick written into its roadmap entry through `grill`; the plan's ledger lists every deviation from the design of mattpocock's two skills, each with its reason and the ruling that approved it, and nothing else differs, checked by reading both.
 - Waits on: 5.A, which sets the folder the skills are built in.
-
-## 21. wizard
-
-- Status: [ ]
-- Goal: A `wizard` skill that writes a script walking a person through the steps only a person can do (open a dashboard, copy a key, paste it), writing each value to `.env` or a GitHub secret, asking before each irreversible action and never printing a secret.
-- Gate: one real run for a project's manual setup you name, the script run by you, reviewed by you.
-- Waits on: 2.D, for the layout rules.
 
 # Not yet specified
 
@@ -94,6 +87,7 @@ Status: `[ ]` open, `[~]` in progress, `[x]` done (its gate ran and passed, with
 
 <!-- - <n>. <title>: <the reason> -->
 
+- 21. wizard: dropped, since it is merged into entry 18, which builds `wait-what` and `wizard` in one plan and carries this entry's goal and gate.
 - 7. rebuttal: dropped, since step 5.Q of entry 5 copies academic-paper's revision-coach and rebuttal-audit modes into `paper` and adds the response letter with its check and the mode `response-letter`, and the check of step 5.Q carries this entry's gate.
 - 22.A. Blind comparisons of the plan skills: dropped, since the plan skills are shown by real use, having built oculus and ordo, so blind comparisons of them add nothing the user needs.
 - 15.A. Rebuild-later rows: dropped, since entry 5 builds its 8 rows for paper and entry 6 its 3 rows for paper-review-panel, so each row is built in the plan that rebuilds its skill, before that skill's comparison with its source.
