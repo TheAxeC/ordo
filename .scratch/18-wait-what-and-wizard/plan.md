@@ -23,7 +23,7 @@ A `wait-what` skill you type when a message did not land: the message explained 
 - ✅ 2 the gate's runs, on a release candidate tagged and pinned: `wait-what` typed by the user in the user's own sessions on three real messages that did not land, each re-explanation read by the user and judged clear; one run of `wizard` for a project's manual setup the user names, made by a separate agent that invokes the installed skill, the user confirming the stage list, running the script and reviewing it (orchestrator, no agent) (approved)
 - ✅ 3 the command stages: `skills/code/wizard/templates/template.sh` with the source's helpers unchanged and three additions, a check whether a tool is installed, a helper that shows one command, asks for a yes, runs it only on a yes and ends the script with the command's status when it fails, and the operating system the script runs on; `skills/code/wizard/SKILL.md` with a stage's commands in its scope, its stage list and its steps, the rule that no command runs without being shown and confirmed, and the rule that the skill is not for an action the session can take itself, now, on the machine it runs on; a test of the added helpers beside the template, with its command on `docs/dev/building.md`; the skill's rows in `README.md` and `docs/dev/scripts.md`; `bash -n` on the template exits 0, the ASCII check prints nothing, the test passes, and a reviewer reads the skill and the library against ADR 0046 (1 commit) (ruling The command stages)
 - ✅ 4 the gate's run for the command stages, on a release candidate tagged and pinned: one run of `wizard` for a setup that installs a tool on the user's machine, made by a separate agent that invokes the installed skill, the user confirming the stage list, running the script and reviewing it (orchestrator, no agent) (ruling The command stages)
-- 5 what the gate's run found short in `wizard`: `skills/code/wizard/SKILL.md` says that a stage ends on a pause, what a stage does when a tool an earlier stage installs is missing, how a command that needs a shell is written, that a check skips a stage's commands and never the reading of its value, and what the `shellcheck` run of Steps 6 must print; `skills/code/wizard/templates/template.sh` gains a comparison of a version with a minimum and a helper that records what is left to do by hand, its `shellcheck` run prints nothing, and its opening screen names the commands; the test covers the two helpers; `bash -n` exits 0, `shellcheck` on the template prints nothing, the test passes, and a reviewer reads the skill and the library against ADR 0046 (1 commit) (ruling The gate's seven findings)
+- ✅ 5 what the gate's run found short in `wizard`: `skills/code/wizard/SKILL.md` says that a stage ends on a pause, what a stage does when a tool an earlier stage installs is missing, how a command that needs a shell is written, that a check skips a stage's commands and never the reading of its value, and what the `shellcheck` run of Steps 6 must print; `skills/code/wizard/templates/template.sh` gains a comparison of a version with a minimum and a helper that records what is left to do by hand, its `shellcheck` run prints nothing, and its opening screen names the commands; the test covers the two helpers; `bash -n` exits 0, `shellcheck` on the template prints nothing, the test passes, and a reviewer reads the skill and the library against ADR 0046 (1 commit) (ruling The gate's seven findings)
 - 6 the closing: the closing report written (the cost script's output, or that the plan started no agent), the roadmap entry ticked with the gate's output, this folder moved to the archive (orchestrator, no agent) (approved)
 
 ## Step 1, landed (2026-11-23)
@@ -50,6 +50,17 @@ A `wait-what` skill you type when a message did not land: the message explained 
   - The builder's first report did not pass its bar: the first review gave three findings and one further point (two comment lines of the template that named only manual steps, one bullet with two requirements, `run_cmd` with no command printing "ok ran", the secrets bullet silent on the variable's expansion), all closed in repair round 1. The review over the round gave no finding.
   - Fixes at landing: none.
   - Agents: the brief check a232eee9f9b9e14d4 (claude-fable-5-2, 147945 tokens, 16 tool uses, 4.9 minutes); the builder a220b11af9b5f3798 (claude-fable-5-2: the build 154541 tokens, 16 tool uses, 5.6 minutes; round 1 169941 tokens, 7 tool uses, 2.0 minutes); the reviewer a35934f5ab790b7de (claude-fable-5-2, 173906 tokens, 13 tool uses, 5.0 minutes); the reviewer over round 1 a4b6a6a0a1e30749c (claude-sonnet-5-5 with one recorded call on claude-opus-5-5, 118093 tokens, 12 tool uses, 1.4 minutes).
+
+## Step 5, landed (2026-11-23)
+
+- What landed: `skills/code/wizard/templates/template.sh` gains `version_at_least` and `by_hand`, one braced expansion in `ask`, the opening screen's text that names the commands, one `shellcheck` directive and a `pause` at the end of the example stage; `skills/code/wizard/SKILL.md` gains the rules of Steps 5 on the pause, a missing tool, a command that needs a shell, a minimum version and a value that is always read, and Steps 6's rule that `shellcheck` prints nothing; `template.test.sh` gains four test functions; `docs/dev/building.md` line 19 and `docs/dev/scripts.md` line 51 name the two helpers; ADR 0046 gains the sentence of Open item A.
+- Premise corrections: the brief check found the brief's `shellcheck` counts wrong (one SC1087 and four SC2329, not two and five), corrected in the brief before the build.
+- Findings: the first review found four (the version read against ADR 0046, the quoting of the `say` line, two bullets with several requirements, one clause of the head comment). Three were closed in repair round 1. The first was raised as Open item A and ruled (a) by the user. The run over round 1 found two wording points in Steps 5.
+- Fixes at landing, 3: the ruling of Open item A carried out (the bullet "Print the version command with `note`", one sentence in the skill's Rules and one in ADR 0046); the values bullet names the exception of a stage whose tool is missing; two bullets shortened to the prose standard's sentence length.
+- The builder's first report passed its bar: every item and case held at the first review.
+- Verification on main, after the fixes at landing: `sh ~/.claude/skills/land/templates/checks.sh .scratch/18-wait-what-and-wizard/orchestrator-state.md` printed `PASS: template.sh scratch tests, 12 cases` and `checks: 15 commands passed`.
+- The verify list is unchanged. No look and no A/B: the configuration names neither.
+- Usage: builder a1b230b7ae645fe72, 147223 tokens, 13 tool uses, 4.6 minutes, and round 1, 153324 tokens, 2 tool uses, 1.0 minutes; brief check a8cdca0e12b1ca0ca, 200355 tokens, 19 tool uses, 4.4 minutes; reviewer a69309a3c1d1e4eec, 137311 tokens, 11 tool uses, 3.3 minutes; reviewer over round 1 a69d33b29fac68577, 83704 tokens, 6 tool uses, 0.8 minutes.
 
 ## Could run in parallel
 
@@ -80,6 +91,7 @@ Independent of each other; the standing rule of one agent at a time still serial
 - The gate, command stages (2026-11-23): the run of step 4 is for the dependencies of the user's game engine, read only there, the script written to a scratch folder so that no file of the project changes: "yes, and the game engine thing would be nice, but it needs to be in a scratch since I dont want to affect the actual files" (the user).
 - Step 4, done (2026-11-23): the script of the `wizard` run for the game engine's dependencies judged "I quite like the script, but I agree on the 7 points" (the user).
 - The gate's seven findings (2026-11-23): the seven gaps the run of step 4 showed in `wizard` are all fixed, in one new step before the closing, since the part landed in step 3 was found short: a pause at the end of a stage, a stage that depends on a declined one, a command that needs a shell, a minimum version, a stage that both runs a command and reads a value, the `shellcheck` run, and the opening screen's text. The last two change one line each of the source's `ask` and `banner`, which ADR 0046 now names: "I would like all 7 to be fixed" (the user).
+- Open item A (2026-11-23): a stage's check may run a tool's own version command, shown first with `note` and run without a question, since it reads and changes nothing; ADR 0046 and the skill's rule each gain that sentence: "A" (the user).
 
 ## Agents
 
@@ -96,6 +108,10 @@ Each agent a plan skill started for this plan has one bullet, with its agent id,
 - a35934f5ab790b7de: reviewer of step 3, claude-fable-5-2
 - a4b6a6a0a1e30749c: reviewer of step 3 over round 1, claude-sonnet-5-5
 - a7482350d02e2cd95: wizard run of step 4, claude-fable-5-2
+- a8cdca0e12b1ca0ca: brief check of step 5, claude-fable-5-2
+- a1b230b7ae645fe72: builder of step 5, claude-fable-5-2
+- a69309a3c1d1e4eec: reviewer of step 5, claude-fable-5-2
+- a69d33b29fac68577: reviewer of step 5 over round 1, claude-sonnet-5-5
 
 ## Blocked, and by what
 

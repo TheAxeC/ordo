@@ -126,3 +126,98 @@ Cases of the brief's "Cases":
 - What git ignores and the tree after staging: outside the three git commands a reviewer runs.
 
 Reviewer usage: a69309a3c1d1e4eec, claude-fable-5-2, 137311 tokens, 11 tool uses, 3.3 minutes.
+
+## Repair round 1, refuted
+
+```
+env -u CLAUDE_CONFIG_DIR -u ORDO_SKILL_DIRS -u ORDO_STABLE sh skills/code/wizard/templates/template.test.sh 2>&1 | tail -3
+ok: case_not_a_version
+ok: case_by_hand
+PASS: template.sh scratch tests, 12 cases
+
+printf '%s\0' <the five files> | xargs -0 perl -CSD -ne '<the brief's command>'
+printed nothing, charset exit 0
+
+shellcheck skills/code/wizard/templates/template.sh
+printed nothing, exit 0
+
+bash -n skills/code/wizard/templates/template.sh
+printed nothing, exit 0
+
+python3 -c 'import yaml; ...'   (the brief's command)
+987
+
+git diff a1b314d -- skills/code/wizard/templates/template.sh | grep -c '^@@'
+8
+
+wc -l: SKILL.md 127, template.sh 330   (as the round's report quotes)
+
+grep -n 'prints nothing' skills/code/wizard/templates/template.sh
+218:# have TOOL succeeds when TOOL is installed, and prints nothing. Use it in the
+252:# version MINIMUM or a later one, and prints nothing. Each is numbers joined by
+```
+
+The round's delta, `diff -u` snapshot against worktree over the six paths of `files.txt`: `docs/dev/building.md`, `docs/dev/scripts.md` and `template.test.sh` are unchanged. `template.sh` differs on line 17 only. `SKILL.md` differs in Steps 5 only. The ledger report gained its "Repair round 1" section. Every changed path is one the round's findings name or the builder's own report. The round's claims 1 to 3 each reproduce. No check was removed: the one clause dropped in `template.sh` line 17 is a wording fix, and the round did not touch the test file.
+
+### Verdicts
+
+Items of the brief's "What to build", for the whole diff since a1b314d:
+
+- 1.1: holds, 8 hunks in `template.sh`, in the head comment, at old line 49, at old lines 64 to 66, at old line 134, in the block between `run_cmd` and `finish`, and the one `pause`. The round touched only a comment line.
+- 1.2: holds, shellcheck prints nothing, exit 0.
+- 1.3: holds, unchanged by the round.
+- 1.4: holds, unchanged by the round; `case_version_equal_and_later`, `case_version_earlier` and `case_not_a_version` pass.
+- 1.5: holds, unchanged by the round; `case_by_hand` passes.
+- 1.6: holds, shellcheck prints nothing, exit 0.
+- 1.7: holds, the head comment's Inputs list no longer carries "which prints nothing" on line 17, and the function's own comment says it (line 252).
+- 1.8: holds, unchanged by the round.
+- 2: holds, 12 cases pass; the test file is unchanged by the round.
+- 3.1: holds, Steps 5, "End each stage on `pause`".
+- 3.2: holds, Steps 5, the check bullet and the three bullets "When that tool is missing, ...", plus "Name each value left unread in the text given to `by_hand`."
+- 3.3: holds, Steps 5, the `bash -c` bullet, the `say` bullet and the new bullet "Give `say` the same line in single quotes". This closes the first report's Spec 2.
+- 3.4: holds, Steps 5, the bullet "Skip the commands of a stage that is already done ..." and the bullet "Ask for and write each value the stage reads outside that `if` ...". The orchestrator's ruling on "no second bullet beside it" is applied.
+- 3.5: holds as the brief words it, Steps 1 and Steps 5. Spec 1 of the first report stands and is the user's open item, not part of this round.
+- 3.6: holds, Steps 6.
+- 3.7: holds, Steps 5's helper list and "The template".
+- 3.8: holds, the description's length is 987 and `metadata.version` is unchanged.
+- 4.1: holds, `docs/dev/building.md` and `docs/dev/scripts.md` are unchanged by the round.
+
+Cases of the brief's "Cases":
+
+- test, `version_at_least`, equal and later: met, `case_version_equal_and_later` passes.
+- test, `version_at_least`, earlier: met, `case_version_earlier` passes.
+- test, `version_at_least`, leading zeros: met, asserted in `case_version_equal_and_later`.
+- test, `version_at_least`, not a version: met, `case_not_a_version` passes.
+- test, `by_hand`: met, `case_by_hand` passes.
+- run, shellcheck: met, prints nothing, exit 0.
+- run, `bash -n`: met, prints nothing, exit 0.
+- run, the diff of `template.sh`: met, 8 hunks in the places the case names.
+- run, the existing eight cases: met, they pass inside the 12.
+- read, `SKILL.md` against 3.1 to 3.8: met, with the Standards finding below on the length of two bullets.
+- read, the head comment against 1.4 and 1.5: met.
+- read, a shipped file names nothing private: met, the new bullets name nothing private.
+
+### Findings
+
+1. Spec: none.
+2. Proof: none.
+3. Standards:
+   - `skills/code/wizard/SKILL.md`, Steps 5: "Give `say` the same line in single quotes, so that bash expands nothing in it and the person reads the line that will run." (24 words) and "When that tool is missing, read none of the stage's values, since a value that depends on the tool is not known yet." (23 words). What is wrong: both pass the roughly 20 words that `prose-standard.md`, "Sentence length" sets, and each carries a reason clause that is not needed to follow the rule. The round's report says only the bullet on values outside the `if` runs past 20 words, which the rerun does not reproduce. Failure scenario: none that mis-leads the builder of a wizard, since each reads as one requirement; the cost is a departure from the standard that the report did not name. Verdict: none.
+   - `skills/code/wizard/SKILL.md`, Steps 5: "Ask for and write each value the stage reads outside that `if`, so that it is read whether or not the check skipped the commands." What is wrong: "that `if`" has its antecedent only in the bullet above it, so the bullet cannot be read alone, and it states "each value ... read whether or not the check skipped the commands" while the missing-tool bullet states "read none of the stage's values", with no sentence saying the second takes precedence when the tool is missing. Failure scenario: an agent writing a stage whose tool may be missing reads the values bullet as always, asks for the value outside the `if`, and has the person type a value the install has not made known yet. Verdict: none (3.2 and 3.4 each hold as written).
+4. Behaviour: none.
+
+### Declined to judge
+
+- The round's report line "`grep -n 'prints nothing' skills/code/wizard/templates/template.sh` prints line 252": the command prints lines 218 and 252. No decision rests on it, so it is not a finding.
+- Spec 1 of the first report, the version read outside `run_cmd` against ADR 0046: Open item A with the user, not part of this round.
+- The first-run failures of the four new test functions on the unchanged tree: not rerun, as in the first report; they need a tree holding the new test beside the base's template.
+- Whether a part of 19 digits or more is an input that has happened for `version_at_least`: the user's call, as in the first report.
+
+Reviewer usage: a69d33b29fac68577, claude-sonnet-5-5, 83704 tokens, 6 tool uses, 0.8 minutes.
+
+## Closed
+
+- First run, Spec 1 (the version read outside `run_cmd`, against ADR 0046): raised as Open item A; ruled (a) by the user on 2026-11-23, carried out at landing in `SKILL.md` and ADR 0046.
+- First run, Spec 2 and Standards 1 and 2: closed by the builder in repair round 1.
+- Round 1, Standards, the two bullets past the sentence length: fixed at landing.
+- Round 1, Standards, the values bullet against the missing-tool bullet: fixed at landing.

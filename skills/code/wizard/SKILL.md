@@ -39,7 +39,7 @@ metadata:
    - For each value, note where it is written: `.env`, a GitHub secret, a GitHub variable, several of these, or nowhere for a stage that is a pure action.
    - For each value, note whether it is secret, and so typed hidden, or public.
    - For each command, note the tool it installs or the state it reaches.
-   - For each command, note the check that shows its stage is already done, so that a second run skips it: `have` for a tool, or a bash test that reads and changes nothing, such as `[[ -d <folder> ]]`.
+   - For each command, note the check that shows its stage is already done, so that a second run skips it: `have` for a tool, `have` followed by `version_at_least` with the minimum for a tool that must be at least a given version, or a bash test that reads and changes nothing, such as `[[ -d <folder> ]]`.
    - For each command, note the operating systems it holds for.
    - Done when every stage is named in order, each value has its three notes and each command has its three.
 2. Show the user the stage list as the Stops row "The stage list" gives it, and wait for the confirmation.
@@ -52,7 +52,7 @@ metadata:
 4. Copy `templates/template.sh` to the target path, which Rules gives.
    - Done when the copy stands at that path.
 5. Replace the example stage with one `stage` per stage of the list, in dependency order, below the `STAGES` marker.
-   - Use the library's helpers: `stage`, `say` and `step`, `open_url`, `ask` and `ask_secret`, `write_env`, `set_secret` and `set_var`, `pause` and `confirm`, `have`, `run_cmd` and `WIZARD_OS`.
+   - Use the library's helpers: `stage`, `say` and `step`, `open_url`, `ask` and `ask_secret`, `write_env`, `set_secret` and `set_var`, `pause` and `confirm`, `have` and `version_at_least`, `run_cmd`, `by_hand` and `WIZARD_OS`.
    - Set `TOTAL_STAGES` to the number of stages written.
    - Open the URL before asking for its value.
    - Read every secret with `ask_secret`.
@@ -60,27 +60,42 @@ metadata:
    - Call `set_secret` only for the values CI needs, and `set_var` for a public value CI reads.
    - Call `confirm` before every irreversible action.
    - Write one `run_cmd` per command.
-   - Skip a stage that is already done by its check, which stands in the condition of an `if` and is not a command of the stage.
+   - Skip the commands of a stage that is already done, and their instructions, by its check, which stands in the condition of an `if` and is not a command of the stage.
+   - Ask for and write each value the stage reads outside the `if` of its check, except in a stage whose tool is missing.
+   - Where a tool must be at least a given version, write the check as `have` followed by `version_at_least <installed version> <minimum>`: the stage reads the installed version only when `have` succeeds, since reading the version of a missing tool ends the script.
+   - Cut the tool's output down to the dotted number before the call, since `version_at_least` fails on any other text.
+   - Read the installed version outside `run_cmd`, since the read is part of the check and changes nothing.
+   - Print the version command with `note` before the stage runs it, so that the person sees every program the script starts.
+   - Where a command needs a tool that an earlier stage installs, check for that tool with `have` first.
+   - When that tool is missing, call `by_hand` with what is left and the stage to run first.
+   - When that tool is missing, run none of the stage's commands.
+   - When that tool is missing, read none of the stage's values, which are not known yet.
+   - Name each value left unread in the text given to `by_hand`.
+   - Write a command that needs a shell (a pipe, a redirection, `$(...)`, a variable the command itself must expand) as `run_cmd bash -c '<the line>'`, the line in single quotes, so that bash expands nothing before the command is shown.
+   - Print the plain line with `say` right above that `run_cmd`, since `run_cmd` prints each word quoted for the shell, which puts a backslash in front of each space and each shell character of the line.
+   - Give `say` the same line in single quotes, so that bash expands nothing in it.
    - Choose a command that differs by operating system by `WIZARD_OS`.
    - Give an operating system the stage list does not cover a `warn` that names it.
    - Keep the expansion of a secret's variable off the `run_cmd` line, where bash replaces it by the value before the line is printed: the command reads the variable from its environment, which the stage exports after `ask_secret`, or asks for the secret itself.
    - Keep a stage to one focused task, since each `stage` clears the screen and what the person still needs must not scroll away.
+   - End each stage on `pause`, since the next `stage`, or `finish` after the last one, clears the screen and what the stage printed, a command's output included, is gone.
    - Done when the script holds one `stage` for each stage of the list and `TOTAL_STAGES` equals their number.
 6. Check the script without running it.
    - Run `bash -n <script>`.
    - Run `shellcheck <script>` when it is installed.
+   - Fix in the stages each line `shellcheck` prints, since the library gives none.
    - Run `chmod +x <script>`.
    - Trace the script by reading it: every value of Steps 1 is read and lands where Steps 1 said.
    - Trace every command of Steps 1: it stands behind a `run_cmd`.
    - Trace every `set_secret` name: it equals a `secrets.*` reference in CI.
-   - Done when `bash -n` prints nothing, the script is executable and the trace finds every value and every command.
+   - Done when `bash -n` prints nothing, `shellcheck`, when it is installed, prints nothing, the script is executable and the trace finds every value and every command.
 7. Tell the user how to run the script, and to delete it after its run unless it is kept as Rules says.
    - Done when the message names the script's path and the command that runs it.
 
 ## The template
 
 - `templates/template.sh` holds the wizard library above its `STAGES` marker and one example stage below it.
-- The library is the same in every script: stage-by-stage progress, confirmations, URL opening on macOS, Linux and WSL, hidden entry of secrets, `.env` writes that replace an existing line, `gh secret` and `gh variable` writes, the check whether a tool is installed (`have`), the run of one command once the person has seen it and answered yes (`run_cmd`), the operating system the script runs on (`WIZARD_OS`), and a closing summary.
+- The library is the same in every script: stage-by-stage progress, confirmations, URL opening on macOS, Linux and WSL, hidden entry of secrets, `.env` writes that replace an existing line, `gh secret` and `gh variable` writes, the check whether a tool is installed (`have`), the comparison of a version with a minimum (`version_at_least`), the run of one command once the person has seen it and answered yes (`run_cmd`), the record of what a stage leaves to do by hand (`by_hand`), the operating system the script runs on (`WIZARD_OS`), and a closing summary.
 - The example stage is made up, around the public API-keys page of Stripe's dashboard.
 
 ## Stops
@@ -103,6 +118,7 @@ metadata:
 
 - The session never runs the script, since it opens a browser, runs commands on the person's machine and waits for a person: it checks the script as Steps 6 says.
 - No command runs without being shown to the person and confirmed with a yes: every command of a stage goes through `run_cmd`.
+- A stage's check may run a tool's own version command without a yes, shown first, since it reads and changes nothing.
 - The skill is not for an action the session can take itself, now, on the machine it runs on.
 - The library above the `STAGES` marker is never edited: the session writes only below the marker.
 - A secret is never asked for in the conversation: the script reads it with `ask_secret` when the person runs it.

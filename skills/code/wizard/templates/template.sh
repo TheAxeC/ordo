@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# shellcheck disable=SC2329  # the library defines helpers that a given script's stages may not call
 #
 # A wizard walks a human through a procedure, step by step: the actions the
 # human takes, and the commands a stage runs once the human has confirmed them.
@@ -12,7 +13,9 @@
 #   - the current folder, which a relative ENV_FILE is read from and whose repository gh sets secrets and variables in;
 #   - whether gh is installed and signed in;
 #   - the name uname -s prints, which sets WIZARD_OS;
-#   - whether each tool a stage passes to have is installed.
+#   - whether each tool a stage passes to have is installed;
+#   - the two versions a stage passes to version_at_least, the installed one and the minimum;
+#   - the text a stage passes to by_hand.
 # Warnings, each printed when the script cannot do something:
 #   - "couldn't open a browser, so visit it manually: <url>", when no command opens the URL;
 #   - "skipped GitHub secret <name>: gh not ready; set it later", when gh is missing, is not signed in or does not set the secret;
@@ -20,8 +23,10 @@
 #   - "skipped command: <command>", when the person does not answer yes to the question of run_cmd, the end of the input included;
 #   - "command failed with status <status>: <command>", when a command the person confirmed exits with a status other than 0;
 #   - "no command given to run_cmd", when a stage calls run_cmd with no word or with an empty first word;
-#   - "still to do by hand:" in the closing summary, with each skipped secret and variable and each command the person declined.
-# Exit status: 0 when the last stage and the closing summary have run; otherwise the status of the first command that fails, as set -e gives it, such as 1 when the input ends before an answer. A command run through run_cmd that fails ends the script with that command's status, and run_cmd called with no word or with an empty first word ends it with 2. Ctrl-C ends the script on the signal, which a shell reports as 130.
+#   - "left to do by hand: <text>", when a stage calls by_hand with a text;
+#   - "no text given to by_hand", when a stage calls by_hand with no text or with an empty one;
+#   - "still to do by hand:" in the closing summary, with each skipped secret and variable, each command the person declined and each text given to by_hand.
+# Exit status: 0 when the last stage and the closing summary have run; otherwise the status of the first command that fails, as set -e gives it, such as 1 when the input ends before an answer. A command run through run_cmd that fails ends the script with that command's status, and run_cmd called with no word or with an empty first word ends it with 2, as by_hand called with no text or with an empty one does. Ctrl-C ends the script on the signal, which a shell reports as 130.
 #
 # Everything above the "STAGES" marker is the wizard library: do not hand-edit
 # it. Author the per-step stages below the marker.
@@ -46,7 +51,7 @@ _STAGE_INDEX=0
 ENV_FILE="${ENV_FILE:-.env}"
 WRITTEN_ENV=()    # KEYs written to ENV_FILE this run
 WRITTEN_SECRET=() # secret NAMEs set this run
-SKIPPED=()        # things left to do by hand: gh wasn't ready, or the person declined a command
+SKIPPED=()        # things left to do by hand: gh wasn't ready, the person declined a command, or a stage called by_hand
 
 # _clear wipes the terminal so only the current step is on screen. No-op when
 # output isn't a terminal, so piped logs stay readable.
@@ -61,9 +66,9 @@ banner() {
   _clear
   printf '\n%s%s  %s%s\n' "$BOLD" "$BLUE" "$1" "$RESET"
   printf '%s  %s stages%s\n\n' "$DIM" "$TOTAL_STAGES" "$RESET"
-  printf '%s  You drive the browser; this wizard tells you exactly what to do and\n' "$DIM"
-  printf '  captures the values you copy back. Stop any time with Ctrl-C and re-run\n'
-  printf '  later, since it remembers values already saved.%s\n' "$RESET"
+  printf '%s  This wizard tells you what to do, runs each command only after you have\n' "$DIM"
+  printf '  confirmed it, and keeps the values you copy back. Stop any time with Ctrl-C\n'
+  printf '  and re-run later, since it remembers values already saved.%s\n' "$RESET"
   pause "Ready to start?"
 }
 
@@ -131,7 +136,7 @@ ask() {
   current=$(_existing "$key" || true)
   # Readline needs the colour codes wrapped in \001..\002 to place the cursor.
   p="  $s$BOLD$e$prompt$s$RESET$e "
-  [[ -n "$current" ]] && p+="$s$DIM$e[Enter keeps current]$s$RESET$e "
+  [[ -n "$current" ]] && p+="$s$DIM${e}[Enter keeps current]$s$RESET$e "
   read -e -r -p "$p" input || rc=1
   if (( rc )) && [[ -z "$input" ]]; then return 1; fi
   [[ -z "$input" && -n "$current" ]] && input="$current"
@@ -243,6 +248,41 @@ run_cmd() {
   printf '  %sok ran%s %s\n' "$GREEN" "$RESET" "$shown"
 }
 
+# version_at_least CURRENT MINIMUM succeeds when the version CURRENT is the
+# version MINIMUM or a later one, and prints nothing. Each is numbers joined by
+# dots, such as 3.28 or 4.0.1. The parts compare as numbers from the left, a
+# missing part counts as 0, and a part with leading zeros is read in base 10,
+# so 3.9 is before 3.28, 3.28 equals 3.28.0 and 09 is 9. Any other text fails,
+# as an empty or absent argument does, so cut a tool's output down to the
+# dotted number first. Use it in the condition of an if: under set -e a
+# failing bare statement ends the script.
+version_at_least() {
+  local current="${1:-}" minimum="${2:-}" dotted='^[0-9]+(\.[0-9]+)*$' a b
+  [[ "$current" =~ $dotted && "$minimum" =~ $dotted ]] || return 1
+  while [[ -n "$current" || -n "$minimum" ]]; do
+    a="${current%%.*}"; b="${minimum%%.*}"
+    if [[ "$current" == *.* ]]; then current="${current#*.}"; else current=""; fi
+    if [[ "$minimum" == *.* ]]; then minimum="${minimum#*.}"; else minimum=""; fi
+    a=$((10#${a:-0})); b=$((10#${b:-0}))
+    if (( a > b )); then return 0; fi
+    if (( a < b )); then return 1; fi
+  done
+  return 0
+}
+
+# by_hand "text" records something a stage leaves to the human, such as a
+# stage that lacks a tool an earlier stage installs: it prints the text as a
+# warning, the closing summary lists it, and the script goes on. With no text
+# or an empty one there is nothing to record: the script ends with status 2.
+by_hand() {
+  if [[ -z "${1:-}" ]]; then
+    warn "no text given to by_hand"
+    exit 2
+  fi
+  SKIPPED+=("$1")
+  warn "left to do by hand: $1"
+}
+
 # finish clears, then shows a closing summary of everything configured.
 finish() {
   _clear
@@ -281,6 +321,7 @@ ask_secret STRIPE_SECRET_KEY "Paste the secret key:"
 write_env STRIPE_PUBLISHABLE_KEY "$STRIPE_PUBLISHABLE_KEY"
 write_env STRIPE_SECRET_KEY "$STRIPE_SECRET_KEY"
 set_secret STRIPE_SECRET_KEY "$STRIPE_SECRET_KEY"   # CI needs this one
+pause
 # --------------------------------------------------------------------------
 
 finish

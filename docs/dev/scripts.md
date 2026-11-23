@@ -48,4 +48,4 @@ Every script in this repository outside `.scratch/` is listed here with its kind
 | `skills/academic/grant/templates/check_sections.test.sh` | `skills/academic/grant/templates/check_sections.py` |
 | `skills/ordo/repo-setup/templates/sync_rules.test.sh` | `skills/ordo/repo-setup/templates/sync_rules.py` with `--write` and with `--glossary` |
 | `utils/pin.test.sh` | `utils/pin.sh` |
-| `skills/code/wizard/templates/template.test.sh` | `skills/code/wizard/templates/template.sh`: `run_cmd`, `have` and `WIZARD_OS` |
+| `skills/code/wizard/templates/template.test.sh` | `skills/code/wizard/templates/template.sh`: `run_cmd`, `have`, `WIZARD_OS`, `version_at_least` and `by_hand` |

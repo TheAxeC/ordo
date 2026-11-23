@@ -145,3 +145,25 @@ Change standard rule 14, the grep: `grep -rn 'version_at_least\|by_hand' skills 
 ## Anything in the brief that was wrong or impossible
 
 Nothing.
+
+## Repair round 1
+
+Nothing of the round is left undone.
+
+1. The `say` line's quoting: closed. `skills/code/wizard/SKILL.md`, Steps 5, a new bullet after the bullet on `say`: "Give `say` the same line in single quotes, so that bash expands nothing in it and the person reads the line that will run."
+2. Two bullets holding several requirements: closed.
+   - The check and the values are two bullets: "Skip the commands of a stage that is already done, and their instructions, by its check, which stands in the condition of an `if` and is not a command of the stage." and "Ask for and write each value the stage reads outside that `if`, so that it is read whether or not the check skipped the commands."
+   - The missing tool is three bullets: "When that tool is missing, call `by_hand` with what is left and the stage to run first.", "When that tool is missing, run none of the stage's commands." and "When that tool is missing, read none of the stage's values, since a value that depends on the tool is not known yet."
+   - Read against each other: the bullet on values speaks of the check skipping the commands, the bullet on a missing tool of the tool being absent, and no third bullet restates either.
+3. `skills/code/wizard/templates/template.sh` line 17: closed. The clause is dropped, and the line reads "#   - the two versions a stage passes to version_at_least, the installed one and the minimum;". The function's own comment says it: `grep -n 'prints nothing' skills/code/wizard/templates/template.sh` prints line 252, "# version MINIMUM or a later one, and prints nothing. Each is numbers joined by".
+
+The checks, rerun after the round:
+
+- `env -u CLAUDE_CONFIG_DIR -u ORDO_SKILL_DIRS -u ORDO_STABLE sh skills/code/wizard/templates/template.test.sh 2>&1 | tail -1` printed `PASS: template.sh scratch tests, 12 cases`.
+- The brief's character-set command over the five files printed nothing, exit 0.
+- `shellcheck skills/code/wizard/templates/template.sh` printed nothing, exit 0.
+- `bash -n skills/code/wizard/templates/template.sh` printed nothing, exit 0.
+- The brief's `python3 -c` command printed `987`.
+- `git diff a1b314d -- skills/code/wizard/templates/template.sh | grep '^@@'` printed the same eight hunks as before the round.
+- `wc -l`: `skills/code/wizard/SKILL.md` 127, `skills/code/wizard/templates/template.sh` 330. The test file was not changed in the round, so Verify 5 has no new run.
+- Verify 6: the five new bullets are one sentence and one requirement each; the bullet on values outside the `if` runs past 20 words with its reason.

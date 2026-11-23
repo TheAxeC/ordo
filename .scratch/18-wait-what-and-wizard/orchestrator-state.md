@@ -45,32 +45,16 @@ repair_reviewer: claude:sonnet  # the model the run of /refute over a repair rou
 ```
 
 ```yaml
-dispatch:
-- step: 5
-  executor: agent
-  worker: claude:fable
-  worktree: .agents/worktrees/18-wait-what-and-wizard-5
-  base: a1b314d
-  launched: 2026-11-23
-  report: .scratch/18-wait-what-and-wizard/agents/reviews/5-report.md
-  brief_check: ".scratch/18-wait-what-and-wizard/agents/reviews/5-brief-check.md (a8cdca0e12b1ca0ca, claude-fable-5-2, 200355 tokens, 19 tool uses, 4.4 minutes)"
-  landing: not-started
-  round: 1
-  session_id: a1b230b7ae645fe72 (claude-fable-5-2)
-  builder_usage: 147223 tokens, 13 tool uses, 4.6 minutes
-  reviewer_report: ".scratch/18-wait-what-and-wizard/agents/reviews/5-refuter.md (a69309a3c1d1e4eec, claude-fable-5-2, 137311 tokens, 11 tool uses, 3.3 minutes)"
+dispatch: []
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled or, under `self_rule: on`, until the orchestrator closes it as `plan-orchestration`'s `references/self-rule.md`, "Closing an open item", says)
 
-- Open item A (kind 3, a contradiction of an ADR in force). Step 5. The skill's new rule for a minimum version has a stage run the tool's own version command, such as `cmake --version`, inside its check, with nothing shown and no question. ADR 0046 says "No command runs without being shown and confirmed", and the opening screen says the wizard "runs each command only after you have confirmed it". The brief asked for it (3.5, decision 7); the reviewer names it as a clash only the user rules (`agents/reviews/5-refuter.md`, Spec 1).
-  - (a) The version command is shown, then run without a question: the stage prints the command with `note` and reads its output. ADR 0046 and the skill's rule gain one sentence: a check may run a tool's own version command, shown first, since it reads and changes nothing. Pro: the person sees everything that runs, and a version check asks nothing. Con: one program runs without a yes. Recommended.
-  - (b) The version command runs unshown, as built. ADR 0046 and the skill's rule gain the sentence that a check may run a tool's version command. Pro: no further change to the skill. Con: a program runs that the person never sees, against the opening screen. The lazy option.
-  - (c) The version command is shown and asked for with `confirm`; on a no the stage calls `by_hand`. Pro: ADR 0046 stands unchanged. Con: one more question per tool with a minimum, for a command that changes nothing.
+- none
 
 ## Closed items (the log of what was raised and how it ended; no report carries it)
 
-- none
+- 2026-11-23: Open item A, how a stage reads a tool's version against ADR 0046: ruled (a) by the user, the version command is shown and then run without a question.
 
 ## The standing demands (from Axel, in force)
 
@@ -103,5 +87,5 @@ dispatch:
 - 2026-11-23. Step 3 has landed: `wizard` writes stages that run commands. Next: a release candidate tagged and pinned on the user's word, then step 4, for a setup the user names.
 - 2026-11-23. `v9.3.0-rc.3` (f0a956a) is tagged and pinned on the user's word. Step 4's run is started in a scratch folder.
 - 2026-11-23. Step 4's run wrote its script; the user's verdict on it is open. The user ruled its seven findings fixed: step 5 added.
-- Roadmap entry 18 (wait-what and wizard). Plan step 5 of 6: what the gate's run found short in `wizard`. Step 4 is done on the user's verdict. Next: step 6, the closing.
+- Roadmap entry 18 (wait-what and wizard). Plan step 6 of 6: the closing. Steps 1 to 5 are done. Next: the closing, on the user's word, then the tag and pin `v9.3.0`.
 - Open on Axel's side: none.
