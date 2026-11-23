@@ -46,8 +46,16 @@ repair_reviewer: claude:sonnet  # the model the run of /refute over a repair rou
 ```yaml
 dispatch:
 - step: 1
-  landing: preparing
-  brief_check: "running: a866bbf579774b48d"
+  executor: agent
+  worker: claude:fable
+  worktree: .agents/worktrees/18-wait-what-and-wizard-1
+  base: 12aa826
+  launched: 2026-11-23
+  report: .scratch/18-wait-what-and-wizard/agents/reviews/1-report.md
+  brief_check: ".scratch/18-wait-what-and-wizard/agents/reviews/1-brief-check.md (a866bbf579774b48d, claude-fable-5-2, 166799 tokens, 20 tool uses, 6.4 minutes)"
+  landing: not-started
+  round: 0
+  session_id: a9fe20eeccf8024f2 (claude-fable-5-2)
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled or, under `self_rule: on`, until the orchestrator closes it as `plan-orchestration`'s `references/self-rule.md`, "Closing an open item", says)
@@ -81,5 +89,6 @@ dispatch:
 ## Current position (rewritten before every step commit of this plan)
 
 - 2026-11-23. The plan is open; nothing has landed.
+- 2026-11-23. Step 1 is dispatched: the builder a9fe20eeccf8024f2 works in `.agents/worktrees/18-wait-what-and-wizard-1` from base 12aa826. Next: its report, then `/refute 18 1`.
 - Roadmap entry 18 (wait-what and wizard). Plan step 1 of 3: the two skills. Next: step 2, the gate's runs.
 - Open on Axel's side: none.
