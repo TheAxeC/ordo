@@ -78,6 +78,6 @@ dispatch: []
 ## Current position (rewritten before every step commit of this plan)
 
 - 2026-11-23. The plan is open; nothing has landed. `v9.1.0` is pinned.
-- 2026-11-23. Step 1, the skill, has landed. Next: step 2, the gate's run, which needs a release candidate tagged and pinned on the user's word.
+- 2026-11-23. Step 1 has landed. `v9.2.0-rc.1` (37a065d) is pinned. Step 2's run is made: agent a34959c2af3b37c09 (claude-fable-5-2, 349005 tokens, 83 tool uses, 84.4 minutes, the agents it started not counted) ran `config`, `draft`, `check` and `review` in `.agents/gate-8/`; its outputs are in `.agents/gate-8/grant-runs/`. The run awaits the user's reading. Found by the run: the skill compiles with `latexmk -xelatex` and the application is a pdfLaTeX document, 10 pages in its own PDF and 11 in the run's compile, so `over: (whole document): 11 pages of 10` is a wrong result.
 - Roadmap entry 8 (grant). Plan step 1 of 3: the skill. Next: step 2, the gate's run.
 - Open on Axel's side: none.
