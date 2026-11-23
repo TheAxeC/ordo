@@ -55,6 +55,8 @@ Independent of each other; the standing rule of one agent at a time still serial
 - The step list (2026-11-23): both skills are built in one step, "one step" (the user).
 - The gate's runs (2026-11-23): `wait-what` is typed by the user in the user's own sessions, the next three times a message does not land, and the user gives the verdict for each; the `wizard` run is made by a separate agent that invokes the installed skill on the project the user names, the orchestrating session answering its stops except the stage list, which the user confirms, and the user runs the script: "(a)" (the user).
 - The gate, wait-what (2026-11-23): the `wait-what` part of the gate passes after one run in the orchestrating session, with the glossary line of the skill changed to name the glossary directly: "Change the glossary line and then I accept wait-what" (the user).
+- The gate, wizard (2026-11-23): the `wizard` run of the gate is made in an empty scratch folder, for one setup, a GitHub personal access token saved to `.env`, in place of a project the user names: "(a), and tag and pin" (the user).
+- The gate, wizard verdict (2026-11-23): the user ran the script the `wizard` run wrote and judged it: "It's awesome" (the user).
 
 ## Agents
 
@@ -65,6 +67,7 @@ Each agent a plan skill started for this plan has one bullet, with its agent id,
 - a9fe20eeccf8024f2: builder of step 1, claude-fable-5-2
 - acb5ec6652074faf9: reviewer of step 1, claude-fable-5-2
 - a0d93dacde474d366: reviewer of step 1 over round 1, claude-sonnet-5-5
+- a1670e62864eff937: wizard run of the gate, claude-fable-5-2
 
 ## Blocked, and by what
 
