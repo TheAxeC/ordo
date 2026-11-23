@@ -11,6 +11,8 @@ Writes, beside this file:
   roles the other five modes start in its note.
 - referee.svg: the agents and stops of the first round of the referee skill, with what the
   second round starts in its note.
+- grant.svg: the agents and stops of the draft mode of the grant skill, with what the other
+  four modes start in its note.
 - paper/full.svg, paper/revision.svg, paper/lit-review.svg, paper/outline-only.svg,
   paper/abstract-only.svg, paper/citation-check.svg, paper/disclosure.svg, paper/plan.svg,
   paper/format-convert.svg, paper/revision-coach.svg, paper/rebuttal-audit.svg,
@@ -1977,6 +1979,52 @@ def referee() -> str:
     )
 
 
+def grant() -> str:
+    """The draft mode of the grant skill: its agents in order and its stops."""
+    nodes = (
+        Node("I", "Intake agent: the questions of the grant intake"),
+        Node("A", "You answer the intake", "stop"),
+        Node("S", "Structure architect: the outline, in the funder's sections"),
+        Node("O", "You confirm the outline", "stop"),
+        Node("B", "Argument builder: each section's argument for the criteria"),
+        Node("W", "Draft writer: the application's .tex, or a patch of a section"),
+        Node("C", "Citation compliance: each cited claim, only with a .bib", "maybe"),
+        Node("F", "Formatter: the layout of the funder config, only when it states one", "maybe"),
+        Node("V", "You pick the writing findings to apply", "stop"),
+        Node("P", "Draft writer, resumed: the picked findings as one patch", "maybe"),
+    )
+    edges = (
+        Edge("I", "A"),
+        Edge("A", "S"),
+        Edge("S", "O"),
+        Edge("O", "S", "a correction", "back"),
+        Edge("O", "B"),
+        Edge("B", "W"),
+        Edge("W", "C"),
+        Edge("C", "F"),
+        Edge("F", "V"),
+        Edge("V", "P"),
+    )
+    note = (
+        "Each of the six roles runs from its page of the paper skill, given the funder "
+        "config and the session's direction. The session applies each patch, "
+        "compiles the application and runs check_sections.py and check_limits.py before the "
+        "writing review and again after its patch. The run asks which config when the "
+        "application's folder holds several, asks the mode of a plain request that names "
+        "none, and passes on a stop of the paper skill. The config mode starts the config "
+        "drafter and shows you its draft to confirm. The revise mode starts the draft writer "
+        "on a comments file and ends with the same writing review. The review mode starts "
+        "the criteria reviewer, which scores the application per criterion and changes "
+        "nothing. The check mode starts no agent: it compiles and runs the two scripts."
+    )
+    return _single(
+        "grant.svg",
+        "The draft mode of the grant skill",
+        _graph(nodes, edges),
+        note,
+    )
+
+
 def code_comments() -> str:
     nodes = (
         Node("F", "Finding agent"),
@@ -2209,6 +2257,7 @@ def figures() -> tuple[tuple[str, str], ...]:
         ("writing.svg", writing()),
         ("paper-review-panel.svg", paper_review_panel()),
         ("referee.svg", referee()),
+        ("grant.svg", grant()),
         ("code-comments.svg", code_comments()),
         *paper_figures(),
         ("paper/lifecycle.svg", paper_lifecycle()),

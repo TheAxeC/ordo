@@ -16,9 +16,21 @@ the tests of the two check scripts pass; one run on the 2024 FWO postdoc applica
 
 ## Steps, in execution order
 
-- 1 the skill: `skills/academic/grant/` with its `SKILL.md` in the skill layout and five modes (`config`, `draft`, `revise`, `review`, `check`), its own pages for what a grant adds (the config drafter, the criteria reviewer, the config's format and one filled FWO example, the intake), the two check scripts with their tests, `paper`'s roles started from the `paper` skill's pages, and the skill listed where the skills are listed (README, glossary, the dev pages, the scripts page, the verification page, its figure); the two scripts' tests pass, a reviewer reads `SKILL.md` and the pages against each ruling of this plan and finds it carried out, reads both folders and finds no copy of a page of `paper`, and the verify list of `docs/dev/building.md` passes (1 commit) (approved)
+- ✅ 1 the skill: `skills/academic/grant/` with its `SKILL.md` in the skill layout and five modes (`config`, `draft`, `revise`, `review`, `check`), its own pages for what a grant adds (the config drafter, the criteria reviewer, the config's format and one filled FWO example, the intake), the two check scripts with their tests, `paper`'s roles started from the `paper` skill's pages, and the skill listed where the skills are listed (README, glossary, the dev pages, the scripts page, the verification page, its figure); the two scripts' tests pass, a reviewer reads `SKILL.md` and the pages against each ruling of this plan and finds it carried out, reads both folders and finds no copy of a page of `paper`, and the verify list of `docs/dev/building.md` passes (1 commit) (approved)
 - 2 the gate's run: one run on a copy of the 2024 FWO postdoc application of `research-hub/funding/2024-fwo-postdoc-fbttr/`, made by a separate agent that invokes `/grant` as the installed skill and starts the skill's agents, the orchestrating session answering its stops: `/grant config` from the call documents, `/grant draft` of the section "Scientific research objectives" from the pitch slides and the 2022 submission with the `/writing` findings applied as patches, and `/grant check` and `/grant review` on the submitted application; the user reads the config against the call, the drafted section against the one submitted, and the criteria review, as the gate words it (0 commit) (approved)
 - 3 the closing: the closing report written (the cost script's output, or that the plan started no agent), the roadmap entry ticked with the gate's output, this folder moved to the archive (orchestrator, no agent) (approved)
+
+## Step 1, landed (2026-11-23)
+
+- What landed: `skills/academic/grant/` (`SKILL.md`, `agents/config_drafter_agent.md`, `agents/criteria_reviewer_agent.md`, `references/intake.md`, `examples/fwo-postdoc-2027.md`, `templates/funder_config_template.md`, `templates/criteria_review_template.md`, `templates/check_limits.py`, `templates/check_sections.py` and their two tests); the listings in `README.md`, `docs/dev/building.md`, `docs/dev/change-standard.md`, `docs/dev/scripts.md` and `docs/glossary.md`; `grant()` in `docs/figures/gen_figures.py` with `docs/figures/grant.svg`. No file of `skills/academic/paper/` changed.
+  - Premise corrections: the brief check gave 33 points, each closed in the brief before the build (the form fields read between the user's `<!--F:key-->` markers; no row added to `paper`, as D12 says; the intake's own page; the counted text defined). Two premises of the brief were wrong and were corrected from the sources during the build and the review: the FWO grid scores 0 to 7, and page 10 of the 2024 application form states the layout (Calibri 11, single line spacing, the template's margins).
+  - The verify list gained the two new tests, as `docs/dev/building.md` now lists them.
+  - Findings outside the brief: none raised as an open item.
+  - Verification: `sh /Users/axelfaes/.claude/skills/land/templates/checks.sh .scratch/8-grant/orchestrator-state.md`, run on main after the fixes at landing, ended `checks: 14 commands passed`.
+  - A/B: none, the configuration names no benchmark. Look: none, the configuration names no view. `python3 docs/figures/gen_figures.py`, run on main, left `docs/figures` with no unstaged change.
+  - The builder's first report did not pass its bar: the first review gave 14 findings (the example's layout written as not stated; every agent forbidden every online lookup, the citation check included; the layout file asked of the intake agent against its page; three refusals of `check_sections.py` without a case; the Field cell not tied to the marker key; nine smaller points of text and of what the report stated), all closed in repair round 1.
+  - Fixes at landing, three, each from the review over round 1: the config drafter's page and the config template write the scores of a label only where the document prints them; `draft` names the formatter's field map for the keys of the layout file; on a runner without `latexmk`, `check_limits.py` is not run and the user is told that no limit was checked.
+  - Agents: the brief check af4851eb920202757 (claude-fable-5-2, 220228 tokens, 25 tool uses, 6.8 minutes); the builder a16e41a3e1d10c18d (claude-fable-5-2: the build 150382 tokens, 47 tool uses, 14.6 minutes; round 1 185526 tokens, 7 tool uses, 2.7 minutes); the reviewer a49b15f323aa7dbde (claude-fable-5-2, 246889 tokens, 39 tool uses, 9.2 minutes); the reviewer over round 1 a9728ec4c5808246f (claude-sonnet-5-5, with one recorded call on claude-opus-5-5, 164014 tokens, 27 tool uses, 3.6 minutes).
 
 ## Could run in parallel
 
@@ -59,6 +71,10 @@ Independent of each other; the standing rule of one agent at a time still serial
 Each agent a plan skill started for this plan has one bullet, with its agent id, its role and the model the runner served it, except an agent the plan leaves unpriced, which has a numbered item under the heading "Agents the cost script leaves unpriced:"; `/land` writes a step's agents at its booking and when it takes a step back out of main, `/grill` writes its lookup agents, `/spec` writes a brief-check agent it stopped for another model or found dead when it took a run over, the orchestrator writes a brief-check agent it stopped under "The review of a choice", the session that starts a diagnosis agent writes its numbered item right after the start, and `/plan` copies the bullets of a rulings file.
 
 - a3a9aa56d1fe033c2: grill lookup, claude-fable-5-2
+- af4851eb920202757: brief check of step 1, claude-fable-5-2
+- a16e41a3e1d10c18d: builder of step 1, claude-fable-5-2
+- a49b15f323aa7dbde: reviewer of step 1, claude-fable-5-2
+- a9728ec4c5808246f: reviewer of step 1 over round 1, claude-sonnet-5-5
 
 ## Blocked, and by what
 

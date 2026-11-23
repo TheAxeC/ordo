@@ -75,6 +75,8 @@ sh skills/academic/paper/templates/apply_tex_patch.test.sh 2>&1 | tail -1
 sh skills/academic/paper/templates/calibration_counts.test.sh 2>&1 | tail -1
 sh skills/academic/paper/templates/lookup.test.sh 2>&1 | tail -1
 sh skills/academic/paper/templates/reference_docx.test.sh 2>&1 | tail -1
+sh skills/academic/grant/templates/check_limits.test.sh 2>&1 | tail -1
+sh skills/academic/grant/templates/check_sections.test.sh 2>&1 | tail -1
 sh skills/ordo/repo-setup/templates/sync_rules.test.sh 2>&1 | tail -1
 python3 skills/ordo/repo-setup/templates/sync_rules.py . --only glossary
 sh utils/pin.test.sh 2>&1 | tail -1
