@@ -2,7 +2,7 @@
 
 - Application: <the path of the main `.tex`>
 - Funder config: <the path of the funder config>
-- Files read: <each file read, the PDF among them when one was given>
+- Files read: <each file given and read, by its path: the main `.tex` and the files it brings in, the PDF, the file of form-field texts and each further file of the call. With a PDF that is not of this run's compile, or with no PDF, the sentence that says so>
 - Scale: <the scale and its labels, as the funder config gives them>
 
 ## <the criterion's number and name, as the funder config gives it>

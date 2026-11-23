@@ -44,19 +44,7 @@ repair_reviewer: claude:sonnet  # the model the run of /refute over a repair rou
 ```
 
 ```yaml
-dispatch:
-- step: 1b
-  executor: agent
-  worker: claude:fable
-  session_id: a738739e2662829f0
-  served_model: claude-fable-5-2
-  worktree: .agents/worktrees/8-grant-1b
-  base: b683b68
-  launched: 2026-11-23
-  report: .scratch/8-grant/agents/reviews/1b-report.md
-  landing: not-started
-  round: 0
-  brief_check: ".scratch/8-grant/agents/reviews/1b-brief-check.md (a362fcb5d89d0e667, claude-fable-5-2, 219,055 tokens, 37 tool uses, 7.8 minutes)"
+dispatch: []
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled or, under `self_rule: on`, until the orchestrator closes it as `plan-orchestration`'s `references/self-rule.md`, "Closing an open item", says)
@@ -93,3 +81,4 @@ dispatch:
 - 2026-11-23. Step 1 has landed. `v9.2.0-rc.1` (37a065d) is pinned. Step 2's run is made: agent a34959c2af3b37c09 (claude-fable-5-2, 349005 tokens, 83 tool uses, 84.4 minutes, the agents it started not counted) ran `config`, `draft`, `check` and `review` in `.agents/gate-8/`; its outputs are in `.agents/gate-8/grant-runs/`. The run awaits the user's reading. Found by the run: the skill compiles with `latexmk -xelatex` and the application is a pdfLaTeX document, 10 pages in its own PDF and 11 in the run's compile, so `over: (whole document): 11 pages of 10` is a wrong result.
 - Roadmap entry 8 (grant). Plan step 1 of 3: the skill. Next: step 2, the gate's run.
 - Open on Axel's side: none.
+- 2026-11-23. Step 1b has landed: the seven changes of the ruling "What the first run showed" are on main. Next: tag and pin `v9.2.0-rc.2`, then step 2, the gate's run again on a copy of the 2026 application, made by a separate agent.

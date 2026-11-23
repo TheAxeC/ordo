@@ -2007,15 +2007,22 @@ def grant() -> str:
     )
     note = (
         "Each of the six roles runs from its page of the paper skill, given the funder "
-        "config and the session's direction. The session applies each patch, "
-        "compiles the application and runs check_sections.py and check_limits.py before the "
-        "writing review and again after its patch. The run asks which config when the "
+        "config and the session's direction. The session counts the application's pages "
+        "before the draft, applies each patch, compiles the application with the engine the "
+        "application itself uses and runs check_sections.py and check_limits.py before the "
+        "writing review and again after its patch. A draft of one section is checked and "
+        "reviewed on that section. The run asks which config when the "
         "application's folder holds several, asks the mode of a plain request that names "
-        "none, and passes on a stop of the paper skill. The config mode starts the config "
-        "drafter and shows you its draft to confirm. The revise mode starts the draft writer "
-        "on a comments file and ends with the same writing review. The review mode starts "
-        "the criteria reviewer, which scores the application per criterion and changes "
-        "nothing. The check mode starts no agent: it compiles and runs the two scripts."
+        "none, and passes on a stop of the paper skill. A draft of a form field starts the "
+        "intake agent and the draft writer only, which writes the field's text into "
+        "grant-fields.md. The config mode starts the config "
+        "drafter and shows you its draft to confirm; for a file of form-field texts you name "
+        "it asks before it replaces a grant-fields.md that exists, starts the field texts "
+        "agent when the file is in another format, and shows you the form fields to confirm. "
+        "The revise mode starts the draft writer "
+        "on a comments file and ends with the same writing review. The review mode compiles "
+        "the application and starts the criteria reviewer, which scores it per criterion "
+        "and changes nothing. The check mode starts no agent: it compiles and runs the two scripts."
     )
     return _single(
         "grant.svg",

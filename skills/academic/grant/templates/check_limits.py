@@ -6,9 +6,17 @@ Usage: check_limits.py <config> <pdf> <main.tex>
 Reads:
 
 - <config>, a funder config, as UTF-8: the table under "## Sections" (columns Heading, Required, Limit, Unit, Source) and, when the config has one, the table under "## Form fields" (columns Field, Limit, Unit, Source), each read as check_sections.py reads a table. A row with an empty Limit has no limit and prints no line.
-- The LaTeX log beside <pdf>, the file of the same base name with the extension .log, only for a limit in pages of the row "(whole document)". The page count is the number in its last statement "Output written on ... (<n> pages" or "(1 page", read with every line break of the log removed, since TeX breaks a long log line. <pdf> itself is not read.
+- The LaTeX log beside <pdf>, the file of the same base name with the extension .log, only for a limit in pages of the row "(whole document)". The page count is the number in its last statement "Output written on ... (<n> pages" or "(1 page", read with every line break of the log removed, since TeX breaks a long log line. <pdf> itself is not read. A <pdf> given as - says that the run made no compile: no log is read, and the limits in words and characters are counted as with a PDF. With - a <main.tex> that does not exist is no error, since a form field can be written before the application's text: no .tex is read, and grant-fields.md is looked for in the folder of that path.
 - <main.tex>, as UTF-8, and the files it brings in, read as check_sections.py reads them: comments dropped, each \input or \include replaced by its file's text, the body between \begin{document} and \end{document}.
-- form-fields.md in the folder of <main.tex>, as UTF-8, only for a row of "Form fields": the text between the marker <!--F:<field>--> and the next <!--/F-->, <field> being the row's Field cell.
+- grant-fields.md in the folder of <main.tex>, the file of form-field texts, as UTF-8, only when a row of "Form fields" has a limit in words or characters. A byte-order mark at its start is no character of it, and each of its line endings is one line break.
+
+The format of grant-fields.md:
+
+- A line that starts with "## " opens a field. The rest of the line, with the spaces at both ends taken off, is the field's name, and it names a row of "Form fields" when it equals the row's Field cell letter for letter, case included.
+- The field's text is every line after that heading up to the next line that starts with "## ", or the end of the file, with the empty lines at both ends taken off. A line that holds only spaces or tabs is empty.
+- A line before the first "## " line belongs to no field.
+- A line that starts with "### ", a code fence and every other line inside a field are text of the field.
+- A "## " heading that names no row of "Form fields" gives no line.
 
 What is counted:
 
@@ -16,17 +24,17 @@ What is counted:
 - For a section row with a limit in words or characters, the section's text: from the end of its \section heading to the next \section heading or the end of the body. The heading's own words are not counted, and the text under a \subsection, its title included, is.
 - The counted text of the application is its LaTeX source after these steps. Comments are gone, and \% is a percent sign. A tikzpicture environment is removed whole. A command whose name starts with \cite, and \ref, \eqref, \autoref, \cref, \label, \includegraphics, \input, \include, \begin, \end, \bibliography and \bibliographystyle, is removed with the bracket and brace arguments that follow it directly. Of every other command the name is removed and the text of its arguments kept. \%, \&, \#, \$, \_, \{ and \} are their characters, \- and \/ are nothing, and every other backslash with one sign, ~ and an unescaped & are a space. Braces and square brackets are removed.
 - Words are the pieces of that text between whitespace. Characters are the length of that text with each run of whitespace made one space and the ends trimmed.
-- For a form field, the text between its markers with its ends trimmed: its words are the pieces between whitespace, and its characters are its length, a line break counting as a character.
+- For a form field, the field's text as the format above gives it: its words are the pieces between whitespace, and its characters are its length, each line break inside it counting as one character.
 
 Prints, on standard output, one line per row that has a limit, the Sections rows first, each in the config's order:
 
 - "ok: <name>: <count> <unit> of <limit>": the count is at most the limit.
 - "over: <name>: <count> <unit> of <limit>": the count is above the limit.
-- "not checked: <name>: <reason>". The reasons: a section's limit in pages, which is read on the PDF; a section the .tex lacks; a form field's limit in pages; no form-fields.md beside the .tex; no markers for the field in form-fields.md.
+- "not checked: <name>: <reason>". The reasons: for every Sections row with a limit, with - as <pdf> and a <main.tex> that does not exist, "no main .tex exists"; a limit in pages of the whole document with - as <pdf>, "no compile was made"; a section's limit in pages, which is read on the PDF; a section the .tex lacks; a form field's limit in pages; no grant-fields.md in the folder of <main.tex>, with the path looked for; no heading for the field in grant-fields.md; no text under the field's heading.
 
 <name> is the row's Heading or Field on one line, and <unit> is the row's Unit.
 
-Errors, each one line "error: <what is wrong>" on standard error, with nothing on standard output: a wrong number of arguments, a config, a .tex, a brought-in file, a log or a form-fields.md that cannot be read, a config with no table under "## Sections", a table that lacks one of its columns, a Required cell that is neither yes nor no, a file that brings itself in, a Limit that is no whole number, a Unit that is none of pages, words and characters, and, for a limit in pages of the whole document, no log beside <pdf> or no page count in it.
+Errors, each one line "error: <what is wrong>" on standard error, with nothing on standard output: a wrong number of arguments, a config, a .tex (with a <pdf> other than -, also one that does not exist), a brought-in file, a log or a grant-fields.md that cannot be read as UTF-8, a grant-fields.md that holds the same "## " heading twice, a config with no table under "## Sections", a table that lacks one of its columns, a Required cell that is neither yes nor no, a file that brings itself in, a Limit that is no whole number, a Unit that is none of pages, words and characters, and, for a limit in pages of the whole document with a <pdf> other than -, no log beside <pdf> or no page count in it.
 
 Exit status: 0 when no line starts with "over:", 1 when one does, 2 for an error.
 """
@@ -54,6 +62,8 @@ from check_sections import (  # noqa: E402
 
 FIELD_COLUMNS = ("Field", "Limit", "Unit", "Source")
 UNITS = ("pages", "words", "characters")
+FIELDS_FILE = "grant-fields.md"
+NO_COMPILE = "-"
 REMOVED_WITH_ARGUMENTS = {
     "ref", "eqref", "autoref", "cref", "label", "includegraphics", "input", "include",
     "begin", "end", "bibliography", "bibliographystyle",
@@ -149,12 +159,16 @@ def section_lines(rows: list[dict[str, str]], pdf: str, main_tex: str) -> list[s
         limit = limit_of(row, name)
         if limit is not None:
             limits.append((row, name, limit[0], limit[1]))
+    if pdf == NO_COMPILE and not os.path.exists(main_tex):
+        return [f"not checked: {name}: no main .tex exists" for _, name, _, _ in limits]
     body = document_body(main_tex)
     headings = sections(body)
     lines = []
     for row, name, limit, unit in limits:
         whole = same_heading(row["Heading"]) == same_heading(WHOLE_DOCUMENT)
-        if whole and unit == "pages":
+        if whole and unit == "pages" and pdf == NO_COMPILE:
+            lines.append(f"not checked: {name}: no compile was made")
+        elif whole and unit == "pages":
             lines.append(verdict(name, page_count(pdf), unit, limit))
         elif whole:
             lines.append(verdict(name, count(plain_text(body), unit), unit, limit))
@@ -171,6 +185,32 @@ def section_lines(rows: list[dict[str, str]], pdf: str, main_tex: str) -> list[s
     return lines
 
 
+def field_texts(path: str) -> dict[str, str]:
+    """The text of each field of the file of form-field texts, by the name its "## " heading gives it."""
+    text = read_text(path, "the file of form-field texts")
+    # A byte-order mark would otherwise stand before the "## " of a heading on the first line.
+    if text.startswith("\ufeff"):
+        text = text[1:]
+    fields: dict[str, list[str]] = {}
+    current = None
+    for line in text.splitlines():
+        if line.startswith("## "):
+            name = line[3:].strip()
+            if name in fields:
+                raise CheckError(f"the file of form-field texts {one_line(path)} holds the heading ## {one_line(name)} twice")
+            current = fields[name] = []
+        elif current is not None:
+            current.append(line)
+    texts = {}
+    for name, lines in fields.items():
+        while lines and not lines[0].strip():
+            del lines[0]
+        while lines and not lines[-1].strip():
+            del lines[-1]
+        texts[name] = "\n".join(lines)
+    return texts
+
+
 def field_lines(config_text: str, main_tex: str) -> list[str]:
     """One line per row of the Form fields table that has a limit."""
     rows = config_table(config_text, "Form fields", FIELD_COLUMNS) or []
@@ -180,26 +220,23 @@ def field_lines(config_text: str, main_tex: str) -> list[str]:
         limit = limit_of(row, name)
         if limit is not None:
             limits.append((row, name, limit[0], limit[1]))
-    if not limits:
-        return []
-    path = os.path.join(os.path.dirname(os.path.abspath(main_tex)), "form-fields.md")
-    fields = read_text(path, "the file") if os.path.exists(path) else None
+    if not any(unit != "pages" for _, _, _, unit in limits):
+        return [f"not checked: {name}: a form field's limit in pages cannot be counted" for _, name, _, _ in limits]
+    path = os.path.join(os.path.dirname(os.path.abspath(main_tex)), FIELDS_FILE)
+    texts = field_texts(path) if os.path.exists(path) else None
     lines = []
     for row, name, limit, unit in limits:
         if unit == "pages":
             lines.append(f"not checked: {name}: a form field's limit in pages cannot be counted")
-            continue
-        if fields is None:
-            lines.append(f"not checked: {name}: no form-fields.md stands beside the .tex")
-            continue
-        opening = f"<!--F:{row['Field']}-->"
-        start = fields.find(opening)
-        end = fields.find("<!--/F-->", start + len(opening)) if start != -1 else -1
-        if end == -1:
-            lines.append(f"not checked: {name}: form-fields.md has no markers for it")
-            continue
-        text = fields[start + len(opening):end].strip()
-        lines.append(verdict(name, len(text.split()) if unit == "words" else len(text), unit, limit))
+        elif texts is None:
+            lines.append(f"not checked: {name}: no file {one_line(path)} exists")
+        elif row["Field"] not in texts:
+            lines.append(f"not checked: {name}: {FIELDS_FILE} has no heading for it")
+        elif not texts[row["Field"]]:
+            lines.append(f"not checked: {name}: {FIELDS_FILE} has no text under its heading")
+        else:
+            text = texts[row["Field"]]
+            lines.append(verdict(name, len(text.split()) if unit == "words" else len(text), unit, limit))
     return lines
 
 

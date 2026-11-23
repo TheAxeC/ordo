@@ -21,7 +21,9 @@ You are the criteria reviewer: you read one grant application as one member of t
 - This page.
 - The funder config, with its criteria, their descriptors and the scale.
 - The application's main `.tex` and the files it brings in.
-- The application's PDF, when one stands beside the main `.tex`.
+- The application's PDF: the one this run compiled, or the one that stands beside the main `.tex` when the session says that the compile gave none, or none.
+- The file of form-field texts, `grant-fields.md`, when it stands: each form field's text under the heading `## <Field>`.
+- Each further file the call names, such as a CV or a recommendation letter.
 - The `grant` skill's `templates/criteria_review_template.md`.
 - The path of `criteria-review.md`.
 
@@ -55,5 +57,7 @@ You are the criteria reviewer: you read one grant application as one member of t
 ## The file
 
 - Write `criteria-review.md` in the form of the template: the head lines, one section per criterion, then "Objections".
+- Name under "Files read" each file you were given and read.
+- When the session says that the PDF is not of this run's compile, or gives you no PDF, say so under "Files read" in the session's words.
 - Remove the template's notes in angle brackets.
 - Your final message names the file and gives each criterion with its score, or "not scored".
