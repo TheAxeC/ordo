@@ -43,14 +43,26 @@ repair_reviewer: claude:sonnet  # the model the run of /refute over a repair rou
 
 ```yaml
 dispatch:
+- step: 1b
+  executor: agent
+  worker: claude:fable
+  base: ebc3dba
+  worktree: .agents/worktrees/7-a-referee-1b
+  report: .scratch/7-a-referee/agents/reviews/1b-report.md
+  session_id: af33cf9bca3b7181b (claude-fable-5-2)
+  landing: not-started
+  round: 2
+  builder_usage: round 2, 300626 tokens, 23 tool uses, 11.5 minutes
+  reviewer_report: ".scratch/7-a-referee/agents/reviews/1b-refuter.md; over round 2: a3ca2ba385c8bda09, claude-sonnet-5-5, 114853 tokens, 12 tool uses, 2.6 minutes"
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled or, under `self_rule: on`, until the orchestrator closes it as `plan-orchestration`'s `references/self-rule.md`, "Closing an open item", says)
 
-- none
+- Open item 7 (step 1b, repair round 2, raised 2026-11-23): the review over round 2 names 10 findings (Spec 1, Proof 1, Standards 1, Behaviour 1 to 7, in `agents/reviews/1b-refuter.md`, "Repair round 2, refuted"), too large for the landing, and the round cap is spent. Options: (a) the builder closes them in one more round, reviewed once more; (b) the round lands as it is and the gate runs are made on it; (c) the round is thrown away. Recommended: (a). The lazy option is (b).
 
 ## Closed items (the log of what was raised and how it ended; no report carries it)
 
+- Open items 4, 5 and 6 (step 2, raised and ruled 2026-11-23): the ceilings hit as targets, ruled (a); a second round keeping unanswered points, ruled (a); a new issue merged into a first-round point, ruled (d); each by the user.
 - Open item 1 (step 1, raised and ruled 2026-11-22): whether `paper-review-panel` names `referee`; ruled (a) by the user, as part of step 1.
 
 ## The standing demands (from Axel, in force)
@@ -80,5 +92,6 @@ dispatch:
 - 2026-11-23. The user read both reports: the first round is close to the comments sent, but its 7 major points equal the budget, which the user ruled bad; the second round is wrong, its points being mostly new items. Step 1b, added on those two rulings, changes the skill; step 2's runs are then made again.
 - 2026-11-23. Step 1b has landed. Step 2's two runs are made again on the changed skill, each by a separate agent, with the stops answered by this session, after a new release candidate is tagged and pinned.
 - 2026-11-23. `v9.1.0-rc.2` is tagged on f14a5ea and pinned, and both runs of step 2 were made again on it. First round, `.agents/gate-7a/round1/referee-runs/round-1-2026-11-23/` (agent a2251a63e8f8c21d4, 171053 tokens, 26 tool uses, 20.8 minutes): found 7 major and 32 minor points, selected 7 and 7, 25 minor points over the budget, 1189 words, major revision. Second round, `.agents/gate-7a/round2/referee-runs/round-2-2026-11-23/` (agent a34649d7e04f8a312, 89213 tokens, 15 tool uses, 12.5 minutes): found 1 major and 9 minor points, all remaining first-round points, no new point, 4 resolved, 1195 words, major revision. Seen in them: the first round again finds exactly the budget's 7 major points; the second round merged the EIC's one new issue into first-round major 3; both reports fill the 1,200 words. A third run of the first round under a budget of 12 major points is made to see whether the found count follows the budget.
+- 2026-11-23. The user ruled Open items 4 (a), 5 (a) and 6 (d), "Rules are rules", and that the change is repair round 2 of step 1b. The round is `agents/briefs/1b-round-2.md`, sent to the builder of step 1b in a fresh worktree; the booking and the agents of step 1b's first landing are in `plan.md`. After the round: one review over it, the landing, a new release candidate pinned, and step 2's two runs again, each by a separate agent. No run or agent is started that the user did not ask for.
 - Roadmap entry 7.A (referee). Plan step 2 of 4: the gate's two runs. Next: step 3, the closing. Next: step 3, the closing.
 - Open on Axel's side: none.
