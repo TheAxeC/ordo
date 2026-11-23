@@ -70,7 +70,6 @@ metadata:
 
 - `templates/template.sh` holds the wizard library above its `STAGES` marker and one example stage below it.
 - The library is the same in every script: stage-by-stage progress, confirmations, URL opening on macOS, Linux and WSL, hidden entry of secrets, `.env` writes that replace an existing line, `gh secret` and `gh variable` writes, and a closing summary.
-- The library is from the repository mattpocock/skills, under the MIT License, whose text stands in the template's head comment.
 - The example stage is made up, around the public API-keys page of Stripe's dashboard.
 
 ## Stops
