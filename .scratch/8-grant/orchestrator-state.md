@@ -44,8 +44,17 @@ repair_reviewer: claude:sonnet  # the model the run of /refute over a repair rou
 ```yaml
 dispatch:
 - step: 1
-  landing: preparing
-  brief_check: "running: af4851eb920202757"
+  executor: agent
+  worker: claude:fable
+  session_id: a16e41a3e1d10c18d
+  served_model: claude-fable-5-2
+  worktree: .agents/worktrees/8-grant-1
+  base: 03708fb
+  launched: 2026-11-23
+  report: .scratch/8-grant/agents/reviews/1-report.md
+  brief_check: ".scratch/8-grant/agents/reviews/1-brief-check.md (af4851eb920202757, claude-fable-5-2, 220228 tokens, 25 tool uses, 6.8 minutes)"
+  landing: not-started
+  round: 0
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled or, under `self_rule: on`, until the orchestrator closes it as `plan-orchestration`'s `references/self-rule.md`, "Closing an open item", says)
@@ -79,5 +88,6 @@ dispatch:
 ## Current position (rewritten before every step commit of this plan)
 
 - 2026-11-23. The plan is open; nothing has landed. `v9.1.0` is pinned.
+- 2026-11-23. Step 1 is prepared at base 03708fb and its builder is running in `.agents/worktrees/8-grant-1`. The brief check's findings are closed in the brief. Next: `/refute 8 1` on the builder's report, then the landing.
 - Roadmap entry 8 (grant). Plan step 1 of 3: the skill. Next: step 2, the gate's run.
 - Open on Axel's side: none.
