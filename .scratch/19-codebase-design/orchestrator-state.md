@@ -47,10 +47,26 @@ repair_reviewer: claude:sonnet  # the model the run of /refute over a repair rou
 ```yaml
 dispatch:
 - step: 4
-  landing: preparing
+  landing: not-started
+  base: 7219d6c
+  worktree: .agents/worktrees/19-codebase-design-4
+  executor: agent
+  worker: claude:fable
+  report: .scratch/19-codebase-design/agents/reviews/4-report.md
+  round: 0
+  session_id: af1ee5368f50ec6e2
+  shared_paths: "README.md and docs/figures/gen_figures.py with step 5 of this plan; simple, since step 4 writes README line 30 and the function codebase_design and step 5 every other line"
   brief_check: ".scratch/19-codebase-design/agents/reviews/4-brief-check.md (a3a640202fd2b636a, claude-fable-5-2, 171187 tokens, 27 tool uses, 5.7 minutes)"
 - step: 5
-  landing: preparing
+  landing: not-started
+  base: 7219d6c
+  worktree: .agents/worktrees/19-codebase-design-5
+  executor: agent
+  worker: claude:fable
+  report: .scratch/19-codebase-design/agents/reviews/5-report.md
+  round: 0
+  session_id: a8d73c9c4d7eaf570
+  shared_paths: "README.md and docs/figures/gen_figures.py with step 4 of this plan; simple, since step 4 writes README line 30 and the function codebase_design and step 5 every other line"
   brief_check: ".scratch/19-codebase-design/agents/reviews/5-brief-check.md (adb032fec2fe9803e, claude-fable-5-2, 172993 tokens, 22 tool uses, 5.8 minutes)"
 ```
 
