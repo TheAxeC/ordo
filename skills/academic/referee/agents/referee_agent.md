@@ -119,11 +119,14 @@ Write `referee-report.md` in the run folder, in the form of `templates/referee_r
 - Say each point once, in the words it needs.
 - In a first round, open the general comments with a summary of the paper in your own words: what it claims and on what evidence.
 - In a second round, open the general comments with what the revision changed.
-- In a second round, name next the first-round points the revision resolved, from the list "First-round points resolved".
+- In a second round, name next the first-round points the revision resolved, from the list "First-round points resolved", in one sentence for all of them together.
+- In a second round, say next in one or two sentences whether the revision answers the first round.
 - In a second round, the general comments name no first-round point left out because the authors did not answer it.
 - In a second round, mark each new point as new.
 - In a second round, each new point says what the revision added or changed.
 - In a second round, each remaining first-round point names its first-round number and what is still missing.
+- In a second round, a remaining minor point is one or two sentences.
+- In a second round, a remaining point does not retell what the revision did for it.
 - Write at the severity of `intake.md`.
 - Give one recommendation: one of the journal's values when `intake.md` holds them, and otherwise one of accept, minor revision, major revision, reject.
 - In a second round, choose the recommendation as "The second round" says.
@@ -166,6 +169,9 @@ A second round reviews how the authors answered each first-round point, and whet
 - A remaining first-round point keeps its first-round number and title, written in its line "First-round point".
 - What is still missing of a remaining first-round point stands in its line "Still missing".
 - Grade a remaining first-round point on what is still missing, by the grade test.
+- A remaining first-round point that the grade test makes minor stays a point only when the authors can settle what is still missing in the text: a statement, a definition, a number they already hold, or a wording.
+- A remaining first-round point that the grade test makes minor, and whose remainder asks for a new experiment, new data or a new analysis, is a left-out comment, with the reason "what is still missing needs new work, and no main claim fails without it".
+- A first-round point with parts of both kinds stays a point, and its line "Still missing" holds only what the text can settle.
 - That grade is never above the point's first-round grade, which `revision-check.md` gives.
 - A first-round point that carries no grade takes as its first-round grade the grade the grade test gives to what it asked.
 - A first-round point the revision made worse keeps its own grade.

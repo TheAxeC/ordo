@@ -183,6 +183,9 @@ After the rule check of `selection.md`, that file is the session's: no agent is 
 - `selected-points.md` holds no point over the budget, no found count, no count line and no left-out comment.
 - The referee writes into `selected-points.md`, and the session carries its text back into `selection.md`.
 - An entry is carried back whole, into the place of the entry of the same number under "Selected points".
+- A point of `selected-points.md` whose number stands nowhere in `selection.md` was written by the referee after the cut.
+- The session moves such a point whole, last under the heading of its grade in "Points over the budget", and takes it out of `selected-points.md`.
+- The session counts such a point in "Count after the cut", and shows it at the stop "The selection", where the user may move it in.
 - An objection of `selected-points.md` is carried into the section "Objections" of `selection.md`.
 - A grade, a number or an order that differs in `selected-points.md` is carried back only where a change of the user asked for it.
 - In a second round, each new point of `new-points.md` goes first under "Major points", as it stands there.
