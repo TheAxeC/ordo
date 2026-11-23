@@ -42,6 +42,13 @@ Status: `[ ]` open, `[~]` in progress, `[x]` done (its gate ran and passed, with
 - Gate: each added rule read by you in its page, with `sh skills/ordo/repo-setup/templates/sync_rules.test.sh` passing; one real run of `repo-setup` on a scratch repository of a kind you name, whose `./utils/build.py gate` exits 0 on the tree as written and exits non-zero once a test that fails is added, both runs made by a separate agent and their output read by you; one real run of `/paper submit` on a manuscript and a portal you name, the submission sheet read by you and the portal walk watched by you up to the stop before the final submit; `docs/figures/paper/lifecycle.svg` read by you; the verify list of `docs/dev/building.md` passes on main.
 - Waits on: nothing.
 
+## 26. teach
+
+- Status: [ ]
+- Goal: A `teach` skill that turns a folder into a teaching workspace for one topic you want to learn over several sessions: a mission file with why you learn it, short lessons tied to the mission, each with a task that gives feedback, reference sheets, a list of trusted sources, and learning records from which the next lesson is chosen, with recall from memory and spaced practice. Its design follows mattpocock's `teach`: the files, the lesson form and the stops are kept as the source has them, and each deviation from them is made only with its reason and your ruling in the plan's Rulings.
+- Gate: one real run of `teach` on a topic you name, over two sessions: the first writes the mission from an interview and one lesson with its reference sheet and its learning record, the second chooses its lesson from the learning records, each read by you; the plan's ledger lists every deviation from the design of mattpocock's `teach`, each with its reason and the ruling that approved it, and nothing else differs, checked by reading both; the verify list of `docs/dev/building.md` passes on main.
+- Waits on: nothing.
+
 ## 24. researcher: the research and full modes
 
 - Status: [ ]
