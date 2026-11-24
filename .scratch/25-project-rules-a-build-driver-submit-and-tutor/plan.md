@@ -137,6 +137,8 @@ Independent of each other; the standing rule of one agent at a time still serial
 - Open item M (2026-11-24): `v11.0.0-rc.5` is tagged and pinned at `5900070` for the `tutor` runs (the user).
 - Open item N (2026-11-24): option 1, fixed now in `submit`: the walk sets a text value whole in one action, fills a field whose read-back differs once more from its row and leaves a difference that remains; the next release candidate is tagged and pinned and the journal run is made again (the user).
 - The runs' issues (2026-11-24): a run always finds issues; what matters is whether an issue is major; the orchestrator runs the `/submit` runs itself and asks the user only where a human must act or an issue is major (the user).
+- Open item O (2026-11-24): the deposit walk is made on `zenodo.org`, where the user is signed in, in place of the sandbox; the user signs in nowhere else (the user).
+- The journal rerun (2026-11-24): the rerun of the journal walk on `v11.0.0-rc.6` goes only as far as the page the fix of open item N bears on, the title, the abstract and the keywords (the user).
 
 ## Agents
 
@@ -194,6 +196,8 @@ Each agent a plan skill started for this plan has one bullet, with its agent id,
 - a48615233866f7916: run of /tutor explain --page on v11.0.0-rc.5, claude-opus-5-5
 - a2435855152b195b4: check of the deviations list on v11.0.0-rc.5, claude-opus-5-5
 - aed2443ba14cc4b1e: builder of the fix of open item N in submit, claude-opus-5-5
+- a127aea36be3265fe: run of /submit on zenodo.org on v11.0.0-rc.6, sheet and walk, claude-opus-5-5
+- a4d2a14a26bf1d88f: run of /submit on the journal's portal on v11.0.0-rc.6, to the page of the title, abstract and keywords, claude-opus-5-5
 
 ## Blocked, and by what
 
