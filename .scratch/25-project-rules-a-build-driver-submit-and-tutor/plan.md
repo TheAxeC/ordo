@@ -173,6 +173,8 @@ Each agent a plan skill started for this plan has one bullet, with its agent id,
 - aa85f45e56022c96e: check of the deviations list against the source skill, claude-opus-5-5
 - a43b8d38788a165a3: builder of ruling I, claude-opus-5-5
 - aa238fda60548b301: builder of ruling H, claude-opus-5-5
+- ac3b8e3d52f4ad011: gate run of /submit on the deposit form on v11.0.0-rc.3, to the approval of the sheet, claude-opus-5-5
+- aa26a6855ea5b887b: gate run of /submit on the journal's portal on v11.0.0-rc.3, to the approval of the sheet, claude-opus-5-5
 
 ## Blocked, and by what
 
