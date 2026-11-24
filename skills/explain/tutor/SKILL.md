@@ -97,12 +97,12 @@ disable-model-invocation: true
    - It backs each claim with a citation, a link to an external resource, which makes the lesson more trustworthy.
    - It reminds the user to ask the agent follow-up questions, since the agent is their teacher and helps with anything unclear.
    - Done when the file stands in `lessons/`.
-9. Write the reference documents of the lesson, as HTML files in `reference/`, the compressed essence of the lesson in a form made for reference at a glance.
+9. Write the reference documents of the lesson in `reference/`, as HTML files except the glossary, the compressed essence of the lesson in a form made for reference at a glance.
    - Lessons are rarely revisited and reference documents are, so the reference documents track the units of knowledge used across lessons, and lessons link to them.
    - They are beautiful documents that print well.
    - Reference documents suit these topics: syntax and code snippets for programming, algorithms and flowcharts for processes, poses and sequences for yoga, exercises and routines for fitness, and a glossary for any topic with its own nomenclature.
    - Glossaries, in particular, are an essential reference.
-   - Write a glossary in the format of `references/glossary-format.md`.
+   - Write the glossary as the Markdown file `reference/GLOSSARY.md` of the teaching workspace, in the structure that `references/glossary-format.md` gives.
    - Once a glossary exists, every lesson adheres to it.
    - Done when each reference document the lesson needs stands in `reference/`.
 10. Open the lesson for the user with a command-line command, where one is available.
@@ -144,7 +144,7 @@ The state of the user's learning is captured in these files of the folder:
 
 - **`MISSION.md`.** The reason the user is interested in the topic, which grounds all teaching, in the format of `references/mission-format.md`.
 - **`RESOURCES.md`.** The resources explored to ground the teaching in contextual knowledge, or to acquire knowledge and wisdom, in the format of `references/resources-format.md`.
-- **`reference/*.html`.** The reference documents: the compressed learnings from the lessons, such as cheat sheets, reference algorithms, syntax, yoga poses and glossaries, which are the raw units of learning.
+- **`reference/*.html` and `reference/GLOSSARY.md`.** The reference documents: the compressed learnings from the lessons, which are the raw units of learning, such as cheat sheets, reference algorithms, syntax and yoga poses as HTML files, and the glossary as a Markdown file in the structure of `references/glossary-format.md`.
 - **`learning-records/*.md`.** The learning records, which capture what the user has learned and from which the zone of proximal development is worked out.
   - Loosely like architectural decision records in software development, they capture non-obvious lessons and key insights that may be revised later or drive later sessions.
   - Each is named `0001-<dash-case-name>.md`, the number one higher each time, in the format of `references/learning-record-format.md`.

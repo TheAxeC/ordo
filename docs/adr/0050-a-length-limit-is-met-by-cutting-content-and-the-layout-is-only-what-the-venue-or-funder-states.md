@@ -10,6 +10,7 @@ Roadmap entry 25's goal says that `grant` and `paper` hold that a page or length
 
 In `paper` and `grant`, the layout (font, size, line spacing, margins) is only what the venue or the funder states, and is never changed to meet a limit.
 
+- A layout value the venue or the funder does not state comes from the declared format profile, and with no profile is the current default.
 - The formatter's sentence that applies a venue-compliant layout value to meet a limit is replaced by this rule.
 - A text over its limit goes back to the draft writer once, to cut content.
 - What is still over is shown to the user with each section's length against its limit.

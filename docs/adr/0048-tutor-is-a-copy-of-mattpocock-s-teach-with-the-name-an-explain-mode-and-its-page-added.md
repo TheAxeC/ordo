@@ -12,6 +12,7 @@ Roadmap entry 25's goal names a skill that teaches one topic over several sessio
 
 - the sections and the frontmatter of `docs/dev/skill-layout.md`, ASCII, the prose standard applied to the skill text, and no `agents/openai.yaml`, which this repository forces;
 - the name `tutor`, since the skill both runs a course and answers one question;
+- the glossary is the Markdown file `reference/GLOSSARY.md`, which stands among the HTML reference documents, since the source's format page gives it that name and form;
 - the mode `/tutor explain <concept>`, which the source does not have. It explains one concept in the conversation, tied to the work at hand, from sources fetched in the run and named in the answer, as the source requires of a lesson. It writes no file. In a teaching workspace it offers a learning record for what the user showed they understand;
 - `/tutor explain <concept> --page`, which also writes the explanation as one HTML page in the lesson's form, to `reference/` in a teaching workspace and elsewhere to a path the user gives or is asked for.
 

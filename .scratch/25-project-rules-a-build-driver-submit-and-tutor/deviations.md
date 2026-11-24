@@ -14,6 +14,7 @@ The source is mattpocock's skill `teach`, whose copy as read stands in `sources/
 | "{<ellipsis>}" under "Success looks like" in `MISSION-FORMAT.md`, one ellipsis character between the braces | "{...}", three full stops between the braces | ASCII | ADR 0048, the ASCII point |
 | `[SKILL.md](./SKILL.md)` in `RESOURCES-FORMAT.md` | `[SKILL.md](../SKILL.md)` | the page moved one folder down | ADR 0048, the layout point |
 | `GLOSSARY-FORMAT.md` linked from no part of `SKILL.md` | `references/glossary-format.md` named from "Teaching" item 9 | the layout: a reference page is named by its path from the step that reads it | ADR 0048, the layout point; brief decision 5 |
+| a glossary written among the reference documents, with no file named by `SKILL.md`, while two format pages name `GLOSSARY.md` | the glossary is the Markdown file `reference/GLOSSARY.md`, named by "Teaching" item 9 and by "The teaching workspace", among the HTML reference documents | the format pages name the file, and the skill has to name the file it writes | ADR 0048, the glossary point; ruling D |
 | "When to write a learning record" only in `LEARNING-RECORD-FORMAT.md` | Rules 3 names that section of `references/learning-record-format.md` from `SKILL.md` | the layout: a reference page is named by its path from the step or rule that reads it | ADR 0048, the layout point |
 | `*-FORMAT.md` links resolve from the skill's folder | paths under `references/` resolve from the skill's folder | the pages moved | ADR 0048, the layout point |
 | "If possible, open the lesson file for the user by running a CLI command." with no criterion | "Teaching" item 10 with "Done when the lesson is open, or the user is given its path." | the layout: each item of Steps ends on its completion criterion, which must hold when no command can open the file | ADR 0048, the layout point; round 1 ruling 3 |
@@ -43,4 +44,4 @@ The differences that the layout, ASCII and the prose standard force, listed by k
 
 `wait-what`: moved with `mv`. The `diff` case prints no line, so its `SKILL.md` is unchanged.
 
-The point of ruling 7 stays raised for the user. The format pages name `GLOSSARY.md`, and the workspace writes no file of that name.
+The format pages name `GLOSSARY.md`, and the workspace writes that file as `reference/GLOSSARY.md` (ruling D).

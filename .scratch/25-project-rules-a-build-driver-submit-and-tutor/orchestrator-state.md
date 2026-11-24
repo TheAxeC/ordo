@@ -57,19 +57,6 @@ dispatch:
   brief_check: .scratch/25-project-rules-a-build-driver-submit-and-tutor/agents/reviews/4-brief-check.md (af32ec4714532fb10, claude-opus-5-5, 162843 tokens, 37 tool uses, 6 min 58 s)
   landing: not-started
   round: 0
-- step: 6
-  executor: agent
-  worker: claude:opus
-  session_id: a623c018efa0d9295 (claude-opus-5-5)
-  worktree: .agents/worktrees/25-project-rules-a-build-driver-submit-and-tutor-6
-  base: 6c0ae1b
-  launched: 2026-11-24
-  report: .scratch/25-project-rules-a-build-driver-submit-and-tutor/agents/reviews/6-report.md
-  builder_usage: 100354 tokens, 23 tool uses, 3 min 20 s
-  reviewer_report: .scratch/25-project-rules-a-build-driver-submit-and-tutor/agents/reviews/6-refuter.md (a5a55e89c91a2caba, claude-opus-5-5, 116573 tokens, 12 tool uses, 3 min 0 s)
-  brief_check: none, a small text step
-  landing: not-started
-  round: 0
 - step: 3
   executor: agent
   worker: claude:opus
@@ -117,5 +104,5 @@ dispatch:
 
 - 2026-11-24. Step 1 has landed. `v10.0.0` is pinned. The working tree holds nothing of this plan outside its ledger.
 - Verified: `sh skills/orchestration/land/templates/checks.sh .scratch/25-project-rules-a-build-driver-submit-and-tutor/orchestrator-state.md` printed `checks: 15 commands passed`.
-- Roadmap entry 25 (Project rules, a build driver, submit and tutor). Plan steps 1, 2 and 5 of 8 landed: the project rules, limits and layout, and the skill `tutor`. Steps 4 and 6 are in preparation. Steps 3 and 4 are stopped on open items B and C.
+- Roadmap entry 25 (Project rules, a build driver, submit and tutor). Plan steps 1, 2, 5 and 6 of 8 landed: the project rules, limits and layout, the skill `tutor`, and rulings D and E carried out. Steps 3 and 4 are in flight, each with its builder running. Step 7, the gate's runs, waits for them.
 - Open on Axel's side: nothing.

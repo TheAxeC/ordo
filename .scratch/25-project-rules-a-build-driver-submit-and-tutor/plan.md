@@ -26,7 +26,7 @@ each added rule read by you in its page, with `sh skills/ordo/ordo-init/template
 - 3 the build driver: `ordo-init` has the mode `/ordo-init build`, the template `utils/build.py` on the Python standard library with its test, the new-repository run that writes the driver by the same steps unless the user answers that it should not, and the rule on build files narrowed, as ruling D9 and ADR 0051 give them, with the script and its test listed on `docs/dev/scripts.md`, `docs/dev/building.md` and the command block of `docs/dev/change-standard.md`; check: the template's test passes, run from the repository root, and it runs the driver's `gate` on a scratch tree whose commands pass (exit 0) and on one where one command fails (non-zero exit) (1 commit) (approved) (ruling B)
 - 4 the skill `submit`: `skills/academic/submit/` holds the skill of rulings D6, D10 and D16 and ADR 0049 (the page of the agent that writes the submission sheet, the user's approval of the sheet, the walk the session makes through the browser extension, what the walk never does, the stop before the final submit), with its figure under `docs/figures/`, its row and its place in the group sentence of `README.md`, and `/submit` named at "You submit" and "You resubmit" of `docs/figures/paper/lifecycle.svg`; check: `python3 docs/figures/gen_figures.py` runs from the repository root and the user reads `docs/figures/paper/lifecycle.svg`, and the skill's text is read against ADR 0049 item by item (1 commit) (approved)
 - ✅ 5 the skill `tutor`: `skills/explain/tutor/` holds a copy of mattpocock's `teach` with the differences of ADR 0048 and rulings D2 and D11 (the name, `/tutor explain <concept>` and `--page`), `skills/ordo/wait-what/` is moved to `skills/explain/wait-what/`, `README.md` names both and the group folder, and `deviations.md` in this ledger lists every deviation from the design of mattpocock's `teach`, each with its reason and the ruling that approved it; check: `deviations.md` is read against both skills and nothing else differs, and `grep -rn 'skills/ordo/wait-what' README.md docs skills utils agents`, run from the repository root, prints no line outside `docs/roadmap.md` and `docs/adr/` (1 commit) (approved)
-- 6 rulings D and E carried out: `tutor` writes the workspace's glossary as `reference/GLOSSARY.md` in the form of its glossary format page, with one line in the Decision of ADR 0048 and its row in `deviations.md`; the Decision of ADR 0050 says that a layout value the venue or the funder does not state comes from the declared format profile, and with no profile is the current default; check: `grep -rn 'GLOSSARY.md' skills/explain/tutor` shows the file named at one path, `reference/GLOSSARY.md`, by `SKILL.md`, and the two changed pages are read against rulings D and E (1 commit) (ruling D) (ruling E)
+- ✅ 6 rulings D and E carried out: `tutor` writes the workspace's glossary as `reference/GLOSSARY.md` in the form of its glossary format page, with one line in the Decision of ADR 0048 and its row in `deviations.md`; the Decision of ADR 0050 says that a layout value the venue or the funder does not state comes from the declared format profile, and with no profile is the current default; check: `grep -rn 'GLOSSARY.md' skills/explain/tutor` shows the file named at one path, `reference/GLOSSARY.md`, by `SKILL.md`, and the two changed pages are read against rulings D and E (1 commit) (ruling D) (ruling E)
 - 7 the gate's runs, on a release candidate tagged and pinned on the user's word, each run made by a separate agent that invokes the installed skill, its stops answered by the orchestrator: `/ordo-init` on a scratch repository of a kind the user names, whose `./utils/build.py gate` exits 0 on the tree as written and non-zero once a test that fails is added; `/ordo-init build` on a scratch copy of an existing repository the user names, whose `./utils/build.py gate` exits 0; `/submit` on a manuscript and a journal's portal the user names, and on a submission of another kind and a portal the user names, each submission sheet read by the user and each walk watched by the user up to the stop before the final submit; `/tutor` on a topic the user names, over two sessions, the second choosing its lesson from the learning records; `/tutor explain` with `--page` on a concept the user names; check: the user reads the output of each run (1 commit; orchestrator, no agent) (approved)
 - 8 the closing: the closing report written (the cost script's output, or that the plan started no agent), the roadmap entry ticked with the gate's output, this folder moved to the archive (orchestrator, no agent) (approved)
 
@@ -64,6 +64,16 @@ each added rule read by you in its page, with `sh skills/ordo/ordo-init/template
 - Verification on main, after the fixes at landing: `checks: 15 commands passed`.
 - The builder's first report did not pass its bar: one repair round. Fixes at landing: four sentences of `skills/explain/tutor/SKILL.md` put back to the source's meaning or made one action ("Teaching" items 4 and 5, "Explaining" item 2, the Rules bullet on parametric knowledge), and `deviations.md` written with the rows the review found missing.
 - Usage: builder 218919 tokens, 44 tool uses, 11 min 50 s, and round 1: 235369 tokens, 5 tool uses, 2 min 11 s; brief check 165019 tokens, 50 tool uses, 9 min 5 s; reviewer 175234 tokens, 32 tool uses, 6 min 54 s; reviewer over round 1 145111 tokens, 15 tool uses, 3 min 15 s.
+
+### Step 6, rulings D and E carried out (landed 2026-11-24)
+
+- Landed: `skills/explain/tutor/SKILL.md` ("Teaching" item 9 and "The teaching workspace" name the glossary as the Markdown file `reference/GLOSSARY.md`, in the structure of `references/glossary-format.md`; the version stays 1.0.0), one bullet in the Decision of ADR 0048, one bullet in the Decision of ADR 0050, and the row of the glossary in `deviations.md` with its last paragraph corrected.
+- Premise corrections: none.
+- Decisions of the brief: the brief raised the version of `tutor` by its patch part; the review found that the plan raises a skill's version once, at the skill's creation in step 5, so the version stays 1.0.0.
+- Raised: nothing.
+- Verification on main: `checks: 15 commands passed`.
+- A small text step: one review, no repair round. Fixes at landing: `metadata.version` of `tutor` put back to 1.0.0; the row and the paragraph of `deviations.md`.
+- Usage: builder 100354 tokens, 23 tool uses, 3 min 20 s; reviewer 116573 tokens, 12 tool uses, 3 min 0 s.
 
 ## Could run in parallel
 
@@ -117,6 +127,8 @@ Each agent a plan skill started for this plan has one bullet, with its agent id,
 - ab824b150f2570d7a: builder of step 5, claude-opus-5-5
 - aadec4c5e8a7aae13: reviewer of step 5, claude-opus-5-5
 - ad09d6adfa6f4853c: reviewer of step 5 over round 1, claude-sonnet-5-5
+- a623c018efa0d9295: builder of step 6, claude-opus-5-5
+- a5a55e89c91a2caba: reviewer of step 6, claude-opus-5-5
 
 ## Blocked, and by what
 
