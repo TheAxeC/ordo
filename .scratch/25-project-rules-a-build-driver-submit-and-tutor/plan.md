@@ -28,6 +28,10 @@ each added rule read by you in its page, with `sh skills/ordo/ordo-init/template
 - 6 the gate's runs, on a release candidate tagged and pinned on the user's word, each run made by a separate agent that invokes the installed skill, its stops answered by the orchestrator: `/ordo-init` on a scratch repository of a kind the user names, whose `./utils/build.py gate` exits 0 on the tree as written and non-zero once a test that fails is added; `/ordo-init build` on a scratch copy of an existing repository the user names, whose `./utils/build.py gate` exits 0; `/submit` on a manuscript and a journal's portal the user names, and on a submission of another kind and a portal the user names, each submission sheet read by the user and each walk watched by the user up to the stop before the final submit; `/tutor` on a topic the user names, over two sessions, the second choosing its lesson from the learning records; `/tutor explain` with `--page` on a concept the user names; check: the user reads the output of each run (1 commit; orchestrator, no agent) (approved)
 - 7 the closing: the closing report written (the cost script's output, or that the plan started no agent), the roadmap entry ticked with the gate's output, this folder moved to the archive (orchestrator, no agent) (approved)
 
+## Step 3, Step 0
+
+- Step 3 raises `metadata.version` of `skills/ordo/ordo-init/SKILL.md` once for the plan, by its minor part, and that raise also covers the template pages step 1 changes; step 1 leaves that version as it is.
+
 ## Could run in parallel
 
 Independent of each other; the standing rule of one agent at a time still serialises them unless `plan.yaml`'s `workers_at_once` allows more.
