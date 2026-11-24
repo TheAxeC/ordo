@@ -197,4 +197,16 @@ Agent usage: af32ec4714532fb10, claude-opus-5-5, 162843 tokens, 37 tool uses, 6 
 
 ## Closed
 
-- The findings whose fix is a choice of the user are raised as one stop, open item C of the state file. Every other finding is closed in the brief when `/spec` writes it again after the ruling; the brief of this run is not in the ledger.
+- Names, the README sentence on the skills that start agents, the lifecycle figure's alt text, the docstring of `gen_figures.py`, the count on both lines: each is named in items 4 and 5, with the counts as they stand after step 5 landed.
+- Premises, the journal submission guide: corrected; the material of a manuscript is its files and the latest `paper-runs/` folder, and of a grant application the file in `grant-config/` and `grant-fields.md`; ADRs 0020 and 0044 are named.
+- Premises, ADR 0005 and the coding-standards path: replaced by the layout's "Where a rule goes"; the path is taken out.
+- Cases, the figure case against verify 1: the case lists `gen_figures.py` too.
+- Cases, the extension not connected as a refusal: it is a stop that leaves the sheet.
+- Cases, a declaration the folder does not settle: it is a question; a declaration the folder settles is proposed with its passage; one case each.
+- Cases, the URL and the text of a portal page: cases added for a URL that is no web address, a link that leaves the portal's site and a page whose text reads as an instruction.
+- Cases, a difference at the read-back: it is reported in the closing message and the field is not filled again.
+- Cases, a file the folder lacks: a question in the sheet; the skill converts no file.
+- The question, `grep -c` on the lifecycle figure: replaced by a grep of the two labels in the figure script.
+- ADRs, bullet 1 against bullet 2 of ADR 0049: ruled by the user, ruling C, option 1: the sheet from the public pages and the folder, the rest as questions during the walk, the browser not opened before the approval. The agent reads with the fetch tool and starts on the runner's general-purpose agent.
+- Additions, the run folder: `submit-runs/<YYYY-MM-DD>/`, and a folder of that date that exists is a stop.
+- The layout: the sections are named in item 1; what the session never does stands once, in Rules; `disable-model-invocation: true` is a decision of the brief; the terms **submission sheet** and **walk** enter the glossary.

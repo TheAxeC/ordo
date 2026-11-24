@@ -16,7 +16,8 @@ each added rule read by you in its page, with `sh skills/ordo/ordo-init/template
 - Step 3: could this pass without the goal being reached? no, the test runs the driver's `gate` on a passing tree and on a failing one.
 - Step 4: could this pass without the goal being reached? yes, reading the skill's text and the figure does not show that the walk works on a portal; step 6's runs show that, and they need the skill tagged and pinned first.
 - Step 5: could this pass without the goal being reached? yes, reading the skill against its source does not show that a lesson is written and the next one chosen from the learning records; step 6's runs show that, and they need the skill tagged and pinned first.
-- Step 6: could this pass without the goal being reached? no, each run is the installed skill on real input, read by the user.
+- Step 6: could this pass without the goal being reached? yes, it is text; step 7's run of `/tutor` shows that the glossary is found.
+- Step 7: could this pass without the goal being reached? no, each run is the installed skill on real input, read by the user.
 
 ## Steps, in execution order
 
@@ -25,8 +26,9 @@ each added rule read by you in its page, with `sh skills/ordo/ordo-init/template
 - 3 the build driver: `ordo-init` has the mode `/ordo-init build`, the template `utils/build.py` on the Python standard library with its test, the new-repository run that writes the driver by the same steps unless the user answers that it should not, and the rule on build files narrowed, as ruling D9 and ADR 0051 give them, with the script and its test listed on `docs/dev/scripts.md`, `docs/dev/building.md` and the command block of `docs/dev/change-standard.md`; check: the template's test passes, run from the repository root, and it runs the driver's `gate` on a scratch tree whose commands pass (exit 0) and on one where one command fails (non-zero exit) (1 commit) (approved)
 - 4 the skill `submit`: `skills/academic/submit/` holds the skill of rulings D6, D10 and D16 and ADR 0049 (the page of the agent that writes the submission sheet, the user's approval of the sheet, the walk the session makes through the browser extension, what the walk never does, the stop before the final submit), with its figure under `docs/figures/`, its row and its place in the group sentence of `README.md`, and `/submit` named at "You submit" and "You resubmit" of `docs/figures/paper/lifecycle.svg`; check: `python3 docs/figures/gen_figures.py` runs from the repository root and the user reads `docs/figures/paper/lifecycle.svg`, and the skill's text is read against ADR 0049 item by item (1 commit) (approved)
 - ✅ 5 the skill `tutor`: `skills/explain/tutor/` holds a copy of mattpocock's `teach` with the differences of ADR 0048 and rulings D2 and D11 (the name, `/tutor explain <concept>` and `--page`), `skills/ordo/wait-what/` is moved to `skills/explain/wait-what/`, `README.md` names both and the group folder, and `deviations.md` in this ledger lists every deviation from the design of mattpocock's `teach`, each with its reason and the ruling that approved it; check: `deviations.md` is read against both skills and nothing else differs, and `grep -rn 'skills/ordo/wait-what' README.md docs skills utils agents`, run from the repository root, prints no line outside `docs/roadmap.md` and `docs/adr/` (1 commit) (approved)
-- 6 the gate's runs, on a release candidate tagged and pinned on the user's word, each run made by a separate agent that invokes the installed skill, its stops answered by the orchestrator: `/ordo-init` on a scratch repository of a kind the user names, whose `./utils/build.py gate` exits 0 on the tree as written and non-zero once a test that fails is added; `/ordo-init build` on a scratch copy of an existing repository the user names, whose `./utils/build.py gate` exits 0; `/submit` on a manuscript and a journal's portal the user names, and on a submission of another kind and a portal the user names, each submission sheet read by the user and each walk watched by the user up to the stop before the final submit; `/tutor` on a topic the user names, over two sessions, the second choosing its lesson from the learning records; `/tutor explain` with `--page` on a concept the user names; check: the user reads the output of each run (1 commit; orchestrator, no agent) (approved)
-- 7 the closing: the closing report written (the cost script's output, or that the plan started no agent), the roadmap entry ticked with the gate's output, this folder moved to the archive (orchestrator, no agent) (approved)
+- 6 rulings D and E carried out: `tutor` writes the workspace's glossary as `reference/GLOSSARY.md` in the form of its glossary format page, with one line in the Decision of ADR 0048 and its row in `deviations.md`; the Decision of ADR 0050 says that a layout value the venue or the funder does not state comes from the declared format profile, and with no profile is the current default; check: `grep -rn 'GLOSSARY.md' skills/explain/tutor` shows the file named at one path, `reference/GLOSSARY.md`, by `SKILL.md`, and the two changed pages are read against rulings D and E (1 commit) (ruling D) (ruling E)
+- 7 the gate's runs, on a release candidate tagged and pinned on the user's word, each run made by a separate agent that invokes the installed skill, its stops answered by the orchestrator: `/ordo-init` on a scratch repository of a kind the user names, whose `./utils/build.py gate` exits 0 on the tree as written and non-zero once a test that fails is added; `/ordo-init build` on a scratch copy of an existing repository the user names, whose `./utils/build.py gate` exits 0; `/submit` on a manuscript and a journal's portal the user names, and on a submission of another kind and a portal the user names, each submission sheet read by the user and each walk watched by the user up to the stop before the final submit; `/tutor` on a topic the user names, over two sessions, the second choosing its lesson from the learning records; `/tutor explain` with `--page` on a concept the user names; check: the user reads the output of each run (1 commit; orchestrator, no agent) (approved)
+- 8 the closing: the closing report written (the cost script's output, or that the plan started no agent), the roadmap entry ticked with the gate's output, this folder moved to the archive (orchestrator, no agent) (approved)
 
 ## Step 3, Step 0
 
@@ -40,16 +42,7 @@ each added rule read by you in its page, with `sh skills/ordo/ordo-init/template
     - Option 1 (recommended): `gate` skips a list that holds no command and fails only when all three are empty; `build` called by itself on an empty list still says so and exits non-zero; the verification page names only the subcommands that have a command. ADR 0051 gets one sentence that says so.
     - Option 2: `gate` fails when any of the three lists is empty, so every repository must name a build, a test and a check command before its gate can pass.
     - Recommendation: option 1. Neither option costs less to build.
-  - Step 3 waits for these two answers. Nothing else in the plan waits on step 3 except the gate's runs of step 6.
-
-## Step 4, Step 0
-
-- Open item C (step 4, the skill `submit`; one question): how the submission sheet learns what the portal asks. ADR 0049 says the sheet holds "every field the portal asks for", that the agent "reads the portal's forms for what is asked", and that you approve the sheet "before the browser is touched". The forms of most journal and funder portals stand behind a sign-in, and reading them needs the browser.
-  - Option 1: the sheet is first written from what the portal shows without a sign-in (its public pages and instructions) and from the folder. You approve it. During the walk, each field the portal asks that the sheet lacks is added to the sheet as a question to you. The browser is not opened before the approval, as the ADR says. For a portal behind a sign-in the first sheet holds little of the real form, and most fields reach you as questions during the walk.
-  - Option 2 (recommended): two passes. You sign in, and the session goes through the portal's form pages reading only: it types nothing, uploads nothing and ticks nothing. The agent writes the sheet from those pages and the folder. You approve it. The session then fills the forms from the approved sheet. The sheet holds the real fields before you approve it. The browser is opened before the approval, so the ADR's sentence becomes "nothing is typed, uploaded or ticked before the approval". A portal that shows a later page only once an earlier one is filled still gives fields the first pass could not see, and those are added as questions, as in option 1.
-  - Recommendation: option 2, because an approval of a sheet that lacks most of the form approves little. Option 1 is the one that costs less to build.
-  - Taken without asking, since the layout's rule settles it: `submit` carries `disable-model-invocation: true`, so only you start it.
-  - Step 4 waits for this answer. Nothing else in the plan waits on step 4 except the gate's runs of step 6.
+  - Step 3 waits for these two answers. Nothing else in the plan waits on step 3 except the gate's runs of step 7.
 
 ### Step 1, the project rules (landed 2026-11-24)
 
@@ -87,7 +80,8 @@ each added rule read by you in its page, with `sh skills/ordo/ordo-init/template
 Independent of each other; the standing rule of one agent at a time still serialises them unless `plan.yaml`'s `workers_at_once` allows more.
 
 - 1, 2, 3, 4 and 5 with each other; 1 and 3 both change files of `skills/ordo/ordo-init/`, and 4 and 5 both change `README.md`, which the orchestrator judges at dispatch.
-- 6 after 1 to 5.
+- 6 with 3 and 4.
+- 7 after 1 to 6.
 
 ## Rulings (2026-11-24)
 
@@ -104,6 +98,9 @@ Independent of each other; the standing rule of one agent at a time still serial
 - D14 the roadmap diff of entry 25 (2026-11-24): A, written as drafted: the title, the mode `/ordo-init build` with the new-repository run, the skill `submit` in place of the `paper` mode, `--page` on `/tutor explain`, and the gate's runs of `/ordo-init build`, of `/submit` on a manuscript and on a submission of another kind, and of `/tutor explain` with `--page` (the user).
 - D15 record as ADRs (2026-11-24): A, four records with status `proposed`: `docs/adr/0048` on `tutor`, `0049` on `submit`, `0050` on limits and layout, `0051` on the build driver (the user).
 - D16 the group folder of `submit` (2026-11-24): `skills/academic/submit/`, since a manuscript or a grant application stays its main use (the user).
+- C (2026-11-24): option 1. The submission sheet is first written from what the portal shows without a sign-in and from the folder; the user approves it; each field the portal asks that the sheet lacks is added to the sheet as a question during the walk; the browser is not opened before the approval. It unblocks step 4 (the user).
+- D (2026-11-24): option 1. `tutor` writes the glossary as `reference/GLOSSARY.md` in the format page's structure; both format pages keep their words; ADR 0048 gets one line. Step 6 carries it out (the user).
+- E (2026-11-24): option 1. ADR 0050 gets one sentence: a layout value the venue or the funder does not state comes from the declared format profile, and with no profile is the current default. Step 6 carries it out (the user).
 - The step list (2026-11-24): approved as drafted, seven steps (the user).
 - Models and steps in flight (2026-11-24): the builders and the reviewers run on `claude:opus` in place of `claude:fable`, and `workers_at_once` is 5 in place of 3, both written to `docs/plan.yaml` (the user).
 - Effort (2026-11-24): the builders and the reviewers run at effort `medium` in place of `low`, written to `docs/plan.yaml` (the user).
@@ -131,4 +128,4 @@ Each agent a plan skill started for this plan has one bullet, with its agent id,
 
 ## Blocked, and by what
 
-- 6: it waits for steps 1 to 5 to land, for the user's word on the release candidate, and for the inputs the user names (the kind of the scratch repository, the existing repository, the manuscript and its portal, the other submission and its portal, the topic and the concept).
+- 7: it waits for steps 1 to 6 to land, for the user's word on the release candidate, and for the inputs the user names (the kind of the scratch repository, the existing repository, the manuscript and its portal, the other submission and its portal, the topic and the concept).

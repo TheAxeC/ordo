@@ -46,6 +46,9 @@ repair_reviewer: claude:sonnet  # the model the run of /refute over a repair rou
 
 ```yaml
 dispatch:
+- step: 4
+  landing: preparing
+  brief_check: .scratch/25-project-rules-a-build-driver-submit-and-tutor/agents/reviews/4-brief-check.md (af32ec4714532fb10, claude-opus-5-5, 162843 tokens, 37 tool uses, 6 min 58 s)
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled or, under `self_rule: on`, until the orchestrator closes it as `plan-orchestration`'s `references/self-rule.md`, "Closing an open item", says)
@@ -60,30 +63,18 @@ dispatch:
     - Option 1 (recommended): `gate` skips a list that holds no command and fails only when all three are empty; `build` called by itself on an empty list still says so and exits non-zero; the verification page names only the subcommands that have a command. ADR 0051 gets one sentence that says so.
     - Option 2: `gate` fails when any of the three lists is empty, so every repository must name a build, a test and a check command before its gate can pass.
     - Recommendation: option 1. Neither option costs less to build.
-  - Step 3 waits for these two answers. Nothing else in the plan waits on step 3 except the gate's runs of step 6.
-- Open item C (step 4, the skill `submit`; one question): how the submission sheet learns what the portal asks. ADR 0049 says the sheet holds "every field the portal asks for", that the agent "reads the portal's forms for what is asked", and that you approve the sheet "before the browser is touched". The forms of most journal and funder portals stand behind a sign-in, and reading them needs the browser.
-  - Option 1: the sheet is first written from what the portal shows without a sign-in (its public pages and instructions) and from the folder. You approve it. During the walk, each field the portal asks that the sheet lacks is added to the sheet as a question to you. The browser is not opened before the approval, as the ADR says. For a portal behind a sign-in the first sheet holds little of the real form, and most fields reach you as questions during the walk.
-  - Option 2 (recommended): two passes. You sign in, and the session goes through the portal's form pages reading only: it types nothing, uploads nothing and ticks nothing. The agent writes the sheet from those pages and the folder. You approve it. The session then fills the forms from the approved sheet. The sheet holds the real fields before you approve it. The browser is opened before the approval, so the ADR's sentence becomes "nothing is typed, uploaded or ticked before the approval". A portal that shows a later page only once an earlier one is filled still gives fields the first pass could not see, and those are added as questions, as in option 1.
-  - Recommendation: option 2, because an approval of a sheet that lacks most of the form approves little. Option 1 is the one that costs less to build.
-  - Taken without asking, since the layout's rule settles it: `submit` carries `disable-model-invocation: true`, so only you start it.
-  - Step 4 waits for this answer. Nothing else in the plan waits on step 4 except the gate's runs of step 6.
-- Open item D (step 5, the skill `tutor`; kind 3; blocks nothing): two of the source's format pages name a file `GLOSSARY.md`, while the skill writes a glossary as an HTML reference document under `reference/`. The copy names the glossary format page from the step that writes a glossary, as the layout asks, so a later run looks for `GLOSSARY.md` and does not find it.
-  - Option 1 (recommended): the glossary is written as `reference/GLOSSARY.md` in the format page's structure; both format pages stay true word for word; ADR 0048 gets one line, since a Markdown file then stands among the HTML reference documents.
-  - Option 2: leave it as built. This is the option that costs less.
-- Open item E (step 2, limits and layout; kind 3; blocks nothing): ADR 0050 and ruling D4 say the layout "is only what the venue or the funder states". The formatter's page as built says that a value the venue does not state comes from the declared format profile, and with no profile is the current default.
-  - Option 1 (recommended): ADR 0050 gets one sentence that says so, since a manuscript needs a font and a margin when the venue names none.
-  - Option 2: where the venue states no value, the run asks the user for it and uses no profile value and no default.
-  - Neither costs less in a way that decides it; option 1 keeps a run from stopping on each value.
+  - Step 3 waits for these two answers. Nothing else in the plan waits on step 3 except the gate's runs of step 7.
 
 ## Closed items (the log of what was raised and how it ended; no report carries it)
 
+- Open item C (2026-11-24): ruled by the user, option 1. Open item D (2026-11-24): ruled by the user, option 1. Open item E (2026-11-24): ruled by the user, option 1. Each stands in `plan.md`, Rulings.
 - none
 
 ## The standing demands (from Axel, in force)
 
 - `~/.claude/CLAUDE.md` and the rules under `~/.claude/rules/`. The ones that bite here: `tutor` follows mattpocock's `teach`, each deviation with its reason and ruling (ADR 0048); a shipped file names nothing private, and an example in a skill is made up or public and says which; every gate run is made by a separate agent that invokes the installed skill, its stops answered by the orchestrator.
 - Commits: a capitalised imperative subject and `- Verb` bullets. No attribution of any kind. Never push. A worktree's branch is deleted with the worktree. Commit at resume points only.
-- Never edit `~/.local/share/ordo-stable` or the skill links by hand, and pin only with `utils/pin.sh <tag>`; a release candidate for step 6 is tagged and pinned on the user's word. Tests that touch skill folders run under `env -u CLAUDE_CONFIG_DIR -u ORDO_SKILL_DIRS -u ORDO_STABLE`. No agent sends anything about the repository or the user to an outside service.
+- Never edit `~/.local/share/ordo-stable` or the skill links by hand, and pin only with `utils/pin.sh <tag>`; a release candidate for step 7 is tagged and pinned on the user's word. Tests that touch skill folders run under `env -u CLAUDE_CONFIG_DIR -u ORDO_SKILL_DIRS -u ORDO_STABLE`. No agent sends anything about the repository or the user to an outside service.
 
 ## Verification, every step
 
@@ -103,5 +94,5 @@ dispatch:
 
 - 2026-11-24. Step 1 has landed. `v10.0.0` is pinned. The working tree holds nothing of this plan outside its ledger.
 - Verified: `sh skills/orchestration/land/templates/checks.sh .scratch/25-project-rules-a-build-driver-submit-and-tutor/orchestrator-state.md` printed `checks: 15 commands passed`.
-- Roadmap entry 25 (Project rules, a build driver, submit and tutor). Plan steps 1, 2 and 5 of 7 landed: the project rules, limits and layout, and the skill `tutor`. No step is in flight. Steps 3 and 4 are stopped on open items B and C.
-- Open on Axel's side: open item A, the reading of the rules; open item B, two questions on the build driver, which step 3 waits on; open item C, one question on the submission sheet, which step 4 waits on; open items D and E, which block nothing.
+- Roadmap entry 25 (Project rules, a build driver, submit and tutor). Plan steps 1, 2 and 5 of 8 landed: the project rules, limits and layout, and the skill `tutor`. Steps 4 and 6 are in preparation. Steps 3 and 4 are stopped on open items B and C.
+- Open on Axel's side: open item A, the reading of the rules, to be asked again in plain words; open item B, two questions on the build driver, to be asked again in plain words, which step 3 waits on.
