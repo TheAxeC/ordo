@@ -3,7 +3,6 @@ name: tutor
 description: "Teach the user one topic over several sessions, in the folder it is run in as a teaching workspace: a mission written from an interview, short self-contained HTML lessons tied to the mission, each with a task that gives feedback, reference documents, a list of trusted resources, and learning records from which the next lesson is chosen; or explain one concept in the conversation, tied to the work at hand, from sources fetched in the run and named in the answer, with --page also as one HTML page in the lesson's form. Triggers on: /tutor, /tutor <topic>, /tutor explain <concept>, /tutor explain <concept> --page, teach me a topic, I want to learn a topic over several sessions, next lesson, explain this concept, explain the method you just offered."
 metadata:
   version: "1.0.0"
-disable-model-invocation: true
 ---
 
 # Tutor

@@ -3,7 +3,6 @@ name: submit
 description: "Make a submission through a web portal from a submission sheet the user approves. A fresh agent saves the portal's public pages, reads them with the folder and writes the sheet: every field with its value and source, every file to upload and every declaration with its proposed answer, each value the folder lacks a question. After the approval the session walks the portal's forms in the browser extension, fills what the sheet holds, adds each field the sheet lacks as a question, reads each page back and stops on the page of the final submit. For a journal, a funder's portal or a registration form, it leaves every sign-in, licence, copyright transfer, consent, payment and the final submit to the user. A run folder keeps the sheet, the pages and the closing message. Triggers on: /submit, submit the manuscript through the journal's portal, fill in the submission form, submit the grant application through its portal, register for the event through its form, write a submission sheet, walk the submission portal."
 metadata:
   version: "1.0.0"
-disable-model-invocation: true
 ---
 
 # Submit through a web portal

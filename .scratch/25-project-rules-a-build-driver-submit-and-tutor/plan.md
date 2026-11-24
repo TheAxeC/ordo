@@ -126,6 +126,8 @@ Independent of each other; the standing rule of one agent at a time still serial
 - The step list (2026-11-24): approved as drafted, seven steps (the user).
 - Models and steps in flight (2026-11-24): the builders and the reviewers run on `claude:opus` in place of `claude:fable`, and `workers_at_once` is 5 in place of 3, both written to `docs/plan.yaml` (the user).
 - Effort (2026-11-24): the builders and the reviewers run at effort `medium` in place of `low`, written to `docs/plan.yaml` (the user).
+- Open item F (2026-11-24): option 3, `disable-model-invocation: true` leaves `submit` and `tutor`, so that an agent can make the gate's runs of them through the Skill tool; `tutor` then differs from its source `teach` in this point, written in ADR 0048 and in `deviations.md`; the gate's runs go on `v11.0.0-rc.2` (the user).
+- Open item G (2026-11-24): option 3, `ordo-init` stays as it is, and at the closing the roadmap gate's words on the new repository say that `./utils/build.py gate` exits 0 once a first passing test exists and non-zero once a failing test is added (the user).
 
 ## Agents
 
@@ -160,6 +162,7 @@ Each agent a plan skill started for this plan has one bullet, with its agent id,
 - a75109dfea599bd95: gate run of /tutor, first session, pixel art, claude-opus-5-5
 - a1b54bd28f2fc185a: gate run of /tutor explain git worktree --page, claude-opus-5-5
 - a52fe985477014025: gate run of /submit on the journal's portal, to the approval of the sheet, claude-opus-5-5
+- a234f4e4517ec9965: builder of ruling F, claude-opus-5-5
 
 ## Blocked, and by what
 

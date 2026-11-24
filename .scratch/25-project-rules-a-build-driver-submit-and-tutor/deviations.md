@@ -5,6 +5,7 @@ The source is mattpocock's skill `teach`, whose copy as read stands in `sources/
 | Source has | `tutor` has | Reason | Approved by |
 |---|---|---|---|
 | `name: teach` | `name: tutor` | the skill runs a course and answers one question | ADR 0048, the name; D2 |
+| `disable-model-invocation: true` | no such key; the user and the model both invoke it | an agent makes a run of the skill through the Skill tool | ADR 0048, the invocation point; ruling F |
 | `description: Teach the user a new skill or concept, within this workspace.` | a one-paragraph description ending in `Triggers on:` | the layout's frontmatter | ADR 0048, the layout point |
 | `argument-hint: "What would you like to learn about?"` | no `argument-hint`; the Quick start line `/tutor` for the call with no topic | the layout's frontmatter has no such key | ADR 0048, the layout point; brief decision 6 |
 | no version | `metadata.version: "1.0.0"` | the layout's frontmatter | ADR 0048, the layout point |

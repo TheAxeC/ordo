@@ -8,10 +8,11 @@ Roadmap entry 25's goal names a skill that teaches one topic over several sessio
 
 ## Decision
 
-`tutor` is a copy of the source's `teach`: its workspace files, its format pages, its lesson form and its two stops are the source's. Only the user invokes it. It differs from the source only in these points:
+`tutor` is a copy of the source's `teach`: its workspace files, its format pages, its lesson form and its two stops are the source's. It differs from the source only in these points:
 
 - the sections and the frontmatter of `docs/dev/skill-layout.md`, ASCII, the prose standard applied to the skill text, and no `agents/openai.yaml`, which this repository forces;
 - the name `tutor`, since the skill both runs a course and answers one question;
+- the user and the model both invoke `tutor`, where the source carries `disable-model-invocation: true` and is invoked by the user only, so that an agent can make a run of it through the Skill tool;
 - the glossary is the Markdown file `reference/GLOSSARY.md`, which stands among the HTML reference documents, since the source's format page gives it that name and form;
 - the mode `/tutor explain <concept>`, which the source does not have. It explains one concept in the conversation, tied to the work at hand, from sources fetched in the run and named in the answer, as the source requires of a lesson. It writes no file. In a teaching workspace it offers a learning record for what the user showed they understand;
 - `/tutor explain <concept> --page`, which also writes the explanation as one HTML page in the lesson's form, to `reference/` in a teaching workspace and elsewhere to a path the user gives or is asked for.
