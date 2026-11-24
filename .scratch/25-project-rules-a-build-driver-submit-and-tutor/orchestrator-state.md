@@ -55,6 +55,8 @@ dispatch: none
 
 - Found by the runs, for the user's reading, no ruling asked: `ruff format --check` would reformat a driver whose command holds a double quote (the `/ordo-init build` run on the clone); the eleven questions of a new repository do not ask `worker`, `reviewer` and `libraries`, which get a stop of their own. Both run reports stand in `agents/reviews/7-run-ordo-init-new.md` and `agents/reviews/7-run-ordo-init-build.md`.
 
+- Open item H (2026-11-24, step 7): both `/submit` runs on `v11.0.0-rc.2` reached the stop "The approval of the sheet" with an empty sheet: 0 fields, 0 files, 0 declarations, 0 questions. The sheet agent builds its tables only from the portal pages it can save with `curl` before any sign-in. Editorial Manager answers with a page a script fills (no form in it), and the Zenodo sandbox redirects to its sign-in page. Nothing of either folder reached a sheet. The gate's "each sheet read by the user" cannot be met by a sheet that holds nothing. Options: 1, `submit` is changed so that the user signs in first, the session reads the form's pages in the browser, and the sheet is then written from those pages and the folder and approved before anything is filled, recommended; 2, the sheet agent writes the sheet from the folder and from public instructions (the journal guide's required components, the journal's guide for authors) when no form can be saved, and the walk adds the fields the sheet lacks, the cheaper option; 3, the skill stays and the gate's words change, which leaves a sheet with nothing to read.
+
 ## Closed items (the log of what was raised and how it ended; no report carries it)
 
 - F and G, ruled by the user 2026-11-24, each option 3; see `plan.md`, Rulings. The runs of `/tutor` and `/submit` go on `v11.0.0-rc.2`.
@@ -85,7 +87,7 @@ dispatch: none
 
 ## Current position (rewritten before every step commit of this plan)
 
-- 2026-11-24. `v11.0.0-rc.1` is pinned. The working tree holds nothing of this plan outside its ledger.
+- 2026-11-24. `v11.0.0-rc.2` is pinned (tagged at `8257327` under ruling F); the two `/ordo-init` runs were made on `v11.0.0-rc.1`, whose `ordo-init` is the same. The working tree holds nothing of this plan outside its ledger.
 - Verified: `sh skills/orchestration/land/templates/checks.sh .scratch/25-project-rules-a-build-driver-submit-and-tutor/orchestrator-state.md` printed `checks: 16 commands passed`.
 - Roadmap entry 25 (Project rules, a build driver, submit and tutor). Plan steps 1 to 6 of 8 landed. Step 7, the gate's runs, is in progress on `v11.0.0-rc.1` (tagged at `db692d9` and pinned 2026-11-24, after the user named the inputs in reply to that recommendation). Inputs: a new `python` repository; a scratch clone of ordo for `/ordo-init build`; a scratch copy of the manuscript `bttn-incident-af` of research-hub with the portal https://submit.editorialmanager.com/BSPC/submissions (the user's); a scratch copy of the code folder of `bttd-source-eeg` with the deposit form of the Zenodo sandbox (the orchestrator's pick, on the user's word to pick an example); the topic pixel art (of the user's two); the concept git worktree. The scratch folders stand under the session's scratchpad, `gate/`. Each run's agent stands in `plan.md`, Agents.
-- Open on Axel's side: nothing.
+- Open on Axel's side: open item H.
