@@ -1,6 +1,6 @@
 # 0043. Paper's modes are academic-paper's, copied, with the deviations the goal and the rulings keep
 
-Status: proposed; superseded by 0050 in the formatter's sentence that applies a venue-compliant layout value to meet a limit
+Status: proposed; superseded by 0050 in the formatter's sentence that applies a venue-compliant layout value to meet a limit, in its copy on the intake's page, and in the list of the draft writer's resumed tasks of Decision 3, which gains the cut of a manuscript over a declared limit
 
 ## Context
 

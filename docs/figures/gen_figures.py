@@ -1321,6 +1321,7 @@ FINDINGS = "Draft writer, resumed: the findings you pick, as a patch"
 SESSION_STOP = "The session's questions, in one message"
 RESTRUCTURE_STOP = "A revision item that needs restructuring"
 REPLACE_STOP = "A converted file to replace"
+LIMIT_CUT = "Draft writer, resumed: content cut once, when over a declared word or page limit"
 
 
 def _search(after: str) -> tuple[tuple[Node, ...], tuple[Edge, ...]]:
@@ -1372,6 +1373,7 @@ def paper_full_graph() -> Graph:
         Node("SR", REFERENCE_STOP, "stop"),
         Node("CF", PATCHED, "script"),
         Node("F", "Formatter: targets, cover letter, AI disclosure, checklist"),
+        Node("LC", LIMIT_CUT, "maybe"),
         Node("SO", REPLACE_STOP, "stop"),
         Node("WG", WRITING, "maybe"),
         Node("WS", REPLY_STOP, "stop"),
@@ -1408,7 +1410,8 @@ def paper_full_graph() -> Graph:
         Edge("CF", "F"),
         Edge("F", "F", "a checklist item fails, no cap", "back"),
         Edge("F", "SO", "a converted output already stands"),
-        Edge("F", "WG"),
+        Edge("F", "LC"),
+        Edge("LC", "WG"),
         Edge("WG", "WS"),
         Edge("WS", "WA"),
     )
@@ -1992,6 +1995,7 @@ def grant() -> str:
         Node("W", "Draft writer: the application's .tex, or a patch of a section"),
         Node("C", "Citation compliance: each cited claim, only with a .bib", "maybe"),
         Node("F", "Formatter: the layout of the funder config, only when it states one", "maybe"),
+        Node("L", "Draft writer, resumed: content cut once, when the compile is over the page limit", "maybe"),
         Node("V", "You pick the writing findings to apply", "stop"),
         Node("P", "Draft writer, resumed: the picked findings as one patch", "maybe"),
     )
@@ -2004,7 +2008,8 @@ def grant() -> str:
         Edge("B", "W"),
         Edge("W", "C"),
         Edge("C", "F"),
-        Edge("F", "V"),
+        Edge("F", "L"),
+        Edge("L", "V"),
         Edge("V", "P"),
     )
     note = (
@@ -2012,7 +2017,8 @@ def grant() -> str:
         "config and the session's direction. The session counts the application's pages "
         "before the draft, applies each patch, compiles the application with the engine the "
         "application itself uses and runs check_sections.py and check_limits.py before the "
-        "writing review and again after its patch. A draft of one section is checked and "
+        "writing review and again after the cut and after the review's patch. A draft of one "
+        "section is checked and "
         "reviewed on that section. The run asks which config when the "
         "application's folder holds several, asks the mode of a plain request that names "
         "none, and passes on a stop of the paper skill. A draft of a form field starts the "
@@ -2022,7 +2028,8 @@ def grant() -> str:
         "it asks before it replaces a grant-fields.md that exists, starts the field texts "
         "agent when the file is in another format, and shows you the form fields to confirm. "
         "The revise mode starts the draft writer "
-        "on a comments file and ends with the same writing review. The review mode compiles "
+        "on a comments file and ends with the same cut and the same writing review. The "
+        "review mode compiles "
         "the application and starts the criteria reviewer, which scores it per criterion "
         "and changes nothing. The check mode starts no agent: it compiles and runs the two scripts."
     )

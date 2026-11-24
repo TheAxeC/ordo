@@ -46,20 +46,6 @@ repair_reviewer: claude:sonnet  # the model the run of /refute over a repair rou
 
 ```yaml
 dispatch:
-- step: 2
-  executor: agent
-  worker: claude:opus
-  session_id: a363858a943d81ea8 (claude-opus-5-5)
-  worktree: .agents/worktrees/25-project-rules-a-build-driver-submit-and-tutor-2
-  base: bacb674
-  launched: 2026-11-24
-  report: .scratch/25-project-rules-a-build-driver-submit-and-tutor/agents/reviews/2-report.md
-  builder_usage: 346662 tokens, 91 tool uses, 16 min 55 s
-  brief_check: .scratch/25-project-rules-a-build-driver-submit-and-tutor/agents/reviews/2-brief-check.md (a87e63407ae314392, claude-opus-5-5, 235254 tokens, 51 tool uses, 7 min 58 s)
-  reviewer_report: .scratch/25-project-rules-a-build-driver-submit-and-tutor/agents/reviews/2-refuter.md (a98a16ecb5987063a, claude-opus-5-5, 219080 tokens, 49 tool uses, 9 min 6 s)
-  landing: not-started
-  round: 1
-  round_1: brief .scratch/25-project-rules-a-build-driver-submit-and-tutor/agents/briefs/2-round-1.md, snapshot .agents/worktrees/25-project-rules-a-build-driver-submit-and-tutor-2-round-1
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled or, under `self_rule: on`, until the orchestrator closes it as `plan-orchestration`'s `references/self-rule.md`, "Closing an open item", says)
@@ -117,5 +103,5 @@ dispatch:
 
 - 2026-11-24. Step 1 has landed. `v10.0.0` is pinned. The working tree holds nothing of this plan outside its ledger.
 - Verified: `sh skills/orchestration/land/templates/checks.sh .scratch/25-project-rules-a-build-driver-submit-and-tutor/orchestrator-state.md` printed `checks: 15 commands passed`.
-- Roadmap entry 25 (Project rules, a build driver, submit and tutor). Plan steps 1 and 5 of 7 landed: the project rules and the skill `tutor`. Step 2 is in repair round 1. Steps 3 and 4 are stopped on open items B and C.
+- Roadmap entry 25 (Project rules, a build driver, submit and tutor). Plan steps 1, 2 and 5 of 7 landed: the project rules, limits and layout, and the skill `tutor`. No step is in flight. Steps 3 and 4 are stopped on open items B and C.
 - Open on Axel's side: open item A, the reading of the rules; open item B, two questions on the build driver, which step 3 waits on; open item C, one question on the submission sheet, which step 4 waits on; open items D and E, which block nothing.

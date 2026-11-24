@@ -2,7 +2,7 @@
 name: paper
 description: "Write, revise, plan and format a LaTeX manuscript with twelve roles, each a fresh agent: intake, literature strategist, structure architect, argument builder, draft writer, citation compliance, abstract, peer reviewer, formatter, Socratic mentor, visualization and revision coach. Twelve modes: full, outline-only, revision, abstract-only, lit-review, format-convert, citation-check, plan, revision-coach, disclosure, rebuttal-audit and response-letter. Two calls, draft-review and figures, run one role. Every change to the manuscript is a patch applied by script, and every cited claim rests on a passage read in the run. Triggers on: /paper, write a paper, outline a paper, revise a manuscript, write the response letter, parse reviewer comments, audit my rebuttal, write an abstract, review the literature on a topic, check the citations, write an AI disclosure statement, help me plan my paper, convert my paper to DOCX, convert the citations to <style>, review my draft, draw the figures."
 metadata:
-  version: "4.1.3"
+  version: "5.0.0"
 ---
 
 # Write and revise a manuscript
@@ -123,7 +123,7 @@ The `<manuscript>` of format-convert is a main `.tex`, a `.md`, a `.docx` or a `
 | **`rebuttal-audit`** | **"audit my response" / "check my rebuttal" / "did I miss any reviewer comment"** (requires BOTH reviewer comments AND an existing rebuttal draft) | **12 only (parse-only)** | **Rebuttal QA report: per-comment coverage + gaps + risk flags. No new response generated; advisory only. Marks nothing as verified.** |
 | `response-letter` | "write the response letter" | 5, then 8 | `response-letter.md` beside the manuscript + `response-letter-check.md` |
 
-Steps 1 to 6 run once, in order, before the items of the mode. Steps 7 to 14 are named from the items of the modes at the point they apply. The five scripts are run as `python3 '<this skill's folder>/templates/<script>'`, where `<script>` is `anchorize_tex.py`, `apply_tex_patch.py`, `lookup.py`, `calibration_counts.py` or `reference_docx.py`.
+Steps 1 to 6 run once, in order, before the items of the mode. Steps 7 to 15 are named from the items of the modes at the point they apply. The five scripts are run as `python3 '<this skill's folder>/templates/<script>'`, where `<script>` is `anchorize_tex.py`, `apply_tex_patch.py`, `lookup.py`, `calibration_counts.py` or `reference_docx.py`.
 
 1. Read the call as "What it reads" 2, 4 and 5 say.
    - A plain request gets its mode from the Quick Mode Selection Guide below and `references/mode_selection_guide.md` (the flowchart, the Common Misselection Scenarios and the Trigger-to-Mode Mapping Examples).
@@ -279,7 +279,7 @@ Steps 1 to 6 run once, in order, before the items of the mode. Steps 7 to 14 are
     - Every other reference no lookup confirms, and under mark only a failing DOI or arXiv ID too, is marked "unconfirmed" in `citation-report.md` and named in the final message, and the run goes on.
     - Run `lookup.py cite-keys`, `check-urls` and `quote-check '<run folder>/citation-report.md' '<.bib>' '<temporary folder>'` after the patches, and write the runs to `checks.md` (Steps 11). A failure of these checks is named in the final message.
     - The incremental check follows each later patch of the draft writer in a full or revision run that adds or changes a cited sentence, once the first check above has run (`agents/citation_compliance_agent.md`, "The incremental check"). It runs only when the rows Claim check and Incremental checks of `config.md` are both yes. With either row no, no check runs after the later patches.
-      - The patches are the draft writer's one rewrite of full mode's revision loop, the results-check patch above, the reference fix and the compile fix (Steps 11), and the findings pass (Steps 13). Each check starts after its patch is applied (Steps 10).
+      - The patches are the draft writer's one rewrite of full mode's revision loop, the results-check patch above, the reference fix and the compile fix (Steps 11), the limit cut (Steps 15), and the findings pass (Steps 13). Each check starts after its patch is applied (Steps 10).
       - A patch whose operations have no cite command in their `new_text` gets no check, and `checks.md` names the patch's number and says it holds no cited sentence.
       - Resume the citation compliance agent (Steps 8 and 9), given the patch file, the outputs of `cite-keys` and `check-urls` on the patched files and the temporary folder. It writes `citation-report-<nn>.md`, with `<nn>` the patch's number, and patches with the ids `C<m>`.
       - Apply its patches (Steps 10), run `quote-check '<run folder>/citation-report-<nn>.md' '<.bib>' '<temporary folder>'`, `cite-keys` and `check-urls`, and write the runs to `checks.md`.
@@ -300,6 +300,7 @@ Steps 1 to 6 run once, in order, before the items of the mode. Steps 7 to 14 are
     - The wait for that reply is the stop "The reply to the closing review". With no reply the run stays ended as the final message left it.
     - A reply goes to the draft writer of the run, resumed (Steps 8 and 9), with the named findings, each with its number and text, as `agents/draft_writer_agent.md`, "The `/writing` findings", gives. Each op of its patch names `F<k>` for the finding `k` it answers, and the patches are applied as Steps 10 says. The autonomous pass goes to the draft writer the same way with every finding.
     - After the findings pass is applied, make a new temporary folder (Steps 7), run the incremental check of the pass's patches when Steps 12 gives them one, and compile (Steps 11). The folder is removed after the compile. A reply `none` runs none of this.
+    - In full mode the count of Steps 15 is then taken again. A manuscript then over a declared limit is named in the message that ends the reply, as Steps 15 names it, with no further return to the draft writer.
     - A number the report does not have is answered by naming the numbers it has, up to 3 answers in all. A third answer with a number the report does not have is taken as `none`.
     - The message that ends a reply is appended to `final.md`.
     - Done when the final message holds the report and the two sentences, and each finding a reply names is applied or listed as not applied, or, with the row Closing review no, when the final message holds the sentence on `/writing`.
@@ -313,7 +314,30 @@ Steps 1 to 6 run once, in order, before the items of the mode. Steps 7 to 14 are
     - In full, revision and citation-check it lists the results-check issues no patch answered, or says that the statements about the study's own results were not checked for want of result files and code (Steps 12).
     - In full and revision it lists each item an incremental check's report leaves (Steps 12), and says so when the row Claim check or Incremental checks was no.
     - The final message of full and revision also lists the sources that only a preprint server or no index matched, taken from the Summary and the Lookups table of `citation-report.md`.
+    - In full mode it names a manuscript still over a declared limit, and says when the page limit was not checked (Steps 15).
     - Done when the temporary folder no longer exists, `final.md` exists and the final message is shown. In full and revision it is also done only when `<main>.pdf` stands beside the main `.tex` or the final message names why not.
+15. Take the count against the declared limits, and in full mode send a manuscript over a limit back to the draft writer once.
+    - Full and format-convert use this step (full item 12, format-convert item 9).
+    - A declared limit is a word limit or a page limit that `format-report.md` names with its file, in its Final Quality Checklist or in its section "Pre-submission checks" (`agents/formatter_agent.md`). The file is the venue profile of the row Venue Profile of `config.md` or another file of the run. A run whose report names no such limit takes no count, and nothing more of this step runs.
+    - Every word count of this step, the first included, is taken by the session with this command, the same each time: `pandoc '<main>.tex' -t json | python3 -c "import json,sys;d=json.load(sys.stdin);S=lambda x:[y for z in x for y in S(z)] if isinstance(x,list) else ([] if not isinstance(x,dict) or (x.get('t')=='Div' and 'thebibliography' in x['c'][0][1]) else [x['c']]*any(k.isalnum() for k in x['c']) if x.get('t')=='Str' else S(x.get('c',[])));P=[['(abstract)',len(S(d['meta'].get('abstract',{})))],['(before the first heading)',0]];[P.append([' '.join(S(b['c'][2])),0]) if b['t']=='Header' else P[-1].__setitem__(1,P[-1][1]+len(S(b))) for b in d['blocks']];[print(n,p) for p,n in P];print(sum(n for p,n in P),'(total)')"`.
+    - The command prints one line per part, its words and its name: the abstract, the text before the first heading, and the text under each heading, a subsection a part of its own. Its last line is the total, the sum of the parts.
+    - The total is held against a word limit. Where the limit's file says that the limit leaves the abstract out, the total less the abstract's line is held against it. The abstract's line is held against an abstract limit.
+    - It counts the words of the body, the captions included. A citation and a formula count as no word, and so does a punctuation mark that stands apart from a word. It leaves out the title, the headings' own words and the reference list, whether `\bibliography` or a `thebibliography` environment gives it.
+    - The formatter's row Word Count of "Format Specifications Applied" is not held against a limit.
+    - The page count is the number of the last statement "Output written on ... (<n> pages" in the log of the run's last compile of the manuscript, read with `tr -d '\n' < '<log>' | grep -o 'Output written on [^(]*([0-9]* pages\{0,1\}' | tail -1`. The line breaks are removed first, since TeX breaks a long log line.
+    - A run with no compile has no page count, and the final message says that the page limit was not checked.
+    - Write each count, its command, its output as printed and its exit status into `checks.md`.
+    - A count above its limit is over that limit.
+    - In full mode a manuscript over a declared limit goes back to the Phase 4b draft writer, resumed (Steps 8 and 9), once, to cut content (`agents/draft_writer_agent.md`, "The limit cut"). Its direction gives the limit with its file, the count and each part's length, as the command printed them.
+    - It writes a patch with the id `limit-cut`, applied as every other patch is (Steps 10).
+    - After the cut, the incremental check of Steps 12 runs on its patch when Steps 12 gives it one.
+    - Then the reference checks and the compile of Steps 11 run, the reference fix among them on a `missing:` line, and the count is taken again.
+    - A manuscript still over its limit after the one return is not cut again.
+    - The final message names a manuscript still over a declared limit with the count against the limit and the length of each part in words.
+    - The return raises no stop.
+    - Format-convert has no draft writer, and it cuts nothing.
+    - Its final message names a manuscript over a declared limit in the same way.
+    - Done when `checks.md` holds each count and a manuscript over a declared limit has had its one return in full mode or is named for the final message, or when the run declares no limit.
 
 ### full
 
@@ -378,8 +402,10 @@ Stops this mode can reach: the mode to run (only for a plain request), the intak
 11. Check the references after the last writer pass, then compile (Steps 11).
     - Done when the done criteria of Steps 11 hold.
 12. Phase 7: start the formatter (Steps 8 and 9), given `config.md`, `main.tex` and its inputs with their manifests, `refs.bib`, `citation-report.md`, the last `review-<r>.md` and the model identifier of Steps 4. It does the target format conversion, the journal-specific formatting when a target journal is specified, the cover letter when the paper is a journal submission, the AI disclosure statement and the final quality checklist, as `agents/formatter_agent.md` gives, with the patches of format-convert's item 4 on `main.tex`.
-    - Apply its patches (Steps 10), compile again (Steps 11), and make each target of the row Output Format other than `latex` and `pdf` by format-convert's items 3, 5, 8 and 9, with `main.tex` as the manuscript. Each output stands beside `main.tex`, as `main.docx` or `main.md`.
-    - Done when `format-report.md` exists, its patches are applied, and each target stands beside `main.tex` or the final message names why not.
+    - Apply its patches (Steps 10) and compile again (Steps 11).
+    - Take the count against the declared limits (Steps 15) before any target is made. A manuscript over a declared limit goes back to the draft writer once, as that step says.
+    - Then make each target of the row Output Format other than `latex` and `pdf` by format-convert's items 3, 5, 8 and 9, with `main.tex` as the manuscript. Each output stands beside `main.tex`, as `main.docx` or `main.md`.
+    - Done when `format-report.md` exists, its patches are applied, the done criterion of Steps 15 holds, and each target stands beside `main.tex` or the final message names why not.
 13. The closing review (Steps 13) when the row Closing review is yes.
     - Done when the done criterion of Steps 13 holds.
 14. End the run (Steps 14). The final message says when the last review's decision was not `accept`.
@@ -648,6 +674,7 @@ Format-convert has no intake agent. The session asks the user, in one message, t
    - Each difference between the counts of the `.tex` and of an output, and an abstract that does not stand, is named in the final message with both counts.
    - The word count of the `.tex` is `pandoc '<main>.tex' --citeproc --bibliography '<.bib>' -t plain | wc -w`, and that of each output is `pandoc '<file>' -t plain | wc -w`.
    - A word count of an output that deviates by 1% or more from that of the `.tex` is named in the final message with both counts, as content to find and restore (`agents/formatter_agent.md`, "Pass Criteria").
+   - Take the count against the declared limits (Steps 15): each word count with the command of that step, and the page count from the log of the compile of item 7. A run with no PDF target makes no such compile. The word counts of the bullets above compare the outputs with the `.tex`, and none of them is held against a limit.
    - A PDF is checked by the compile's exit status and by `pdftotext '<main>.pdf' -`.
    - The session reads that text for each heading of `pandoc '<main>.tex' -t markdown | grep '^#'`, ignoring case, numbering, line breaks and typography, and names a heading it does not find.
    - A runner without `pdftotext` is named in the final message.
@@ -689,6 +716,7 @@ Format-convert has no intake agent. The session asks the user, in one message, t
    - It lists each `.bib` entry without a DOI with the call `/paper citation-check`.
    - It lists each entry of the `.bib` the formatter wrote from the reference text.
    - It says when the citations were not checked against their sources, and when the last draft review's verdict was not Accept.
+   - It names a manuscript over a declared limit, with the count against the limit and the length of each part in words, and says that the run cut nothing (Steps 15).
    - In a run in which the formatter ran the pre-submission checks (item 4), it names each check with the result `not met`, or says that no check has that result.
    - In such a run it gives the number of pre-submission checks with the result `for the author`, zero included.
    - In such a run it names the section "Pre-submission checks" of `format-report.md`, which holds every check with its result.
@@ -899,7 +927,7 @@ See `references/failure_paths.md` for details. Quick reference:
 |---------|---------|
 | Insufficient research foundation | Explain what is missing; if the user insists, switch to outline-only mode |
 | Wrong paper structure selected | Return to Phase 2, suggest alternative structure |
-| Word count significantly over/under target | Identify problematic chapters, suggest trimming/expansion |
+| Word count significantly over/under target | The draft writer trims or expands a section against its target as it drafts. A manuscript over a declared limit goes back to the draft writer once to cut content in full mode, and what is still over is named in the final message (Steps 15) |
 | Citation format entirely wrong | Entries in the configured style are corrected as one patch; entries in another style are the stop "The citation style to confirm", then one patch (Steps 12) |
 | Peer review rejection | Analyze rejection reasons, suggest major revision or restructuring |
 | Plan mode not converging | Suggest switching to outline-only mode |
@@ -1021,6 +1049,7 @@ A run stops only at the stops its mode lists under its heading in "Steps", and t
 - A role's `lookup.py bibtex` entry that holds `{?}` has each `{?}` replaced by a LaTeX form the role chooses for the character the warning line names.
 - The role's report names each `{?}` it replaced, with the character and the form.
 - Every change to the main `.tex`, a file it inputs or the `.bib` is a patch (Steps 9 and 10).
+- No layout value (font, size, line spacing, margins) is changed to gain room, in any mode. The layout is what the venue or the format profile states (`agents/formatter_agent.md`, "Conflict precedence: the layout the venue states"), and a manuscript over a declared limit is cut by the draft writer in full mode (Steps 15).
 - A file the run creates, such as the first `main.tex`, a new `refs.bib` and the images of the figures, is written once.
 - Role agents report issues, and the word "finding" is kept for what `/writing` reports.
 - A cited claim rests on a passage read in the run from the source's full text.

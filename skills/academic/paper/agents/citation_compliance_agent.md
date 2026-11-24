@@ -855,7 +855,7 @@ In full, revision and citation-check mode, when the user's materials hold result
 
 In full and revision modes, a patch of the draft writer that adds or changes a cited sentence after the first check has run gets a check of its own, when the rows Claim check and Incremental checks of `config.md` are both yes. A cited sentence is a sentence that holds a cite command.
 
-- The patches that get this check are the draft writer's one rewrite of full mode's revision loop, the results-check patch, the reference fix, the compile fix and the findings pass.
+- The patches that get this check are the draft writer's one rewrite of full mode's revision loop, the results-check patch, the reference fix, the compile fix, the limit cut and the findings pass.
 - A patch the agent writes itself, with the ids `C<m>`, gets no check, so a check never leads to another check.
 - An incremental check does not run the results check. The statements a results-check patch rewrites are not read again against the result files.
 - The session resumes the agent that made the first check, with one message for one patch. The agent reads the patch file `patches/<nn>-<file name>.patch.json` with the main `.tex` and its inputs as the patch left them, the outputs of `lookup.py cite-keys` and `check-urls`, and the path of the temporary folder.

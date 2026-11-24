@@ -2,7 +2,7 @@
 name: writing
 description: "Review the prose of a draft with a script and four fresh agents that change nothing. The script computes the counts and word lists that have one right answer. The agents read a whole .tex file with the files it inputs and includes, a .md, a .txt or a .docx against the prose standard and the academic writing rules, each checking its own rules. The report shown to the user lists each break of a named rule, numbered, with its place, the quoted passage and what the rule asks for, the findings that leave the reader wrong or unsure first, grouped by rule, and proposes no replacement. Triggers on: /writing <file>, review the writing of a draft, check a draft against the prose standard, review the prose of a manuscript, review the prose of a grant, check the writing of a text."
 metadata:
-  version: "2.1.2"
+  version: "2.2.0"
 ---
 
 # Review the prose of a draft
@@ -84,7 +84,7 @@ The prompt of each finding agent holds these pieces:
 - The draft's text for a `.docx`: the output of `docx_paragraphs.py`.
 - The draft's text for a `.tex`, `.md` or `.txt` draft: the text of each file with its line numbers as `cat -n` prints them, under the file's path from the main file's folder.
 - The output of `prose_facts.py`.
-- The text of each rule of the agent's list, copied unchanged from its page. For a manuscript, a rule that `references/manuscript-prose-standard.md` leaves out is not given. A rule it replaces is given in its text, and its section G is given, as "The manuscript prose standard" says.
+- The text of each rule of the agent's list, copied unchanged from its page. For a manuscript, a rule that `references/manuscript-prose-standard.md` leaves out is not given. A rule it replaces is given in its text, and its sections G and H are given, as "The manuscript prose standard" says.
 - The page and the section of each rule, with the rule's `##` heading and its marker, such as "(manuscripts and grants)".
 - The bullets of "Finding agent prompt" and of the agent's own section.
 
@@ -180,11 +180,12 @@ The rules of the sentence agent, each named by page, section and the page's own 
 
 ## The manuscript prose standard
 
-`references/manuscript-prose-standard.md` holds no copy of the prose standard. It lists the rules of the prose standard that a manuscript leaves out, the two it replaces, and its own section G. The prose standard is the one "What it reads" 1 finds, so a repository's own prose page holds for its manuscripts too. For a manuscript, the lists of the three agents change as follows:
+`references/manuscript-prose-standard.md` holds no copy of the prose standard. It lists the rules of the prose standard that a manuscript leaves out, the two it replaces, and its own sections G and H. The prose standard is the one "What it reads" 1 finds, so a repository's own prose page holds for its manuscripts too. For a manuscript, the lists of the three agents change as follows:
 
 - The rules the page lists under "Rules left out" are not given, nor the words and the exception that list names.
 - The rules "Section 0, Arrows" and "Section D, Paragraphs" are given in the text of the page's "Rules replaced", in place of the prose standard's text.
 - The sentence agent also gets the rule "G. The project's own software / No software wording".
+- The sentence agent also gets the rule "H. The deliverable / No process history".
 - A finding that names a rule the page replaces or adds names it as "Manuscript prose standard, <section> / <label>". A finding under any other rule names the prose standard as for any draft.
 
 ## Section agent

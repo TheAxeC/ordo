@@ -92,10 +92,11 @@ Default: IMRaD (for empirical research) or Literature Review (for synthesis topi
 - If yes, note journal name for formatting agent
 - If no, skip (use generic academic format)
 
-**Venue-profile follow-up (optional, only when a target journal was named):** offer to record the venue's submission limits as a venue profile, consumed by the formatter ("Conflict precedence: venue compliance wins" of `agents/formatter_agent.md`):
+**Venue-profile follow-up (optional, only when a target journal was named):** offer to record the venue's submission limits as a venue profile, consumed by the formatter ("Conflict precedence: the layout the venue states" of `agents/formatter_agent.md`):
 
-> "Do you want to record the venue's declared limits (word limit, abstract limit, keyword range, required sections, reference ceiling, blind-review model)? I will only record values you state; I never look up or infer limits from the journal name. Without a profile, the formatter checks no venue limit."
+> "Do you want to record the venue's declared limits (word limit, page limit, abstract limit, keyword range, required sections, reference ceiling, blind-review model)? I will only record values you state; I never look up or infer limits from the journal name. Without a profile, the formatter checks no venue limit."
 
+- **Paper's addition: the page limit.** The question's list holds "page limit", so that a page limit the venue declares is recorded in the profile and counted against the manuscript (`SKILL.md`, Steps 15).
 - **Declared values only:** every field comes from the scholar's answer; a field the scholar does not state stays null. NEVER fill a field from memory of the journal, its website, or its name.
 - Store the answers as a YAML file in the run folder with `declared_by: scholar` (the only provenance value that exists), and record its path in `config.md` `Venue Profile` row. The profile is re-feedable across runs like any declared input.
 - A declined or skipped follow-up = no profile, no `config.md` row value beyond `absent`; current behavior is unchanged.
@@ -128,7 +129,7 @@ Auto-suggest based on discipline; user can override.
 - **Declared values only (downgraded: consistency, not integrity):** every field comes from the scholar's answer; an unstated field is simply not declared and the formatter keeps its current default for that aspect. NEVER fill a layout field from the venue name, the institution, the language/locale, or the filename.
 - Store the answers as a YAML file in the run folder, and record its path in `config.md` `Format Profile` row. The profile is re-feedable across runs like any declared input.
 - **No profile, no row:** a declined or skipped follow-up writes **nothing**: no profile and **no `config.md` `Format Profile` row at all** (per-row absence already means not-declared; writing an explicit `absent` would perturb a run that recorded no profile).
-- **Venue compliance wins:** the recorded layout is a rendering preference. Where a declared layout field would push the manuscript past a declared `venue_profile` limit (e.g. margins/spacing inflating page count), the formatter applies the venue-compliant value and notes the override; it never silently ships a noncompliant package to honor a layout preference.
+- **Paper's addition: the layout the venue states:** the recorded layout is a rendering preference. A layout value the venue states is used, and a value the venue does not state comes from this profile. No layout value is ever changed to gain room, and a manuscript over a declared `venue_profile` limit is not made to fit by layout ("Conflict precedence: the layout the venue states" of `agents/formatter_agent.md`).
 - **Plan mode is exempt** (the simplified plan-mode intake does not run this follow-up, mirroring Step 3 / Step 12 / Step 13).
 
 ### Step 6: Language & Abstract

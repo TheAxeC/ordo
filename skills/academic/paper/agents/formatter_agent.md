@@ -96,7 +96,7 @@ Common journal requirements to check:
 - Adjust document structure to match journal template
 - Reformat references if journal uses a different style
 - Add required sections (COI, data availability, etc.)
-- Ensure word count compliance
+- Name each declared word or page limit with its file; the session takes the count and the formatter cuts nothing (`SKILL.md`, Steps 15)
 
 ## Format Profile: declared layout, NOT-DECLARED -> current default
 
@@ -122,9 +122,11 @@ Resolve the path and load the profile *before* producing any output. Do not half
 - Each field is **best-effort per output target** (DOCX / PDF / LaTeX). When the chosen target cannot faithfully honor a declared field, **say so in the Final Quality Checklist** (field + target + reason) rather than silently dropping it.
 - Field map: `body_font` -> body text family/size; `caption` -> figure/table caption font/size/placement/alignment; `line_spacing` -> single/onehalf/double, or a fixed point value when `mode == fixed_pt`; `margins_cm` -> page margins (centimeters); `table_border_style` -> `three_line` (booktabs-style) / `full_grid` / `none`.
 
-### Conflict precedence: venue compliance wins
+### Conflict precedence: the layout the venue states
 
-The layout profile is a **rendering preference**, the same class as any user preference under the existing "journal requirement > user preference" rule (see Template conflict handling below); this is that one principle applied to layout. Where a declared layout field would push the manuscript past a declared `venue_profile` limit (e.g. larger font / wider spacing / bigger margins inflating page count past a page limit), apply the **venue-compliant** value, not the format_profile value, and emit a **loud note in the Final Quality Checklist** naming the field, the venue constraint it would have violated, and the overridden format_profile value. NEVER silently produce a noncompliant package to honor a layout preference.
+The layout profile is a **rendering preference**, the same class as any user preference under the existing "journal requirement > user preference" rule (see Template conflict handling below); this is that one principle applied to layout.
+
+**Paper's addition: the layout is never changed to meet a limit.** A layout value the venue states, in its template or in another file the run gives, is used. A value the venue does not state comes from the declared format profile, and with no profile it is the current default. No layout value (font, size, line spacing, margins) is ever changed to gain room, and a manuscript over a declared limit is not made to fit by layout. The Final Quality Checklist names each word or page limit that the venue profile or another file of the run declares, with its file. The session counts the manuscript against each one, and in full mode sends a manuscript over a limit to the draft writer to cut content (`SKILL.md`, Steps 15).
 
 ## Cover Letter Generation
 
@@ -292,7 +294,7 @@ Before delivering the output, verify:
 - [ ] Font/spacing/margin specifications (if applicable)
 - [ ] Page numbers (if applicable)
 - [ ] Journal-specific requirements (if applicable)
-- [ ] Format profile applied (if declared): declared fields reflected; any field the target could not honor noted (field + target + reason); any venue-compliance override noted (field + violated venue constraint + overridden value)
+- [ ] Format profile applied (if declared): declared fields reflected; any field the target could not honor noted (field + target + reason); each word or page limit the venue profile or another file of the run declares named (limit + its file) for the session's count, with no layout value changed to gain room
 
 ### Required Elements
 - [ ] Title page with all required information
@@ -556,8 +558,8 @@ Step 1: Look up journal requirements
 Step 2: Check and adjust sequentially
 
   [ ] Word/Page Limit
-    -> IF exceeds -> suggest sections to trim
-    -> IF within limit -> PASS
+    -> name each declared limit with its file; the session counts the manuscript against it (`SKILL.md`, Steps 15)
+    -> change no layout value to meet it
 
   [ ] Abstract format
     -> structured (Background-Method-Results-Conclusion) vs unstructured
@@ -860,7 +862,7 @@ This subsection applies in format-convert. When the venue of the run is a journa
 - **What a venue asks.** It is read only from a file the run gives, as `agents/intake_agent.md`, Step 3, says of a venue's limits ("I never look up or infer limits from the journal name") and "Apply it: declared fields only, best-effort per target" says of a missing layout field.
 - **The files a result rests on.** They are `config.md` with its rows, the row Venue Profile and the profile it names among them, the manuscript's files, the `.bib`, the venue's template and the other files of the row Existing Materials, and `cover-letter.tex` when it stands or the formatter writes it.
   - A result never rests on text the formatter wrote in this run, its cover letter and its report among them.
-  - There are two exceptions: the manuscript as its patch leaves it, as the bullet "The manuscript" gives, and the word count of the row Word Count of "Format Specifications Applied", which a declared word limit is held against.
+  - There is one exception: the manuscript as its patch leaves it, as the bullet "The manuscript" gives.
   - A `cover-letter.tex` the formatter wrote settles the component "Cover letter" by standing beside the manuscript, and its text settles no check.
 - **The manuscript.** It is checked as the formatter's own `format-convert` patch leaves it, so the results describe the manuscript with that patch applied. A `[GAP: <element>]` placeholder the patch writes counts as the element missing.
 - **No web search.** The formatter makes no web search for these checks: a fact it would need one for gives the result `for the author`.
@@ -897,8 +899,8 @@ The result is one of four:
 - Any other missing component that the guide marks "Often", "Sometimes", "Increasingly" or "If applicable", and that no file of the run requires, is `for the author`.
 - A check of "Journal Selection Criteria" that no file settles, such as the journal's review turnaround, is `for the author`.
 - The check "Correct citation format (may differ from your preferred style)" is `met` or `not met` only against a style the venue's template or profile states, and `for the author` otherwise.
-- The check "Word/page count within limits" has two rules, and with no limit declared in a file it is `for the author`.
-  - A word limit that a file of the run declares is held against the count of the row Word Count of "Format Specifications Applied", and the row names the count and the limit with its file.
-  - A page limit that a file of the run declares gives `for the author`, since the formatter has no page count, and the row names the limit and its file.
+- The check "Word/page count within limits" is `for the author`.
+  - A word limit or a page limit that a file of the run declares gives `for the author`, since the session takes the count (`SKILL.md`, Steps 15), and the row names the limit and its file.
+  - With no limit declared in a file, the row says so.
 - With no venue, the section holds one sentence: "The pre-submission checks were not run, since the run names no venue."
 - With a venue that `SKILL.md`, format-convert item 1, does not take as a journal, the section holds one sentence: "The pre-submission checks were not run, since the guide's checks are a journal's."

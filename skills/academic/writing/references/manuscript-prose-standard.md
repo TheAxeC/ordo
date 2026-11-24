@@ -22,3 +22,7 @@ These rules of the prose standard concern software documentation, a terminal, a 
 
 - **No software wording.** The text of the manuscript names no file, script, program of the project, path, folder, code identifier, job, run, exit code or log. It uses no wording of software operations about the project's own work, such as "ran successfully", "exited with code 0", "crashed", "stdout" or "the pipeline". A result is worded as a statement about the study: "all nine subjects were evaluated under the same leave-one-subject-out procedure", never "all 9 run folders exited with code 0".
 - A name the paper's field uses for a method, a dataset, a tool or a library is a term of the field. It is written as the field writes it. A repository URL in a data or code availability statement is a statement's content.
+
+## H. The deliverable
+
+- **No process history.** Every sentence of a deliverable answers the reader or states a change, and the text holds no process history: what was tried, what an earlier version of the text said, or how the text came about. A change the reader asked for or must act on, such as a revision stated in a response letter or a resubmission's cover letter, is no process history. The cover letter of a resubmission states a change to the manuscript, such as "Section 3 now reports the effect for each cohort". A paper never writes "In an earlier version of this section we reported the effect differently". Both examples are made up for this page.

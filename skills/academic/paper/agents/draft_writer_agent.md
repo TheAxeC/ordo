@@ -661,6 +661,23 @@ The patch with the id `compile-fix` answers the compile lines that the session g
 - An overfull line is corrected by a change of wording or of a table or figure width that leaves every claim, number and citation as it was.
 - A line the agent cannot correct that way is left unchanged and named in its report.
 
+### The limit cut
+
+The patch with the id `limit-cut` answers a manuscript over a declared word or page limit. Two skills send it, each once in a run, and each gives its own inputs.
+
+- `paper` sends it in full mode after the formatter's patches (`SKILL.md`, Steps 15). Its direction gives the limit with its file, the count, and the length in words of each part, as the count's command printed them.
+- `grant` sends it when the compile of an application is over the page limit of its funder config (the `grant` skill's `SKILL.md`, Steps 10). Its direction gives the page limit, the page count of the last compile and the lines its `check_limits.py` printed, and in a run on one section it says that the patch changes lines of that section only.
+
+For either sender:
+
+- The agent reads the manuscript with its manifests, and `outline.md` and `arguments.md` when the run has them, so that it knows which argument each passage carries.
+- It cuts content. It cuts redundant argument first, the same point stated more than once, as "Word Count Monitoring Mechanism" above names it, and then the material the paper's argument needs least.
+- For a page limit it cuts about the words of the pages over the limit, taken as the manuscript's words divided by its page count.
+- It changes no layout value, no float's size and no font: no class option, no length, no spacing, no font size command and no width of a table or a figure.
+- A sentence it keeps keeps every claim, number and citation it holds.
+- In `paper`'s full mode it removes the row of the trace table for each statement it removes, so that the table holds only the statements the manuscript makes.
+- Its report gives each section's length before and after the cut, in words for `paper` and against the section's limit in its unit for `grant`, what it cut in each section, and each section it left as it was with the reason.
+
 ### The trace table
 
 In full mode the agent writes a section "Trace table" in `draft-report.md`, which the citation compliance agent reads as the index of its results check (`agents/citation_compliance_agent.md`, "The results check").

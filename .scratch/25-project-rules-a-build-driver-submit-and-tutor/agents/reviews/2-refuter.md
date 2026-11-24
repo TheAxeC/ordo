@@ -115,3 +115,117 @@ Cases of the brief's "Cases":
 - What git ignores in the worktree, and the tree after staging, would need a git command outside the three the reviewer may run (`git status --short --ignored`, `git add -n`).
 
 Reviewer usage: a98a16ecb5987063a, claude-opus-5-5, 219080 tokens, 49 tool uses, 9 min 6 s.
+
+## Repair round 1, refuted
+
+```
+(from the worktree root, under env -u CLAUDE_CONFIG_DIR -u ORDO_SKILL_DIRS -u ORDO_STABLE)
+sh skills/academic/paper/templates/anchorize_tex.test.sh 2>&1 | tail -1
+PASS: anchorize_tex.py leaves the .tex byte-identical, makes one block of a paragraph run and of an environmen...
+sh skills/academic/paper/templates/apply_tex_patch.test.sh 2>&1 | tail -1
+PASS: apply_tex_patch.py replaces, inserts after and deletes only the blocks a patch names with the manifest's...
+sh skills/academic/grant/templates/check_limits.test.sh 2>&1 | tail -1
+PASS: check_limits.py reads the page count of the log beside the PDF, a statement of one page and a broken one...
+sh skills/academic/grant/templates/check_sections.test.sh 2>&1 | tail -1
+PASS: check_sections.py prints ok for each heading of the config that the .tex holds in the config's order, mi...
+python3 gen_figures.py on a copy of docs/figures in my scratch folder; echo "exit $?"
+(23 "wrote" lines, last three paper/response-letter, lifecycle, run-folder) exit 0
+cmp of the copy's grant.svg and paper/full.svg with the worktree's: identical
+git status --short docs/figures
+ M docs/figures/gen_figures.py
+ M docs/figures/grant.svg
+ M docs/figures/paper/full.svg
+character-set check over the 17 files of git diff --name-only bacb674 outside .scratch: no output, exit 0
+grep -rn 'venue-compliant' skills: no line, exit 1
+description lengths: highest 1023 (skills/academic/referee/SKILL.md), none above 1024
+grep -n 'version:' ...: writing "2.2.0", paper "5.0.0", grant "2.0.0"
+```
+
+The round's word-count command (Steps 15 of `paper`, line 322, extracted from the page by script, `<main>.tex` replaced by `main.tex`), run on my own scratch files. Each has a title, a 5-word abstract, a 6-word text before the first heading, a figure caption of 3 words, `\cite{smith2024}` mid-sentence, the sections Introduction (with a subsection Data) and Methods, and a reference list. `a/main.tex` ends with `\bibliography{refs}`, `b/main.tex` with a `thebibliography` environment of one 7-word item.
+
+```
+a and b, identical output, exit 0:
+5 (abstract)
+6 (before the first heading)
+9 Introduction
+1 Data
+3 Methods
+24 (total)
+c/main.tex, section "S" with the body "One two three four\cite{k}." (4 words, a citation, a full stop):
+0 (abstract)
+0 (before the first heading)
+5 S
+5 (total)
+the builder's own lc2/a and lc2/b files, "One two three four \cite{smith2024}." then "Five six." and a 3-word caption:
+10 Introduction
+19 (total)
+```
+
+The page-count command of line 326 on the builder's two compile logs prints `Output written on main.pdf (1 page` for each.
+
+### Verdicts
+
+Items of the brief's "What to build", for the whole diff since bacb674:
+
+- 1: holds. `formatter_agent.md` line 129 and the checklist and "Word/Page Limit" lines state the rule, and `grep -rn 'venue-compliant' skills` prints nothing. The "Ensure word count compliance" line (Standards 2) is not part of item 1.
+- 2: violated, Proof 1 (the sentence on what the command counts is false) and Spec 1 (no sentence names the number held against a limit). The return, the `limit-cut` patch, the incremental check, the recount after the findings pass, the final message and the absent Stops row hold. Format-convert item 9 uses the command. Disclosure is out of Steps 15 and its item 3 equals the base (`git diff bacb674 -- skills/academic/paper/SKILL.md | grep -n -i disclosure` shows no hunk in the disclosure section).
+- 3: holds. The Failure paths row (line 929) agrees with Steps 15.
+- 4: holds. Grant Steps 10 has the one-section bound (ruling 3) and the `check_limits.py` lengths (ruling 10). `draft` items 8, 9 and 11, `revise` items 3 and 5, the form-field sentence and the description are as before.
+- 5: holds. Section H keeps "states a change" and the process-history list now reads "what an earlier version of the text said". `writing/SKILL.md` gives H to the sentence agent only.
+- 6: violated, Standards 1 (ADR 0026's Decision now quotes a list the page no longer holds). ADR 0036 names the cut and the page limit, ADR 0050 and 0043 name the three places, and format-convert alone is named in the 0036 bullet.
+- 7: holds. paper 5.0.0, grant 2.0.0, writing 2.2.0.
+- 8: holds. The copy-run SVGs equal the committed ones. `gen_figures.py` shows the cut only in the full figure (line 1376) and in grant (line 1998), and no figure or README sentence names a count in disclosure.
+- 9: violated, Standards 2 (formatter "Ensure word count compliance") and Standards 3 (README paper row, which the builder named).
+
+Cases of the brief's "Cases":
+
+- Full run, format profile with a font size, venue page limit, one page over: met by reading Steps 15 (page count from the log, one return with `limit-cut`) and formatter line 129 (no layout value changed). It needs the venue's page limit to reach the profile, which intake line 97 now asks for.
+- Full run over a declared word limit: met in sequence (one return, incremental check, reference checks and compile, count again, then targets). The number compared with the limit is unspecified, Spec 1.
+- Still over after the return, or over after the findings pass: met (Steps 15 and Steps 13, no second return).
+- Format-convert over a word limit: met (Steps 15, format-convert item 9, nothing cut). The count is again the one of Spec 1.
+- `grant revise` over the page limit: met (Steps 10, `revise` items 3 and 5).
+- `grant draft` one page over: met for the whole application (one resume, `limit-cut`, both scripts again). A run on one section is now bound to that section's lines.
+- `grant` form field over its limit: met, the sentence at line 295 is unchanged.
+- "In an earlier version of this section we reported the effect differently": met (section H's example, given to the sentence agent).
+- `grep -rn 'venue-compliant' skills`: met.
+- Verbatim block wider than the page: met, no hunk touches it.
+
+### Findings
+
+1. Spec
+
+- `skills/academic/paper/SKILL.md`, Steps 15, bullets 322 to 330, and `agents/formatter_agent.md` lines 129, 297 and 560 to 562: "A count above its limit is over that limit." and "Its direction gives the limit with its file, the count and each part's length". What is wrong: the command prints a total that includes the abstract and the text before the first heading, plus one line per part. No sentence says which printed number is held against a declared word limit, or which against an abstract limit, which the formatter's page lists as a requirement to check (lines 86 and 634). A venue limit that excludes the abstract is common, and the page leaves the choice to each session. Failure scenario: a venue states 3000 words for the text without the abstract, the manuscript's body is 2950 and its abstract 150. One session compares the total 3100 and sends the manuscript back to the draft writer for a cut it does not need. Another compares the body and counts nothing over. The same manuscript is cut in one run and left alone in the other. Verdict: item 2 violated.
+
+2. Proof
+
+- `skills/academic/paper/SKILL.md:324`: "It counts the words of the body, the captions included and each citation key as one word." What is wrong: the command counts no citation key. Pandoc without `--citeproc` reads `\cite{k}` as a Cite node whose content is a RawInline, and the command counts only Str nodes. In the builder's file the Introduction's 10 is 4 + 2 + 3 caption words + the "." Str that stands after the Cite, not the key (my run on `c/main.tex`: 4 words, a citation and a full stop print 5). The command therefore adds one word for each punctuation mark that follows a citation (also one after an inline formula or any other node that splits the Str), and counts the citation itself as nothing. The round's ruling 1 required the sentence to say what the command counts as it runs. The builder's report gives "the key (1)" as the reason for 10, and my rerun on its own file shows otherwise. The decision resting on it: the count against a word limit and the lengths the draft writer is told. Failure scenario: a manuscript with 120 citations, most followed by a comma or full stop, is counted 80 to 120 words too high, and a manuscript 60 words under its limit is reported over and sent to the draft writer to cut content that the venue did not ask to be cut. Verdict: item 2 violated.
+
+3. Standards
+
+- `docs/adr/0026-*.md`, Decision: "no process history: what was tried, what was changed since an earlier version, or how the text came about (ADR 0050)." What is wrong: ruling 8 changed the list on the page to "what an earlier version of the text said", and added the sentence that a change the reader asked for is no process history. ADR 0026 is not in the round's path list and still holds the old wording, which is the wording the ruling removed because it contradicted "states a change" (rule 19 of `docs/dev/change-standard.md`, no two statements that contradict each other, and the rule "A change carries to every place that names it"). Failure scenario: a reader of the ADR takes "what was changed since an earlier version" as forbidden, as the page's first version did, and holds a resubmission's cover letter to it. Verdict: item 6 violated. Closed by changing that clause of the ADR to the page's list.
+- `skills/academic/paper/agents/formatter_agent.md:99`: "Ensure word count compliance". What is wrong: the page says elsewhere that the formatter takes no count and makes no cut (line 129, lines 560 to 562, lines 902 to 904, Steps 15). This sentence in "Step 2: Apply Formatting" tells the formatter to make the text comply, and brief item 9 asks that any sentence that tells an agent to make a text fit be changed. The builder left it as copied wording of academic-paper, but it is one of the sentences the change makes contradictory. Failure scenario: the formatter, told to ensure compliance, trims words or tightens a layout value to reach the limit, which ADR 0050 forbids and which Steps 15 gives to the draft writer once. Verdict: item 9 violated.
+- `README.md:30` (the `paper` row): "a full run over a word or page limit the venue profile declares goes back to the draft writer once to cut content". What is wrong: Steps 15 now counts a limit that the venue profile or another file of the run declares. The builder named this sentence and left it for the landing. It is inside the step's brief (the step's path list holds `README.md`) and is a small fix, "the venue profile declares" to "a file of the run declares". Failure scenario: a user whose template states a limit and who has no profile reads the README and expects no count, and the run counts and cuts. Verdict: item 9 violated.
+
+4. Behaviour
+
+- none.
+
+### Declined to judge
+
+- Whether `format-report.md` of a real formatter run names a limit in the line "Format profile applied (if declared)" when a venue profile declares a limit but no format profile is declared: the page ties the naming to a line that holds the qualifier "(if declared)" and to the "Pre-submission checks" section of a journal run only. This needs a run of the formatter, which a read cannot give, so I raise it as a reading and not as a finding.
+- Pandoc's reading of `\cite`, a `thebibliography` Div and a Figure caption is from pandoc 3.11 on this machine, and I did not check other versions.
+- Ruling 7, ADR 0050's "only what the venue or the funder states" against "comes from the declared format profile": unchanged on purpose and open item E of the state file, so it is not judged.
+- The ruling 5 claim "no change was needed in the tree": the path list lives in the ledger, which I do not read for edits. The change to `citation_compliance_agent.md` stands in the diff and is correct.
+
+Reviewer usage: ab9fe8e68965015ba, claude-sonnet-5-5, 150292 tokens, 36 tool uses, 4 min 15 s.
+
+## Closed
+
+- Spec 1 and Proof 1 (the word counters), Spec 2 (the page limit in the intake's question), Spec 3 (`grant`, a run on one section), Spec 4 (which limits are counted), Spec 6 (disclosure), Standards 1 (section H), Standards 2 (the limit cut's two senders) and Behaviour 1 (`grant`'s section lengths) of the first run: closed in round 1, in the report's section "Repair round 1".
+- Spec 5 of the first run, `citation_compliance_agent.md` outside the path list: the change stands; the round's brief adds the file to the step's paths.
+- Spec 7 of the first run, the layout value the venue does not state: raised to the user as open item E of the state file.
+- Proof 1 of the run over round 1, the sentence on what the command counts: fixed at landing. The command counts a token only when it holds a letter or a digit, and the sentence reads "A citation and a formula count as no word, and so does a punctuation mark that stands apart from a word." Run on two scratch files, one per form of reference list: both print 5, 6, 11, 1, 3 and the total 26.
+- Spec 1 of the run over round 1, which number is held against a limit: fixed at landing by one bullet of Steps 15 (the total against a word limit, less the abstract's line where the limit's file leaves the abstract out; the abstract's line against an abstract limit).
+- Standards 1 of the run over round 1, ADR 0026's clause: fixed at landing, the clause reads "what an earlier version of the text said".
+- Standards 2 of the run over round 1, the formatter's "Ensure word count compliance": fixed at landing, the line names the limits for the session's count and says the formatter cuts nothing.
+- Standards 3 of the run over round 1, the `paper` row of `README.md`: fixed at landing, "a file of the run declares".

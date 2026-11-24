@@ -96,6 +96,7 @@ The ids are:
 | `R<m>` | The draft writer | Issue `m` of the results check in the citation report, in full and revision mode (`agents/draft_writer_agent.md`, "The results-check patch") |
 | `reference-fix` | The draft writer | The `missing:` lines of `lookup.py cite-keys` after the last writer pass of full and revision |
 | `compile-fix` | The draft writer | The compile lines of a failed compile, or of an `Overfull \hbox` or `Overfull \vbox` of more than 10pt |
+| `limit-cut` | The draft writer | A manuscript over a declared word or page limit after the formatter's patches in full mode, by a cut of content (`agents/draft_writer_agent.md`, "The limit cut") |
 | `abstract` | The abstract agent | The abstract and the keywords, in place of the `% ABSTRACT` lines of the first draft in full mode, and of the abstract of the `.tex` in abstract-only mode |
 | `disclosure` | The formatter | The AI disclosure statement of disclosure mode, at the place `references/disclosure_mode_protocol.md` gives |
 | `format-convert` | The formatter | The format conversion: the citation style, the venue's template and its required elements, and the fields of the format profile in LaTeX, with the cite commands of a `.tex` made from a `.md` or a `.docx` |

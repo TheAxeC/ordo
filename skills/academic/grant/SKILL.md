@@ -2,7 +2,7 @@
 name: grant
 description: "Draft, revise, review and check a grant application written in LaTeX against a funder config: one funder's required sections, limits, layout and evaluation criteria for one call. Five modes: config has an agent draft the funder config from the call documents and saves it beside the application once approved, draft writes a section, the whole application or a form field from materials, revise changes it by patches for a comments file, review scores it per criterion on the funder's scale with the passages each score rests on, and check compiles it and checks its limits and required sections with two scripts. Draft and revise end with the prose findings the user picks applied. Triggers on: /grant, write a grant application, draft a section of a grant application, draft a funder config from call documents, revise a grant application for comments, score my grant application against the funder's criteria, criteria review of a grant application, check the page limit or the required sections of a grant application."
 metadata:
-  version: "1.0.1"
+  version: "2.0.0"
 ---
 
 # Write and check a grant application
@@ -51,7 +51,7 @@ metadata:
 
 ## Steps
 
-Items 1 to 5 run once, in order, before the items of the mode. Items 6 to 9 are named from the items of the modes.
+Items 1 to 5 run once, in order, before the items of the mode. Items 6 to 10 are named from the items of the modes.
 
 1. Read the call and settle the mode.
    - A plain request takes the mode its words name: a config from call documents is `config`, text to write is `draft`, comments to answer are `revise`, scores against the criteria are `review`, and limits or required sections are `check`.
@@ -120,6 +120,18 @@ Items 1 to 5 run once, in order, before the items of the mode. Items 6 to 9 are 
    - Tell the user what the scripts found, in sentences or a table: what holds, what is over or missing, and what was not checked and why.
    - The message that ends a run that compiled names the engine and the rule that gave it, says that a `% !TEX program =` line in the main `.tex` fixes the engine, and repeats each font line `checks.md` holds for the last compile, as printed.
    - Done when `checks.md` holds the engine, each compile and both runs and the user has been told, or the failed compile has been shown.
+10. Cut an application whose compile is over the page limit.
+    - The application is over the page limit when `check_limits.py` prints a line `over:` for the row `(whole document)` with its limit in pages.
+    - It goes back to the run's draft writer, resumed (Steps 7 and 8), once, to cut content, as the `paper` skill's `agents/draft_writer_agent.md`, "The limit cut", gives. In `revise` that is the draft writer of `revise` item 2.
+    - Its direction gives the page limit, the page count of the last compile and the lines `check_limits.py` printed, and says that its report gives each section's length against its limit.
+    - It writes a patch with the id `limit-cut` (Steps 8).
+    - In a `draft` run on one section the direction says that the patch changes lines of that section only. The session reads the patch's ops against the section's line range, found as `draft` item 9 finds it, before it applies the patch, as it reads the findings patch of the same run; an op outside the range goes back to the writer once, within the same return.
+    - In `draft`, the incremental check runs on that patch when the `paper` skill's Steps 12 gives it one, as after the findings pass (`draft` item 9).
+    - Steps 9 then runs again: the compile, the compile fix where it applies, and both scripts.
+    - The return is made once in a run: an application still over the page limit, after the return or after a later compile, is not cut again.
+    - The message that ends the run then names the application still over, with the page count against the page limit and each section's length against its limit.
+    - Each section's length is the one that the last run of `check_limits.py` printed on its `ok:` or `over:` line. A section for which that run printed no such line, a `not checked:` line or none, has no length given, and the message says so.
+    - Done when both scripts have run after the cut, or the last compile is not over the page limit.
 
 ### config
 
@@ -216,12 +228,14 @@ Stops this mode can reach: the mode, which config, the intake, the outline, the 
    - The session adds the row Format Profile with that path to `config.md`.
    - Start the formatter (Steps 7 and 8) from the `paper` skill's `agents/formatter_agent.md`, given `config.md`, the profile and `main.tex` with its manifest.
    - Its direction says that it writes the fields of the profile into `main.tex` as one patch with the id `layout`, and changes nothing else.
+   - No value of the layout is changed to gain room: the layout stays what the "Layout" of the funder config states, and an application over its page limit is cut by the draft writer (Steps 10).
    - Its direction names the run's engine (Steps 9) and says that it sets the layout only with what that engine compiles, so that a font is never set with a package of another engine.
    - Its direction says that its report names each value of the "Layout" it could not set as stated, with what the `.tex` sets in its place, such as a font that stands in for the one the config names.
    - With no value stated the session writes no profile and no row, the formatter is not started, and the message that ends the run says that the funder config states no layout.
    - Done when the patch is applied, or the item was skipped.
 8. Compile the application and run the two scripts (Steps 9).
-   - Done when the done criterion of Steps 9 holds.
+   - An application over the page limit goes back to the draft writer once, before the writing review (Steps 10).
+   - Done when the done criteria of Steps 9 and 10 hold.
 9. When the row Closing review of `config.md` is yes, invoke `/writing` through the Skill tool and show its numbered report whole, the stop "The writing findings".
    - A run on the whole application invokes `/writing` on `main.tex`.
    - A run on one section invokes it on a copy of the section:
@@ -237,6 +251,7 @@ Stops this mode can reach: the mode, which config, the intake, the outline, the 
    - In a run on one section the direction says that the patch changes lines of that section only, and the session reads the patch's ops against the section's line range before it applies the patch; an op outside the range goes back to the writer once.
    - A number the report does not have is answered as the `paper` skill's Steps 13 says.
    - After the patch is applied, the incremental check runs when the `paper` skill's Steps 12 gives the patch one, on the cited sentences the patch adds or changes, and Steps 9 runs again.
+   - An application then over the page limit is named in the message that ends the run, as Steps 10 says, with no further return to the draft writer.
    - A reply `none` writes no patch and runs nothing more of this item.
    - Done when each finding the reply names is applied or listed as not applied, or the reply is `none`, or the row is no.
 10. When the row Output Format of `config.md` names DOCX, make `main.docx` as the `paper` skill's Steps, "full", item 12 makes a target other than `latex` and `pdf`.
@@ -245,6 +260,7 @@ Stops this mode can reach: the mode, which config, the intake, the outline, the 
 11. End the run with a message that names `main.tex`, the PDF, the run folder, each gap and each change not applied, and what the two scripts found, in sentences.
     - The message names the engine and the font lines as Steps 9 says.
     - The message gives the page count before the draft and the page count of the last compile, and says which of the two was over the page limit.
+    - An application still over the page limit is given with each section's length against its limit, as Steps 10 says.
     - The message repeats each value the formatter's report names as not set as stated, with what the `.tex` sets in its place.
     - With a reference list set by hand, the message says so, and says that a source the new text cites reaches the printed list only as an item added to it.
     - The message then names each such source by its key. The session finds the keys with `grep`: each key that a cite command names in the `new_text` of the run's patches, or in a `main.tex` the run wrote whole, and for which the file that holds the list has no `\bibitem{<key>}`.
@@ -304,12 +320,14 @@ Stops this mode can reach: the mode, which config, the intake, the writing findi
    - The session writes each comment the user narrows into `narrowed-comments.md` in the run folder, under its id `G<k>`, in place of the `items.md` that item names, and gives the file to the writer, resumed.
    - Done when each comment is acted on or listed in `revision-log.md` with its reason, and the patches are applied.
 3. Compile the application and run the two scripts (Steps 9).
-   - Done when the done criterion of Steps 9 holds.
+   - An application over the page limit goes back to the draft writer once, before the writing review (Steps 10).
+   - Done when the done criteria of Steps 9 and 10 hold.
 4. Run the writing review and make the `.docx` as items 9 and 10 of `draft` say of a run on the whole application, on the main `.tex`.
    - Done when the done criteria of those two items hold.
 5. End the run with a message that names the main `.tex`, the PDF, the run folder, each comment not acted on with its reason, and what the two scripts found, in sentences.
    - The message names the engine and the font lines as Steps 9 says.
    - The message says that the run checked no citation, and names `/paper citation-check <main.tex>`.
+   - An application still over the page limit is given with each section's length against its limit, as Steps 10 says.
    - With a reference list set by hand, the message holds the sentences and the keys that `draft` item 11 gives for such a list.
    - The run writes no response letter.
    - Done when the temporary folder is removed and the message is sent.
