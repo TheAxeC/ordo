@@ -2088,8 +2088,9 @@ def codebase_design() -> str:
         Panel("THE REVIEW MODE", _graph(review, review_edges)),
     ]
     note = (
-        "The standards mode starts no agent. Either mode asks once whether the repository has "
-        "a user interface, unless it uses Svelte or SvelteKit. In a repository with no plan "
+        "The standards mode starts no agent. Either mode reads the repository's pages and then "
+        "asks once whether the repository has a user interface, unless a page holds a UI "
+        "standard or the repository tracks a .svelte file. In a repository with no plan "
         "configuration the review mode invokes /ordo-init before /roadmap add. The skills it "
         "invokes have their own stops. The call with no mode starts the design agents only "
         "when you ask for other interfaces."

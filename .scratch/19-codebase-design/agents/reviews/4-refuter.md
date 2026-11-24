@@ -272,3 +272,8 @@ S5. The first letter of a new page is not specified when there is no difference.
 Files: /Users/axelfaes/workspace/ordo/.agents/worktrees/19-codebase-design-4/skills/code/codebase-design/SKILL.md, /Users/axelfaes/workspace/ordo/.agents/worktrees/19-codebase-design-4/README.md, /Users/axelfaes/workspace/ordo/.agents/worktrees/19-codebase-design-4/docs/adr/0047-codebase-design-is-one-skill-made-from-two-sources-and-finds-the-standards-pages-by-a-search-order.md, /Users/axelfaes/workspace/ordo/.agents/worktrees/19-codebase-design-4/docs/figures/gen_figures.py, /Users/axelfaes/workspace/ordo/.agents/worktrees/19-codebase-design-4/docs/figures/codebase-design.svg
 
 Agent usage: a36ce253e9ce66cbf, claude-sonnet-5-5, 116459 tokens, 10 tool uses, 2.6 minutes.
+
+## Closed
+
+- First review: its findings closed by the builder in round 1, as the rulings of `agents/briefs/4-round-1.md` say.
+- Round 1: S1, S3, S4, S5 and B1 fixed at landing, named in the booking. Judgment call 1, the split by requirement applying only to a rule that names a tool, accepted as built.

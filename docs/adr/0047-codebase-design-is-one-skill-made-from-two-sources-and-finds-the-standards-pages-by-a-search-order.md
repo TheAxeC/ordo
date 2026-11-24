@@ -4,23 +4,23 @@ Status: proposed
 
 ## Context
 
-Roadmap entry 19's goal names two public sources in the repository mattpocock/skills: `skills/engineering/codebase-design` (a vocabulary for module design, with the pages `DEEPENING.md` and `DESIGN-IT-TWICE.md`) and `skills/engineering/improve-codebase-architecture` (a scan that writes candidates and grills through the one the user picks). The second source loads the first through the Skill tool on every run. The source ends in its grilling loop and writes no roadmap entry. Ordo's standards pages ship as templates of `repo-setup`, and a repository keeps its own filled pages where its plan configuration says: the same repository can hold them under another folder than `docs/dev/`, or hold none. `paper` reads the prose standard from `docs/dev/prose-standard.md` and then from the `repo-setup` folder beside its own (`skills/academic/paper/SKILL.md`, "What it reads" 1).
+Roadmap entry 19's goal names two public sources in the repository mattpocock/skills: `skills/engineering/codebase-design` (a vocabulary for module design, with the pages `DEEPENING.md` and `DESIGN-IT-TWICE.md`) and `skills/engineering/improve-codebase-architecture` (a scan that writes candidates and grills through the one the user picks). The second source loads the first through the Skill tool on every run. The source ends in its grilling loop and writes no roadmap entry. Ordo's standards pages ship as templates of `ordo-init`, and a repository keeps its own filled pages where its plan configuration says: the same repository can hold them under another folder than `docs/dev/`, or hold none. `paper` reads the prose standard from `docs/dev/prose-standard.md` and then from the `ordo-init` folder beside its own (`skills/academic/paper/SKILL.md`, "What it reads" 1).
 
 ## Decision
 
-`codebase-design` is one skill with two modes. The `standards` mode fills the standards pages of an existing repository from the default pages `repo-setup` ships. The `review` mode reads the repository against its standards pages, writes candidates, and ends in a roadmap entry written through `grill` for the candidate the user picks. The content of both sources is kept in the one skill.
+`codebase-design` is one skill with two modes. The `standards` mode fills the standards pages of an existing repository from the default pages `ordo-init` ships. The `review` mode reads the repository against its standards pages, writes candidates, and ends in a roadmap entry written through `grill` for the candidate the user picks. The content of both sources is kept in the one skill.
 
 The skill finds the standards pages by a search order, and no step of it refuses a repository:
 
 1. the pages the repository's `plan.yaml` names under `rules` and `standards`, when the repository has one;
 2. the fixed names under `docs/dev/`;
-3. the default pages in the `repo-setup` skill's folder, which stands beside this skill's folder.
+3. the default pages in the `ordo-init` skill's folder, which stands beside this skill's folder.
 
 The skill reads no standards page from a path outside the repository it runs in and its own skills folder.
 
 The skill treats a repository's own pages in two ways:
 
-- the `standards` mode adds and rewrites nothing that exists: a rule of a default page that already stands in the repository's pages, wherever it stands, is left as written, and a missing rule is drafted in the form it takes there and written after the user's approval;
+- the `standards` mode adds and rewrites nothing that exists: a rule of a default page that already stands in the repository's pages, wherever it stands, is left as written; a missing rule that the code follows, or that is about how work is done, is drafted in the form it takes there and written after the user's approval; a missing rule that the code does not follow is listed, and written only when the user names it; a rule about a tool the repository lacks is not written;
 - for a kind of page the repository lacks, the `review` mode holds the code to the default page, says in each such candidate that the rule comes from the default page, and skips a sentence that still holds an unfilled placeholder.
 
 ## Alternatives rejected
@@ -35,4 +35,4 @@ The skill treats a repository's own pages in two ways:
 
 ## Consequences
 
-One skill holds the vocabulary once. A change that splits the skill, fixes a page's path, or ends the review without a roadmap entry contradicts this record and needs a record that supersedes it. The skill depends on `repo-setup` standing beside it, as `paper`, `writing` and `code-comments` already do. The search order has three places to state and keep true in the skill text.
+One skill holds the vocabulary once. A change that splits the skill, fixes a page's path, or ends the review without a roadmap entry contradicts this record and needs a record that supersedes it. The skill depends on `ordo-init` standing beside it, as `paper`, `writing` and `code-comments` already do. The search order has three places to state and keep true in the skill text.

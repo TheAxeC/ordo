@@ -45,20 +45,7 @@ repair_reviewer: claude:sonnet  # the model the run of /refute over a repair rou
 ```
 
 ```yaml
-dispatch:
-- step: 4
-  landing: not-started
-  base: 7219d6c
-  worktree: .agents/worktrees/19-codebase-design-4
-  executor: agent
-  worker: claude:fable
-  report: .scratch/19-codebase-design/agents/reviews/4-report.md
-  round: 1
-  session_id: af1ee5368f50ec6e2 (claude-fable-5-2)
-  builder_usage: 185956 tokens, 25 tool uses, 11.9 minutes; round 1: 218111 tokens, 6 tool uses, 3.0 minutes
-  shared_paths: "README.md and docs/figures/gen_figures.py with step 5 of this plan; simple, since step 4 writes README line 30 and the function codebase_design and step 5 every other line"
-  brief_check: ".scratch/19-codebase-design/agents/reviews/4-brief-check.md (a3a640202fd2b636a, claude-fable-5-2, 171187 tokens, 27 tool uses, 5.7 minutes)"
-  reviewer_report: ".scratch/19-codebase-design/agents/reviews/4-refuter.md (a0f5e5d3a9d6b9ca8, claude-fable-5-2, 138507 tokens, 15 tool uses, 4.8 minutes); over round 1: a36ce253e9ce66cbf, claude-sonnet-5-5, 116459 tokens, 10 tool uses, 2.6 minutes"
+dispatch: []
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled or, under `self_rule: on`, until the orchestrator closes it as `plan-orchestration`'s `references/self-rule.md`, "Closing an open item", says)
@@ -91,5 +78,5 @@ dispatch:
 
 ## Current position (rewritten before every step commit of this plan)
 
-- 2026-11-24. Steps 1 and 5 have landed. Step 4 (the standards stop) is built, reviewed and repaired in one round, and lands next with the five small fixes its last review names. Then a new release candidate, on the user's word, and step 2's runs.
-- Roadmap entry 19 (codebase-design). Plan step 4 of 5: the standards stop. Next: step 2, the gate's runs.
+- 2026-11-24. Steps 1, 4 and 5 have landed. Step 2, the gate's runs, waits on a release candidate that holds both, tagged and pinned only on the user's word.
+- Roadmap entry 19 (codebase-design). Plan step 2 of 5: the gate's runs. Next: step 3, the closing.

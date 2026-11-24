@@ -17,7 +17,7 @@ one real run of the `standards` mode on a scratch copy of Cathedra, where every 
 ## Steps, in execution order
 
 - ✅ 1 the skill: `skills/code/codebase-design/` with its `SKILL.md` in the skill layout, the modes `standards` and `review`, the search order of ADR 0047 for the standards pages, the default page used for a kind of page the repository lacks (ruling D12), the review ending in a roadmap entry through `grill`, and the sources' vocabulary, deepening page, design-it-twice page and report page as its reference pages; `README.md` and `docs/dev/` wired in as the skill layout asks; the ledger's list of every deviation from the two sources, each with its reason and its ruling; check: the skill follows `docs/dev/skill-layout.md`, read by the user, the deviations list read against both sources, and the verify list passes on main (1 commit) (approved)
-- 4 the standards stop: `/codebase-design standards` shows its draft in the five groups and the forms of the ruling "The standards stop", with the rules found present in a file beside it, and has a rule for a default rule the code does not follow, for a default rule about a tool the repository lacks and for a default rule that contradicts a rule of the repository; it names `ordo-init`'s folder as the place of the default pages; check: the skill's text read against the ruling and the skill layout, and the verify list passes on main (1 commit) (ruling The standards stop)
+- ✅ 4 the standards stop: `/codebase-design standards` shows its draft in the five groups and the forms of the ruling "The standards stop", with the rules found present in a file beside it, and has a rule for a default rule the code does not follow, for a default rule about a tool the repository lacks and for a default rule that contradicts a rule of the repository; it names `ordo-init`'s folder as the place of the default pages; check: the skill's text read against the ruling and the skill layout, and the verify list passes on main (1 commit) (ruling The standards stop)
 - ✅ 5 the merge: `ordo-init` covers the three cases of the ruling "repo-setup merged into ordo-init", `skills/ordo/repo-setup/` is removed with its `templates/` folder moved to `skills/ordo/ordo-init/templates/`, and every skill outside `skills/code/codebase-design/`, every page under `docs/`, the README and the figures name `ordo-init` where they named `repo-setup`; check: `grep -rn 'repo-setup' skills README.md docs/dev docs/glossary.md utils` prints nothing outside `skills/code/codebase-design/`, the skill's text read against the skill layout, and the verify list passes on main (1 commit) (ruling repo-setup merged into ordo-init)
 - 2 the gate's runs, on a release candidate tagged and pinned on the user's word: one run of the `standards` mode on a scratch copy of Cathedra, where every point of Cathedra's existing "Design principles" section still stands and each addition the run proposes is reviewed by the user, by reading both; one run of the `review` mode on the same copy, each candidate reviewed by the user, the one the user picks written into the copy's roadmap through `grill`; no file of Cathedra itself is changed; each run made by a separate agent that invokes the installed skill, its stops answered by the orchestrator; after steps 4 and 5, on a release candidate that holds both: the `standards` run made again on a fresh scratch copy, and one run of `/ordo-init` on an empty folder, one on a scratch copy of an existing repository and one on a configured scratch copy, each by a separate agent (orchestrator, no agent) (approved) (ruling repo-setup merged into ordo-init)
 - 3 the closing: the closing report written (the cost script's output, or that the plan started no agent), the roadmap entry ticked with the gate's output, this folder moved to the archive (orchestrator, no agent) (approved)
@@ -26,7 +26,6 @@ one real run of the `standards` mode on a scratch copy of Cathedra, where every 
 
 Independent of each other; the standing rule of one agent at a time still serialises them unless `plan.yaml`'s `workers_at_once` allows more.
 
-- 4 and 5: step 4 writes `skills/code/codebase-design/` and step 5 leaves that folder alone (ruling "Steps 4 and 5 run in parallel").
 
 ## Rulings (2026-11-23)
 
@@ -69,10 +68,14 @@ Each agent a plan skill started for this plan has one bullet, with its agent id,
 - adb032fec2fe9803e: brief check of step 5, claude-fable-5-2
 - a5a056ebb96ece6ae: reviewer of step 5, claude-fable-5-2
 - add1fddfd58c551b7: reviewer of step 5 over round 1, claude-sonnet-5-5
+- af1ee5368f50ec6e2: builder of step 4, claude-fable-5-2
+- a3a640202fd2b636a: brief check of step 4, claude-fable-5-2
+- a0f5e5d3a9d6b9ca8: reviewer of step 4, claude-fable-5-2
+- a36ce253e9ce66cbf: reviewer of step 4 over round 1, claude-sonnet-5-5
 
 ## Blocked, and by what
 
-- 2: waits on step 4 and on a release candidate that holds both; its first `standards` run, on `v9.4.0-rc.1`, reached the stop "The draft" and was not approved.
+- 2: waits on a release candidate that holds steps 4 and 5; its first `standards` run, on `v9.4.0-rc.1`, reached the stop "The draft" and was not approved.
 - 3: waits on step 2.
 
 ## Step 1, booked (2026-11-23)
@@ -99,3 +102,13 @@ Each agent a plan skill started for this plan has one bullet, with its agent id,
 - Not changed: T2 of that review, "What it reads" 6 naming the reference page and the answers together, since splitting it renumbers every later item and its citations for no change in what a session does.
 - No look and no A/B: `look:` and `bench:` are empty.
 - Usage: builder a8d73c9c4d7eaf570 239605 tokens, 44 tool uses, 15.9 minutes, and round 1 294611 tokens, 13 tool uses, 5.1 minutes; brief check adb032fec2fe9803e 172993 tokens, 22 tool uses, 5.8 minutes; reviewer a5a056ebb96ece6ae 192040 tokens, 25 tool uses, 7.1 minutes; reviewer over round 1 add1fddfd58c551b7 190174 tokens, 24 tool uses, 4.8 minutes.
+
+## Step 4, booked (2026-11-24)
+
+- Landed on main from the base 7219d6c, after step 5: the standards mode of `skills/code/codebase-design/SKILL.md` sorts each default rule into present or one of five groups and shows the draft as a short stop, with an audit file and one file per new page in the temp folder; the README row, ADR 0047 and the figure `codebase-design.svg` say the same; the skill names the `ordo-init` folder for the default pages.
+- `README.md` and `docs/figures/gen_figures.py`, shared with step 5, merged without a conflict.
+- Verification on main: `checks: 15 commands passed`, run again after the fixes below; `grep -rn 'repo-setup' skills README.md docs/dev docs/glossary.md utils docs/adr/0047-*.md | wc -l` prints 0.
+- The builder's first report did not pass its bar: the first review's findings were sent back in round 1 with 9 rulings (`agents/briefs/4-round-1.md`).
+- Fixes at landing, from the review over round 1, all in the stop of the standards mode: the example's line of group 4 says the rule belongs to the new page B below (S1); an unanswered question drops its rule alone, a new page still written on its yes without it (S3); group 5 is defined where the groups are listed (S4); the new pages are lettered from A when there is no difference (S5); the draft's last line says that what is left unanswered counts as no (B1).
+- No look and no A/B: `look:` and `bench:` are empty.
+- Usage: builder af1ee5368f50ec6e2 185956 tokens, 25 tool uses, 11.9 minutes, and round 1 218111 tokens, 6 tool uses, 3.0 minutes; brief check a3a640202fd2b636a 171187 tokens, 27 tool uses, 5.7 minutes; reviewer a0f5e5d3a9d6b9ca8 138507 tokens, 15 tool uses, 4.8 minutes; reviewer over round 1 a36ce253e9ce66cbf 116459 tokens, 10 tool uses, 2.6 minutes.
