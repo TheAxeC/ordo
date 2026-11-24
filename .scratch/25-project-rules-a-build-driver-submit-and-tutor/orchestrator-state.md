@@ -59,7 +59,7 @@ dispatch:
   round: 0
 - step: 5
   landing: preparing
-  brief_check: "running: a80a3d262da646252"
+  brief_check: .scratch/25-project-rules-a-build-driver-submit-and-tutor/agents/reviews/5-brief-check.md (a80a3d262da646252, claude-opus-5-5, 165019 tokens, 50 tool uses, 9 min 5 s)
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled or, under `self_rule: on`, until the orchestrator closes it as `plan-orchestration`'s `references/self-rule.md`, "Closing an open item", says)
