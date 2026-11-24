@@ -13,6 +13,8 @@ Writes, beside this file:
   roles the other five modes start in its note.
 - referee.svg: the agents and stops of the first round of the referee skill, with what the
   second round starts in its note.
+- submit.svg: the agent and stops of the submit skill, from the submission sheet to the page
+  of the final submit.
 - grant.svg: the agents and stops of the draft mode of the grant skill, with what the other
   four modes start in its note.
 - paper/full.svg, paper/revision.svg, paper/lit-review.svg, paper/outline-only.svg,
@@ -1730,7 +1732,7 @@ def paper_lifecycle() -> str:
         node_width=218,
     )
     submit = Lane(
-        "You submit",
+        "You submit: /submit",
         _parts(
             "Write the highlights",
             "Describe a graphical abstract",
@@ -1748,7 +1750,7 @@ def paper_lifecycle() -> str:
         node_width=218,
     )
     resubmit = Lane(
-        "You resubmit",
+        "You resubmit: /submit",
         _parts("A response you wrote yourself, checked before you send it: /paper rebuttal-audit"),
     )
     internal = Lane(
@@ -1979,6 +1981,43 @@ def referee() -> str:
     return _single(
         "referee.svg",
         "The first round of the referee skill",
+        _graph(nodes, edges),
+        note,
+    )
+
+
+def submit() -> str:
+    """The submit skill: its agent and its stops, from the sheet to the page of the final submit."""
+    nodes = (
+        Node("S", "Sheet agent: the submission sheet from the portal's public pages and the folder"),
+        Node("A", "You approve the sheet, correct it or answer its questions", "stop"),
+        Node("E", "The extension not connected: the run ends with the sheet", "stop"),
+        Node("L", "A field the sheet lacks, added to it as a question", "stop"),
+        Node("C", "A sign-in, a licence, a copyright transfer, a consent or a payment that blocks a page", "stop"),
+        Node("N", "A page that does not pass: the portal's message, with its row", "stop"),
+        Node("P", "The page of the final submit: you press it", "stop"),
+    )
+    edges = (
+        Edge("S", "A"),
+        Edge("A", "E", "no extension"),
+        Edge("A", "L", "the walk, page by page"),
+        Edge("L", "C"),
+        Edge("C", "N"),
+        Edge("N", "P"),
+    )
+    note = (
+        "The session walks the portal's forms in the browser extension after your approval: "
+        "it fills each field, uploads each file and answers each declaration as the sheet "
+        "says, and reads each page back against it. A field the sheet lacks, a control left "
+        "to you and a page that does not pass stop a page only when the page has one. The "
+        "agent saves the public pages with curl and reads the files. Before the agent starts, "
+        "the run stops when a run folder of the same date stands, and when the folder holds "
+        "several funder configs. The session never types a password and never presses the "
+        "final submit."
+    )
+    return _single(
+        "submit.svg",
+        "The submit skill",
         _graph(nodes, edges),
         note,
     )
@@ -2315,6 +2354,7 @@ def figures() -> tuple[tuple[str, str], ...]:
         ("writing.svg", writing()),
         ("paper-review-panel.svg", paper_review_panel()),
         ("referee.svg", referee()),
+        ("submit.svg", submit()),
         ("grant.svg", grant()),
         ("code-comments.svg", code_comments()),
         ("codebase-design.svg", codebase_design()),

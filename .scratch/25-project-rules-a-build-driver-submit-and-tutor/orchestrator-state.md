@@ -46,19 +46,6 @@ repair_reviewer: claude:sonnet  # the model the run of /refute over a repair rou
 
 ```yaml
 dispatch:
-- step: 4
-  executor: agent
-  worker: claude:opus
-  session_id: aad1290499046e502 (claude-opus-5-5)
-  worktree: .agents/worktrees/25-project-rules-a-build-driver-submit-and-tutor-4
-  base: 7132ac8
-  launched: 2026-11-24
-  report: .scratch/25-project-rules-a-build-driver-submit-and-tutor/agents/reviews/4-report.md
-  builder_usage: 243982 tokens, 60 tool uses, 12 min 7 s
-  reviewer_report: .scratch/25-project-rules-a-build-driver-submit-and-tutor/agents/reviews/4-refuter.md (a69c8e7d7e94743e3, claude-opus-5-5, 154003 tokens, 37 tool uses, 8 min 11 s)
-  brief_check: .scratch/25-project-rules-a-build-driver-submit-and-tutor/agents/reviews/4-brief-check.md (af32ec4714532fb10, claude-opus-5-5, 162843 tokens, 37 tool uses, 6 min 58 s)
-  landing: not-started
-  round: 1
 - step: 3
   executor: agent
   worker: claude:opus
@@ -67,6 +54,7 @@ dispatch:
   base: ed1f928
   launched: 2026-11-24
   report: .scratch/25-project-rules-a-build-driver-submit-and-tutor/agents/reviews/3-report.md
+  builder_usage: 253440 tokens, 70 tool uses, 16 min 21 s
   brief_check: .scratch/25-project-rules-a-build-driver-submit-and-tutor/agents/reviews/3-brief-check.md (ab554d078f519c4bd, claude-opus-5-5, 193217 tokens, 32 tool uses, 6 min 59 s)
   shared_paths: README.md, docs/glossary.md, docs/dev/building.md, docs/dev/scripts.md and docs/figures/gen_figures.py with step 4 of this plan, in other lines of each (step 3: the row, the command line and the paragraphs of ordo-init, the plan-terms block, the lines of the build test, the lane of /ordo-init; step 4: the row and sentences of submit, two terms under Ordo's own terms, the line of submit.svg, the function of the submit figure and two labels of the lifecycle figure), so each merge takes both sides
   landing: not-started
@@ -106,5 +94,5 @@ dispatch:
 
 - 2026-11-24. Step 1 has landed. `v10.0.0` is pinned. The working tree holds nothing of this plan outside its ledger.
 - Verified: `sh skills/orchestration/land/templates/checks.sh .scratch/25-project-rules-a-build-driver-submit-and-tutor/orchestrator-state.md` printed `checks: 15 commands passed`.
-- Roadmap entry 25 (Project rules, a build driver, submit and tutor). Plan steps 1, 2, 5 and 6 of 8 landed: the project rules, limits and layout, the skill `tutor`, and rulings D and E carried out. Steps 3 and 4 are in flight, each with its builder running. Step 7, the gate's runs, waits for them.
+- Roadmap entry 25 (Project rules, a build driver, submit and tutor). Plan steps 1, 2, 4, 5 and 6 of 8 landed: the project rules, limits and layout, the skill `submit`, the skill `tutor`, and rulings D and E carried out. Step 3, the build driver, is in flight: built and reviewed once, its repair round next. Step 7, the gate's runs, waits for it.
 - Open on Axel's side: nothing.

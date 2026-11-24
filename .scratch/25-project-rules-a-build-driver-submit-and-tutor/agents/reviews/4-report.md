@@ -154,3 +154,44 @@ Sentences about a file as a whole, reread after the change:
 ## Anything in the brief that was wrong or impossible
 
 None.
+
+## Repair round 1
+
+Every ruling of `agents/briefs/4-round-1.md` is carried out.
+
+1. Pages saved with `curl` (Spec 1). `agents/sheet_agent.md`, "Reading the portal" 1: each page is saved with `curl -sSL --fail --proto '=http,https' -w '%{http_code} %{url_effective}\n' -o '<run folder>/portal/<nn>.html' '<address>'` and read with the Read tool. The call sends no cookie, no credential and no form data, and no portal page is read through WebFetch. The sheet's first lines name each saved file beside its address ("The sheet" 1; template line "Pages saved"). A source or a quoted passage from the portal names its saved file ("The sheet" 3 and 4 and its "Done" line; template example `portal/02.html`). `SKILL.md`: "What it reads" 5, Steps 4, the Anti-patterns row on reading before the approval, the Rules bullet on the run folder (now holds `portal/`), Steps 2 (replacing removes `portal/` with `rm -rf`), the title paragraph and the description. The glossary entry **submission sheet** names the saved pages. A local run of `curl ... --proto '=http,https' ... 'file:///etc/hosts'` printed `curl: (1) Protocol "file" disabled` and `000 file:///etc/hosts`, exit 1.
+2. "The rules hold" (Spec 2). `agents/sheet_agent.md` opens with that section in the words of `skills/academic/referee/agents/referee_agent.md`. The template ends on a section "Objections" that reads "None." when the agent has none. The agent page's "The sheet" 8 writes the objections there. `SKILL.md` Steps 4 ("Done" line) and 5, and the stop "The approval of the sheet", show the objections with the sheet.
+3. The glossary term (Standards 1). The entry is now **walk, of a submission**, in the form of the scoped entries. It says that the bare "walk" in `submit` means this, so the text of `submit` reads as before.
+4. The added row (Standards 2). The rule stands only in `SKILL.md`, "The walk of one page" 2: the added row names its page, its last cell reads `Q<n>, added in the walk`, and its question goes under "Questions". The template's bullet that held a second form is replaced by a description of the last cell ("Source" or "What it rests on"), which gives the same form `Q<n>, added in the walk`.
+5. Steps 9 (Standards 3). It is now three items. Steps 9 walks the final page by items 1 to 7 of "The walk of one page". Steps 10 writes `walk.md`. Steps 11 shows the closing message with the sentence that the user presses the final submit, which is the stop. Each ends on its completion criterion. The stop's "When" cell and the Anti-patterns row on the final submit name Steps 11.
+6. The description (Standards 4). The fragment is joined to the preceding sentence: "It leaves every sign-in, licence, copyright transfer, consent, payment and the final submit to the user, for a journal, a funder's portal or a registration form." The description is 1020 characters.
+7. "A page that does not pass" (Behaviour 1). A new stop is added in "The walk of one page" 8, in the Stops table and in an Anti-patterns row. The session shows the portal's message and the row it concerns. After the user's answer it fills what the changed sheet holds and uses the control once more. It never types a value the sheet does not hold to make a page pass, and uses the control again only after a change to the sheet or the user's word. The figure draws it as a box, and the README row and alt text name it.
+8. Controls (Behaviour 2).
+   - Steps 7 uses the portal's controls that lead to the form.
+   - "The walk of one page" 3 uses the control that adds an entry the sheet holds, such as one more author.
+   - A consent, a cookie banner included, is an agreement. The second Rules bullet names it, Steps 7 leaves it to the user (blocking: the stop "A control left to the user that blocks the walk"), and the stop's "When" cell, the Anti-patterns row, the sheet agent's "The sheet" 4, the figure box, the README row, the description and the glossary entry name it. "Consent" is taken out of the agent's list of declarations it may answer.
+   - Every other control the sheet does not cover is added under "Questions" at the stop "A field the sheet lacks" and is not used ("The walk of one page" 1 and 2; an Anti-patterns row).
+9. "The same site" (Behaviour 3). The agent saves only pages on the host of the URL. A page that `curl` redirects to another host has its file removed and is listed as not read. Each link to another host that looks like an instruction page is listed in the sheet's first lines as a page not read, with its address (agent page "Reading the portal" 2; template line "Pages not read"). The example of two hosts of one domain is gone. The case "An instruction page that links to another site" is still met.
+10. The material (Behaviour 4). Steps 3 now leaves out every file and folder whose name starts with a dot. When `git rev-parse --is-inside-work-tree`, run in the folder, prints `true`, it also leaves out the files that `find . -type f | git check-ignore --stdin`, run in the folder, prints. The message names how many files the material holds. A run on a scratch repository with `build/` and `*.log` ignored printed `./x.log` and `./build/a.pdf`, exit 0, and `git rev-parse --is-inside-work-tree` in a subfolder printed `true`.
+11. "Which config" stays as it was.
+
+After the changes, `SKILL.md`, the agent page and the template were read as one run, from the call to the page of the final submit. These places were corrected:
+- The lead line of the Stops table now says eight stops, six of them waiting.
+- The step numbers in the Stops table and the Anti-patterns follow the new Steps.
+- The README row and the alt text of `docs/figures/submit.svg` (two changed boxes) match the skill.
+- The figure's note names the saved pages and the new stop.
+- Both glossary entries match the skill.
+
+Checks, run from the worktree's root:
+
+| Check | Output |
+|---|---|
+| 1 | `python3 docs/figures/gen_figures.py; echo "exit $?"` printed `exit 0`; `git status --short docs/figures` printed ` M docs/figures/gen_figures.py`, ` M docs/figures/paper/lifecycle.svg`, `?? docs/figures/submit.svg` |
+| 2 | the character-set check over the ten changed files printed nothing, `exit 0` |
+| 3 | `submit 1020 1.0.0 True` |
+| 4 | `PASS: pin.sh scratch tests` |
+| 5 | `grep -c 'academic/submit' README.md` printed `1`; `grep -n 'twenty-two' README.md` printed nothing; the loop printed no line |
+| glossary | `ok: the plan-terms block equals the template` |
+| case grep | `1735:        "You submit: /submit",` and `1753:        "You resubmit: /submit",` |
+
+Line counts now: `SKILL.md` 159, `agents/sheet_agent.md` 72, `templates/submission-sheet.md` 46, `docs/figures/submit.svg` 57. `git diff --numstat`: `README.md` 9 added and 6 removed, `docs/figures/gen_figures.py` 42 added and 2 removed, `docs/figures/paper/lifecycle.svg` 4 and 4, `docs/glossary.md` 2 added, `docs/dev/building.md` 1 and 1, `docs/dev/scripts.md` 1 and 1.
