@@ -55,10 +55,11 @@ dispatch:
   launched: 2026-11-24
   report: .scratch/25-project-rules-a-build-driver-submit-and-tutor/agents/reviews/3-report.md
   builder_usage: 253440 tokens, 70 tool uses, 16 min 21 s
+  reviewer_report: .scratch/25-project-rules-a-build-driver-submit-and-tutor/agents/reviews/3-refuter.md (a5bc4b4e441d63e90, claude-opus-5-5, 191856 tokens, 31 tool uses, 8 min 0 s)
   brief_check: .scratch/25-project-rules-a-build-driver-submit-and-tutor/agents/reviews/3-brief-check.md (ab554d078f519c4bd, claude-opus-5-5, 193217 tokens, 32 tool uses, 6 min 59 s)
   shared_paths: README.md, docs/glossary.md, docs/dev/building.md, docs/dev/scripts.md and docs/figures/gen_figures.py with step 4 of this plan, in other lines of each (step 3: the row, the command line and the paragraphs of ordo-init, the plan-terms block, the lines of the build test, the lane of /ordo-init; step 4: the row and sentences of submit, two terms under Ordo's own terms, the line of submit.svg, the function of the submit figure and two labels of the lifecycle figure), so each merge takes both sides
   landing: not-started
-  round: 0
+  round: 1
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled or, under `self_rule: on`, until the orchestrator closes it as `plan-orchestration`'s `references/self-rule.md`, "Closing an open item", says)
