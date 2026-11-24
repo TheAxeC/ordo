@@ -81,10 +81,15 @@ Each agent a plan skill started for this plan has one bullet, with its agent id,
 - a33239329078fdf56: brief check of step 6, claude-fable-5-2
 - a7057f07033744b86: reviewer of step 6, claude-fable-5-2
 - a15943d1cd0d846a9: reviewer of step 6 over round 1, claude-sonnet-5-5
+- adc8022a453c525b2: gate run of the standards mode on v9.4.0-rc.3, step 2, claude-fable-5-2
+- a1136d134914ace47: gate run of the review mode on v9.4.0-rc.3, step 2, claude-fable-5-2
+- af172707cbe2ca342: gate run of ordo-init on an empty folder on v9.4.0-rc.3, step 2, claude-fable-5-2
+- a9479700a654c2165: gate run of ordo-init on an existing repository on v9.4.0-rc.3, step 2, claude-fable-5-2
+- aaeb5620b1475d957: gate run of ordo-init on a configured repository on v9.4.0-rc.3, step 2, claude-fable-5-2
 
 ## Blocked, and by what
 
-- 2: waits on a release candidate that holds step 6; its first `standards` run, on `v9.4.0-rc.1`, reached the stop "The draft" and was not approved.
+- 2: its five runs on `v9.4.0-rc.3` (2026-11-24) each ran to their end on scratch copies and showed defects reported to the user; the step is not ticked and waits on the user's ruling on them; its first `standards` run, on `v9.4.0-rc.1`, reached the stop "The draft" and was not approved.
 - 3: waits on step 2.
 
 ## Step 1, booked (2026-11-23)

@@ -78,5 +78,5 @@ dispatch: []
 
 ## Current position (rewritten before every step commit of this plan)
 
-- 2026-11-24. Steps 1, 4, 5 and 6 have landed. Step 2, the gate's runs, is next: a release candidate that holds step 6 is tagged and pinned, then the five runs are made to their end by separate agents, every stop answered by the orchestrating session.
+- 2026-11-24. Steps 1, 4, 5 and 6 have landed. `v9.4.0-rc.3` holds step 6 and is pinned. The five runs of step 2 were made on it to their end on scratch copies under the session scratchpad folder `gate3/`; the defects they showed are reported to the user, and step 2 is not ticked.
 - Roadmap entry 19 (codebase-design). Plan step 5 of 6: the gate's runs. Next: step 3, the closing.
