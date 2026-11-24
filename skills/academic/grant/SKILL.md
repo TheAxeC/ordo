@@ -2,7 +2,7 @@
 name: grant
 description: "Draft, revise, review and check a grant application written in LaTeX against a funder config: one funder's required sections, limits, layout and evaluation criteria for one call. Five modes: config has an agent draft the funder config from the call documents and saves it beside the application once approved, draft writes a section, the whole application or a form field from materials, revise changes it by patches for a comments file, review scores it per criterion on the funder's scale with the passages each score rests on, and check compiles it and checks its limits and required sections with two scripts. Draft and revise end with the prose findings the user picks applied. Triggers on: /grant, write a grant application, draft a section of a grant application, draft a funder config from call documents, revise a grant application for comments, score my grant application against the funder's criteria, criteria review of a grant application, check the page limit or the required sections of a grant application."
 metadata:
-  version: "1.0.0"
+  version: "1.0.1"
 ---
 
 # Write and check a grant application
@@ -33,7 +33,7 @@ metadata:
 ## What it reads
 
 1. The `paper` skill's folder, which stands beside this skill's folder, with its `SKILL.md`. A folder that is missing, or that holds no `SKILL.md`, is the refusal "The `paper` skill is not installed".
-2. For `draft` and `revise`, the prose standard and the writing pages, found as the `paper` skill's "What it reads" 1 finds them: the prose standard in the repository the session runs in or in the `repo-setup` skill's folder, and `references/manuscript-prose-standard.md`, `references/rules.md` and `references/registers.md` in the `writing` skill's folder. A missing one is the refusal that section gives, "No prose standard".
+2. For `draft` and `revise`, the prose standard and the writing pages, found as the `paper` skill's "What it reads" 1 finds them: the prose standard in the repository the session runs in or in the `ordo-init` skill's folder, and `references/manuscript-prose-standard.md`, `references/rules.md` and `references/registers.md` in the `writing` skill's folder. A missing one is the refusal that section gives, "No prose standard".
 3. The arguments of the mode, as Quick start gives them. A missing argument, or a file or folder argument that does not exist, is the refusal "A missing input".
 4. For every mode but `config`, the funder config: the one `.md` file in `grant-config/` in the application's folder. No file there is the refusal "No funder config". Several files there are the stop "Which config".
 5. For `config`, the call documents the call names and `templates/funder_config_template.md`, read by the config drafter, and the file that holds the texts of the form's fields when the user names one at the intake.
@@ -359,7 +359,7 @@ The first nine rows wait for the user. The row after them passes a stop of the `
 | The writing findings | `/writing` has reported (`draft` item 9, "draft of a form field" item 5, `revise` item 4) | The numbered report whole, the two sentences on a reply and on the autonomous writer pass, and, for a review of one section or one form field, what the review read | A one-line reply such as `all`, `2, 5` or `none`, or the call for the autonomous writer pass |
 | A stop of the `paper` skill | An item run as the `paper` skill's Steps 9, 10, 11 or 12, its "revision" item 2 or its "full" item 12 raises a stop of that skill's Stops table, such as "A structural patch" or "A claim the run cannot support" | What that table's row shows | What that table's row gives |
 | The `paper` skill is not installed | The `paper` folder with its `SKILL.md` does not stand beside this skill's folder (Steps 2) | That `grant` runs the pages and scripts of the `paper` skill, and that this skill is not installed beside it | The skill installed, then `/grant` again |
-| No prose standard | `draft` or `revise`: the prose standard, or a page of the `writing` skill's folder, is missing (Steps 5) | The paths, as the `paper` skill's Stops row "No prose standard" shows them | The `repo-setup` or `writing` skill installed, then `/grant` again |
+| No prose standard | `draft` or `revise`: the prose standard, or a page of the `writing` skill's folder, is missing (Steps 5) | The paths, as the `paper` skill's Stops row "No prose standard" shows them | The `ordo-init` or `writing` skill installed, then `/grant` again |
 | No funder config | `grant-config/` in the application's folder holds no `.md` file (Steps 4) | That the mode reads a funder config, and the call `/grant config <application folder> <call documents>` | A config made with `/grant config`, then `/grant` again |
 | A missing input | An argument is missing, or names a file or folder that does not exist (Steps 3, `config` item 1), or the name after `field` is no Field of the config ("draft of a form field" item 1) | The mode's line of Quick start, the path, or the config's fields | The call corrected, then `/grant` again |
 

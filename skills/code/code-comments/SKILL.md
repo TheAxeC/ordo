@@ -2,7 +2,7 @@
 name: code-comments
 description: "Review the comments a git diff adds or changes, the uncommitted changes or a range of commits, with a finding agent and a checking agent that change nothing, and rewrite the comments the user picks in C, C++ and CMake files. Each agent reads its whole task from a prompt file the session writes with shell commands. A file over 256 KB reaches it as its diff hunks. The report shown to the user lists each comment that breaks a named rule with its place, the quoted comment and what the rule asks for, the false comments first, and proposes no replacement. The report names each file given as hunks. A rewrite is kept only when the file's code compares equal to its code before the rewrite. Triggers on: /code-comments, /code-comments <base>..<head>, review the comments of a diff, review the comments of a range, check the comments of my changes, check the comments against the code, apply the comment findings, apply <numbers>, apply all."
 metadata:
-  version: "1.1.0"
+  version: "1.1.1"
 ---
 
 # Review the comments of a diff
@@ -29,7 +29,7 @@ apply all                         after a report: rewrite the comments of every 
 
 1. The prose standard, from the first of these two places that holds it:
    - `docs/dev/prose-standard.md` of the repository the session is in.
-   - `templates/docs/dev/prose-standard.md` in the `repo-setup` skill's folder, which stands beside this skill's folder.
+   - `templates/docs/dev/prose-standard.md` in the `ordo-init` skill's folder, which stands beside this skill's folder.
    - Neither is the refusal "No prose standard", which names both paths.
    - The file found, when it lacks one of the headings `## 0.`, `## A.`, `## B.`, `## C.` and `## E.`, is the same refusal, which names that file.
 2. The diff, from the call's argument.

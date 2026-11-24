@@ -27,7 +27,7 @@ Every script in this repository outside `.scratch/` is listed here with its kind
 | `skills/academic/grant/templates/check_limits.py` | Checks the length of a grant application against the limits of its funder config: the page count of the compile's log, the words or characters of a section, of the whole document and of a form field's text under its heading in `grant-fields.md`, the file of form-field texts beside the main `.tex`, each printed as ok, over or not checked. With `-` in place of the PDF, for a run that made no compile, it counts the words and characters and leaves the page limit not checked, and with no main `.tex` yet it counts the form fields alone |
 | `skills/academic/grant/templates/check_sections.py` | Checks the section headings of a grant application's `.tex` against the Sections table of its funder config, and prints each heading as ok, missing, out of order, absent and not required, or not in the config |
 | `skills/orchestration/plan-orchestration/templates/plan_cost.py` | Prices the usage of each agent role of a plan from the response bodies and the agents' transcripts |
-| `skills/ordo/repo-setup/templates/sync_rules.py` | Compares the shared-rules block and the plan-terms block of a repository with their templates, and rewrites them on request, the plan-terms block in `docs/glossary.md` or in the file `--glossary <path>` names |
+| `skills/ordo/ordo-init/templates/sync_rules.py` | Compares the shared-rules block and the plan-terms block of a repository with their templates, and rewrites them on request, the plan-terms block in `docs/glossary.md` or in the file `--glossary <path>` names |
 | `skills/ordo/session-retro/templates/transcript_window.py` | Prints what was said and done in Claude Code transcripts, for a time window or for one Claude Code session, with secrets replaced |
 | `skills/academic/writing/templates/docx_paragraphs.py` | Prints the text of each paragraph of a `.docx` file, numbered, with tracked insertions kept and tracked deletions and comments left out |
 | `skills/academic/writing/templates/prose_facts.py` | Prints the facts of a draft with one right answer: words per sentence, sentences and words per paragraph, semicolons per 1000 words, runs of sentences of equal length, non-ASCII characters, the words of the prose standard's banned and flagged lists, and contractions |
@@ -46,6 +46,6 @@ Every script in this repository outside `.scratch/` is listed here with its kind
 | `skills/academic/paper/templates/reference_docx.test.sh` | `skills/academic/paper/templates/reference_docx.py` |
 | `skills/academic/grant/templates/check_limits.test.sh` | `skills/academic/grant/templates/check_limits.py` |
 | `skills/academic/grant/templates/check_sections.test.sh` | `skills/academic/grant/templates/check_sections.py` |
-| `skills/ordo/repo-setup/templates/sync_rules.test.sh` | `skills/ordo/repo-setup/templates/sync_rules.py` with `--write` and with `--glossary` |
+| `skills/ordo/ordo-init/templates/sync_rules.test.sh` | `skills/ordo/ordo-init/templates/sync_rules.py` with `--write` and with `--glossary` |
 | `utils/pin.test.sh` | `utils/pin.sh` |
 | `skills/code/wizard/templates/template.test.sh` | `skills/code/wizard/templates/template.sh`: `run_cmd`, `have`, `WIZARD_OS`, `version_at_least` and `by_hand` |

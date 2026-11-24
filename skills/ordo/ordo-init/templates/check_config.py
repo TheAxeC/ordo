@@ -168,7 +168,7 @@ def check_adr(paths, prefix, value, default, errors, notes):
     if full is None or os.path.isdir(full):
         return
     if not os.path.exists(full) and full == os.path.join(paths.root, default):
-        notes.append(f"{prefix}adr folder {default} does not exist yet; repo-setup or grill creates it")
+        notes.append(f"{prefix}adr folder {default} does not exist yet; ordo-init or grill creates it")
         return
     errors.append(f"{prefix}adr names a folder that does not exist: {paths.shown(full)}")
 

@@ -1,6 +1,6 @@
 # The skill layout
 
-Every `skills/<group>/<name>/SKILL.md` follows this layout, so a reader finds the same thing in the same place in every skill. The section "Writing for an agent" binds a skill's text as that section's last bullet says. The prose inside follows `skills/ordo/repo-setup/templates/docs/dev/prose-standard.md`.
+Every `skills/<group>/<name>/SKILL.md` follows this layout, so a reader finds the same thing in the same place in every skill. The section "Writing for an agent" binds a skill's text as that section's last bullet says. The prose inside follows `skills/ordo/ordo-init/templates/docs/dev/prose-standard.md`.
 
 ## Frontmatter
 
@@ -63,7 +63,7 @@ No other `##` heading appears outside the place row 6 gives it.
 
 - A rule states the behaviour wanted: a rule written as a prohibition names the behaviour to do instead, in the same bullet or in the Do instead cell of its Anti-patterns row, since a bare prohibition draws attention to what it forbids.
 - One meaning has one place, as "Where a rule goes" says for a rule.
-- A term that `docs/glossary.md` defines is used only in a sense it defines there. A skill that needs a new term, or a term in a new sense, adds or changes its entry in `skills/ordo/repo-setup/templates/plan-terms.md` first, and `docs/glossary.md`'s block is synced from it.
+- A term that `docs/glossary.md` defines is used only in a sense it defines there. A skill that needs a new term, or a term in a new sense, adds or changes its entry in `skills/ordo/ordo-init/templates/plan-terms.md` first, and `docs/glossary.md`'s block is synced from it.
 - A sentence stays only when it changes what the reader does from what they would do without it. A sentence that restates a default, praises, or explains what the reader already knows is cut.
 - Each item of Steps ends on its completion criterion: what is true, or what exists, when the step is done.
 - Every repeat a skill asks for states its count and what happens when the count is reached: the work goes on as it is, or the skill stops for the user. A repeat that ends only when a condition holds, such as "until it passes" or "asked again", is given a count.

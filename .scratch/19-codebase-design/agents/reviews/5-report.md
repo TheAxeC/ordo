@@ -159,7 +159,9 @@ A file changed that "Paths this step writes" does not name: `.gitignore`.
 | Stops "The draft" in each skill | "The draft of the tree" and "The draft of the configuration" |
 | The sequence of `/ordo-help` and of the README: a line for `/repo-setup` and a line for `/ordo-init` | One line, the same text in both: `/ordo-init                    once per repository: sets up a new one from an empty folder, writes docs/plan.yaml and what an existing one lacks, or checks the plan.yaml there with the shared rules and the plan terms` |
 | `check_config.py` note: `adr folder docs/adr does not exist yet; repo-setup or grill creates it` | `...; ordo-init or grill creates it` |
-| `templates/shared-rules.md` line 3: "`/repo-setup sync` keeps this section identical to the template" | "`/ordo-init`, run in a repository that has a plan configuration, keeps this section identical to the template". A repository whose block is a copy of the old text differs from the template by this line until its next sync. |
+| `templates/shared-rules.md` line 3: "`/repo-setup sync` keeps this section identical to the template" | "`/ordo-init` keeps this section identical to the template". A repository whose block is a copy of the old text differs from the template by this line until its next sync. |
+| `templates/docs/glossary.md` line 3, outside the plan-terms block: "which `/repo-setup sync` keeps equal to the `repo-setup` skill's template" | "which `/ordo-init` keeps equal to the `ordo-init` skill's template". The line is outside the block, so no sync rewrites it: a glossary written earlier keeps the old sentence until its owner edits it. |
+| `/repo-setup sync` on a repository with no `plan.yaml` compared both blocks, with `docs/glossary.md` as the glossary | `/ordo-init` on such a repository is the second case: it drafts `docs/plan.yaml` with what is missing, stops for `worker`, `reviewer` and `libraries` and for the approval, and after the write runs the sync in the same run, a block that differs shown per hunk. A person who wants only the sync is led through the draft of the plan configuration first. |
 | The templates under `skills/ordo/repo-setup/templates/`, installed as `<skills>/repo-setup/templates/` | Under `skills/ordo/ordo-init/templates/`, installed as `<skills>/ordo-init/templates/` |
 | README: twenty-two skills, a row for `repo-setup`, `ordo/repo-setup` in the install loop | Twenty-one skills, one row for `ordo-init` covering the three cases, no `ordo/repo-setup` in the loop |
 | Pipeline figure: two lanes, `/repo-setup` and `/ordo-init` | One lane `/ordo-init` with the twelve stops of the merged Stops table, and the README's alternative text lists them |
@@ -169,3 +171,77 @@ A file changed that "Paths this step writes" does not name: `.gitignore`.
 - Item 5 and case 9 name a root `CLAUDE.md`. The worktree has none, since `.gitignore` ignores it, so case 9's grep prints `CLAUDE.md: No such file or directory` beside its lines. The file in the main checkout was read and holds no `repo-setup`.
 - "README.md (every line but line 30)": removing the `repo-setup` row moves the `codebase-design` row from line 30 to line 29. Its text is unchanged (`sed -n 29p README.md` prints the row).
 - The brief's paths do not name `.gitignore`, and the move of `templates/CLAUDE.md` cannot land without the change of judgment call 1.
+
+## Round 1
+
+Nothing is NOT done: each of the thirteen rulings is carried out.
+
+### The rulings
+
+| Ruling | Where the change stands |
+|---|---|
+| 1 (S1) | `ordo-init/SKILL.md`, "Steps / A configured repository" 1: "The configuration check writes nothing by itself and drafts no plan configuration." The sentence on pages is gone. |
+| 2 (S2) | "What it reads" 4: "The folder is the longest leading part of `<folder>` that is a folder holding a `plan.yaml`, and what is left of `<folder>` names a project of that file", and "The command takes the folder alone: a project's name is taken off `<folder>` before the command runs, and is used afterwards to choose the project in the file found." "Steps / A configured repository" 1 runs "the command of "What it reads" 4". The two scratch runs are under the checks. |
+| 3 (S3) | "Steps / A configured repository" 10 now takes `error: no CLAUDE.md in` with the two no-single-block lines: the file is drafted from `templates/CLAUDE.md` as "Steps / An existing repository" 11 says, after questions 1, 5 and 9 are asked, each only for what the repository does not show. Items 11 and 12 show and write it like every other drafted change. Item 13 no longer lists that line. The Stops row "The questions" covers "Steps / An existing repository" 6 and "Steps / A configured repository" 10, and the row "The drafted sync change" names a missing `CLAUDE.md`. "Steps / An existing repository" 11: "A placeholder with no value is shown to the user and never written as `<...>`". |
+| 4 (S4) | "What it reads" 7 names the three cases: "In a configured repository it is what the repository's rules state, in its `CLAUDE.md` or in the page its `rules` key names", "When they state none, the skill asks whether it may commit at the stop that shows the change ("Steps / A configured repository" 9 and 11), with the change". The Stops rows "A hunk to rule on" and "The drafted sync change" show the commit question and resume on its answer. The glossary's **commit rule** says the same. |
+| 5 (P1) | "A configured repository" 7 ends on "The item is done when the sync has run and its exit status is known." "A new repository" 11 ends on its criterion. A script that reads the last sub-bullet of every item of Steps printed no item without one. |
+| 6 (T1) | `check_config.py`'s run is "the configuration check" and `sync_rules.py`'s is "the sync" in every item. The stops are "A fix in the configuration check" and "The sync still fails", in the Stops table, in `gen_figures.py`, in `pipeline.svg` and in the README's alternative text. Case 14 prints nothing. |
+| 7 (T2) | "Steps / An existing repository" 15: "The sync runs at most twice after a block is written or rewritten, and a second run that does not print the `ok:` line of each block is the stop "The sync still fails"". The Stops row names that item beside "Steps / A configured repository" 14. |
+| 8 (T3, T5) | `templates/plan-terms.md` and the glossary's block. **standards** cites `ordo-init`, `references/new-repository.md`, "The questions" 6 and "The tree", and no longer `ordo-help`. **questions, the** adds "Questions 1, 5 and 9 are also asked where `CLAUDE.md` is written from the template in an existing or a configured repository, each only for what the repository does not show." |
+| 9 (T4) | `skills/ordo/ordo-init/references/new-repository.md`, 46 lines, holds "The questions" and "The tree". `SKILL.md` has no such section. "What it reads" 6 names the page and who reads which part, and "Steps / A new repository" 2 and 3 say to read it. The citations name the page: in the skill, in `plan-terms.md` and the glossary (**commit rule**, **new repository**, **questions, the**, **standards**), and in `grill` line 302. `gen_figures.py` cites neither section: its "The questions" is the stop's label. |
+| 10 (T6) | "Steps / An existing repository" 7 finds the glossary and drafts or offers its plan terms, and item 8 drafts `standards` from it. The old items 7 to 10 are items 8 to 11. |
+| 11 (B1) | "Steps / An existing repository" 15: after the configuration check, "run the sync, as "Steps / A configured repository" 7 to 14 say, on the blocks written and on a block that was already there", and "A block that differs is shown per hunk". Items 7 and 11 say that nothing is drafted for a block that is there and that the sync of item 15 compares it in the same run. Item 16 commits a block the sync rewrote with the files written. The frontmatter description, the introduction, the glossary's **sync**, **shared-rules block**, **plan-terms block** and **existing repository**, line 3 of `templates/shared-rules.md` and of `templates/docs/glossary.md`, and the README's paragraph on an existing repository say so. |
+| 12 (B2) | The table "User-visible changes" above has the two rows: line 3 of `templates/docs/glossary.md`, and the sync of a repository with no `plan.yaml`. Its row on `templates/shared-rules.md` quotes the line as it now stands. |
+| 13 | `.gitignore` stays as built, and the case names, the three terms and the lines of "Read before you act" stay as built. |
+
+### The checks, as printed
+
+1. The character-set check printed nothing, then `exit status 0`.
+2. Case 6: `PASS: sync_rules.py scratch tests`. Case 7: `ok: the plan-terms block equals the template`, exit 0. Case 8: `PASS: check_config.py scratch tests`. Case 9: 4 lines in ADR 0047, 9 in `skills/code/codebase-design/SKILL.md`, and the warning `CLAUDE.md: No such file or directory`. Case 10: exit 0, `ok: docs/plan.yaml carries every required key, no unknown key, and every page it names exists`.
+3. The frontmatter command prints `ordo-init 1013 4.0.0`.
+4. `ls skills/ordo` prints `ordo-help ordo-init session-retro wait-what`. `grep -c 'twenty-one' README.md` prints `2`, and `grep -c 'twenty-two' README.md` prints `0`.
+5. `python3 docs/figures/gen_figures.py` exits 0, and `git status --short docs/figures` lists ` M docs/figures/gen_figures.py` and ` M docs/figures/pipeline.svg` only. The figure was rendered again with `rsvg-convert` and looked at: twelve stops in three rows of four, "A fix in the configuration check" on two lines, every box and label inside the frame.
+6. `docs/dev/building.md` lines 16 and 17 are cases 6 and 7. Both pass.
+7. The new and changed items were read against the skill layout and the prose standard. One departure stays: the sub-lists carried from the old skills keep several bullets to a rule, so that no rule's meaning changes.
+
+The scratch runs of ruling 2, in a scratch git repository outside the worktree whose `tools/plan.yaml` is in the `projects:` form with a project `a`:
+
+```
+$ check_config.py --find . tools
+tools/plan.yaml
+exit 0
+$ check_config.py --find . tools/a
+error: no plan.yaml in tools/a, .scratch, docs, .agents of .
+exit 1
+```
+
+The first is the command the skill now runs for `/ordo-init . tools/a`, the project's name taken off. The second is the same call with the name left on, which the skill's text now rules out.
+
+### The cases
+
+1. Met. Steps 1, then "Steps / A new repository": the page `references/new-repository.md` read and its questions asked (2), the tree drafted and shown with every file's text (3, 4), written after approval (5), the plan configuration through "Steps / An existing repository" (8).
+2. Met. "Steps / An existing repository" 11 gives a `CLAUDE.md` with no block the change of "Steps / A configured repository" 10, with each existing rule the block now states listed for removal. Item 12 shows it, item 13 stops, item 14 writes.
+3. Met. "Steps / An existing repository" 11: "With no `CLAUDE.md`, the file is offered from `templates/CLAUDE.md`", its questions asked at item 6.
+4. Met. "Steps / A configured repository" 1 to 6 are the configuration check, then 7 runs the sync and 9 shows the diff per hunk.
+5. Met. Item 8: "both blocks equal their templates, so nothing is written, and the two `ok:` lines are shown with the configuration check's output."
+6. Run: `PASS: sync_rules.py scratch tests`.
+7. Run: `ok: the plan-terms block equals the template`, exit 0.
+8. Run: `PASS: check_config.py scratch tests`.
+9. Run: lines only under `skills/code/codebase-design/` and in ADR 0047.
+10. Run: exit 0 and the `ok:` line.
+11. Met. "What it reads" 4 takes `a` off `tools/a`, the command `--find . tools` prints `tools/plan.yaml` (the run above), Steps 1 makes it a configured repository, and the project is `a`, by "used afterwards to choose the project in the file found" and "What it reads" 8, "the glossary is read from the `standards` list of the project the call names".
+12. Met. "Steps / A configured repository" 1 to 6, then 7 exits 2 with `error: no CLAUDE.md in`, and item 10 asks questions 1, 5 and 9 and drafts the file from the template. Item 11 shows it and item 12 writes only after approval.
+13. Met. "Steps / An existing repository" 1 to 13 draft and show the plan configuration, item 11 drafts nothing for the block that is there, and item 15 runs the sync after the write, where "Steps / A configured repository" 9 shows the diff of the block per hunk.
+14. Run: `grep -n 'the check\b\|the comparison' skills/ordo/ordo-init/SKILL.md` prints nothing, exit 1.
+
+### Judgment calls the rulings left open
+
+1. Ruling 3. The missing `CLAUDE.md` of a configured repository is drafted at item 10, with the two no-single-block lines, so that items 11 and 12 show and write it under the stop "The drafted sync change". It left item 13, the item of files the sync cannot use.
+2. Ruling 3. The stop "The questions" now also covers the questions asked in an existing repository at item 6, so one row holds every place the questions are asked. The row "Worker, reviewer and libraries" no longer names them.
+3. Ruling 4. The commit question of a configured repository is asked at the stops "A hunk to rule on" and "The drafted sync change", the two stops that show a change the skill would commit. Where item 10 asks question 5 for a `CLAUDE.md` written from the template, its answer is the commit rule.
+4. Ruling 9. The page is named `references/new-repository.md`, the name the ruling gives. Inside it, the two citations of the skill's steps name `SKILL.md`.
+5. Ruling 11. The sync in an existing repository follows "Steps / A configured repository" 7 to 14 and not 15: item 16 of the existing repository makes the one commit. A block the user declined at the approval stop is not drafted again by that sync.
+6. Ruling 11. The sentences that said `/ordo-init` syncs "on a configured repository" now name both cases: the glossary's **sync**, **shared-rules block** and **plan-terms block**, and the README. Line 3 of `templates/shared-rules.md` and of `templates/docs/glossary.md` reads "`/ordo-init` keeps" with no condition.
+7. Ruling 8. **standards** cites "The questions" 6 beside "The tree", since question 6 is where the term "standards pages" is stated.
+
+Files this round changed: `skills/ordo/ordo-init/SKILL.md` (418 lines), `skills/ordo/ordo-init/references/new-repository.md` (new, 46 lines), `skills/ordo/ordo-init/templates/plan-terms.md`, `templates/shared-rules.md`, `templates/docs/glossary.md`, `docs/glossary.md`, `skills/orchestration/grill/SKILL.md`, `docs/figures/gen_figures.py`, `docs/figures/pipeline.svg`, `README.md`, and this report.

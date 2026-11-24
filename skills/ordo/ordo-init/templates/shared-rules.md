@@ -1,6 +1,6 @@
 ## Shared rules
 
-These rules hold in every repository set up from the same template. `/repo-setup sync` keeps this section identical to the template; a project-specific rule goes in the Project rules section below it.
+These rules hold in every repository set up from the same template. `/ordo-init` keeps this section identical to the template; a project-specific rule goes in the Project rules section below it.
 
 - **No claim about state without a command in the same turn.** A judgment, estimate, prediction or recommendation is not a claim about state and is given directly, with one clause saying it is a judgment. A sentence about what exists, what is done, how many there are, what a file says or whether a check passed is produced by a command run in the same turn, and the message names that command or quotes its output; otherwise it says "not verified". Memory, inference, an agent's summary and a previous message are leads, never evidence. Read the source and cite it: `file:line` for code, the section for a page.
 - **Reports state the end state.** The first line says what is NOT done, or that everything asked for is done. Then a DONE / NOT DONE row per item, each naming the command that proves it. A wrong turn taken and backed out inside the task is not narrated. Partial work is never presented as complete, and a measurement not taken is never stated.

@@ -24,7 +24,7 @@ The open item names its kind by its number:
 
 ## A skill with its own approval stop
 
-- An option that runs `/roadmap move`, `drop` or `done`, `/roadmap add` of work no finding names, `/ordo-init` or `/repo-setup` under a quoted ruling meets that skill's approval stop, since those commands take only a bullet ending "(the user)" as a quoted ruling.
+- An option that runs `/roadmap move`, `drop` or `done`, `/roadmap add` of work no finding names, or `/ordo-init` under a quoted ruling meets that skill's approval stop, since those commands take only a bullet ending "(the user)" as a quoted ruling.
   - The item stays open for the user.
 - An option that runs `/roadmap add` under a quoted ruling ending "(self-rule)" whose bullet names a finding of a running plan, as the `roadmap` skill's "What it reads" 6 says, is closed like any other, since `/roadmap add` takes such a bullet.
   - After `/roadmap add` commits the entry, the orchestrator adds `the roadmap entry <n>` to the choice's `Builds on it:` line.

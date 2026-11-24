@@ -2,7 +2,7 @@
 name: plan-orchestration
 description: "Run every open plan unattended in one session, or the plan named, step by step, from its ledger folder: pick the next unblocked step, prepare its brief and worktree, dispatch one builder agent in the step's worktree, have a reviewer refute the result, send its findings back to the builder for the repair rounds plan.yaml allows, read the delta, land the step with the small fixes made at landing, book it, and repeat, and under self_rule: on and next_entry: on go on to the next roadmap entry after a closing; stop only where a decision is for the user. Every project specific comes from plan.yaml and the ledger, so the same skill runs a code tool, a research project or a manuscript under Claude Code, and one orchestrator session can hand the plans to another mid-way. Triggers on: run every open plan, run the plan, next step, orchestrate the plan, plan orchestration, dispatch the next step, continue the plan, resume the plan, C<n> Agree, C<n> => <ruling> (the review of a choice taken under self-rule)."
 metadata:
-  version: "8.0.0"
+  version: "8.0.1"
 ---
 
 # Plan orchestration
@@ -482,7 +482,7 @@ The table holds seven kinds of stop, each for a decision for the user, and two r
   - The user's ruling on the item then approves those approvals too, with no second stop.
   - An approval of work not yet done when the option is written, such as the user's reading of a page a step will write, stays a stop of its own.
   - The option names that stop.
-  - An option that runs a skill with an approval stop (`/plan`, `/roadmap`, `/ordo-init`, `/repo-setup` or `/grill`) states the change in full, as that skill's text says a quoted ruling must state it, or names that skill's approval stop as a stop of its own.
+  - An option that runs a skill with an approval stop (`/plan`, `/roadmap`, `/ordo-init` or `/grill`) states the change in full, as that skill's text says a quoted ruling must state it, or names that skill's approval stop as a stop of its own.
   - After the user's ruling on an option that states the change, the session books the ruling as the `spec` skill's "Steps / A ruling" says.
   - It then runs the skill with `--ruling <ledger file> "<name>"`.
 - A pause the user asks for holds every open plan unless the user names the plans it holds.
@@ -525,4 +525,4 @@ The table holds seven kinds of stop, each for a decision for the user, and two r
 - Everything else that the rounds left undone, or that lies outside the step's part, is raised to the user as an open item, by "Stops".
   - It is never sent back to the builder.
   - It goes where "What earns a step of its own" says.
-- Every skill the orchestrator invokes (`/spec`, `/refute`, `/land`, `academic-paper` for manuscript content, `/roadmap` at the closing, `/grill <entry> --self-rule` and `/plan <entry> --self-rule` in next-entry mode, and `/plan`, `/roadmap`, `/ordo-init`, `/repo-setup` or `/grill` run under a quoted ruling) is invoked through the runner every time, after a compaction too, and never carried out from remembered text.
+- Every skill the orchestrator invokes (`/spec`, `/refute`, `/land`, `academic-paper` for manuscript content, `/roadmap` at the closing, `/grill <entry> --self-rule` and `/plan <entry> --self-rule` in next-entry mode, and `/plan`, `/roadmap`, `/ordo-init` or `/grill` run under a quoted ruling) is invoked through the runner every time, after a compaction too, and never carried out from remembered text.

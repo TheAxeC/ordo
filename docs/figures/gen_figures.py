@@ -2195,30 +2195,23 @@ def plan_loop() -> str:
 
 
 def pipeline() -> str:
-    repo = Lane(
-        "/repo-setup",
-        (
-            Node("a", "The questions", "stop"),
-            Node("b", "The draft", "stop"),
-            Node("c", "A hunk to rule on", "stop"),
-            Node("d", "The drafted sync change", "stop"),
-            Node("e", "A file sync cannot use", "stop"),
-            Node("f", "The check still fails", "stop"),
-            Node("g", "No commit allowed", "stop"),
-        ),
-        columns=2,
-    )
     init = Lane(
         "/ordo-init",
         (
-            Node("a", "The draft", "stop"),
-            Node("b", "Several roadmaps", "stop"),
-            Node("c", "Worker, reviewer and libraries", "stop"),
-            Node("d", "A failing command", "stop"),
-            Node("e", "A fix in the check", "stop"),
-            Node("f", "No commit allowed", "stop"),
+            Node("a", "The questions", "stop"),
+            Node("b", "The draft of the tree", "stop"),
+            Node("c", "Several roadmaps", "stop"),
+            Node("d", "Worker, reviewer and libraries", "stop"),
+            Node("e", "A failing command", "stop"),
+            Node("f", "The draft of the configuration", "stop"),
+            Node("g", "A fix in the configuration check", "stop"),
+            Node("h", "A hunk to rule on", "stop"),
+            Node("i", "The drafted sync change", "stop"),
+            Node("j", "A file sync cannot use", "stop"),
+            Node("k", "The sync still fails", "stop"),
+            Node("l", "No commit allowed", "stop"),
         ),
-        columns=2,
+        columns=4,
     )
     roadmap = Lane(
         "/roadmap add",
@@ -2275,8 +2268,8 @@ def pipeline() -> str:
     )
     rows = (
         Row(
-            "SET THE REPOSITORY UP, ONCE: ONE OF THE TWO",
-            (repo, init),
+            "SET THE REPOSITORY UP, ONCE",
+            (init,),
             arrows=False,
         ),
         Row(
@@ -2298,7 +2291,7 @@ def pipeline() -> str:
         + "."
     )
     note = (
-        "These start no agent: /repo-setup, /ordo-init, /roadmap, /plan, /land, /plan-retro, "
+        "These start no agent: /ordo-init, /roadmap, /plan, /land, /plan-retro, "
         "/session-retro, /wizard, and /wait-what and /ordo-help, which have no stop. A refusal names "
         "its cause and leaves nothing, so it is not drawn."
     )

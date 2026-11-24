@@ -14,14 +14,14 @@ verify:                      # commands run once, at landing on main, in order; 
 - sh skills/academic/paper/templates/reference_docx.test.sh 2>&1 | tail -1
 - sh skills/academic/grant/templates/check_limits.test.sh 2>&1 | tail -1
 - sh skills/academic/grant/templates/check_sections.test.sh 2>&1 | tail -1
-- sh skills/ordo/repo-setup/templates/sync_rules.test.sh 2>&1 | tail -1
-- python3 skills/ordo/repo-setup/templates/sync_rules.py . --only glossary
+- sh skills/ordo/ordo-init/templates/sync_rules.test.sh 2>&1 | tail -1
+- python3 skills/ordo/ordo-init/templates/sync_rules.py . --only glossary
 - sh utils/pin.test.sh 2>&1 | tail -1
 - sh skills/code/wizard/templates/template.test.sh 2>&1 | tail -1
 - >-
   git ls-files -coz --exclude-standard | xargs -0 sh -c 'for f; do if [ -e "$f" ]; then printf "%s\0" "$f"; fi; done' sh | xargs -0 perl -CSD -ne 'my $bad_char = $ARGV =~ /\.md\z/ ? qr/[^\x20-\x7E\x{2705}\n]/ : qr/[^\x20-\x7E\n]/; if (/$bad_char/) { print "$ARGV:$.: $_"; $bad = 1 } close ARGV if eof; END { $? ||= 1 if $bad }'
 rules: docs/dev/change-standard.md # the repository's change standard: the rules every builder works under; every brief points at it.
-standards: [docs/dev/skill-layout.md, skills/ordo/repo-setup/templates/docs/dev/prose-standard.md, docs/glossary.md] # files every brief tells the builder to read in full, from docs/plan.yaml.
+standards: [docs/dev/skill-layout.md, skills/ordo/ordo-init/templates/docs/dev/prose-standard.md, docs/glossary.md] # files every brief tells the builder to read in full, from docs/plan.yaml.
 worktree_root: .agents/worktrees # where a step's worktree is created, relative to the repository root; gitignored.
 worktree_paths: []           # sparse-checkout paths for a step's worktree; empty means the whole tree.
 executor: agent              # the plan's default: a builder is dispatched in the step's worktree for every step not marked orchestrator.
@@ -59,19 +59,6 @@ dispatch:
   shared_paths: "README.md and docs/figures/gen_figures.py with step 5 of this plan; simple, since step 4 writes README line 30 and the function codebase_design and step 5 every other line"
   brief_check: ".scratch/19-codebase-design/agents/reviews/4-brief-check.md (a3a640202fd2b636a, claude-fable-5-2, 171187 tokens, 27 tool uses, 5.7 minutes)"
   reviewer_report: ".scratch/19-codebase-design/agents/reviews/4-refuter.md (a0f5e5d3a9d6b9ca8, claude-fable-5-2, 138507 tokens, 15 tool uses, 4.8 minutes); over round 1: a36ce253e9ce66cbf, claude-sonnet-5-5, 116459 tokens, 10 tool uses, 2.6 minutes"
-- step: 5
-  landing: not-started
-  base: 7219d6c
-  worktree: .agents/worktrees/19-codebase-design-5
-  executor: agent
-  worker: claude:fable
-  report: .scratch/19-codebase-design/agents/reviews/5-report.md
-  round: 1
-  session_id: a8d73c9c4d7eaf570 (claude-fable-5-2)
-  builder_usage: 239605 tokens, 44 tool uses, 15.9 minutes
-  shared_paths: "README.md and docs/figures/gen_figures.py with step 4 of this plan; simple, since step 4 writes README line 30 and the function codebase_design and step 5 every other line"
-  brief_check: ".scratch/19-codebase-design/agents/reviews/5-brief-check.md (adb032fec2fe9803e, claude-fable-5-2, 172993 tokens, 22 tool uses, 5.8 minutes)"
-  reviewer_report: ".scratch/19-codebase-design/agents/reviews/5-refuter.md (a5a056ebb96ece6ae, claude-fable-5-2, 192040 tokens, 25 tool uses, 7.1 minutes)"
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled or, under `self_rule: on`, until the orchestrator closes it as `plan-orchestration`'s `references/self-rule.md`, "Closing an open item", says)
@@ -104,5 +91,5 @@ dispatch:
 
 ## Current position (rewritten before every step commit of this plan)
 
-- 2026-11-24. Step 1 has landed (f03b8d6). Step 2's first `standards` run on `v9.4.0-rc.1` reached the stop "The draft"; the user found the draft unreadable, and it was not approved. The scratch copy holds no change. Rulings of 2026-11-24 add step 4 (the standards stop) and step 5 (`repo-setup` merged into `ordo-init`), built in parallel. Next: `/spec 19 4` and `/spec 19 5`, their builders, reviews and landings, then a new release candidate and step 2's runs.
-- Roadmap entry 19 (codebase-design). Plan steps 4 and 5 of 5: the standards stop, and the merge. Next: step 2, the gate's runs.
+- 2026-11-24. Steps 1 and 5 have landed. Step 4 (the standards stop) is built, reviewed and repaired in one round, and lands next with the five small fixes its last review names. Then a new release candidate, on the user's word, and step 2's runs.
+- Roadmap entry 19 (codebase-design). Plan step 4 of 5: the standards stop. Next: step 2, the gate's runs.

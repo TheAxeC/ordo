@@ -2,7 +2,7 @@
 name: grill
 description: "Settle a roadmap entry's design decisions before its plan opens, by an interview in rounds: list the decisions the entry's goal and gate need, ask every decision whose prerequisites are settled in one round, each with its options, their pros and cons, a reference line for the configured design bar, one recommendation and the lazy option named, have facts looked up by agents instead of asked, and write each answer as it settles into the plan's Rulings or the entry's rulings file, each lookup agent into the Agents section of the same file, the roadmap entry, the glossary, the glossary's path in the standards list of plan.yaml and of each open plan's configuration block when it creates or lists a glossary, and a proposed ADR, written on the user's yes or, under `--self-rule`, on the orchestrator's recommendation. Triggers on: grill <entry>, grill me on the entry, settle the design decisions of an entry, interview me about the design, design decisions before the plan, stress-test the design of an entry."
 metadata:
-  version: "2.0.0"
+  version: "2.0.1"
 ---
 
 # Settle an entry's design decisions
@@ -70,7 +70,7 @@ metadata:
 9. The page that states this repository's goals: `docs/dev/design-principles.md` when it exists, otherwise the opening of `README.md`.
    - A repository that states no goals in either is shown so in the first round.
    - The goals of such a repository are asked as a decision of their own.
-10. The `repo-setup` skill's `templates/docs/adr/README.md`, `templates/docs/adr/template.md` and `templates/docs/glossary.md`, only when Steps 8 must create the ADR folder's files or the glossary.
+10. The `ordo-init` skill's `templates/docs/adr/README.md`, `templates/docs/adr/template.md` and `templates/docs/glossary.md`, only when Steps 8 must create the ADR folder's files or the glossary.
 11. The quoted ruling, when the invocation ends with `--ruling <ledger file> "<name>"`.
     - `<ledger file>` is a plan's `plan.md` or a rulings file, given by a path the skill can read from where it runs.
     - The quoted ruling is the bullet named `<name>` in that file's Rulings section, or in the file itself when it is a rulings file, with every line under it: its sub-bullets and their fenced blocks.
@@ -200,7 +200,7 @@ metadata:
     - List each lookup agent written to an Agents section ("Steps / Looking up a fact" 4), with its bullet and its `<path>:<line>`.
     - An entry changed under a quoted ruling is listed with the ruling's name and its ledger file.
     - List each change owed to an open plan ("Steps / A plan already open"): a step whose text an answer changed, and the lines of `plan.md`'s "## Goal" or "## Gate" an answer changed.
-    - List each clash with a term of the plan-terms block as a change for the user to make in the Ordo repository's `skills/ordo/repo-setup/templates/plan-terms.md`.
+    - List each clash with a term of the plan-terms block as a change for the user to make in the Ordo repository's `skills/ordo/ordo-init/templates/plan-terms.md`.
     - Name `/roadmap add <entry>` when the interview settled the gate of an entry under "Not yet specified", since `grill` does not move that entry.
     - Print that gate's text whole beside the command, for the user to give it.
     - Without `--self-rule`, ask, in the same message, whether the user confirms a shared understanding and whether the skill may commit.
@@ -299,7 +299,7 @@ metadata:
    - The item is done when the file, read back, holds the bullet whole.
 2. Write the glossary term.
    - A term the interview settles is written into the glossary below the plan-terms block, in the file's form `- **<term>**: <definition>`, at once.
-   - In a repository whose `standards` list names no glossary, the skill first looks for a `glossary.md` in the folder that holds the rules file, and then for the glossary `/repo-setup` writes, at the path the `repo-setup` skill's "The tree" gives it from the repository root.
+   - In a repository whose `standards` list names no glossary, the skill first looks for a `glossary.md` in the folder that holds the rules file, and then for the glossary `/ordo-init` writes in a new repository, at the path "The tree" of the `ordo-init` skill's `references/new-repository.md` gives it from the repository root.
      - The first found is the glossary: it is not written over, and the term is written into it.
      - A new glossary is written only when neither exists, as `glossary.md` in the folder that holds the rules file, from the glossary template "What it reads" 10 names.
    - The term's decision shows the glossary found or the new one, and the two additions of its path, with the term, for the user's yes in the round.
@@ -307,8 +307,8 @@ metadata:
      - Its path, as it reads from the repository root, is added to the `standards` line of the configuration block of each open plan of that `plan.yaml` (`plan-orchestration`'s "What it reads" 1), so the next `/spec` of an open plan reads the glossary.
    - On the yes, a new glossary and the two additions are written before the term.
    - A term that clashes with the glossary's existing definition is put to the user as a decision.
-   - A term the plan-terms block defines is never written into the block, since `/repo-setup sync` undoes it.
-   - No copy of the `repo-setup` skill's `templates/plan-terms.md` is changed by this skill.
+   - A term the plan-terms block defines is never written into the block, since the sync of `/ordo-init` undoes it.
+   - No copy of the `ordo-init` skill's `templates/plan-terms.md` is changed by this skill.
    - A clash with such a term is put to the user as a decision.
    - Its answer is written as a Rulings bullet (item 1).
    - The end lists it as a change for the user to make in the Ordo repository (Steps 10).
@@ -335,7 +335,7 @@ metadata:
    - On the user's yes, write the record in the same turn.
      - Under `--self-rule`, the decision is answered with its recommendation like the rest, and a record taken is written with status `proposed`.
    - Write it in the folder `adr` names, from its `template.md`, or from the form of the folder's latest record when it has no `template.md`.
-   - A missing folder, or one with neither `template.md` nor a record, is created or filled first from the `repo-setup` skill's `templates/docs/adr/README.md` and `template.md`.
+   - A missing folder, or one with neither `template.md` nor a record, is created or filled first from the `ordo-init` skill's `templates/docs/adr/README.md` and `template.md`.
    - The record is numbered after the folder's highest.
    - The record's status is `proposed`.
    - Its decision is the ruled option, its context the facts the decision gave, its alternatives rejected the other options with their cons, and its consequences what the decision said follows.

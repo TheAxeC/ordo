@@ -2,7 +2,7 @@
 name: wizard
 description: "Generate an interactive bash script, a wizard, that walks a person through a setup or another procedure: it opens each URL, says what to click and copy, reads each value, writes it to .env, a GitHub secret or a GitHub variable, runs the commands a stage needs, each shown and confirmed first, and asks before an irreversible action. Use it when installing a tool or a project's dependencies, provisioning infrastructure, setting up credentials or CI secrets, walking an unfamiliar third-party dashboard, or running a one-off migration or cutover. It is not for an action the session can take itself, now, on the machine it runs on. It leaves behind the script, checked and never run by the session. Triggers on: /wizard, write a wizard, write a setup script that walks me through it, walk me through installing the dependencies, walk me through setting up the credentials, set up the CI secrets, walk me through this dashboard, walk me through the migration, walk me through the cutover."
 metadata:
-  version: "1.0.0"
+  version: "1.0.1"
 ---
 
 # Wizard
@@ -19,8 +19,7 @@ metadata:
 
 | When | Use |
 |---|---|
-| A new repository is to be set up with its pages and skills | `/repo-setup` |
-| A repository is to be set up for the plan skills | `/ordo-init` |
+| A repository is to be set up for the plan skills, a new one with its pages and skills or an existing one | `/ordo-init` |
 
 ## What it reads
 

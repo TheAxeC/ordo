@@ -189,3 +189,194 @@ B2. A second change not stated.
 - A folder with untracked files and no git repository, which Steps 1 sends to "A new repository" where "The tree" names `README.md` and `.gitignore`: the old `repo-setup` treated it the same way, so it is outside this step's diff.
 
 Agent usage: a5a056ebb96ece6ae, claude-fable-5-2, 192040 tokens, 25 tool uses, 7.1 minutes.
+
+## Repair round 1, refuted
+
+# Review of repair round 1 of step 5 (worktree /Users/axelfaes/workspace/ordo/.agents/worktrees/19-codebase-design-5)
+
+Nothing was changed anywhere. I ran only `git status --short`, read-only commands, and scratch runs outside the worktree (`rev5r1/` and `rev5r1fig/` under the scratchpad). I did not run `python3 docs/figures/gen_figures.py` in the worktree because it writes files there. I ran a copy in the scratchpad instead.
+
+Line numbers below are those of `skills/ordo/ordo-init/SKILL.md` as it now stands. It has 418 lines.
+
+## Checks, as printed here
+
+1. The character-set check over the changed files printed nothing, then `exit status 0`.
+2. Cases 6 to 10:
+   - Case 6: `PASS: sync_rules.py scratch tests`.
+   - Case 7: `ok: the plan-terms block equals the template`, exit 0.
+   - Case 8: `PASS: check_config.py scratch tests`.
+   - Case 9: `ugrep: warning: CLAUDE.md: No such file or directory`, then 9 lines in `skills/code/codebase-design/SKILL.md` and 4 lines in ADR 0047. Nothing else.
+   - Case 10: `note: docs/plan.yaml: design_references not set, default [] applies`, then `ok: docs/plan.yaml carries every required key, no unknown key, and every page it names exists`. I did not read the exit status for this case: my `$PIPESTATUS` expansion printed `exit ` with no value, so the exit status of case 10 is not verified here.
+3. Frontmatter: `ordo-init 1013 4.0.0`.
+4. `ls skills/ordo` prints `ordo-help ordo-init session-retro wait-what`. `grep -c 'twenty-one' README.md` prints `2` and `grep -c 'twenty-two' README.md` prints `0`.
+5. Figures:
+   - The copy of `gen_figures.py` run in the scratchpad exited 0, and every `.svg` it wrote is byte-equal (`cmp`) to the one in the worktree's `docs/figures/`.
+   - `git status --short docs/figures` lists only `gen_figures.py` and `pipeline.svg`.
+   - I rendered `pipeline.svg` with `rsvg-convert -w 1600` and looked at it. The `/ordo-init` lane shows twelve stops in three rows of four, "A fix in the configuration check" on two lines, and every box and label inside the frame.
+6. `docs/dev/building.md` lines 16 and 17 are cases 6 and 7 at the new path, and both pass above.
+7. Case 14, `grep -n 'the check\b\|the comparison' skills/ordo/ordo-init/SKILL.md`, prints nothing (exit 1).
+8. The delta:
+   - `diff -u` between the round's snapshot and the worktree differs for `README.md`, `docs/figures/gen_figures.py`, `docs/figures/pipeline.svg`, `docs/glossary.md`, `grill/SKILL.md`, `ordo-init/SKILL.md`, `templates/docs/glossary.md`, `templates/plan-terms.md` and `templates/shared-rules.md`.
+   - `git status --short --untracked-files=all` against `files.txt` also shows the new `skills/ordo/ordo-init/references/new-repository.md` (read whole).
+9. Script scan: the last line of every item of Steps contains "done". That is 47 parsed blocks, 44 items plus the 3 `###` headings, which my script flagged only as an artefact of its parse.
+10. `check_config.py --find` in a scratch git repository whose `tools/plan.yaml` is in the `projects:` form with a project `a`:
+    - `--find . tools` prints `tools/plan.yaml`, exit 0.
+    - `--find . tools/a` prints `error: no plan.yaml in tools/a, .scratch, docs, .agents of .`, exit 1.
+    - With a `docs/plan.yaml` added, `--find . tools/a` prints `docs/plan.yaml`, exit 0.
+    - `--find . nothing` prints `docs/plan.yaml`, exit 0.
+    - The builder's two runs are reproduced.
+11. `sync_rules.py .` in a folder with no `CLAUDE.md` and a glossary with no block prints both `error: no CLAUDE.md in <root>` and `error: docs/glossary.md has no single plan-terms block (...)`, exit 2. This agrees with "A configured repository" 10.
+
+## Rulings 1 to 13
+
+1. Carried out. Line 289 reads "The configuration check writes nothing by itself and drafts no plan configuration." The sentence about pages is gone.
+2. Carried out. "What it reads" 4 (lines 32 to 37) takes the project name off before the command and uses it afterwards. I reproduced both runs. See Behaviour finding B3, which is a gap the ruling did not ask to close.
+3. Carried out in text. "A configured repository" 10 asks questions 1, 5 and 9, the stop "The questions" covers it, and placeholders are never written unfilled. The item it points to has a defect. See S2.
+4. Carried out. "What it reads" 7 (lines 45 to 51) names all three cases and the ask at the stop that shows the change. The glossary's **commit rule** says the same.
+5. Carried out, by my own scan. Nothing was removed to get there.
+6. Carried out as written. Case 14 prints nothing. The Stops table, `gen_figures.py`, `pipeline.svg` and the README alternative text all use "A fix in the configuration check" and "The sync still fails", and no leftover of the old names exists. See T1 for the residual uses of "check" and "comparison".
+7. Carried out (line 274). Its count nests with the count of "A configured repository" 14. See B2.
+8. Carried out as read in the diffs of `docs/glossary.md` and `templates/plan-terms.md`.
+9. Carried out. The page exists with 46 lines. `SKILL.md` has no such sections. "What it reads" 6 and the steps name the page, and the citations in the skill, the glossary, `plan-terms.md` and `grill` 302 name it. The `gen_figures.py` hit is only a stop label. The page itself has a stale pointer. See P1.
+10. Carried out. Item 7 settles the glossary, item 8 drafts `standards`, and item 11 comes after item 9. I found no item of Steps that uses something produced later within a case, except item 11 (S2).
+11. Carried out in text, at "An existing repository" 15. It breaks when the user declines the plan configuration. See B1.
+12. Carried out. Report lines 163 and 164 hold both rows.
+13. The acceptance matches the report. Not a code matter.
+
+No finding is closed by removing something. Two fixes reach slightly beyond their rulings:
+- The Stops row "The questions" absorbed "Existing" 6 (judgment call 2 of the round).
+- Ruling 11 changed `templates/shared-rules.md` and `templates/docs/glossary.md` line 3. It also changes the text a synced block takes, so every set-up repository differs from the template until its next sync. This is stated in the report.
+
+## Verdicts on the whole diff
+
+Items of "What to build":
+1. Holds. `skills/ordo/repo-setup/` is gone and the templates are under `skills/ordo/ordo-init/templates/`.
+2. Violated by S1, S2, B1 and T2 below (the frontmatter, the three cases, their order and the arguments are in place).
+3. Holds. Every named file reads true, and the glossary, `plan-terms.md`, `grill`, the README and the figure now agree.
+4. Holds. No path under `skills/code/codebase-design/` is changed.
+5. Not applicable. The worktree has no root `CLAUDE.md`.
+
+Cases:
+1. Met.
+2. Met. "Existing" 11 gives a `CLAUDE.md` with no block the change of "Configured" 10, and removal listings are covered.
+3. Met.
+4. Met for a call without a project name. With a project name it is met by "What it reads" 4 (B3 is the residual risk).
+5. Met.
+6. Met.
+7. Met.
+8. Met.
+9. Met.
+10. Met in its output (the `ok:` line printed). Its exit status is not verified here.
+11. Partial. The text is correct (project name off, `--find . tools`, case configured, project `a`). The skill gives no way to decide which leading part holds the `plan.yaml` (B3).
+12. Met in text. Walk: configuration check 1 to 6, sync 7 exits 2 with `error: no CLAUDE.md in`, item 10 asks questions 1, 5 and 9, items 11 and 12 show and write after approval. The drafted file reaches S2.
+13. Met except when the user declines the plan configuration (B1). Walk: "Existing" 1 to 13 draft and show, item 14 writes, item 15 syncs, the differing block is shown per hunk through "Configured" 9, and item 16 commits.
+14. Met.
+
+Walks of the folder states:
+- Empty folder: Steps 1, then "New" 1 to 12, with "Existing" 1 to 16 at "New" 8. The two sync runs are redundant but consistent.
+- Existing repository with its own `CLAUDE.md`: "Existing" 1 to 16.
+- Existing repository without `CLAUDE.md`: "Existing" 11, which uses the draft's `plan.yaml` (S2).
+- Configured repository: "Configured" 1 to 15.
+- Configured repository without `CLAUDE.md`: "Configured" 10 asks and drafts.
+- Existing repository with a differing block: "Existing" 15 shows the diff.
+
+## Judgments over the merged skill
+
+- Two sentences that contradict: the introduction (line 10) against "Configured" 15 (S3).
+- Cases: the three cases cannot be confused. The order of tests in Steps 1 is stated, and no argument chooses the case.
+- A folder state where the session cannot tell what applies: a user who declines or corrects the plan configuration draft at "Existing" 13 (B1), and a user who declines one block (B2).
+- Every item uses only what an earlier item produced, except "Existing" 11 reading "the draft's `plan.yaml`" when run from "Configured" 10 (S2).
+- Citations of sections and items in the skill, `docs/glossary.md`, `plan-terms.md`, `grill`, the README and `gen_figures.py` all point at something that exists. The sole exception is the stale pointer in the reference page (P1).
+- Stops table: each of the twelve rows names items that raise it, and each item that stops has a row. "The sync still fails" says "does not exit 0" for both citations while "Existing" 15 says "does not print the `ok:` line". They are the same condition for `sync_rules.py`.
+
+## The builder's seven judgment calls
+
+1. The missing `CLAUDE.md` of a configured repository is drafted at item 10 and left out of item 13. Inside ruling 3, which says the offer stays and must work.
+2. The stop "The questions" now also covers "Existing" 6. Inside ruling 3 ("the stop covers it"). It widens one row, not another stop.
+3. The commit question sits at "A hunk to rule on" and "The drafted sync change". Inside ruling 4 ("the stop that shows the change").
+4. The page name `references/new-repository.md`. Inside ruling 9. The two citations inside it name `SKILL.md`.
+5. The sync after the write follows "Configured" 7 to 14, not 15. Inside ruling 11. It creates the count nesting in B2.
+6. The condition "on a configured repository" in the glossary, README and the two template lines now names both cases. Inside ruling 11, but it changes a template line that propagates to every set-up repository. That is a user-visible change and the report states it.
+7. **standards** also cites "The questions" 6. Inside ruling 8 (the term appears there).
+
+None of the seven was a decision that was not the builder's.
+
+## Findings
+
+### Spec
+
+S1. A carried rule says "existing repository" where it covered all cases (small, a few lines).
+- Place: Rules, line 408.
+- Text: "A page the skill writes in an existing repository states, beside its template's text, what the repository already does or says." The Anti-patterns row at line 396 states the same rule with no case.
+- Wrong: "existing repository" is a glossary term (tracked file, no plan configuration). A `CLAUDE.md` or glossary written in a configured repository falls outside it. The row and the rule disagree on scope.
+- Failure: in a configured repository without `CLAUDE.md`, a session writes the file from the template and does not state or cite what the repository already says about its commands or rules.
+
+S2. "A configured repository" 10 sends the session to an item that assumes a drafted `plan.yaml` (small).
+- Place: lines 245 to 246 ("Existing" 11), reached from lines 348 to 349.
+- Text: "Each line of "Read before you act" names the page of that kind the draft's `plan.yaml` names or the draft offers".
+- Wrong: in a configured repository there is no draft `plan.yaml` and no page offers.
+- Failure: the session cannot name the pages for the lines of "Read before you act" and writes them from guesswork or leaves them all out. It violates the ruling "no placeholder written unfilled".
+
+S3. The introduction and the steps disagree on what is committed (small).
+- Place: line 10 against "A configured repository" 15, lines 369 to 372.
+- Text: "...the fixed configuration and the synced blocks, committed when the repository's commit rule allows it." Item 15 commits only "After exit 1 or exit 2".
+- Wrong: no step commits a configuration fix made at item 5.
+- Failure: a reader believes the fixed `plan.yaml` is committed. In a repository that passes the sync, it is left uncommitted.
+
+### Proof
+
+P1. The reference page cites a statement that is not there (small).
+- Place: `references/new-repository.md` line 17.
+- Text: "The draft at "Steps / A new repository" 4 of `SKILL.md` says so."
+- Wrong: `SKILL.md` has no sentence that says a language without a template page gets none. The old skill had the same pointer with the same gap.
+- Failure: a session shows the draft for a language such as Go without telling the user it gets no language page.
+
+### Standards
+
+T1. Residual one-term-two-meanings (small).
+- Place: line 141 ("Run the checks:"), line 152 ("each check's output"), line 259 ("The comparison covers the form, ...").
+- Wrong: "the checks" here are the five commands of "A new repository" 10, one of which is the sync and one the configuration check. "The comparison" at 259 is draft against ruling, while the glossary's **sync** is also "the comparison". Case 14 does not see the capitalised form.
+- Failure: a reader takes "the checks" at "New" 10 as the configuration check alone.
+- Also: "configuration check" has no glossary entry while "sync" does. The layout asks a new term in a sense of its own to be added to `plan-terms.md`.
+
+T2. "What it reads" 6 mixes a file and the user's answers in one input (small).
+- Text: "`references/new-repository.md` ..., and the user's answers to the questions."
+- Wrong: the layout says one input per item.
+- Failure: minor. A reviewer cannot tell whether an absent answer is a refusal.
+
+T3. Rules line 418 says "Every path in this skill's text is relative to the repository root" while the skill names `templates/...` and `references/...`, relative to the skill's folder (carried, small).
+
+### Behaviour
+
+B1. Declining the plan configuration leaves "Existing" 15 with no outcome.
+- Place: lines 268 to 275, after item 13 "stop then stands with nothing written".
+- Wrong: item 15 assumes "The path printed is `docs/plan.yaml`". A user who approves a block change but declines or corrects the plan configuration reaches it, and no Stops row covers it. This is the person ruling 11 means: "runs /ordo-init to sync a repository without a plan configuration".
+- Failure: `--find` exits 1 or the session invents a branch. The block sync the user asked for does not run. Not small: it needs an item or a clause saying what runs when no plan configuration was written.
+
+B2. The count of reruns nests (small).
+- Place: lines 271 to 274 against 366 to 368.
+- Wrong: item 15 says "runs at most twice", and it also follows "Configured" 7 to 14, whose item 14 has its own "at most twice". It is unclear whether the total is two or three runs. A block the user declined at item 13 makes `sync_rules.py` exit 2 "has no single block", yet item 15 says it is "not drafted again" while "Configured" 10 says to draft. No row names that outcome.
+- Failure: the session reruns three times, or drafts the declined block again.
+
+B3. The skill gives no way to find "the longest leading part of `<folder>` that holds a `plan.yaml`" (small).
+- Place: lines 32 to 37.
+- Wrong: `--find . tools/a` cannot do it, because it falls back to `docs/plan.yaml` with exit 0 (scratch run above).
+- Failure: with `/ordo-init . tools/a` and no `tools/plan.yaml`, a session may take a `docs/plan.yaml` as the file of project `a`. The text says it checks existence but names no command.
+
+## Declined to judge
+
+- The exit status of case 10: not read here (`$PIPESTATUS` printed nothing). Output lines only.
+- `python3 docs/figures/gen_figures.py` inside the worktree: not run. A copy in the scratchpad was run.
+- The plan's whole verify list, the state file and the ruling file: not run, not read.
+- `git check-ignore` claims and the `.gitignore` change (ruling 13, accepted by the orchestrator).
+- The cases' first run on the unchanged tree: not repeated.
+- Whether the three case names, "configuration check" and the new glossary terms are the user's wording: the user's call.
+- `skills/code/codebase-design/` and ADR 0047: step 4's.
+- README sentences outside the skill ("The same comparison runs on its own", "The same check runs on its own"): outside ruling 6's scope, not judged.
+
+Agent usage: add1fddfd58c551b7, claude-sonnet-5-5, 190174 tokens, 24 tool uses, 4.8 minutes.
+
+## Closed
+
+- First review: S1 to S4, P1, T1 to T6, B1 and B2 closed by the builder in round 1, as the rulings of `agents/briefs/5-round-1.md` say; P2 and S5 needed no change.
+- Round 1, S1, S2, S3, P1, T1, T2, T3, B1, B2 and B3: each fixed at landing, named in the booking.

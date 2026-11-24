@@ -8,7 +8,7 @@ ADR 0027 decides that each role of a `paper` run "runs as `ordo-<reviewer_effort
 
 ## Decision
 
-`paper` and `writing` read no `plan.yaml`. `paper` names in its own text the model and the effort of each agent it starts: every role of `paper` runs as `ordo-medium` on opus, and `paper`'s formatter runs as `ordo-medium` on sonnet. `writing` starts each of its agents on the runner's default agent with the runner's defaults, and its prompts set no model and no effort. The prose standard is `docs/dev/prose-standard.md` of the repository when it has one, and otherwise the `repo-setup` skill's `templates/docs/dev/prose-standard.md`, with no refusal for a missing configuration. This record supersedes ADR 0027 in the effort and the model its roles run at, and ADR 0001 in the `standards` key; both stand for every other part.
+`paper` and `writing` read no `plan.yaml`. `paper` names in its own text the model and the effort of each agent it starts: every role of `paper` runs as `ordo-medium` on opus, and `paper`'s formatter runs as `ordo-medium` on sonnet. `writing` starts each of its agents on the runner's default agent with the runner's defaults, and its prompts set no model and no effort. The prose standard is `docs/dev/prose-standard.md` of the repository when it has one, and otherwise the `ordo-init` skill's `templates/docs/dev/prose-standard.md`, with no refusal for a missing configuration. This record supersedes ADR 0027 in the effort and the model its roles run at, and ADR 0001 in the `standards` key; both stand for every other part.
 
 ## Alternatives rejected
 

@@ -2,7 +2,7 @@
 name: spec
 description: "Prepare one step of an open plan: refuse a step without its authority ((approved) or (ruling <name>)), check each premise of the step's text against the tree, under libraries: check, look for a library for each capability the step builds, a candidate being the user's choice, or under self-rule the orchestrator's, write the brief (checked premises, fix text, verification list, report shape, pointer to the rules file, cases, libraries checked, paths it writes), compare those paths with the briefs of steps in flight, a shared file judged by the orchestrator, run for a full step the brief check by a fresh read-only agent, create the worktree at main's head, stage the base binaries, and record the dispatch in the state file. A step a red line took back out of main is prepared again, its old work saved as a patch in the ledger and applied in the new worktree. Triggers on: spec <entry> <step>, brief <step>, prepare step <n>, write the brief; and on a ruling typed in reply to a stop (Ruled: ...)."
 metadata:
-  version: "8.0.0"
+  version: "8.0.1"
 ---
 
 # Prepare a step
@@ -166,7 +166,7 @@ Ruled: <the choice>      the reply to a stop, booked as "Steps / A ruling" says;
      - `Size: a small text step: no brief check, one review, no repair round` for a step that is a small text step, as the glossary's entry **small text step** says.
      - `Size: a full step` for every other step.
      - The glossary is the page `/plan`'s "What it reads" 1 names, read at its path in the configuration block's `standards` list.
-     - With no glossary, the entry **small text step** is read from the `repo-setup` skill's `templates/plan-terms.md`, and the brief says under "What is on the tree" that the repository has no glossary.
+     - With no glossary, the entry **small text step** is read from the `ordo-init` skill's `templates/plan-terms.md`, and the brief says under "What is on the tree" that the repository has no glossary.
    - The premises as checked, with the command that checked each.
    - The ADRs the step touches, as Steps 2 names them.
    - The change Steps 1 made to the plan's verify list, when it made one.

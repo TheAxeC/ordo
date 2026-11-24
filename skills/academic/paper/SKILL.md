@@ -2,7 +2,7 @@
 name: paper
 description: "Write, revise, plan and format a LaTeX manuscript with twelve roles, each a fresh agent: intake, literature strategist, structure architect, argument builder, draft writer, citation compliance, abstract, peer reviewer, formatter, Socratic mentor, visualization and revision coach. Twelve modes: full, outline-only, revision, abstract-only, lit-review, format-convert, citation-check, plan, revision-coach, disclosure, rebuttal-audit and response-letter. Two calls, draft-review and figures, run one role. Every change to the manuscript is a patch applied by script, and every cited claim rests on a passage read in the run. Triggers on: /paper, write a paper, outline a paper, revise a manuscript, write the response letter, parse reviewer comments, audit my rebuttal, write an abstract, review the literature on a topic, check the citations, write an AI disclosure statement, help me plan my paper, convert my paper to DOCX, convert the citations to <style>, review my draft, draw the figures."
 metadata:
-  version: "4.1.2"
+  version: "4.1.3"
 ---
 
 # Write and revise a manuscript
@@ -73,7 +73,7 @@ The `<manuscript>` of format-convert is a main `.tex`, a `.md`, a `.docx` or a `
 ## What it reads
 
 1. The prose standard, from the first of these two places that holds it, and the writing pages.
-   - `docs/dev/prose-standard.md` of the repository the session runs in, then `templates/docs/dev/prose-standard.md` in the `repo-setup` skill's folder, which stands beside this skill's folder. Neither is a refusal that names both paths.
+   - `docs/dev/prose-standard.md` of the repository the session runs in, then `templates/docs/dev/prose-standard.md` in the `ordo-init` skill's folder, which stands beside this skill's folder. Neither is a refusal that names both paths.
    - The writing pages are `references/manuscript-prose-standard.md`, `references/rules.md` and `references/registers.md` in the `writing` skill's folder, standing beside this skill's folder. A missing page is a refusal that names the path.
    - The manuscript prose standard is the prose standard with the differences `references/manuscript-prose-standard.md` lists. It is the prose standard of every role of this skill and of the `/writing` review of Steps 13.
 2. The arguments of the mode, as Quick start gives them. Each file or folder argument is a path; one that does not exist is the refusal "An argument that does not exist", and so is a missing argument.
