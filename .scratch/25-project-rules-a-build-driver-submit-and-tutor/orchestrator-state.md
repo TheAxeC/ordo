@@ -54,9 +54,13 @@ dispatch:
   base: b772895
   launched: 2026-11-24
   report: .scratch/25-project-rules-a-build-driver-submit-and-tutor/agents/reviews/1-report.md
+  builder_usage: 161372 tokens, 25 tool uses, 5 min 32 s
+  reviewer_report: .scratch/25-project-rules-a-build-driver-submit-and-tutor/agents/reviews/1-refuter.md (aff8729b7d77a1e04, claude-opus-5-5, 149633 tokens, 23 tool uses, 5 min 42 s)
   brief_check: .scratch/25-project-rules-a-build-driver-submit-and-tutor/agents/reviews/1-brief-check.md (a84e8e7f2b9dce5b4, claude-opus-5-5, 125805 tokens, 30 tool uses, 5 min 42 s)
   landing: not-started
-  round: 0
+  round: 1
+- step: 2
+  landing: preparing
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled or, under `self_rule: on`, until the orchestrator closes it as `plan-orchestration`'s `references/self-rule.md`, "Closing an open item", says)

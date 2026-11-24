@@ -1,0 +1,12 @@
+# Step 1, repair round 1
+
+The findings are those of `agents/reviews/1-refuter.md`. Each ruling says what to change. The rules of the brief `agents/briefs/1.md` hold unchanged, its conventions and its "Verify before you report" included.
+
+1. Finding S1, the open-items rule and open items that hold no options. The rule is narrowed to the open items that offer options, in both places it is written: the bullet "An open item is for costs the user weighs" of `skills/ordo/ordo-init/templates/shared-rules.md`, and the sub-bullet under the stop-message bullet of "Stops" in `skills/orchestration/plan-orchestration/SKILL.md`. After the change the rule says that an open item that offers options is raised only when each option costs something the user would weigh. It then says nothing about an open item with no options: the user's reading of a page, a worktree that could not be removed, a diff to approve. Read each of the four places the finding names against the new wording and state in the report that none contradicts it.
+2. Finding S3, what is done in place of raising. Each of the two places of ruling 1 also says what is done with a decision whose options do not each cost something the user would weigh: the recommended option is taken and the report states it. In `plan-orchestration` the sentence is written so that it sets aside none of the skill's own raises: what the rounds left undone is still raised as that skill's text says. One sentence in each place, in the form of the page.
+3. Finding S2, the effort rule and the revision coach's table. The bullet "An effort question is answered with the changes" of the shared rules is narrowed to a question about the effort of a change to the repository. After the change it does not reach an estimate a manuscript skill gives of a revision. No page of `skills/academic/` is changed.
+4. Finding P1: the report lists the hits of `grep -rn -i '[0-9] \(hours\|days\|weeks\|minutes\)' skills/` that state an effort estimate, each read against the effort rule as ruling 3 words it.
+5. Finding B1: the report's list of visible changes gains the two sentences added to rules 6 and 16 of `docs/dev/change-standard.md`, with the before and after.
+6. Finding SP1 is closed by rulings 1 to 3.
+
+Paths this round writes: `skills/ordo/ordo-init/templates/shared-rules.md`, `skills/orchestration/plan-orchestration/SKILL.md`, and the report `agents/reviews/1-report.md`, which gains a section "Repair round 1" with each ruling, the passage before and after, and the verify list's output run again.
