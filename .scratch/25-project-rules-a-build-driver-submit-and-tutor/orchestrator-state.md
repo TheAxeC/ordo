@@ -58,8 +58,17 @@ dispatch:
   landing: not-started
   round: 0
 - step: 5
-  landing: preparing
+  executor: agent
+  worker: claude:opus
+  session_id: ab824b150f2570d7a (claude-opus-5-5)
+  worktree: .agents/worktrees/25-project-rules-a-build-driver-submit-and-tutor-5
+  base: a7850f3
+  launched: 2026-11-24
+  report: .scratch/25-project-rules-a-build-driver-submit-and-tutor/agents/reviews/5-report.md
   brief_check: .scratch/25-project-rules-a-build-driver-submit-and-tutor/agents/reviews/5-brief-check.md (a80a3d262da646252, claude-opus-5-5, 165019 tokens, 50 tool uses, 9 min 5 s)
+  shared_paths: README.md and docs/figures/gen_figures.py with step 2, in other lines of each (step 2: the alt texts of the grant and paper figures and their two functions; step 5: the table, the group sentence, the install loop, the count and the note of pipeline()); simple to merge
+  landing: not-started
+  round: 0
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled or, under `self_rule: on`, until the orchestrator closes it as `plan-orchestration`'s `references/self-rule.md`, "Closing an open item", says)
@@ -110,5 +119,5 @@ dispatch:
 
 - 2026-11-24. Step 1 has landed. `v10.0.0` is pinned. The working tree holds nothing of this plan outside its ledger.
 - Verified: `sh skills/orchestration/land/templates/checks.sh .scratch/25-project-rules-a-build-driver-submit-and-tutor/orchestrator-state.md` printed `checks: 15 commands passed`.
-- Roadmap entry 25 (Project rules, a build driver, submit and tutor). Plan step 1 of 7 landed: the project rules. Step 2's builder is running. Step 5's brief check is running. Steps 3 and 4 are stopped on open items B and C.
+- Roadmap entry 25 (Project rules, a build driver, submit and tutor). Plan step 1 of 7 landed: the project rules. The builders of steps 2 and 5 are running. Steps 3 and 4 are stopped on open items B and C.
 - Open on Axel's side: open item A, the reading of the rules; open item B, two questions on the build driver, which step 3 waits on; open item C, one question on the submission sheet, which step 4 waits on.
