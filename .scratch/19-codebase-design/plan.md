@@ -86,10 +86,17 @@ Each agent a plan skill started for this plan has one bullet, with its agent id,
 - af172707cbe2ca342: gate run of ordo-init on an empty folder on v9.4.0-rc.3, step 2, claude-fable-5-2
 - a9479700a654c2165: gate run of ordo-init on an existing repository on v9.4.0-rc.3, step 2, claude-fable-5-2
 - aaeb5620b1475d957: gate run of ordo-init on a configured repository on v9.4.0-rc.3, step 2, claude-fable-5-2
+- aa62707e2037f74e7: gate run of the standards mode on v9.4.0-rc.4, step 2, claude-fable-5-2
+- a92d37754d11b71c7: gate run of the review mode on v9.4.0-rc.4, step 2, claude-fable-5-2
+- a3aac14008c7ec84e: gate run of ordo-init on an empty folder on v9.4.0-rc.4, step 2, claude-fable-5-2
+- ace1d88975705aa94: gate run of ordo-init on an existing repository on v9.4.0-rc.4, step 2, claude-fable-5-2
+- a7df954223e997d4a: gate run of ordo-init on a configured repository on v9.4.0-rc.4, step 2, claude-fable-5-2
+- a442384b82998c183: gate run of ordo-init on an empty folder on v9.4.0-rc.5, step 2, claude-fable-5-2
+- aeec4d98036270380: gate run of ordo-init on an existing repository on v9.4.0-rc.5, step 2, claude-fable-5-2
 
 ## Blocked, and by what
 
-- 2: its five runs on `v9.4.0-rc.3` (2026-11-24) each ran to their end on scratch copies and showed defects reported to the user; the step is not ticked and waits on the user's ruling on them; its first `standards` run, on `v9.4.0-rc.1`, reached the stop "The draft" and was not approved.
+- 2: the seven defects of its runs on `v9.4.0-rc.3` were fixed on main by the user's ruling of 2026-11-24 (no further step; fixed outside a step), tagged `v9.4.0-rc.4`; its five runs on `v9.4.0-rc.4` each ran to their end on scratch copies with none of the seven left; three smaller defects those runs showed were fixed on main and tagged `v9.4.0-rc.5`, pinned, and the empty-folder and existing-repository runs were made again on it; the step is not ticked and waits on the user's reading of the report.
 - 3: waits on step 2.
 
 ## Step 1, booked (2026-11-23)
