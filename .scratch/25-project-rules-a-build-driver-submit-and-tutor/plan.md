@@ -130,6 +130,9 @@ Independent of each other; the standing rule of one agent at a time still serial
 - Open item G (2026-11-24): option 3, `ordo-init` stays as it is, and at the closing the roadmap gate's words on the new repository say that `./utils/build.py gate` exits 0 once a first passing test exists and non-zero once a failing test is added (the user).
 - Open item H (2026-11-24): option 2, the submission sheet of `submit` is written from the folder and from the public instructions (the portal's pages `curl` can save, the journal guide of `paper`, a funder config of `grant`), says how much of the portal's form could be read, and is never shown for approval with nothing from the folder; in the walk each field of the form is matched to a row and a field with no row is asked; both `/submit` runs of the gate are made again on `v11.0.0-rc.3` (the user).
 - Open item I (2026-11-24): option 1, the sentences of `tutor` whose meaning differs from the source `teach` are put back to the source's meaning, the instruction the copy added is removed, and `deviations.md` is corrected (the user).
+- Open item J (2026-11-24): a value of the submission sheet is always its whole text, however long, never a summary or a pointer, fixed now in `submit` (the user).
+- Open item K (2026-11-24): the sheet agent of `submit` reads a folder's own list of what is left out of a submission and leaves those files out of "Files" with a count; `.gitignore` is no such list (the user).
+- The final runs (2026-11-24): the walks of the two `/submit` runs are made from the link the user gave, with no further act of the user; before step 8 the orchestrator reports each final run with pass or fail, and step 8 starts after that report (the user).
 
 ## Agents
 
@@ -175,6 +178,7 @@ Each agent a plan skill started for this plan has one bullet, with its agent id,
 - aa238fda60548b301: builder of ruling H, claude-opus-5-5
 - ac3b8e3d52f4ad011: gate run of /submit on the deposit form on v11.0.0-rc.3, to the approval of the sheet, claude-opus-5-5
 - aa26a6855ea5b887b: gate run of /submit on the journal's portal on v11.0.0-rc.3, to the approval of the sheet, claude-opus-5-5
+- ad2d880fc0e83b85c: builder of rulings J and K, claude-opus-5-5
 
 ## Blocked, and by what
 

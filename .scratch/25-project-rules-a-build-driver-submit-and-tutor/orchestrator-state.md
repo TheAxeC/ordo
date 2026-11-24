@@ -59,6 +59,7 @@ dispatch: none
 
 ## Closed items (the log of what was raised and how it ended; no report carries it)
 
+- J and K, ruled by the user 2026-11-24; see `plan.md`, Rulings. Every final run is made on `v11.0.0-rc.4`, and each is reported to the user with pass or fail before step 8 starts.
 - H (option 2) and I (option 1), ruled by the user 2026-11-24; see `plan.md`, Rulings. The two `/submit` runs are made again on `v11.0.0-rc.3`.
 - F and G, ruled by the user 2026-11-24, each option 3; see `plan.md`, Rulings. The runs of `/tutor` and `/submit` go on `v11.0.0-rc.2`.
 
@@ -88,7 +89,7 @@ dispatch: none
 
 ## Current position (rewritten before every step commit of this plan)
 
-- 2026-11-24. `v11.0.0-rc.3` is pinned (rulings H and I; `v11.0.0-rc.2` at `8257327` under ruling F); the two `/ordo-init` runs were made on `v11.0.0-rc.1`, whose `ordo-init` is the same. The working tree holds nothing of this plan outside its ledger.
+- 2026-11-24. `v11.0.0-rc.4` is pinned (rulings J and K; `v11.0.0-rc.3` under rulings H and I; `v11.0.0-rc.2` at `8257327` under ruling F); the two `/ordo-init` runs were made on `v11.0.0-rc.1`, whose `ordo-init` is the same. The working tree holds nothing of this plan outside its ledger.
 - Verified: `sh skills/orchestration/land/templates/checks.sh .scratch/25-project-rules-a-build-driver-submit-and-tutor/orchestrator-state.md` printed `checks: 16 commands passed`.
 - Roadmap entry 25 (Project rules, a build driver, submit and tutor). Plan steps 1 to 6 of 8 landed. Step 7, the gate's runs, is in progress on `v11.0.0-rc.1` (tagged at `db692d9` and pinned 2026-11-24, after the user named the inputs in reply to that recommendation). Inputs: a new `python` repository; a scratch clone of ordo for `/ordo-init build`; a scratch copy of the manuscript `bttn-incident-af` of research-hub with the portal https://submit.editorialmanager.com/BSPC/submissions (the user's); a scratch copy of the code folder of `bttd-source-eeg` with the deposit form of the Zenodo sandbox (the orchestrator's pick, on the user's word to pick an example); the topic pixel art (of the user's two); the concept git worktree. The scratch folders stand under the session's scratchpad, `gate/`. Each run's agent stands in `plan.md`, Agents.
 - Open on Axel's side: nothing.

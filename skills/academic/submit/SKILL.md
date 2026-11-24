@@ -47,17 +47,20 @@ metadata:
    - Done when no file of a run of that date stands, or the user has ended the run.
 3. Resolve the material.
    - The material is every file of the folder and its subfolders, with `submit-runs/` left out.
-   - Leave out every file and folder whose name starts with a dot.
+   - Leave out every file and folder whose name starts with a dot, except a list of what is left out of a submission.
+   - A list of what is left out of a submission is a file at the folder's root whose name or whose own first lines say that it lists what its owner leaves out of a deposit, an upload or a submission, such as a made-up `.deposit-leave-out` whose first line reads "Not part of the deposit". It is judged by reading.
+   - Read the name and the first lines of each file at the folder's root, and keep each list of what is left out of a submission in the material, a list whose name starts with a dot included. The sheet agent leaves the files a list names out of "Files", as `agents/sheet_agent.md`, "Reading the folder" 3, says.
+   - `.gitignore` is no list of what is left out of a submission: a file git ignores stays in the material and may be a file to upload, such as a built PDF in an ignored build folder.
    - A `paper-runs/` folder in the parent of the folder adds its latest run folder, the one whose name holds the latest date and, on that date, the highest number.
    - A `grant-config/` folder in the folder adds its one `.md` file, the funder config, and `grant-fields.md` beside the main `.tex`, the form-field texts. Several `.md` files there are the stop "Which config".
-   - Name the material to the user in one message, with the number of files it holds and the run folder of `paper` and the funder config each by its path, or, for each of them the folder does not hold, that it holds none, such as "No run folder of `paper` and no funder config.", and go on without waiting.
+   - Name the material to the user in one message, with the number of files it holds and the run folder of `paper`, the funder config and each list of what is left out of a submission each by its path, or, for each of them the folder does not hold, that it holds none, such as "No run folder of `paper`, no funder config and no list of what is left out.", and go on without waiting.
    - A build product, such as a LaTeX `.aux` file, stays in the material: the sheet agent may read it and does not list it as a file to upload.
    - Ask nothing the folder answers.
    - Done when the message is sent, after the user's answer when the stop "Which config" was raised.
 4. Have the sheet written.
    - Create the run folder and its `portal/` with `mkdir -p`.
    - Start one fresh agent from `agents/sheet_agent.md`, as Rules says of the sheet agent.
-   - Give it the path of `agents/sheet_agent.md`, with the word to read it whole, the path of `templates/submission-sheet.md`, the URL, the material of Steps 3 by its paths, the path of "What it reads" 4 when it applies, and the run folder's path.
+   - Give it the path of `agents/sheet_agent.md`, with the word to read it whole, the path of `templates/submission-sheet.md`, the URL, the material of Steps 3 by its paths, each list of what is left out of a submission by its path, the path of "What it reads" 4 when it applies, and the run folder's path.
    - It reads the folder, as its page's "Reading the folder" says.
    - It saves each portal page it reads with `curl` into `portal/` of the run folder and reads the saved file, as its page's "Reading the portal" says.
    - It writes down what the form and the public instructions ask for and matches each thing to the folder, as its page's "Reading the instructions" says.
@@ -99,18 +102,21 @@ metadata:
    - Write the user's answer into its row or its question, as a change to the sheet.
    - Done when each of them has a row or a question the user has answered.
 3. Fill each field with the value its row of the sheet holds.
+   - Type the value's text as its cell holds it, read as the notes of `templates/submission-sheet.md` say of a value written on one line: each `<br>` a line break, each `\|` a `|`, and every other character as it stands.
    - Use the portal's control that adds an entry, such as one more author, for each entry the sheet holds.
    - Leave a field whose row is empty, as the user approved it, empty.
    - Done when each field with a value is filled.
 4. Upload each file the sheet lists for the page, from its path.
    - Done when each file is uploaded.
 5. Tick or answer each declaration as the approved sheet says.
+   - Type an answer that is a text as item 3 says of a value.
    - Done when each declaration of the page is answered as its row says.
 6. Leave each control of the first two bullets of Rules to the user, and note it with its page for the closing message.
    - Say to the user which control was left and on which page.
    - A page that cannot be passed without such a control is the stop "A control left to the user that blocks the walk".
    - Done when each control is noted, and each one that blocks the page is done by the user.
 7. Read the filled page back against the sheet.
+   - Compare each field with the text of its row, read as item 3 says.
    - Note each difference for the closing message: the field, the value of the sheet and the value the page shows.
    - Fill no field a second time.
    - Done when each field, file and declaration of the page is compared.
@@ -128,7 +134,7 @@ The first nine rows are stops: six wait for the user, and "A sheet with nothing 
 |---|---|---|---|
 | A run folder that exists | `submit-runs/<YYYY-MM-DD>/` with the date of the run stands under the folder (Steps 2) | The run folder's path and the files it holds | The user says to replace it, and the run goes on; or the user ends the run |
 | Which config | `grant-config/` holds several `.md` files (Steps 3) | Each file's path | The user names the funder config the sheet is written from |
-| A sheet with nothing from the folder | The sheet holds no row of "Fields" with a value, no row of "Files" with a path and no row of "Declarations" with an answer that rests on a passage of the folder (Steps 5) | What the sheet agent found in the folder, from the sheet's first lines on the files read, the files not read and the build products left out; what it could not read, from its first lines on the portal's form, the instructions read and the pages not read; the sheet's questions and objections; and the path of the sheet | Nothing: the run ends with the sheet in the run folder, and the user adds the material to the folder and calls `/submit` again |
+| A sheet with nothing from the folder | The sheet holds no row of "Fields" with a value, no row of "Files" with a path and no row of "Declarations" with an answer that rests on a passage of the folder (Steps 5) | What the sheet agent found in the folder, from the sheet's first lines on the files read, the files not read, the build products left out and the files a list of the folder leaves out; what it could not read, from its first lines on the portal's form, the instructions read and the pages not read; the sheet's questions and objections; and the path of the sheet | Nothing: the run ends with the sheet in the run folder, and the user adds the material to the folder and calls `/submit` again |
 | The approval of the sheet | `submission-sheet.md` stands in the run folder and holds something from the folder (Steps 6) | The sheet whole, with its first lines, its questions and its objections | The user approves the sheet; a correction or an answer is written into the sheet, which is shown again |
 | The extension not connected | After the approval, when the session has no tool of Claude in Chrome (Steps 7) | That the extension is not connected, and the path of the approved sheet, which serves the user filling the portal by hand | Nothing: the run ends with the sheet in the run folder |
 | A control left to the user that blocks the walk | The portal asks for a sign-in, or a page cannot be passed without a credential, a licence, a copyright transfer, a consent or a payment (Steps 8; "The walk of one page" 6) | The control and its page, and that the session leaves it to the user | The user does it in the tab and says so, and the walk goes on with the same page |
@@ -152,6 +158,8 @@ The first nine rows are stops: six wait for the user, and "A sheet with nothing 
 | Typing a value the sheet does not hold, or using the control for the next page again, to make a page pass | The portal receives a value the user never approved, and the walk repeats with no count | Stop at "A page that does not pass", as "The walk of one page" 8 says |
 | Opening the portal in the browser to read its forms before the approval | The browser acts on the portal before the user has approved what goes into it | The sheet agent saves the public pages with `curl` into `portal/` and reads the files, and the walk starts after the approval |
 | Writing the sheet only from what the saved portal pages ask for | Nearly every portal shows its form only after a sign-in, so the sheet comes out empty and the walk asks for every field one page at a time | The sheet agent lists what the folder holds by kind and adds what the public instructions ask for, as `agents/sheet_agent.md`, "Reading the folder" and "Reading the instructions", say |
+| Writing in a row of the sheet a description of a long value, such as its word count, its first and last words or the path of its file, in place of its text | The user approves a pointer, and the walk, whose only source is the sheet, has no text to type | The sheet agent writes the value's whole text in its cell, as `agents/sheet_agent.md`, "The sheet" 2, says |
+| Leaving every file whose name starts with a dot out of the material, a list of what is left out of a submission included | The sheet agent never reads the list and proposes for upload the files its owner leaves out | Keep such a list in the material, as Steps 3 says, and the sheet agent leaves the files it names out of "Files" |
 | Showing a sheet that holds nothing from the folder for approval | An approval of it approves no value, and it reads as an approval of a form nobody has seen | Stop at "A sheet with nothing from the folder", as Steps 5 says |
 | Making the PDF of a Word document the portal asks for | The file the portal receives is one the user never made or saw | List the file as a question in the sheet, for the user to supply |
 

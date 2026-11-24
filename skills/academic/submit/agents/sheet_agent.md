@@ -19,6 +19,7 @@ You write the submission sheet of a `submit` run: what the user's folder holds f
 - `templates/submission-sheet.md`, the form of the sheet.
 - The URL of the portal.
 - The material of the folder, by its paths: the folder's files and, when they are there, the latest run folder of `paper`, the funder config and `grant-fields.md`.
+- Each list of what is left out of a submission that the folder holds at its root, by its path, when it holds one.
 - For a journal's manuscript system, the path of the `paper` skill's `references/journal_submission_guide.md`, whose section "Required Components" lists what a journal usually asks for.
 - The path of the run folder.
 
@@ -30,14 +31,22 @@ You write the submission sheet of a `submit` run: what the user's folder holds f
    - Done when each chosen file is read whole or is a file not read.
 2. Note each value the files hold, by kind, with the file and the place in it, a section, a line, a heading or a key: such as the title, the authors with their affiliations, the corresponding author, an abstract, keywords, highlights, a version, the licence the work is released under, the text of a funding statement, of a conflict-of-interest statement, of a data availability statement, of an ethics statement or of an AI disclosure.
    - The licence the work is released under, such as the one a `LICENSE` file states, is a value. A licence, a copyright transfer or terms the portal asks the user to agree to are no value of the folder.
+   - Note a value as its whole text, as "The sheet" 2 says.
    - Done when each value found is noted with its file and place.
-3. Note each file of the material that could be uploaded, with what it is, such as the manuscript as a PDF, its LaTeX source, its bibliography, a figure, a cover letter, a declaration file or the source code of a deposit.
+3. Read whole each list of what is left out of a submission: a file at the root of the folder whose name or whose own first lines say that it lists what its owner leaves out of a deposit, an upload or a submission, such as a made-up `.deposit-leave-out` whose first line reads "Not part of the deposit".
+   - Judge by reading whether a file is such a list, from its name and its first lines, whether or not you were given its path.
+   - `.gitignore` is no such list: a file git ignores stays in the material and may be a file to upload, such as a built PDF in an ignored build folder.
+   - Find each file of the material that a line of the list names, with the list's line read in the form the list writes it, such as `results/` for every file under the folder `results` or `*.cache` for every file whose name ends in `.cache`, and count them.
+   - A file a list leaves out stays material: read it for values and declarations as items 1, 2 and 5 say, and do not note it as a file that could be uploaded.
+   - Done when each list is read and each file of the material it leaves out is found and counted.
+4. Note each file of the material that could be uploaded, with what it is, such as the manuscript as a PDF, its LaTeX source, its bibliography, a figure, a cover letter, a declaration file or the source code of a deposit.
    - Several files that go up together, such as the files of a source folder, may be one entry, with the folder's path and the number of files it holds.
    - A file that a tool made for its own use while it built or ran something is not noted: an intermediate file, a log, an index, a cache or a compiled module, such as a LaTeX `.aux`, `.log` or `.synctex.gz` file or a Python `.pyc` file in `__pycache__/`. These are examples, and no list of extensions is complete: decide each file by reading its name, its place and, where they leave a doubt, its first lines.
    - The output of a build that a reader opens, such as the PDF of a manuscript, is a file that could be uploaded.
    - Note each kind of file left out in this way, with the number of its files and one path.
+   - A file a list of what is left out of a submission leaves out, as item 3 found it, is not noted as a file that could be uploaded, whatever it is.
    - Done when each file of the material is noted as a file that could be uploaded or as a file left out.
-4. Note each declaration or statement the files hold that answers a question a submission asks, such as whether the authors have a conflict of interest, with the answer it settles and the passage it rests on, quoted with its file and place.
+5. Note each declaration or statement the files hold that answers a question a submission asks, such as whether the authors have a conflict of interest, with the answer it settles and the passage it rests on, quoted with its file and place.
    - Done when each one is noted with its quoted passage.
 
 ## Reading the portal
@@ -88,23 +97,31 @@ Write `submission-sheet.md` in the run folder in the form of `templates/submissi
    - The pages saved, each saved file beside its address, and the pages not read with their addresses.
    - The files read, each with the kinds of value it held or that it held none, and the files not read.
    - Each kind of file left out as a build product, with the number of its files and one path.
+   - Each list of what is left out of a submission, by its path, with the number of files of the material it leaves out, or that the folder holds none.
 2. Fill the table "Fields": every value the folder holds, by kind, and every value the form or an instruction asks for, each with what asks for it, its value and the file and the place the value comes from.
+   - The cell "Value" holds the value's whole text as it is to be typed into the field, however long, such as an abstract, a description, highlights or a statement: never a summary, a count of its words, its first or last words or a pointer to a file or a place.
+   - Write a value on one line of the table: each line break of the text as `<br>`, so that a paragraph break is `<br><br>`, and each `|` of the text as `\|`, with every other character as it is to be typed, as the notes of `templates/submission-sheet.md` say.
+   - Done when each row of "Fields" with a value holds the value's whole text in this form, and no cell "Value" holds a description of the text or a pointer to it.
 3. Fill the table "Files": every file that could be uploaded, with its path in the folder, what it is, what asks for it with the requirement it states, and what shows what the file is.
 4. Fill the table "Declarations": every declaration or statement the folder holds and every declaration the form or an instruction asks for, such as a conflict of interest, an ethics statement or a data statement, with what asks for it, the answer proposed and what it rests on.
    - Propose an answer only when the folder settles it, and quote the passage it rests on, with its file and place.
+   - An answer that is a text, such as the text of a statement, is written in the cell "Answer proposed" whole, in the form item 2 gives for a value.
    - A declaration the folder does not settle has an empty answer and is a question.
    - A licence, a copyright transfer, a consent to the portal's own terms or a payment the portal or an instruction shows is a row whose answer reads "Left to the user", with the saved file or the instruction that shows it.
    - A statement about the submission, such as that the participants of a study gave informed consent, is a declaration and no such consent.
+   - Done when each answer proposed that is a text holds its whole text in the form of item 2, and no cell "Answer proposed" holds a description of the text or a pointer to it.
 5. Leave a value the folder does not hold empty, and list it under "Questions".
 6. List under "Questions" each file the form or an instruction asks for that the folder lacks, such as the PDF of a Word document, for the user to supply.
 7. Number the questions Q1, Q2 and so on, each naming its row.
 8. Write each objection under "Objections", as "The rules hold" says.
 
-Done when the sheet stands in the run folder, every row of its tables has a value with its place or is a question, a source or a quoted passage names its file or its saved page, and a table or section with no entry reads "None.".
+Done when the sheet stands in the run folder, every row of its tables has a value with its place or is a question, each value and each answer that is a text stands whole in its cell, a source or a quoted passage names its file or its saved page, and a table or section with no entry reads "None.".
 
 ## What you never do
 
 - Never write a value the folder does not hold: leave it empty and list it as a question.
+- Never write a summary, a count, the first or last words or a pointer to a file in place of a value or of an answer that is a text: write its whole text in the cell, however long, as "The sheet" 2 says.
+- Never note as a file that could be uploaded a file that a list of what is left out of a submission leaves out: leave it out of "Files" and count it in the first lines, as "Reading the folder" 3 says.
 - Never propose a declaration's answer from what is usual: propose one only from a passage of the folder.
 - Never convert a file: list the file the form or an instruction asks for as a question.
 - Never write down a field of a sign-in page, and never take a page a script fills for a form with no fields: say in the first lines how much of the form was read.

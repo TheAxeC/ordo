@@ -6,6 +6,8 @@ The sheet agent fills the block below as `submission-sheet.md` in the run folder
 - The cell "Asked by" names what asks for the row: a saved page of the form, such as `portal/03.html`, step 1, a saved page of the portal's instructions with its heading, the journal guide's "Required Components", a table of the funder config, or "Nothing read asks for it" for a row only the folder gives.
 - The last cell of a row, "Source" or "What it rests on", holds the file and the place the value comes from, `Q<n>` for a row whose value is a question, or `Q<n>, added in the walk` for a row the session adds during the walk.
 - A table or a section with no entry reads "None.".
+- The cell "Value", and the cell "Answer proposed" of an answer that is a text, holds the whole text as it is to be typed, however long, and never a summary, a count, its first or last words or a pointer to a file.
+- Such a text stands on one line of its table: each line break of the text is written `<br>`, so that a paragraph break is `<br><br>`, each `|` of the text is written `\|`, and every other character stands as it is to be typed. The walk types the cell's text with each `<br>` as a line break and each `\|` as a `|`. A made-up abstract of two paragraphs reads `We measure the growth of a made-up plant under two lights.<br><br>The plant grows faster under the blue light.`
 
 ```markdown
 # Submission sheet
@@ -19,6 +21,7 @@ The sheet agent fills the block below as `submission-sheet.md` in the run folder
 - Files read: [each file of the material read, with the kinds of value it held or "no value"]
 - Files not read: [each file chosen whose text could not be read, or "None."]
 - Left out of "Files": [each kind of build product, with the number of its files and one path, such as "LaTeX build files, 4, `manuscript/main.aux`", or "None."]
+- Left out by the folder's list: [each list of what is left out of a submission at the folder's root, by its path, with the number of files of the material it leaves out, such as "`.deposit-leave-out` (a made-up name), 12 files", or "None: the folder holds no list of what is left out of a submission."]
 
 ## Fields
 
