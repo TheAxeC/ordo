@@ -7,7 +7,7 @@ The language pages in `docs/dev/coding-standards/` add to this page and never re
 - **Formatting.** Each language has one formatter, with its configuration pinned in the repository. The verify list runs each formatter as <the format check>. A failing format check is fixed by running the formatter.
 - **Comments.** The change standard's rule "No history in code or comments" says what a comment carries and what it never carries.
 - **Character set.** Every authored file is ASCII, source code included, with the one exception the prose standard's section B allows: accented letters in names. A file whose format requires another character set is exempt. <the ASCII check> enforces the rule.
-- **Markdown and YAML.** Each paragraph and each bullet is one line, as the prose standard's section F sets for source formatting.
+- **Markdown and YAML.** Each paragraph and each bullet is one line, as the prose standard's section F sets for source formatting. A YAML file is loaded, that is parsed as YAML, after every write to it, under the change standard's rule "A write verifies its own result".
 - **Names.** A name says what the thing is in the repository's vocabulary, whose terms `docs/glossary.md` holds. One concept keeps one name, the rule "No synonym cycling" of the prose standard's section D.
 - **Errors.** A failure is reported through the language's error mechanism, with what failed and why. Nothing fails silently, and no catch-all handler hides a failure.
 - **Tests.** A test proves behaviour whose failure costs something, under the change standard's section "Scripts compute facts; judgment is read". Its rule "A test proves the change by failing on the unchanged tree, and the report quotes the failure" sets how the proof is shown.

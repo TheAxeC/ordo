@@ -2,7 +2,7 @@
 name: plan-orchestration
 description: "Run every open plan unattended in one session, or the plan named, step by step, from its ledger folder: pick the next unblocked step, prepare its brief and worktree, dispatch one builder agent in the step's worktree, have a reviewer refute the result, send its findings back to the builder for the repair rounds plan.yaml allows, read the delta, land the step with the small fixes made at landing, book it, and repeat, and under self_rule: on and next_entry: on go on to the next roadmap entry after a closing; stop only where a decision is for the user. Every project specific comes from plan.yaml and the ledger, so the same skill runs a code tool, a research project or a manuscript under Claude Code, and one orchestrator session can hand the plans to another mid-way. Triggers on: run every open plan, run the plan, next step, orchestrate the plan, plan orchestration, dispatch the next step, continue the plan, resume the plan, C<n> Agree, C<n> => <ruling> (the review of a choice taken under self-rule)."
 metadata:
-  version: "8.0.1"
+  version: "9.0.0"
 ---
 
 # Plan orchestration
@@ -478,6 +478,8 @@ The table holds seven kinds of stop, each for a decision for the user, and two r
 - A stop is repeated in every report until the user has ruled, or, under `self_rule: on`, until the orchestrator closes it as `references/self-rule.md`, "Closing an open item", says.
 - The stop message is plain text in the report: an open item with its options inside the written rules, the pros and cons of each, and one recommendation with its reasons.
   - It never goes through a question-box or multiple-choice tool.
+  - An open item that offers options is raised only when each option costs something the user would weigh.
+  - Each option meets every wish the user has stated, and an option that drops one is not offered.
   - Each option states in full every approval it would need later whose content exists when the option is written, such as a change to the configuration or the verification list.
   - The user's ruling on the item then approves those approvals too, with no second stop.
   - An approval of work not yet done when the option is written, such as the user's reading of a page a step will write, stays a stop of its own.

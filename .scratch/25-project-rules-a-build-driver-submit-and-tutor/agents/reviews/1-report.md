@@ -159,3 +159,76 @@ Read against `docs/glossary.md`:
 
 - "What is on the tree" says "This repository's `CLAUDE.md` holds no shared-rules block: `grep -n 'ordo:shared-rules' CLAUDE.md` prints nothing." In the worktree `ls CLAUDE.md` printed `ls: CLAUDE.md: No such file or directory` and `git ls-files CLAUDE.md` printed nothing: the file is not tracked, so the worktree has none. The premise's conclusion (no shared-rules block reaches this repository) still holds, and the step needs nothing from that file.
 - Nothing else in the brief was wrong or impossible.
+
+## Repair round 1
+
+Everything in the round's brief (`agents/briefs/1-round-1.md`) is done. The round changed `skills/ordo/ordo-init/templates/shared-rules.md` and `skills/orchestration/plan-orchestration/SKILL.md` and this report, and nothing else.
+
+### Ruling 1, finding S1: the open-items rule narrowed to open items that offer options
+
+- `skills/ordo/ordo-init/templates/shared-rules.md` line 27, before: `- **An open item is for costs the user weighs.** An open item is raised to the user only for options that each cost something the user would weigh.`
+- After (with ruling 2's sentence): `- **An open item is for costs the user weighs.** An open item that offers options is raised to the user only when each option costs something the user would weigh. A decision whose options do not each cost something the user would weigh is taken with its recommended option, and the report states it.`
+- `skills/orchestration/plan-orchestration/SKILL.md` line 481, before: `  - Its open item is raised only for options that each cost something the user would weigh.`
+- After: `  - An open item that offers options is raised only when each option costs something the user would weigh.`
+
+The places of open items with no options, read against the new wording. The refuter report is not in the worktree (`ls .scratch/25-project-rules-a-build-driver-submit-and-tutor/agents/reviews/` printed `1-brief-check.md` and `1-report.md`), so these four were found with `grep -rn -i 'open item' skills/ docs/glossary.md | grep -i 'worktree\|reading\|diff\|approv'` and the ruling's three examples:
+
+- `skills/orchestration/plan-orchestration/references/self-rule.md`, "The six kinds left open", kind 5, "The user's reading of a page a step writes." with "The reading stays an open item.": the open item offers no options, and the new wording says nothing about it. No contradiction.
+- `skills/orchestration/land/SKILL.md`, "Stops", row "A worktree that cannot be removed" and the bullet "The last row is a stop after the landing's commit that leaves an open item: ...": the open item names the worktree and branches to remove and offers no options. No contradiction.
+- `skills/orchestration/plan-orchestration/SKILL.md`, "Stops", row "The roadmap diff" ("The diff, in the stop message", resumed by "The user's approval of the diff"), with kind 4 of `self-rule.md`, "The closing's roadmap diff, tag and pin.": a diff to approve, not a choice among options. No contradiction.
+- `docs/glossary.md` line 72 and `skills/ordo/ordo-init/templates/plan-terms.md` line 67, entry **open item**, second sense: "It is also a worktree `/land` could not remove, closed by running the removal." It offers no options. No contradiction. The first sense ("a decision for the user, with its options ...") is the kind the new wording governs, and it is consistent with it.
+
+### Ruling 2, finding S3: what is done in place of raising
+
+- Shared rules, the second sentence of the bullet quoted under ruling 1: `A decision whose options do not each cost something the user would weigh is taken with its recommended option, and the report states it.`
+- `skills/orchestration/plan-orchestration/SKILL.md` line 482, a new sub-bullet under the stop-message bullet of "Stops", after the line of ruling 1: `  - A decision whose options do not each cost something the user would weigh is taken with its recommended option and stated in the report, unless this skill's text raises it, as "Rules" raises what the rounds left undone.`
+- Read against the skill's own raises: "Rules" ("Everything else that the rounds left undone, or that lies outside the step's part, is raised to the user as an open item, by "Stops"."), the Stops rows, and `references/self-rule.md`, "The six kinds left open", are all text of this skill that raises an item, so the "unless" clause keeps each of them raised. "Fixing a defect in what the user asked for is never a stop" and "No question boxes" ("Recommend and proceed.") agree with taking the recommended option.
+
+### Ruling 3, finding S2: the effort rule narrowed to a change to the repository
+
+- `skills/ordo/ordo-init/templates/shared-rules.md` line 8, before: `- **An effort question is answered with the changes.** A question about how much effort something is gets an answer that lists each change and the code it touches. The answer gives no duration.`
+- After: `- **An effort question is answered with the changes.** A question about how much effort a change to the repository is gets an answer that lists each change and the code it touches. The answer gives no duration.`
+- An estimate a manuscript skill gives of a revision is the skill's estimate of an author's work on a paper, not an answer to a question about a change to the repository, so the rule does not reach it. No page of `skills/academic/` was changed: `git diff --stat` names no path under it.
+
+### Ruling 4, finding P1: the duration grep read against the effort rule
+
+`grep -rn -i '[0-9] \(hours\|days\|weeks\|minutes\)' skills/` printed 33 lines (`| wc -l` printed `33`): 19 state an effort estimate, 14 do not. The hits that state an effort estimate, each an estimate of the time an author's manuscript revision takes, given by a manuscript or review skill. None is an answer to a question about how much effort a change to the repository is, so none falls under the rule as ruling 3 words it:
+
+- `skills/academic/paper/agents/revision_coach_agent.md:200`, `:201`, `:202`: the "Effort Estimation" table, "1-3 days", "1-2 weeks", "2-4 weeks".
+- `skills/academic/paper/references/failure_paths.md:250`: "Turnaround target: 2 weeks for reformatting, 4 weeks for substantive revision", after a desk rejection.
+- `skills/academic/paper-review-panel/references/editorial_decision_standards.md:38`, `:52`, `:65`, `:79`: the time a minor or major revision takes, and its deadline.
+- `skills/academic/paper-review-panel/agents/editorial_synthesizer_agent.md:227`, `:340`: the same for the editor's decision.
+- `skills/academic/paper-review-panel/templates/editorial_decision_template.md:139`: "[Minor: 2-4 weeks / Major: 6-8 weeks]".
+- `skills/academic/paper-review-panel/examples/interdisciplinary_review_example.md:216`, `:223`, `:230`, `:235`: "Estimated effort: 12-16 days", "6-8 days", "2 days", "Recommended 8 weeks".
+- `skills/academic/paper-review-panel/examples/hei_paper_review_example.md:322`, `:328`, `:335`, `:341`: "Estimated effort: 10-14 days", "5-7 days", "2-3 days", "Recommended 6-8 weeks".
+
+The other hits state no effort estimate: `skills/academic/paper/agents/citation_compliance_agent.md:572` ("acceptance within 72 hours", a sign of a predatory venue), `skills/academic/paper/agents/peer_reviewer_agent.md:208` (the simulated time of a reviewer's first read), `skills/academic/paper/templates/lookup.py:93`, `:99`, `:1415`, `:1424`, `:1446` and `skills/academic/paper/templates/lookup.test.sh:2`, `:1069`, `:1079`, `:1082`, `:1099`, `:2271` (the cache's age limits), and `skills/academic/writing/references/registers.md:15` (an example sentence, "heated ... for 2 hours").
+
+### Ruling 5, finding B1: the visible changes of `docs/dev/change-standard.md`
+
+Added to "Host- or user-visible changes":
+
+- `docs/dev/change-standard.md` rule 6 (line 33), before, ending: `... a new test moving a total upward is fine and the report says by how much. Zero warnings in every configuration; "pre-existing" excuses nothing.` After, ending: `... Zero warnings in every configuration; "pre-existing" excuses nothing. Every target in scope of the change (each platform, configuration or build the change is meant for) compiles and works in the same change. A target is never left broken for a later change.`
+- `docs/dev/change-standard.md` rule 16 (line 48), before: `16. **A write verifies its own result.** A step or a tool that rewrites a file's text re-parses what it wrote and refuses when the reparse is not what was asked. A write that cannot verify itself does not land.` After: `16. **A write verifies its own result.** A step or a tool that rewrites a file's text re-parses what it wrote and refuses when the reparse is not what was asked. A YAML file is loaded, that is parsed as YAML, after every write to it. A write that cannot verify itself does not land.`
+
+### Ruling 6, finding SP1
+
+Closed by rulings 1 to 3, as above.
+
+### Verify list, run again after the round
+
+| Check | Output as printed |
+|---|---|
+| 1 `sh skills/ordo/ordo-init/templates/sync_rules.test.sh 2>&1 \| tail -1` | `PASS: sync_rules.py scratch tests` |
+| 2 `python3 skills/ordo/ordo-init/templates/sync_rules.py . --only glossary; echo "exit $?"` | `ok: the plan-terms block equals the template` / `exit 0` |
+| 3 `sh skills/ordo/ordo-init/templates/check_config.test.sh 2>&1 \| tail -1` | `PASS: check_config.py scratch tests` |
+| 4 the brief's character-set check over the five shipped files; `echo "exit $?"` | no line printed, then `exit 0` |
+| 5 `grep -c '^- \*\*' skills/ordo/ordo-init/templates/shared-rules.md` | `27` |
+| 5 `grep '^- \*\*' skills/ordo/ordo-init/templates/shared-rules.md \| tail -1` | `- **No history in a rule file or a comment.** A rule file states the rule and at most one clause of why. A comment says what the code does and why. Dates, incidents and what was reverted belong in a ledger, a commit message or a changelog.` |
+| 6 `grep -n 'last rule' docs/dev/change-standard.md; echo "exit $?"` | no line printed, then `exit 1` |
+| 6 `grep -c '"No history in a rule file or a comment")' docs/dev/change-standard.md` | `1` |
+| 7 `grep -n 'version' skills/orchestration/plan-orchestration/SKILL.md \| head -1` | `5:  version: "9.0.0"` |
+| 7 `git diff --numstat` | `3 3 docs/dev/change-standard.md`, `4 1 skills/orchestration/plan-orchestration/SKILL.md`, `2 2 skills/ordo/ordo-init/templates/docs/dev/change-standard.md`, `1 1 skills/ordo/ordo-init/templates/docs/dev/coding-standards/common.md`, `4 0 skills/ordo/ordo-init/templates/shared-rules.md` (each line printed as `<added><tab><removed><tab><path>`) |
+| 8 read | The new sentences of rulings 1 and 2 are 18 to 26 words. The `plan-orchestration` sub-bullet of ruling 2 is about 33 words, over the prose standard's "under roughly 20", because ruling 2 asks for one sentence that both states the action and keeps the skill's own raises. Each new sub-bullet holds one rule. No semicolon or dash was added. |
+
+The file table of "The files with line counts" now reads 4 added and 1 removed for `skills/orchestration/plan-orchestration/SKILL.md` (531 lines, `wc -l`); the other rows are unchanged.

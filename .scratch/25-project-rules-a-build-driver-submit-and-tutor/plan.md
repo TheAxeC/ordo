@@ -20,7 +20,7 @@ each added rule read by you in its page, with `sh skills/ordo/ordo-init/template
 
 ## Steps, in execution order
 
-- 1 the project rules: the five rules of the goal stand where ruling D3 puts them (`skills/ordo/ordo-init/templates/shared-rules.md`, `skills/orchestration/plan-orchestration/`, `skills/ordo/ordo-init/templates/docs/dev/change-standard.md`, `skills/ordo/ordo-init/templates/docs/dev/coding-standards/common.md` and `docs/dev/change-standard.md`), and the citation "last rule" in `docs/dev/change-standard.md` names its rule; check: `sh skills/ordo/ordo-init/templates/sync_rules.test.sh` passes, run from the repository root, and the user reads each rule in its page (1 commit) (approved)
+- ✅ 1 the project rules: the five rules of the goal stand where ruling D3 puts them (`skills/ordo/ordo-init/templates/shared-rules.md`, `skills/orchestration/plan-orchestration/`, `skills/ordo/ordo-init/templates/docs/dev/change-standard.md`, `skills/ordo/ordo-init/templates/docs/dev/coding-standards/common.md` and `docs/dev/change-standard.md`), and the citation "last rule" in `docs/dev/change-standard.md` names its rule; check: `sh skills/ordo/ordo-init/templates/sync_rules.test.sh` passes, run from the repository root, and the user reads each rule in its page (1 commit) (approved)
 - 2 limits and layout: `skills/academic/paper/` and `skills/academic/grant/` hold the rule of ADR 0050 as ruling D4 gives it (the formatter's sentence replaced, one return to the draft writer to cut content, what is still over shown with each section's length, the same step in `grant`), and `skills/academic/writing/references/manuscript-prose-standard.md` holds that every sentence of a deliverable answers the reader or states a change, with no process history; check: the user reads each changed passage, and no sentence of `skills/academic/paper/` or `skills/academic/grant/` changes a layout value to meet a limit, by reading every hit of `grep -rnEi 'limit' skills/academic/paper skills/academic/grant`, run from the repository root (1 commit) (approved)
 - 3 the build driver: `ordo-init` has the mode `/ordo-init build`, the template `utils/build.py` on the Python standard library with its test, the new-repository run that writes the driver by the same steps unless the user answers that it should not, and the rule on build files narrowed, as ruling D9 and ADR 0051 give them, with the script and its test listed on `docs/dev/scripts.md`, `docs/dev/building.md` and the command block of `docs/dev/change-standard.md`; check: the template's test passes, run from the repository root, and it runs the driver's `gate` on a scratch tree whose commands pass (exit 0) and on one where one command fails (non-zero exit) (1 commit) (approved)
 - 4 the skill `submit`: `skills/academic/submit/` holds the skill of rulings D6, D10 and D16 and ADR 0049 (the page of the agent that writes the submission sheet, the user's approval of the sheet, the walk the session makes through the browser extension, what the walk never does, the stop before the final submit), with its figure under `docs/figures/`, its row and its place in the group sentence of `README.md`, and `/submit` named at "You submit" and "You resubmit" of `docs/figures/paper/lifecycle.svg`; check: `python3 docs/figures/gen_figures.py` runs from the repository root and the user reads `docs/figures/paper/lifecycle.svg`, and the skill's text is read against ADR 0049 item by item (1 commit) (approved)
@@ -31,6 +31,17 @@ each added rule read by you in its page, with `sh skills/ordo/ordo-init/template
 ## Step 3, Step 0
 
 - Step 3 raises `metadata.version` of `skills/ordo/ordo-init/SKILL.md` once for the plan, by its minor part, and that raise also covers the template pages step 1 changes; step 1 leaves that version as it is.
+
+### Step 1, the project rules (landed 2026-11-24)
+
+- Landed on main from `.agents/worktrees/25-project-rules-a-build-driver-submit-and-tutor-1`, base `b772895`: `docs/dev/change-standard.md`, `skills/orchestration/plan-orchestration/SKILL.md` (9.0.0), `skills/ordo/ordo-init/templates/docs/dev/change-standard.md`, `skills/ordo/ordo-init/templates/docs/dev/coding-standards/common.md`, `skills/ordo/ordo-init/templates/shared-rules.md` (27 bullets).
+- Premise corrections: none.
+- Verification on main, after the fix at landing: `sh skills/orchestration/land/templates/checks.sh .scratch/25-project-rules-a-build-driver-submit-and-tutor/orchestrator-state.md` printed `checks: 15 commands passed`. The verify list equalled the verification page; no change.
+- No look and no A/B: the configuration names neither.
+- The builder's first report did not pass its bar: the first review found six findings (SP1, P1, S1, S2, S3, B1), closed in one repair round. The run over that round found two (S1, S2), both in the sentence the round added on what is done in place of raising.
+- Fix at landing, one: that sentence removed from the shared rules and from `plan-orchestration`, "Stops". Both pages hold the goal's rule narrowed to an open item that offers options.
+- Raised to the user: open item A, the reading of the rules, with the question whether a page says what is done in place of raising.
+- Usage: builder a1c62803166842022, 161372 tokens, 25 tool uses, 5 min 32 s, and round 1: 181152 tokens, 9 tool uses, 2 min 31 s. Brief check a84e8e7f2b9dce5b4, 125805 tokens, 30 tool uses, 5 min 42 s. Reviewer aff8729b7d77a1e04, 149633 tokens, 23 tool uses, 5 min 42 s. Reviewer over round 1 a82688a6d8c685329, 87068 tokens, 6 tool uses, 1 min 17 s.
 
 ## Could run in parallel
 
@@ -64,6 +75,10 @@ Each agent a plan skill started for this plan has one bullet, with its agent id,
 
 - a6a641092c180b960: grill lookup, claude-fable-5-2
 - aa7a2f4de5dea9a2f: grill lookup, claude-fable-5-2
+- a84e8e7f2b9dce5b4: brief check of step 1, claude-opus-5-5
+- a1c62803166842022: builder of step 1, claude-opus-5-5
+- aff8729b7d77a1e04: reviewer of step 1, claude-opus-5-5
+- a82688a6d8c685329: reviewer of step 1 over round 1, claude-sonnet-5-5
 
 ## Blocked, and by what
 

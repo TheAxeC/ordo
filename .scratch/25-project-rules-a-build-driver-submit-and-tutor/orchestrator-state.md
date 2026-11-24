@@ -46,26 +46,23 @@ repair_reviewer: claude:sonnet  # the model the run of /refute over a repair rou
 
 ```yaml
 dispatch:
-- step: 1
-  executor: agent
-  worker: claude:opus
-  session_id: a1c62803166842022 (claude-opus-5-5)
-  worktree: .agents/worktrees/25-project-rules-a-build-driver-submit-and-tutor-1
-  base: b772895
-  launched: 2026-11-24
-  report: .scratch/25-project-rules-a-build-driver-submit-and-tutor/agents/reviews/1-report.md
-  builder_usage: 161372 tokens, 25 tool uses, 5 min 32 s
-  reviewer_report: .scratch/25-project-rules-a-build-driver-submit-and-tutor/agents/reviews/1-refuter.md (aff8729b7d77a1e04, claude-opus-5-5, 149633 tokens, 23 tool uses, 5 min 42 s)
-  brief_check: .scratch/25-project-rules-a-build-driver-submit-and-tutor/agents/reviews/1-brief-check.md (a84e8e7f2b9dce5b4, claude-opus-5-5, 125805 tokens, 30 tool uses, 5 min 42 s)
-  landing: not-started
-  round: 1
 - step: 2
   landing: preparing
+  brief_check: "running: a87e63407ae314392"
+- step: 3
+  landing: preparing
+  brief_check: "running: ab554d078f519c4bd"
+- step: 4
+  landing: preparing
+  brief_check: "running: af32ec4714532fb10"
+- step: 5
+  landing: preparing
+  brief_check: "running: a80a3d262da646252"
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled or, under `self_rule: on`, until the orchestrator closes it as `plan-orchestration`'s `references/self-rule.md`, "Closing an open item", says)
 
-- none
+- Open item A (step 1, the user's reading of the rules): the five rules stand on their pages on main and wait for your reading: `skills/ordo/ordo-init/templates/shared-rules.md` (the bullets "An effort question is answered with the changes", "Every option meets every stated wish", "Every target in scope works", "An open item is for costs the user weighs"), `skills/orchestration/plan-orchestration/SKILL.md`, "Stops" (two sub-bullets under the stop-message bullet), rules 6 and 16 of `skills/ordo/ordo-init/templates/docs/dev/change-standard.md` and of `docs/dev/change-standard.md`, and "Markdown and YAML" of `skills/ordo/ordo-init/templates/docs/dev/coding-standards/common.md`. Two rules were narrowed from the goal's words after the review: the open-items rule to "an open item that offers options", since the plan skills also hold open items with no options (your reading of a page, a worktree that could not be removed, a diff to approve), and the effort rule to "a change to the repository", since `paper`'s revision coach gives a typical duration for a manuscript revision. One point is yours: neither page says what is done with a decision whose options do not each cost something. Option 1, leave it unsaid: the pages hold the goal's rule and nothing more; a reader gets no instruction for that case. Option 2, add "the recommended option is taken and the report states it": it tells the reader what to do, and the second review found that this sentence contradicts "No silent design decisions" and "Surface rule clashes" in the shared rules unless it excepts them. Recommendation: option 1, which is also the option that costs less to carry out; it is recommended because the other rules already say when a decision is raised. The reading blocks no later step.
 
 ## Closed items (the log of what was raised and how it ended; no report carries it)
 
@@ -93,7 +90,7 @@ dispatch:
 
 ## Current position (rewritten before every step commit of this plan)
 
-- 2026-11-24. The plan is open; no step has landed. `v10.0.0` is pinned. The working tree holds nothing of this plan outside its ledger.
+- 2026-11-24. Step 1 has landed. `v10.0.0` is pinned. The working tree holds nothing of this plan outside its ledger.
 - Verified: `sh skills/orchestration/land/templates/checks.sh .scratch/25-project-rules-a-build-driver-submit-and-tutor/orchestrator-state.md` printed `checks: 15 commands passed`.
-- Roadmap entry 25 (Project rules, a build driver, submit and tutor). Plan step 1 of 7: the project rules. Next: step 2, limits and layout. Step 1's builder is running; steps 2 to 5 are prepared once step 1 has landed, since it changes rule files and runs alone.
-- Open on Axel's side: none.
+- Roadmap entry 25 (Project rules, a build driver, submit and tutor). Plan step 1 of 7 landed: the project rules. Next: steps 2 to 5, each in preparation with its brief written and its brief check running.
+- Open on Axel's side: open item A, the reading of the rules.

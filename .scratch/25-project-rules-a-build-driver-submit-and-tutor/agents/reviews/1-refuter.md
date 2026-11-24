@@ -133,3 +133,95 @@ Cases of the brief's "Cases":
 - Whether the cases' first run was made before any change, and whether `git status --short` printed nothing then. The order cannot be checked from the end state.
 
 Reviewer usage: aff8729b7d77a1e04, claude-opus-5-5, 149633 tokens, 23 tool uses, 5 min 42 s.
+
+## Repair round 1, refuted
+
+Verification, run from the worktree root (the brief's "Verify before you report"):
+
+1. `sh skills/ordo/ordo-init/templates/sync_rules.test.sh 2>&1 | tail -1` printed `PASS: sync_rules.py scratch tests`
+2. `python3 skills/ordo/ordo-init/templates/sync_rules.py . --only glossary; echo "exit $?"` printed `ok: the plan-terms block equals the template` and `exit 0`
+3. `sh skills/ordo/ordo-init/templates/check_config.test.sh 2>&1 | tail -1` printed `PASS: check_config.py scratch tests`
+4. The brief's character-set `printf | xargs perl` check printed no line, then `exit 0`.
+5. `grep -c '^- \*\*' ...shared-rules.md` printed `27`; the last bullet printed starts `- **No history in a rule file or a comment.** A rule file st`.
+6. `grep -n 'last rule' docs/dev/change-standard.md` printed nothing, `exit 1`; `grep -c '"No history in a rule file or a comment")' docs/dev/change-standard.md` printed `1`.
+7. `grep -n 'version' skills/orchestration/plan-orchestration/SKILL.md | head -1` printed `5:  version: "9.0.0"`. `git status --short` shows the five modified shipped files, all in "Paths this step writes", plus the untracked `briefs/1-round-1.md` and `reviews/1-report.md`.
+8. Read: see the findings.
+
+Commands the round's section quotes, rerun in the same form:
+- `grep -rn -i '[0-9] \(hours\|days\|weeks\|minutes\)' skills/ | wc -l` printed `33`. The report says 33.
+- I split the 33 lines by reading: 19 estimates of an author's revision time (revision_coach 3, failure_paths 1, editorial_decision_standards 4, editorial_synthesizer 2, editorial_decision_template 1, interdisciplinary example 4, hei example 4) and 14 other hits (citation_compliance 1, peer_reviewer 1, lookup.py 5, lookup.test.sh 6, registers.md 1). This matches the report's list line for line.
+- `ls` of the `reviews/` folder and the per-ruling greps are reproduced by my own greps (open item hits, the sub-bullets at lines 481 and 482).
+- The report's `git diff --numstat` is not run (see Declined to judge).
+
+### Verdicts
+
+Items of "What to build", for the whole diff since the base:
+1. Shared rules: holds. Bullets R4 (line 8), R3 (line 14), R1 (line 22, directly after "Zero warnings", unchanged) and R2 (line 27) are present, and "No history..." is last. But R2's new second sentence contradicts other rules of the file (finding S1).
+2. `plan-orchestration`: holds as built, version 9.0.0. The two new sub-bullets are in "Stops". The wording issue is S2.
+3. Template change standard: holds (not changed this round).
+4. `coding-standards/common.md`: holds (not changed this round).
+5. `docs/dev/change-standard.md`: holds. Not changed this round, and the citation by label is in place (verify 6).
+6. Contradiction greps: violated. The new R2 sentence in the shared rules contradicts three rules on the same page (S1).
+7. Carry greps: holds (no count, list or position citation of the shared rules found; my grep on `last rule` printed nothing).
+
+Cases:
+- R1 in the shared rules: met.
+- R2 in the shared rules: partial, because of S1.
+- R3 in the shared rules: met.
+- R4 in the shared rules: met. Line 8 now covers only a change to the repository.
+- R2 and R3 in `plan-orchestration`, "Stops": partial. R3 is met, R2 is stated twice-qualified, see S2.
+- R1 in rule 6 and R5 in rule 16 of the template change standard: met.
+- R1 and R5 in `docs/dev/change-standard.md`, same words: met.
+- R5 in `coding-standards/common.md`: met.
+- `tail -1` of the bullets: met. `"No history..." )` count 1: met. `sync_rules.test.sh`: met.
+
+Closures of rulings 1 to 6:
+1. Ruling 1 (S1, narrowing to open items that offer options): done in both places. I re-read the four option-less open items (self-rule.md kind 5, land "A worktree that cannot be removed", Stops row "The roadmap diff", glossary line 72 second sense). None is a decision that offers options, so none contradicts the narrowed first sentence. The closure is not complete, because the sentence added by ruling 2 contradicts other rules (S1 below).
+2. Ruling 2 (S3, what is done instead): written once in each place, as asked. The shared-rules sentence breaks three neighbouring rules (S1). The `plan-orchestration` sentence sets aside every raise and so clashes with the line before it (S2).
+3. Ruling 3 (S2, effort rule): done. Line 8 now reads "how much effort a change to the repository is". The revision coach's table (lines 200 to 202) is an author's manuscript estimate and no longer in scope. No file under `skills/academic/` is changed (`git status --short`).
+4. Ruling 4 (P1, grep listing): done; reproduced (above).
+5. Ruling 5 (B1, visible changes of `docs/dev/change-standard.md`): the report adds the before and after of rules 6 and 16. The diff of that file against the base shows exactly those two sentences plus the citation change, so the statement is true.
+6. Ruling 6 (SP1): closed only as far as 1 and 2 are closed; see S1 and S2.
+
+### Findings
+
+#### Spec
+None. The round's delta (`diff -u` of the snapshot against the worktree) changes only the shared rules and `plan-orchestration` SKILL.md, in the three places the rulings name.
+
+#### Proof
+None. The report's counts and quotes reproduce.
+
+#### Standards
+- **S1. The new sentence of the open-items bullet contradicts three rules of the same file.**
+  - Place: `skills/ordo/ordo-init/templates/shared-rules.md`, bullet "An open item is for costs the user weighs."
+  - Hunk: `+ A decision whose options do not each cost something the user would weigh is taken with its recommended option, and the report states it.`
+  - What is wrong:
+    - "No silent design decisions" says a user-visible choice "is surfaced as a decision before it is built". The new sentence takes such a choice with the recommended option and states it in the report, after the fact, whenever one option costs nothing the user would weigh.
+    - "Surface rule clashes: stop and tell" says "ask for a ruling before going on. A side is never picked silently". The new sentence takes the recommended option for a clash whose options do not each cost something.
+    - "No question boxes" lists the decisions where the stop belongs to the user: a user-visible shape nothing names, a rule clash. The new sentence takes any of them with the recommendation.
+  - This breaks the change standard's rule 19, "A change leaves no two statements that contradict each other". The ruling asked for the sentence, but it had to be worded or scoped so as to keep these three rules. The sentence has no "unless" clause of the kind the `plan-orchestration` copy has, so nothing in the file keeps those raises.
+  - Failure scenario: in a repository that carries the shared rules, an agent faces a user-visible shape or a rule clash where one option is free and the others cost something. It reads the new sentence, takes the recommended option and reports it. The user never gets the stop that "No silent design decisions" and "Surface rule clashes" promise.
+
+- **S2. The two sub-bullets under the stop-message bullet of "Stops" contradict each other.**
+  - Place: `skills/orchestration/plan-orchestration/SKILL.md`, "Stops", sub-bullets after "It never goes through a question-box or multiple-choice tool."
+  - Hunks:
+    - `+  - An open item that offers options is raised only when each option costs something the user would weigh.`
+    - `+  - A decision whose options do not each cost something the user would weigh is taken with its recommended option and stated in the report, unless this skill's text raises it, as "Rules" raises what the rounds left undone.`
+  - What is wrong: every stop of the table above them (a shape nobody named, a wrong premise, a red check, a rule clash, a finding that is the user's) is "this skill's text raises it". The second sub-bullet therefore sets aside the first for every stop the skill raises, and the first sub-bullet then restricts nothing a reader can act on. A reader of the first bullet reads that a stop whose options are free is not raised, and of the second that it is. The second sentence is also about 33 words, over the prose standard's "under roughly 20 unless the mechanism needs more"; the report discloses this and the reason (one sentence asked for). The refuter's earlier S3 asked for the instead-action without setting aside the table, and this wording does neither cleanly.
+  - Failure scenario: an orchestrator hits a red check whose options are one free fix and one costly one. Bullet 1 says "do not raise". Bullet 2 says "unless the skill raises it", and the table raises a red check. It cannot tell which applies and either raises a stop the user ruled out or takes a decision the skill makes a stop.
+
+#### Behaviour
+None new. The report's list of visible changes now includes the two sentences of `docs/dev/change-standard.md`. A reader of the shared rules sees one more behaviour change from this round that the report states only as a rule sentence: a decision with a free option is taken and reported instead of raised. That is the content of S1.
+
+### Declined to judge
+
+- The report's `git diff --numstat` (a git command other than the three allowed). The diffs it stands for were read through `git diff b772895` and the snapshot `diff -u`.
+- Whether `metadata.version` of `plan-orchestration` was already raised earlier in this plan (needs `git log`), unchanged from the first review.
+
+Reviewer usage: a82688a6d8c685329, claude-sonnet-5-5, 87068 tokens, 6 tool uses, 1 min 17 s.
+
+## Closed
+
+- SP1, S1, S2 and S3 of the first run: closed in round 1 for the narrowing of both rules (the open-items rule to an open item that offers options, the effort rule to a change to the repository); the sentence round 1 added on what is done in place of raising is taken out at landing, as the next bullet says.
+- P1 and B1 of the first run: closed in round 1, in the report's section "Repair round 1".
+- S1 and S2 of the run over round 1: fixed at landing. The sentence "A decision whose options do not each cost something the user would weigh is taken with its recommended option" is removed from `skills/ordo/ordo-init/templates/shared-rules.md`, bullet "An open item is for costs the user weighs", and the sub-bullet that holds it is removed from `skills/orchestration/plan-orchestration/SKILL.md`, "Stops". Each place then holds the rule of the entry's goal, narrowed to an open item that offers options. Whether either page should also say what is done in place of raising is part of the user's reading of the rules, open item A.
