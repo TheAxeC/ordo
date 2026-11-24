@@ -1,6 +1,6 @@
 # Step 6 refuter report
 
-Agent usage: a7057f07033744b86, claude-fable-5-2, tokens, tool uses and time not given in the completion notice.
+Agent usage: a7057f07033744b86, claude-fable-5-2, 203494 tokens, 21 tool uses, 7.0 minutes.
 
 Review of step 6, roadmap entry 19 (worktree /Users/axelfaes/workspace/ordo/.agents/worktrees/19-codebase-design-6, base 3e30f8b)
 
@@ -127,3 +127,163 @@ none
 - Whether the brief's decisions are right (commands written unrun, no path for the prose standard, the one-tenth band, no version raised): the brief's, not the step's.
 - Whether ADR 0001 line 20 ("installed beside it") should change: the file is outside the step's paths and speaks of the installation.
 - The whole verify list: it runs at landing on main.
+
+## Repair round 1, refuted
+
+Agent usage: a15943d1cd0d846a9, claude-sonnet-5-5, 140941 tokens, 16 tool uses, 2.7 minutes.
+
+Review of repair round 1, step 6, roadmap entry 19 (worktree /Users/axelfaes/workspace/ordo/.agents/worktrees/19-codebase-design-6, base 3e30f8b). Nothing was changed.
+
+### Checks run (worktree root)
+
+Substitutions: `git status --short --untracked-files=all` stands in for `git status --porcelain --untracked-files=all` (same columns). `grep -rn` stands in for `git grep -n`, except for the "one tenth" search, where `git grep` was used.
+
+1. Character-set check over the changed files: printed nothing, `charset exit 0`.
+2. With `env -u CLAUDE_CONFIG_DIR -u ORDO_SKILL_DIRS -u ORDO_STABLE` in front:
+   - `PASS: sync_rules.py scratch tests`
+   - `PASS: check_config.py scratch tests`
+   - `ok: the plan-terms block equals the template`, exit 0
+3. Frontmatter: `ordo-init 1013 4.0.0` and `codebase-design 1019 1.0.0`. `LC_ALL=C grep -n '[^ -~]'` over both SKILL.md files printed nothing.
+4. `grep -rn 'beside this skill\|beside it\|standing beside' skills docs/adr README.md`:
+   - Order sentence hits: `ordo-init/SKILL.md:30`, `codebase-design/SKILL.md:32`, `code-comments:32`, `paper:76` and `:77`, `writing:30`, `referee:29`, `grant:35`, ADR 0047 line 17.
+   - `check_config.py:9` and `:111` and `check_config.test.sh:21` and `:26` state the script's own order.
+   - The other hits use "beside" of a thing that is not a skill folder. ADR 0001 line 20 is unchanged.
+5. `git status --short`: ten modified files, all on the brief's path list, plus the untracked ledger files.
+6. Delta: `diff -u` of each snapshot file against the worktree. The snapshot has changes in `paper`, `writing`, `code-comments`, `codebase-design` and `ordo-init/SKILL.md` only. `files.txt` prefixes each path with " M ", so my first loop also tried the literal "M" and got "No such file" for it; the real paths gave the output above. Of `git diff 3e30f8b` I ran `--stat` only (10 files, 140 insertions, 61 deletions). Everything before the round I read in the two skills as they stand and in the first refuter report.
+
+### The nine rulings
+
+1. Closed. `grant`, `referee` and `paper` line 77 show no difference against the snapshot.
+2. Closed.
+   - `writing` lines 30 to 32 and `code-comments` lines 32 to 34: the folder sentence ends at "beside this skill's group folder."
+   - Then the bullet "Neither is a refusal that names both paths." stays with the prose standard.
+   - Then the new bullet "When the `ordo-init` folder is in neither of those two folders, that refusal names the repository's path and the two folder paths."
+   - `paper` line 76 has the same three sentences in one bullet.
+   - The "No prose standard" Stops rows are unchanged, as the ruling says.
+   - The ruling is carried out by adding a sentence; the first sentence was moved into it, not dropped.
+   - Standards finding 1 below is the one remaining point.
+3. Closed.
+   - `ordo-init` "Steps / A new repository" 12 (lines 185 to 187), "An existing repository" 16 (308 to 310) and "A configured repository" 15 (410 to 412) give the three outcomes in the ruled order.
+   - The Stops row "No commit allowed" (line 433) agrees: "and a file written or changed is not ignored by git".
+   - "What it reads" 7 (line 58): "The question whether the skill may commit is not asked when every file of the change is ignored by git".
+   - Behaviour finding 1 below is the one residue.
+4. Closed.
+   - "What it reads" 2 (line 32) and 3 (line 35) say "is a refusal, made at Steps 1 before anything is drafted or written, that names the folder and the two folder paths".
+   - Steps 1 (lines 90 and 91) makes the check, with a completion criterion.
+   - The new first Stops row, "A skill's folder not found" (line 421), says "Steps 1, in each of the three cases".
+   - Steps 1 reaches both folders before any case runs, as the ruling says.
+5. Closed.
+   - Lines 125 and 126: "The common page's Formatting rule is written for the languages whose formatter is configured, each named, and is left out only when no language of the repository has a configured formatter."
+   - The made-up C++ and Python repository with `pyfmt` shows the form: "Python has one formatter, `pyfmt`, with its configuration pinned in the repository."
+   - `templates/docs/dev/coding-standards/common.md` line 7 has the three sentences the text speaks of.
+6. Closed, with Behaviour finding 2 below.
+   - Configured 10 (line 382): the open plans are found "as `plan-orchestration`'s 'What it reads' 1 says". That item exists (lines 37 to 48 of that skill).
+   - Each path is given with its folder in the same sentence: "relative to the folder that holds the `plan.yaml`" and "relative to the repository root".
+   - Item 12 (lines 397 to 399) reads back both files and runs the configuration check again before the sync.
+   - Item 14 (line 407) points the sync at it.
+   - The item is done only when both hold.
+7. Closed. Line 203 reads "About 1,180 of 1,204 declarations." and line 204 "310 of 322 headers."
+8. Closed. Line 121 reads "An estimate that lies no more than one tenth of <m> from half of <m>, on either side". Line 123 reads "about 36 of 60 lies exactly 6 from 30, on the edge, and goes to group 4". Groups 3 and 4 (lines 102 and 103) say "near half" and stay consistent.
+9. Closed, with Behaviour finding 3 below.
+   - Line 107: a narrowing worded as a prohibition ("exists only for", "never for") is an exemption.
+   - Line 108 gives a made-up pair: the repository rule "Every module has a header comment" and the default "A header comment exists only for a module that other modules import."
+   - Line 112: "Present is tried first, so this criterion applies only to what is left after the exemptions", and "of the very thing the repository's rule expressly allows".
+   - Line 98 already ordered the groups, so the order is stated twice, as the ruling asked.
+
+None of the nine was closed by removing a sentence. Nothing outside the nine rulings changed since the snapshot: the diffs touch only the files and passages above.
+
+### Verdict per brief item, over the whole diff since the base
+
+1. holds
+2. holds
+3. holds (see Behaviour 2)
+4. holds
+5. holds
+6. holds. The sentence in `grant`, `referee` and `paper` line 77 stays by ruling 1. Standards finding 1 attaches.
+7. holds
+8. holds
+9. holds (see Behaviour 3)
+
+### Verdict per case
+
+Cases 11 to 17 were re-walked on the current text. The others were walked on the lines this round changed, plus the first refuter report for the unchanged parts.
+
+1. met
+2. met
+3. met
+4. met. The diff adds `../docs/glossary.md` to `standards` and to each open plan's block, reads both back, and runs `check_config.py` again before the sync with `--glossary`.
+5. met
+6. met. The Stops row lists `CLAUDE.md` apart.
+7. met. All files changed are ignored, so no commit, no stop, and the last message says so.
+8. met
+9. met
+10. met
+11. met. "about 33 of 60" goes to group 4.
+12. met. "about 55 of 60" goes to group 3.
+13. met
+14. met. Present is tried first and the second default sentence is an exemption.
+15. met
+16. met
+17. met. Present does not fit, since the repository asks less than the default forbids. The difference criterion then holds: the default forbids polling outright, including what the repository expressly allows.
+18. met. Output under check 2.
+
+### The two skills read as wholes
+
+- Citations followed:
+  - `ordo-init` to `plan-orchestration` "What it reads" 1 (exists), `grill` "Steps / Writing what settled" 2 (exists, same two additions), `plan` "What it reads" 1, "A configured repository" 4, 9, 10, 12 and 14, "A new repository" 12, and Steps 1.
+  - `codebase-design` to "What it reads" 2, 3, 5 and 6, "Steps / standards" 3, 5 and 10, and "Steps / review" 8 and 9.
+  - Each exists and says what is cited. No item number changed.
+- Contradicting pair: `ordo-init` "What it reads" 7 against "A configured repository" 10 (Behaviour 1).
+- Folder state a session cannot decide: none found beyond the three findings below.
+
+### Findings
+
+### Spec
+none
+
+### Proof
+none
+
+### Standards
+
+1. `skills/academic/paper/SKILL.md` line 76, one bullet:
+   - Quoted: "...beside this skill's group folder. Neither is a refusal that names both paths. When the `ordo-init` folder is in neither of those two folders, that refusal names the repository's path and the two folder paths."
+   - In `writing` and `code-comments`, "Neither is a refusal..." is a bullet of its own under the two places of the prose standard. In `paper` it stands directly after the sentence that gives the two folders.
+   - A session can read "Neither" as "neither folder", which is what the third sentence then says again with other words. The two meanings the round was meant to separate stand in adjacent sentences again.
+   - Effect: the session may name only the two folder paths in the message and leave out the repository's path. Change this by giving the prose-standard sentence its own bullet, as in the other two skills.
+   - The Stops row "No prose standard" in the three skills still shows "Both paths" while the bullet names three. The ruling kept the row as it was, so no change is called for.
+
+### Behaviour
+
+1. `skills/ordo/ordo-init/SKILL.md` "What it reads" 7 (line 58) against "A configured repository" 10 (lines 386 to 387):
+   - Line 58: "The question whether the skill may commit is not asked when every file of the change is ignored by git".
+   - Item 10 asks questions 1, 5 and 9 together, and "Where 'Steps / A configured repository' 10 asks question 5, its answer is the commit rule" (line 56).
+   - Item 10 checks the path of `CLAUDE.md` first, so the session knows `CLAUDE.md` is ignored. The glossary may already exist and be equal.
+   - Question 5 is one of three questions the missing `CLAUDE.md` needs, so a session either drops it from the bundle or asks it.
+   - Effect: an extra question the text says is not asked, or a bundle split that no item describes. The case is narrow: a missing, ignored `CLAUDE.md` as the only file of the change.
+2. `skills/ordo/ordo-init/SKILL.md` "A configured repository" 14 (line 407): "After a new glossary's path is written into `standards`, the first of these runs follows the read-back and the configuration check of 'Steps / A configured repository' 12".
+   - Item 14 is also run from "An existing repository" 15 ("as 'Steps / A configured repository' 7 to 14 say"). There the path is written by "An existing repository" 14, with no open plan, and `check_config.py` has just run.
+   - The text sends that session to read back open plans' blocks that do not exist and to handle errors "as 'Steps / A configured repository' 4 says".
+   - Effect: a second configuration check, or a search for plans, that the existing-repository path does not need. It does no harm. The item should say it applies when the path was written by "A configured repository" 10.
+3. `skills/code/codebase-design/SKILL.md` "Steps / standards" 5, lines 107 and 112:
+   - Quoted: "narrows a requirement to a kind of file or a kind of defect is an exemption also when it is worded as a prohibition" and "this criterion applies only to what is left after the exemptions".
+   - A repository rule can expressly allow what such a default sentence forbids. Made-up pair: the repository says "A test may be written for a text file", and the default says "A test exists only for a script".
+   - The text tries Present first and treats the default sentence as an exemption, so the session sorts the pair as present and shows nothing. That is a conflict between "allows" and "forbids" that group 1 exists to show.
+   - Effect: a session sorts such a pair as present. The brief's cases do not cover it. This follows from ruling 9 as written. It is reported because the text no longer sorts the pair two ways, but sorts it one way that hides an express allowance.
+
+### Declined to judge
+
+- The builder's scratch-repository git runs ("Run before written": `git check-ignore` exit statuses, and `git add` exiting 1 on an ignored path while it stages the others). A scratch repository is outside what I may create. The shipped sentence "since `git add` exits 1 on an ignored path even when it stages the others" rests on them: not verified by me.
+- Whether the three skills' unchanged sentences (`grant`, `referee`, `paper` line 77) should stay. Ruling 1 settled it.
+- Whether "Present is tried first" and the exemption rule are the right criterion. The rulings set them.
+- Whether a count of headers by a per-file `grep -L` is exact or an estimate. The text leaves the listing-or-pattern boundary to the session, and the example now shows it as exact.
+- The whole verify list: it runs at landing on main.
+- Line counts and the "43 lines" figure of the builder's report: not rerun, no decision rests on them.
+
+## Closed
+
+- First run, Spec 1: kept by ruling 1 of round 1. Standards 1 and 2 and Behaviour 1 to 6: sent back in round 1 (`agents/briefs/6-round-1.md`, rulings 2 to 9), each closed as the run over round 1 states.
+- Over round 1, Standards 1 (`paper`, the sentence "Neither is a refusal"): fixed at landing; the sentence names the prose standard's two paths.
+- Over round 1, Behaviour 1 (the commit question asked in a bundle): fixed at landing in `ordo-init` "What it reads" 7.
+- Over round 1, Behaviour 2 (item 14 run from the existing-repository steps): fixed at landing; the sentence applies when "Steps / A configured repository" 10 wrote the path.
+- Over round 1, Behaviour 3 (a repository rule that expressly allows what a narrowing default forbids): fixed at landing in `codebase-design` "Steps / standards" 5; such a pair is a difference.

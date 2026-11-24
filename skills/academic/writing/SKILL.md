@@ -27,8 +27,9 @@ metadata:
 
 1. The prose standard, from the first of these two places that holds it:
    - `docs/dev/prose-standard.md` of the repository the session runs in.
-   - `templates/docs/dev/prose-standard.md` in the `ordo-init` skill's folder, which stands beside this skill's folder.
+   - `templates/docs/dev/prose-standard.md` in the `ordo-init` skill's folder, found from this skill's folder with every link resolved: the folder of that name beside it, and otherwise the folder of that name in a group folder beside this skill's group folder.
    - Neither is a refusal that names both paths.
+   - When the `ordo-init` folder is in neither of those two folders, that refusal names the repository's path and the two folder paths.
    - A manuscript also takes `references/manuscript-prose-standard.md` in this skill's folder, which lists the differences from the prose standard that hold for a manuscript, as "The manuscript prose standard" says. A manuscript is a `.tex` draft, and so is the main file that the `paper` skill's closing call gives. A missing page is a refusal that names the path.
 2. `references/rules.md` and `references/registers.md`.
 3. The draft, by the extension of `<file>`:

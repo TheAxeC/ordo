@@ -31,11 +31,11 @@ skills-lock.json                 written by the skills CLI when the project skil
 docs/dev/change-standard.md      templates/docs/dev/change-standard.md, its placeholders filled
 docs/dev/prose-standard.md       templates/docs/dev/prose-standard.md
 docs/dev/design-principles.md    templates/docs/dev/design-principles.md, its placeholders filled, when question 6 gave the defaults
-docs/dev/coding-standards/common.md   templates/docs/dev/coding-standards/common.md, its placeholders filled, when question 6 gave the defaults
-docs/dev/coding-standards/<language>.md   templates/docs/dev/coding-standards/<language>.md for each language as question 6 says, its placeholders filled, when question 6 gave the defaults
+docs/dev/coding-standards/common.md   templates/docs/dev/coding-standards/common.md, its placeholders filled and each tool the repository does not configure left out as "Steps / A new repository" 3 of SKILL.md says, when question 6 gave the defaults
+docs/dev/coding-standards/<language>.md   templates/docs/dev/coding-standards/<language>.md for each language as question 6 says, its placeholders filled and each tool the repository does not configure left out the same way, when question 6 gave the defaults
 docs/dev/ui-standard.md          templates/docs/dev/ui-standard.md, its placeholders filled, when question 6 gave the defaults and the repository has a user interface
 <the pages question 6 names>     the pages copied from a sibling repository or written from the user's rules, at the paths the answer gives, in place of the default pages above, or beside them for a language with no template page
-docs/dev/building.md             written at "Steps / A new repository" 8 of SKILL.md from the build files
+docs/dev/building.md             written at "Steps / A new repository" 8 of SKILL.md from the build files and the answer to question 3, each command as named and not run
 docs/roadmap.md                  the roadmap skill's templates/roadmap.md
 docs/glossary.md                 templates/docs/glossary.md, the plan-terms block filled from templates/plan-terms.md
 docs/adr/README.md               templates/docs/adr/README.md

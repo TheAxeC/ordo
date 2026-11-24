@@ -4,7 +4,7 @@ Status: proposed
 
 ## Context
 
-Roadmap entry 19's goal names two public sources in the repository mattpocock/skills: `skills/engineering/codebase-design` (a vocabulary for module design, with the pages `DEEPENING.md` and `DESIGN-IT-TWICE.md`) and `skills/engineering/improve-codebase-architecture` (a scan that writes candidates and grills through the one the user picks). The second source loads the first through the Skill tool on every run. The source ends in its grilling loop and writes no roadmap entry. Ordo's standards pages ship as templates of `ordo-init`, and a repository keeps its own filled pages where its plan configuration says: the same repository can hold them under another folder than `docs/dev/`, or hold none. `paper` reads the prose standard from `docs/dev/prose-standard.md` and then from the `ordo-init` folder beside its own (`skills/academic/paper/SKILL.md`, "What it reads" 1).
+Roadmap entry 19's goal names two public sources in the repository mattpocock/skills: `skills/engineering/codebase-design` (a vocabulary for module design, with the pages `DEEPENING.md` and `DESIGN-IT-TWICE.md`) and `skills/engineering/improve-codebase-architecture` (a scan that writes candidates and grills through the one the user picks). The second source loads the first through the Skill tool on every run. The source ends in its grilling loop and writes no roadmap entry. Ordo's standards pages ship as templates of `ordo-init`, and a repository keeps its own filled pages where its plan configuration says: the same repository can hold them under another folder than `docs/dev/`, or hold none. `paper` reads the prose standard from `docs/dev/prose-standard.md` and then from the `ordo-init` skill's folder (`skills/academic/paper/SKILL.md`, "What it reads" 1).
 
 ## Decision
 
@@ -14,7 +14,7 @@ The skill finds the standards pages by a search order, and no step of it refuses
 
 1. the pages the repository's `plan.yaml` names under `rules` and `standards`, when the repository has one;
 2. the fixed names under `docs/dev/`;
-3. the default pages in the `ordo-init` skill's folder, which stands beside this skill's folder.
+3. the default pages in the `ordo-init` skill's folder, found from this skill's folder with every link resolved: the folder of that name beside it, and otherwise the folder of that name in a group folder beside this skill's group folder.
 
 The skill reads no standards page from a path outside the repository it runs in and its own skills folder.
 
@@ -35,4 +35,4 @@ The skill treats a repository's own pages in two ways:
 
 ## Consequences
 
-One skill holds the vocabulary once. A change that splits the skill, fixes a page's path, or ends the review without a roadmap entry contradicts this record and needs a record that supersedes it. The skill depends on `ordo-init` standing beside it, as `paper`, `writing` and `code-comments` already do. The search order has three places to state and keep true in the skill text.
+One skill holds the vocabulary once. A change that splits the skill, fixes a page's path, or ends the review without a roadmap entry contradicts this record and needs a record that supersedes it. The skill depends on the `ordo-init` skill's folder being found in one of those two places, as `paper`, `writing` and `code-comments` already do. The search order has three places to state and keep true in the skill text.

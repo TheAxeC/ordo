@@ -134,3 +134,29 @@ Unchanged, since no sentence of theirs became false: `README.md`, `docs/glossary
 - A new repository's verification commands are written without a run, and its coding-standards pages name only the tools the repository configures or the user named.
 - A file git ignores is written and left out of the commit, and listed apart.
 - `codebase-design standards` writes "about <n> of <m>" for an estimate, sorts an estimate near half into group 4, shows a contradicted default rule in group 1, and no longer shows as a difference a pair where the repository asks at least as much.
+
+## Repair round 1
+
+Every ruling is carried out. Only what a ruling names was changed.
+
+| # | State | Place |
+|---|---|---|
+| 1 | DONE, no change | `grant`, `referee` and `paper`'s sentence on the `writing` folder stand as written |
+| 2 | DONE | `skills/academic/writing/SKILL.md`, `skills/code/code-comments/SKILL.md` and `skills/academic/paper/SKILL.md`, "What it reads" 1: the sentence on the folder now reads "When the `ordo-init` folder is in neither of those two folders, that refusal names the repository's path and the two folder paths." It stands after the sentence on the prose standard, which keeps "Neither" and "both paths" for the two places of the prose standard. The three Stops rows "No prose standard" are unchanged |
+| 3 | DONE | `skills/ordo/ordo-init/SKILL.md`: "Steps / A new repository" 12, "Steps / An existing repository" 16 and "Steps / A configured repository" 15 each state, in this order, every file ignored (no commit, no stop, the last message says so), otherwise the commit without the ignored paths when the commit rule allows it, otherwise the stop; "What it reads" 7 gained the bullet that the commit question is not asked when every file of the change is ignored |
+| 4 | DONE | `ordo-init`, "What it reads" 2 and 3 (a folder in neither of the two folders is a refusal made at Steps 1 before anything is drafted or written, naming the folder and the two folder paths); Steps 1 (the check, and its completion criterion); Stops, new first row "A skill's folder not found" |
+| 5 | DONE | `ordo-init`, "Steps / A new repository" 3, two bullets under the rule on tools: the Formatting rule written for the languages whose formatter is configured, each named, left out only when none is; the form for one language out of two, with the made-up formatter `pyfmt` in a made-up repository of C++ and Python |
+| 6 | DONE | `ordo-init`, "Steps / A configured repository" 10 (the open plans found as `plan-orchestration`'s "What it reads" 1 says; each path with the folder it is relative to in its sentence), 12 (the read-back of the `plan.yaml` and of each open plan's block, the configuration check run again before the sync, and the completion criterion), 14 (the first sync run follows that read-back and check) |
+| 7 | DONE | `skills/code/codebase-design/SKILL.md`, the example draft: "About 1,180 of 1,204 declarations." and "310 of 322 headers." |
+| 8 | DONE | `codebase-design`, "Steps / standards" 5: "An estimate that lies no more than one tenth of <m> from half of <m>, on either side", and the made-up "about 36 of 60", which lies exactly 6 from 30 and goes to group 4 |
+| 9 | DONE | `codebase-design`, "Steps / standards" 5: the bullet on a difference between two rules says that Present is tried first and that the criterion applies only to what is left after the exemptions, to "the very thing the repository's rule expressly allows or expressly sets otherwise"; under "Present, the repository asks at least as much", a bullet on an exemption worded as a prohibition ("exists only for", "never for") with the made-up pair of the header comment |
+
+Verify before you report, rerun on the tree after the round:
+
+1. The character-set check printed nothing and exited 0.
+2. `PASS: sync_rules.py scratch tests`, `PASS: check_config.py scratch tests`, `ok: the plan-terms block equals the template`.
+3. `ordo-init 1013 4.0.0` and `codebase-design 1019 1.0.0`.
+4. The grep prints 43 lines, each of a kind the first report explains.
+5. The citations the round wrote were followed: `plan-orchestration`, "What it reads" 1 holds how the open plans of a call are found; "Steps / A configured repository" 4 holds how an error of the configuration check is handled; Steps 1 of `ordo-init` holds the new check. No item number changed.
+
+Judgment call of the round: for ruling 6, an error the second configuration check reports is handled as "Steps / A configured repository" 4 says, since the ruling names the run and not what follows a failure.

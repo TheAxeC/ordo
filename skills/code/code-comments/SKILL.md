@@ -29,8 +29,9 @@ apply all                         after a report: rewrite the comments of every 
 
 1. The prose standard, from the first of these two places that holds it:
    - `docs/dev/prose-standard.md` of the repository the session is in.
-   - `templates/docs/dev/prose-standard.md` in the `ordo-init` skill's folder, which stands beside this skill's folder.
+   - `templates/docs/dev/prose-standard.md` in the `ordo-init` skill's folder, found from this skill's folder with every link resolved: the folder of that name beside it, and otherwise the folder of that name in a group folder beside this skill's group folder.
    - Neither is the refusal "No prose standard", which names both paths.
+   - When the `ordo-init` folder is in neither of those two folders, that refusal names the repository's path and the two folder paths.
    - The file found, when it lacks one of the headings `## 0.`, `## A.`, `## B.`, `## C.` and `## E.`, is the same refusal, which names that file.
 2. The diff, from the call's argument.
    - No argument: the uncommitted changes against `HEAD`, as `git diff HEAD` gives them, together with every untracked file git does not ignore, each read as added whole.

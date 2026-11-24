@@ -28,11 +28,12 @@ metadata:
 ## What it reads
 
 1. The mode, from the call: `standards`, `review` with an optional area, or none.
-2. The `ordo-init` skill's folder, which stands beside this skill's folder, in both modes.
+2. The `ordo-init` skill's folder, in both modes.
+   - The `ordo-init` skill's folder is found from this skill's folder with every link resolved: the folder of that name beside it, and otherwise the folder of that name in a group folder beside this skill's group folder.
    - Its `templates/docs/dev/` holds the default pages: `change-standard.md`, `design-principles.md`, `prose-standard.md`, `ui-standard.md` and `coding-standards/` with `common.md` and one page per language.
    - Its `templates/docs/adr/README.md` and `templates/docs/adr/template.md` are read for an ADR folder the repository lacks, as "Steps / review" 12 says.
    - A default page marks what a repository fills in with a placeholder in angle brackets, such as `<the layers, top down>`.
-   - The folder missing is the refusal "No ordo-init folder", which names the folder.
+   - A folder found in neither place is named, with both paths, in the message the skill then gives, the refusal "No ordo-init folder".
 3. The repository's `plan.yaml`, when it has one: the first found in `.scratch/`, `docs/` and `.agents/` at the repository root, in that order, as `/plan`'s "What it reads" 1 finds it for a call that names no folder.
    - Each path it holds is read relative to the folder that holds the file.
    - In the `projects:` form, the `rules` and `standards` of every project are read.
@@ -82,8 +83,9 @@ metadata:
    - Done when the languages are listed.
 3. Find the repository's pages at places 1 and 2 of "What it reads" 4, and judge which subject each page and each section holds.
    - Each language of the repository is judged on its own, as "What it reads" 4 says of a language's page.
-   - Only these pages are compared, so a rule that stands on another page of the repository counts as missing.
+   - Only these pages are compared for a rule that is present, so a rule that stands only on another page of the repository counts as missing.
    - Each other page of the repository that holds rules, such as a contribution guide, is noted by its path for the draft.
+   - A noted page is read at Steps / standards 5 for a sentence that states or describes the opposite of a default rule, and for nothing else.
    - Done when each page found has its subjects, and each other page of rules is noted.
 4. Settle whether the repository has a user interface, as "What it reads" 6 says.
    - Done when the answer is known, and each subject that applies is present, with the page or section that holds it, or is a subject the repository lacks.
@@ -94,15 +96,32 @@ metadata:
    - A requirement the code shows without the tool is sorted like any other rule, even when its sentence names the tool or speaks of it by a pronoun.
    - Only what cannot be met without the tool goes to group 5: that the tool runs, its configuration file, and a requirement that only the tool can check.
    - Each rule gets the first of these that fits, tried in this order:
-     - Present: the repository's pages hold a rule that asks the same on the same requirement, wherever it stands.
-     - Group 1, a difference: the repository's pages hold a rule on the same requirement that asks something else, such as a different limit, a different order or a different check, whether or not the two can both be followed.
+     - Present: the repository's compared pages hold a rule on the same requirement, wherever it stands, and each part of what the default rule covers falls under one of the two bullets on a present rule below.
+     - Group 1, a difference: one of the two bullets on a difference below holds.
      - Group 2, a rule on how work is done: the pages hold nothing on the requirement, and whether the rule is followed cannot be read from the code, as with a rule of the change standard.
-     - Group 3, a rule the code already follows: the pages hold nothing on the requirement, and the code follows the rule in more than half of the places it applies to.
-     - Group 4, a rule the code does not follow: the pages hold nothing on the requirement, and the code follows the rule in half of the places it applies to, or in fewer.
+     - Group 3, a rule the code already follows: the pages hold nothing on the requirement, and the code follows the rule in more than half of the places it applies to, an estimate near half excepted as the bullet on an estimate below says.
+     - Group 4, a rule the code does not follow: the pages hold nothing on the requirement, and the code follows the rule in half of the places it applies to, or in fewer, or by an estimate near half.
      - Group 5, a rule about a tool the repository lacks: a requirement that cannot be met without a tool for which the tree holds no configuration, as the bullets on a tool above say.
-   - A default rule that holds more than the repository's rule, and asks nothing else on what both cover, is present, and the sentences it holds beyond the repository's are neither drafted nor asked about.
+   - Present, the repository asks at least as much: the repository's rule covers what the default rule covers and asks the same or more of it.
+     - A default sentence that takes a kind of file or a kind of defect out of a requirement, or that allows what the repository's rule forbids, is an exemption however it is worded, and makes no difference.
+     - A default sentence that narrows a requirement to a kind of file or a kind of defect is an exemption also when it is worded as a prohibition, with "exists only for" or "never for".
+     - A made-up exemption worded as a prohibition: the repository's rule reads "Every module has a header comment", and the default rule reads "A header comment exists only for a module that other modules import."
+     - A repository rule that expressly allows what such a default sentence forbids makes the pair a difference and no exemption, as in the made-up pair of the repository's rule "A test may be written for a text file" and the default rule "A test exists only for a script".
+     - A made-up exemption: the repository's rule reads "Every source file opens with the licence header", and the default rule says the same and adds "A generated file carries none."
+     - A made-up default that allows what the repository forbids: the repository's rule reads "No function takes a boolean parameter", and the default rule reads "A function takes a boolean parameter only when its name says what true means."
+   - Present, the default says more where the repository is silent: a default rule that holds more than the repository's rule, and asks nothing else on what both cover, is present, and the sentences it holds beyond the repository's are neither drafted nor asked about.
+   - A difference between two rules: Present is tried first, so this criterion applies only to what is left after the exemptions, and it holds when the default rule forbids or requires something of the very thing the repository's rule expressly allows or expressly sets otherwise, such as a different limit, a different order, a different check or an allowance the default withdraws.
+     - A repository rule that sets a limit expressly allows what stays within the limit, so a default rule that forbids the thing outright differs from it.
+   - A difference by contradiction: a page of the repository, one compared or one noted at Steps / standards 3, states or describes the opposite of the default rule, as a rule that asks the opposite or as a described practice the default rule forbids.
+     - Such a rule never stands in group 2, 3 or 4.
+     - A made-up contradiction: the default rule reads "No commented-out code is committed", and a noted contribution guide says "Old code is left commented out above its replacement for one release."
    - A rule that is present is left as written.
    - For groups 3 and 4, a command counts the places the rule applies to and the places that follow it, over the files of "What it reads" 5.
+     - A count a command produces by listing each place is written "<n> of <m>".
+     - A count produced by a pattern over lines, which can miss or over-count, is an estimate and is written "about <n> of <m>".
+     - An estimate that lies no more than one tenth of <m> from half of <m>, on either side, puts the rule in group 4, which adds nothing unless the user names the rule.
+     - Any other estimate sorts by "more than half" as an exact count does.
+     - With made-up counts, "about 36 of 60" lies exactly 6 from 30, on the edge, and goes to group 4, as "about 33 of 60" does, and "about 55 of 60" goes to group 3.
    - A rule whose following could be read from the code, and that applies in no place of the code, is left out.
    - Done when each such default rule is present, with the page, the section and the line where it stands, or is in one group, or is left out.
 6. Draft each rule of groups 1 to 4 in the concrete form it takes in the repository, read from the code.
@@ -126,6 +145,7 @@ metadata:
    - The audit file is one Markdown file named `standards-audit-<timestamp>.md`, so that each run writes a new file.
    - It holds each default rule found present, with the page, the section and the line where it stands.
    - It holds each rule of groups 3 and 4 with its count and the command that produced the count.
+   - Its line for a rule whose count is an estimate writes the count as "about <n> of <m>" and says that the count is an estimate.
    - It holds the place each addition will go to.
    - It holds each rule left out because it applies in no place of the code.
    - The user is not asked to open it.
@@ -138,13 +158,14 @@ metadata:
    - Done when that message ends the run, or a rule or a new page is left to show.
 10. Show the draft (the stop "The draft"), in the order and the form below, with nothing else of the comparison.
     - A group with no rule is left out.
-    - Group 1 shows each difference in full, lettered: the repository's rule quoted, its page and its section named in words, the default's rule quoted, what goes wrong under each in one plain sentence, and the choice.
+    - Group 1 shows each difference in full, lettered: the repository's sentence quoted, a rule or a described practice, its page and its section named in words, the default's rule quoted, what goes wrong under each in one plain sentence, and the choice.
     - Each quote of a difference is the sentence or the sentences that differ, never a whole item of several sentences.
-    - The words of group 1 say that the two pages state the rule differently.
+    - The words of group 1 say that the repository's pages and the default page disagree, which holds for a rule and for a described practice.
+    - A difference introduces the repository's sentence with "says" for a rule and with "describes" for a described practice.
     - Group 2 takes one line per default page, with one yes or no for the whole group.
     - That line names the rules by their titles or opening words as the default page has them, and reprints none.
-    - Group 3 takes one numbered line per rule: the rule in the words it would be added in, then its count as "<n> of <m>".
-    - Group 4 takes one numbered line per rule: the rule in a few words, then what adopting it would break, with its count.
+    - Group 3 takes one numbered line per rule: the rule in the words it would be added in, then its count as "<n> of <m>", or as "about <n> of <m>" for an estimate.
+    - Group 4 takes one numbered line per rule: the rule in a few words, then what adopting it would break, with its count in the same two forms.
     - The numbers run on through groups 3 and 4, so that each number names one rule.
     - Group 5 takes one line for all its rules, which names the tools.
     - Each new page follows in one line, lettered on after the differences, or from A when there is no difference, with a yes or no of its own, and its text is not printed.
@@ -154,7 +175,7 @@ metadata:
     - A rule of group 4 that belongs to a new page stays a numbered line of group 4, and its line names the page.
     - Each change to `plan.yaml` follows the new pages, one line each.
     - A question stands directly under the line of its rule, or under the line of the new page that holds its rule.
-    - When Steps / standards 3 noted other pages of rules, one sentence names them and says that they were not compared, so a rule standing only there counts as missing.
+    - When Steps / standards 3 noted other pages of rules, one sentence names them and says that they were read only for a sentence that contradicts a default rule, so a rule standing only there counts as missing.
     - One sentence then gives how many default rules were found present, and the audit file's absolute path.
     - The last line says how to answer.
     - A place is named by its page and its section in words. A line number may follow that name and never stands alone.
@@ -165,13 +186,13 @@ metadata:
       ```
       The draft. Nothing is written until you answer.
 
-      Your page and the default page state a rule differently. Choose one.
+      Your pages and the default page disagree on a rule. Choose one.
 
-      A. Which checks a builder runs before landing
-         Your change standard, section "Verification", says: "The builder runs the whole verify list on the whole tree before it reports."
-         The default says: "The whole verify list runs once, at landing. Before that, the builder runs only the checks of the files the step changes."
-         Under yours: every step waits for the whole list, also a step that changes one page.
-         Under the default: a failure outside the changed files shows only at landing.
+      A. How long a source file may be
+         Your coding standards, section "Files", says: "A source file stays under 2,000 lines."
+         The default says: "A source file stays under 1000 lines."
+         Under yours: a file grows to twice the default's limit before it is split.
+         Under the default: the 14 files over 1,000 lines break the rule from the day it is adopted.
          Keep yours, or take the default's?
 
       Rules on how work is done that your pages lack. Add them all, yes or no?
@@ -180,11 +201,12 @@ metadata:
 
       Rules your code already follows. Each is added unless you strike its number.
 
-         1. A pointer binds to its type: `T* p`, never `T *p`. 1,180 of 1,204 declarations.
+         1. A pointer binds to its type: `T* p`, never `T *p`. About 1,180 of 1,204 declarations.
+         2. Every header opens with `#pragma once`. 310 of 322 headers.
 
       Rules your code does not follow. None is added unless you name its number.
 
-         2. Every Python function annotates its parameters and its return type. 3 of 240 functions do, so adopting it leaves 237 breaking it. It belongs to the new page B below.
+         3. Every Python function annotates its parameters and its return type. 3 of 240 functions do, so adopting it leaves 237 breaking it. It belongs to the new page B below.
 
       Rules about tools the repository lacks, none added: clang-format, clang-tidy.
 
@@ -192,7 +214,7 @@ metadata:
 
       B. The Python coding standards, at docs/dev/coding-standards/python.md, with 4 rules: "The code runs on Python 3.11 or newer", "Modules and functions are `snake_case`", "A handler names the exception class it catches", "A path is a `pathlib.Path`". Its text is in /tmp/standards-page-python-20260101-120000.md.
 
-      61 default rules already stand in your pages. They are listed in /tmp/standards-audit-20260101-120000.md.
+      62 default rules already stand in your pages. They are listed in /tmp/standards-audit-20260101-120000.md.
 
       Answer with: yours or the default's for A, yes or no for the rules on how work is done, the numbers to strike, the numbers to add, yes or no for B. Whatever you leave unanswered counts as no.
       ```
@@ -200,7 +222,7 @@ metadata:
     - Done when the user has answered or corrected the draft.
 11. Write the additions the answer approves, each at its place.
     - A rule of group 1 is added only where the user chose the default's rule.
-    - The repository's rule of such a difference is left as written, and the last message says that it needs the user's own rewrite, which this mode does not make.
+    - The repository's sentence of such a difference, a rule or a described practice, is left as written, and the last message says that it needs the user's own rewrite, which this mode does not make.
     - The rules of group 2 that go to pages that exist are added on the user's yes to group 2.
     - A rule of group 3 that goes to a page that exists is added unless the user struck its number.
     - A rule of group 4 is added only when the user named its number, and one that belongs to a new page only when that page also has its yes.
@@ -284,7 +306,7 @@ metadata:
 
 | Stop | When | What it shows | What resumes it |
 |---|---|---|---|
-| No ordo-init folder | Either mode, at its Steps 1, when the `ordo-init` skill's folder does not stand beside this skill's folder | A refusal that names the folder | The `ordo-init` skill installed beside this skill, then the call again |
+| No ordo-init folder | Either mode, at its Steps 1, when the `ordo-init` skill's folder is in neither place of "What it reads" 2 | A refusal that names the folder with both paths | The `ordo-init` skill installed, then the call again |
 | The user interface | Either mode, after the repository's pages are read, when no page holds a UI standard and the repository tracks no `.svelte` file | The question whether the repository has a user interface a reader sees and operates, asked once | The user's answer |
 | The draft | Steps / standards 10, before anything is written into the repository, when a rule is in groups 1 to 4 or a page is new | Each difference in full, the rules on how work is done named in one line per default page, one numbered line per rule the code follows and per rule it does not, the tools the repository lacks in one line, one line per new page, each change to `plan.yaml`, the draft's questions, how many rules were found present and the audit file's path | The user's answer or correction: a choice per difference, yes or no for group 2 and for each new page, the numbers struck and named, each question's answer |
 | The candidates | Steps / review 9, after the report is written and opened | The report's absolute path and the question which candidate to explore | The user's pick, or the user's word that none is picked |
@@ -298,6 +320,8 @@ metadata:
 | Anti-pattern | Why it fails | Do instead |
 |---|---|---|
 | A page that exists rewritten into the default page's structure | It rewrites rules the user already approved, and every record that cites a line of them goes stale | Leave each rule that stands as written, and draft only the rules the pages lack (Steps / standards 5 to 7) |
+| A default rule that a page of the repository contradicts sorted as a rule the pages lack | The rule is added beside a sentence that says the opposite, and the pages then disagree | Sort it into group 1 and show it in full (Steps / standards 5 and 10) |
+| An estimated count shown as an exact one | A rule near half is added as one the code follows on a count that may be wrong | Write "about <n> of <m>", and sort an estimate near half into group 4 (Steps / standards 5) |
 | A default rule written with its placeholder still in it | The page then states something nobody filled in | Fill it from the code, or put it to the user as a question in the draft |
 | A draft that lists placements and line numbers in place of what each rule says | The user cannot judge a rule without opening the pages | Show each rule in its own words, in the form of its group, and keep the places for the audit file and the last message (Steps / standards 8, 10 and 11) |
 | A candidate passed into the report unread | The agent's return is a lead, and its lines may not show what it says | Read each candidate's files and lines, and drop one they do not show (Steps / review 6) |

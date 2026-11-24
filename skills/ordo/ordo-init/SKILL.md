@@ -7,7 +7,7 @@ metadata:
 
 # Set a repository up for the plan skills
 
-`/ordo-init` sets a repository up for the plan skills (`plan`, `spec`, `refute`, `land`, `ordo-help`, `plan-orchestration`), by what it finds in the folder: a new repository set up whole in an empty folder, the plan configuration `docs/plan.yaml` drafted, what is missing offered and the two blocks synced in an existing repository, and, in a repository that has a plan configuration, the configuration check of that file and the sync of the shared-rules block and the glossary's plan-terms block. It leaves behind the approved tree or files with the `.gitignore` lines it needed, or the fixed configuration on disk and the synced blocks, the files it wrote in a new or an existing repository and a sync change committed when the repository's commit rule allows it.
+`/ordo-init` sets a repository up for the plan skills (`plan`, `spec`, `refute`, `land`, `ordo-help`, `plan-orchestration`), by what it finds in the folder: a new repository set up whole in an empty folder, the plan configuration `docs/plan.yaml` drafted, what is missing offered and the two blocks synced in an existing repository, and, in a repository that has a plan configuration, the configuration check of that file and the sync of the shared-rules block and the glossary's plan-terms block. It leaves behind the approved tree or files with the `.gitignore` lines it needed, or the fixed configuration on disk and the synced blocks, the files it wrote in a new or an existing repository and a sync change committed when the repository's commit rule allows it, a file git ignores written and left out of the commit.
 
 ## Quick start
 
@@ -26,8 +26,13 @@ metadata:
 ## What it reads
 
 1. `templates/` in this skill's folder: `CLAUDE.md`, `shared-rules.md`, `plan-terms.md`, the `docs/` pages, the `gitignore/` files, `LICENSE-MIT`, `sync_rules.py` and `check_config.py`.
-2. The plan skill's `templates/plan.yaml` (one project) and `templates/plan.projects.yaml` (several), in the `plan` folder beside this skill's folder: the keys, which are required, each optional key's default, and the comment that says what the key is.
-3. The `roadmap` skill's `templates/roadmap.md`, in the `roadmap` folder beside this skill's folder.
+2. The plan skill's `templates/plan.yaml` (one project) and `templates/plan.projects.yaml` (several): the keys, which are required, each optional key's default, and the comment that says what the key is.
+   - The `plan` skill's folder is found from this skill's folder with every link resolved: the folder of that name beside it, and otherwise the folder of that name in a group folder beside this skill's group folder.
+   - `templates/check_config.py` finds the `plan` skill's folder in the same order.
+   - A `plan` folder that is in neither of those two folders is a refusal, made at Steps 1 before anything is drafted or written, that names the folder and the two folder paths ("Stops").
+3. The `roadmap` skill's `templates/roadmap.md`.
+   - The `roadmap` skill's folder is found as item 2 finds the `plan` skill's folder.
+   - A `roadmap` folder that is in neither of those two folders is the same refusal, made at Steps 1 before anything is drafted or written, that names the folder and the two folder paths ("Stops").
 4. The plan configuration, when the repository has one: the first `plan.yaml` found in the folder the call names, then in `.scratch/`, `docs/` and `.agents/` at the repository root, the order the `plan` skill's "What it reads" 1 states.
    - `<folder>` names the `plan.yaml` as the part in front of the entry does in a call of `/plan`: the folder that holds it, as a path from the repository root, with a project's name after it in the `projects:` form.
    - The folder is the longest leading part of `<folder>` that is a folder holding a `plan.yaml`, and what is left of `<folder>` names a project of that file: `/ordo-init . tools/a` reads the project `a` of `tools/plan.yaml`.
@@ -50,6 +55,7 @@ metadata:
      - When they state none, the skill asks whether it may commit at the stop that shows the change ("Steps / A configured repository" 9 and 11), with the change.
      - Where "Steps / A configured repository" 10 asks question 5, its answer is the commit rule.
    - Under a quoted ruling that states whether the skill may commit, the commit rule is what the ruling states.
+   - The question whether the skill may commit is not asked when every file of the change is ignored by git, since no commit is then made, as Rules says of a file git ignores, and where an item asks it together with other questions it is left out of them.
 8. For the sync, the repository's `CLAUDE.md` and its glossary, through `templates/sync_rules.py`, and the rules of its `CLAUDE.md` and the entries of its glossary for the exit-2 draft.
    - The glossary is the page the plan configuration names in its `standards` list, as `/plan`'s "What it reads" 1 says.
    - In the `projects:` form, the glossary is read from the `standards` list of the project the call names.
@@ -81,7 +87,8 @@ Run from the repository root, the folder `<path>` names or else the current fold
    - Otherwise a tracked file, a line `git ls-files` prints, makes it an existing repository: follow "Steps / An existing repository".
    - Otherwise the folder, with no tracked file or with no git repository, gets a new repository: follow "Steps / A new repository".
    - No argument chooses the case.
-   - The step is done when the case is known.
+   - Before a case is followed, the `plan` skill's folder and the `roadmap` skill's folder are found as "What it reads" 2 and 3 say, and a folder in neither of its two folders is the refusal "A skill's folder not found" ("Stops").
+   - The step is done when the case is known and both folders are found, or the refusal is raised with nothing drafted or written.
 
 ### A new repository
 
@@ -95,6 +102,7 @@ Run from the repository root, the folder `<path>` names or else the current fold
 3. Draft "The tree" of `references/new-repository.md`, every file with its full text.
    - Under a quoted ruling ("What it reads" 9), a file whose full text the ruling holds is drafted as that text.
    - The plan-terms block of `docs/glossary.md` is filled from `templates/plan-terms.md`, as the shared-rules block of `CLAUDE.md` is from `templates/shared-rules.md`.
+   - Before a file is drafted, its path is checked as Rules says of a file git ignores, and the draft marks an ignored file as that rule says.
    - A placeholder in a template (`<...>`) is filled from the answers or from the files written before.
    - Every placeholder of an installed standards page is filled from the answers, from the files written before, or with the value the template writes inside it when that is a default value (`<1000>` becomes `1000`).
      - A placeholder is a `<...>` that names what fills it, inside inline code or not (`include/<lib>/`).
@@ -105,6 +113,19 @@ Run from the repository root, the folder `<path>` names or else the current fold
        - With a value as the answer, the rule holds the value.
      - Such a rule is left out of the installed page, with its sub-list and the placeholders only it holds, when the answer is no or none.
      - A check the repository does not have yet is written as "checked by reading at review" in place of the placeholder's sentence part, so the page states nothing nobody filled in.
+   - A default coding-standards page written into a repository, the common page or a language page, names no tool the repository does not configure.
+     - A tool here is a formatter, a linter or a static type checker run as its own command.
+     - A language's own compiler and its configuration file are not such a tool.
+     - A tool counts as configured only when the repository holds its configuration file or section, or the user named it in an answer.
+     - For a tool that is not configured, each rule of the page is split by requirement, as the `codebase-design` skill's "Steps / standards" 5 splits a rule that names a tool.
+     - A requirement that can be read and followed without the tool is written in plain words, without the tool's name, its rule codes or its configuration file.
+     - What only the tool can do is left out: that it runs, its configuration, and a selection of its rule groups.
+     - A line that names a rule code of the tool names the tool.
+     - A placeholder for a check that only such a tool runs is left out with it, and the bullet on "checked by reading at review" above holds for every other placeholder of a check.
+     - The common page's Formatting rule is written for the languages whose formatter is configured, each named, and is left out only when no language of the repository has a configured formatter.
+     - With one language configured out of two, the rule opens with that language in place of "Each language": in a made-up repository of C++ and Python whose only configured formatter is a Python formatter named `pyfmt`, it reads "Python has one formatter, `pyfmt`, with its configuration pinned in the repository.", and its two other sentences speak of that formatter alone.
+     - With no linter configured, a made-up rule "A handler names the exception class it catches. The linter's rule `X100` fails a bare handler." is written as "A handler names the exception class it catches."
+     - The draft lists, in one line per page, the tools left out.
    - `coding-standards/typescript.md` keeps its section "Svelte and SvelteKit" only when the repository uses Svelte or SvelteKit (a `.svelte` file, or the answer to question 3).
      - Otherwise the section, its heading included, is left out of the installed page.
      - A repository that uses Svelte or SvelteKit has a user interface, so with question 6's defaults it gets `docs/dev/ui-standard.md`.
@@ -131,6 +152,10 @@ Run from the repository root, the folder `<path>` names or else the current fold
 7. List each installed skill with its description in the Skills section of `CLAUDE.md`.
    - The step is done when the Skills section lists each installed skill.
 8. Follow "Steps / An existing repository" on the tree written, with its own draft and approval: it writes `docs/plan.yaml` and `docs/dev/building.md`.
+   - No command meant for the verification page is run, whether the user named it in question 3 or the skill read it from a build file it wrote, since the tree holds no source for it.
+   - Each such command is written on the verification page as named.
+   - The draft of the configuration says, beside each command, that it was not run and why.
+   - The stop "A failing command" is not raised from this item.
    - Its configuration check passes.
    - Under a quoted ruling, it runs under the same ruling.
    - It skips the stops the ruling covers, as its own items say.
@@ -156,14 +181,15 @@ Run from the repository root, the folder `<path>` names or else the current fold
 12. Commit the setup's other files in one commit, the subject naming the repository's setup.
     - Each file is staged with `git add -- <path> ...`.
     - The commit names the same paths: `git commit -m <message> -- <path> ...`.
-    - Every file written is named, except those committed at "Steps / A new repository" 8.
-    - The commit is made only when the answer to question 5 allows it.
+    - Every file written is named, except those committed at "Steps / A new repository" 8 and a file git ignores, which Rules keeps out of both commands.
+    - When every file written is ignored by git, no commit is made, no stop is raised and the last message says so.
+    - Otherwise, when the answer to question 5 allows it, the commit is made without the ignored paths.
     - Otherwise the skill stops ("Stops").
     - A setup written under a quoted ruling names the ruling in the commit message, by its name and its ledger file.
     - When no commit is made, the list of files the stop shows names the ruling the same way.
     - `.agents/skills/` and `.claude/` are ignored and not committed.
     - `skills-lock.json` is committed.
-    - The step is done when the files are committed, or the stop "No commit allowed" shows them.
+    - The step is done when the files git does not ignore are committed, or the stop "No commit allowed" shows the files written, or every file written is ignored and the last message says that no commit was made.
 
 ### An existing repository
 
@@ -187,11 +213,11 @@ Run from the repository root, the folder `<path>` names or else the current fold
 3. Draft `verification`: the page that defines the green check, with the commands every step runs, each written as the `plan` skill's "What it reads" 3 says.
    - An existing page qualifies only when it states commands.
    - None: the skill offers to write `docs/dev/building.md` from the commands the CI jobs and build files run (install, build, test, lint, type check).
-   - Each command is run once, as it is to be written, before it is written.
-   - Its exit status and the last lines of its output are shown beside it.
-   - A command that fails is not written as a check.
+   - Each command is run once, as it is to be written, before it is written, except when these steps run from "Steps / A new repository" 8, where no command is run and each is written as that item says.
+   - The exit status of a command that was run and the last lines of its output are shown beside it.
+   - A command that fails its one run is not written as a check.
      - It is a stop ("Stops").
-   - The step is done when the draft names the verification page, offers `docs/dev/building.md` with each command's result, or the stop of a failing command stands.
+   - The step is done when the draft names the verification page, offers `docs/dev/building.md` with each command's result or, from "Steps / A new repository" 8, with the note that the command was not run and why, or the stop of a failing command stands.
 4. Draft `rules`: the page that says how a change is made (a change standard, `CONTRIBUTING.md`, or the rules section of `AGENTS.md` or `CLAUDE.md`).
    - None: the skill offers to write `docs/dev/change-standard.md` from `templates/docs/dev/change-standard.md`.
    - Its placeholders are filled from this repository: the standards pages, the folders a renamed name is grepped across, the verification commands with their filters.
@@ -250,10 +276,11 @@ Run from the repository root, the folder `<path>` names or else the current fold
 12. Show, in this order:
     1. The form and why.
     2. The draft `docs/plan.yaml` in full.
-    3. Each page it would create, `CLAUDE.md` and the glossary included, in full, with the commands' results for a verification page.
+    3. Each page it would create, `CLAUDE.md` and the glossary included, in full, and for a verification page each command's result or, from "Steps / A new repository" 8, the note that the command was not run and why.
     4. The `.gitignore` changes, and the changes to an existing `CLAUDE.md` and to an existing glossary with what each lists for removal, as Rules says of a change to an existing file.
     5. Where question 5 was not asked, the question whether the skill may commit.
     - The commit question is left out when a quoted ruling states whether the skill may commit.
+    - A page to create or a file to change that git ignores is marked as Rules says of a file git ignores, from the check made before it was drafted.
     - The step is done when everything this item lists is shown.
 13. Stop for the approval ("Stops").
     - Under a quoted ruling, compare the draft "Steps / An existing repository" 12 shows with the ruling.
@@ -278,12 +305,13 @@ Run from the repository root, the folder `<path>` names or else the current fold
 16. Commit the files written, a block the sync rewrote included, in one commit whose subject names the plan configuration.
     - Each file is staged with `git add -- <path> ...`.
     - The commit names the same paths: `git commit -m <message> -- <path> ...`.
-    - The commit is made only when the repository's commit rule ("What it reads" 7) allows it.
+    - When every file written is ignored by git, no commit is made, no stop is raised and the last message says so.
+    - Otherwise, when the repository's commit rule ("What it reads" 7) allows it, the commit is made without the ignored paths, as Rules says of a file git ignores.
     - Otherwise the skill stops ("Stops"), except when these steps run from "Steps / A new repository" 8, where the setup goes on and "Steps / A new repository" 12 raises the one stop.
     - A setup written under a quoted ruling names the ruling in the commit message, by its name and its ledger file.
     - When no commit is made, the list of files written names the ruling the same way.
     - That list is the one of the stop "No commit allowed", raised here or at "Steps / A new repository" 12.
-    - The step is done when the files written are in one commit, or the list of files written is shown.
+    - The step is done when the files written that git does not ignore are in one commit, or the list of files written is shown, or every file written is ignored and the last message says that no commit was made.
 
 ### A configured repository
 
@@ -340,12 +368,19 @@ Run from the repository root, the folder `<path>` names or else the current fold
    - Or the repository's text is the wording wanted everywhere: the change goes into `templates/shared-rules.md` or `templates/plan-terms.md` in this skill's folder, after which every repository set up from it differs until it is synced.
    - Under a quoted ruling whose hunks are the hunks of the diff, each with the choice for it, the choices are applied without the stop.
    - A diff whose hunks are not the ruling's is shown whole, and the stop stands.
+   - Before the diff is shown, the file of each block that differs is checked as Rules says of a file git ignores, and the diff of an ignored file is marked as that rule says.
    - The item is done when each hunk has the user's ruling or the quoted ruling's choice.
 10. Exit 2 with `error: CLAUDE.md has no single shared-rules block`, `error: <glossary> has no single plan-terms block` or `error: no CLAUDE.md in`, `<glossary>` being the path passed with `--glossary` or else `docs/glossary.md`: draft the change for each block or file the lines name.
+    - Before a file or a change is drafted, its path is checked as Rules says of a file git ignores, and the draft marks an ignored file as that rule says.
     - The shared-rules block inserted after the opening paragraph of `CLAUDE.md`.
     - Each rule of the existing `CLAUDE.md` that the block now states, listed for removal with the block rule that replaces it.
     - A rule that differs in substance, kept in Project rules and named.
     - With no file at the glossary's path, the file written there from `templates/docs/glossary.md`, its plan-terms block filled from `templates/plan-terms.md`.
+      - When the plan configuration found lists no glossary in `standards`, the drafted change adds the new glossary's path to that list, written relative to the folder that holds the `plan.yaml`, as the `plan` skill's "What it reads" 1 reads a path: `../docs/glossary.md` in `.agents/plan.yaml`.
+      - A configuration with no `standards` key gets the key with that one path and the comment "Steps / An existing repository" 9 gives a written key.
+      - In the `projects:` form the list is that of the project the call names, and with none named, of the first project.
+      - The glossary's path, written relative to the repository root, is also added to the `standards` line of the configuration block of each open plan of that `plan.yaml`, the open plans found as `plan-orchestration`'s "What it reads" 1 says, as the `grill` skill's "Steps / Writing what settled" 2 adds the path of a glossary it creates, so the next `/spec` of an open plan reads the glossary.
+      - These additions are shown as a diff with the rest of the change, and written with it.
     - With a glossary that has no single block, the plan-terms block inserted after its opening paragraph, and each existing entry that the block now defines listed for removal.
     - With no `CLAUDE.md`, the file drafted from `templates/CLAUDE.md`, as "Steps / An existing repository" 11 says of a repository with no `CLAUDE.md`.
       - Before that draft, questions 1, 5 and 9 of `references/new-repository.md` are asked, together, each only for what the repository does not show ("Stops", "The questions").
@@ -359,7 +394,9 @@ Run from the repository root, the folder `<path>` names or else the current fold
     - The stop then stands.
     - The item is done when the drafted change is shown, or written under a quoted ruling.
 12. Write it once the user approves.
-    - The item is done when the approved change is on disk.
+    - After a glossary's path is written into `standards`, the `plan.yaml` is read back and holds the path relative to the folder that holds it, and each open plan's configuration block is read back and holds the path relative to the repository root.
+    - The configuration check is then run again on the changed `plan.yaml`, before the sync of "Steps / A configured repository" 14, and an error it reports is handled as "Steps / A configured repository" 4 says.
+    - The item is done when the approved change is on disk and, where a path was written into `standards`, the read-back holds it in both places and the configuration check has run again.
 13. Exit 2 with any other `error:` line (`is not UTF-8`, `cannot read`, `cannot write`, `does not read back as written`): draft nothing for the file that line names.
     - A no-single-block line of the same run is still drafted, as "Steps / A configured repository" 10 says.
     - Show the line with the file it names ("Stops").
@@ -367,28 +404,33 @@ Run from the repository root, the folder `<path>` names or else the current fold
     - The item is done when the line is shown with the file it names.
 14. After a written draft or a fixed file: run the sync again, at most twice, following "Steps / A configured repository" 8 to 13 on its exit status each time.
     - A sync that does not exit 0 on the second of those runs is a stop ("Stops").
+    - When "Steps / A configured repository" 10 wrote a new glossary's path into `standards`, the first of these runs follows the read-back and the configuration check of "Steps / A configured repository" 12, and each run adds `--glossary <the glossary's path, relative to the repository root>`, as "Steps / A configured repository" 7 says of a glossary the plan configuration names.
     - The item is done when a run exits 0, or the stop stands.
-15. After exit 1 or exit 2: commit the change, in the form "Steps / A new repository" 12 states, when the repository's commit rule allows it, and otherwise stop ("Stops").
+15. After exit 1 or exit 2: end by the first of these three that holds.
+    - When every file changed is ignored by git, no commit is made, no stop is raised and the last message says so.
+    - Otherwise, when the repository's commit rule allows it, the change is committed in the form "Steps / A new repository" 12 states, without the ignored paths.
+    - Otherwise the skill stops ("Stops").
     - A change written under a quoted ruling names the ruling in the commit message, by its name and its ledger file.
     - When no commit is made, the list of files the stop shows names the ruling the same way.
-    - The item is done when the change is committed, or the stop shows the files changed.
+    - The item is done when the change to the files git does not ignore is committed, or the stop shows the files changed, or every file changed is ignored and the last message says that no commit was made.
 
 ## Stops
 
 | Stop | When | What it shows | What resumes it |
 |---|---|---|---|
+| A skill's folder not found | Steps 1, in each of the three cases, when the `plan` or the `roadmap` skill's folder is in neither of the two folders "What it reads" 2 gives | A refusal that names the folder and the two folder paths, with nothing drafted or written | The skill installed, then `/ordo-init` again |
 | The questions | A new repository, at "Steps / A new repository" 2, and a `CLAUDE.md` written from the template, at "Steps / An existing repository" 6 or "Steps / A configured repository" 10, for each question asked there that a quoted ruling does not answer | The questions asked, each with its default | The user's answers |
-| The draft of the tree | A new repository, at "Steps / A new repository" 4, except a draft a quoted ruling covers as that item says | The tree of `references/new-repository.md`, every file's text and the placeholders that "Steps / A new repository" 3 lists for the user's value | The user's approval or correction |
+| The draft of the tree | A new repository, at "Steps / A new repository" 4, except a draft a quoted ruling covers as that item says | The tree of `references/new-repository.md`, every file's text, the placeholders that "Steps / A new repository" 3 lists for the user's value and the tools that item leaves out of each coding-standards page | The user's approval or correction |
 | Several roadmaps | More than one roadmap candidate, and no quoted ruling states `roadmap` | The candidates | The user's pick |
 | Worker, reviewer and libraries | At "Steps / An existing repository" 6, for each key a quoted ruling does not state | The offered answer for `worker` and `reviewer`, and the two values of `libraries` with what each means, as that item names them | The user's answers |
-| A failing command | A command meant for the verification page fails its one run | What "Steps / An existing repository" 3 shows beside it | The user's decision |
+| A failing command | In an existing repository, a command meant for the verification page fails its one run; never from "Steps / A new repository" 8, where no command is run | What "Steps / An existing repository" 3 shows beside it | The user's decision |
 | The draft of the configuration | At "Steps / An existing repository" 13, except a draft a quoted ruling states as that item says, where only a commit question the ruling leaves open is asked | What "Steps / An existing repository" 12 lists | The user's approval or correction, and the answer to the commit question when it is shown |
 | A fix in the configuration check | The configuration check reports an error in a plan configuration, and no quoted ruling states its fix | The error and the proposed fix | The user's approval |
 | A hunk to rule on | The sync exits 1, except a diff whose hunks are a quoted ruling's ("Steps / A configured repository" 9) | The diff, and the commit question where "What it reads" 7 says to ask it | The user's ruling per hunk, and the answer to the commit question when it is asked |
 | The drafted sync change | The sync exits 2 with an `error:` line of "Steps / A configured repository" 10, for the shared-rules block, the plan-terms block or a missing `CLAUDE.md`, except a change a quoted ruling states ("Steps / A configured repository" 11) | The change "Steps / A configured repository" 10 drafts, and the commit question where "What it reads" 7 says to ask it | The user's approval, and the answer to the commit question when it is asked |
 | A file sync cannot use | The sync exits 2 with one of the `error:` lines of "Steps / A configured repository" 13 | The `error:` line and the file it names | The file fixed, then the sync again ("Steps / A configured repository" 14) |
 | The sync still fails | The sync run again after the change does not exit 0 on its second run ("Steps / A configured repository" 14, "Steps / An existing repository" 15) | The sync's output | The user's decision, then `/ordo-init` again |
-| No commit allowed | The repository's commit rule ("What it reads" 7) does not allow the commit, at "Steps / A new repository" 12, "Steps / An existing repository" 16 or "Steps / A configured repository" 15 | The files written or changed, the quoted ruling named when they were written under one, and the command that shows them (`git status --short`) | The user's commit |
+| No commit allowed | The repository's commit rule ("What it reads" 7) does not allow the commit, at "Steps / A new repository" 12, "Steps / An existing repository" 16 or "Steps / A configured repository" 15, and a file written or changed is not ignored by git | The files written or changed, the quoted ruling named when they were written under one, the command that shows them (`git status --short`), and apart from them each file written and ignored by git, as Rules says | The user's commit |
 
 ## Anti-patterns
 
@@ -399,12 +441,24 @@ Run from the repository root, the folder `<path>` names or else the current fold
 | The plan skills installed per project | Two copies load, and the project's copy drifts from the user's | See Rules: the plan skills are installed per user |
 | A `<...>` placeholder written into a file, other than one inside an HTML comment that shows an entry's form | The file then states something nobody filled in | See "Steps / A new repository" 3 |
 | Overwriting an existing page or plan configuration | The user's text is lost without a decision | See Rules: no existing page is overwritten, and a change to an existing file is shown as a diff |
+| A test or a source file written so that a verification command passes | The verification page then shows green for a check that proves nothing about the repository | See Rules: a command that fails is shown as failing and left as it is |
+| An ignored file staged with `git add -f`, or its ignore rule changed | The file is ignored by the user's choice, and the commit publishes it | See Rules: a file git ignores is written, left ignored and kept out of the commit |
+| A tool of a default coding-standards page written into a repository that does not configure it | The page binds the builders to a tool nobody chose | See "Steps / A new repository" 3: the requirement in plain words, the tool left out and listed in the draft |
 
 ## Rules
 
-- Everything the skill writes comes from `templates/` in this skill's folder, from the templates of the `plan` and `roadmap` skills beside it, from the repository and from the user's answers.
-- The skill writes nothing until the user approves or corrects the draft it shows, with two exceptions: `git init` at "Steps / A new repository" 1, and the one run of each verification command at "Steps / An existing repository" 3 before the draft is shown.
+- Everything the skill writes comes from `templates/` in this skill's folder, from the templates of the `plan` and `roadmap` skills, found as "What it reads" 2 and 3 say, from the repository and from the user's answers.
+- The skill writes nothing until the user approves or corrects the draft it shows, with two exceptions: `git init` at "Steps / A new repository" 1, and the one run of each verification command at "Steps / An existing repository" 3 before the draft is shown, which is not made when those steps run from "Steps / A new repository" 8.
   - A quoted ruling that covers or states the draft, as the item of its stop says, is that approval.
+- A command that fails is shown as failing and left as it is, and no step writes a test, a source file or any other file so that a command passes.
+- Before the skill drafts a file to create or a change to a file that exists, such as `CLAUDE.md`, the glossary or a page, in each of the three cases, it runs `git check-ignore -q -- <path>` for that file on the folder as it stands, and an exit status of 0 says that git ignores the path.
+  - A path git ignores is still offered, and written or changed on approval.
+  - The draft says, beside that file, that git ignores it, and names the line and the ignore file that `git check-ignore -v -- <path>` prints, which may be a file outside the repository.
+  - The skill leaves that ignore rule as it is and never offers to change it.
+  - The path is left out of every `git add` and `git commit` command the skill writes, and is never forced into a commit, since `git add` exits 1 on an ignored path even when it stages the others.
+  - When every file written is ignored, no commit is made and the last message says so.
+  - The last message, and each stop that lists the files written, names such a file apart, as written and ignored by git, since `git status --short` does not list it.
+  - The checks of the worktree root and of the configuration file ("Steps / An existing repository" 10, "Steps / A new repository" 10 and "Steps / A configured repository" 2) are apart from this check and keep their own results.
 - The skill writes nothing outside the repository's folder, except a change to `templates/shared-rules.md` or `templates/plan-terms.md` the user rules on at "Steps / A configured repository" 9.
 - The skill adds no rule other than Ordo's shipped defaults, the user's, and the rules an existing repository already states.
 - A page the skill writes in an existing or a configured repository states, beside its template's text, what the repository already does or says.

@@ -26,7 +26,7 @@ Referee this paper: [paste paper or provide file]                               
 
 ## What it reads
 
-1. The `paper-review-panel` skill's folder, which stands beside this skill's folder, with its `SKILL.md`. A folder that is missing, or that holds no `SKILL.md`, is the refusal "The panel skill is not installed".
+1. The `paper-review-panel` skill's folder, with its `SKILL.md`, found from this skill's folder with every link resolved: the folder of that name beside it, and otherwise the folder of that name in a group folder beside this skill's group folder. A folder found in neither place is named, with both paths, in the message the skill then gives. A folder that is missing, or that holds no `SKILL.md`, is the refusal "The panel skill is not installed".
 2. The manuscript, as a file or as pasted text. A call that gives none is the refusal "A missing input".
 3. In a second round, the authors' response letter. A second-round call that gives none is the refusal "A missing input".
 4. In a second round, the referee's first-round comments, when the call gives them.
@@ -224,7 +224,7 @@ The first five rows wait for the user. The row with a tag ends the run before it
 | The selection | After the selected points in full and their rule check, before the report is written (first round item 10) | The found counts beside the budget, the selected points, major and minor, the points over the budget, the left-out comments with their reasons, the points the user moved out, each section "Objections", each break a rule check still names and, in a second round, the first-round points resolved and the section "Left out of the check of the revision" | The user confirms, or moves items and then confirms |
 | The breaks left in the report | The rule check still names a break of `referee-report.md` after its two returns (first round item 13) | Each break with its rule and the sentence that breaks it, and the objections of the rule check | The user accepts the report as it stands, or says what to change, which the session returns to the referee once; the rule check then reads the report once more and the session counts its words, and what they find is named in the end message |
 | `[PANEL-SHRUNK]` | A reviewer is marked unusable under a contract (first round item 4) | The tags the `paper-review-panel` skill's Stops table gives for this stop | Nothing: the run ends, and the review starts again with `/referee` |
-| The panel skill is not installed | The `paper-review-panel` folder with its `SKILL.md` does not stand beside this skill's folder (Steps 1) | That `referee` runs the pages of the `paper-review-panel` skill, and that this skill is not installed beside it | The skill installed, then `/referee` again |
+| The panel skill is not installed | The `paper-review-panel` folder with its `SKILL.md` is in neither place of "What it reads" 1 (Steps 1) | That `referee` runs the pages of the `paper-review-panel` skill, and that this skill is not installed, with both paths | The skill installed, then `/referee` again |
 | A missing input | The call gives no manuscript, or a second-round call gives no response letter (Steps 1) | The round's line of Quick start | The call corrected, then `/referee` again |
 
 ## Anti-patterns

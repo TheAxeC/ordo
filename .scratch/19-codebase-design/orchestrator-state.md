@@ -45,20 +45,7 @@ repair_reviewer: claude:sonnet  # the model the run of /refute over a repair rou
 ```
 
 ```yaml
-dispatch:
-- step: 6
-  landing: not-started
-  base: 3e30f8b
-  worktree: .agents/worktrees/19-codebase-design-6
-  executor: agent
-  worker: claude:fable
-  launched: 2026-11-24
-  report: .scratch/19-codebase-design/agents/reviews/6-report.md
-  session_id: acbe2f1c6ca322be6 (claude-fable-5-2)
-  builder_usage: 275049 tokens, 74 tool uses, 11.4 minutes
-  round: 1
-  reviewer_report: ".scratch/19-codebase-design/agents/reviews/6-refuter.md (a7057f07033744b86, claude-fable-5-2, usage not given in the completion notice)"
-  brief_check: ".scratch/19-codebase-design/agents/reviews/6-brief-check.md (a33239329078fdf56, claude-fable-5-2, 210438 tokens, 21 tool uses, 7.3 minutes)"
+dispatch: []
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled or, under `self_rule: on`, until the orchestrator closes it as `plan-orchestration`'s `references/self-rule.md`, "Closing an open item", says)
@@ -73,7 +60,7 @@ dispatch:
 
 - `~/.claude/CLAUDE.md` and the rules under `~/.claude/rules/`. The ones that bite here: the skill follows its two sources, each deviation with its reason and ruling (ADR 0047); a shipped file names nothing private; every gate run is made by a separate agent, its stops answered by the orchestrating session; work runs through the skills' agents; no claim about state without a command in the same turn; report the end state only, in plain short prose; no breakage testing.
 - Commits: a capitalised imperative subject and `- Verb` bullets. No attribution of any kind. Never push. A worktree's branch is deleted with the worktree. Commit at resume points only.
-- Never edit `~/.local/share/ordo-stable` or the skill links by hand, and never run `utils/pin.sh <tag>` without asking. Tests that touch skill folders run under `env -u CLAUDE_CONFIG_DIR -u ORDO_SKILL_DIRS -u ORDO_STABLE`.
+- Never edit `~/.local/share/ordo-stable` or the skill links by hand, and pin only with `utils/pin.sh <tag>`; tagging and pinning the release candidates of step 2 needs no question (the user, 2026-11-24). Tests that touch skill folders run under `env -u CLAUDE_CONFIG_DIR -u ORDO_SKILL_DIRS -u ORDO_STABLE`.
 
 ## Verification, every step
 
@@ -91,5 +78,5 @@ dispatch:
 
 ## Current position (rewritten before every step commit of this plan)
 
-- 2026-11-24. Steps 1, 4 and 5 have landed. Step 2, the gate's runs, waits on a release candidate that holds both, tagged and pinned only on the user's word.
-- Roadmap entry 19 (codebase-design). Plan step 2 of 5: the gate's runs. Next: step 3, the closing.
+- 2026-11-24. Steps 1, 4, 5 and 6 have landed. Step 2, the gate's runs, is next: a release candidate that holds step 6 is tagged and pinned, then the five runs are made to their end by separate agents, every stop answered by the orchestrating session.
+- Roadmap entry 19 (codebase-design). Plan step 5 of 6: the gate's runs. Next: step 3, the closing.
