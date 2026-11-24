@@ -128,6 +128,8 @@ Independent of each other; the standing rule of one agent at a time still serial
 - Effort (2026-11-24): the builders and the reviewers run at effort `medium` in place of `low`, written to `docs/plan.yaml` (the user).
 - Open item F (2026-11-24): option 3, `disable-model-invocation: true` leaves `submit` and `tutor`, so that an agent can make the gate's runs of them through the Skill tool; `tutor` then differs from its source `teach` in this point, written in ADR 0048 and in `deviations.md`; the gate's runs go on `v11.0.0-rc.2` (the user).
 - Open item G (2026-11-24): option 3, `ordo-init` stays as it is, and at the closing the roadmap gate's words on the new repository say that `./utils/build.py gate` exits 0 once a first passing test exists and non-zero once a failing test is added (the user).
+- Open item H (2026-11-24): option 2, the submission sheet of `submit` is written from the folder and from the public instructions (the portal's pages `curl` can save, the journal guide of `paper`, a funder config of `grant`), says how much of the portal's form could be read, and is never shown for approval with nothing from the folder; in the walk each field of the form is matched to a row and a field with no row is asked; both `/submit` runs of the gate are made again on `v11.0.0-rc.3` (the user).
+- Open item I (2026-11-24): option 1, the sentences of `tutor` whose meaning differs from the source `teach` are put back to the source's meaning, the instruction the copy added is removed, and `deviations.md` is corrected (the user).
 
 ## Agents
 
@@ -169,6 +171,8 @@ Each agent a plan skill started for this plan has one bullet, with its agent id,
 - aac165cfb3187030c: gate run of /submit on the deposit form on v11.0.0-rc.2, to the approval of the sheet, claude-opus-5-5
 - a3aa8f1d0e51b9a81: gate run of /tutor on v11.0.0-rc.2, second session, claude-opus-5-5
 - aa85f45e56022c96e: check of the deviations list against the source skill, claude-opus-5-5
+- a43b8d38788a165a3: builder of ruling I, claude-opus-5-5
+- aa238fda60548b301: builder of ruling H, claude-opus-5-5
 
 ## Blocked, and by what
 

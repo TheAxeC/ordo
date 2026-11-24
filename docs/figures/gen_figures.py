@@ -1989,7 +1989,8 @@ def referee() -> str:
 def submit() -> str:
     """The submit skill: its agent and its stops, from the sheet to the page of the final submit."""
     nodes = (
-        Node("S", "Sheet agent: the submission sheet from the portal's public pages and the folder"),
+        Node("S", "Sheet agent: the submission sheet from your folder and the public instructions"),
+        Node("X", "Nothing from the folder in the sheet: the run ends with what was found", "stop"),
         Node("A", "You approve the sheet, correct it or answer its questions", "stop"),
         Node("E", "The extension not connected: the run ends with the sheet", "stop"),
         Node("L", "A field the sheet lacks, added to it as a question", "stop"),
@@ -1998,6 +1999,7 @@ def submit() -> str:
         Node("P", "The page of the final submit: you press it", "stop"),
     )
     edges = (
+        Edge("S", "X", "nothing from the folder"),
         Edge("S", "A"),
         Edge("A", "E", "no extension"),
         Edge("A", "L", "the walk, page by page"),
@@ -2010,7 +2012,9 @@ def submit() -> str:
         "it fills each field, uploads each file and answers each declaration as the sheet "
         "says, and reads each page back against it. A field the sheet lacks, a control left "
         "to you and a page that does not pass stop a page only when the page has one. The "
-        "agent saves the public pages with curl and reads the files. Before the agent starts, "
+        "agent reads your folder, the portal's public pages it saves with curl, the journal "
+        "guide of paper and the funder config of grant, and the sheet's first lines say how "
+        "much of the portal's form it could read before a sign-in. Before the agent starts, "
         "the run stops when a run folder of the same date stands, and when the folder holds "
         "several funder configs. The session never types a password and never presses the "
         "final submit."

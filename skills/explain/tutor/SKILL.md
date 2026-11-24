@@ -47,49 +47,49 @@ metadata:
 
 ### Teaching
 
-1. Read `MISSION.md`, the learning records in `learning-records/` and `NOTES.md`, each that exists.
-   - `RESOURCES.md` is read by items 4 and 6, and `assets/` by item 7, before the lesson is written.
-   - No lesson and no reference document is read whole unless a step needs it.
-   - Done when each of the three that exists is read.
+1. Read `MISSION.md` when it exists, since it grounds all teaching and items 2 and 3 depend on it.
+   - The learning records are read by item 5 when the user names no exact thing to learn, `RESOURCES.md` by items 4 and 6, and `assets/` by item 7, before the lesson is written.
+   - Done when `MISSION.md` is read, or it does not exist.
 2. Interview the user on why they want to learn the topic, when `MISSION.md` is missing or not populated, or the user is unclear about the mission (Stops, "The mission interview").
    - This is the first job of the run, before any lesson.
    - Without the mission, knowledge is not grounded in real-world aims, lessons feel too abstract, and nothing judges what the user should do next.
    - Write `MISSION.md` in the format of `references/mission-format.md`.
    - Done when `MISSION.md` holds the mission.
 3. Confirm with the user before changing the mission, when the request or what the user has learned would change it (Stops, "The confirmation before the mission is changed").
-   - Missions change as the user develops more skills and knowledge.
+   - Missions may change as the user develops more skills and knowledge.
    - On the user's yes, update `MISSION.md` and add a learning record that captures the change.
    - Done when the user has answered, and after a yes `MISSION.md` and the learning record are written.
 4. While `RESOURCES.md` is not well populated, focus on finding high-quality, high-trust resources that help the user acquire knowledge, and record them there in the format of `references/resources-format.md`.
    - Done when `RESOURCES.md` lists the resources the lesson draws on.
 5. Choose what the lesson teaches: the exact thing the user names, or else the most relevant thing in the user's zone of proximal development.
-   - In each lesson the user always feels challenged "just enough".
-   - Find it from the learning records and from the mission, which says what the right thing to teach is.
+   - Choose it so that in each lesson the user always feels challenged "just enough".
+   - When the user names no exact thing to learn, find the zone of proximal development: read the learning records in `learning-records/`, work out the right thing to teach from the mission, and teach the most relevant thing that fits the zone.
    - Done when the one tightly scoped thing the lesson teaches is named.
 6. Design the lesson around a skill the user is going to learn, as "Knowledge, skills and wisdom" describes the two.
    - The knowledge in the lesson is only what that skill requires.
    - Teach the knowledge first, then have the user practise the skill through an interactive feedback loop.
    - Draw the knowledge from the trusted resources of `RESOURCES.md`.
-   - Keep the knowledge free of difficulty, which eats the working memory the user needs for understanding.
-   - Make the practice of the skill effortful, so that the knowledge sticks, since effortful retrieval builds storage strength.
-   - Build storage strength by desirable difficulty: retrieval practice (recall from memory), spacing (practice spread over time) and, for skills practice only, interleaving (different but related topics mixed in practice).
+   - For acquiring knowledge, difficulty is the enemy: it eats the working memory the user needs for understanding.
+   - Make the knowledge stick: for skill acquisition, difficulty is the tool, and effortful retrieval is what builds storage strength.
+   - Try to design the lesson to build long-term retention by desirable difficulty: retrieval practice (recall from memory), spacing (practice spread over time) and, for skills practice only, interleaving (different but related topics mixed in practice).
    - Teach a skill through an interactive lesson: quizzes and light tasks in the browser, or a guide through a list of real-world actions, such as yoga poses.
    - Give the user feedback on their performance in a feedback loop as tight as possible: at once and, ideally, automatically.
-   - Give every answer of a quiz question the same number of words, and of characters where possible.
+   - Give every answer of a quiz question exactly the same number of words, and of characters where possible.
    - Vary which position holds the correct answer across the questions.
    - Give the user no clue to the answer through formatting or order.
    - Done when the lesson's knowledge, its task and the task's feedback are set.
 7. Read `assets/` and build the lesson from the components already there.
    - Reuse of components is the default.
-   - Write anything new that a second lesson could reuse as a component in `assets/`, and link the lesson to it, so that no lesson inlines code a later lesson would duplicate.
+   - Write anything new that a second lesson could reuse as a component in `assets/`, and link the lesson to it.
+   - Never inline code a later lesson would duplicate.
    - A shared stylesheet is the first component every workspace gets, and every lesson links it, so that the lessons look like one course.
-   - The component library grows with the workspace.
+   - As the workspace grows, grow the component library with it.
    - Done when each component the lesson uses stands in `assets/`.
 8. Write the lesson as one self-contained HTML file in `lessons/`, named `0001-<dash-case-name>.html`, the number one higher than the last lesson's.
    - It is beautiful, with clean, readable typography and layout in the manner of Edward Tufte, since the user returns to the lessons later to review.
-   - It is short and fast to complete, since a learner's working memory is small and the lesson stays within it.
+   - It is short and fast to complete, since a learner's working memory is very small and the lesson stays within it.
    - It gives the user one tangible win to build on.
-   - It is tied to the mission.
+   - It is directly tied to the mission.
    - It is in the user's zone of proximal development.
    - It links to other lessons and to reference documents with HTML anchors.
    - It recommends one primary source to read or watch: the highest-quality, highest-trust resource found on the topic.
@@ -97,7 +97,8 @@ metadata:
    - It reminds the user to ask the agent follow-up questions, since the agent is their teacher and helps with anything unclear.
    - Done when the file stands in `lessons/`.
 9. Write the reference documents of the lesson in `reference/`, as HTML files except the glossary, the compressed essence of the lesson in a form made for reference at a glance.
-   - Lessons are rarely revisited and reference documents are, so the reference documents track the units of knowledge used across lessons, and lessons link to them.
+   - Lessons will rarely be revisited later, and reference documents will be.
+   - Lessons can reference these documents, which are useful for tracking raw units of knowledge useful across lessons.
    - They are beautiful documents that print well.
    - Reference documents suit these topics: syntax and code snippets for programming, algorithms and flowcharts for processes, poses and sequences for yoga, exercises and routines for fitness, and a glossary for any topic with its own nomenclature.
    - Glossaries, in particular, are an essential reference.
@@ -142,7 +143,7 @@ metadata:
 The state of the user's learning is captured in these files of the folder:
 
 - **`MISSION.md`.** The reason the user is interested in the topic, which grounds all teaching, in the format of `references/mission-format.md`.
-- **`RESOURCES.md`.** The resources explored to ground the teaching in contextual knowledge, or to acquire knowledge and wisdom, in the format of `references/resources-format.md`.
+- **`RESOURCES.md`.** The list of resources that can be explored to ground the teaching in contextual knowledge, or to acquire knowledge and wisdom, in the format of `references/resources-format.md`.
 - **`reference/*.html` and `reference/GLOSSARY.md`.** The reference documents: the compressed learnings from the lessons, which are the raw units of learning, such as cheat sheets, reference algorithms, syntax and yoga poses as HTML files, and the glossary as a Markdown file in the structure of `references/glossary-format.md`.
 - **`learning-records/*.md`.** The learning records, which capture what the user has learned and from which the zone of proximal development is worked out.
   - Loosely like architectural decision records in software development, they capture non-obvious lessons and key insights that may be revised later or drive later sessions.
@@ -159,9 +160,9 @@ To learn at a deep level, the user needs three things:
 - **Skills.** Acquired through highly relevant interactive lessons devised from the knowledge, and made durable and flexible by difficulty, which is the tool here.
 - **Wisdom.** Gained from interaction with other learners and practitioners: testing the skills in the real world, outside the learning environment.
 
-Some topics need more skills than knowledge: theoretical physics leans on knowledge, and yoga on skills.
+Some topics may need more skills than knowledge: theoretical physics might lean more on knowledge, and yoga more on skills.
 
-Lessons tell two strengths apart:
+Be careful to tell apart two types of learning:
 
 - **Fluency strength.** The retrieval of knowledge in the moment, which can give the user an illusory sense of mastery.
 - **Storage strength.** The retention of knowledge over the long term, which is the real aim the lessons build towards.
@@ -193,5 +194,5 @@ Lessons tell two strengths apart:
 - Never trust the model's parametric knowledge: every lesson and every explanation draws its knowledge from high-quality, high-trust resources.
 - In the teaching mode, write a learning record whenever `references/learning-record-format.md`, "When to write a learning record", says one is due.
 - When the user states a preference for how they want to be taught, or something to keep in mind, record it in `NOTES.md` and refer back to it when designing lessons or working with the user.
-- When the user asks a question that appears to need wisdom, attempt an answer and then delegate the question to a community: a place, online or offline, where the user tests the skills in the real world, such as a forum, a subreddit, a real-world class when the budget allows, or a local interest group.
-- Find high-reputation communities the user can join, and respect the user's preference when they do not want to join one.
+- When the user asks a question that appears to need wisdom, by default attempt an answer, but ultimately delegate the question to a community: a place, online or offline, where the user tests the skills in the real world, such as a forum, a subreddit, a real-world class when the budget allows, or a local interest group.
+- Attempt to find high-reputation communities the user can join, and respect the user's preference when they do not want to join one.
