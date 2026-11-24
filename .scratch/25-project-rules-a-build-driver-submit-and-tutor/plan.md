@@ -52,6 +52,7 @@ Independent of each other; the standing rule of one agent at a time still serial
 - D16 the group folder of `submit` (2026-11-24): `skills/academic/submit/`, since a manuscript or a grant application stays its main use (the user).
 - The step list (2026-11-24): approved as drafted, seven steps (the user).
 - Models and steps in flight (2026-11-24): the builders and the reviewers run on `claude:opus` in place of `claude:fable`, and `workers_at_once` is 5 in place of 3, both written to `docs/plan.yaml` (the user).
+- Effort (2026-11-24): the builders and the reviewers run at effort `medium` in place of `low`, written to `docs/plan.yaml` (the user).
 
 ## Agents
 
