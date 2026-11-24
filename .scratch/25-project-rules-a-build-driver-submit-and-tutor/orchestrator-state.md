@@ -54,9 +54,11 @@ dispatch:
   base: 7132ac8
   launched: 2026-11-24
   report: .scratch/25-project-rules-a-build-driver-submit-and-tutor/agents/reviews/4-report.md
+  builder_usage: 243982 tokens, 60 tool uses, 12 min 7 s
+  reviewer_report: .scratch/25-project-rules-a-build-driver-submit-and-tutor/agents/reviews/4-refuter.md (a69c8e7d7e94743e3, claude-opus-5-5, 154003 tokens, 37 tool uses, 8 min 11 s)
   brief_check: .scratch/25-project-rules-a-build-driver-submit-and-tutor/agents/reviews/4-brief-check.md (af32ec4714532fb10, claude-opus-5-5, 162843 tokens, 37 tool uses, 6 min 58 s)
   landing: not-started
-  round: 0
+  round: 1
 - step: 3
   executor: agent
   worker: claude:opus
