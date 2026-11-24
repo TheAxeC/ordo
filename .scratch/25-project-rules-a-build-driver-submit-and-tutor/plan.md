@@ -167,6 +167,7 @@ Each agent a plan skill started for this plan has one bullet, with its agent id,
 - ae11221ea13d8e943: gate run of /tutor explain git worktree --page on v11.0.0-rc.2, claude-opus-5-5
 - ae66c5257ddf0e46c: gate run of /submit on the journal's portal on v11.0.0-rc.2, to the approval of the sheet, claude-opus-5-5
 - aac165cfb3187030c: gate run of /submit on the deposit form on v11.0.0-rc.2, to the approval of the sheet, claude-opus-5-5
+- a3aa8f1d0e51b9a81: gate run of /tutor on v11.0.0-rc.2, second session, claude-opus-5-5
 
 ## Blocked, and by what
 
