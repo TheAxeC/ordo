@@ -47,8 +47,16 @@ repair_reviewer: claude:sonnet  # the model the run of /refute over a repair rou
 ```yaml
 dispatch:
 - step: 1
-  brief_check: "running: a84e8e7f2b9dce5b4"
-  landing: preparing
+  executor: agent
+  worker: claude:opus
+  session_id: a1c62803166842022 (claude-opus-5-5)
+  worktree: .agents/worktrees/25-project-rules-a-build-driver-submit-and-tutor-1
+  base: b772895
+  launched: 2026-11-24
+  report: .scratch/25-project-rules-a-build-driver-submit-and-tutor/agents/reviews/1-report.md
+  brief_check: .scratch/25-project-rules-a-build-driver-submit-and-tutor/agents/reviews/1-brief-check.md (a84e8e7f2b9dce5b4, claude-opus-5-5, 125805 tokens, 30 tool uses, 5 min 42 s)
+  landing: not-started
+  round: 0
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled or, under `self_rule: on`, until the orchestrator closes it as `plan-orchestration`'s `references/self-rule.md`, "Closing an open item", says)
@@ -83,5 +91,5 @@ dispatch:
 
 - 2026-11-24. The plan is open; no step has landed. `v10.0.0` is pinned. The working tree holds nothing of this plan outside its ledger.
 - Verified: `sh skills/orchestration/land/templates/checks.sh .scratch/25-project-rules-a-build-driver-submit-and-tutor/orchestrator-state.md` printed `checks: 15 commands passed`.
-- Roadmap entry 25 (Project rules, a build driver, submit and tutor). Plan step 1 of 7: the project rules. Next: `/spec 25 1`.
+- Roadmap entry 25 (Project rules, a build driver, submit and tutor). Plan step 1 of 7: the project rules. Next: step 2, limits and layout. Step 1's builder is running; steps 2 to 5 are prepared once step 1 has landed, since it changes rule files and runs alone.
 - Open on Axel's side: none.
