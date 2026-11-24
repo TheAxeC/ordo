@@ -61,10 +61,10 @@ Every rule on this page that names code, a script, a test or a check is read und
 
 ## Commands and their filters
 
-Every build, test or check command runs in the foreground with a long timeout, one configuration per command, and its output goes through a filter for its summary lines so raw build output never enters the context:
+Every build, test or check command runs in the foreground with a long timeout, one configuration per command, and its output goes through a filter for its summary lines, inside `utils/build.py` where the repository has the build driver, so raw build output never enters the context:
 
 ```
-<each verification command from docs/dev/building.md, piped through the grep that keeps its summary lines>
+<each verification command from docs/dev/building.md, piped through the grep that keeps its summary lines; with the build driver, its python3 utils/build.py lines as the page names them>
 ```
 
 The plan's whole verify list runs once, at landing on main, through the `land` skill's `templates/checks.sh` from the root of the checkout it checks, as `sh <the land skill's folder>/templates/checks.sh <state file>`. The booking quotes the lines it prints, never a count. Before landing, the builder and the reviewer run the checks the brief names for the files the step changes, and the report quotes their output. Each command in the verify list exits non-zero when it fails, as written, and a command with long output uses its tool's quiet mode or a filter under `pipefail`.

@@ -16,6 +16,7 @@ verify:                      # commands run once, at landing on main, in order; 
 - sh skills/academic/grant/templates/check_sections.test.sh 2>&1 | tail -1
 - sh skills/ordo/ordo-init/templates/sync_rules.test.sh 2>&1 | tail -1
 - python3 skills/ordo/ordo-init/templates/sync_rules.py . --only glossary
+- sh skills/ordo/ordo-init/templates/utils/build.test.sh 2>&1 | tail -1
 - sh utils/pin.test.sh 2>&1 | tail -1
 - sh skills/code/wizard/templates/template.test.sh 2>&1 | tail -1
 - >-
@@ -45,21 +46,7 @@ repair_reviewer: claude:sonnet  # the model the run of /refute over a repair rou
 ```
 
 ```yaml
-dispatch:
-- step: 3
-  executor: agent
-  worker: claude:opus
-  session_id: afe9b922f157189e8 (claude-opus-5-5)
-  worktree: .agents/worktrees/25-project-rules-a-build-driver-submit-and-tutor-3
-  base: ed1f928
-  launched: 2026-11-24
-  report: .scratch/25-project-rules-a-build-driver-submit-and-tutor/agents/reviews/3-report.md
-  builder_usage: 253440 tokens, 70 tool uses, 16 min 21 s
-  reviewer_report: .scratch/25-project-rules-a-build-driver-submit-and-tutor/agents/reviews/3-refuter.md (a5bc4b4e441d63e90, claude-opus-5-5, 191856 tokens, 31 tool uses, 8 min 0 s)
-  brief_check: .scratch/25-project-rules-a-build-driver-submit-and-tutor/agents/reviews/3-brief-check.md (ab554d078f519c4bd, claude-opus-5-5, 193217 tokens, 32 tool uses, 6 min 59 s)
-  shared_paths: README.md, docs/glossary.md, docs/dev/building.md, docs/dev/scripts.md and docs/figures/gen_figures.py with step 4 of this plan, in other lines of each (step 3: the row, the command line and the paragraphs of ordo-init, the plan-terms block, the lines of the build test, the lane of /ordo-init; step 4: the row and sentences of submit, two terms under Ordo's own terms, the line of submit.svg, the function of the submit figure and two labels of the lifecycle figure), so each merge takes both sides
-  landing: not-started
-  round: 1
+dispatch: none
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled or, under `self_rule: on`, until the orchestrator closes it as `plan-orchestration`'s `references/self-rule.md`, "Closing an open item", says)
@@ -94,6 +81,6 @@ dispatch:
 ## Current position (rewritten before every step commit of this plan)
 
 - 2026-11-24. Step 1 has landed. `v10.0.0` is pinned. The working tree holds nothing of this plan outside its ledger.
-- Verified: `sh skills/orchestration/land/templates/checks.sh .scratch/25-project-rules-a-build-driver-submit-and-tutor/orchestrator-state.md` printed `checks: 15 commands passed`.
-- Roadmap entry 25 (Project rules, a build driver, submit and tutor). Plan steps 1, 2, 4, 5 and 6 of 8 landed: the project rules, limits and layout, the skill `submit`, the skill `tutor`, and rulings D and E carried out. Step 3, the build driver, is in flight: built and reviewed once, its repair round next. Step 7, the gate's runs, waits for it.
+- Verified: `sh skills/orchestration/land/templates/checks.sh .scratch/25-project-rules-a-build-driver-submit-and-tutor/orchestrator-state.md` printed `checks: 16 commands passed`.
+- Roadmap entry 25 (Project rules, a build driver, submit and tutor). Plan steps 1 to 6 of 8 landed: the project rules, limits and layout, the build driver, the skill `submit`, the skill `tutor`, and rulings D and E carried out. Next: step 7, the gate's runs, which waits for the user's word on the release candidate to tag and pin and for the inputs the user names.
 - Open on Axel's side: nothing.

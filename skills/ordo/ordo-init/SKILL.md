@@ -1,18 +1,19 @@
 ---
 name: ordo-init
-description: "Set a repository up for the plan skills, by what the folder holds. In an empty folder it sets up a new repository: CLAUDE.md with the shared rules, docs/ with the change standard, the prose standard, the standards pages, a roadmap, a glossary and an ADR folder, src/ and utils/, .gitignore, LICENSE, README, the project skills and the plan configuration docs/plan.yaml. In an existing repository with no plan.yaml it drafts docs/plan.yaml from what the repository has and offers what it lacks: pages, the shared rules in CLAUDE.md, the glossary's plan terms, the ignore rules, and syncs a block that is already there. In a repository with a plan.yaml it checks that file, then compares the shared-rules block and the glossary's plan-terms block with their templates. It shows every draft and writes after approval. Triggers on: ordo-init, set up the plan skills, init plan.yaml, configure ordo, check plan.yaml, set up a new repo, scaffold a repository, new project repo, sync the shared rules, sync the glossary."
+description: "Set a repository up for the plan skills, by what the folder holds. In an empty folder it sets up a new repository: CLAUDE.md with the shared rules, docs/ with the change and prose standards, the standards pages, a roadmap, a glossary and an ADR folder, src/, utils/ with the build driver, .gitignore, LICENSE, README, the project skills and docs/plan.yaml. In an existing repository with no plan.yaml it drafts docs/plan.yaml and offers what it lacks: pages, the shared rules, the plan terms, the ignore rules. With a plan.yaml it checks that file and syncs the two blocks with their templates. The mode build writes utils/build.py from the verification page, with build, test, check and gate, and makes the page name them. It shows every draft and writes after approval. Triggers on: ordo-init, set up the plan skills, init plan.yaml, configure ordo, check plan.yaml, set up a new repo, scaffold a repository, new project repo, sync the shared rules, sync the glossary, ordo-init build, write the build driver."
 metadata:
-  version: "4.0.0"
+  version: "5.0.0"
 ---
 
 # Set a repository up for the plan skills
 
-`/ordo-init` sets a repository up for the plan skills (`plan`, `spec`, `refute`, `land`, `ordo-help`, `plan-orchestration`), by what it finds in the folder: a new repository set up whole in an empty folder, the plan configuration `docs/plan.yaml` drafted, what is missing offered and the two blocks synced in an existing repository, and, in a repository that has a plan configuration, the configuration check of that file and the sync of the shared-rules block and the glossary's plan-terms block. It leaves behind the approved tree or files with the `.gitignore` lines it needed, or the fixed configuration on disk and the synced blocks, the files it wrote in a new or an existing repository and a sync change committed when the repository's commit rule allows it, a file git ignores written and left out of the commit.
+`/ordo-init` sets a repository up for the plan skills (`plan`, `spec`, `refute`, `land`, `ordo-help`, `plan-orchestration`), by what it finds in the folder: a new repository set up whole in an empty folder, the plan configuration `docs/plan.yaml` drafted, what is missing offered and the two blocks synced in an existing repository, and, in a repository that has a plan configuration, the configuration check of that file and the sync of the shared-rules block and the glossary's plan-terms block. Its mode `/ordo-init build` writes the build driver `utils/build.py` from the commands of the verification page and rewrites the page to name the driver's commands. It leaves behind the approved tree or files with the `.gitignore` lines it needed, or the fixed configuration on disk and the synced blocks, the files it wrote in a new or an existing repository and a sync change committed when the repository's commit rule allows it, a file git ignores written and left out of the commit, and from the mode the driver, the rewritten page and the output of its one `gate` run.
 
 ## Quick start
 
 ```
-/ordo-init [<path>] [<folder>]   the repository at <path> (default: the current folder), by what it holds: a new repository in an empty folder, docs/plan.yaml and what is missing in an existing repository, the configuration check and the sync of the two blocks where there is a plan.yaml; <folder> holds the plan.yaml, as a path from the repository root
+/ordo-init [<path>] [<folder>]   the repository at <path> (default: the current folder), by what it holds: a new repository in an empty folder, docs/plan.yaml and what is missing in an existing repository, the configuration check and the sync of the two blocks where there is a plan.yaml; <folder> holds the plan.yaml, as a path from the repository root; a folder named build is given as ./build
+/ordo-init build [<path>] [<folder>]   the build driver: utils/build.py written from the commands of the verification page, the page rewritten to name python3 utils/build.py build, test and check, and the gate run once
 /ordo-init ... --ruling <ledger file> "<name>"   the same, under a quoted ruling: a draft, a fix or a sync change the ruling states is written without the stop
 ```
 
@@ -25,7 +26,7 @@ metadata:
 
 ## What it reads
 
-1. `templates/` in this skill's folder: `CLAUDE.md`, `shared-rules.md`, `plan-terms.md`, the `docs/` pages, the `gitignore/` files, `LICENSE-MIT`, `sync_rules.py` and `check_config.py`.
+1. `templates/` in this skill's folder: `CLAUDE.md`, `shared-rules.md`, `plan-terms.md`, the `docs/` pages, the `gitignore/` files, `LICENSE-MIT`, `sync_rules.py`, `check_config.py` and `utils/build.py`, the template of the build driver.
 2. The plan skill's `templates/plan.yaml` (one project) and `templates/plan.projects.yaml` (several): the keys, which are required, each optional key's default, and the comment that says what the key is.
    - The `plan` skill's folder is found from this skill's folder with every link resolved: the folder of that name beside it, and otherwise the folder of that name in a group folder beside this skill's group folder.
    - `templates/check_config.py` finds the `plan` skill's folder in the same order.
@@ -39,7 +40,9 @@ metadata:
    - That folder is found by testing each leading part of `<folder>` for a file `plan.yaml`, the longest first, and when no part holds one the call ends with a message that names `<folder>` and writes nothing.
    - `python3 <this skill's folder>/templates/check_config.py --find . [<the folder>]` prints the file's path, or exits 1 with the places looked in when there is none.
    - The command takes the folder alone: a project's name is taken off `<folder>` before the command runs, and is used afterwards to choose the project in the file found.
-   - `<folder>` is given only after `<path>`, and a single argument is the path.
+   - `<folder>` is given only after `<path>`, and a single argument other than `build` is the path.
+   - The word `build` as the first argument is the mode "Steps / The build driver", and `<path>` and `<folder>` follow it.
+   - A folder named `build` is given as `./build`: `/ordo-init ./build` runs on that folder by what it holds, and no mode runs.
    - Without `<folder>`, the `plan.yaml` is the first found in the three places at the repository root.
 5. The repository: `git ls-files`, the CI configuration (`.github/workflows/`, `.gitlab-ci.yml` and the like), the build and package files (`package.json` scripts, `Makefile`, `CMakeLists.txt` and `CMakePresets.json`, `pyproject.toml`, `Cargo.toml`, `go.mod`), the documentation folders, `README.md`, `CONTRIBUTING.md`, `AGENTS.md`, `CLAUDE.md`, and `.gitignore`.
    - The names of the files the folder holds give the languages of question 6.
@@ -52,7 +55,7 @@ metadata:
    - In a new repository it is the answer to question 5.
    - In an existing repository it is the answer to question 5 when "Steps / An existing repository" 6 asks it, and otherwise the user's answer at the approval stop of "Steps / An existing repository" 13.
    - In a configured repository it is what the repository's rules state, in its `CLAUDE.md` or in the page its `rules` key names.
-     - When they state none, the skill asks whether it may commit at the stop that shows the change ("Steps / A configured repository" 9 and 11), with the change.
+     - When they state none, the skill asks whether it may commit at the stop that shows the change ("Steps / A configured repository" 9 and 11, "Steps / The build driver" 6), with the change.
      - Where "Steps / A configured repository" 10 asks question 5, its answer is the commit rule.
    - Under a quoted ruling that states whether the skill may commit, the commit rule is what the ruling states.
    - The question whether the skill may commit is not asked when every file of the change is ignored by git, since no commit is then made, as Rules says of a file git ignores, and where an item asks it together with other questions it is left out of them.
@@ -77,6 +80,8 @@ metadata:
      - The bullet's first line does not end with "(the user)", with or without a full stop after it.
    - With no ruling, the skill says which of these it found.
    - With no ruling, every stop stands.
+10. For the mode `build`, the verification page the plan configuration's `verification` names, for each project the mode serves in the `projects:` form, with the commands of its code block, and the file at the driver's path when one stands there.
+    - A missing plan configuration, a missing page and a page that states no command are the refusal "The mode refused", made at "Steps / The build driver" 1 or 2 before anything is drafted or written ("Stops").
 
 ## Steps
 
@@ -86,8 +91,8 @@ Run from the repository root, the folder `<path>` names or else the current fold
    - A plan configuration found ("What it reads" 4) makes it a configured repository: follow "Steps / A configured repository".
    - Otherwise a tracked file, a line `git ls-files` prints, makes it an existing repository: follow "Steps / An existing repository".
    - Otherwise the folder, with no tracked file or with no git repository, gets a new repository: follow "Steps / A new repository".
-   - No argument chooses the case.
-   - Before a case is followed, the `plan` skill's folder and the `roadmap` skill's folder are found as "What it reads" 2 and 3 say, and a folder in neither of its two folders is the refusal "A skill's folder not found" ("Stops").
+   - No argument chooses the case, except the mode: with `build` as the first argument the skill follows "Steps / The build driver" in place of the three cases.
+   - Before a case or the mode is followed, the `plan` skill's folder and the `roadmap` skill's folder are found as "What it reads" 2 and 3 say, and a folder in neither of its two folders is the refusal "A skill's folder not found" ("Stops").
    - The step is done when the case is known and both folders are found, or the refusal is raised with nothing drafted or written.
 
 ### A new repository
@@ -167,9 +172,18 @@ Run from the repository root, the folder `<path>` names or else the current fold
    - The `standards` key it drafts lists every standards page written at "Steps / A new repository" 5 except the change standard, which is the `rules` key.
    - The answer to question 5 is the repository's commit rule, which its commit follows.
    - The step is done when `docs/plan.yaml` is written and its configuration check passes.
-9. Fill the Build section of `CLAUDE.md` and the command block of `docs/dev/change-standard.md` from `docs/dev/building.md`.
+9. Write the build driver on the tree written, by "Steps / The build driver" 1 to 8, unless the answer to question 11 is no or `docs/dev/building.md` names no command.
+   - A `docs/dev/building.md` that names no command gets no driver, and the refusal "The mode refused" is not raised.
+   - The user is then told in one sentence that the page names no command yet and that `/ordo-init build` writes the driver once it does.
+   - The setup then goes on to "Steps / A new repository" 10.
+   - Its draft is shown for its own approval at "Steps / The build driver" 6 ("Stops"), and holds the driver and the change to `docs/dev/building.md` only, since "Steps / A new repository" 10 fills `CLAUDE.md` and `docs/dev/change-standard.md` from the page afterwards.
+   - The read-back of "Steps / The build driver" 8 is made, and no command is run, as "Steps / A new repository" 8 says: "Steps / The build driver" 9 is left out.
+   - Its files are committed at "Steps / A new repository" 13, and "Steps / The build driver" 10 makes no commit here.
+   - With the answer no, no `utils/build.py` is written and `docs/dev/building.md` keeps the commands themselves.
+   - The step is done when the driver is written and reads back equal to the page, the answer to question 11 is no, or the user is told that the page names no command yet.
+10. Fill the Build section of `CLAUDE.md` and the command block of `docs/dev/change-standard.md` from `docs/dev/building.md`.
    - The step is done when both hold the commands of `docs/dev/building.md`.
-10. Run these commands:
+11. Run these commands:
 
     ```sh
     python3 <this skill's folder>/templates/sync_rules.py .
@@ -180,13 +194,14 @@ Run from the repository root, the folder `<path>` names or else the current fold
     ```
 
     - The setup is done when the first three exit 0, the second prints `docs/plan.yaml`, the scan prints nothing and the `git check-ignore` line exits 0.
-11. Show the user each command's output.
-    - The setup goes on to "Steps / A new repository" 12 without waiting.
+12. Show the user each command's output.
+    - The setup goes on to "Steps / A new repository" 13 without waiting.
     - The step is done when the outputs are shown.
-12. Commit the setup's other files in one commit, the subject naming the repository's setup.
+13. Commit the setup's other files in one commit, the subject naming the repository's setup.
     - Each file is staged with `git add -- <path> ...`.
     - The commit names the same paths: `git commit -m <message> -- <path> ...`.
     - Every file written is named, except those committed at "Steps / A new repository" 8 and a file git ignores, which Rules keeps out of both commands.
+    - `utils/build.py` and `docs/dev/building.md` are named when "Steps / A new repository" 9 wrote the driver, the page included although "Steps / A new repository" 8 committed it.
     - When every file written is ignored by git, no commit is made, no stop is raised and the last message says so.
     - Otherwise, when the answer to question 5 allows it, the commit is made without the ignored paths.
     - Otherwise the skill stops ("Stops").
@@ -222,6 +237,7 @@ Run from the repository root, the folder `<path>` names or else the current fold
    - The exit status of a command that was run and the last lines of its output are shown beside it.
    - A command that fails its one run is not written as a check.
      - It is a stop ("Stops").
+   - These steps write no build driver: `/ordo-init build` writes it in an existing repository ("Steps / The build driver"), and "Steps / A new repository" 9 in a new one.
    - The step is done when the draft names the verification page, offers `docs/dev/building.md` with each command's result or, from "Steps / A new repository" 8, with the note that the command was not run and why, or the stop of a failing command stands.
 4. Draft `rules`: the page that says how a change is made (a change standard, `CONTRIBUTING.md`, or the rules section of `AGENTS.md` or `CLAUDE.md`).
    - None: the skill offers to write `docs/dev/change-standard.md` from `templates/docs/dev/change-standard.md`.
@@ -313,16 +329,17 @@ Run from the repository root, the folder `<path>` names or else the current fold
     - The commit names the same paths: `git commit -m <message> -- <path> ...`.
     - When every file written is ignored by git, no commit is made, no stop is raised and the last message says so.
     - Otherwise, when the repository's commit rule ("What it reads" 7) allows it, the commit is made without the ignored paths, as Rules says of a file git ignores.
-    - Otherwise the skill stops ("Stops"), except when these steps run from "Steps / A new repository" 8, where the setup goes on and "Steps / A new repository" 12 raises the one stop.
+    - Otherwise the skill stops ("Stops"), except when these steps run from "Steps / A new repository" 8, where the setup goes on and "Steps / A new repository" 13 raises the one stop.
     - A setup written under a quoted ruling names the ruling in the commit message, by its name and its ledger file.
     - When no commit is made, the list of files written names the ruling the same way.
-    - That list is the one of the stop "No commit allowed", raised here or at "Steps / A new repository" 12.
+    - That list is the one of the stop "No commit allowed", raised here or at "Steps / A new repository" 13.
     - The step is done when the files written that git does not ignore are in one commit, or the list of files written is shown, or every file written is ignored and the last message says that no commit was made.
 
 ### A configured repository
 
 1. Run the command of "What it reads" 4 that finds the plan configuration, and then `python3 <this skill's folder>/templates/check_config.py <the path it printed>`, so the file checked is the file the plan skills read.
    - The configuration check writes nothing by itself and drafts no plan configuration.
+   - This run writes no build driver: `/ordo-init build` writes it ("Steps / The build driver").
    - Each line the configuration check prints names the file by its path from the repository root, and a page or a folder it does not find by the path it resolves to, read from the folder that holds the file.
    - The item is done when the configuration check has run on the path printed.
 2. It reports each of these.
@@ -414,29 +431,115 @@ Run from the repository root, the folder `<path>` names or else the current fold
     - The item is done when a run exits 0, or the stop stands.
 15. After exit 1 or exit 2: end by the first of these three that holds.
     - When every file changed is ignored by git, no commit is made, no stop is raised and the last message says so.
-    - Otherwise, when the repository's commit rule allows it, the change is committed in the form "Steps / A new repository" 12 states, without the ignored paths.
+    - Otherwise, when the repository's commit rule allows it, the change is committed in the form "Steps / A new repository" 13 states, without the ignored paths.
     - Otherwise the skill stops ("Stops").
     - A change written under a quoted ruling names the ruling in the commit message, by its name and its ledger file.
     - When no commit is made, the list of files the stop shows names the ruling the same way.
     - The item is done when the change to the files git does not ignore is committed, or the stop shows the files changed, or every file changed is ignored and the last message says that no commit was made.
+
+### The build driver
+
+Run from the repository root, the folder `<path>` names or else the current folder. The driver is `templates/utils/build.py` filled with three lists of commands, `BUILD`, `TEST` and `CHECK`, and the value `ROOT`, the repository root as a path from the driver's folder. It runs each command under `bash -o pipefail`, so a failure inside a pipe or an `&&` chain fails the command, and a filter that keeps a summary line keeps the failure.
+
+1. Find the plan configuration as "What it reads" 4 says, and the page its `verification` names, read from the folder that holds the `plan.yaml`.
+   - In the `projects:` form the mode serves the project `<folder>` names, or every project of the file when it names none, and writes one driver per project.
+   - Two projects that name one verification page are asked about with the draft of "Steps / The build driver" 6, since one page names one driver.
+   - No `plan.yaml` is the refusal "The mode refused" ("Stops"), which names `/ordo-init`, whose run in an existing repository writes `docs/plan.yaml` and offers `docs/dev/building.md`.
+   - No page at the path `verification` names is the same refusal, which names that path and `/ordo-init`, whose configuration check reports the missing page and proposes its fix.
+   - The step is done when the configuration and each page are found, or the refusal is raised with nothing drafted or written.
+2. Read the commands of each verification page, those of its command block, as `/plan` copies them into a verify list (the `plan` skill's Steps 4).
+   - Each command is taken with its filter as `/plan` copies it: the filter written on its line, or the filter the page names in a sentence for the summary line of its test commands, written after the command.
+   - On a page whose sentence says that the filters stand in the driver, a test command with no filter on its line takes the filter the test commands of the driver end with, and is asked about with the draft of "Steps / The build driver" 6 when they end with none or with several.
+   - A page that states no command is the refusal "The mode refused" ("Stops"), which names the page and says that its commands are written there first, since no run of `/ordo-init` writes a command onto a page that exists.
+   - The step is done when each page's commands are listed, or the refusal is raised with nothing drafted or written.
+3. Give each driver its path and its root value.
+   - In the one-project form the driver is `utils/build.py` and `ROOT` is `..`.
+   - In the `projects:` form each entry of `worktree_paths` is read relative to the folder that holds the `plan.yaml`, as "Steps / The build driver" 1 reads `verification`.
+   - The project's folder is its first entry of `worktree_paths`, resolved to a path from the repository root, and the driver is `utils/build.py` in that folder.
+   - `ROOT` leads from that `utils/` folder to the repository root: the entry `../tools/a` in `docs/plan.yaml` resolves to `tools/a`, the driver is `tools/a/utils/build.py` and `ROOT` is `../../..`.
+   - A project whose `worktree_paths` names no folder, or whose first entry resolves outside the repository or to its root, is asked for its folder with the draft of "Steps / The build driver" 6.
+   - The page names the driver by its path from the repository root: `python3 tools/a/utils/build.py test`.
+   - The step is done when each driver has its path and its root value.
+4. Look at the file at each driver's path, as it stands.
+   - With no file there, the lists are sorted at "Steps / The build driver" 5.
+   - With no file there while the page names one of the driver's own commands ("Steps / The build driver" 5), the commands stand in neither place: this is the refusal "The mode refused" ("Stops"), which names the missing driver and says that the commands are written on the page first.
+   - A file is this driver when the first line of its docstring is the first line of the docstring of `templates/utils/build.py` and it assigns `ROOT`, `BUILD`, `TEST` and `CHECK`.
+   - The lists of this driver are read with the command of "Steps / The build driver" 8, and its comments from its text.
+   - Any other file is the stop "Another utils/build.py" at "Steps / The build driver" 6 ("Stops"): it is replaced only when the user says so, and nothing is written before the answer.
+   - Every command that other file serves and the page names stays on the page or in the lists.
+   - The step is done when the kind of each file is known.
+5. Fill the three lists.
+   - A line of the page that runs the file at the driver's path is one of the driver's own commands, whatever its spelling and its subcommand: `python3 <the driver's path> test`, `./<the driver's path> gate` and `python <the driver's path> build` are three.
+   - One of the driver's own commands is never sorted into a list, so that a driver never names itself as one of its commands.
+   - When the page names one or more of the driver's own commands, the lists start from those "Steps / The build driver" 4 read from the driver.
+   - Each other command of such a page is sorted as the next bullet says and added to its list.
+   - When the page names none of them and this driver stands at the path, the lists are the page's commands alone, and the diff of "Steps / The build driver" 6 shows each command that leaves the driver.
+   - Each command of the page that is not one of the driver's own is sorted by reading what it does: into `BUILD` a command that configures, compiles, installs or packages, into `TEST` a command that runs tests, and into `CHECK` a command that checks the tree without running its tests, such as a linter, a format check, a type check or a character-set check.
+   - A command is copied whole: its filter and an `&&` chain stay with it, and the driver's string holds the command with the filter "Steps / The build driver" 2 took for it.
+   - A command's comment, the text from the `#` that begins a shell comment, is written as a Python comment on the lines above its string, broken between words so that no line of the driver passes 100 characters.
+   - A string whose line would pass 100 characters is written as adjacent string literals inside parentheses, which Python reads as one string, broken so that no line passes 100 characters.
+   - Each command is written as a Python string in double quotes, each backslash written `\\` and each `"` written `\"`, as the head comment of `templates/utils/build.py` says.
+   - The step is done when each command the lists started from stands in its list, and each command of the page stands in one list or is one of the driver's own.
+6. Show one draft, before anything is written ("Stops").
+   1. The three lists.
+   2. Each filled `utils/build.py`.
+      - A driver written for the first time is shown in full.
+      - A driver written over this driver is shown as a diff against the file as it stands, as Rules says of a change to an existing file.
+      - A driver written over a file that is not this driver is shown in full beside that file.
+   3. As a diff, each verification page.
+      - Its command block names `python3 <the driver's path> build`, `python3 <the driver's path> test` and `python3 <the driver's path> check`, one per line, with no filter.
+      - A subcommand whose list is empty is left out.
+      - Its sentences say that the commands themselves stand in the driver.
+      - A sentence that names a filter for the test commands says that the filters stand in the driver.
+   4. As a diff, the Build section of `CLAUDE.md` and the command block of the page the `rules` key names, where each copies the verification page's commands.
+      - A sentence of that page that names a filter for those commands is rewritten as part 3 says.
+   - Each file of the draft is checked as Rules says of a file git ignores, and an ignored file is marked as that rule says.
+   - Where the repository's rules state no commit rule, the draft asks whether the skill may commit, as "What it reads" 7 says.
+   - Under a quoted ruling ("What it reads" 9) that states the draft, it is written without the stop.
+   - A draft that differs from the quoted ruling is shown whole with each difference named, and the stop stands.
+   - The step is done when the user has approved or corrected the draft, or a quoted ruling states it.
+7. Write what was approved, each driver with mode 755 so that `./utils/build.py gate` runs.
+   - The step is done when each approved file and change is on disk.
+8. Read each driver back without running or compiling it, from the repository root:
+
+   ```sh
+   python3 -B -c 'import ast, sys; tree = ast.parse(open(sys.argv[1], encoding="utf-8").read()); values = {t.id: ast.literal_eval(n.value) for n in tree.body if isinstance(n, (ast.Assign, ast.AnnAssign)) for t in (n.targets if isinstance(n, ast.Assign) else [n.target]) if isinstance(t, ast.Name) and t.id in ("ROOT", "BUILD", "TEST", "CHECK")}; print("ROOT:", values["ROOT"]); [print(f"{name}:", command) for name in ("BUILD", "TEST", "CHECK") for command in values[name]]' <the driver's path>
+   ```
+
+   - It parses the file, writes no bytecode file, and prints `ROOT` and then each command of the three lists, one per line, as Python reads them.
+   - Each command printed that came from the page is held equal, character for character, to the page's command with the filter "Steps / The build driver" 2 took for it, its comment taken off.
+   - Each command printed that came from the driver as it stood is held equal to that command as "Steps / The build driver" 4 read it before the write.
+   - `ROOT` is held equal to the value of "Steps / The build driver" 3.
+   - A command that differs is rewritten and read back once more, and one that still differs is the stop "A command that does not read back" ("Stops"), with the difference shown.
+   - The step is done when every command reads back equal, or the stop stands.
+9. Run `python3 <the driver's path> gate` once from the repository root, in the mode typed in an existing or a configured repository, and show its output as it is.
+   - A failing command is shown as failing and left as it is, as Rules says.
+   - The step is done when the output of each driver's run is shown.
+10. Commit the files written as "Steps / A configured repository" 15 ends a change, the subject naming the build driver and the command naming each driver and each changed page.
+    - From "Steps / A new repository" 9 no commit is made here, since "Steps / A new repository" 13 commits.
+    - The step is done as that item says.
 
 ## Stops
 
 | Stop | When | What it shows | What resumes it |
 |---|---|---|---|
 | A skill's folder not found | Steps 1, in each of the three cases, when the `plan` or the `roadmap` skill's folder is in neither of the two folders "What it reads" 2 gives | A refusal that names the folder and the two folder paths, with nothing drafted or written | The skill installed, then `/ordo-init` again |
+| The mode refused | `/ordo-init build` at "Steps / The build driver" 1 or 2, with no plan configuration, no page at the path `verification` names, a page that states no command, or a page that names the driver's own commands with no driver at its path; never from "Steps / A new repository" 9 | A refusal that names what is missing and where it is written, as those items say, with nothing drafted or written | What is missing written, then `/ordo-init build` again |
 | The questions | A new repository, at "Steps / A new repository" 2, and a `CLAUDE.md` written from the template, at "Steps / An existing repository" 6 or "Steps / A configured repository" 10, for each question asked there that a quoted ruling does not answer | The questions asked, each with its default | The user's answers |
 | The draft of the tree | A new repository, at "Steps / A new repository" 4, except a draft a quoted ruling covers as that item says | The tree of `references/new-repository.md`, every file's text, the placeholders that "Steps / A new repository" 3 lists for the user's value and the tools that item leaves out of each coding-standards page | The user's approval or correction |
 | Several roadmaps | More than one roadmap candidate, and no quoted ruling states `roadmap` | The candidates | The user's pick |
 | Worker, reviewer and libraries | At "Steps / An existing repository" 6, for each key a quoted ruling does not state | The offered answer for `worker` and `reviewer`, and the two values of `libraries` with what each means, as that item names them | The user's answers |
 | A failing command | In an existing repository, a command meant for the verification page fails its one run; never from "Steps / A new repository" 8, where no command is run | What "Steps / An existing repository" 3 shows beside it | The user's decision |
 | The draft of the configuration | At "Steps / An existing repository" 13, except a draft a quoted ruling states as that item says, where only a commit question the ruling leaves open is asked | What "Steps / An existing repository" 12 lists | The user's approval or correction, and the answer to the commit question when it is shown |
+| Another utils/build.py | At "Steps / The build driver" 6, when a file that is not this driver stands at the driver's path ("Steps / The build driver" 4) | The file beside the filled template, and each command the file serves with the place it keeps on the page or in the lists | The user's answer: the file replaced, or the run ended with nothing written |
+| The draft of the driver | At "Steps / The build driver" 6, from the mode and from "Steps / A new repository" 9, except a draft a quoted ruling states as that item says | The three lists, the filled driver in full or, over a driver that stands, as a diff against it, and the diffs of the verification page, of the Build section of `CLAUDE.md` and of the rules page's command block, and the commit question where "What it reads" 7 says to ask it | The user's approval or correction, and the answer to the commit question when it is asked |
+| A command that does not read back | At "Steps / The build driver" 8, when a command still differs after its one rewrite from the page's command, or from the driver's command as it stood | The command as the page or the driver held it and as the driver reads back, with the read-back's output | The user's decision, then `/ordo-init build` again |
 | A fix in the configuration check | The configuration check reports an error in a plan configuration, and no quoted ruling states its fix | The error and the proposed fix | The user's approval |
 | A hunk to rule on | The sync exits 1, except a diff whose hunks are a quoted ruling's ("Steps / A configured repository" 9) | The diff, and the commit question where "What it reads" 7 says to ask it | The user's ruling per hunk, and the answer to the commit question when it is asked |
 | The drafted sync change | The sync exits 2 with an `error:` line of "Steps / A configured repository" 10, for the shared-rules block, the plan-terms block or a missing `CLAUDE.md`, except a change a quoted ruling states ("Steps / A configured repository" 11) | The change "Steps / A configured repository" 10 drafts, and the commit question where "What it reads" 7 says to ask it | The user's approval, and the answer to the commit question when it is asked |
 | A file sync cannot use | The sync exits 2 with one of the `error:` lines of "Steps / A configured repository" 13 | The `error:` line and the file it names | The file fixed, then the sync again ("Steps / A configured repository" 14) |
 | The sync still fails | The sync run again after the change does not exit 0 on its second run ("Steps / A configured repository" 14, "Steps / An existing repository" 15) | The sync's output | The user's decision, then `/ordo-init` again |
-| No commit allowed | The repository's commit rule ("What it reads" 7) does not allow the commit, at "Steps / A new repository" 12, "Steps / An existing repository" 16 or "Steps / A configured repository" 15, and a file written or changed is not ignored by git | The files written or changed, the quoted ruling named when they were written under one, the command that shows them (`git status --short`), and apart from them each file written and ignored by git, as Rules says | The user's commit |
+| No commit allowed | The repository's commit rule ("What it reads" 7) does not allow the commit, at "Steps / A new repository" 13, "Steps / An existing repository" 16, "Steps / A configured repository" 15 or "Steps / The build driver" 10, and a file written or changed is not ignored by git | The files written or changed, the quoted ruling named when they were written under one, the command that shows them (`git status --short`), and apart from them each file written and ignored by git, as Rules says | The user's commit |
 
 ## Anti-patterns
 
@@ -456,6 +559,7 @@ Run from the repository root, the folder `<path>` names or else the current fold
 - Everything the skill writes comes from `templates/` in this skill's folder, from the templates of the `plan` and `roadmap` skills, found as "What it reads" 2 and 3 say, from the repository and from the user's answers.
 - The skill writes nothing until the user approves or corrects the draft it shows, with two exceptions: `git init` at "Steps / A new repository" 1, and the one run of each verification command at "Steps / An existing repository" 3 before the draft is shown, which is not made when those steps run from "Steps / A new repository" 8.
   - A quoted ruling that covers or states the draft, as the item of its stop says, is that approval.
+  - Besides those runs, the skill runs one command of the repository: `python3 <the driver's path> gate`, once, at "Steps / The build driver" 9, after the approved driver is written, and never from "Steps / A new repository" 9.
 - A command that fails is shown as failing and left as it is, and no step writes a test, a source file or any other file so that a command passes.
 - Before the skill drafts a file to create or a change to a file that exists, such as `CLAUDE.md`, the glossary or a page, in each of the three cases, it runs `git check-ignore -q -- <path>` for that file on the folder as it stands, and an exit status of 0 says that git ignores the path.
   - A path git ignores is still offered, and written or changed on approval.
@@ -464,7 +568,7 @@ Run from the repository root, the folder `<path>` names or else the current fold
   - The path is left out of every `git add` and `git commit` command the skill writes, and is never forced into a commit, since `git add` exits 1 on an ignored path even when it stages the others.
   - When every file written is ignored, no commit is made and the last message says so.
   - The last message, and each stop that lists the files written, names such a file apart, as written and ignored by git, since `git status --short` does not list it.
-  - The checks of the worktree root and of the configuration file ("Steps / An existing repository" 10, "Steps / A new repository" 10 and "Steps / A configured repository" 2) are apart from this check and keep their own results.
+  - The checks of the worktree root and of the configuration file ("Steps / An existing repository" 10, "Steps / A new repository" 11 and "Steps / A configured repository" 2) are apart from this check and keep their own results.
 - The skill writes nothing outside the repository's folder, except a change to `templates/shared-rules.md` or `templates/plan-terms.md` the user rules on at "Steps / A configured repository" 9.
 - The skill adds no rule other than Ordo's shipped defaults, the user's, and the rules an existing repository already states.
 - A page the skill writes in an existing or a configured repository states, beside its template's text, what the repository already does or says.
@@ -473,6 +577,8 @@ Run from the repository root, the folder `<path>` names or else the current fold
 - A change to an existing file, `.gitignore`, `CLAUDE.md` and the glossary included, is shown as a diff and made after approval.
   - Under a quoted ruling that states the change, it is made without being shown for approval, as "Steps / An existing repository" 13 and "Steps / A configured repository" 4, 9 and 11 say.
 - Build files are written only for what the user names.
+  - Typing `/ordo-init build` names the build driver.
+  - The driver of a new repository, written at "Steps / A new repository" 9 unless the answer to question 11 is no, is the one exception.
 - The plan skills are never installed per project: they are installed per user, and one copy is loaded.
 - The skill never writes a Claude Code settings file; a setting the user asks for is written out in the reply, for the user to add.
 - Every file it drafts is ASCII with one paragraph per source line, as the prose standard says.

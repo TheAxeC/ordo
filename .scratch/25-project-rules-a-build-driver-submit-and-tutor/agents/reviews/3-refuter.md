@@ -173,3 +173,171 @@ No place writes before an approval: items 4 and 6 hold every write back until th
 - A real run of `/ordo-init build` or of a new-repository setup. The four runs were judged by reading the skill. The runs themselves are step 7's gate runs.
 
 Agent usage: a5bc4b4e441d63e90, claude-opus-5-5, 191856 tokens, 31 tool uses, 8 min 0 s.
+
+## Repair round 1, refuted
+
+### Verification lines
+
+Every test and script ran from the worktree with `env -u CLAUDE_CONFIG_DIR -u ORDO_SKILL_DIRS -u ORDO_STABLE` in front.
+
+1. `sh skills/ordo/ordo-init/templates/utils/build.test.sh 2>&1 | tail -1` printed `PASS: build.py scratch tests`. Without the filter, `grep -c '^ok:'` printed `20`.
+2. `check_config.test.sh` printed `PASS: check_config.py scratch tests`. `sync_rules.test.sh` printed `PASS: sync_rules.py scratch tests`.
+3. `python3 -B -W error skills/ordo/ordo-init/templates/utils/build.py` printed `usage: build.py build|test|check|gate` and `exit 2`. `test -x` on the template printed `0`.
+4. `python3 skills/ordo/ordo-init/templates/sync_rules.py . --only glossary` printed `ok: the plan-terms block equals the template` and `exit 0`.
+5. The character-set check over the changed paths of `git status --short`, plus `build.py` and `build.test.sh`, printed nothing and exited 0.
+6. The description length is `1011`. `grep -n 'version:'` printed `5:  version: "5.0.0"`.
+7. `grep -n 'build.test.sh'` printed `docs/dev/scripts.md:51`, `docs/dev/change-standard.md:82` and `docs/dev/building.md:18`.
+8. `python3 docs/figures/gen_figures.py` exited 0. `git status --short docs/figures` printed ` M docs/figures/gen_figures.py` and ` M docs/figures/pipeline.svg`. The whole `git status --short` output is byte-equal before and after (`diff` printed nothing, then `same`). I ran it twice, with the same result.
+9. On a copy under `$TMPDIR`:
+   - `ruff check --no-cache --isolated --target-version py310 --line-length 100 --select E,F,W,I,B,UP,SIM,N,PTH,ANN,BLE,S602 build.py` printed `All checks passed!`.
+   - `ruff format --no-cache --isolated --line-length 100 --check build.py` printed `1 file already formatted`.
+   - `pyright --pythonversion 3.10 build.py` printed `0 errors, 0 warnings, 0 informations`.
+   - `awk 'length($0) > 100' build.py | wc -l` printed `0`.
+
+### Rulings
+
+1. Ruling 1 (driver shown as a diff on a second run): carried out as written, in "Steps / The build driver" 6.2 and the Stops row "The draft of the driver".
+2. Ruling 2 (second run, partial page): carried out in 5 (bullets 1, 2, 7) and 8 (two comparisons) and the Stops row "A command that does not read back". It leaves the gaps in Spec 1 and 2, and the restriction of "never sorted" to `build`, `test` and `check` is as the ruling writes it.
+3. Ruling 3 (`worktree_paths`): carried out as written in 3. The resolution rule matches the `plan` skill's "What it reads" 1, which reads `worktree_paths` relative to the folder that holds the file.
+4. Ruling 4 (the line in `building.md`): carried out. Line 18 has no filter, and `scripts.md` and `change-standard.md` kept their own forms.
+5. Ruling 5 (count of `E501`): carried out in the round's section, "the count is 0". My run reproduces it. Older sections of the report still say seven (Proof 1).
+6. Ruling 6 (docstring lines): carried out. Every line is at most 100 characters and no sentence is split. The `pipefail` sentence moved to the opening paragraph of "Steps / The build driver". See Standards 2 for the prose standard.
+7. Ruling 7 (failure line stays on standard output): carried out. The docstring names the stream of each line, and my read of the code agrees with it.
+8. Ruling 8 (new repository, no command): carried out in "Steps / A new repository" 9, the Stops row "The mode refused", `references/new-repository.md` (question 11 and the tree row), README line 13 and line 177, `plan-terms.md` and `docs/glossary.md`. Not carried to ADR 0051 (Spec 3), the `SKILL.md` description (Spec 4), or the report's older sections (Proof 1).
+9. Ruling 9 (filter named in a sentence): carried out in 2, 5, 6.3 and 8. Two places that state the same thing are not carried (Spec 5).
+
+### The open point
+
+Each variant was written into a copy of the template under `$TMPDIR/open` or `$TMPDIR/open2`, then checked with the builder's selection (`ruff 0.16.5`).
+
+With the page's own comments (lines 10 to 18 of `building.md` carry comments of 118 to 260 characters), three test commands, three E501 lines in each variant:
+- Current form, comment beside the string: `E501 Line too long (197 > 100)`, `(271 > 100)`, `(349 > 100)`. `ruff format --check`: `1 file already formatted`.
+- (a) Comment on its own line above the string: `E501 (122 > 100)`, `(194 > 100)`, `(275 > 100)`, now on the comment lines. `ruff format --check`: `1 file already formatted`.
+- (b) String as adjacent literals in parentheses, comment above: the same three `E501` on the comment lines. `ruff format --check` printed `1 file would be reformatted` and its diff replaces each three-line parenthesised group with `("sh skills/ordo/.../check_config.test.sh 2>&1 | tail -1"),`. The strings were split at 70 characters, and each joined string is under 100.
+
+With a 51-character comment and one 142-character command (`check_config.test.sh ... && sync_rules.test.sh ...`):
+- Beside the string: `Found 1 error.` (E501 on the string line). `ruff format --check`: `1 file already formatted`.
+- (a) Comment above: `Found 1 error.` (E501 on the string line). `ruff format --check`: `1 file already formatted`.
+- (b) Comment above, string as two adjacent literals in parentheses: `All checks passed!`. `ruff format --check`: `1 file already formatted`.
+
+Read-back command of "Steps / The build driver" 8 on the (b) copy (the 142-character command):
+- It printed `ROOT: ..`.
+- It printed `TEST: sh skills/ordo/ordo-init/templates/check_config.test.sh 2>&1 | tail -1 && sh skills/ordo/ordo-init/templates/sync_rules.test.sh 2>&1 | tail -1`, the command whole on one line.
+- The copy's folder held only `build.py`, so the parse left no `__pycache__`.
+
+### Verdicts
+
+Items of "What to build":
+1. Template `build.py`: holds. The line length is met and the docstring matches the code (read line by line against `run_list` and `main`).
+2. `build.test.sh`: holds. It is unchanged, and its 20 cases assert printed lines and effects, not only exit statuses.
+3. `SKILL.md`: partial (Spec 1, Spec 2, Spec 4 name it; Standards 1 and Behaviour 1 touch it).
+4. `references/new-repository.md` and the templates: holds. The `templates/docs/dev/change-standard.md` sentence on the filter inside the driver is true as written, once the filters stand in the driver.
+5. Glossary term: holds (Standards 4 on one sentence).
+6. ADR 0051, one sentence added: holds. See Spec 3 on its other sentences.
+7. Pages of this repository: holds.
+8. Figures: holds. No Stops row was added, removed or renamed in the round, and the figure and README alt text match.
+9. Other places: holds, except the places named in Spec 3, 4 and 5.
+
+Cases:
+- All 18 cases of `build.test.sh`: met (the 20 `ok:` lines), including the `__pycache__` case.
+- By reading, no `plan.yaml`: met. A page with no command: met.
+- By reading, a second run: met for a page the mode wrote. It is not met for a page with a driver line spelled otherwise, or with no driver at the path (Spec 1, Spec 2).
+- By reading, another `utils/build.py`: met. `/ordo-init ./build`: met. A page command with `\0` and quotes: met (the read-back probe in the first review, and the 142-character run above).
+- By reading, a new repository that declines the driver: met. An existing-repository run: met ("Steps / An existing repository" 3 and "Steps / A configured repository" name the mode).
+
+### Spec
+
+1. **A driver can still name itself as one of its commands.**
+   - Place: "Steps / The build driver" 5, bullet 1: "A line of the page that is one of the driver's own commands, `python3 <the driver's path>` followed by `build`, `test` or `check`, is never sorted into a list".
+   - What is wrong: the rule covers one spelling and three subcommands. A page line `python3 utils/build.py gate`, `./utils/build.py test` or `python utils/build.py test`, which a user can add by hand, is sorted "by reading what it does" into a list. `gate` calls every list and the driver has no guard, so a `gate` line in `CHECK` makes `gate` start itself again.
+   - Failure scenario: the user adds `python3 utils/build.py gate` to the page, and `/ordo-init build` copies it into `CHECK`. `python3 utils/build.py gate` then starts a new `gate` at its `check` step until the process limit stops it. The brief's reason for the rule (a driver never names itself) fails.
+2. **Second run when the page and the file at the path disagree.**
+   - Place: "Steps / The build driver" 4, bullet 2 ("With no file there, the lists are sorted at 5"), and 5, bullets 1 and 2.
+   - What is wrong, in two cases:
+     - The page names driver lines but no file stands at the path (the file was deleted). Bullet 1 of item 5 sorts none of those lines and bullet 2 has no driver to read, so every list starts empty. The draft then shows a driver with empty lists and a page with no command, and the commands are written nowhere.
+     - The file at the path is this driver but the page names no driver line (the page was restored from history). Bullet 2 starts from the driver only "when the page names one or more", so the driver's commands are dropped from the draft with no instruction to keep them.
+   - Failure scenario: the first case yields a driver whose `gate` exits 1 with "no command is named", and the user approves it because no instruction raised the loss.
+3. **ADR 0051 keeps two statements the round's ruling 8 changes.**
+   - Place: the ADR's title and the Decision bullet: "A new-repository run writes the driver by the same steps, unless the user answers that it should not."
+   - What is wrong: after ruling 8, a new repository whose page names no command gets no driver whatever the answer. The report keeps the bullet because "those steps include the check", but "by the same steps" lead to the refusal that ruling 8 turns into a skip. Change standard rule 19 says a change leaves no contradicting statements.
+   - The brief and the round limit changes to ADR 0051 to the one added sentence, so this one is the orchestrator's.
+   - Failure scenario: a reader of the ADR expects a driver in every new repository that does not decline it.
+4. **The `SKILL.md` description says a new repository gets `utils/` with the build driver, unconditionally.**
+   - Place: frontmatter `description`: "src/, utils/ with the build driver".
+   - What is wrong: README line 13, the glossary and the tree row of `references/new-repository.md` now state the second condition. The description does not.
+   - Failure scenario: a reader or a model matching on the description expects the driver in every new repository, including one with an empty page. The unconditional wording already ignored answer no.
+5. **The rules page's filter sentence is not carried by 6.4.**
+   - Place: "Steps / The build driver" 6.4 (block diff only) against 6.3 (sentence rewritten).
+   - What is wrong: a repository whose rules page says, as this one's "Commands and their filters" does, "each test's output goes through a filter", has the block replaced by the three driver lines while the sentence stays. Ruling 9 asked for the sentence rewrite only on the verification page.
+   - Failure scenario: the rules page then says the filter applies to commands that the page no longer lists.
+6. **A test command added to the page on a later run gets no filter.**
+   - Place: "Steps / The build driver" 2 against 6.3.
+   - What is wrong: after the first run the page's sentence says that the filters stand in the driver, so it names no filter. A test command the user then adds to the page is taken with no filter, and no instruction says to apply the filters found in the driver's strings.
+   - Failure scenario: the new test's full output reaches the gate run and the context.
+
+### Proof
+
+1. **Sections of the report written before the round now state what is false.**
+   - Place: `agents/reviews/3-report.md`, the checks section: "prints seven `E501` lines, each on a line of the docstring, which keeps one paragraph or bullet per line". "Departures from the list and sentence rules", first bullet: "its paragraphs and bullets are one line each ... they are the seven `E501` lines". "Judgment calls" 8: "the project's folder is the first folder of its `worktree_paths`". The before and after table, row "A new repository": "written at ... 9 unless the answer is no".
+   - What is wrong, per statement:
+     - The `ruff check` run prints `All checks passed!`.
+     - The docstring's paragraphs are now split into one sentence per line.
+     - Item 3 resolves the first entry from the folder of the `plan.yaml`.
+     - The new-repository row omits the no-command outcome.
+   - Failure scenario: the orchestrator lands on the old statements, and the departure from the prose standard's section F, which the ruling forced, is no longer recorded.
+2. No other proof finding. All eight commands of the round's section reproduced (the three tool runs, `awk`, the test, the glossary sync, the version, the figures). The test file is unchanged and each case asserts a printed line or an effect.
+
+### Standards
+
+1. **Bullets that hold several requirements.** `docs/dev/skill-layout.md`, "Lists and tables": "two requirements ... joined by 'and', 'then', a semicolon ... are two bullets".
+   - `SKILL.md` "Steps / A new repository" 9, new bullet: "gets no driver: the user is told in one sentence ..., the refusal ... is not raised, and the setup goes on to ... 10". That is four requirements.
+   - "Steps / The build driver" 6.2: three cases joined by semicolons.
+   - "Steps / The build driver" 6.3: five clauses.
+   - Failure scenario: a reviewer cannot check each requirement on its own, and a skipped clause (for example "told in one sentence") passes unnoticed.
+2. **Docstring against the prose standard.** `build.py` lines 6 to 10 and 12 to 18 are paragraphs of several source lines. Prose standard section F: "one paragraph or bullet per source line, no hard wrapping". Ruling 6 requires the line length, so the departure is forced, but it is not stated anywhere in the report (Proof 1).
+3. **Rule written in several places.** `skill-layout.md`, "Where a rule goes": a rule is written once. The no-command outcome of a new repository stands in item 9, the Stops row, `references/new-repository.md` (twice), README (twice), `plan-terms.md` and `docs/glossary.md`. Ruling 8 asked for the follow-up in the reference page.
+4. **The glossary entry reads unfinished.** `plan-terms.md` and `docs/glossary.md`, **build driver**: "a new repository whose verification page names a command gets unless the user answers that it should not". The object of "gets" is missing and a long clause separates it from its verb.
+5. No history in comments, no non-ASCII, no private name in a shipped file (the character-set check printed nothing).
+
+### Behaviour
+
+1. **Question 11 is asked when its answer may not matter.** `references/new-repository.md`, question 11, and "Steps / A new repository" 2 and 9.
+   - Item 2 asks every question, with the default yes. The sub-bullet says "a page that names no command gets no driver, whatever the answer".
+   - A new repository whose question 3 fixed no command ends with no driver and a one-sentence notice at item 9, after the tree's approval. The setup then goes on to 10 to 13 without a stop.
+   - Failure scenario: the user answered yes and finds no `utils/build.py` after the commit.
+   - The round's section states the outcome but not the question's wording.
+2. **Four runs, read once more** (each place that leaves the session without an instruction, disagrees, or writes early):
+   - First run, test lines with no filter and the filter in a sentence: the filtered strings, the three unfiltered page lines and the rewritten sentence are all instructed (2, 5, 6.3, 8). No write happens before the stop of 6. Gap: Spec 5 (rules page sentence).
+   - Second run: the lists come from the driver, the diff of 6.2 is shown, and the read-back compares each command with its pre-write read. Gaps: Spec 1, 2 and 6.
+   - `projects:` form with `worktree_paths: [../tools/a]` in `docs/plan.yaml`: the driver is `tools/a/utils/build.py`, `ROOT` is `../../..`, and the page names `python3 tools/a/utils/build.py test`. This is instructed and consistent with `plan.projects.yaml`. Item 1 still says "one driver per verification page" while item 3 gives each project its own driver path, so two projects that name one page would get two drivers and one page. The text does not say what happens then.
+   - New repository: with a command on the page, items 1 to 8 are followed with no command run and no commit, and item 13 commits. Without a command, the one sentence is given and the setup goes on to 10. The first bullet of item 9 still says "by items 1 to 8", where item 2 raises the refusal that a later bullet turns off, so two instructions meet.
+   - A `gate` that exits 0 while a page command fails is reachable only through a command that ends up in no list (item 5's completion criterion covers it). A driver that names itself: Spec 1.
+
+### Declined to judge
+
+- The `git diff --numstat` line counts in the round's section, and whether `ordo-help`'s version was raised twice in the plan: both need git commands outside the three I may run (`git diff ed1f928 --numstat`, `git log -- skills/ordo/ordo-help/SKILL.md`).
+- A live run of `/ordo-init build`, of a new-repository setup, or of a driver whose list names itself: judged by reading only. Running a self-naming driver would start a recursion, and I did not run it.
+- The first run of the test on a tree with no template: it cannot be rerun on this tree without removing the template.
+
+Agent usage: a81a1a70ecf47f318, claude-sonnet-5-5, 177803 tokens, 33 tool uses, 5 min 21 s.
+
+## Closed
+
+First review, each closed in repair round 1 by the ruling of the same number in `agents/briefs/3-round-1.md`: Spec 1 to 4 (rulings 1 to 4), Proof 1 (ruling 5), Standards 1 (ruling 6), Standards 2 (ruling 7, nothing changed: the failure line stays on standard output, in order with the failing command's output), Behaviour 1 and 2 (rulings 8 and 9).
+
+Run over round 1, each fixed at landing on main unless it says otherwise:
+
+- The open point, a filled line over 100 characters: "Steps / The build driver" 5 writes a command's comment on the lines above its string, broken between words, and a string too long for one line as adjacent literals inside parentheses. The reviewer's run of that form printed `All checks passed!` and `1 file already formatted`, and the read-back printed the command whole. The template's docstring says the same.
+- Spec 1, a driver that names itself: any line of the page that runs the file at the driver's path, whatever its spelling and its subcommand, `gate` included, is one of the driver's own commands and is never sorted into a list.
+- Spec 2, the page and the file disagreeing: driver lines on the page with no driver at the path is the refusal "The mode refused"; this driver at the path with no driver line on the page takes the page's commands alone, and the diff shows each command that leaves.
+- Spec 3, ADR 0051: its bullet on the new-repository run gains the sentence that a page that names no command gets no driver until it names one.
+- Spec 4, the description of `ordo-init`: nothing changed. The description names what a new repository gets by default, and the two conditions stand in "Steps / A new repository" 9; the description has 13 characters left under its limit.
+- Spec 5, the rules page's filter sentence: part 4 of the draft rewrites it as part 3 does.
+- Spec 6, a test command added on a later run: it takes the filter the driver's test commands end with, and is asked about in the draft when they end with none or with several.
+- Proof 1, the earlier sections of the builder's report: nothing changed in the builder's record. Its section "Repair round 1" gives the state after the round, and the booking gives the state on main.
+- Standards 1, bullets with several requirements: item 9's bullet is three bullets, and parts 2 and 3 of the draft are sub-bullets.
+- Standards 2, the docstring against one paragraph per source line: nothing changed. Ruling 6 of the round put the line length of the Python page first, one sentence per line, so that the driver passes the check it runs.
+- Standards 3, the no-command outcome written in several places: nothing changed. The rule stands in "Steps / A new repository" 9; the other places describe what a new repository gets.
+- Standards 4, the glossary entry: rewritten in `templates/plan-terms.md` and synced into `docs/glossary.md`.
+- Behaviour 1, question 11 asked when its answer may not matter: nothing changed. The question's sub-bullet says that a page with no command gets no driver whatever the answer.
+- Behaviour 2: "Steps / A new repository" 9 names the no-command outcome in its first line and its first bullets; "Steps / The build driver" 1 writes one driver per project, and two projects that name one page are asked about in the draft.

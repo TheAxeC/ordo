@@ -2,7 +2,7 @@
 name: ordo-help
 description: "Print the command sequence for running a plan step by step (open, spec, build, refute, diagnose, close, land, and the loop inside a step) with the choices awaiting review that the orchestrator took under self-rule, with no entry the position and open items of each open plan, and for the plan named, where it stands: the position, the open items, the step in flight, which of its artifacts exist, and the command that comes next. With the argument skills, print instead the name and the Quick start block of every skill in the folder that holds this skill, in folder-name order. Triggers on: ordo-help, ordo help, what do I type next, where is the plan, how does the plan loop work, which choices await my review, ordo-help skills, which skills are there, list every skill and its modes, what modes does a skill have."
 metadata:
-  version: "5.0.0"
+  version: "5.1.0"
 ---
 
 # Ordo help
@@ -97,6 +97,7 @@ metadata:
 
 ```
 /ordo-init                    once per repository: sets up a new one from an empty folder, writes docs/plan.yaml and what an existing one lacks, or checks the plan.yaml there with the shared rules and the plan terms
+/ordo-init build              when the repository is to get the build driver: writes utils/build.py from the verification page's commands and makes the page name python3 utils/build.py build, test and check
 /roadmap add <goal>           an entry with its goal, gate and place in the order, for /plan to open
 /roadmap add <entry>          for an entry not yet specified: its gate and place in the order, before /plan can open it
 /grill <entry>                optional: an interview in rounds that settles the entry's design decisions, written as they settle

@@ -24,7 +24,7 @@
 ## Build
 
 ```sh
-<the commands from docs/dev/building.md, one per line, each with a comment>
+<the commands from docs/dev/building.md, one per line, each with a comment; with the build driver, its python3 utils/build.py lines as the page names them>
 ```
 
 ## Skills

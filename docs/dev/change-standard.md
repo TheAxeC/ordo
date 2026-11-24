@@ -79,6 +79,7 @@ sh skills/academic/grant/templates/check_limits.test.sh 2>&1 | tail -1
 sh skills/academic/grant/templates/check_sections.test.sh 2>&1 | tail -1
 sh skills/ordo/ordo-init/templates/sync_rules.test.sh 2>&1 | tail -1
 python3 skills/ordo/ordo-init/templates/sync_rules.py . --only glossary
+sh skills/ordo/ordo-init/templates/utils/build.test.sh 2>&1 | tail -1
 sh utils/pin.test.sh 2>&1 | tail -1
 sh skills/code/wizard/templates/template.test.sh 2>&1 | tail -1
 git ls-files -coz --exclude-standard | xargs -0 sh -c 'for f; do if [ -e "$f" ]; then printf "%s\0" "$f"; fi; done' sh | xargs -0 perl -CSD -ne 'my $bad_char = $ARGV =~ /\.md\z/ ? qr/[^\x20-\x7E\x{2705}\n]/ : qr/[^\x20-\x7E\n]/; if (/$bad_char/) { print "$ARGV:$.: $_"; $bad = 1 } close ARGV if eof; END { $? ||= 1 if $bad }'

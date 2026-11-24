@@ -12,7 +12,8 @@ Roadmap entry 25's goal names a build driver, `utils/build.py`: one entry point 
 
 - The mode writes `utils/build.py` from a template on the Python standard library, filled with the commands of the verification page, and rewrites that page to name the driver's `build`, `test` and `check`, one per line. `gate` runs the three.
 - A subcommand with no command named says so and exits non-zero.
-- A new-repository run writes the driver by the same steps, unless the user answers that it should not.
+- `gate` skips a subcommand with no command named and fails only when none of the three has one, and the verification page names only the subcommands that have a command.
+- A new-repository run writes the driver by the same steps, unless the user answers that it should not. A page that names no command gets no driver until it names one.
 - An existing or a configured repository gets the driver only through the mode.
 - The rule on build files stands, since typing the mode names the driver, and its text names the new-repository run as the one exception.
 - The template has a test, since a gate that exits 0 on a failure costs a broken change on main.

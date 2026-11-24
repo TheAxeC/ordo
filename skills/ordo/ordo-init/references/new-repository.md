@@ -20,6 +20,8 @@ The questions `/ordo-init` asks before it drafts a new repository, and the tree 
 8. The project skills: the set in a sibling repository's `skills-lock.json` the user names, a list the user gives, or none.
 9. Rules that belong to this repository only, for the Project rules section.
 10. The code's layers, top down, and the repository's goals in a sentence, for `docs/dev/design-principles.md`, asked only when question 6 gave the defaults.
+11. Whether to write the build driver `utils/build.py`, which runs the commands of `docs/dev/building.md` as `python3 utils/build.py build`, `test`, `check` and `gate` [yes].
+    - A page that names no command gets no driver, whatever the answer, and `/ordo-init build` writes it once the page names one.
 
 ## The tree
 
@@ -36,7 +38,7 @@ docs/dev/coding-standards/common.md   templates/docs/dev/coding-standards/common
 docs/dev/coding-standards/<language>.md   templates/docs/dev/coding-standards/<language>.md for each language as question 6 says, its placeholders filled and each tool the repository does not configure left out the same way, when question 6 gave the defaults
 docs/dev/ui-standard.md          templates/docs/dev/ui-standard.md, its placeholders filled, when question 6 gave the defaults and the repository has a user interface
 <the pages question 6 names>     the pages copied from a sibling repository or written from the user's rules, at the paths the answer gives, in place of the default pages above, or beside them for a language with no template page
-docs/dev/building.md             written at "Steps / A new repository" 8 of SKILL.md from the build files and the answer to question 3, each command as named and not run
+docs/dev/building.md             written at "Steps / A new repository" 8 of SKILL.md from the build files and the answer to question 3, each command as named and not run; it names the driver's commands when "Steps / A new repository" 9 wrote utils/build.py, and the commands themselves otherwise
 docs/roadmap.md                  the roadmap skill's templates/roadmap.md
 docs/glossary.md                 templates/docs/glossary.md, the plan-terms block filled from templates/plan-terms.md
 docs/adr/README.md               templates/docs/adr/README.md
@@ -44,4 +46,5 @@ docs/adr/template.md             templates/docs/adr/template.md
 docs/plan.yaml                   written at "Steps / A new repository" 8 of SKILL.md
 src/                             the source tree, with the build files for the kind as far as question 3 fixed them
 utils/                           scripts the build and the checks run
+utils/build.py                   templates/utils/build.py, its lists filled from docs/dev/building.md at "Steps / A new repository" 9 of SKILL.md, absent when question 11 gave no or docs/dev/building.md names no command
 ```
