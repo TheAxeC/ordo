@@ -163,4 +163,4 @@ Cases of the brief's "Cases":
 - The skill-layout sentence that sends a new term to `plan-terms.md` first. It was not raised: brief item 9 names "Ordo's own terms", and other skills' terms such as **funder config** stand there.
 - "feedback loop" against the glossary term **loop**: not raised as a finding. It is a compound noun from the source with a different referent, and the builder lists it as a judgment call. Whether it needs its own glossary sense is the orchestrator's reading.
 
-Reviewer usage: <the session fills this from the completion notice: agent id, served model, tokens, tool uses, minutes>.
+Reviewer usage: aadec4c5e8a7aae13, claude-opus-5-5, 175234 tokens, 32 tool uses, 6 min 54 s.

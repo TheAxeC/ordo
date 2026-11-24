@@ -56,9 +56,10 @@ dispatch:
   report: .scratch/25-project-rules-a-build-driver-submit-and-tutor/agents/reviews/2-report.md
   builder_usage: 346662 tokens, 91 tool uses, 16 min 55 s
   brief_check: .scratch/25-project-rules-a-build-driver-submit-and-tutor/agents/reviews/2-brief-check.md (a87e63407ae314392, claude-opus-5-5, 235254 tokens, 51 tool uses, 7 min 58 s)
-  reviewer_report: running: a98a16ecb5987063a, claude-opus-5-5
+  reviewer_report: .scratch/25-project-rules-a-build-driver-submit-and-tutor/agents/reviews/2-refuter.md (a98a16ecb5987063a, claude-opus-5-5, usage at its notice)
   landing: not-started
-  round: 0
+  round: 1
+  round_1: brief .scratch/25-project-rules-a-build-driver-submit-and-tutor/agents/briefs/2-round-1.md, snapshot .agents/worktrees/25-project-rules-a-build-driver-submit-and-tutor-2-round-1
 - step: 5
   executor: agent
   worker: claude:opus
@@ -70,7 +71,7 @@ dispatch:
   builder_usage: 218919 tokens, 44 tool uses, 11 min 50 s
   brief_check: .scratch/25-project-rules-a-build-driver-submit-and-tutor/agents/reviews/5-brief-check.md (a80a3d262da646252, claude-opus-5-5, 165019 tokens, 50 tool uses, 9 min 5 s)
   shared_paths: README.md and docs/figures/gen_figures.py with step 2, in other lines of each (step 2: the alt texts of the grant and paper figures and their two functions; step 5: the table, the group sentence, the install loop, the count and the note of pipeline()); simple to merge
-  reviewer_report: .scratch/25-project-rules-a-build-driver-submit-and-tutor/agents/reviews/5-refuter.md (aadec4c5e8a7aae13, claude-opus-5-5, usage at its notice)
+  reviewer_report: .scratch/25-project-rules-a-build-driver-submit-and-tutor/agents/reviews/5-refuter.md (aadec4c5e8a7aae13, claude-opus-5-5, 175234 tokens, 32 tool uses, 6 min 54 s)
   landing: not-started
   round: 1
   round_1: brief .scratch/25-project-rules-a-build-driver-submit-and-tutor/agents/briefs/5-round-1.md, snapshot .agents/worktrees/25-project-rules-a-build-driver-submit-and-tutor-5-round-1
@@ -95,6 +96,13 @@ dispatch:
   - Recommendation: option 2, because an approval of a sheet that lacks most of the form approves little. Option 1 is the one that costs less to build.
   - Taken without asking, since the layout's rule settles it: `submit` carries `disable-model-invocation: true`, so only you start it.
   - Step 4 waits for this answer. Nothing else in the plan waits on step 4 except the gate's runs of step 6.
+- Open item D (step 5, the skill `tutor`; kind 3; blocks nothing): two of the source's format pages name a file `GLOSSARY.md`, while the skill writes a glossary as an HTML reference document under `reference/`. The copy names the glossary format page from the step that writes a glossary, as the layout asks, so a later run looks for `GLOSSARY.md` and does not find it.
+  - Option 1 (recommended): the glossary is written as `reference/GLOSSARY.md` in the format page's structure; both format pages stay true word for word; ADR 0048 gets one line, since a Markdown file then stands among the HTML reference documents.
+  - Option 2: leave it as built. This is the option that costs less.
+- Open item E (step 2, limits and layout; kind 3; blocks nothing): ADR 0050 and ruling D4 say the layout "is only what the venue or the funder states". The formatter's page as built says that a value the venue does not state comes from the declared format profile, and with no profile is the current default.
+  - Option 1 (recommended): ADR 0050 gets one sentence that says so, since a manuscript needs a font and a margin when the venue names none.
+  - Option 2: where the venue states no value, the run asks the user for it and uses no profile value and no default.
+  - Neither costs less in a way that decides it; option 1 keeps a run from stopping on each value.
 
 ## Closed items (the log of what was raised and how it ended; no report carries it)
 
@@ -124,5 +132,5 @@ dispatch:
 
 - 2026-11-24. Step 1 has landed. `v10.0.0` is pinned. The working tree holds nothing of this plan outside its ledger.
 - Verified: `sh skills/orchestration/land/templates/checks.sh .scratch/25-project-rules-a-build-driver-submit-and-tutor/orchestrator-state.md` printed `checks: 15 commands passed`.
-- Roadmap entry 25 (Project rules, a build driver, submit and tutor). Plan step 1 of 7 landed: the project rules. The builders of steps 2 and 5 are running. Steps 3 and 4 are stopped on open items B and C.
-- Open on Axel's side: open item A, the reading of the rules; open item B, two questions on the build driver, which step 3 waits on; open item C, one question on the submission sheet, which step 4 waits on.
+- Roadmap entry 25 (Project rules, a build driver, submit and tutor). Plan step 1 of 7 landed: the project rules. Steps 2 and 5 are each in repair round 1. Steps 3 and 4 are stopped on open items B and C.
+- Open on Axel's side: open item A, the reading of the rules; open item B, two questions on the build driver, which step 3 waits on; open item C, one question on the submission sheet, which step 4 waits on; open items D and E, which block nothing.
