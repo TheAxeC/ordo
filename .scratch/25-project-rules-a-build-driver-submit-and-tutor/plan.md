@@ -30,7 +30,26 @@ each added rule read by you in its page, with `sh skills/ordo/ordo-init/template
 
 ## Step 3, Step 0
 
-- Step 3 raises `metadata.version` of `skills/ordo/ordo-init/SKILL.md` once for the plan, by its minor part, and that raise also covers the template pages step 1 changes; step 1 leaves that version as it is.
+- Step 3 raises `metadata.version` of `skills/ordo/ordo-init/SKILL.md` once for the plan, by its major part, to 5.0.0, since the word `build` as the first argument and the default new-repository run change what a run that worked before writes (`docs/dev/skill-layout.md`, "Frontmatter"), and that raise also covers the template pages step 1 changes; step 1 leaves that version as it is.
+- Open item B (step 3, the build driver; two questions, both before the brief can be final):
+  - Question 1, what "the checks imported and called" in the entry's goal means. The goal says of the driver: "one entry point with `build`, `test`, `check` and `gate`, one command per invocation, the checks imported and called, and every failure a non-zero exit". Your ruling D9 and ADR 0051 say the driver is written "from the commands of the verification page", and those are shell commands, such as `sh utils/pin.test.sh`. A shell command cannot be imported.
+    - Option 1 (recommended): the driver runs each command of the verification page as a shell command, under `bash -o pipefail`, and imports nothing. It works the same for a repository in any language, and it is what D9 says. The words "the checks imported and called" then describe nothing the driver does, and I take them out of the entry's goal in the roadmap diff at the closing.
+    - Option 2: a command of the page that runs a Python script of the repository is imported and its entry function called inside the driver; every other command runs as a shell command. The goal's words hold for Python checks. The mode must then decide for each command which kind it is, a script that calls `sys.exit` or does work at import behaves differently inside the driver than on the command line, and the driver has two ways to run a command, each to be tested.
+    - Recommendation: option 1, because D9 already rules the commands of the verification page and one way to run a command is easier to trust in a gate. Option 1 is also the one that costs less to build.
+  - Question 2, a repository with no build step. ADR 0051 says "A subcommand with no command named says so and exits non-zero" and "`gate` runs the three". Read strictly, `gate` fails in every repository that has no build command, such as this one.
+    - Option 1 (recommended): `gate` skips a list that holds no command and fails only when all three are empty; `build` called by itself on an empty list still says so and exits non-zero; the verification page names only the subcommands that have a command. ADR 0051 gets one sentence that says so.
+    - Option 2: `gate` fails when any of the three lists is empty, so every repository must name a build, a test and a check command before its gate can pass.
+    - Recommendation: option 1. Neither option costs less to build.
+  - Step 3 waits for these two answers. Nothing else in the plan waits on step 3 except the gate's runs of step 6.
+
+## Step 4, Step 0
+
+- Open item C (step 4, the skill `submit`; one question): how the submission sheet learns what the portal asks. ADR 0049 says the sheet holds "every field the portal asks for", that the agent "reads the portal's forms for what is asked", and that you approve the sheet "before the browser is touched". The forms of most journal and funder portals stand behind a sign-in, and reading them needs the browser.
+  - Option 1: the sheet is first written from what the portal shows without a sign-in (its public pages and instructions) and from the folder. You approve it. During the walk, each field the portal asks that the sheet lacks is added to the sheet as a question to you. The browser is not opened before the approval, as the ADR says. For a portal behind a sign-in the first sheet holds little of the real form, and most fields reach you as questions during the walk.
+  - Option 2 (recommended): two passes. You sign in, and the session goes through the portal's form pages reading only: it types nothing, uploads nothing and ticks nothing. The agent writes the sheet from those pages and the folder. You approve it. The session then fills the forms from the approved sheet. The sheet holds the real fields before you approve it. The browser is opened before the approval, so the ADR's sentence becomes "nothing is typed, uploaded or ticked before the approval". A portal that shows a later page only once an earlier one is filled still gives fields the first pass could not see, and those are added as questions, as in option 1.
+  - Recommendation: option 2, because an approval of a sheet that lacks most of the form approves little. Option 1 is the one that costs less to build.
+  - Taken without asking, since the layout's rule settles it: `submit` carries `disable-model-invocation: true`, so only you start it.
+  - Step 4 waits for this answer. Nothing else in the plan waits on step 4 except the gate's runs of step 6.
 
 ### Step 1, the project rules (landed 2026-11-24)
 
@@ -79,6 +98,9 @@ Each agent a plan skill started for this plan has one bullet, with its agent id,
 - a1c62803166842022: builder of step 1, claude-opus-5-5
 - aff8729b7d77a1e04: reviewer of step 1, claude-opus-5-5
 - a82688a6d8c685329: reviewer of step 1 over round 1, claude-sonnet-5-5
+- a87e63407ae314392: brief check of step 2, claude-opus-5-5
+- ab554d078f519c4bd: brief check of step 3, claude-opus-5-5
+- af32ec4714532fb10: brief check of step 4, claude-opus-5-5
 
 ## Blocked, and by what
 
