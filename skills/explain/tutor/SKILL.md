@@ -1,6 +1,6 @@
 ---
 name: tutor
-description: "Teach the user one topic over several sessions, in the folder it is run in as a teaching workspace: a mission written from an interview, short self-contained HTML lessons tied to the mission, each with a task that gives feedback, reference documents, a list of trusted resources, and learning records from which the next lesson is chosen; or explain one concept in the conversation, tied to the work at hand, from sources fetched in the run and named in the answer, with --page also as one HTML page in the lesson's form. Triggers on: /tutor, /tutor <topic>, /tutor explain <concept>, /tutor explain <concept> --page, teach me a topic, I want to learn a topic over several sessions, next lesson, explain this concept, explain the method you just offered."
+description: "Teach the user one topic over several sessions, in the folder it is run in as a teaching workspace: a mission written from an interview, short self-contained HTML lessons tied to the mission, each with a task that gives feedback, reference documents, a list of trusted resources, and learning records from which, with the mission, the next lesson is chosen; or explain one concept in the conversation, tied to the work at hand, from sources fetched in the run and named in the answer, with --page also as one HTML page in the lesson's form. Triggers on: /tutor, /tutor <topic>, /tutor explain <concept>, /tutor explain <concept> --page, teach me a topic, I want to learn a topic over several sessions, next lesson, explain this concept, explain the method you just offered."
 metadata:
   version: "1.0.0"
 ---
@@ -13,7 +13,7 @@ metadata:
 
 ```
 /tutor <topic>                     start or continue teaching a topic in this folder, the teaching workspace
-/tutor                             the next lesson of this workspace, chosen from its learning records
+/tutor                             the next lesson of this workspace, chosen from its learning records and its mission
 /tutor explain <concept>           explain one concept in the conversation, tied to the work at hand
 /tutor explain <concept> --page    the same, and write the explanation as one HTML page in the lesson's form
 ```
@@ -54,13 +54,13 @@ metadata:
    - This is the first job of the run, before any lesson.
    - Without the mission, knowledge is not grounded in real-world aims, lessons feel too abstract, and nothing judges what the user should do next.
    - Write `MISSION.md` in the format of `references/mission-format.md`.
-   - Done when `MISSION.md` holds the mission.
-3. Confirm with the user before changing the mission, when the request or what the user has learned would change it (Stops, "The confirmation before the mission is changed").
+   - Done when `MISSION.md` is populated and the user is clear about the mission.
+3. Confirm with the user before changing the mission (Stops, "The confirmation before the mission is changed").
    - Missions may change as the user develops more skills and knowledge.
    - On the user's yes, update `MISSION.md` and add a learning record that captures the change.
-   - Done when the user has answered, and after a yes `MISSION.md` and the learning record are written.
-4. While `RESOURCES.md` is not well populated, focus on finding high-quality, high-trust resources that help the user acquire knowledge, and record them there in the format of `references/resources-format.md`.
-   - Done when `RESOURCES.md` lists the resources the lesson draws on.
+   - Done when the run changes nothing in the mission, or the user has answered, and after a yes `MISSION.md` and the learning record are written.
+4. While `RESOURCES.md` is not well populated, focus on finding high-quality resources that will help the user acquire knowledge, and record them there in the format of `references/resources-format.md`.
+   - Done when `RESOURCES.md` is well populated.
 5. Choose what the lesson teaches: the exact thing the user names, or else the most relevant thing in the user's zone of proximal development.
    - Choose it so that in each lesson the user always feels challenged "just enough".
    - When the user names no exact thing to learn, find the zone of proximal development: read the learning records in `learning-records/`, work out the right thing to teach from the mission, and teach the most relevant thing that fits the zone.
@@ -85,28 +85,28 @@ metadata:
    - A shared stylesheet is the first component every workspace gets, and every lesson links it, so that the lessons look like one course.
    - As the workspace grows, grow the component library with it.
    - Done when each component the lesson uses stands in `assets/`.
-8. Write the lesson as one self-contained HTML file in `lessons/`, named `0001-<dash-case-name>.html`, the number one higher than the last lesson's.
-   - It is beautiful, with clean, readable typography and layout in the manner of Edward Tufte, since the user returns to the lessons later to review.
-   - It is short and fast to complete, since a learner's working memory is very small and the lesson stays within it.
-   - It gives the user one tangible win to build on.
-   - It is directly tied to the mission.
-   - It is in the user's zone of proximal development.
-   - It links to other lessons and to reference documents with HTML anchors.
-   - It recommends one primary source to read or watch: the highest-quality, highest-trust resource found on the topic.
-   - It backs each claim with a citation, a link to an external resource, which makes the lesson more trustworthy.
-   - It reminds the user to ask the agent follow-up questions, since the agent is their teacher and helps with anything unclear.
-   - Done when the file stands in `lessons/`.
-9. Write the reference documents of the lesson in `reference/`, as HTML files except the glossary, the compressed essence of the lesson in a form made for reference at a glance.
-   - Lessons will rarely be revisited later, and reference documents will be.
-   - Lessons can reference these documents, which are useful for tracking raw units of knowledge useful across lessons.
-   - They are beautiful documents that print well.
-   - Reference documents suit these topics: syntax and code snippets for programming, algorithms and flowcharts for processes, poses and sequences for yoga, exercises and routines for fitness, and a glossary for any topic with its own nomenclature.
-   - Glossaries, in particular, are an essential reference.
-   - Write the glossary as the Markdown file `reference/GLOSSARY.md` of the teaching workspace, in the structure that `references/glossary-format.md` gives.
-   - Once a glossary exists, every lesson adheres to it.
-   - Done when each reference document the lesson needs stands in `reference/`.
-10. Open the lesson for the user with a command-line command, where one is available.
-    - Done when the lesson is open, or the user is given its path.
+8. Write the lesson as one self-contained HTML file in `lessons/`, named `0001-<dash-case-name>.html`, the number one higher than the last lesson's, and while writing it, write its reference documents in `reference/`.
+   - The lesson:
+     - It is beautiful, with clean, readable typography and layout in the manner of Edward Tufte, since the user returns to the lessons later to review.
+     - It is short and fast to complete, since a learner's working memory is very small and the lesson stays within it.
+     - It gives the user one tangible win to build on.
+     - It is directly tied to the mission.
+     - It is in the user's zone of proximal development.
+     - It links to other lessons and to reference documents with HTML anchors.
+     - It recommends one primary source to read or watch: the highest-quality, highest-trust resource found on the topic.
+     - It backs each claim with a citation, a link to an external resource, which makes the lesson more trustworthy.
+     - It reminds the user to ask the agent follow-up questions, since the agent is their teacher and helps with anything unclear.
+   - The reference documents, as HTML files except the glossary, are the compressed essence of the lesson in a form made for reference at a glance:
+     - Lessons will rarely be revisited later, and reference documents will be.
+     - Lessons can reference these documents, which are useful for tracking raw units of knowledge useful across lessons.
+     - They are beautiful documents that print well.
+     - Reference documents suit these topics: syntax and code snippets for programming, algorithms and flowcharts for processes, poses and sequences for yoga, exercises and routines for fitness, and a glossary for any topic with its own nomenclature.
+     - Glossaries, in particular, are an essential reference.
+     - Write the glossary as the Markdown file `reference/GLOSSARY.md` of the teaching workspace, in the structure that `references/glossary-format.md` gives.
+     - Once a glossary exists, every lesson adheres to it.
+   - Done when the lesson stands in `lessons/` and the reference documents that hold its compressed essence stand in `reference/`.
+9. Open the lesson for the user with a command-line command, where one is available.
+   - Done when the lesson is open, or the user is given its path.
 
 ### Explaining
 
@@ -135,7 +135,7 @@ metadata:
    - Done when the path is known.
 3. Ask the user before a file that stands at the page's path is replaced (Stops, "The page's path").
    - Done when no file stands at the path, the user has said yes, or the user has named another path.
-4. Write the explanation as one self-contained HTML page at the path, in the lesson's form that "Teaching" item 8 gives, and in a teaching workspace with the components of `assets/` as "Teaching" item 7 says.
+4. Write the explanation as one self-contained HTML page at the path, in the lesson's form that "Teaching" item 8, "The lesson", gives, and in a teaching workspace with the components of `assets/` as "Teaching" item 7 says.
    - Done when the page stands at the path.
 
 ## The teaching workspace
@@ -156,8 +156,8 @@ The state of the user's learning is captured in these files of the folder:
 
 To learn at a deep level, the user needs three things:
 
-- **Knowledge.** Captured from high-quality, high-trust resources, and acquired best without difficulty.
-- **Skills.** Acquired through highly relevant interactive lessons devised from the knowledge, and made durable and flexible by difficulty, which is the tool here.
+- **Knowledge.** Captured from high-quality, high-trust resources; for acquiring knowledge, difficulty is the enemy.
+- **Skills.** Acquired through highly relevant interactive lessons devised from the knowledge; skills are about durability and flexibility, and for skill acquisition, difficulty is the tool.
 - **Wisdom.** Gained from interaction with other learners and practitioners: testing the skills in the real world, outside the learning environment.
 
 Some topics may need more skills than knowledge: theoretical physics might lean more on knowledge, and yoga more on skills.
@@ -173,8 +173,8 @@ Be careful to tell apart two types of learning:
 |---|---|---|---|
 | `--page` without `explain` | "The call" item 1: the call holds `--page` and no `explain` | A refusal that names the three calls `/tutor [<topic>]`, `/tutor explain <concept>` and `/tutor explain <concept> --page` | The call typed again |
 | No concept | "The call" item 2: the call holds `explain` with no concept | The request for the concept | The concept from the user |
-| The mission interview | "Teaching" item 2: `MISSION.md` is missing or not populated, or the user is unclear about the mission, before any lesson | The questions on why the user wants to learn the topic | The user's answers, until the mission is concrete enough to write |
-| The confirmation before the mission is changed | "Teaching" item 3: the request, or what the user has learned, would change the mission | The change to `MISSION.md` | The user's yes, which updates `MISSION.md` and adds a learning record, or a no, which keeps the mission |
+| The mission interview | "Teaching" item 2: `MISSION.md` is missing or not populated, or the user is unclear about the mission, before any lesson | The questions on why the user wants to learn the topic | The user's answers on why they want to learn the topic; if the user cannot articulate why, the interview goes on before anything is written, as `references/mission-format.md`, "Push back on vagueness", says |
+| The confirmation before the mission is changed | "Teaching" item 3: the mission is to be changed | The change to `MISSION.md` | The user's yes, which updates `MISSION.md` and adds a learning record, or a no, which keeps the mission |
 | The offer of a learning record | "Explaining" item 5, in a teaching workspace, once the user has shown they understand the concept | The learning record to write | The user's yes, which writes it, or a no, which writes nothing |
 | The page's path | "The page" items 2 and 3: outside a teaching workspace with no path given, or a file stands at the page's path | The request for a path, or the path of the file that stands there | A path from the user, or the user's yes to replace the file |
 
@@ -191,8 +191,8 @@ Be careful to tell apart two types of learning:
 ## Rules
 
 - Every lesson is tied to the mission, the reason the user is interested in the topic.
-- Never trust the model's parametric knowledge: every lesson and every explanation draws its knowledge from high-quality, high-trust resources.
+- Never trust the model's parametric knowledge, in either mode.
 - In the teaching mode, write a learning record whenever `references/learning-record-format.md`, "When to write a learning record", says one is due.
 - When the user states a preference for how they want to be taught, or something to keep in mind, record it in `NOTES.md` and refer back to it when designing lessons or working with the user.
-- When the user asks a question that appears to need wisdom, by default attempt an answer, but ultimately delegate the question to a community: a place, online or offline, where the user tests the skills in the real world, such as a forum, a subreddit, a real-world class when the budget allows, or a local interest group.
+- When the user asks a question that appears to need wisdom, by default attempt an answer, but ultimately delegate the question to a community: a place, online or offline, where the user can test the skills in the real world, such as a forum, a subreddit, a real-world class when the budget allows, or a local interest group.
 - Attempt to find high-reputation communities the user can join, and respect the user's preference when they do not want to join one.

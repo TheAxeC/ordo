@@ -179,6 +179,12 @@ Each agent a plan skill started for this plan has one bullet, with its agent id,
 - ac3b8e3d52f4ad011: gate run of /submit on the deposit form on v11.0.0-rc.3, to the approval of the sheet, claude-opus-5-5
 - aa26a6855ea5b887b: gate run of /submit on the journal's portal on v11.0.0-rc.3, to the approval of the sheet, claude-opus-5-5
 - ad2d880fc0e83b85c: builder of rulings J and K, claude-opus-5-5
+- a843a8bfc8d79eab3: final run of /submit on the journal's portal on v11.0.0-rc.4, sheet and walk, claude-opus-5-5
+- a9a9c8c3d3b79e1a8: final run of /submit on the deposit form on v11.0.0-rc.4, sheet and walk, claude-opus-5-5
+- a4fb0fc7bbc09158b: final run of /tutor on v11.0.0-rc.4, first session, claude-opus-5-5
+- ad2a691dcd28fd024: final run of /tutor explain --page on v11.0.0-rc.4, claude-opus-5-5
+- a3f60f20db11b350f: final check of the deviations list against the source skill, claude-opus-5-5
+- a01432936c4eba847: builder that closed the points of the final check of the deviations list (open item I), claude-opus-5-5
 
 ## Blocked, and by what
 
