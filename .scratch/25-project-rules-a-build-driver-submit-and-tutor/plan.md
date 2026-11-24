@@ -155,7 +155,12 @@ Each agent a plan skill started for this plan has one bullet, with its agent id,
 - afe9b922f157189e8: builder of step 3, claude-opus-5-5
 - a5bc4b4e441d63e90: reviewer of step 3, claude-opus-5-5
 - a81a1a70ecf47f318: reviewer of step 3 over round 1, claude-sonnet-5-5
+- a10d74bc88b8b7ab6: gate run of /ordo-init on a new python repository, claude-opus-5-5
+- a8345eb24bd6ca099: gate run of /ordo-init build on a scratch clone of ordo, claude-opus-5-5
+- a75109dfea599bd95: gate run of /tutor, first session, pixel art, claude-opus-5-5
+- a1b54bd28f2fc185a: gate run of /tutor explain git worktree --page, claude-opus-5-5
+- a52fe985477014025: gate run of /submit on the journal's portal, to the approval of the sheet, claude-opus-5-5
 
 ## Blocked, and by what
 
-- 7: steps 1 to 6 have landed; it waits for the user's word on the release candidate, and for the inputs the user names (the kind of the scratch repository, the existing repository, the manuscript and its portal, the other submission and its portal, the topic and the concept).
+- 7: in progress on `v11.0.0-rc.1`. The walks of the two `/submit` runs wait for the user, who reads each sheet and watches each walk.

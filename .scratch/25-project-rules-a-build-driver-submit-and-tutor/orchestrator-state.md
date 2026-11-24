@@ -80,7 +80,7 @@ dispatch: none
 
 ## Current position (rewritten before every step commit of this plan)
 
-- 2026-11-24. Step 1 has landed. `v10.0.0` is pinned. The working tree holds nothing of this plan outside its ledger.
+- 2026-11-24. `v11.0.0-rc.1` is pinned. The working tree holds nothing of this plan outside its ledger.
 - Verified: `sh skills/orchestration/land/templates/checks.sh .scratch/25-project-rules-a-build-driver-submit-and-tutor/orchestrator-state.md` printed `checks: 16 commands passed`.
-- Roadmap entry 25 (Project rules, a build driver, submit and tutor). Plan steps 1 to 6 of 8 landed: the project rules, limits and layout, the build driver, the skill `submit`, the skill `tutor`, and rulings D and E carried out. Next: step 7, the gate's runs, which waits for the user's word on the release candidate to tag and pin and for the inputs the user names.
+- Roadmap entry 25 (Project rules, a build driver, submit and tutor). Plan steps 1 to 6 of 8 landed. Step 7, the gate's runs, is in progress on `v11.0.0-rc.1` (tagged at `db692d9` and pinned 2026-11-24, after the user named the inputs in reply to that recommendation). Inputs: a new `python` repository; a scratch clone of ordo for `/ordo-init build`; a scratch copy of the manuscript `bttn-incident-af` of research-hub with the portal https://submit.editorialmanager.com/BSPC/submissions (the user's); a scratch copy of the code folder of `bttd-source-eeg` with the deposit form of the Zenodo sandbox (the orchestrator's pick, on the user's word to pick an example); the topic pixel art (of the user's two); the concept git worktree. The scratch folders stand under the session's scratchpad, `gate/`. Each run's agent stands in `plan.md`, Agents.
 - Open on Axel's side: nothing.
