@@ -7,7 +7,7 @@ The sheet agent fills the block below as `submission-sheet.md` in the run folder
 - The last cell of a row, "Source" or "What it rests on", holds the file and the place the value comes from, `Q<n>` for a row whose value is a question, or `Q<n>, added in the walk` for a row the session adds during the walk.
 - A table or a section with no entry reads "None.".
 - The cell "Value", and the cell "Answer proposed" of an answer that is a text, holds the whole text as it is to be typed, however long, and never a summary, a count, its first or last words or a pointer to a file.
-- Such a text stands on one line of its table: each line break of the text is written `<br>`, so that a paragraph break is `<br><br>`, each `|` of the text is written `\|`, and every other character stands as it is to be typed. The walk types the cell's text with each `<br>` as a line break and each `\|` as a `|`. A made-up abstract of two paragraphs reads `We measure the growth of a made-up plant under two lights.<br><br>The plant grows faster under the blue light.`
+- Such a text stands on one line of its table: each line break of the text is written `<br>`, so that a paragraph break is `<br><br>`, each `|` of the text is written `\|`, and every other character stands as it is to be typed. The walk fills the field with the cell's text, each `<br>` as a line break and each `\|` as a `|`. A made-up abstract of two paragraphs reads `We measure the growth of a made-up plant under two lights.<br><br>The plant grows faster under the blue light.`
 
 ```markdown
 # Submission sheet

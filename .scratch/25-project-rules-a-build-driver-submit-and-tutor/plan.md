@@ -133,6 +133,10 @@ Independent of each other; the standing rule of one agent at a time still serial
 - Open item J (2026-11-24): a value of the submission sheet is always its whole text, however long, never a summary or a pointer, fixed now in `submit` (the user).
 - Open item K (2026-11-24): the sheet agent of `submit` reads a folder's own list of what is left out of a submission and leaves those files out of "Files" with a count; `.gitignore` is no such list (the user).
 - The final runs (2026-11-24): the walks of the two `/submit` runs are made from the link the user gave, with no further act of the user; before step 8 the orchestrator reports each final run with pass or fail, and step 8 starts after that report (the user).
+- Open item L (2026-11-24): option 1, the user ticks the terms checkbox of the journal's portal, and the walk goes on from "Start a new submission" (the user).
+- Open item M (2026-11-24): `v11.0.0-rc.5` is tagged and pinned at `5900070` for the `tutor` runs (the user).
+- Open item N (2026-11-24): option 1, fixed now in `submit`: the walk sets a text value whole in one action, fills a field whose read-back differs once more from its row and leaves a difference that remains; the next release candidate is tagged and pinned and the journal run is made again (the user).
+- The runs' issues (2026-11-24): a run always finds issues; what matters is whether an issue is major; the orchestrator runs the `/submit` runs itself and asks the user only where a human must act or an issue is major (the user).
 
 ## Agents
 
@@ -185,6 +189,11 @@ Each agent a plan skill started for this plan has one bullet, with its agent id,
 - ad2a691dcd28fd024: final run of /tutor explain --page on v11.0.0-rc.4, claude-opus-5-5
 - a3f60f20db11b350f: final check of the deviations list against the source skill, claude-opus-5-5
 - a01432936c4eba847: builder that closed the points of the final check of the deviations list (open item I), claude-opus-5-5
+- a1f79db6ebd6b5521: first /tutor session on v11.0.0-rc.5, claude-opus-5-5
+- ab0ed5974895be2d2: second /tutor session on v11.0.0-rc.5, claude-opus-5-5
+- a48615233866f7916: run of /tutor explain --page on v11.0.0-rc.5, claude-opus-5-5
+- a2435855152b195b4: check of the deviations list on v11.0.0-rc.5, claude-opus-5-5
+- aed2443ba14cc4b1e: builder of the fix of open item N in submit, claude-opus-5-5
 
 ## Blocked, and by what
 
