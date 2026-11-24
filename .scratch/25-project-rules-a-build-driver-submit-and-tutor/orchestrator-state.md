@@ -66,7 +66,20 @@ dispatch:
   launched: 2026-11-24
   report: .scratch/25-project-rules-a-build-driver-submit-and-tutor/agents/reviews/6-report.md
   builder_usage: 100354 tokens, 23 tool uses, 3 min 20 s
+  reviewer_report: .scratch/25-project-rules-a-build-driver-submit-and-tutor/agents/reviews/6-refuter.md (a5a55e89c91a2caba, claude-opus-5-5, 116573 tokens, 12 tool uses, 3 min 0 s)
   brief_check: none, a small text step
+  landing: not-started
+  round: 0
+- step: 3
+  executor: agent
+  worker: claude:opus
+  session_id: afe9b922f157189e8 (claude-opus-5-5)
+  worktree: .agents/worktrees/25-project-rules-a-build-driver-submit-and-tutor-3
+  base: ed1f928
+  launched: 2026-11-24
+  report: .scratch/25-project-rules-a-build-driver-submit-and-tutor/agents/reviews/3-report.md
+  brief_check: .scratch/25-project-rules-a-build-driver-submit-and-tutor/agents/reviews/3-brief-check.md (ab554d078f519c4bd, claude-opus-5-5, 193217 tokens, 32 tool uses, 6 min 59 s)
+  shared_paths: README.md, docs/glossary.md, docs/dev/building.md, docs/dev/scripts.md and docs/figures/gen_figures.py with step 4 of this plan, in other lines of each (step 3: the row, the command line and the paragraphs of ordo-init, the plan-terms block, the lines of the build test, the lane of /ordo-init; step 4: the row and sentences of submit, two terms under Ordo's own terms, the line of submit.svg, the function of the submit figure and two labels of the lifecycle figure), so each merge takes both sides
   landing: not-started
   round: 0
 ```
