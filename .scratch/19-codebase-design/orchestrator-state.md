@@ -55,7 +55,9 @@ dispatch:
   launched: 2026-11-24
   report: .scratch/19-codebase-design/agents/reviews/6-report.md
   session_id: acbe2f1c6ca322be6 (claude-fable-5-2)
-  round: 0
+  builder_usage: 275049 tokens, 74 tool uses, 11.4 minutes
+  round: 1
+  reviewer_report: ".scratch/19-codebase-design/agents/reviews/6-refuter.md (a7057f07033744b86, claude-fable-5-2, usage not given in the completion notice)"
   brief_check: ".scratch/19-codebase-design/agents/reviews/6-brief-check.md (a33239329078fdf56, claude-fable-5-2, 210438 tokens, 21 tool uses, 7.3 minutes)"
 ```
 
