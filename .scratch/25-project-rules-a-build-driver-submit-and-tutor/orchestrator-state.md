@@ -49,12 +49,23 @@ dispatch:
 - step: 4
   executor: agent
   worker: claude:opus
-  session_id: aad1290499046e502 ()
+  session_id: aad1290499046e502 (claude-opus-5-5)
   worktree: .agents/worktrees/25-project-rules-a-build-driver-submit-and-tutor-4
   base: 7132ac8
   launched: 2026-11-24
   report: .scratch/25-project-rules-a-build-driver-submit-and-tutor/agents/reviews/4-report.md
   brief_check: .scratch/25-project-rules-a-build-driver-submit-and-tutor/agents/reviews/4-brief-check.md (af32ec4714532fb10, claude-opus-5-5, 162843 tokens, 37 tool uses, 6 min 58 s)
+  landing: not-started
+  round: 0
+- step: 6
+  executor: agent
+  worker: claude:opus
+  session_id: a623c018efa0d9295 (claude-opus-5-5)
+  worktree: .agents/worktrees/25-project-rules-a-build-driver-submit-and-tutor-6
+  base: 6c0ae1b
+  launched: 2026-11-24
+  report: .scratch/25-project-rules-a-build-driver-submit-and-tutor/agents/reviews/6-report.md
+  brief_check: none, a small text step
   landing: not-started
   round: 0
 ```
