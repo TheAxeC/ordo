@@ -78,5 +78,5 @@ dispatch: []
 
 ## Current position (rewritten before every step commit of this plan)
 
-- 2026-11-24. Steps 1, 4, 5 and 6 have landed. `v9.4.0-rc.5` is pinned: it holds step 6, the fixes of the seven defects the runs on `v9.4.0-rc.3` showed, and the fixes of three smaller defects the runs on `v9.4.0-rc.4` showed. The five runs of step 2 were made on `v9.4.0-rc.4` to their end on scratch copies under the session scratchpad folder `gate4/`, and the empty-folder and existing-repository runs again on `v9.4.0-rc.5` under `gate5/`; the result is reported to the user, and step 2 is not ticked.
-- Roadmap entry 19 (codebase-design). Plan step 5 of 6: the gate's runs. Next: step 3, the closing.
+- 2026-11-24. Steps 1, 4, 5, 6 and 2 are done. `v9.4.0-rc.5` is pinned. Step 2 was ticked on the user's ruling after its runs on `v9.4.0-rc.4` and `v9.4.0-rc.5`. The closing is the one step left.
+- Roadmap entry 19 (codebase-design). Plan step 6 of 6: the closing. Next: the closing report.
