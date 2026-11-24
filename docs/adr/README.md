@@ -54,3 +54,7 @@ A record is `NNNN-<decision-as-a-phrase>.md` from `template.md`, numbered in ord
 | [0045](0045-wait-what-and-wizard-are-copies-of-their-sources-with-the-differences-this-repository-forces.md) | wait-what and wizard are copies of their sources, with the differences this repository forces |
 | [0046](0046-wizard-runs-the-commands-a-stage-needs-each-shown-and-confirmed-first.md) | wizard runs the commands a stage needs, each shown and confirmed first |
 | [0047](0047-codebase-design-is-one-skill-made-from-two-sources-and-finds-the-standards-pages-by-a-search-order.md) | codebase-design is one skill made from two sources, and finds the standards pages by a search order |
+| [0048](0048-tutor-is-a-copy-of-mattpocock-s-teach-with-the-name-an-explain-mode-and-its-page-added.md) | tutor is a copy of mattpocock's teach, with the name, an explain mode and its page added |
+| [0049](0049-submit-is-one-skill-for-any-portal-driven-by-the-session-from-a-sheet-the-user-approves.md) | submit is one skill for any portal, driven by the session from a sheet the user approves |
+| [0050](0050-a-length-limit-is-met-by-cutting-content-and-the-layout-is-only-what-the-venue-or-funder-states.md) | A length limit is met by cutting content, and the layout is only what the venue or funder states |
+| [0051](0051-the-build-driver-is-written-by-a-mode-of-ordo-init-and-by-its-new-repository-run-unless-the-user-says-no.md) | The build driver is written by a mode of ordo-init, and by its new-repository run unless the user says no |

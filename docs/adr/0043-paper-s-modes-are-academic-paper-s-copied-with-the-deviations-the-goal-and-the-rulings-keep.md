@@ -1,6 +1,6 @@
 # 0043. Paper's modes are academic-paper's, copied, with the deviations the goal and the rulings keep
 
-Status: proposed
+Status: proposed; superseded by 0050 in the formatter's sentence that applies a venue-compliant layout value to meet a limit
 
 ## Context
 
