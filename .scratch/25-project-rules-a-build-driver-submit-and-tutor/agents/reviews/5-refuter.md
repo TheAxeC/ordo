@@ -164,3 +164,114 @@ Cases of the brief's "Cases":
 - "feedback loop" against the glossary term **loop**: not raised as a finding. It is a compound noun from the source with a different referent, and the builder lists it as a judgment call. Whether it needs its own glossary sense is the orchestrator's reading.
 
 Reviewer usage: aadec4c5e8a7aae13, claude-opus-5-5, 175234 tokens, 32 tool uses, 6 min 54 s.
+
+## Repair round 1, refuted
+
+```
+$ env -u CLAUDE_CONFIG_DIR -u ORDO_SKILL_DIRS -u ORDO_STABLE sh utils/pin.test.sh 2>&1 | tail -1
+PASS: pin.sh scratch tests
+
+$ printf '%s\0' <the 11 files of the brief's check: README.md docs/figures/gen_figures.py docs/figures/pipeline.svg docs/glossary.md skills/explain/tutor/SKILL.md the 4 references/*.md skills/explain/wait-what/SKILL.md and the ledger report 5-report.md> | xargs -0 perl -CSD -ne '<the brief's character-set check>'; echo "ascii exit $?"
+ascii exit 0          (no line printed)
+
+$ python3 -c 'import yaml; d=yaml.safe_load(open("skills/explain/tutor/SKILL.md").read().split("---")[1]); print(d["name"], len(d["description"]), d["metadata"]["version"], d["disable-model-invocation"])'
+tutor 754 1.0.0 True
+
+$ grep -rn 'skills/ordo/wait-what' README.md docs skills utils agents
+docs/roadmap.md:80:- [x] 18. wait-what and wizard: at the closing on main (0b8e471), `skills/ordo/wait-what/` ... (one hit, in docs/roadmap.md)
+$ test ! -e skills/ordo/wait-what; echo "exit $?"
+exit 0
+
+$ grep -c 'explain/tutor' README.md        -> 1
+$ grep -c 'explain/wait-what' README.md    -> 1
+$ grep -n 'twenty-one' README.md           -> (nothing)
+$ for s in $(grep -o 'for skill in [^;]*' README.md | head -1 | cut -d' ' -f4-); do test -f skills/$s/SKILL.md || echo "missing $s"; done   -> (no line)
+
+$ diff <(git show a7850f3:skills/ordo/wait-what/SKILL.md) skills/explain/wait-what/SKILL.md; echo "diff exit $?"
+diff exit 0
+
+$ python3 skills/ordo/ordo-init/templates/sync_rules.py . --only glossary
+ok: the plan-terms block equals the template
+
+$ diff <source>/<X>-FORMAT.md skills/explain/tutor/references/<x>-format.md   (four pages)
+GLOSSARY same, LEARNING-RECORD same, MISSION same, RESOURCES differs (the ../SKILL.md link only, as in the first report)
+
+$ git diff a7850f3 --stat
+README.md 7, docs/figures/gen_figures.py 2, docs/figures/pipeline.svg 4, docs/glossary.md 4, skills/ordo/wait-what/SKILL.md 52 deleted (5 files changed); skills/explain/ is untracked
+
+$ for each path of files.txt: diff -u <snapshot>/<path> <worktree>/<path>
+README.md, docs/figures/gen_figures.py, docs/figures/pipeline.svg, docs/glossary.md, the four references/*.md, skills/explain/wait-what/SKILL.md: no difference.
+skills/explain/tutor/SKILL.md: the one delta of the round (hunks quoted below).
+
+$ wc -l skills/explain/tutor/SKILL.md
+198
+```
+
+The delta holds only `skills/explain/tutor/SKILL.md`; no path outside `files.txt` changed besides the ledger report and the round's brief. Every change in that file is one of the eight rulings, or one of the sentence-level changes the report lists under "The sentence-by-sentence read". I judged each of those against the source and found none that reaches beyond its sentence.
+
+### Verdicts
+
+Items of the brief's "What to build" (item 1's Stops count is six by the round's ruling 5), for the whole diff since a7850f3:
+
+- 1: violated, Spec 1. The six Stops rows, the calls, the frontmatter and the lesson and reference-document bullets of rulings 1 and 2 hold. Two source instructions are still changed or added without a row.
+- 2: holds. Three pages are identical to the source; the fourth differs in the `../SKILL.md` link path only.
+- 3: holds. "Explaining" items 1 to 5 match ADR 0048's explain point. Item 5's criterion now has the no-workspace branch.
+- 4: holds. "The call" items 1 and 2 and "The page" items 1 to 4 are unchanged and read as before.
+- 5: holds. `test ! -e skills/ordo/wait-what` exits 0 and the diff against the base copy prints nothing.
+- 6: holds. README names five group folders, `explain/wait-what` and `explain/tutor` in the loop, twenty-two skills on both lines, and the loop command prints no line.
+- 7: violated, Spec 1 and Spec 2. "Deviations" has rows for the three round rulings (3, 4, 5) and the sentence changes the report lists, but the differences named in Spec 1 have none, and the two ASCII rows do not show their characters.
+- 8: holds. The grep above prints only the roadmap hit, and no delta touches README or the figures.
+- 9: holds. The sync check prints ok, and the four glossary entries are unchanged by the round.
+
+Cases of the brief's "Cases":
+
+- Each heading, frontmatter key and format page of the source, found in "Deviations": partial, Spec 1 and Spec 2.
+- `/tutor <topic>` in an empty folder, in a workspace whose mission the request would change, and `/tutor explain <concept>` in a code repository: met by reading, as in the first report. Item 1 of "Teaching" now reads three files, and item 2 still opens with the interview.
+- `/tutor explain <concept>` in a teaching workspace: met by reading. Item 5 now ends on a criterion that holds with and without an offer.
+- `--page` in a workspace, `--page` elsewhere with no path, `--page` with a file standing at the path, the `a/b ../c` name: met by reading, since "The page" is unchanged.
+- The model deciding by itself that a lesson is due: met, verify 3 prints `True`.
+- `grep -rn 'skills/ordo/wait-what' ...`: met, one hit in `docs/roadmap.md`.
+- `/tutor` with no topic in a workspace with learning records: met by reading; "Teaching" item 1 reads the learning records and item 5 chooses from them.
+- `/tutor explain` with no concept, and `/tutor --page` without `explain`: met by reading, and each is now a Stops row that "The call" items 1 and 2 name.
+- The install-loop command and the `wait-what` diff: met, both print nothing.
+
+### Findings
+
+Closures of the eight rulings, checked and holding: ruling 1 (`SKILL.md:90` "It is beautiful, with clean, readable typography and layout in the manner of Edward Tufte, since the user returns to the lessons later to review." and `:104` "Glossaries, in particular, are an essential reference."); ruling 2 (`:51-54`); ruling 3 (row "If possible, open the lesson file ..." in "Deviations" names the layout's completion-criterion rule); ruling 5 (six rows at `:174-179`, named from `:42` and `:44`); ruling 6 (`:125`); rulings 7 and 8 (no delta in the two sections or the two format pages; open item D stands in `orchestrator-state.md`). Ruling 4 is closed in form only, see Spec 2. Findings, by heading:
+
+**1. Spec**
+
+- Spec 1, `skills/explain/tutor/SKILL.md:67`, `:194`, `:115` and "Deviations": "In the zone of proximal development the user feels challenged "just enough" in each lesson." and "The model's own knowledge is untrusted: every lesson and every explanation draws its knowledge from high-quality, high-trust resources." and "Fetch sources on the concept in this run: high-quality, high-trust resources, and in a teaching workspace the resources of `RESOURCES.md` first."; what is wrong: the source says "Each lesson, the user should always feel as if they are being challenged 'just enough'" (an instruction with "always"), and "Never trust your parametric knowledge" (a prohibition that names the term "parametric knowledge"). The copy turns the first into a description without "always" and the second into a statement about "the model's own knowledge", and extends it to explanations. "RESOURCES.md first" in the explain mode is behaviour that no ADR 0048 point and no brief item states. None of the three has a row in "Deviations" (the only mention of the second is the Anti-patterns bullet's quote of "Never trust your parametric knowledge"), and the round's closing sentence says every other sentence of the source stands with its meaning. The brief asks that every difference have a row or be put back as the source has it; failure scenario: a user who checks "Deviations" against the public source for the gate reads "nothing else differs" and finds these three differences; an agent drafting a lesson is no longer told that the user must always feel challenged "just enough", and an agent in the explain mode reads `RESOURCES.md` before searching, which the ADR does not ask for; verdict: item 1 violated, item 7 violated, and the case "Each heading ..." partial.
+- Spec 2, the two ASCII rows of "Deviations" in `agents/reviews/5-report.md`: "the range in `GLOSSARY-FORMAT.md`, "A 1{range}10 self-rating", written with a non-ASCII range character in the public source" and "the braces' content in `MISSION-FORMAT.md`, "{...}" under "Success looks like", written with an ellipsis character in the public source"; what is wrong: ruling 4 asks for a row for each of the two characters. The rows exist, but the first quotes the range as the placeholder `{range}`, so the row shows neither the source's character nor the copy's, and the second does not say what the three dots replace. The row for the format pages above them still says "words unchanged", which these two rows contradict. The brief's character check rule (the report names such a character in angle brackets) is not applied to the characters themselves; failure scenario: the user, who does the gate check against the public pages, cannot tell from the row which character differs and finds the "words unchanged" row false for two pages; verdict: item 7 violated (with Spec 1).
+
+**2. Proof**
+
+- `agents/reviews/5-report.md`, "Repair round 1 / The sentence-by-sentence read": "'Teaching Workspace': the sentence "The state of their learning is captured in this directory in several files" now opens "The teaching workspace"."; what is wrong: the sentence now reads (`SKILL.md:143`) "The state of the user's learning is captured in these files of the folder:". It does not open with "The teaching workspace", so the report's account of that change does not reproduce. The change itself (an added lead-in to the list) has no row in "Deviations" either. The report's closing claim "Every other sentence of the source stands in `tutor` with its meaning" also does not reproduce, as Spec 1 shows; failure scenario: the orchestrator, who reads the diff against the report's list to decide the delta is within the rulings, takes the reworded sentence as the one the report describes, and takes the sentence-by-sentence read as complete; verdict: none (supports item 7).
+
+**3. Standards**
+
+- `skills/explain/tutor/SKILL.md:64`: "4. Read `RESOURCES.md`, and while it is not well populated, make it the focus to find high-quality, high-trust resources that help the user acquire knowledge, and record them there in the format of `references/resources-format.md`."; what is wrong: `docs/dev/skill-layout.md`, "Sections, in order" row 5 ("one action per item") and the prose standard, section E (cold opens, a pronoun that has no clear antecedent). The item holds three actions (read, find, record), and "make it the focus" reads as making `RESOURCES.md` the focus, where the source's focus is on finding resources; failure scenario: an agent reads "make it the focus" as treating the file as the thing to work on, and either skips the search for resources when the file is empty or spends the run on editing the file; verdict: none.
+
+**4. Behaviour**
+
+- none. The round changes the wording of a skill the user has not yet run and adds two stop rows and a no-workspace branch that "Deviations" and the report state; no host-visible change is unstated.
+
+### Declined to judge
+
+- Whether the public source has a non-ASCII range character in the glossary format page and an ellipsis character in the mission format page: the brief states it as a premise and fetching the public repository is barred; the ledger copies are ASCII, and `diff` shows the two copies match them.
+- How `/tutor` behaves at run time (a mission interview, a lesson written, the explain mode's offer and page): a read cannot settle it; step 6 runs the installed skill.
+- Whether landing collides with the report and the round's brief, which `git status --short` shows as untracked in the worktree's `.scratch/`, and with the same files in the main checkout: `git check-ignore -v` and the land script's own run would settle it, and neither is a git command allowed here.
+- A real `utils/pin.sh <tag>` relinking of `wait-what` from `skills/explain/`: it would change the installation; `pin.test.sh` passes.
+- Rulings 7 and 8 (the `GLOSSARY.md` clash raised as open item D, and the rule on difficulty in two sections): left unchanged on purpose by the round's brief; not re-judged.
+- The sentence-length rule of the prose standard (under about 20 words) over the new bullets: the long bullets are the first report's verify 7 point, and the delta adds none over about 45 words.
+
+Reviewer usage: ad09d6adfa6f4853c, claude-sonnet-5-5, 145111 tokens, 15 tool uses, 3 min 15 s.
+
+## Closed
+
+- Spec 1, Spec 2, Spec 3, Standards 1 and Standards 4 of the first run: closed in round 1, in the report's section "Repair round 1".
+- Standards 2 of the first run, the format pages that name `GLOSSARY.md`: raised to the user as open item D of the state file.
+- Standards 3 of the first run, the rule on difficulty in two sections: left as built, since the source states it in both and the copy keeps the source's text.
+- Spec 1 of the run over round 1: fixed at landing. "Teaching" item 5 says "In each lesson the user always feels challenged \"just enough\"."; the Rules bullet opens "Never trust the model's parametric knowledge" and has a row in `deviations.md` for its reach to explanations; the words on `RESOURCES.md` first are taken out of "Explaining" item 2.
+- Spec 2 and Proof 1 of the run over round 1: fixed at landing in `deviations.md`: the two ASCII rows name the source's character in angle brackets and the copy's, the format pages' row names the three rows that differ, and the first line of "The teaching workspace" has a row.
+- Standards 1 of the run over round 1: fixed at landing. "Teaching" item 4 opens "While `RESOURCES.md` is not well populated, focus on finding".

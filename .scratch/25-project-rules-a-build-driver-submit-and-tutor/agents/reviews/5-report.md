@@ -213,3 +213,85 @@ The differences that the layout, ASCII and the prose standard force, listed by k
 - **Format pages.** Their text is the source's apart from the one link path. The source copies were already ASCII and one paragraph per line, so no other change was needed.
 
 `wait-what`: moved with `mv`. The `diff` case prints no line, so its `SKILL.md` is unchanged.
+
+## Repair round 1
+
+Every ruling of `agents/briefs/5-round-1.md` is carried out. None was found wrong on the tree. The only shipped file changed is `skills/explain/tutor/SKILL.md`, now 198 lines.
+
+### Findings
+
+1. "Teaching" item 8 now reads "It is beautiful, with clean, readable typography and layout in the manner of Edward Tufte, since the user returns to the lessons later to review." "Teaching" item 9 gains the bullet "Glossaries, in particular, are an essential reference."
+2. "Teaching" item 1 now reads `MISSION.md`, the learning records in `learning-records/` and `NOTES.md`, each that exists. Its sub-bullets say that `RESOURCES.md` is read by items 4 and 6 and `assets/` by item 7, before the lesson is written, and that no lesson and no reference document is read whole unless a step needs it. Item 4 now opens with "Read `RESOURCES.md`" and keeps the source's "focus" on finding resources while it is not well populated.
+3. "Teaching" item 10 is unchanged. Its criterion now has a row in "Deviations".
+4. Two rows are added to "Deviations", one for each ASCII character of the copies.
+5. The Stops table gains the rows "`--page` without `explain`" and "No concept", so it has six rows. "The call" items 1 and 2 now name these rows.
+6. The criterion of "Explaining" item 5 now reads: "Done at once, with nothing offered, when the folder is no teaching workspace or the user has not shown that they understand the concept; otherwise done when the user has answered, and after a yes the record stands in `learning-records/`."
+7. Nothing is changed.
+8. Nothing is changed.
+
+### The sentence-by-sentence read against the source
+
+These sentences were weakened or missing in the copy, and are now put back as the source has them:
+- "Assets": "Reuse is the default" is added to "Teaching" item 7 as "Reuse of components is the default." The binary contrast "not the exception" is cut, as the prose standard requires.
+- "Knowledge": the feedback loop is again "interactive" ("Teaching" item 6).
+- "Skills": "Make the knowledge stick" is folded into the effortful-practice bullet of "Teaching" item 6.
+- "Teaching Workspace": "loosely equivalent to architectural decision records" is now "Loosely like architectural decision records".
+- "Teaching Workspace": the sentence "The state of their learning is captured in this directory in several files" now opens "The teaching workspace".
+- "Lessons": "short, and completable very quickly" is now "short and fast to complete". The words "very" and "quick" are banned fillers under the prose standard. The sitting-length wording is removed.
+- "Fluency vs Storage Strength": "storage strength is the real goal" is now "the real aim the lessons build towards". **goal** is a glossary term.
+
+Every other sentence of the source stands in `tutor` with its meaning, at the place the heading map gives. The behaviours the copy adds are the rows of "Deviations".
+
+### Checks
+
+- `env -u CLAUDE_CONFIG_DIR -u ORDO_SKILL_DIRS -u ORDO_STABLE sh utils/pin.test.sh 2>&1 | tail -1` prints `PASS: pin.sh scratch tests`.
+- The character-set check over the 11 existing changed files prints nothing; `exit 0`.
+- The YAML command prints `tutor 754 1.0.0 True`.
+- `grep -rn 'skills/ordo/wait-what' README.md docs skills utils agents` prints only `docs/roadmap.md:80:...`, and `test ! -e skills/ordo/wait-what; echo "exit $?"` prints `exit 0`.
+- `grep -c 'explain/tutor' README.md` prints `1`, and `grep -c 'explain/wait-what' README.md` prints `1`.
+- `grep -n 'twenty-one' README.md` prints nothing.
+- The loop command prints no line.
+- The `diff` case prints nothing; exit 0.
+
+### Deviations, as they now stand
+
+| Source has | `tutor` has | Reason | Approved by |
+|---|---|---|---|
+| `name: teach` | `name: tutor` | the skill runs a course and answers one question | ADR 0048, the name; D2 |
+| `description: Teach the user a new skill or concept, within this workspace.` | a one-paragraph description ending in `Triggers on:` | the layout's frontmatter | ADR 0048, the layout point |
+| `argument-hint: "What would you like to learn about?"` | no `argument-hint`; the Quick start line `/tutor` for the call with no topic | the layout's frontmatter has no such key | ADR 0048, the layout point; brief decision 6 |
+| no version | `metadata.version: "1.0.0"` | the layout's frontmatter | ADR 0048, the layout point |
+| `agents/openai.yaml` | none | this repository ships no such file | ADR 0048, the layout point |
+| format pages `GLOSSARY-FORMAT.md`, `LEARNING-RECORD-FORMAT.md`, `MISSION-FORMAT.md`, `RESOURCES-FORMAT.md` beside `SKILL.md` | `references/glossary-format.md`, `learning-record-format.md`, `mission-format.md`, `resources-format.md`, words unchanged | the layout puts reference pages in `references/` with lower-case names | ADR 0048, the layout point; brief decision 1 |
+| the range in `GLOSSARY-FORMAT.md`, "A 1{range}10 self-rating", written with a non-ASCII range character in the public source | "A 1-10 self-rating" | ASCII | ADR 0048, the ASCII point |
+| the braces' content in `MISSION-FORMAT.md`, "{...}" under "Success looks like", written with an ellipsis character in the public source | "{...}" with three dots | ASCII | ADR 0048, the ASCII point |
+| `[SKILL.md](./SKILL.md)` in `RESOURCES-FORMAT.md` | `[SKILL.md](../SKILL.md)` | the page moved one folder down | ADR 0048, the layout point |
+| `GLOSSARY-FORMAT.md` linked from no part of `SKILL.md` | `references/glossary-format.md` named from "Teaching" item 9 | the layout: a reference page is named by its path from the step that reads it | ADR 0048, the layout point; brief decision 5 |
+| "When to write a learning record" only in `LEARNING-RECORD-FORMAT.md` | Rules 3 names that section of `references/learning-record-format.md` from `SKILL.md` | the layout: a reference page is named by its path from the step or rule that reads it | ADR 0048, the layout point |
+| `*-FORMAT.md` links resolve from the skill's folder | paths under `references/` resolve from the skill's folder | the pages moved | ADR 0048, the layout point |
+| "If possible, open the lesson file for the user by running a CLI command." with no criterion | "Teaching" item 10 with "Done when the lesson is open, or the user is given its path." | the layout: each item of Steps ends on its completion criterion, which must hold when no command can open the file | ADR 0048, the layout point; round 1 ruling 3 |
+| no completion criteria | each item of Steps ends on "Done when" | the layout, "Writing for an agent" | ADR 0048, the layout point |
+| `/teach` and its sections | `/tutor`, the calls `/tutor [<topic>]`, `/tutor explain <concept>`, `/tutor explain <concept> --page` | the name and the two added calls | ADR 0048, the name, the explain mode and the page; D2, D11 |
+| no explain mode | "Steps / Explaining": one concept explained in the conversation, tied to the work at hand, from sources fetched and named, no file written, a learning record offered in a teaching workspace and written on a yes | the user's case of a concept met mid-work | ADR 0048, the explain mode; D2 |
+| no page | "Steps / The page": one HTML page in the lesson's form, to `reference/` in a workspace, elsewhere to a path given or asked for; name from the concept's words with no `/` and no `..`; no file replaced without a yes | the page of the explain mode | ADR 0048, the page; D11 |
+| no argument checks | "Steps / The call": `--page` without `explain` refused with the three calls; `explain` with no concept asks for it | the calls of the explain mode | ADR 0048, the explain mode and the page (the mode is this repository's own) |
+| two stops written in prose | the Stops table: the source's two stops, the explain mode's offer of a learning record and the page's path, and the rows "No concept" and "`--page` without `explain`" | the layout's Stops section | ADR 0048, the layout point and the explain mode; round 1 ruling 5 |
+| the skill in `skills/productivity/teach/` | `skills/explain/tutor/`, beside `skills/explain/wait-what/` | the group folder | ADR 0048, the last sentence; D12, D13 |
+
+The differences that the layout, ASCII and the prose standard force, listed by kind:
+- **Sections.** The source's sections became the layout's nine sections: the title and paragraph, Quick start, Use instead with the row `/wait-what`, What it reads, Steps with "The call", "Teaching", "Explaining" and "The page", the reference sections "The teaching workspace" and "Knowledge, skills and wisdom", Stops, Anti-patterns and Rules. The heading map of the step's report gives where each source section went.
+- **Anti-patterns.** The table is made from the source's prohibitions ("Never trust your parametric knowledge", "never inline code a future lesson would duplicate", "Don't give the user any clues", a lesson before the mission), with one row for the explain mode.
+- **Second person.** The source's "you" (the agent) and "your first job" are written as instructions.
+- **ASCII and the prose standard.**
+  - The spaced-hyphen asides of the source are reworded, among them "stateful request - they", "from the lessons - cheat sheets", "the mission - the reason", "This is normal - make sure", "citations - links", "immediately - and ideally automatically", "real-world interaction - testing", "attempt to answer - but", "revisited later - reference documents will be" and "these documents - they are useful".
+  - "Think Tufte." became "in the manner of Edward Tufte".
+  - "completable very quickly" became "fast to complete".
+  - "Reuse is the default, not the exception" became "Reuse of components is the default".
+  - "real-world goals" became "real-world aims" and "the real goal" became "the real aim", since **goal** is a glossary term.
+  - "designed for quick reference" became "made for reference at a glance".
+  - "steps to take (for instance, yoga poses)" became "real-world actions, such as yoga poses", since **step** is a plan term.
+- **Format pages.** Their text is the source's apart from the link path and the two ASCII characters above.
+
+`wait-what`: moved with `mv`. The `diff` case prints no line, so its `SKILL.md` is unchanged.
+
+The point of ruling 7 stays raised for the user. The format pages name `GLOSSARY.md`, and the workspace writes no file of that name.

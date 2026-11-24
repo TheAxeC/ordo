@@ -114,4 +114,4 @@ Cases of the brief's "Cases":
 - Whether a `config.md` row Venue Profile that reads `absent` counts as "no such row" under Steps 15. A run of full mode with a declined follow-up would show it. By reading, "whose profile states neither" covers it in effect.
 - What git ignores in the worktree, and the tree after staging, would need a git command outside the three the reviewer may run (`git status --short --ignored`, `git add -n`).
 
-Reviewer usage: <the session fills this from the completion notice: agent id, served model, tokens, tool uses, minutes>.
+Reviewer usage: a98a16ecb5987063a, claude-opus-5-5, 219080 tokens, 49 tool uses, 9 min 6 s.

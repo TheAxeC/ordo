@@ -2293,7 +2293,7 @@ def pipeline() -> str:
     )
     note = (
         "These start no agent: /ordo-init, /roadmap, /plan, /land, /plan-retro, "
-        "/session-retro, /wizard, and /wait-what and /ordo-help, which have no stop. A refusal names "
+        "/session-retro, /wizard, /tutor, and /wait-what and /ordo-help, which have no stop. A refusal names "
         "its cause and leaves nothing, so it is not drawn."
     )
     return lanes_figure("pipeline.svg", label, rows, SIMPLE_LEGEND, note)
