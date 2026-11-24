@@ -280,6 +280,7 @@ metadata:
    - Done when the runner reports that the agent ended.
 6. Read the files and lines of each candidate.
    - A candidate whose lines do not show what it says is dropped.
+   - A count in a candidate that the session's own command gives otherwise is written in the report as the session's command gives it.
    - Done when each candidate left is one the session has read at its lines.
 7. Hold each candidate against the ADRs read.
    - A candidate that contradicts an ADR is shown only when the friction warrants reopening that ADR, and its card then carries a warning that names the ADR and why it is worth reopening.

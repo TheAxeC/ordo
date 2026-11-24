@@ -94,7 +94,7 @@ Run from the repository root, the folder `<path>` names or else the current fold
 
 1. Run `git init` when the folder is not a repository.
    - The step is done when the folder is a git repository.
-2. Read `references/new-repository.md` and ask "The questions" of that page, together, in plain prose, each with its default in brackets ("Stops").
+2. Read `references/new-repository.md` and ask "The questions" of that page, together, in plain prose, each with its default in brackets where the page gives one ("Stops").
    - A question a quoted ruling answers ("What it reads" 9) is not asked.
    - Its answer is the ruling's.
    - The questions the ruling leaves open are asked together.
@@ -248,6 +248,7 @@ Run from the repository root, the folder `<path>` names or else the current fold
    - The step is done when the change or the file is drafted, or the block is there.
 8. Leave each optional key out, so its default applies, unless the repository gives a reason.
    - A key that is written names that reason in its comment.
+     - The reason states what holds in the repository once the files are written, such as "the repository has these standards pages and a glossary", and never refers to the draft or to an offer.
    - `standards` lists every standards page the repository has, wherever it is (design principles, coding standards, a UI standard, a layout or prose standard), and the repository's glossary when it has one, wherever it is, so every brief names them.
      - The glossary is listed under the file name `glossary.md`, by which the skills find it (the `plan` skill's "What it reads" 1).
      - A glossary that "Steps / An existing repository" 7 offers is listed as the repository's glossary.
