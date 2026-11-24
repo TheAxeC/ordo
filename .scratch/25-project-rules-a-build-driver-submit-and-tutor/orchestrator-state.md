@@ -54,7 +54,9 @@ dispatch:
   base: bacb674
   launched: 2026-11-24
   report: .scratch/25-project-rules-a-build-driver-submit-and-tutor/agents/reviews/2-report.md
+  builder_usage: 346662 tokens, 91 tool uses, 16 min 55 s
   brief_check: .scratch/25-project-rules-a-build-driver-submit-and-tutor/agents/reviews/2-brief-check.md (a87e63407ae314392, claude-opus-5-5, 235254 tokens, 51 tool uses, 7 min 58 s)
+  reviewer_report: running: a98a16ecb5987063a, claude-opus-5-5
   landing: not-started
   round: 0
 - step: 5
@@ -65,10 +67,13 @@ dispatch:
   base: a7850f3
   launched: 2026-11-24
   report: .scratch/25-project-rules-a-build-driver-submit-and-tutor/agents/reviews/5-report.md
+  builder_usage: 218919 tokens, 44 tool uses, 11 min 50 s
   brief_check: .scratch/25-project-rules-a-build-driver-submit-and-tutor/agents/reviews/5-brief-check.md (a80a3d262da646252, claude-opus-5-5, 165019 tokens, 50 tool uses, 9 min 5 s)
   shared_paths: README.md and docs/figures/gen_figures.py with step 2, in other lines of each (step 2: the alt texts of the grant and paper figures and their two functions; step 5: the table, the group sentence, the install loop, the count and the note of pipeline()); simple to merge
+  reviewer_report: .scratch/25-project-rules-a-build-driver-submit-and-tutor/agents/reviews/5-refuter.md (aadec4c5e8a7aae13, claude-opus-5-5, usage at its notice)
   landing: not-started
-  round: 0
+  round: 1
+  round_1: brief .scratch/25-project-rules-a-build-driver-submit-and-tutor/agents/briefs/5-round-1.md, snapshot .agents/worktrees/25-project-rules-a-build-driver-submit-and-tutor-5-round-1
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled or, under `self_rule: on`, until the orchestrator closes it as `plan-orchestration`'s `references/self-rule.md`, "Closing an open item", says)
