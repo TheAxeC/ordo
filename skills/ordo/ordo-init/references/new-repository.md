@@ -19,17 +19,18 @@ The questions `/ordo-init` asks before it drafts a new repository, and the tree 
 7. Does the repository have a user interface a reader sees and operates? [no]
 8. The project skills: the set in a sibling repository's `skills-lock.json` the user names, a list the user gives, or none.
 9. Rules that belong to this repository only, for the Project rules section.
+10. The code's layers, top down, and the repository's goals in a sentence, for `docs/dev/design-principles.md`, asked only when question 6 gave the defaults.
 
 ## The tree
 
 ```
-CLAUDE.md                        templates/CLAUDE.md, the shared-rules block filled from templates/shared-rules.md
+CLAUDE.md                        templates/CLAUDE.md, the shared-rules block filled from templates/shared-rules.md, the Skills section left out when question 8 gave none
 README.md                        the name, the paragraph, how to build (a pointer to docs/dev/building.md), the license line
-LICENSE
+LICENSE                          the license of question 4, its year the year of the day the skill runs
 .gitignore                       templates/gitignore/common.gitignore, then the kind's file
-skills-lock.json                 written by the skills CLI when the project skills are installed
+skills-lock.json                 written by the skills CLI when the project skills are installed, absent when question 8 gave none
 docs/dev/change-standard.md      templates/docs/dev/change-standard.md, its placeholders filled
-docs/dev/prose-standard.md       templates/docs/dev/prose-standard.md
+docs/dev/prose-standard.md       templates/docs/dev/prose-standard.md, its calibration exemplar line written as "Calibration exemplar: none yet."
 docs/dev/design-principles.md    templates/docs/dev/design-principles.md, its placeholders filled, when question 6 gave the defaults
 docs/dev/coding-standards/common.md   templates/docs/dev/coding-standards/common.md, its placeholders filled and each tool the repository does not configure left out as "Steps / A new repository" 3 of SKILL.md says, when question 6 gave the defaults
 docs/dev/coding-standards/<language>.md   templates/docs/dev/coding-standards/<language>.md for each language as question 6 says, its placeholders filled and each tool the repository does not configure left out the same way, when question 6 gave the defaults

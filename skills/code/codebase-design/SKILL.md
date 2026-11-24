@@ -98,9 +98,13 @@ metadata:
    - Each rule gets the first of these that fits, tried in this order:
      - Present: the repository's compared pages hold a rule on the same requirement, wherever it stands, and each part of what the default rule covers falls under one of the two bullets on a present rule below.
      - Group 1, a difference: one of the two bullets on a difference below holds.
-     - Group 2, a rule on how work is done: the pages hold nothing on the requirement, and whether the rule is followed cannot be read from the code, as with a rule of the change standard.
+     - Group 2, a rule on how work is done: the pages hold nothing on the requirement, and the rule says how a change is made, checked, reviewed or recorded, as a rule of the change standard does, so that it asks nothing of the code itself.
      - Group 3, a rule the code already follows: the pages hold nothing on the requirement, and the code follows the rule in more than half of the places it applies to, an estimate near half excepted as the bullet on an estimate below says.
      - Group 4, a rule the code does not follow: the pages hold nothing on the requirement, and the code follows the rule in half of the places it applies to, or in fewer, or by an estimate near half.
+       - A rule that asks something of the code, that would go to a page that exists, and for which no command can count the places that follow it, is a rule of group 4 and never one of group 2 or 3, since nothing shows that the code follows it.
+       - Such a rule of a subject the repository lacks stands in the line of its new page, which has its own yes.
+       - Its line gives the words "not counted" in place of a count, and says in a few words why no command counts it.
+       - A made-up rule of that kind: "A function that allocates in a loop that runs every frame takes its buffer from the caller."
      - Group 5, a rule about a tool the repository lacks: a requirement that cannot be met without a tool for which the tree holds no configuration, as the bullets on a tool above say.
    - Present, the repository asks at least as much: the repository's rule covers what the default rule covers and asks the same or more of it.
      - A default sentence that takes a kind of file or a kind of defect out of a requirement, or that allows what the repository's rule forbids, is an exemption however it is worded, and makes no difference.
@@ -115,6 +119,11 @@ metadata:
    - A difference by contradiction: a page of the repository, one compared or one noted at Steps / standards 3, states or describes the opposite of the default rule, as a rule that asks the opposite or as a described practice the default rule forbids.
      - Such a rule never stands in group 2, 3 or 4.
      - A made-up contradiction: the default rule reads "No commented-out code is committed", and a noted contribution guide says "Old code is left commented out above its replacement for one release."
+   - Before a rule is sorted into group 2, 3 or 4, it is read against every rule of the repository's compared pages that speaks of the same act, the same kind of file or the same check, under whatever subject or wording that rule stands.
+     - A default rule that cannot be followed together with such a rule is a difference by contradiction, and goes to group 1.
+     - Two rules cannot be followed together when one asks for less than the other requires of the same act, as well as when one forbids what the other requires.
+     - A made-up pair of that kind: the repository's rule reads "Every check of the repository runs before each commit", and the default rule reads "The builder runs only the checks of the files the step changes."
+     - This holds for each paragraph of a default rule on its own, so a default rule of several paragraphs is added without the paragraph that is such a difference, and that paragraph is shown in group 1.
    - A rule that is present is left as written.
    - For groups 3 and 4, a command counts the places the rule applies to and the places that follow it, over the files of "What it reads" 5.
      - A count a command produces by listing each place is written "<n> of <m>".
@@ -138,13 +147,13 @@ metadata:
    - In a repository without a `plan.yaml`, or with no page of its own, a new page takes the fixed name place 2 of "What it reads" 4 gives its subject.
    - A new page is added to the `standards` list of the repository's `plan.yaml` when it has one, as part of the draft.
    - In the `projects:` form, a new page is added to the `standards` list of the project whose pages it stands beside, and the draft names that project.
-   - A new page holds its rules of groups 2 and 3, and a rule of group 4 enters it only when the user names it.
+   - A new page holds its rules of groups 2 and 3 and its rules that no command counts, and a counted rule of group 4 enters it only when the user names it.
    - The prose standard is copied as it is when the repository has none, and left alone when it has one.
    - Done when each drafted rule has its file and its place in it, and each new page its path.
 8. Write the audit file and the drafted text of each new page to the operating system's temporary folder, as "Steps / review" 8 finds it.
    - The audit file is one Markdown file named `standards-audit-<timestamp>.md`, so that each run writes a new file.
    - It holds each default rule found present, with the page, the section and the line where it stands.
-   - It holds each rule of groups 3 and 4 with its count and the command that produced the count.
+   - It holds each rule of groups 3 and 4 with its count and the command that produced the count, or with "not counted" and the reason.
    - Its line for a rule whose count is an estimate writes the count as "about <n> of <m>" and says that the count is an estimate.
    - It holds the place each addition will go to.
    - It holds each rule left out because it applies in no place of the code.
@@ -165,7 +174,7 @@ metadata:
     - Group 2 takes one line per default page, with one yes or no for the whole group.
     - That line names the rules by their titles or opening words as the default page has them, and reprints none.
     - Group 3 takes one numbered line per rule: the rule in the words it would be added in, then its count as "<n> of <m>", or as "about <n> of <m>" for an estimate.
-    - Group 4 takes one numbered line per rule: the rule in a few words, then what adopting it would break, with its count in the same two forms.
+    - Group 4 takes one numbered line per rule: the rule in a few words, then what adopting it would break, with its count in the same two forms, or with "not counted" and the reason for a rule no command counts.
     - The numbers run on through groups 3 and 4, so that each number names one rule.
     - Group 5 takes one line for all its rules, which names the tools.
     - Each new page follows in one line, lettered on after the differences, or from A when there is no difference, with a yes or no of its own, and its text is not printed.
@@ -276,7 +285,8 @@ metadata:
    - A candidate that contradicts an ADR is shown only when the friction warrants reopening that ADR, and its card then carries a warning that names the ADR and why it is worth reopening.
    - A refactor that an ADR forbids and no friction calls for is left out.
    - Done when each candidate that contradicts an ADR is marked or left out.
-8. Write the report as `references/report.md` gives it: one HTML file with a card per candidate, each with its before and after picture.
+8. Read `references/deepening.md`, classify the dependencies of each candidate left into the categories that page defines, then write the report as `references/report.md` gives it: one HTML file with a card per candidate, each with its before and after picture.
+   - The category on a card's tag is the one this classification gave, by that page's definition, and every later step, the roadmap entry included, names the same category for that candidate.
    - The file is written to the operating system's temporary folder, so that nothing lands in the repository: `$TMPDIR`, or `/tmp` when it is not set, or `%TEMP%` on Windows.
    - It is named `architecture-review-<timestamp>.html`, so that each run writes a new file.
    - The report names each subject the repository lacks, and `/codebase-design standards` as the way to fill it.
@@ -286,14 +296,15 @@ metadata:
 9. Ask the user which candidate to explore (the stop "The candidates").
    - With no candidate picked, Steps / review 10 and 11 are left out.
    - Done when the user has picked a candidate, or has picked none.
-10. For the picked candidate, when the user wants to see other interfaces, follow `references/design-it-twice.md`, and classify the dependencies as `references/deepening.md` says.
+10. For the picked candidate, when the user wants to see other interfaces, follow `references/design-it-twice.md`, with the dependencies in the categories Steps / review 8 gave them.
     - Done when the designs are compared and one is recommended, or the user asked for none.
 11. Make the picked candidate a roadmap entry.
     - In a repository with no `plan.yaml` in the three folders of "What it reads" 3, invoke `/ordo-init` first, which has its own draft and approval.
     - When the user declines `/ordo-init`, the skill ends with the report as its result and says that no roadmap entry was written.
     - Invoke `/roadmap add` with the candidate as the goal, which has its own approval.
-    - The goal names, for the picked candidate, its constraints, its dependencies with their categories as `references/deepening.md` gives them, the shape of the deepened module, what sits behind the seam and which tests survive.
-    - Then invoke `/grill` on that entry, which settles each of those, with the entry's other decisions, its glossary terms and its ADRs.
+    - The goal says what the deepened module is and what friction it ends, in a sentence or two, and the entry holds only the parts the roadmap's other entries hold, as `/roadmap add` writes them.
+    - The candidate's constraints, its dependencies with their categories, the shape of the deepened module, what sits behind the seam and which tests survive are not written into the entry.
+    - Then invoke `/grill` on that entry, and give it those five things from the report as decisions to settle, with the entry's other decisions, its glossary terms and its ADRs.
     - Done when `/grill` has ended on the entry, or the message says that no roadmap entry was written.
 12. Offer an ADR for a candidate the user rejects for a reason a later review would need in order not to propose it again.
     - A reason that holds only for now, such as "not worth it right now", and a reason that is plain from the code get no offer.

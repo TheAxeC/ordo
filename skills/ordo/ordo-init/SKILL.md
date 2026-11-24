@@ -107,12 +107,16 @@ Run from the repository root, the folder `<path>` names or else the current fold
    - Every placeholder of an installed standards page is filled from the answers, from the files written before, or with the value the template writes inside it when that is a default value (`<1000>` becomes `1000`).
      - A placeholder is a `<...>` that names what fills it, inside inline code or not (`include/<lib>/`).
      - A language's own angle brackets in code (`std::get<>`, `std::span<const T>`) are code and stay as they are.
+     - The year of `LICENSE` is the year of the day the skill runs.
+     - The calibration exemplar line of `docs/dev/prose-standard.md` is written as "Calibration exemplar: none yet.", since a new repository has no approved page.
+     - The layers and the goals of `design-principles.md` are the answer to question 10.
      - A placeholder none of these fills is listed with the draft at "Steps / A new repository" 4, and the user gives its value.
      - A rule whose condition is a choice placeholder (`<yes or no>`, or a value `or none`) is kept when the answer is yes or a value.
        - With the answer yes, the parenthesis is removed.
        - With a value as the answer, the rule holds the value.
      - Such a rule is left out of the installed page, with its sub-list and the placeholders only it holds, when the answer is no or none.
      - A check the repository does not have yet is written as "checked by reading at review" in place of the placeholder's sentence part, so the page states nothing nobody filled in.
+     - The closing paragraph of `design-principles.md` is the exception: when the repository has no check for any principle, the whole paragraph is written as the one sentence "Each principle is checked by reading at review."
    - A default coding-standards page written into a repository, the common page or a language page, names no tool the repository does not configure.
      - A tool here is a formatter, a linter or a static type checker run as its own command.
      - A language's own compiler and its configuration file are not such a tool.
@@ -150,7 +154,8 @@ Run from the repository root, the folder `<path>` names or else the current fold
    - The CLI copies them into `.agents/skills/`, links them under `.claude/skills/`, and writes `skills-lock.json`.
    - The step is done when `skills-lock.json` lists each project skill, or the answer to question 8 is none.
 7. List each installed skill with its description in the Skills section of `CLAUDE.md`.
-   - The step is done when the Skills section lists each installed skill.
+   - When the answer to question 8 is none, `CLAUDE.md` is drafted and written without the Skills section, its heading included, since no `skills-lock.json` exists.
+   - The step is done when the Skills section lists each installed skill, or `CLAUDE.md` has no Skills section.
 8. Follow "Steps / An existing repository" on the tree written, with its own draft and approval: it writes `docs/plan.yaml` and `docs/dev/building.md`.
    - No command meant for the verification page is run, whether the user named it in question 3 or the skill read it from a build file it wrote, since the tree holds no source for it.
    - Each such command is written on the verification page as named.
