@@ -195,4 +195,14 @@ Agent usage: ab554d078f519c4bd, claude-opus-5-5, 193217 tokens, 32 tool uses, 6 
 
 ## Closed
 
-- The findings whose fix is a choice of the user are raised as one stop, open item B of the state file. Every other finding is closed in the brief when `/spec` writes it again after the ruling; the brief of this run is not in the ledger.
+- Names: `references/new-repository.md` (the question, the tree rows), `plan-terms.md` and `docs/glossary.md` (the term **build driver**), the README paragraph on a new repository, and `gen_figures.py` with `pipeline.svg` for the lane of `/ordo-init` are in "What to build" and in the paths.
+- The step line, "narrowed": item 3 words the rule as ADR 0051 does, the new-repository run as the one exception.
+- Premises: the base is main's head; the three tables of `scripts.md`, ADR 0010 for how the verify list follows the page, the layout's "Where a rule goes" in place of ADR 0005, the template coding-standards pages in place of a path that does not exist, and the full title of ADR 0051 are corrected.
+- Cases, rule 13: the test is written first and run once on the tree without the template, and the report quotes its failing line.
+- Cases, the Python page: each command runs as the list of arguments `bash -o pipefail -c <command>`, never with `shell=True`, on Python 3.10 or later.
+- Cases, rules 15 and 16: the read-back after the write holds each command equal to the page's text, with a test case for quotes and backslash sequences and a reading case.
+- The question: the failing command of the gate case carries a filter, so the case fails without `pipefail`; cases are added for `&&`, a trailing comment, standard input, the `projects:` form, the call by path and no bytecode folder.
+- Implied inputs 1 to 13: each has a requirement in items 1 and 3 and a case: the filter and `&&`, the comment kept beside its command, a page with no command (refusal), the root value for the `projects:` form and `[<folder>]` in the call, a `utils/build.py` of another kind (stop), a page that already names the driver, the word `build` against a folder named `build`, the page's lines and the driver's last line, the place of the driver step between items 8 and 9 with the commit of item 12, the diffs of existing files and the parse that writes no bytecode, standard input from `/dev/null`, the shebang and mode 755.
+- ADRs: ruled by the user, ruling B: `gate` skips an empty list, the page names only the subcommands that have a command, and ADR 0051 gets one sentence (item 6). The driver of a project in the `projects:` form stands in that project's `utils/`, with the root value filled.
+- Dictated text: the version goes to 5.0.0 by its major part, as "Step 3, Step 0" now says.
+- Declined to judge, "the checks imported and called": ruled by the user, ruling B, question 1: shell commands, nothing imported.
