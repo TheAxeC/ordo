@@ -14,7 +14,8 @@ Writes, beside this file:
 - referee.svg: the agents and stops of the first round of the referee skill, with what the
   second round starts in its note.
 - researcher.svg: the stages, agents, runs of other skills and stops of the manuscript mode of
-  the researcher skill, with what the integrity mode runs alone in its note.
+  the researcher skill, with what the integrity mode runs alone, and what the novelty and idea
+  modes do with no agent started, in its note.
 - submit.svg: the agent and stops of the submit skill, from the submission sheet to the page
   of the final submit.
 - grant.svg: the agents and stops of the draft mode of the grant skill, with what the other
@@ -2080,7 +2081,11 @@ def researcher() -> str:
         "re-review, a stop, and to Stage 4.5. Each run of paper and paper-review-panel is invoked "
         "through the Skill tool with its own stops, which are not drawn. The session holds "
         "every checkpoint and writes the run's state and the Material Passport. Each "
-        "integrity record and each compliance report is a file of the run folder."
+        "integrity record and each compliance report is a file of the run folder. novelty and "
+        "idea start no agent and are not drawn: novelty searches the closest prior work on each "
+        "claim of an idea, confirms each work it cites with lookup.py resolve and writes a page "
+        "with a verdict per claim, and idea puts the choices of the idea to you in rounds of the "
+        "interview, runs novelty between them and writes the research questions and claims into the README."
     )
     return _single(
         "researcher.svg",

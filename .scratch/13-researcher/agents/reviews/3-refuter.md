@@ -179,3 +179,144 @@ Every other output the report quotes was reproduced:
 - I wrote temporary comparison files (the base `SKILL.md`, the extracted sections and the svg head lines) to the session scratchpad, outside the repository, to run the `diff`s above. No file in the repository or the ledger was written, apart from the figure files that the brief's own check 2 rewrites, which `git status` shows as unchanged.
 
 Usage: a779a2f818f5c41bd, claude-opus-5-5, 191071 tokens, 45 tool uses, 536 s
+
+## Repair round 1, refuted
+
+### Verification
+
+All run from `/Users/axelfaes/workspace/ordo/.agents/worktrees/13-researcher-3`, under `env -u CLAUDE_CONFIG_DIR -u ORDO_SKILL_DIRS -u ORDO_STABLE` where a script ran.
+
+- Character set: the brief's perl check over the changed and new files (`git status --short` paths, then `git ls-files -mo --exclude-standard -z`, ledger included) printed nothing. `ascii exit 0` and `ascii2 0`.
+- `python3 docs/figures/gen_figures.py`: `gen 0`, last line `wrote docs/figures/paper/run-folder.svg (21112 bytes)`. `python3 docs/figures/academic-pipeline/gen_academic_pipeline.py`: `wrote docs/figures/academic-pipeline/academic-pipeline.svg (22636 bytes)`, `ap 0`.
+- `git status --short`: ` M README.md`, ` M docs/figures/gen_figures.py`, ` M docs/figures/researcher.svg`, ` M docs/glossary.md`, ` M skills/academic/researcher/SKILL.md`, ` M skills/academic/researcher/references/compliance_checkpoint_protocol.md`, ` M skills/ordo/ordo-init/SKILL.md`, ` M skills/ordo/ordo-init/templates/plan-terms.md`, `?? .scratch/13-researcher/agents/briefs/3-round-1.md`, `?? .scratch/13-researcher/agents/reviews/3-report.md`, `?? .../references/checkpoints.md`, `?? .../references/integrity_check.md`, `?? .../references/novelty_page.md`. This is the round's path list plus the ledger. `docs/figures/researcher.svg` is byte-identical to the round-1 snapshot (`diff -q` printed nothing).
+- Description counts: `researcher 1019 {'version': '1.0.0'}`. The longest of every other skill is 1023 (`referee`), and `ordo-init` is 1011.
+- `grep -n '^## '`: 12 Quick start, 24 Use instead, 41 What it reads, 63 Steps, 313 Stops, 360 Anti-patterns, 379 Rules. The Quick start block has 7 lines.
+- `grep -n '/grill\|Agent tool'`: line 39 (the Use instead row) and line 383 (the Rules bullet scoped to `integrity` and `manuscript`).
+- `grep -n 'in both modes'`: nothing, exit 1.
+- `grep -rn '"The integrity check\|"Checkpoints' skills/academic/researcher`: only `references/checkpoints.md:3` and `:5`, which are the moved text.
+- `grep -n novelty README.md`: line 34 only. `grep -n 'round, of\|verdict, of' docs/glossary.md`: 111, 168, 169, 173, 174.
+- `sync_rules.py . --only glossary`: `ok: the plan-terms block equals the template`. `sync_rules.test.sh | tail -1`: `PASS: sync_rules.py scratch tests`. `check_config.test.sh | tail -1`: `PASS: check_config.py scratch tests`.
+- Stops intro: it says "the nine refusals at the end". I counted the nine rows from "No manuscript" to "No lookup.py for the novelty check", and the count is true.
+- Line counts: `novelty_page.md` 116, `integrity_check.md` 49, `checkpoints.md` 28. `git diff fba2c70 --numstat`: SKILL.md 171/113, glossary 3/1, README 1/1. All match the report.
+- The moved sections against the base: `diff` of base lines 201-247 against `integrity_check.md` lines 5-end differs only by the one added bullet at item 4 (ruling 9). The same holds for `checkpoints.md`, up to the heading and opening paragraph.
+- `lookup.py bibtex '10.1038/nature14539'`, with HOME in the scratchpad and the API variables unset: exit 0, and standard output ` @article{LeCun_2015, title={Deep learning}, volume={521}, ISSN={1476-4687}, url={http://dx.doi.org/10.1038/nature14539}, DOI={10.1038/nature14539}, number={7553}, journal={Nature}, publisher={Springer Science and Business Media LLC}, author={LeCun, Yann and Bengio, Yoshua and Hinton, Geoffrey}, year={2015}, month=May, pages={436--444} }`. This reproduces the report's quoted run. `lookup.py` line 32 states that `search` prints `<index>: left out, <reason>`, so ruling 10 rests on a real output line.
+
+### The rulings
+
+1. Ordo-init paths stay: carried out, no change. `sync_rules.py --only glossary` is green with them. Whether 5.0.1 is the right version is under Declined to judge.
+2. Description: carried out at `SKILL.md` line 3. It holds `/researcher integrity`, `/researcher manuscript`, `verify the references and claims of a finished draft`, `final integrity check`, `full paper workflow`, `/researcher novelty` and `/researcher idea`. It also holds the pre-review depth and "keep state and records in a run folder", and its length is 1019. It does not mention the new `.bib` (Standards 1).
+3. Newest progress file only: carried out at "What it reads" 19, idea item 1 and idea item 2, and the Stops row "A reopening" says the same.
+4. Title paragraph scoped: carried out at line 15, "A run of `integrity` or `manuscript` leaves behind ...".
+5. Rules scoped: carried out at the two Rules bullets (lines 395-396 of the diff context) and the Anti-patterns row "Skipping an integrity check" ("in every run of `manuscript`"). I read the other bullets and rows, and none is false for `novelty` or `idea`.
+6. "The reopening evidence": carried out. It is defined at idea item 2 and used in items 2, 3 and 10 and in the Stops row. "Result" remains for the choice and for the Compare stage's result. The repository has no other use.
+7. README row: carried out at `README.md` line 34.
+8. Temporary folder removed: carried out at novelty item 6 (`rm -r '<folder>'`), with the Done line requiring it gone. Behaviour 3 notes a residual case.
+9. `integrity` reads the checkpoint rules: carried out. The places are `### integrity` items 1 and 2, and the new bullet of `integrity_check.md` item 4, which covers item 4's stops and "The third correction round failed". I read each Stops row an `integrity` run reaches (FAIL, third round, failure-mode block, compliance block, BLOCKED, CONDITIONAL), and each leads by item 4 or 6 to the page.
+10. Searches that did not run: carried out. Novelty item 2 records the indexes left out, the stop "The searches did not run" has its row, and item 5 and the form name the left-out indexes in a `new` reason. The form gains the column "Indexes left out". The stop has no path inside `idea` (Spec 1).
+11. `.bib` beside the page: carried out. Novelty item 6 writes `notes/novelty-<date>.bib` from `bibtex`, appended when it exits 0, and names works with no entry on the page. Item 7, the Anti-patterns row, "What it reads" 3, the form and the README name it. The glossary entry stays true.
+12. Unconfirmed works named in a `new` or `partly done` reason: carried out in novelty item 5, the form's rules and the example (C2 names "Head pruning for speech models", C1 states none). The punctuation of the verdict line matches the form (`novelty_page.md` line 92).
+13. Claim options checked before they are put: carried out. Idea item 5 runs `novelty` over the options of the next claim choice and over a settled claim not yet checked, item 7 shows each option with its verdict and page, and items 5, 7, 8 and the Stops rows are renumbered consistently. Spec 1 names a gap in it.
+14. Deviations list: no change by the builder, as ruled. The report's own "Deviations" section is stale (Proof 1).
+
+### Verdicts
+
+Items:
+1. `SKILL.md` gains the two modes: violated (Standards 1).
+2. `novelty`: holds (Behaviour 3 is minor).
+3. `idea`: violated (Spec 1).
+4. `references/novelty_page.md`: holds.
+5. `docs/glossary.md`: holds.
+6. The two moved pages: holds. The only change beyond the heading level and opening paragraph is the one bullet of ruling 9.
+7. `README.md`: holds.
+8. The figure: holds.
+9. The report's "Deviations": violated (Proof 1).
+
+Cases:
+- Frontmatter count and version: met (1019, `{'version': '1.0.0'}`).
+- `##` headings: met.
+- Quick start, seven lines, each with its comment: met.
+- `/researcher novelty "<idea>"` through the Steps: met (no agent, claims shown, three searches, `resolve`, page, `.bib`, message on Existing Materials and Phase 1 kept).
+- An idea with a single quote: met (Rules bullet's `'\''` form).
+- A project path with a space: met.
+- A work `resolve` does not confirm: met.
+- A second run on the same day: met (`-2` for the page and the `.bib`).
+- "is my idea that X new?": met (Steps 1 routing).
+- `idea` with no README: met.
+- `idea` started again: met (newest file only).
+- A reopening: met (items 2 and 10, Stops row).
+- A claim found `done`: met for options and for a settled claim (item 5).
+- The `/grill` and Agent-tool grep: met.
+- The goal's sentences and ADR 0054's first paragraph: met, apart from the gap of Spec 1.
+- `integrity` and `manuscript` as before: met. The moved text is identical apart from the one bullet, and the checkpoint rules are now named at each step that holds one.
+- `in both modes`: met.
+- The section-name grep: met.
+- `gen_figures.py`, `gen_academic_pipeline.py`: met.
+- `grep novelty README.md`: met.
+- The glossary grep: met.
+
+### Spec
+
+1. **A claim with no verdict has no path in `idea`.**
+   - Place: `SKILL.md` idea items 5, 6, 7 and the Stops row "The searches did not run".
+   - Hunk: item 6, "Go to item 10 when no choice is open and the settled claim has a verdict other than `done` on a page of the interview." Item 5 runs `novelty` items 1 to 6, whose item 2 raises the stop and gives the claim "no verdict".
+   - What is wrong: a settled claim that got no verdict is neither `done` nor a verdict other than `done`, so item 6 does not go to item 10. Item 7 asks the open choices, and none is open. Nothing re-runs the check.
+   - Failure scenario: the network is down in the last round. The settled claim gets the stop, the user says "run again", and item 9 returns to item 4. The next item 5 finds the claim "unchecked" only if the session reads that into the text. The text does not say it, so the interview can stall with no choice to ask. Options of a claim choice that got no verdict are shown in item 7 with no verdict to show.
+   - A related gap: after item 5 opens a claim choice again because the settled claim was `done`, no item draws that choice's options between the detection and the one more run of `novelty` ("each option drawn for a claim choice opened again"). Item 4 has already run.
+
+### Proof
+
+1. **The report's "Deviations" section is false after the round.**
+   - Place: `.scratch/13-researcher/agents/reviews/3-report.md`, section "## Deviations", lines 144-160.
+   - Hunk: "The description, rewritten for four modes; it drops the triggers `/researcher integrity`, `/researcher manuscript`, ... `final integrity check` and `full paper workflow`, and the phrase on the two depths"; "Stops: intro count five to nine; six stops and four refusals added".
+   - What is wrong: the description now holds those triggers and the depths (my `python3` run and line 3). Seven stops are added (the Stops table has "The searches did not run"). The section also lacks the round's changes to `### integrity` items 1 and 2, the bullet in `integrity_check.md`, and the scoping of the title sentence, two Rules bullets and one Anti-patterns row. Those appear only under "Repair round 1".
+   - Failure scenario: item 9 of the brief asks this section to list each change to the landed text. The gate reader of step 6 reads a list that contradicts the tree.
+
+### Standards
+
+1. **The title paragraph is five sentences and does not name the `.bib`.**
+   - Place: `SKILL.md` line 15, and `docs/dev/skill-layout.md` line 34, row 1: "What the skill does and what it leaves behind, in one to three sentences."
+   - The base paragraph had three sentences. The paragraph now has five, and `novelty` is said to leave "one page". It leaves a page and a `.bib`.
+   - The Quick start line of `novelty` ("write a page with a verdict per claim") and the description ("writes a page") omit it as well.
+   - Failure scenario: a reader or `/ordo-help` learns that `novelty` leaves one page, and does not look for the `.bib` that is the file `paper` reads.
+2. **A bullet joins several rules and is not listed as a departure.**
+   - Place: idea item 5, third bullet: "An option found `done`, and each option drawn for a claim choice opened again, is sharpened beyond the works the page names and checked in one more run of `novelty`, its own page, or it is dropped; a sharpened option found `done` in that run is dropped."
+   - The layout's "Lists and tables" rule is one rule per bullet. The report's "Departures from the list and sentence rules" does not name it. Item 5 as a whole also holds four actions (run the check, raise the stop, sharpen, record).
+3. **"What it reads" 13 names `references/novelty_page.md` "for `novelty`" only.**
+   - `idea` runs "novelty" items 1 to 6, so item 6 writes the page in that form during `idea`. A sentence of `idea` and of `novelty` item 6 sends the reader to a page that "What it reads" says only `novelty` reads.
+
+### Behaviour
+
+1. **The `.bib` is a new file in the user's `notes/` that the report's "Host- or user-visible changes" does not list.**
+   - Before the round, `novelty` wrote one page. After it, `novelty` and every round of `idea` that has a candidate claim write a page and a `notes/novelty-<date>.bib`.
+   - The section lists only the first-run changes. The repair section names the `.bib` but gives no before and after.
+2. **The `.bib` can hold one work twice.**
+   - Novelty item 6: "holding one entry per confirmed work: ... appended when the command exits 0". A work that is a nearest work of C1 and of C2 is one work, and the text does not say it is written once. Two entries with one key make `bibtex` complain once `paper` reads the file.
+3. **`rm -r '<folder>'` has no folder when no text came from `index-abstract`.**
+   - Item 3 makes the folder with `mktemp -d` as part of the `index-abstract` command. When every text was read from a web page, nothing makes it, and item 6's removal then points at an undefined path. Its Done line "the temporary folder is gone" is not tied to the case where there is none.
+4. **`integrity` and `manuscript` run as before.**
+   - I read `### integrity`, `### manuscript` 1, 3, 5 and 12, the Stops rows, the two moved pages and the Rules. No step, check, stop or rule of the two modes is removed or loosened by the round. The checkpoint rules are now read at the steps that name them, and that is the same material every run read before the step.
+5. **`novelty` and `idea` against the Goal and ADR 0054.**
+   - `novelty` carries each sentence of the Goal: the session alone, claims shown first, three searches per claim, abstracts read in the run, `resolve` per work, one page with a verdict per claim, and the `.bib` for `paper`.
+   - `idea` carries ADR 0054's first paragraph: rounds of the interview, each choice with options and a recommendation, `novelty` before each round on each candidate claim (the repair makes this literal), and the README at the end with a reopening. It invokes no `/grill`. Spec 1 is the one place where the described path does not complete.
+
+### Declined to judge
+
+- Whether `ordo-init` was already raised in this plan, which decides if 5.0.1 is right under `docs/dev/skill-layout.md` line 24. It needs a `git log` over the plan's range, and I may run only `git diff fba2c70`, `git status --short` and `git show fba2c70:<path>`.
+- Whether `paper`'s intake accepts a `.bib` named in the Existing Materials row without treating it as "own sources" that let Phase 1 be skipped. I read lines 361 and 417 of `paper/SKILL.md` and Checkpoint Rules 5. The text of `researcher` says Phase 1 stays, and I did not run `paper`.
+- End-to-end runs of the four modes. They need the skill invoked, and every case was judged by reading.
+- I wrote `/tmp/err.txt`, `/tmp/cp_old.txt` and `/tmp/ic_old.txt` for the `bibtex` run and the two `diff`s, and `HOME` for the run was a folder in the session scratchpad. No file in the repository or the ledger was written. `gen_figures.py` rewrites figure files as the brief's own check 2 does, and `git status` shows only the same paths as before.
+
+Usage: a61d1811a1c66fa14, claude-sonnet-5-5, 177236 tokens, 30 tool uses, 295 s
+
+## Closed
+
+First run:
+- Spec 1 to 3, Proof 1 and 2, Standards 1 to 3, 5 and 6, Behaviour 1 to 5: closed in repair round 1, rulings 1 to 13 of `agents/briefs/3-round-1.md`.
+- Standards 4: fixed at landing, `deviations.md` names the two moved pages and gains the section of step 3.
+
+Run over round 1:
+- Spec 1: fixed at landing, idea items 5, 6 and 7.
+- Proof 1: the builder's report is its record and stays; `deviations.md`, the list the gate reads, holds the round's changes.
+- Standards 1, 2, 3 and Behaviour 2, 3: fixed at landing in `SKILL.md`.
+- Behaviour 1: stated with its before and after in the booking of step 3 in `plan.md`.
+- Behaviour 4, 5: no finding, as the run says.

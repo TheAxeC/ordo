@@ -104,7 +104,7 @@ Differences of `skills/academic/researcher/SKILL.md` from the source's `SKILL.md
 | Version Info, Changelog | `metadata.version` only | no history | forced: change standard |
 | the reinforcement template with an emoji, a box arrow and an em dash | the same template in ASCII (`->`, `-`), in a code block | ASCII | forced: prose standard |
 | the decision dashboard block with box-drawing rules | pointed at in `agents/pipeline_orchestrator_agent.md`, "FULL Checkpoint Template (with Decision Dashboard)", where the copied page holds it in ASCII | one meaning in one place | forced: skill layout "Where a rule goes" |
-| Checkpoint Types and Adaptive Rules 1, 3, 4, 6 written in `SKILL.md` | pointed at in `agents/pipeline_orchestrator_agent.md`, "3. Checkpoint Management", which states them; Checkpoint Rules 1 to 5 and the self-check questions written out in "Checkpoints" | a rule a copied page states in full is pointed at | forced: skill layout "Writing for an agent"; brief item 2 |
+| Checkpoint Types and Adaptive Rules 1, 3, 4, 6 written in `SKILL.md` | pointed at in `agents/pipeline_orchestrator_agent.md`, "3. Checkpoint Management", which states them; Checkpoint Rules 1 to 5 and the self-check questions written out in `references/checkpoints.md` | a rule a copied page states in full is pointed at | forced: skill layout "Writing for an agent"; brief item 2 |
 
 ### Map of the source's headings
 
@@ -117,12 +117,12 @@ Differences of `skills/academic/researcher/SKILL.md` from the source's `SKILL.md
 | Trigger Exclusions | `## Use instead` (a run of a mode already under way; a single function) and Steps 1, last bullet but one |
 | Pipeline Stages (10 Stages) | the title paragraph; `### manuscript` items 3 to 9; Stage 1, 5, 6 left out (D16) |
 | Pipeline State Machine | `### manuscript` item 1, pointing at `references/pipeline_state_machine.md`; the branches in items 5 and 7 and the Stops rows |
-| Adaptive Checkpoint System | `## Checkpoints` |
-| Checkpoint Types | `## Checkpoints`, lead, pointing at `agents/pipeline_orchestrator_agent.md`, "3. Checkpoint Management" |
-| Decision Dashboard | `## Checkpoints`, "A FULL checkpoint shows the decision dashboard" |
-| Adaptive Rules | `## Checkpoints` bullets 1, 6, 7 and the page's "Checkpoint Type Rules"; rule 5 left out (Stage 5) |
-| Checkpoint Rules | `## Checkpoints` bullets 2 to 5 and 8 |
-| Self-Check Questions | `## Checkpoints`, the numbered list |
+| Adaptive Checkpoint System | `references/checkpoints.md` |
+| Checkpoint Types | `references/checkpoints.md`, lead, pointing at `agents/pipeline_orchestrator_agent.md`, "3. Checkpoint Management" |
+| Decision Dashboard | `references/checkpoints.md`, "A FULL checkpoint shows the decision dashboard" |
+| Adaptive Rules | `references/checkpoints.md` bullets 1, 6, 7 and the page's "Checkpoint Type Rules"; rule 5 left out (Stage 5) |
+| Checkpoint Rules | `references/checkpoints.md` bullets 2 to 5 and 8 |
+| Self-Check Questions | `references/checkpoints.md`, the numbered list |
 | Agent Team (5 Agents) | Rules bullets 1 to 3; "What it reads" 9 and 10; the collaboration agent and the claim audit agent left out (D16) |
 | Orchestrator Workflow | Steps 1 to 6 and `### manuscript` |
 | Step 1: INTAKE & DETECTION | Steps 1 |
@@ -131,23 +131,23 @@ Differences of `skills/academic/researcher/SKILL.md` from the source's `SKILL.md
 | Step 4: TRANSITION | `### manuscript` item 2, pointing at the page's "4. Transition Management" handoff table |
 | Mid-Conversation Reinforcement Protocol | `### manuscript` item 2 and its template; `references/reinforcement_content.md` |
 | Phase-by-phase Invocation Contract | left out (Open item A); Mode A's content in Rules bullets 1 to 3 |
-| Integrity Review Protocol | `## The integrity check`; "What it reads" 11 |
+| Integrity Review Protocol | `references/integrity_check.md`; "What it reads" 11 |
 | Two-Stage Review Protocol | `### manuscript` items 5 and 7, pointing at `references/two_stage_review_protocol.md` |
 | Mid-Entry Protocol | Steps 1 and Steps 5, bullet 3 (D4) |
 | External Review Protocol | `### manuscript` items 6 and 7, pointing at `references/external_review_protocol.md`; Stops "The parsed comments" |
-| Progress Dashboard | `## Checkpoints`, the "status" bullet; `### manuscript` item 10 |
+| Progress Dashboard | `references/checkpoints.md`, the "status" bullet; `### manuscript` item 10 |
 | Revision Loop Management | Rules (the cap, Stage 4' once, the override of `paper`'s cap); `### manuscript` items 6 and 8 (history, Acknowledged Limitations), item 10 (cumulative history) |
 | Early-Stopping Criterion | `### manuscript` item 7; Stops "The early-stopping suggestion" |
-| Budget Transparency | Steps 5, bullets 4 to 6; `## Checkpoints`, the round-trip bullets |
+| Budget Transparency | Steps 5, bullets 4 to 6; `references/checkpoints.md`, the round-trip bullets |
 | Reproducibility | Rules (same input, versioned artifacts); `### manuscript` item 10 (audit trail) |
 | Stage 6: Process Summary Protocol | left out (D16) |
 | Collaboration Depth Observer | left out (D16) |
 | Anti-Patterns | `## Anti-patterns`, rows 1 to 6 and 7 (the source's 8); the source's 7 left out (D16); row 8 added for D5 |
-| Quality Standards | Steps 1 (stage detection), Steps 5 (mode recommendation), `### manuscript` item 2 (handoff), Steps 3 and item 2 (state), `## Checkpoints` (mandatory checkpoint), `## The integrity check` (mandatory checks and checklist), Anti-patterns row 2 (no overstepping), Rules (no forcing, reproducible), item 7 (convergence), Steps 5 (budget) |
-| Error Recovery | Stops rows "The entry point", "The third correction round failed", "The review decision", "An incomplete revision", "The re-review decision", item 8 (Acknowledged Limitations), "The integrity check" item 5, Steps 2 and "Checkpoints" (pause and resume), "A run that fails"; the Stage 1 and 2 rows left out (D16) |
+| Quality Standards | Steps 1 (stage detection), Steps 5 (mode recommendation), `### manuscript` item 2 (handoff), Steps 3 and item 2 (state), `references/checkpoints.md` (mandatory checkpoint), `references/integrity_check.md` (mandatory checks and checklist), Anti-patterns row 2 (no overstepping), Rules (no forcing, reproducible), item 7 (convergence), Steps 5 (budget) |
+| Error Recovery | Stops rows "The entry point", "The third correction round failed", "The review decision", "An incomplete revision", "The re-review decision", item 8 (Acknowledged Limitations), `references/integrity_check.md` item 5, Steps 2 and `references/checkpoints.md` (pause and resume), "A run that fails"; the Stage 1 and 2 rows left out (D16) |
 | Agent File References | "What it reads" 9 and 10 |
 | Reference Files | "What it reads" 11 to 13, each page named at its step |
-| Templates | "What it reads" 13; `## Checkpoints` (`templates/pipeline_status_template.md`) |
+| Templates | "What it reads" 13; `references/checkpoints.md` (`templates/pipeline_status_template.md`) |
 | Examples | "What it reads" 14; `### manuscript` item 1 |
 | Output Language | Rules, last bullet |
 | Integration with Other Skills | Rules on the four runs; "What it reads" 5 to 7; Stage 1 and 5 parts left out (D16) |
@@ -174,3 +174,12 @@ Differences of `skills/academic/researcher/SKILL.md` from the source's `SKILL.md
 - `paper-review-panel`, the Editorial Decision's scores: ruling 14 named the scoring matrix of the sprint contract as their source; that matrix holds block, warn or pass values, so the scores rest on seven score rows added to the Reviewer Summary Matrix, and on the reviewers' reports where those rows are empty (Open item F, C148).
 - `agents/state_tracker_agent.md`: the key `score_trajectory`, which the source's state structure does not have (Open item E).
 - `references/pipeline_state_machine.md` and `references/two_stage_review_protocol.md`: a Minor decision at Stage 3' goes to one `/paper revision` run before Stage 4.5; the source handles the minor items in its finalizing stage, which is left out (D16).
+
+## Added at the landing of step 3
+
+- `SKILL.md` gains the modes `novelty` and `idea`, which are this repository's own and copy nothing of academic-pipeline (ADR 0054, Consequences); their subsections `### novelty` and `### idea`, their Quick start lines, their rows of Use instead, Stops and Anti-patterns, and their items of "What it reads" have no counterpart in the source.
+- `references/novelty_page.md` is new, the form of a novelty page, with a made-up example; it has no counterpart in the source.
+- The sections "The integrity check" and "Checkpoints" of `SKILL.md` moved to `references/integrity_check.md` and `references/checkpoints.md`, word for word apart from the heading level and an opening paragraph that says which modes read each, since `docs/dev/skill-layout.md` lets a reference section of `SKILL.md` hold only material every run reads, and a run of `novelty` or `idea` reads neither. Every row above that pointed at those sections now names the page.
+- `references/integrity_check.md` item 4 gains one bullet: each of its stops, and the stop "The third correction round failed" of item 6, is held as a checkpoint as `references/checkpoints.md` gives it, so that an `integrity` run reads the checkpoint rules it read when they were a section of `SKILL.md`.
+- `references/compliance_checkpoint_protocol.md` line 10 names `references/integrity_check.md` in place of the section "The integrity check" of `SKILL.md`.
+- The landed text of `SKILL.md` that the two modes made false was scoped to `integrity` and `manuscript`: the description, the title and its paragraph, "What it reads" 1, 3, 5, 6, 9 and 13, Steps 1 and 6 and the sentence on which items run in which mode, the Stops intro's count of refusals, the Rules bullets on the agents a run starts, on following the same stages in every session and on the Material Passport, and the Anti-patterns row on skipping an integrity check. No stage, check or stop of the two landed modes changed.

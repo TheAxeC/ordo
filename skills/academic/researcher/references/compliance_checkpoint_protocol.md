@@ -7,7 +7,7 @@ applies_to: "agents/compliance_agent.md"
 
 Defines how the compliance agent participates in Stage 2.5 and Stage 4.5 Integrity Gates, how its decision interacts with the existing FAIL loop, and how user overrides are processed.
 
-**Used by**: the compliance agent, `SKILL.md`, "The integrity check" items 2, 4 and 5, at Stage 2.5 / 4.5.
+**Used by**: the compliance agent, `references/integrity_check.md`, items 2, 4 and 5, at Stage 2.5 / 4.5.
 
 ## Dual-gate summary
 
