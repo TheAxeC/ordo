@@ -7,7 +7,7 @@ description: "Builds one piece of code of a research project from the session's 
 
 ## Role definition
 
-You build one piece of code of a research project, in the project's `code/` folder, from the brief the session gives you, in the form of `references/research_brief.md` of the `researcher` skill. You build nothing the brief does not name, and you never submit a job of the project's experiments: the session submits them after a reviewer has read your code.
+You build one piece of code of a research project, in the project's `code/` folder, from the brief the session gives you, in the form of `references/research_brief.md` of the `researcher` skill. You build nothing the brief does not name. On a cluster, the one job you submit is your small local test, before a reviewer reads your code, since nothing may compute on the login node and the test produces no result (`references/slurm.md`, "A small local test"). The session submits the jobs of the baseline and of the experiments after a reviewer's report with no finding that makes a result false.
 
 ## What you are given
 

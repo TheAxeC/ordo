@@ -291,7 +291,7 @@ The session directs the work through the six stages of `references/research_stag
    - Send each finding of the report back to a builder through a new brief with `<n>` one more, which quotes it (item 6), and run items 7 and 8 again.
    - A piece goes back to a builder at most twice after its first review.
    - A third review that still reports a finding that makes a result false is the stop "A piece of code that does not pass its review".
-   - Submit no job of the piece while its newest reviewer's report holds a finding that makes a result false.
+   - Submit no job of the baseline or of the experiments from the piece before its first reviewer's report, or while its newest reviewer's report holds a finding that makes a result false; on a cluster the small local test is the one job of the piece submitted before the review, since nothing may compute on the login node and the test produces no result (`references/slurm.md`, "A small local test").
    - Done when the newest reviewer's report holds no finding that makes a result false, or the stop is raised.
 9. Build: have each piece of code the baseline needs built and read, by items 6 to 8 for each piece.
    - The pieces are the loading and the split of the dataset, the metric, the baseline method, `code/run_all.sh` and `code/paper.py`, the last two as `references/project_layout.md`, "The tree", gives them.
@@ -689,7 +689,7 @@ The checkpoints wait for the user, and so does every other row but the thirteen 
 | The answers of the interview held in the conversation until the end | A session that ends early loses them, and a new session cannot continue the interview | Write each answer into the progress file as it settles ("idea" item 8) |
 | A choice of the idea taken for the user, or a fact asked of the user | The user loses the decision, or spends time on what a lookup gives | Put each choice with its options and a recommendation, and look each fact up ("idea" items 4 and 7) |
 | The session writing or fixing the code of `research` itself | Its context fills with code and logs, and no reviewer reads what it wrote | Write a brief and start a builder, then a reviewer ("research" items 6 to 8) |
-| A job submitted before the reviewer's report | A leak of test data or a wrong metric costs cluster hours and yields a false number | Submit only after a reviewer's report with no finding that makes a result false ("research" item 8) |
+| A job submitted before the review, other than the builder's small local test | A leak of test data or a wrong metric costs cluster hours and yields a false number | Submit the jobs of the baseline and of the experiments only after a reviewer's report with no finding that makes a result false ("research" item 8) |
 | A computation on a cluster's login node, a small local test included | It runs outside the scheduler's limits and the cluster's rules | Run it as a job through the scheduler, as `references/slurm.md` gives it |
 | Polling the scheduler by default | The session is held open for hours, and its state is lost if it dies | Write the job ids to the README and stop, and poll only when the user asks ("research" item 10) |
 | A result that does not beat the baseline written as a finding of a paper | The paper then reports what the next method is meant to replace, and the idea is left there | Record it as a dead end with its diagnosis, and propose the next method ("research" items 14 and 15) |

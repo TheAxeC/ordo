@@ -34,4 +34,6 @@ The `research` mode of `researcher` runs every job of a project on a cluster thr
 - The builder and the reviewer submit it with `sbatch --wait` from `code/hpc/`, which returns when the job ends.
 - They run `sbatch --wait` as a background command of the runner, so that the runner's cap on a foreground command does not cut it off, and read the result when the command ends.
 - A test job that `squeue --jobs <id>` still shows as pending 60 minutes after its submission is cancelled with `scancel <id>` and handed back in the agent's report with its id.
+- On a cluster, the builder's small local test is the one job of a piece submitted before its reviewer reads the code, since nothing may compute on the login node and the test produces no result.
+- The jobs of the baseline and of the experiments wait for a reviewer's report with no finding that makes a result false.
 - Off a cluster, the small local test runs where the session runs.
