@@ -17,6 +17,7 @@ one `novelty` run on an idea you name, its page read by you, each work it cites 
 - Step 4: could this pass without the goal being reached? no for the text: a sentence of the goal or a rule with no step shows as "none"; it does not show that a run of the mode works, as the gate does not.
 - Step 5: could this pass without the goal being reached? no, the two forms are read against the rulings that state them, and step 6 runs both.
 - Step 6: could this pass without the goal being reached? no, each run is made on the installed skill and each output is read by the user.
+- Step 8: could this pass without the goal being reached? no for the text: the goal's sentence on `revision` or a ruling with no step shows as "none"; a run of the mode is outside the gate.
 
 ## Steps, in execution order
 
@@ -25,6 +26,7 @@ one `novelty` run on an idea you name, its page read by you, each work it cites 
 - ✅ 3 the modes `novelty` and `idea`: `SKILL.md` and its `references/` hold `novelty` as the goal gives it, made by the session with no agent started, a work confirmed as ruling D14 says, and `idea` as ruling D26 and ADR 0054 give it; check: the text is read against ADR 0054 item by item and against each sentence of the goal on the two modes (1 commit) (approved)
 - ✅ 4 the modes `research`, with its adopt mode, and `full`: `SKILL.md`, its `references/` and its `agents/` hold the six stages with their completion criteria and loops, the campaigns, the brief and the reviewer of a builder, Frame with the limits and the choice of the dataset, the diagnosis and the manual or automatic setting, the rules for SLURM, the one command, the README as entry file and the default layout, several manuscripts, the record of the experiments, the adopt mode, and `full`, as rulings D7 to D13 and D25 to D31 and ADRs 0053 and 0054 give them; check: a fresh agent reads the skill once and lists, for each sentence of the goal on `idea`, `research`, its adopt mode and `full` and for each of the four rules, the step of the skill that carries it, or "none", and the list holds no "none" (1 commit) (approved)
 - ✅ 5 `ordo-help` covers every skill: `/ordo-help skills` prints per skill one line on what it is for and then its Quick start block, and `/ordo-help <a sentence on what the user wants to do>` names the skill, the mode and the command, recognised as ruling D33 says, with the row of `ordo-help` in `README.md` saying so; check: the skill's text is read against rulings D15 and D33 (1 commit) (approved)
+- 8 the mode `revision`: `SKILL.md`, its `references/` and the figure hold `/researcher revision <project folder> <comments file> [--manuscript <name>]` as rulings D36 to D42 and ADR 0055 give it: the comments split by `paper`'s revision coach at one stop, each comment that needs results work run as a campaign of the project's `research` stages with Consolidate after it, a result that does not beat the baseline sent to Compare and never written up, the new results reaching `/paper revision` through its comments file and its row Existing Materials, and the stages of `manuscript` for comments in hand after it; check: a fresh agent reads the skill once and lists, for the goal's sentence on `revision` and for each of rulings D36 to D42, the step of the skill that carries it, or "none", and the list holds no "none" (1 commit) (ruling J)
 - 6 the gate's runs and readings, on a release candidate tagged and pinned on the user's word, each run made by a separate agent that invokes the installed skill, its stops answered by the orchestrator: one `/researcher novelty` run on an idea the user names, each work it cites confirmed as the gate says; one run of `/ordo-help skills`, read against `ls skills/*/`, and one run of `/ordo-help` with a sentence the user names; the user reads the novelty page, the two outputs, the list of step 1's differences, the list of step 4, and the text of the `idea` mode, the `research` mode, its adopt mode and the `full` mode; check: the user reads each of them (1 commit; orchestrator, no agent) (approved)
 - 7 the closing: the closing report written (the cost script's output, or that the plan started no agent), the roadmap entry ticked with the gate's output, this folder moved to the archive (orchestrator, no agent) (approved)
 
@@ -180,7 +182,7 @@ Each agent a plan skill started for this plan has one bullet, with its agent id,
 
 ## Blocked, and by what
 
-- 6: the release candidate is tagged and pinned on the user's word, and the user names the idea of the novelty run and the sentence of the `/ordo-help` run.
+- 6: step 8 lands first, since the gate reads the `revision` mode; the release candidate is tagged and pinned on the user's word, and the user names the idea of the novelty run and the sentence of the `/ordo-help` run.
 
 ### Step 5, `ordo-help` covers every skill (landed 2026-11-25)
 

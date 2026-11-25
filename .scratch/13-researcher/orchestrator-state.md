@@ -95,5 +95,5 @@ A finding that is neither closed in the repair rounds nor fixed at landing is an
 
 - 2026-11-25. Steps 1, 2, 3, 4 and 5 have landed. No step is in flight.
 - Verified: `templates/checks.sh` on this file printed `checks: 16 commands passed` on main with step 4 staged and its fixes at landing made.
-- Roadmap entry 13 (researcher). Plan step 4 of 7: the modes `research` and `full`, landed. Next: step 6, the gate runs, which waits on the user's word for the release candidate's tag and pin, the idea of the `novelty` run and the sentence of the `/ordo-help` run.
+- Roadmap entry 13 (researcher). Plan step 8 of 8: the mode `revision`, being prepared. Next: step 6, the gate runs, after step 8 lands and on the user's word for the release candidate's tag and pin, the idea of the `novelty` run and the sentence of the `/ordo-help` run.
 - Open on the user's side: the review of the choices C144 to C151 in `.scratch/choices.md`, which blocks nothing.
