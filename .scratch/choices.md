@@ -2,7 +2,7 @@
 
 Each choice the orchestrator took under self-rule waits here for the user's review, grouped by roadmap entry. The user agrees with a choice by typing `C<n> Agree`, or replaces it by typing `C<n> => <ruling>`, in any session on the repository. A reviewed choice leaves this file.
 
-Last number: C144
+Last number: C145
 
 # Entry 2.I Several plans in one session
 
@@ -782,4 +782,15 @@ Step 1 copies academic-pipeline's files, and the gate lets the comparison print 
 
 Taken: (a)
 Booked: `.scratch/13-researcher/plan.md:82` (Open item A)
+Builds on it: step 1
+
+## C145. Three differences of the copy no ruling names (2026-11-25)
+
+The brief check of step 1 (`.scratch/13-researcher/agents/reviews/1-brief-check.md`, "The step line" 1 and "ADRs" 1 and 3) found three differences of the copy that no ruling names, while the gate lets the comparison print only differences the Rulings name. First, where the six upstream documents stand: the step line said "each under its source's folder and name", upstream keeps them in `shared/`, and `docs/dev/skill-layout.md` gives a skill the folders `agents/`, `references/`, `examples/` and `templates/`. Second, how far the prose standard reaches into copied text: ADR 0052 says "ASCII and the prose standard applied to the skill text", and the copy is word for word. Third, what happens to a pointer to a file that is not taken, such as `shared/references/firm_rules.md`, `scripts/slr_lineage.py` and the `docs/design/` lines of `agents/pipeline_orchestrator_agent.md`.
+  - Option (a), recommended: (1) `shared/agents/compliance_agent.md` stands at `agents/compliance_agent.md` and the other five documents at `references/<the same name>`, as the layout places a role page and reference material. (2) Copied text follows the prose standard's section 0 (no character outside ASCII, the check mark included; no dash used as an aside in any form, a spaced hyphen and a double hyphen included; an arrow outside code written as a word) and section F on hard wraps; a sentence kept from the source otherwise keeps its words; a sentence the builder writes follows the whole standard. (3) A pointer to a file that is not taken is removed with the sentence or the row that exists only for it; a line that names a design document as the specification of a rule is removed as history; a pointer to a file of `paper` or `paper-review-panel` names that skill and its file. Pro: the copy fits the layout, stays a copy of the source's words, and names no file a reader cannot open. Con: the six documents are not at upstream's paths, so the comparison pairs them file by file.
+  - Option (b): the six documents in a folder `shared/` as upstream has them, every sentence rewritten to the whole prose standard, and the pointers kept. Pro: upstream's paths. Con: a folder the layout does not give a skill; rewriting every sentence ends the copy that ADR 0052 decides; a kept pointer names a file that does not exist here.
+  - Recommendation: (a), since the layout and ADR 0052's word "copy" rank the options. Of the two, (a) is also the smaller amount of rewriting; it is taken for the reasons given.
+
+Taken: (a)
+Booked: `.scratch/13-researcher/plan.md:87` (Open item B)
 Builds on it: step 1

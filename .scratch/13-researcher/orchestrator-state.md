@@ -47,12 +47,18 @@ repair_reviewer: claude:sonnet  # the model the run of /refute over a repair rou
 
 ```yaml
 dispatch:                    # one entry per step in flight, written by /spec, since docs/plan.yaml's workers_at_once is 5.
-- step: 1
-  brief_check: "running: a88f2b2030a881ff2"
-  landing: preparing
 - step: 5
-  brief_check: "running: af1105b279c18c7ed"
-  landing: preparing
+  session_id: a6b13ac6347fbb68a (claude-opus-5-5)
+  executor: agent
+  worker: claude:opus
+  worktree: .agents/worktrees/13-researcher-5
+  base: 6dacf2b
+  launched: 2026-11-25
+  report: .scratch/13-researcher/agents/reviews/5-report.md
+  brief_check: .scratch/13-researcher/agents/reviews/5-brief-check.md (af1105b279c18c7ed, claude-opus-5-5, 159691 tokens, 22 tool uses, 267 s)
+  landing: not-started
+  round: 0
+  shared_paths: "README.md, with step 1 of this plan: step 1 changes line 263 and this step line 22, so the cherry-pick merges them without a hand edit"
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled or, under `self_rule: on`, until the orchestrator closes it as `plan-orchestration`'s `references/self-rule.md`, "Closing an open item", says)
@@ -64,6 +70,7 @@ A finding that is neither closed in the repair rounds nor fixed at landing is an
 ## Closed items (the log of what was raised and how it ended; no report carries it)
 
 - 2026-11-25: Open item A, the source's files no ruling names: closed under self-rule, C144.
+- 2026-11-25: Open item B, three differences of the copy no ruling names: closed under self-rule, C145.
 
 ## The standing demands (from the user, in force)
 
