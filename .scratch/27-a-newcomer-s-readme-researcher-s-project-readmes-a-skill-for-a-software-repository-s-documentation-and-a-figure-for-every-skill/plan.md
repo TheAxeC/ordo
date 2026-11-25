@@ -37,7 +37,7 @@ you read the rewritten `README.md` and approve it; each image path in `README.md
 - Landed: `grill` 3.0.0 and `plan` 7.0.0 read and write `<ledger_root>/rulings/<number>.md`, the number by `plan` "What it reads" 4; the file is the entry's only when the number in its heading line equals the entry's; `grill` writes `# Rulings: <number>. <title>` at every write and, with no plan open for the entry, stops on a file at that path whose heading holds another number or none ("Another entry's rulings file"); `plan` shows such a file at Steps 3 and neither copies nor removes it; a file at another path, or one whose heading holds no number, is named as not read; `plan-orchestration` 9.0.1 (`references/self-rule.md` lines 80, 115 and 142); `ordo-init` 6.0.0, whose `check_config.py` refuses two projects of one `projects:` form whose `ledger_root` values resolve to one folder, with the cases `projects-one-ledger` and `projects-two-ledgers`; `templates/plan-terms.md` and the glossary's block; ADR 0059's Decision and Consequences.
 - Premise corrections: none.
 - The plan's verify list is unchanged: it equals the commands of `docs/dev/building.md`, which the step does not change.
-- Raised: Open item E, the user's reading of `grill` and `plan` on the rulings file, the step's check (brief item 8).
+- Raised: Open item E, the user's reading of `grill` and `plan` on the rulings file, the step's check (brief item 8); approved by the user on 2026-11-26.
 - Verification on main: `checks: 16 commands passed`, run again after the fixes at landing.
 - The builder's first report did not pass its bar: a cases ruling (`agents/briefs/4-cases.md`), one repair round of eight rulings, then five fixes at landing from the run over the round, each named under "Closed" in `agents/reviews/4-refuter.md`.
 - Usage: brief check 169399 tokens, 37 tool uses, 5.9 minutes; builder 134369 tokens, 19 tool uses, 2.5 minutes to the hand-back of its cases, 219168 tokens, 31 tool uses, 7.8 minutes after the cases ruling, and round 1: 286847 tokens, 75 tool uses, 6.8 minutes; reviewer 169524 tokens, 29 tool uses, 6.5 minutes; reviewer over round 1: 135553 tokens, 18 tool uses, 3.2 minutes.
@@ -57,10 +57,14 @@ you read the rewritten `README.md` and approve it; each image path in `README.md
 - Landed: `skills/academic/researcher/SKILL.md` at 2.0.0 and its references: the project README in the twelve sections of ADR 0057 (`references/project_layout.md`, "The README"), the code README in its eight sections ("The code README"), `code/.depositignore` with the lines of "The deposit", the mapping of a README in the old layout and the stop it raises in every mode; the mode `/researcher readme <project folder>`, which drafts the README and the code folder's two files, moves a section past 200 lines or a fact with no form in the layout to `notes/<slug>.md`, and writes only after the user approves the drafts; the adopt mode drafting by that rewrite; who writes each section among the stages; the glossary's entry "slug, of a section of a project's README"; ADR 0055 line 15 and `README.md` line 34.
 - Premise corrections: the adopt note of the figures stands in `docs/figures/researcher-research.svg` (now `docs/figures/academic/researcher/research.svg`), not in `researcher.svg`; step 5's brief takes it, with the lines of `docs/figures/gen_figures.py` the step makes false (the builder's "Doc text" in `agents/reviews/2-report.md`).
 - The plan's verify list is unchanged.
-- Raised: Open item F, the user's reading of the text against ADR 0057, the step's check.
+- Raised: Open item F, the user's reading of the text against ADR 0057, the step's check; approved by the user on 2026-11-26.
 - Verification on main: `checks: 16 commands passed`, run again after the fixes at landing; the heading grep of the step's check prints 91 lines, each in a place the brief allows (`agents/reviews/2-refuter.md`, "Repair round 1, refuted").
 - The builder's first report did not pass its bar: one repair round of seven rulings, of which one needed no change, then three fixes at landing from the run over the round, each named under "Closed" in `agents/reviews/2-refuter.md`.
 - Usage: brief check 195898 tokens, 28 tool uses, 4.8 minutes; builder 308527 tokens, 121 tool uses, 16.5 minutes, and round 1: 362147 tokens, 39 tool uses, 4.4 minutes; reviewer 228033 tokens, 41 tool uses, 8.3 minutes; reviewer over round 1: 114905 tokens, 25 tool uses, 2.3 minutes.
+
+### Step 8, carried
+
+- Carried from step 3: after the pin, a separate agent runs `/ordo-help skills` on the installed skills and quotes the lines it prints for `handbook`, its description line and its Quick start block; this is step 3's check "`/ordo-help skills` lists `handbook` with its Quick start", which reads only the installed skills.
 
 ## Could run in parallel
 
@@ -113,6 +117,8 @@ Independent of each other; the standing rule of one agent at a time still serial
 - Open item B (2026-11-25): the gate's part on figure paths reads "every `docs/figures/` path that `git grep` finds in `README.md`, `docs/` outside `docs/roadmap.md`, and `skills/` names a file that exists", written into entry 27's gate by `/roadmap` at the closing; entry 25's done line keeps the path you read (the user).
 - Open item C (2026-11-25): D33's check reads "`git grep -n 'rulings/<slug>' -- skills docs ':!docs/roadmap.md'` prints nothing", in D33 and in entry 27's gate, written by `/roadmap` at the closing (the user).
 - Open item D (2026-11-25): the README and code README headings of D1, D15 and ADR 0057 stand as ruled, `### Why it matters`, `### What is not claimed` and `## Dead ends (do not retry)` among them, against the prose standard's "Headings are labels, not sentences." (the user).
+- Open item E (2026-11-26): step 4's check passes: the user read `grill` and `plan` on the rulings file and approved the text as it stands (the user).
+- Open item F (2026-11-26): step 2's check passes: the user read researcher's text against ADR 0057 and approved it as it stands (the user).
 
 ## Agents
 

@@ -47,18 +47,17 @@ repair_reviewer: claude:sonnet  # the model the run of /refute over a repair rou
 
 ```yaml
 dispatch:                    # one entry per step in flight, written by /spec, since docs/plan.yaml's workers_at_once is 5.
+- step: 3
+  brief_check: "running: af894f369408218fe"
+  landing: preparing
+- step: 7
+  brief_check: "running: a9a2fe5d909e6aec9"
+  landing: preparing
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled or, under `self_rule: on`, until the orchestrator closes it as `plan-orchestration`'s `references/self-rule.md`, "Closing an open item", says)
 
-- Open item E (2026-11-26), step 4's check: your reading of `grill` and `plan` on the rulings file. Step 4 is on main. Read `skills/orchestration/grill/SKILL.md` "What it reads" 6, Steps 2, Steps 6 (the first round's naming of files not read) and the Stops row "Another entry's rulings file", and `skills/orchestration/plan/SKILL.md` "What it reads" 1 and 4 and Steps 3.
-  - (a) Approve the text as it stands. Pro: the step's check passes and the plan's gate item for step 4 is met. Con: none, if the text reads right to you.
-  - (b) Name what reads wrong. Pro: the text is fixed before the plan closes. Con: the change becomes a step of its own only as `plan-orchestration`'s "What earns a step of its own" allows, since step 4 has landed.
-  - Recommendation: (a), my judgment after the reviews: both reviews' findings are fixed, the last five at landing. The lazy option is (a) taken without reading the text, since the reading is the check.
-- Open item F (2026-11-26), step 2's check: your reading of researcher's text against ADR 0057. Step 2 is on main. Read `skills/academic/researcher/references/project_layout.md` ("The README", "The code README", "The deposit", "A README in the old layout") and `skills/academic/researcher/SKILL.md`, "readme" items 1 to 5, "research adopt" item 3 and the Stops rows "A README in the old layout" and "The README drafts".
-  - (a) Approve the text as it stands. Pro: the step's check passes, and step 8's runs of `/researcher readme` use this text. Con: none, if the text reads right to you.
-  - (b) Name what reads wrong. Pro: the text is fixed before step 8 runs it on your projects. Con: the change becomes a step of its own only as `plan-orchestration`'s "What earns a step of its own" allows, since step 2 has landed.
-  - Recommendation: (a), my judgment after the reviews: both reviews' findings are fixed, the last three at landing. The lazy option is (a) taken without reading the text, since the reading is the check.
+None.
 
 ## Closed items (the log of what was raised and how it ended; no report carries it)
 
@@ -66,6 +65,8 @@ dispatch:                    # one entry per step in flight, written by /spec, s
 - 2026-11-25: D33's check leaves out `docs/roadmap.md`, ruled (a) by the user (Open item C).
 - 2026-11-25: the README headings stand as ruled against the prose standard, ruled (a) by the user (Open item D).
 - 2026-11-25: the layout engine's file name: `skills/code/handbook/templates/figures.py`, ruled by the user (Open item A).
+- 2026-11-26: step 4's check, the user's reading of `grill` and `plan` on the rulings file, approved, ruled (a) by the user (Open item E).
+- 2026-11-26: step 2's check, the user's reading of researcher's text against ADR 0057, approved, ruled (a) by the user (Open item F).
 
 ## The standing demands (from the user, in force)
 
