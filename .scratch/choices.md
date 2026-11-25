@@ -2,7 +2,7 @@
 
 Each choice the orchestrator took under self-rule waits here for the user's review, grouped by roadmap entry. The user agrees with a choice by typing `C<n> Agree`, or replaces it by typing `C<n> => <ruling>`, in any session on the repository. A reviewed choice leaves this file.
 
-Last number: C160
+Last number: C161
 
 # Entry 2.I Several plans in one session
 
@@ -998,3 +998,20 @@ Lazy option: (b).
 Taken: (a)
 Booked: `.scratch/13-researcher/plan.md:166` (D44 The impact factor dropped from the target-journal line)
 Builds on it: step 10 of roadmap entry 13
+
+## C161. A call of `full` whose text is a sentence (2026-11-25)
+
+Ruling O reads a call of `idea` with more arguments than its Quick start line takes as the sketch. `full` has the same call, `full <project folder> [<sketch file>]`, and hands its sketch to `idea`, so a sentence typed after `full` meets the same defect: its first word would become a new project folder.
+
+- (a) the same reading for `full`: its text, when longer than its line takes, is the sketch it hands to `idea`, and the first message asks for the project folder. Pro: one rule for both calls, and no stray folder from `full`. Con: a few more words in step 11.
+- (b) leave `full` as it is. Con: the defect ruling O ends stays in the other call that takes a sketch.
+
+Rule: a ruling is carried out on what it names; another place its reason reaches is raised first.
+
+Recommend (a).
+
+Lazy option: (b).
+
+Taken: (a)
+Booked: `.scratch/13-researcher/plan.md` (D45 A call of full whose text is a sentence)
+Builds on it: step 11 of roadmap entry 13
