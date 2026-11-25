@@ -53,7 +53,8 @@ dispatch:                    # one entry per step in flight, written by /spec, s
 
 A finding that is neither closed in the repair rounds nor fixed at landing is an open item here, and goes where `plan-orchestration`'s "What earns a step of its own" says; what is settled belongs in the closed list.
 
-- none.
+- Open item L (2026-11-25), step 6, the gate's goal check (`agents/reviews/6-goal-coverage.md`, R5): the goal says each piece of code is read by a fresh reviewer before any job is submitted; on a cluster the builder submits the code's small test as a job before the review (`agents/research_builder_agent.md` item 4, `references/slurm.md`, "A small local test"), since nothing may run on the login node. Options: (a) allow this one test job and write it, with its reason, in those two pages; (b) move the test job after the review, the reviewer submitting it. Recommendation: (a). The lazy option: leave the text as it is.
+- Open item M (2026-11-25), step 6, the gate's comparison (`agents/reviews/6-differences.md`, "Differences with no ruling"): two differences from academic-pipeline that no ruling or line of `deviations.md` names: a PASS WITH NOTES at Stage 4.5 goes to the correction round (the source sends only FAIL), and the Rules bullet that every path and value the user gives reaches a command as one quoted argument. Both were added in step 2. Options: (a) keep both and write them in `deviations.md`; (b) remove both. Recommendation: (a). The lazy option: leave them unwritten.
 
 ## Closed items (the log of what was raised and how it ended; no report carries it)
 
