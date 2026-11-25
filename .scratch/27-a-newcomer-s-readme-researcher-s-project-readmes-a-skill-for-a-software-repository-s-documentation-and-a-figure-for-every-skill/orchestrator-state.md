@@ -85,6 +85,10 @@ dispatch:                    # one entry per step in flight, written by /spec, s
   - (a) Recommended. The check reads "`git grep -n 'rulings/<slug>' -- skills docs ':!docs/roadmap.md'` prints nothing", in D33 and in entry 27's gate, written by `/roadmap` at the closing. Pro: it checks every page that states the rule; the one line left out is the check itself. Con: none found.
   - (b) The gate keeps D33's words, and the closing records that the check printed its own line. Pro: no change to the ruling. Con: the gate's output then shows a part that did not pass as written.
   - Lazy option: (b), since it changes nothing now and leaves a failed check in the record.
+- Open item D (2026-11-25, step 2, kind 3, a ruling against a standard): your rulings D1 and D15 and ADR 0057 give the README headings `### Why it matters`, `## What it is and why`, `### What it does`, `### What is not claimed`, `### What this project adds`, `## What each result comes from` and `## Dead ends (do not retry)`. The prose standard says "Headings are labels, not sentences." and gives "Why it is separate at all" as a heading it rejects. Step 2 writes the ruled headings meanwhile.
+  - (a) Recommended. Keep the ruled headings. Pro: they are the list you approved, and each says what a newcomer finds under it; the standard's own heading `## How it is applied` and the brief template's `## What to build` already use this form. Con: they read close to the example the standard rejects.
+  - (b) Shorten them to labels: `### Relevance`, `## Overview`, `### Scope`, `### Not claimed`, `### Contribution`, `## Provenance of results` and `## Dead ends`. Pro: the standard is met word for word. Con: a newcomer reads less from each heading, and D1, D15 and ADR 0057 are changed.
+  - Lazy option: neither ruling, leaving the clash unstated.
 
 ## Closed items (the log of what was raised and how it ended; no report carries it)
 
