@@ -56,9 +56,10 @@ dispatch:                    # one entry per step in flight, written by /spec, s
   launched: 2026-11-25
   report: .scratch/27-a-newcomer-s-readme-researcher-s-project-readmes-a-skill-for-a-software-repository-s-documentation-and-a-figure-for-every-skill/agents/reviews/1-report.md
   builder_usage: "244429 tokens, 80 tool uses, 12.8 minutes"
+  reviewer_report: .scratch/27-a-newcomer-s-readme-researcher-s-project-readmes-a-skill-for-a-software-repository-s-documentation-and-a-figure-for-every-skill/agents/reviews/1-refuter.md (a87f37bb66e71447b, claude-opus-5-5, 185283 tokens, 47 tool uses, 8.0 minutes)
   brief_check: .scratch/27-a-newcomer-s-readme-researcher-s-project-readmes-a-skill-for-a-software-repository-s-documentation-and-a-figure-for-every-skill/agents/reviews/1-brief-check.md (a2f96bd6829d5adb2, claude-opus-5-5, 214981 tokens, 45 tool uses, 6.4 minutes)
   landing: not-started
-  round: 0
+  round: 1
 - step: 2
   executor: agent
   worker: claude:opus
@@ -80,9 +81,10 @@ dispatch:                    # one entry per step in flight, written by /spec, s
   launched: 2026-11-25
   report: .scratch/27-a-newcomer-s-readme-researcher-s-project-readmes-a-skill-for-a-software-repository-s-documentation-and-a-figure-for-every-skill/agents/reviews/4-report.md
   builder_usage: "134369 tokens, 19 tool uses, 2.5 minutes to the hand-back of its cases; after the cases ruling: 219168 tokens, 31 tool uses, 7.8 minutes"
+  reviewer_report: .scratch/27-a-newcomer-s-readme-researcher-s-project-readmes-a-skill-for-a-software-repository-s-documentation-and-a-figure-for-every-skill/agents/reviews/4-refuter.md (a8b65453be25f0c4e, claude-opus-5-5, 169524 tokens, 29 tool uses, 6.5 minutes)
   brief_check: .scratch/27-a-newcomer-s-readme-researcher-s-project-readmes-a-skill-for-a-software-repository-s-documentation-and-a-figure-for-every-skill/agents/reviews/4-brief-check.md (af6924bb5a482c6d5, claude-opus-5-5, 169399 tokens, 37 tool uses, 5.9 minutes)
   landing: not-started
-  round: 0
+  round: 1
   shared_paths: "docs/glossary.md with step 2 of this plan: step 4 writes lines 5-144, the plan-terms block, and step 2 writes lines 146-190, Ordo's own terms; the ranges do not touch, so the cherry-pick merges them without conflict"
 ```
 
