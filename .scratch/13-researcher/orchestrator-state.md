@@ -55,7 +55,9 @@ dispatch:                    # one entry per step in flight, written by /spec, s
   launched: 2026-11-25
   session_id: a781286d82284189f (claude-opus-5-5)
   report: .scratch/13-researcher/agents/reviews/4-report.md
-  round: 0
+  builder_usage: 355479 tokens, 102 tool uses, 1461 s
+  reviewer_report: .scratch/13-researcher/agents/reviews/4-refuter.md (a6e39bbd6d6f0b790, claude-opus-5-5, 251507 tokens, 53 tool uses, 584 s)
+  round: 1
   brief_check: .scratch/13-researcher/agents/reviews/4-brief-check.md (ad013e826d92d4998, claude-opus-5-5, 219310 tokens, 41 tool uses, 368 s)
   landing: not-started
 ```
