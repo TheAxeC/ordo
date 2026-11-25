@@ -67,9 +67,11 @@ dispatch:                    # one entry per step in flight, written by /spec, s
   base: 6dacf2b
   launched: 2026-11-25
   report: .scratch/13-researcher/agents/reviews/5-report.md
+  builder_usage: 166884 tokens, 21 tool uses, 342 s
+  reviewer_report: .scratch/13-researcher/agents/reviews/5-refuter.md (a0f7721f21de23fac, claude-opus-5-5, 151881 tokens, 31 tool uses, 351 s)
   brief_check: .scratch/13-researcher/agents/reviews/5-brief-check.md (af1105b279c18c7ed, claude-opus-5-5, 159691 tokens, 22 tool uses, 267 s)
   landing: not-started
-  round: 0
+  round: 1
   shared_paths: "README.md, with step 1 of this plan: step 1 changes line 263 and this step line 22, so the cherry-pick merges them without a hand edit"
 ```
 
