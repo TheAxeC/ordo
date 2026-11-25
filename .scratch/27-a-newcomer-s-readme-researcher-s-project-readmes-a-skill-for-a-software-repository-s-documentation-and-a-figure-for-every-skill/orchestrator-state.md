@@ -48,8 +48,16 @@ repair_reviewer: claude:sonnet  # the model the run of /refute over a repair rou
 ```yaml
 dispatch:                    # one entry per step in flight, written by /spec, since docs/plan.yaml's workers_at_once is 5.
 - step: 1
-  landing: preparing
-  brief_check: "running: a2f96bd6829d5adb2"
+  executor: agent
+  worker: claude:opus
+  session_id: aa853461e0bda0675 (claude-opus-5-5)
+  worktree: .agents/worktrees/27-a-newcomer-s-readme-researcher-s-project-readmes-a-skill-for-a-software-repository-s-documentation-and-a-figure-for-every-skill-1
+  base: 50a98c8
+  launched: 2026-11-25
+  report: .scratch/27-a-newcomer-s-readme-researcher-s-project-readmes-a-skill-for-a-software-repository-s-documentation-and-a-figure-for-every-skill/agents/reviews/1-report.md
+  brief_check: .scratch/27-a-newcomer-s-readme-researcher-s-project-readmes-a-skill-for-a-software-repository-s-documentation-and-a-figure-for-every-skill/agents/reviews/1-brief-check.md (a2f96bd6829d5adb2, claude-opus-5-5, 214981 tokens, 45 tool uses, 6.4 minutes)
+  landing: not-started
+  round: 0
 - step: 2
   landing: preparing
   brief_check: "running: aa8df1549baebff17"
