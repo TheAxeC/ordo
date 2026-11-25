@@ -1,6 +1,6 @@
 # 0053. researcher's research mode is directed by the session through six stages that can loop, with a brief and a reviewer for each builder, and the project's README as its entry file
 
-Status: proposed
+Status: proposed; superseded by 0056 in the sentence "Jobs are submitted only after it."
 
 ## Context
 
