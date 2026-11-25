@@ -48,7 +48,17 @@ repair_reviewer: claude:sonnet  # the model the run of /refute over a repair rou
 ```yaml
 dispatch:                    # one entry per step in flight, written by /spec, since docs/plan.yaml's workers_at_once is 5.
 - step: 1
-  landing: preparing
+  session_id: a90f7dfac5ca2a866 (claude-opus-5-5)
+  executor: agent
+  worker: claude:opus
+  worktree: .agents/worktrees/13-researcher-1
+  base: cc3965a
+  launched: 2026-11-25
+  report: .scratch/13-researcher/agents/reviews/1-report.md
+  brief_check: .scratch/13-researcher/agents/reviews/1-brief-check.md (a88f2b2030a881ff2, claude-opus-5-5, 234088 tokens, 48 tool uses, 448 s)
+  landing: not-started
+  round: 0
+  shared_paths: "README.md, with step 5 of this plan: this step changes line 263 and step 5 line 22, so the cherry-pick merges them without a hand edit"
 - step: 5
   session_id: a6b13ac6347fbb68a (claude-opus-5-5)
   executor: agent
@@ -99,7 +109,7 @@ A finding that is neither closed in the repair rounds nor fixed at landing is an
 
 ## Current position (rewritten before every step commit of this plan)
 
-- 2026-11-25. The plan is opened; nothing of it has landed. The working tree holds nothing of this plan outside its ledger.
-- Verified: `sh skills/orchestration/land/templates/checks.sh .scratch/13-researcher/orchestrator-state.md` printed `checks: 16 commands passed`.
-- Roadmap entry 13 (researcher). Plan step 0 of 7 landed. Next step: 1, the copied pages, because steps 2 to 4 are written on those pages.
-- Open on the user's side: nothing.
+- 2026-11-25. Nothing of the plan has landed. Steps 1 and 5 are in flight, each with its builder running in its worktree; the dispatch block names them.
+- Verified: `git worktree list` printed the worktrees `13-researcher-1` at cc3965a and `13-researcher-5` at 6dacf2b.
+- Roadmap entry 13 (researcher). Plan step 1 of 7: the copied pages. Next: step 2, the modes `integrity` and `manuscript`.
+- Open on the user's side: the review of the choices C144 and C145 in `.scratch/choices.md`, which blocks nothing.
