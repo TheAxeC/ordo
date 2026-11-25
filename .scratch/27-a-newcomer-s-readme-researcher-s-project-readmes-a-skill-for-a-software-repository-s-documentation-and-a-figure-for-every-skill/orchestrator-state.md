@@ -59,8 +59,17 @@ dispatch:                    # one entry per step in flight, written by /spec, s
   landing: not-started
   round: 0
 - step: 2
-  landing: preparing
-  brief_check: "running: aa8df1549baebff17"
+  executor: agent
+  worker: claude:opus
+  session_id: a08312753d0d93b46 (claude-opus-5-5)
+  worktree: .agents/worktrees/27-a-newcomer-s-readme-researcher-s-project-readmes-a-skill-for-a-software-repository-s-documentation-and-a-figure-for-every-skill-2
+  base: 929e519
+  launched: 2026-11-25
+  report: .scratch/27-a-newcomer-s-readme-researcher-s-project-readmes-a-skill-for-a-software-repository-s-documentation-and-a-figure-for-every-skill/agents/reviews/2-report.md
+  brief_check: .scratch/27-a-newcomer-s-readme-researcher-s-project-readmes-a-skill-for-a-software-repository-s-documentation-and-a-figure-for-every-skill/agents/reviews/2-brief-check.md (aa8df1549baebff17, claude-opus-5-5, 195898 tokens, 28 tool uses, 4.8 minutes)
+  landing: not-started
+  round: 0
+  shared_paths: "docs/glossary.md with step 4 of this plan: step 2 writes lines 146-190, Ordo's own terms, and step 4 lines 5-144, the plan-terms block; README.md with step 1 of this plan: step 2 writes line 34, the researcher row, and step 1 lines 72-132, the figure lines; the ranges do not touch, so the cherry-pick merges them without conflict"
 - step: 4
   executor: agent
   worker: claude:opus
