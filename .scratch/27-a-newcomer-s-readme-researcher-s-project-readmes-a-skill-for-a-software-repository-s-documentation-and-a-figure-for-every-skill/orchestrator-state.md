@@ -49,6 +49,8 @@ repair_reviewer: claude:sonnet  # the model the run of /refute over a repair rou
 dispatch:                    # one entry per step in flight, written by /spec, since docs/plan.yaml's workers_at_once is 5.
 - step: 3
   brief_check: "running: af894f369408218fe"
+  base: 749f499
+  worktree: .agents/worktrees/27-a-newcomer-s-readme-researcher-s-project-readmes-a-skill-for-a-software-repository-s-documentation-and-a-figure-for-every-skill-3
   landing: preparing
 - step: 7
   brief_check: "running: a9a2fe5d909e6aec9"
