@@ -66,6 +66,7 @@ A finding that is neither closed in the repair rounds nor fixed at landing is an
 - 2026-11-25: Open item G, the command lines of `novelty` and `idea` and the place of a novelty page: closed under self-rule, C149.
 - 2026-11-25: Open item H, the command lines of `research`, its adopt mode and `full`: closed under self-rule, C150.
 - 2026-11-25: Open item I, where a further paper of a project is written: closed under self-rule, C151.
+- 2026-11-25: Open item J, a revision mode for `researcher`: ruled (a) by the user, a new step before the gate.
 
 ## The standing demands (from the user, in force)
 

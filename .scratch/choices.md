@@ -2,7 +2,7 @@
 
 Each choice the orchestrator took under self-rule waits here for the user's review, grouped by roadmap entry. The user agrees with a choice by typing `C<n> Agree`, or replaces it by typing `C<n> => <ruling>`, in any session on the repository. A reviewed choice leaves this file.
 
-Last number: C151
+Last number: C159
 
 # Entry 2.I Several plans in one session
 
@@ -861,3 +861,125 @@ Ruling D28 puts a further paper of a project in `manuscript-<name>/`, and `resea
 Taken: (a)
 Booked: `.scratch/13-researcher/plan.md:133` (Open item I)
 Builds on it: step 4
+
+## C152. The command line of the revision mode (2026-11-25)
+
+- (a) `/researcher revision <project folder> <comments file> [--manuscript <name>]`. Pro: the project folder gives the code, the results and the README the campaigns need, and `--manuscript` names a further paper as `manuscript` does (Open item I). Con: none.
+- (b) `/researcher revision <main.tex> <comments file>`. Con: the main `.tex` alone does not locate the project's `code/` and README when the manuscript stands outside it.
+
+Industry: `/paper revision-coach <comments file> [<main.tex>]` (`skills/academic/paper/SKILL.md:24`) and Open item J's ruled line `/researcher revision <project folder> <comments file>` (`.scratch/13-researcher/plan.md`, Rulings).
+
+Recommend (a): it is Open item J's line with the further paper of Open item I.
+
+Lazy option: none, both cost the same.
+
+Taken: (a)
+Booked: `.scratch/13-researcher/plan.md:143` (D36 The command line of the revision mode)
+Builds on it: step 8
+
+## C153. How the referee comments are split into text work and results work (2026-11-25)
+
+- (a) `paper`'s revision coach, then one stop that shows the split. Pro: the parse is `paper`'s, copied from academic-paper, so one parser serves both skills, and the user confirms what needs experiments. Con: one more stop.
+- (b) the session classifies each comment itself. Con: a second parser beside `paper`'s, whose types can disagree with the roadmap `/paper revision` later reads.
+- (c) the user names the comments that need results work. Con: a fact the coach already computes is asked of the user.
+
+Industry: the revision coach gives each commitment a `commitment_type` of `add_experiment`, `add_analysis`, `add_clarification`, `add_citation`, `restructure` or `other` (`skills/academic/paper/agents/revision_coach_agent.md:100`).
+
+Recommend (a): it reuses the copied parser and keeps the user's word on what needs experiments.
+
+Lazy option: (c), it costs no stop and leaves the split to the user.
+
+Taken: (a)
+Booked: `.scratch/13-researcher/plan.md:144` (D37 How the referee comments are split into text work and results work)
+Builds on it: step 8
+
+## C154. How a comment that needs results work is run (2026-11-25)
+
+- (a) a campaign of `research`'s stages per comment. Pro: the four rules, the reviewer before any job and the reproduction run hold for the new results as for the first. Con: a small analysis runs through the whole campaign.
+- (b) the session runs the analysis itself. Con: code with no reviewer and a number with no reproduction run reach the paper, against ruling D10 and D12.
+- (c) a fresh `/researcher research` run. Con: Frame asks again what the project already holds.
+
+Industry: `research_stages.md:36`, a campaign sends the work back to its own start at most 3 times; ADR 0053's Decision, each piece of code built by a fresh agent and read by a fresh reviewer before any job.
+
+Recommend (a): the results of a revision are held to the same rules as the first results.
+
+Lazy option: (b), it costs less and leaves the code unreviewed and the numbers unreproduced.
+
+Taken: (a)
+Booked: `.scratch/13-researcher/plan.md:145` (D38 How a comment that needs results work is run)
+Builds on it: step 8
+
+## C155. What a requested result that does not beat the baseline leads to (2026-11-25)
+
+- (a) Compare's loop, and the stop for a comment not yet answered. Pro: it follows the rule that a negative or null result is never written up, and the work goes on to a method that works. Con: a revision can take more methods than the referee asked for.
+- (b) the result reported in the response letter as it came out. Con: it writes up a negative result, which the user's rule forbids.
+
+Rule: the global rule against writing up a negative or null result, and `SKILL.md` Rules on a result that does not beat the baseline.
+
+Recommend (a): it is the only option the user's rules allow.
+
+Lazy option: none, (b) is forbidden, not cheaper.
+
+Taken: (a)
+Booked: `.scratch/13-researcher/plan.md:146` (D39 What a requested result that does not beat the baseline leads to)
+Builds on it: step 8
+
+## C156. How the new results reach `paper`'s revision (2026-11-25)
+
+- (a) one comments file with the result lines, and the result files in Existing Materials. Pro: `paper`'s results check reads each statement about the new results against their files (`skills/academic/paper/SKILL.md:105`), and the response letter is written from the same file. Con: none.
+- (b) the session edits the manuscript with the new numbers. Con: a change outside `/paper revision`, which `researcher`'s Rules forbid.
+
+Industry: `paper`'s revision reads the result files the row Existing Materials names (`skills/academic/paper/SKILL.md:105`).
+
+Recommend (a): the new numbers are checked against their files by `paper` itself.
+
+Lazy option: (b), it costs less and bypasses `paper`'s patches and checks.
+
+Taken: (a)
+Booked: `.scratch/13-researcher/plan.md:147` (D40 How the new results reach `paper`'s revision)
+Builds on it: step 8
+
+## C157. Which stages follow the revision (2026-11-25)
+
+- (a) the stages of `manuscript` for comments in hand. Pro: one path for comments in hand, copied from the source; the completeness check is the source's re-review of external comments. Con: no panel scores.
+- (b) also a `/paper-review-panel re-review`. Con: `manuscript` item 9 says the panel re-review is not invoked for comments in hand, so the two paths differ.
+
+Industry: `references/external_review_protocol.md:109`, "Step 4: Self-Verification (Completeness Check)".
+
+Recommend (a): it is the goal's "as `manuscript` runs them".
+
+Lazy option: none, both cost about the same.
+
+Taken: (a)
+Booked: `.scratch/13-researcher/plan.md:148` (D41 Which stages follow the revision)
+Builds on it: step 8
+
+## C158. The cap on rounds of the revision mode (2026-11-25)
+
+- (a) one run per comments file, the campaigns under `research`'s counts. Pro: every repeat has its count. Con: none.
+- (b) loop until every comment is answered. Con: a repeat with no count, against `docs/dev/skill-layout.md`.
+
+Rule: `docs/dev/skill-layout.md`, "Writing for an agent", every repeat a skill asks for states its count.
+
+Recommend (a).
+
+Lazy option: (b) costs nothing to write and leaves a loop with no count.
+
+Taken: (a)
+Booked: `.scratch/13-researcher/plan.md:149` (D42 The cap on rounds of the revision mode)
+Builds on it: step 8
+
+## C159. Record the revision mode's decisions as an ADR (2026-11-25)
+
+- (a) record D36 to D42 as one ADR. Pro: the split by the coach, the campaigns and the rule on a result that does not beat the baseline bind the skill after the plan closes. Con: one more record.
+- (b) keep them as Rulings lines. Con: the ledger is archived at the closing, and the reasons go with it.
+
+Rule: `docs/adr/README.md`, a record is kept for a decision not obvious from the code that binds work after its plan closes.
+
+Recommend (a).
+
+Lazy option: (b).
+
+Taken: (a)
+Booked: `.scratch/13-researcher/plan.md:150` (D43 Record the revision mode's decisions as an ADR)
+Builds on it: the record docs/adr/0055-researcher-s-revision-mode-runs-each-comment-that-needs-new-results-as-a-campaign-of-the-research-stages-then-paper-s-revision.md
