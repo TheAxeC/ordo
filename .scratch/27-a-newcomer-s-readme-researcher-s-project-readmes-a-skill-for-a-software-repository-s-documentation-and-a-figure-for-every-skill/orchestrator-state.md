@@ -62,8 +62,17 @@ dispatch:                    # one entry per step in flight, written by /spec, s
   landing: preparing
   brief_check: "running: aa8df1549baebff17"
 - step: 4
-  landing: preparing
-  brief_check: "running: af6924bb5a482c6d5"
+  executor: agent
+  worker: claude:opus
+  session_id: ac96504d9c4e48105 (claude-opus-5-5)
+  worktree: .agents/worktrees/27-a-newcomer-s-readme-researcher-s-project-readmes-a-skill-for-a-software-repository-s-documentation-and-a-figure-for-every-skill-4
+  base: e4e0198
+  launched: 2026-11-25
+  report: .scratch/27-a-newcomer-s-readme-researcher-s-project-readmes-a-skill-for-a-software-repository-s-documentation-and-a-figure-for-every-skill/agents/reviews/4-report.md
+  brief_check: .scratch/27-a-newcomer-s-readme-researcher-s-project-readmes-a-skill-for-a-software-repository-s-documentation-and-a-figure-for-every-skill/agents/reviews/4-brief-check.md (af6924bb5a482c6d5, claude-opus-5-5, 169399 tokens, 37 tool uses, 5.9 minutes)
+  landing: not-started
+  round: 0
+  shared_paths: "docs/glossary.md with step 2 of this plan: step 4 writes lines 5-144, the plan-terms block, and step 2 writes lines 146-190, Ordo's own terms; the ranges do not touch, so the cherry-pick merges them without conflict"
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled or, under `self_rule: on`, until the orchestrator closes it as `plan-orchestration`'s `references/self-rule.md`, "Closing an open item", says)
