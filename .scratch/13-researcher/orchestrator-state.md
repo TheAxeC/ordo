@@ -48,8 +48,16 @@ repair_reviewer: claude:sonnet  # the model the run of /refute over a repair rou
 ```yaml
 dispatch:                    # one entry per step in flight, written by /spec, since docs/plan.yaml's workers_at_once is 5.
 - step: 4
-  landing: preparing
+  base: 0e20d25
+  worktree: .agents/worktrees/13-researcher-4
+  executor: agent
+  worker: claude:opus
+  launched: 2026-11-25
+  session_id: a781286d82284189f (claude-opus-5-5)
+  report: .scratch/13-researcher/agents/reviews/4-report.md
+  round: 0
   brief_check: .scratch/13-researcher/agents/reviews/4-brief-check.md (ad013e826d92d4998, claude-opus-5-5, 219310 tokens, 41 tool uses, 368 s)
+  landing: not-started
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled or, under `self_rule: on`, until the orchestrator closes it as `plan-orchestration`'s `references/self-rule.md`, "Closing an open item", says)
@@ -97,5 +105,5 @@ A finding that is neither closed in the repair rounds nor fixed at landing is an
 
 - 2026-11-25. Steps 1, 2, 3 and 5 have landed. No step is in flight.
 - Verified: `templates/checks.sh` on this file printed `checks: 16 commands passed` on main with step 3 staged and its fixes at landing made.
-- Roadmap entry 13 (researcher). Plan step 4 of 7: the modes `research` and `full`, its brief checked and committed, the builder held at the user's request. Next: step 6, the gate runs.
+- Roadmap entry 13 (researcher). Plan step 4 of 7: the modes `research` and `full`, its builder running. Next: step 6, the gate runs.
 - Open on the user's side: the review of the choices C144 to C151 in `.scratch/choices.md`, which blocks nothing.
