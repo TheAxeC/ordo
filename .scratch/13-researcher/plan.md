@@ -30,7 +30,7 @@ one `novelty` run on an idea you name, its page read by you, each work it cites 
 - ✅ 5 `ordo-help` covers every skill: `/ordo-help skills` prints per skill one line on what it is for and then its Quick start block, and `/ordo-help <a sentence on what the user wants to do>` names the skill, the mode and the command, recognised as ruling D33 says, with the row of `ordo-help` in `README.md` saying so; check: the skill's text is read against rulings D15 and D33 (1 commit) (approved)
 - ✅ 8 the mode `revision`: `SKILL.md`, its `references/` and the figure hold `/researcher revision <project folder> <comments file> [--manuscript <name>]` as rulings D36 to D42 and ADR 0055 give it: the comments split by `paper`'s revision coach at one stop, each comment that needs results work run as a campaign of the project's `research` stages with Consolidate after it, a result that does not beat the baseline sent to Compare and never written up, the new results reaching `/paper revision` through its comments file and its row Existing Materials, and the stages of `manuscript` for comments in hand after it; check: a fresh agent reads the skill once and lists, for the goal's sentence on `revision` and for each of rulings D36 to D42, the step of the skill that carries it, or "none", and the list holds no "none" (1 commit) (ruling J)
 - ✅ 9 the test job before review: `skills/academic/researcher/agents/research_builder_agent.md`, `references/slurm.md`, and each other page of the skill that states that a piece of code is read by its reviewer before a job of it is submitted (`SKILL.md` "research" item 8 and its Rules, `agents/research_reviewer_agent.md`, `references/research_brief.md`), state that on a cluster the builder's small local test, a short job of at most 10 minutes, is the one job submitted before the reviewer reads the code, because nothing may compute on the login node and the test produces no result, as ruling L gives it; check: each of those pages is read for it, and no page says that every job waits for the review (1 commit) (ruling L)
-- 10 the target-journal line: `skills/academic/researcher/examples/mid_entry_example.md` gives the target journal as the source's line does, "Computers & Education (SSCI Q1, IF: 12.0)", as ruling D44 gives it; check: `diff` of the file against the source shows no hunk on that line (1 commit) (ruling D44)
+- ✅ 10 the target-journal line: `skills/academic/researcher/examples/mid_entry_example.md` gives the target journal as the source's line does, "Computers & Education (SSCI Q1, IF: 12.0)", as ruling D44 gives it; check: `diff` of the file against the source shows no hunk on that line (1 commit) (ruling D44)
 - 6 the gate's runs and readings, on a release candidate tagged and pinned on the user's word, each run made by a separate agent that invokes the installed skill, its stops answered by the orchestrator: one `/researcher novelty` run on an idea the user names, each work it cites confirmed as the gate says; one run of `/ordo-help skills`, read against `ls skills/*/`, and one run of `/ordo-help` with a sentence the user names; the user reads the novelty page, the two outputs, the list of step 1's differences, the lists of steps 4 and 8, and the text of the `idea` mode, the `research` mode, its adopt mode, the `full` mode and the `revision` mode; check: the user reads each of them (1 commit; orchestrator, no agent) (approved) (ruling J)
 - 7 the closing: the closing report written (the cost script's output, or that the plan started no agent), the roadmap entry ticked with the gate's output, this folder moved to the archive (orchestrator, no agent) (approved)
 
@@ -199,10 +199,12 @@ Each agent a plan skill started for this plan has one bullet, with its agent id,
 - a5d978c0616308574: reviewer of step 8 over round 1, claude-sonnet-5-5
 - aae8b220f4c7bf7fa: builder of step 9, claude-opus-5-5
 - a12170d055f42a91d: reviewer of step 9, claude-opus-5-5
+- a05f3e2e43c3796f6: builder of step 10, claude-opus-5-5
+- ae0353b7bc8dcad7f: reviewer of step 10, claude-opus-5-5
 
 ## Blocked, and by what
 
-- 6: step 10 lands and the comparison is run again; the release candidate is tagged and pinned on the user's word; the user gives the session id of their `/researcher idea` run.
+- 6: the comparison is run again; the release candidate is tagged and pinned on the user's word; the user gives the session id of their `/researcher idea` run.
 
 ### Step 5, `ordo-help` covers every skill (landed 2026-11-25)
 
@@ -291,3 +293,13 @@ Each agent a plan skill started for this plan has one bullet, with its agent id,
 - Verification on main, after the fixes at landing: `checks: 16 commands passed`, printed by `templates/checks.sh` on the state file. The verify list was not changed.
 - A/B: none, the configuration names no `bench:`. Look: none, `look:` is empty.
 - Usage: builder aae8b220f4c7bf7fa, 102258 tokens, 12 tool uses, 218 s; reviewer a12170d055f42a91d, 129788 tokens, 28 tool uses, 314 s.
+
+### Step 10, the target-journal line (landed 2026-11-25)
+
+- Landed: `skills/academic/researcher/examples/mid_entry_example.md` line 127 reads `Target journal: Computers & Education (SSCI Q1, IF: 12.0)`, the source's line 84, from the base a2acd99. `diff` of the file against the source prints no hunk on that line (`grep -c 'Target journal'` 0, before the change 2).
+- Premise corrections: none. A small text step: no brief check, one review, no repair round.
+- The builder's first report passed its bar: the review found nothing under any heading.
+- Fixes at landing: none. Findings outside the brief: none.
+- Verification on main: `checks: 16 commands passed`, printed by `templates/checks.sh` on the state file. The verify list was not changed.
+- A/B: none, the configuration names no `bench:`. Look: none, `look:` is empty.
+- Usage: builder a05f3e2e43c3796f6, 101383 tokens, 13 tool uses, 102 s; reviewer ae0353b7bc8dcad7f, 83767 tokens, 17 tool uses, 130 s.

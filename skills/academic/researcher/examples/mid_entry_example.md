@@ -124,7 +124,7 @@ the field analyst analyzing paper domain...
 ```
 Paper domain: Educational Data Mining / Higher Education
 Method type: Machine Learning (Supervised Classification)
-Target journal: Computers & Education (SSCI Q1)
+Target journal: Computers & Education (SSCI Q1, IF: 12.0)
 
 EIC:                  Computers & Education Associate Editor
                       Learning Analytics, Educational AI
