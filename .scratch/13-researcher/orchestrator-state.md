@@ -55,7 +55,9 @@ dispatch:                    # one entry per step in flight, written by /spec, s
   launched: 2026-11-25
   session_id: a6dece389171399fc (claude-opus-5-5)
   report: .scratch/13-researcher/agents/reviews/2-report.md
-  round: 0
+  builder_usage: 247020 tokens, 104 tool uses, 1244 s
+  reviewer_report: .scratch/13-researcher/agents/reviews/2-refuter.md (a1e8b7527ba8e54f0, claude-opus-5-5, 257452 tokens, 58 tool uses, 502 s)
+  round: 1
   brief_check: ".scratch/13-researcher/agents/reviews/2-brief-check.md (a7ab1a8b91934c83b, claude-opus-5-5, 219563 tokens, 57 tool uses, 558 s)"
   landing: not-started
 ```
@@ -64,7 +66,10 @@ dispatch:                    # one entry per step in flight, written by /spec, s
 
 A finding that is neither closed in the repair rounds nor fixed at landing is an open item here, and goes where `plan-orchestration`'s "What earns a step of its own" says; what is settled belongs in the closed list.
 
-- none.
+- Open item E (2026-11-25), kind 6, step 2. The score trajectory at the re-review has no scores to read. `skills/academic/researcher/references/score_trajectory_protocol.md` says that at Stage 3' "the editorial synthesizer produces new dimension scores", and the early-stopping suggestion and the regression stop of `manuscript` are computed from them. The re-review of `paper-review-panel` writes a Decision, a checklist, the new issues and the residual issues, and no score (`grep -n -i 'score\|dimension\|0-100' skills/academic/paper-review-panel/references/re_review_mode_protocol.md` prints nothing). The source has the same gap: the re-review of academic-paper-reviewer writes no score either. As built, the session would have to make the scores up, or the two stops never fire.
+  - Option (a), recommended: the re-review of `paper-review-panel` gains the seven dimension scores and the overall score on the 0-100 rubric in its output, given by the editorial synthesizer as in the full mode, and `researcher` reads them. Pro: the two stops work as the copied page describes them. Con: it changes `paper-review-panel` beyond its source, in a mode that is otherwise a copy; its version goes up by a minor part.
+  - Option (b): `researcher` leaves the score deltas, the early-stopping suggestion and the regression stop out, and `score_trajectory_protocol.md` with them. Pro: `paper-review-panel` stays a copy. Con: two parts of the source's revision loop are gone, and a revision that made the paper worse is no longer flagged by a number.
+  - Recommendation: (a), since it ends the cause. The cheaper option is (b). Kind 6: your rule that a copy is not changed and your rule that a cause is ended point to different options, so the choice waits for you. Until you rule, `SKILL.md` keeps the source's wording, and a session that finds no scores in the re-review report says so at the checkpoint and computes no delta.
 
 ## Closed items (the log of what was raised and how it ended; no report carries it)
 
@@ -98,7 +103,7 @@ A finding that is neither closed in the repair rounds nor fixed at landing is an
 
 ## Current position (rewritten before every step commit of this plan)
 
-- 2026-11-25. Steps 1 and 5 have landed. Step 2 is in flight, its builder running.
+- 2026-11-25. Steps 1 and 5 have landed. Step 2 is in flight, repair round 1 sent to its builder.
 - Verified: `templates/checks.sh` on this file printed `checks: 16 commands passed` on main with step 1 staged.
 - Roadmap entry 13 (researcher). Plan step 2 of 7: the modes `integrity` and `manuscript`. Next: step 3, the modes `novelty` and `idea`.
-- Open on the user's side: the review of the choices C144, C145, C146 and C147 in `.scratch/choices.md`, which blocks nothing.
+- Open on the user's side: Open item E, and the review of the choices C144, C145, C146 and C147 in `.scratch/choices.md`, which blocks nothing.
