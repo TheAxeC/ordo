@@ -53,10 +53,11 @@ dispatch:                    # one entry per step in flight, written by /spec, s
 
 A finding that is neither closed in the repair rounds nor fixed at landing is an open item here, and goes where `plan-orchestration`'s "What earns a step of its own" says; what is settled belongs in the closed list.
 
-- Open item L (2026-11-25), step 6, the gate's goal check (`agents/reviews/6-goal-coverage.md`, R5): the goal says each piece of code is read by a fresh reviewer before any job is submitted; on a cluster the builder submits the code's small test as a job before the review (`agents/research_builder_agent.md` item 4, `references/slurm.md`, "A small local test"), since nothing may run on the login node. Options: (a) allow this one test job and write it, with its reason, in those two pages; (b) move the test job after the review, the reviewer submitting it. Recommendation: (a). The lazy option: leave the text as it is.
-- Open item M (2026-11-25), step 6, the gate's comparison (`agents/reviews/6-differences.md`, "Differences with no ruling"): two differences from academic-pipeline that no ruling or line of `deviations.md` names: a PASS WITH NOTES at Stage 4.5 goes to the correction round (the source sends only FAIL), and the Rules bullet that every path and value the user gives reaches a command as one quoted argument. Both were added in step 2. Options: (a) keep both and write them in `deviations.md`; (b) remove both. Recommendation: (a). The lazy option: leave them unwritten.
 
 ## Closed items (the log of what was raised and how it ended; no report carries it)
+
+- 2026-11-25: Open item L ruled (a) by the user; step 9 builds it.
+- 2026-11-25: Open item M ruled (a) by the user; the two differences written in `deviations.md`.
 
 - 2026-11-25: Open item A, the source's files no ruling names: closed under self-rule, C144.
 - 2026-11-25: Open item B, three differences of the copy no ruling names: closed under self-rule, C145.
@@ -96,5 +97,5 @@ A finding that is neither closed in the repair rounds nor fixed at landing is an
 
 - 2026-11-25. Steps 1, 2, 3, 4 and 5 have landed. No step is in flight.
 - Verified: `templates/checks.sh` on this file printed `checks: 16 commands passed` on main with step 4 staged and its fixes at landing made.
-- Roadmap entry 13 (researcher). Plan step 8 of 8: the mode `revision`, landed. Next: step 6, the gate runs, on `v11.1.0-rc.1`, pinned; the `novelty` run waits on the user's confirmation of the idea's sentence.
+- Roadmap entry 13 (researcher). Plan step 9 of 9: the test job before review (ruling L), next: `/spec 13 9`. Step 6, the gate, waits on step 9, a new release candidate on the user's word, and the session id of the user's `/researcher idea` run.
 - Open on the user's side: the review of the choices C144 to C151 in `.scratch/choices.md`, which blocks nothing.
