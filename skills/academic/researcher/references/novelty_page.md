@@ -11,7 +11,7 @@ Date: <YYYY-MM-DD>. Made by `/researcher novelty`, or by round <n> of the interv
 
 ## The idea
 
-> <the idea or the candidate claims as the user gave them, each line quoted>
+> <the idea or the candidate claims as the user gave them, each line quoted, or in a page made by `idea` the sketch and the answers the claims rest on>
 
 ## The claims
 
@@ -60,6 +60,9 @@ Name `notes/novelty-<YYYY-MM-DD>.bib` in the Existing Materials row at `paper`'s
 - The section "Works with no entry in the .bib" is written with "none" when the `.bib` holds an entry for every confirmed work.
 - A claim at the stop "The searches did not run" has no verdict line; its section gives the reasons the searches printed.
 - The searches list every query of `SKILL.md`'s "novelty" item 2, three per claim, each with the indexes it left out.
+- In a page made by `idea`, the section "The idea" quotes only the user's words: the sketch from the progress file and the user's answers the round's claims rest on.
+- Under each answer that takes an option, a letter or `Agree`, the page states unquoted the option it took as the round put it, named by its round and its choice, such as "Round 2, choice 2 (the claim), option (a): <the option>".
+- A line the session writes in "The idea", such as a summary of what a round settled, stands unquoted.
 
 ## An example
 

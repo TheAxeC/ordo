@@ -47,19 +47,6 @@ repair_reviewer: claude:sonnet  # the model the run of /refute over a repair rou
 
 ```yaml
 dispatch:                    # one entry per step in flight, written by /spec, since docs/plan.yaml's workers_at_once is 5.
-- step: 11
-  executor: agent
-  worker: claude:opus
-  worktree: .agents/worktrees/13-researcher-11
-  base: 04f2bd5
-  launched: 2026-11-25 20:53
-  session_id: ab807098ebde0e797 (claude-opus-5-5)
-  report: .scratch/13-researcher/agents/reviews/11-report.md
-  builder_usage:
-  brief_check: none, a small text step
-  reviewer_report:
-  round: 0
-  landing: not-started
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled or, under `self_rule: on`, until the orchestrator closes it as `plan-orchestration`'s `references/self-rule.md`, "Closing an open item", says)
@@ -111,7 +98,7 @@ A finding that is neither closed in the repair rounds nor fixed at landing is an
 
 ## Current position (rewritten before every step commit of this plan)
 
-- 2026-11-25. Steps 1, 2, 3, 4 and 5 have landed. No step is in flight.
-- Verified: `templates/checks.sh` on this file printed `checks: 16 commands passed` on main with step 4 staged and its fixes at landing made.
-- Roadmap entry 13 (researcher). Plan step 10 of 11: the target-journal line, landed. Next: step 11, the call of `idea` and the quoted idea of its novelty pages; then step 6, the gate, which waits on step 11 and on the user's reading of the novelty pages.
-- Open on the user's side: the review of the choices C144 to C151 in `.scratch/choices.md`, which blocks nothing.
+- 2026-11-25. Steps 1, 2, 3, 4, 5, 8, 9, 10 and 11 have landed. No step is in flight.
+- Verified: `templates/checks.sh` on this file printed `checks: 16 commands passed` on main with step 11 staged and its fixes at landing made.
+- Roadmap entry 13 (researcher). Plan step 11 of 11: the call of `idea` and the quoted idea of its novelty pages, landed. Next: step 6, the gate, whose runs all pass and which the user has read, booked; then step 7, the closing.
+- Open on the user's side: the review of the choices C144 to C161 in `.scratch/choices.md`, which blocks nothing.
