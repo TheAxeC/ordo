@@ -50,6 +50,7 @@ dispatch: none               # or the block /spec writes (a list when .agents/pl
 - Step 3, how the ruled fix is carried (2026-10-15): ruled (a) by the user on 2026-10-15; booked in `plan.md` Rulings, with the line of step 3 rewritten.
 - Step 3, the second run (2026-10-15): ruled by the user on 2026-10-15, one new step 4 that rebuilds `/writing`; booked in `plan.md` Rulings, with step 4's line added and the closing made step 5.
 - Step 4, ADR 0013 and the moved place (2026-10-15): closed by the user's four changes to `/writing` on 2026-10-15, which rewrote ADR 0013's sentence on the checking agent to keep a finding at the place given or moved to where its quote stands; booked in `plan.md` Rulings, "Step 4, the four changes".
+- 2026-11-25: C68, Which register rules the agents of /writing get: agreed by the user.
 
 ## The standing demands (from Axel, in force)
 

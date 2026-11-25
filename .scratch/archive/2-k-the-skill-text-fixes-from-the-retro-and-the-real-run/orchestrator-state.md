@@ -50,6 +50,32 @@ dispatch: none               # or the block /spec writes (a list when .agents/pl
 - 2026-10-13: Open item A, the step list as drafted: closed under self-rule, C67.
 - 2026-10-13: Open item Closing 1, the roadmap diff: ruled (a) by the user; written in d64aeb2.
 - 2026-10-13: Open item Closing 2, the tag and the pin: ruled (a) by the user; `v7.0.0` on d64aeb2, pinned.
+- 2026-11-25: C41, No breakage testing: agreed by the user.
+- 2026-11-25: C42, The character-set check reads only files on disk: agreed by the user.
+- 2026-11-25: C43, Land never settles a clash of two rulings: agreed by the user.
+- 2026-11-25: C44, Land carries out a ruling only on what it names: agreed by the user.
+- 2026-11-25: C45, A ruling given outside a plan is written down: agreed by the user.
+- 2026-11-25: C46, A proposal says what exists now: agreed by the user.
+- 2026-11-25: C47, The builder's prompt says a shortcut is a finding: agreed by the user.
+- 2026-11-25: C48, Roadmap compares the written file with the draft: agreed by the user.
+- 2026-11-25: C49, A dictated sentence about a script is run first: agreed by the user.
+- 2026-11-25: C50, The reviewer's git commands: agreed by the user.
+- 2026-11-25: C51, How a verify command that starts with git reaches a builder: agreed by the user.
+- 2026-11-25: C52, A builder's saved report passes the character-set check: agreed by the user.
+- 2026-11-25: C53, A repair round's brief reaches the builder in its worktree: agreed by the user.
+- 2026-11-25: C54, A reviewer's saved report passes the character-set check: agreed by the user.
+- 2026-11-25: C55, Who writes a reviewer's usage line: agreed by the user.
+- 2026-11-25: C56, How a closing step runs beside the other steps: agreed by the user.
+- 2026-11-25: C57, The builder's git rule: agreed by the user.
+- 2026-11-25: C59, Each changed skill's version raised: agreed by the user.
+- 2026-11-25: C60, The gate's grep and fresh reviewer: agreed by the user.
+- 2026-11-25: C61, The gate's deleted-file worktree run: agreed by the user.
+- 2026-11-25: C62, The gate's version check: agreed by the user.
+- 2026-11-25: C63, The gate's checks.sh run: agreed by the user.
+- 2026-11-25: C64, The gate's land.test.sh case: agreed by the user.
+- 2026-11-25: C65, The roadmap diff of entry 2.K: agreed by the user.
+- 2026-11-25: C66, Record as ADR?: agreed by the user.
+- 2026-11-25: C67, The step list of plan 2.K as drafted: agreed by the user.
 
 ## The standing demands (from Axel, in force)
 

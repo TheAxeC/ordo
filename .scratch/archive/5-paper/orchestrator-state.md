@@ -124,6 +124,37 @@ A finding that is neither closed in the repair rounds nor fixed at landing is an
 - 2026-10-20: C107, the ended academic-paper revision run's three closing decisions (step 3, review over round 1, Spec 2): closed under self-rule, (a).
 - 2026-10-20: Open item H, the commands that made step 3's records: ruled by the user, (a).
 - 2026-10-20: Open item I, five choices of step 4's brief check (the other skills' figures, a failed reference check, the disclosure's model identifier, the statements the ethics check triggered, intake's DOI checking): closed under self-rule, C108.
+- 2026-11-25: C102, The drafted step list of plan 5: agreed by the user.
+- 2026-11-25: C103, The command forms of lookup.py's key check, check-urls and quote-check: agreed by the user.
+- 2026-11-25: C104, What each mode of paper leaves in the manuscript's files: agreed by the user.
+- 2026-11-25: C105, The numbers of the /writing findings the user accepts and the names of a run's patch files: agreed by the user.
+- 2026-11-25: C106, How the /writing findings reach /paper on the current dongho manuscript: agreed by the user.
+- 2026-11-25: C107, The ended academic-paper revision run's three closing decisions: agreed by the user.
+- 2026-11-25: C108, Five choices of step 4's brief check: agreed by the user.
+- 2026-11-25: C109, The judge command of step 5's comparisons: agreed by the user.
+- 2026-11-25: C110, Item 8's pick of the closing `/writing` findings: agreed by the user.
+- 2026-11-25: C111, What the cache of step 5.B holds: agreed by the user.
+- 2026-11-25: C112, The earlier papers in step 5.E: agreed by the user.
+- 2026-11-25: C113, Where the citation compliance agent gets a source's PMCID: agreed by the user.
+- 2026-11-25: C114, The effort of a role on the default agent: agreed by the user.
+- 2026-11-25: C115, The OpenAlex field list and test U1 in step 5.E: agreed by the user.
+- 2026-11-25: C116, The fix caps in step 5.F: agreed by the user.
+- 2026-11-25: C117, The count of the currency passes in step 5.F: agreed by the user.
+- 2026-11-25: C118, The parts of the research question in step 5.F: agreed by the user.
+- 2026-11-25: C119, A character with no ASCII form in step 5.F: agreed by the user.
+- 2026-11-25: C120, The change written again in full in step 5.F: agreed by the user.
+- 2026-11-25: C121, The form of a with a ring in step 5.F: agreed by the user.
+- 2026-11-25: C122, The stop after draft review round 2 in step 5.F: agreed by the user.
+- 2026-11-25: C123, The source-count target of a theme run in step 5.G: agreed by the user.
+- 2026-11-25: C124, The branch of the ruling The rule-by-rule check: agreed by the user.
+- 2026-11-25: C125, Where the run's process records go in step 5.H: agreed by the user.
+- 2026-11-25: C126, A renamed later version that no index links to its preprint, in step 5.I: agreed by the user.
+- 2026-11-25: C127, The renamed later version cited from the record resolve prints, in step 5.I: agreed by the user.
+- 2026-11-25: C128, The record an entry is written from, in step 5.J: agreed by the user.
+- 2026-11-25: C129, Three choices of the brief of step 5.M: agreed by the user.
+- 2026-11-25: C130, Findings S2 and S3 of the review of step 5.M, taken into repair round 1: agreed by the user.
+- 2026-11-25: C131, The name of the response letter's own mode, in the brief of step 5.Q: agreed by the user.
+- 2026-11-25: C132, Step 5.Q built by one builder, in three ordered parts: agreed by the user.
 
 ## The standing demands (from Axel, in force)
 

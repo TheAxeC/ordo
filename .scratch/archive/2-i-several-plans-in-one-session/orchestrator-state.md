@@ -88,6 +88,7 @@ dispatch: none               # or the block /spec writes (a list when .agents/pl
 - 2026-10-07: C32, record as ADR?: agreed by the user.
 - 2026-10-07: C33, the roadmap diff of entry 2.I: agreed by the user.
 - 2026-10-07: C34, the step list of plan 2.I as drafted: agreed by the user.
+- 2026-11-25: C40, How a step in /spec is recorded: agreed by the user.
 
 ## The standing demands (from Axel, in force)
 

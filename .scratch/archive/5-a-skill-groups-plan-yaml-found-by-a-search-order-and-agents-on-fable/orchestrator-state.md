@@ -57,6 +57,9 @@ dispatch: []
 - 2026-11-22: C138, who runs the submission checks and how a result is written: agreed by the user.
 - 2026-11-22: C139, where /grill creates a glossary: agreed by the user.
 - 2026-11-22: C140, how /repo-setup sync finds the glossary: agreed by the user.
+- 2026-11-25: C133, A folder and a project name share the place in front of the entry, in the brief of step 3 of plan 5.A: agreed by the user.
+- 2026-11-25: C134, A new configuration is written to `docs/plan.yaml`, in the brief of step 3 of plan 5.A: agreed by the user.
+- 2026-11-25: C135, How the two scripts are given the configuration, in the brief of step 3 of plan 5.A: agreed by the user.
 
 ## The standing demands (from Axel, in force)
 

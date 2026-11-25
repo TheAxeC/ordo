@@ -53,6 +53,7 @@ A finding that is neither closed in the repair rounds nor fixed at landing is an
 - Open item C (2026-10-17), step 2, the size of the agents' prompt: closed 2026-10-17 by the user's ruling (a), booked in `plan.md`'s Rulings and under step 2's Step 0; step 1a added.
 - Open item D (2026-10-17), step 2, the tag and the pin before the gate run: closed 2026-10-17 by the user's ruling (a), booked in `plan.md`'s Rulings; `v8.2.0-rc.2` tagged on `7481267` and pinned.
 - Open item F (2026-10-17), step 2, the tag and the pin after step 1b: closed 2026-10-17 by the user's ruling (a), booked in `plan.md`'s Rulings; `v8.2.0-rc.3` tagged on `436760d` and pinned.
+- 2026-11-25: C71, Step 1b reaches session-retro: agreed by the user.
 
 ## The standing demands (from Axel, in force)
 
