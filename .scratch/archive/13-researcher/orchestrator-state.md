@@ -72,6 +72,24 @@ A finding that is neither closed in the repair rounds nor fixed at landing is an
 - 2026-11-25: Open item H, the command lines of `research`, its adopt mode and `full`: closed under self-rule, C150.
 - 2026-11-25: Open item I, where a further paper of a project is written: closed under self-rule, C151.
 - 2026-11-25: Open item J, a revision mode for `researcher`: ruled (a) by the user, a new step before the gate.
+- 2026-11-25: C144, The source's files no ruling names: agreed by the user.
+- 2026-11-25: C145, Three differences of the copy no ruling names: agreed by the user.
+- 2026-11-25: C146, The full example's integrity stages and how the integrity agent picks its claims: agreed by the user.
+- 2026-11-25: C147, The command lines of `integrity` and `manuscript`: agreed by the user.
+- 2026-11-25: C148, The Stage 3 scores the deltas start from: agreed by the user.
+- 2026-11-25: C149, The command lines of `novelty` and `idea`, and where a novelty page is written: agreed by the user.
+- 2026-11-25: C150, The command lines of `research`, its adopt mode and `full`: agreed by the user.
+- 2026-11-25: C151, Where a further paper of a project is written: agreed by the user.
+- 2026-11-25: C152, The command line of the revision mode: agreed by the user.
+- 2026-11-25: C153, How the referee comments are split into text work and results work: agreed by the user.
+- 2026-11-25: C154, How a comment that needs results work is run: agreed by the user.
+- 2026-11-25: C155, What a requested result that does not beat the baseline leads to: agreed by the user.
+- 2026-11-25: C156, How the new results reach `paper`'s revision: agreed by the user.
+- 2026-11-25: C157, Which stages follow the revision: agreed by the user.
+- 2026-11-25: C158, The cap on rounds of the revision mode: agreed by the user.
+- 2026-11-25: C159, Record the revision mode's decisions as an ADR: agreed by the user.
+- 2026-11-25: C160, The impact factor dropped from the target-journal line of an example: agreed by the user.
+- 2026-11-25: C161, A call of `full` whose text is a sentence: agreed by the user.
 
 ## The standing demands (from the user, in force)
 
