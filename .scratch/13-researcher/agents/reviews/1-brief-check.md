@@ -146,4 +146,27 @@ The case greps do not look for `research-hub` or `/Users/`. Adding `research-hub
 2. Whether `https://creativecommons.org/licenses/by-nc/4.0/` is the licence's canonical address, and whether "Academic Research Skills" is the upstream project's published name: neither appears in the saved `LICENSE`, and this needs web access.
 3. Whether the two contradictions in the source that ADR 0052 names (a failed final check, a midway entry) sit only in the pages cases 3 and 4 read: this is left to the builder's first run, since the cases already cover every page.
 
+## Closed
+
+Each finding is closed by a change to the brief `agents/briefs/1.md`, after Open item B of `plan.md` ruled the three points no ruling named.
+
+- Names 2: "What is on the tree" says `LICENSE` is not changed, by ruling D32.
+- The step line 1, ADRs 1 and 3: Open item B, booked in `plan.md`'s Rulings: the six documents at `agents/` and `references/`; the prose standard's section 0 and its section F on hard wraps for copied text, a kept sentence keeping its words; a pointer to a file not taken removed with its sentence or row, a design-document line removed as history. Item 3 is rewritten to it, and decision 1 is removed since the ruling now decides it. The step line in `plan.md` names the two folders.
+- The step line 2, The question 10 and 12: "Verify before you report" item 3 gives the `diff` of the copied files, one `diff` per document and the `diff` of the ethics page against its source in git history, and item 8 lists what they print.
+- Cases and checks 1 and 2, The question 5 and 7: the grep case is split: no hit allowed for the left-out parts, the old names, `research-hub` and `/Users/`, with the cross-model check and the process summary added; the allowance "named with why" stays for the version pattern only; the case on left-out parts covers every copied page.
+- Cases and checks 3: "Verify before you report" item 2 added, the scan for any character outside ASCII, and item 3 of "What to build" names the check mark.
+- Cases and checks 4: the expected output of `diff -rq` names the folder `references/adapters`.
+- The question 1, ADRs 4: D1 names each field and the retraction notices; D6 says the session writes the state in the state tracker's structure and no state-tracker agent is started; D24 is given in the ruling's words for the corrections and the records; D21 is named.
+- The question 6: the pointer case and item 3 say a sentence that needs the missing file is removed whole or reworded, listed per file.
+- The question 9 and 16: item 6 and its case add the licensor's copyright line and the disclaimer of warranties.
+- The question 14: one case each added for D20, D17, D6, D24 and D31.
+- ADRs 2: ADR 0033 is named, and the integrity agent reads a source's text as `paper`'s citation compliance agent does.
+- ADRs 5: ADR 0043 and ADR 0026 are named; ADR 0027 replaces the superseded 0022 and 0025.
+- ADRs, the pointers to other skills' files: item 3 says how a file of `paper` or `paper-review-panel` is named and that a `deep-research` pointer is removed.
+- ADRs, the ethics page's pointers: item 4 D17 says how each is carried.
+- ADRs, how another agent is named: item 3 gives the rule.
+- Nothing private: `research-hub` and `/Users/` are in the grep case.
+
+The lines of item 6 that name the copyright line and the two addresses are literals the licence and ruling D32 fix; each is ASCII and breaks no rule of the rules file or the standards pages. No other dictated line was added.
+
 Usage: agent a88f2b2030a881ff2, claude-opus-5-5, 234088 tokens, 48 tool uses, 448 s.

@@ -47,6 +47,8 @@ repair_reviewer: claude:sonnet  # the model the run of /refute over a repair rou
 
 ```yaml
 dispatch:                    # one entry per step in flight, written by /spec, since docs/plan.yaml's workers_at_once is 5.
+- step: 1
+  landing: preparing
 - step: 5
   session_id: a6b13ac6347fbb68a (claude-opus-5-5)
   executor: agent
