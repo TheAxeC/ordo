@@ -55,7 +55,7 @@ dispatch:                    # one entry per step in flight, written by /spec, s
   launched: 2026-11-25
   session_id: a6dece389171399fc (claude-opus-5-5)
   report: .scratch/13-researcher/agents/reviews/2-report.md
-  builder_usage: 247020 tokens, 104 tool uses, 1244 s
+  builder_usage: 247020 tokens, 104 tool uses, 1244 s, and for round 1 100212 tokens, 109 tool uses, 492 s
   reviewer_report: .scratch/13-researcher/agents/reviews/2-refuter.md (a1e8b7527ba8e54f0, claude-opus-5-5, 257452 tokens, 58 tool uses, 502 s)
   round: 1
   brief_check: ".scratch/13-researcher/agents/reviews/2-brief-check.md (a7ab1a8b91934c83b, claude-opus-5-5, 219563 tokens, 57 tool uses, 558 s)"
@@ -75,6 +75,7 @@ A finding that is neither closed in the repair rounds nor fixed at landing is an
 - 2026-11-25: Open item C, the full example's integrity stages and how the integrity agent picks its claims: closed under self-rule, C146.
 - 2026-11-25: Open item D, the command lines of `integrity` and `manuscript`: closed under self-rule, C147.
 - 2026-11-25: Open item E, the missing scores of the re-review: ruled (a) by the user, the re-review of `paper-review-panel` gains the scores.
+- 2026-11-25: Open item F, the Stage 3 scores the deltas start from: closed under self-rule, C148.
 
 ## The standing demands (from the user, in force)
 
@@ -104,4 +105,4 @@ A finding that is neither closed in the repair rounds nor fixed at landing is an
 - 2026-11-25. Steps 1 and 5 have landed. Step 2 is in flight, repair round 1 sent to its builder.
 - Verified: `templates/checks.sh` on this file printed `checks: 16 commands passed` on main with step 1 staged.
 - Roadmap entry 13 (researcher). Plan step 2 of 7: the modes `integrity` and `manuscript`. Next: step 3, the modes `novelty` and `idea`.
-- Open on the user's side: the review of the choices C144, C145, C146 and C147 in `.scratch/choices.md`, which blocks nothing.
+- Open on the user's side: the review of the choices C144, C145, C146, C147 and C148 in `.scratch/choices.md`, which blocks nothing.

@@ -2,7 +2,7 @@
 
 Each choice the orchestrator took under self-rule waits here for the user's review, grouped by roadmap entry. The user agrees with a choice by typing `C<n> Agree`, or replaces it by typing `C<n> => <ruling>`, in any session on the repository. A reviewed choice leaves this file.
 
-Last number: C147
+Last number: C148
 
 # Entry 2.I Several plans in one session
 
@@ -815,4 +815,16 @@ Step 2 writes the Quick start of `researcher`, and the plan fixes the command li
 
 Taken: (a)
 Booked: `.scratch/13-researcher/plan.md:100` (Open item D)
+Builds on it: step 2
+
+## C148. The Stage 3 scores the deltas start from (2026-11-25)
+
+The Stage 3 scores that the score deltas start from are not in the full mode's Editorial Decision. My text of Open item E said the editorial synthesizer gives the scores "as in the full mode"; that was wrong. In the full mode each of the five reviewers scores the seven dimensions in its own report, and the editorial synthesizer builds a scoring matrix from them (`skills/academic/paper-review-panel/agents/editorial_synthesizer_agent.md` line 50) and writes none of it into the Editorial Decision (`grep -n -i '0-100\|dimension score\|weighted average' skills/academic/paper-review-panel/templates/editorial_decision_template.md` prints nothing). The user's ruling on E gives the re-review its scores; the baseline they are compared with still has to stand somewhere.
+  - Option (a), recommended: the full mode's editorial synthesizer also writes the seven dimension scores and the Weighted Average into the Editorial Decision, in the form the re-review now gives them. Pro: the baseline and the re-review are scored by the same role on the same rubric, which is what ruling E set out to get. Con: one more addition to `paper-review-panel`'s output.
+  - Option (b): `researcher` aggregates the baseline from the five reviewers' tables. Con: it needs an aggregation rule that the rubric page does not give.
+  - Option (c): the re-review's scores are compared with each reviewer's own scores. Con: five deltas per dimension, where the copied page defines one.
+  - Recommendation: (a). The cheaper option is (b).
+
+Taken: (a)
+Booked: `.scratch/13-researcher/plan.md:111` (Open item F)
 Builds on it: step 2
