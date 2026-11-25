@@ -48,13 +48,27 @@ repair_reviewer: claude:sonnet  # the model the run of /refute over a repair rou
 ```yaml
 dispatch:                    # one entry per step in flight, written by /spec, since docs/plan.yaml's workers_at_once is 5.
 - step: 3
-  brief_check: "running: af894f369408218fe"
-  base: 749f499
+  executor: agent
+  worker: claude:opus
   worktree: .agents/worktrees/27-a-newcomer-s-readme-researcher-s-project-readmes-a-skill-for-a-software-repository-s-documentation-and-a-figure-for-every-skill-3
-  landing: preparing
+  base: 749f499
+  session_id: a15970d264f25815b
+  launched: 2026-11-26 00:50
+  report: .scratch/27-a-newcomer-s-readme-researcher-s-project-readmes-a-skill-for-a-software-repository-s-documentation-and-a-figure-for-every-skill/agents/reviews/3-report.md
+  round: 0
+  brief_check: .scratch/27-a-newcomer-s-readme-researcher-s-project-readmes-a-skill-for-a-software-repository-s-documentation-and-a-figure-for-every-skill/agents/reviews/3-brief-check.md (af894f369408218fe, claude-opus-5-5, 182732 tokens, 44 tool uses, 7 min 45 s)
+  landing: not-started
 - step: 7
-  brief_check: "running: a9a2fe5d909e6aec9"
-  landing: preparing
+  executor: agent
+  worker: claude:opus
+  worktree: .agents/worktrees/27-a-newcomer-s-readme-researcher-s-project-readmes-a-skill-for-a-software-repository-s-documentation-and-a-figure-for-every-skill-7
+  base: ada4e20
+  session_id: a657185e09bea583a
+  launched: 2026-11-26 00:50
+  report: .scratch/27-a-newcomer-s-readme-researcher-s-project-readmes-a-skill-for-a-software-repository-s-documentation-and-a-figure-for-every-skill/agents/reviews/7-report.md
+  round: 0
+  brief_check: .scratch/27-a-newcomer-s-readme-researcher-s-project-readmes-a-skill-for-a-software-repository-s-documentation-and-a-figure-for-every-skill/agents/reviews/7-brief-check.md (a9a2fe5d909e6aec9, claude-opus-5-5, 128993 tokens, 25 tool uses, 4 min 22 s)
+  landing: not-started
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled or, under `self_rule: on`, until the orchestrator closes it as `plan-orchestration`'s `references/self-rule.md`, "Closing an open item", says)
