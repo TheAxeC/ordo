@@ -6,7 +6,7 @@ The `research` mode of `researcher` writes one brief in this form for each piece
 
 - The brief is `notes/code/<piece>-brief-<n>.md` in the project folder, with `<piece>` a short name of the piece of letters, digits and `-`, and `<n>` 1 for the first brief and one more for each brief that sends a finding back.
 - The builder's report is `notes/code/<piece>-builder-<n>.md`, and the reviewer's report `notes/code/<piece>-review-<n>.md`, each written by the session from the agent's final message.
-- The README's `## The stage and campaign that stand` links the three files of the piece that stands.
+- The README's `### The stage and campaign that stand` links the three files of the piece that stands.
 
 ## The form
 

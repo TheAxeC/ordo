@@ -47,20 +47,6 @@ repair_reviewer: claude:sonnet  # the model the run of /refute over a repair rou
 
 ```yaml
 dispatch:                    # one entry per step in flight, written by /spec, since docs/plan.yaml's workers_at_once is 5.
-- step: 2
-  executor: agent
-  worker: claude:opus
-  session_id: a08312753d0d93b46 (claude-opus-5-5)
-  worktree: .agents/worktrees/27-a-newcomer-s-readme-researcher-s-project-readmes-a-skill-for-a-software-repository-s-documentation-and-a-figure-for-every-skill-2
-  base: 929e519
-  launched: 2026-11-25
-  report: .scratch/27-a-newcomer-s-readme-researcher-s-project-readmes-a-skill-for-a-software-repository-s-documentation-and-a-figure-for-every-skill/agents/reviews/2-report.md
-  builder_usage: "308527 tokens, 121 tool uses, 16.5 minutes; round 1: 362147 tokens, 39 tool uses, 4.4 minutes"
-  reviewer_report: .scratch/27-a-newcomer-s-readme-researcher-s-project-readmes-a-skill-for-a-software-repository-s-documentation-and-a-figure-for-every-skill/agents/reviews/2-refuter.md (a0d3f8882c6d34f95, claude-opus-5-5, 228033 tokens, 41 tool uses, 8.3 minutes)
-  brief_check: .scratch/27-a-newcomer-s-readme-researcher-s-project-readmes-a-skill-for-a-software-repository-s-documentation-and-a-figure-for-every-skill/agents/reviews/2-brief-check.md (aa8df1549baebff17, claude-opus-5-5, 195898 tokens, 28 tool uses, 4.8 minutes)
-  landing: not-started
-  round: 1
-  shared_paths: "docs/glossary.md with step 4 of this plan: step 2 writes lines 146-190, Ordo's own terms, and step 4 lines 5-144, the plan-terms block; README.md with step 1 of this plan: step 2 writes line 34, the researcher row, and step 1 lines 72-132, the figure lines; the ranges do not touch, so the cherry-pick merges them without conflict"
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled or, under `self_rule: on`, until the orchestrator closes it as `plan-orchestration`'s `references/self-rule.md`, "Closing an open item", says)
@@ -69,6 +55,10 @@ dispatch:                    # one entry per step in flight, written by /spec, s
   - (a) Approve the text as it stands. Pro: the step's check passes and the plan's gate item for step 4 is met. Con: none, if the text reads right to you.
   - (b) Name what reads wrong. Pro: the text is fixed before the plan closes. Con: the change becomes a step of its own only as `plan-orchestration`'s "What earns a step of its own" allows, since step 4 has landed.
   - Recommendation: (a), my judgment after the reviews: both reviews' findings are fixed, the last five at landing. The lazy option is (a) taken without reading the text, since the reading is the check.
+- Open item F (2026-11-26), step 2's check: your reading of researcher's text against ADR 0057. Step 2 is on main. Read `skills/academic/researcher/references/project_layout.md` ("The README", "The code README", "The deposit", "A README in the old layout") and `skills/academic/researcher/SKILL.md`, "readme" items 1 to 5, "research adopt" item 3 and the Stops rows "A README in the old layout" and "The README drafts".
+  - (a) Approve the text as it stands. Pro: the step's check passes, and step 8's runs of `/researcher readme` use this text. Con: none, if the text reads right to you.
+  - (b) Name what reads wrong. Pro: the text is fixed before step 8 runs it on your projects. Con: the change becomes a step of its own only as `plan-orchestration`'s "What earns a step of its own" allows, since step 2 has landed.
+  - Recommendation: (a), my judgment after the reviews: both reviews' findings are fixed, the last three at landing. The lazy option is (a) taken without reading the text, since the reading is the check.
 
 ## Closed items (the log of what was raised and how it ended; no report carries it)
 
@@ -102,7 +92,7 @@ dispatch:                    # one entry per step in flight, written by /spec, s
 
 ## Current position (rewritten before every step commit of this plan)
 
-- 2026-11-26. Steps 1 and 4 have landed. Step 2 is in flight: its repair round 1 is built and reviewed, and waits for its landing.
-- Verified: `checks: 16 commands passed` on main at step 1's landing.
-- Next step: land step 2; then /spec steps 3, 5, 6 and 7.
-- Open on the user's side: Open item E.
+- 2026-11-26. Steps 1, 2 and 4 have landed. No step is in flight.
+- Verified: `checks: 16 commands passed` on main at step 2's landing.
+- Next step: /spec steps 3 and 7, which nothing blocks now; step 5 waits on 3, step 6 on 5, step 8 on 3, 6 and the user.
+- Open on the user's side: Open items E and F.

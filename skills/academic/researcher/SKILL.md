@@ -1,13 +1,13 @@
 ---
 name: researcher
-description: "Take an idea to results and a paper. novelty: a page of closest prior work, verdicts per claim. idea: README questions and claims. research: six stages, SLURM jobs, to results and a resumable README; adopt for one underway. full: idea, research, manuscript. integrity: checks of references, claims, numbers, figures, ethics. manuscript: writing, review, revision. revision: referees' new results, then revision. The last three keep a run folder. Triggers on: /researcher novelty|idea|research|full|integrity|manuscript|revision, is this idea new, the closest prior work, sharpen my research idea, from a sketch to a research question, take my idea to results, run the experiments of my project, continue my research project, adopt a project underway, from an idea to a paper, check the integrity of my manuscript, verify the references and claims of a finished draft, ethics check of a paper, full paper workflow, take my draft through review and revision, the referees asked for more experiments, revise with new results."
+description: "Take an idea to results and a paper. novelty: a page of closest prior work, verdicts per claim. idea: README questions and claims. research: six stages, SLURM jobs, to results and a resumable README; adopt for one underway. readme: README and code README redrafted for a newcomer. full: idea, research, manuscript. integrity: checks of references, claims, numbers, figures, ethics. manuscript: writing, review, revision. revision: referees' new results, then revision. The last three keep a run folder. Triggers on: /researcher novelty|idea|research|readme|full|integrity|manuscript|revision, is this idea new, sharpen my research idea, from a sketch to a research question, take my idea to results, run the experiments of my project, continue my research project, adopt a project underway, update my project's README, from an idea to a paper, check the integrity of my manuscript, ethics check of a paper, take my draft through review and revision, the referees asked for more experiments, revise with new results."
 metadata:
-  version: "1.0.0"
+  version: "2.0.0"
 ---
 
 # From a research idea to results and a manuscript
 
-`/researcher novelty` leaves a page of the closest prior work on each claim of an idea, with a verdict per claim, and a `.bib` of the works it confirmed, both in the project's `notes/`, and `/researcher idea` takes a rough sketch to research questions and claims in rounds of the interview and leaves a progress file and a novelty page per round in `notes/` and the questions and claims in the project's `README.md`. `/researcher research` takes the project through the stages Frame, Build, Baseline, Experiments, Compare and Consolidate, with a builder and a reviewer for each piece of code and every job on a cluster through the scheduler, and leaves the code, the results, the logs, the record of the experiments and a `README.md` from which a new session resumes, in the layout of `references/project_layout.md`; `/researcher research adopt` continues a project underway the same way, and `/researcher full` runs `idea`, then `research` and `manuscript`, leaving what each of them leaves. `/researcher integrity` checks a finished manuscript with a fresh integrity agent and a compliance agent, and `/researcher manuscript` takes a manuscript through the stages from the writing on: Stage 2 the writing, Stage 2.5 the first integrity check, Stage 3 the review, Stage 4 the revision, Stage 3' the re-review, Stage 4' the re-revision and Stage 4.5 the final integrity check, and a run of either leaves behind the run's state, each integrity record and each compliance report, each a file of its own in its run folder (Rules). `/researcher revision` answers the referee comments on a paper of a project: each comment that needs new results is run as a campaign of the stages of `research`, and then `/paper revision` and the stages of `manuscript` for comments in hand run with the new results, leaving the new results in the project as `research` leaves them, the revised paper with its response letter, and a run folder as `manuscript` leaves it.
+`/researcher novelty` leaves a page of the closest prior work on each claim of an idea, with a verdict per claim, and a `.bib` of the works it confirmed, both in the project's `notes/`, and `/researcher idea` takes a rough sketch to research questions and claims in rounds of the interview and leaves a progress file and a novelty page per round in `notes/` and the questions and claims in the project's `README.md`. `/researcher research` takes the project through the stages Frame, Build, Baseline, Experiments, Compare and Consolidate, with a builder and a reviewer for each piece of code and every job on a cluster through the scheduler, and leaves the code, the results, the logs, the record of the experiments and a `README.md` from which a new session resumes, in the layout of `references/project_layout.md`; `/researcher research adopt` continues a project underway the same way, `/researcher readme` brings a project's `README.md` and the `README.md` and `.depositignore` of its code folder to that layout and leaves them as the user approved their drafts, and `/researcher full` runs `idea`, then `research` and `manuscript`, leaving what each of them leaves. `/researcher integrity` checks a finished manuscript with a fresh integrity agent and a compliance agent, and `/researcher manuscript` takes a manuscript through the stages from the writing on: Stage 2 the writing, Stage 2.5 the first integrity check, Stage 3 the review, Stage 4 the revision, Stage 3' the re-review, Stage 4' the re-revision and Stage 4.5 the final integrity check, and a run of either leaves behind the run's state, each integrity record and each compliance report, each a file of its own in its run folder (Rules). `/researcher revision` answers the referee comments on a paper of a project: each comment that needs new results is run as a campaign of the stages of `research`, and then `/paper revision` and the stages of `manuscript` for comments in hand run with the new results, leaving the new results in the project as `research` leaves them, the revised paper with its response letter, and a run folder as `manuscript` leaves it.
 
 ## Quick start
 
@@ -19,6 +19,7 @@ metadata:
 /researcher novelty <idea> [<project folder>]                       search the closest prior work on each claim of an idea, a sentence in quotes or a file, and write a page with a verdict per claim and a .bib
 /researcher research <project folder>                               take the project's research questions to results through six stages, or resume it from its README.md at the stage that stands
 /researcher research adopt <project folder>                         read a project underway that research did not start, and continue it from the first stage not done
+/researcher readme <project folder>                                 draft the project's README.md and its code README in the newcomer's layout, and write them after you approve the drafts
 /researcher manuscript <project folder>                             write the paper from the project's materials, then check it, review it, revise it and check it again
 /researcher manuscript <project folder> --manuscript <name>         write a further paper of the project in manuscript-<name>/, with the same checks, review and revision
 /researcher manuscript <main.tex>                                   take a draft that exists from the first integrity check through review, revision and the final check
@@ -48,10 +49,10 @@ metadata:
 
 ## What it reads
 
-1. The call, as Quick start gives it: the mode, the depth of `integrity` and the arguments. `<idea>` is a sentence in quotes, or the path of a file that holds it, and is read from the file when it names a file that exists; every other argument is a path, except in a call of `idea` or `full` with more than two words after the mode, which reads the whole text after the mode as its sketch, a first word that looks like a path included, makes no folder from it, and in place of the refusal "No project folder" asks in its first message for the `<project folder>`, the stop "The project folder", before the mode's first item. A call of `novelty` with no `<idea>`, or with one that holds no word, is the refusal "No idea given". A call of `idea` with no argument is the refusal "No project folder", and its `<project folder>` that does not exist is made, a new project (Steps, "idea" item 3). A `<sketch file>` that does not exist is the refusal "No sketch file". A call whose `<main.tex>` is missing or does not exist is the refusal "No manuscript". For `manuscript`, `novelty` and `revision`, a `<project folder>` that does not exist is the refusal "No project folder". A `<comments file>` that does not exist, or a call of `revision` with no `<comments file>`, is the refusal "No comments file". A call of `research`, `research adopt` or `revision` with no `<project folder>`, or of `full` with no argument, is the refusal "No project folder". For `research` and `full`, a `<project folder>` that does not exist is made, a new project ("research" item 3, "idea" item 3). For `research adopt`, a `<project folder>` that does not exist or is empty is the refusal "Nothing to adopt". The `<name>` of `--manuscript` is one folder name of letters, digits, `-` and `_`, and any other `<name>`, or a `--manuscript` with no `<name>`, is the refusal "No manuscript name".
+1. The call, as Quick start gives it: the mode, the depth of `integrity` and the arguments. `<idea>` is a sentence in quotes, or the path of a file that holds it, and is read from the file when it names a file that exists; every other argument is a path, except in a call of `idea` or `full` with more than two words after the mode, which reads the whole text after the mode as its sketch, a first word that looks like a path included, makes no folder from it, and in place of the refusal "No project folder" asks in its first message for the `<project folder>`, the stop "The project folder", before the mode's first item. A call of `novelty` with no `<idea>`, or with one that holds no word, is the refusal "No idea given". A call of `idea` with no argument is the refusal "No project folder", and its `<project folder>` that does not exist is made, a new project (Steps, "idea" item 3). A `<sketch file>` that does not exist is the refusal "No sketch file". A call whose `<main.tex>` is missing or does not exist is the refusal "No manuscript". For `manuscript`, `novelty` and `revision`, a `<project folder>` that does not exist is the refusal "No project folder". A `<comments file>` that does not exist, or a call of `revision` with no `<comments file>`, is the refusal "No comments file". A call of `research`, `research adopt`, `readme` or `revision` with no `<project folder>`, or of `full` with no argument, is the refusal "No project folder". For `readme`, a `<project folder>` that does not exist or is empty is the refusal "No project folder". For `research` and `full`, a `<project folder>` that does not exist is made, a new project ("research" item 3, "idea" item 3). For `research adopt`, a `<project folder>` that does not exist or is empty is the refusal "Nothing to adopt". The `<name>` of `--manuscript` is one folder name of letters, digits, `-` and `_`, and any other `<name>`, or a `--manuscript` with no `<name>`, is the refusal "No manuscript name".
 2. The manuscript: the main `.tex`, the files it inputs and includes, and its `.bib`, read by the integrity agent and the compliance agent.
-3. The project folder: the `<project folder>` of the call, for a call given a `<main.tex>` the parent of the manuscript's folder, and for `novelty` with no `<project folder>` the folder the session runs in. For `integrity` and `manuscript` it holds the record of the experiments and the run folders, for `novelty` and `idea` its folder `notes/` holds the novelty pages, the `.bib` beside each page and the progress files they write, and for `research`, `research adopt`, `full` and `revision` it holds the layout of `references/project_layout.md`, or a project's own folders that its README records.
-   - For `revision`, the project folder holds a `README.md` whose `## The stage and campaign that stand` names a stage of `research`, or the end of `research` that "research" item 17 writes, the README that `research` and `research adopt` write, and a project folder with no such README is the refusal "No project of research", which names `research adopt` and `research` as the modes to run first.
+3. The project folder: the `<project folder>` of the call, for a call given a `<main.tex>` the parent of the manuscript's folder, and for `novelty` with no `<project folder>` the folder the session runs in. For `integrity` and `manuscript` it holds the record of the experiments and the run folders, for `novelty` and `idea` its folder `notes/` holds the novelty pages, the `.bib` beside each page and the progress files they write, and for `research`, `research adopt`, `readme`, `full` and `revision` it holds the layout of `references/project_layout.md`, or a project's own folders that its README records.
+   - For `revision`, the project folder holds a `README.md` whose `### The stage and campaign that stand` under `## Working state` names a stage of `research`, or the end of `research` that "research" item 17 writes, the README that `research` and `research adopt` write, and a project folder with no such README is the refusal "No project of research", which names `research adopt` and `research` as the modes to run first.
    - For `revision`, the manuscript's folder is `<project folder>/manuscript/`, or `<project folder>/manuscript-<name>/` with `--manuscript <name>`, and the manuscript is the `main.tex` of that folder, and a manuscript's folder with no `main.tex` is the refusal "No paper to revise", which names `manuscript` as the mode to run first.
 4. The record of the experiments, the file `experiment-record.yaml` in the project folder: the `experiment_intake_declaration` and the `experiment_provenance[]` of Schema 9 in `references/handoff_schemas.md`, "Experiment Provenance Intake". The `research` mode writes it at its last stage. A project with no such file gets the stop "The record of the experiments".
 5. The `paper` skill's folder, with its `SKILL.md`, found from this skill's folder with every link resolved: the folder of that name beside it, and otherwise the folder of that name in a group folder beside this skill's group folder. A folder found in neither place, or that holds no `SKILL.md`, is the refusal "A skill not installed" for `integrity`, `manuscript`, `research`, `research adopt`, `full` and `revision`, and the refusal "No paper for the novelty check" for `novelty` and `idea`, each naming both paths.
@@ -67,22 +68,28 @@ metadata:
 15. An unfinished run of the same mode for the same manuscript: a run folder in the project folder whose `state.json` holds a `pipeline_state` of `running`, `awaiting_confirmation` or `paused`. That `state.json` names the same manuscript's folder in `manuscript_folder`, and a run whose `state.json` names none counts as `manuscript/`. Its mode is the `mode` its `state.json` names, which a run of `revision` writes (Steps 3), and for a `state.json` that names none the `<mode>` of its folder's name `researcher-runs/<mode>-<date>/`.
 16. For `novelty`, the `paper` skill's `agents/citation_compliance_agent.md`, "Looking a reference up", which the Rules bullet on `lookup.py resolve` names, read by the session before its first `resolve`.
 17. For `idea`, the sketch: the `<sketch file>` of the call, the call's text when item 1 reads it as the sketch, or else the words the user gives when the first message asks for them.
-18. For `idea`, the project's `README.md`, when it exists: its section "Research questions and claims", read for a reopening, and its other sections, left as they stand.
+18. For `idea`, the project's `README.md`, when it exists: its section "Research questions and claims", read for a reopening, and its other sections, left as they stand, a README in the old layout being the stop of Steps 1.
 19. For `idea`, the progress files `notes/idea-<YYYY-MM-DD>.md` of the project folder, `-2`, `-3` and so on included, of which only the newest is read, for the choices it holds still open.
-20. For `research`, `research adopt`, `full` and `revision`, the project's `README.md`, its entry file, read first, in the sections of `references/project_layout.md`, "The README": its section `## The stage and campaign that stand`, which names the stage that stands for a project `research` started, and its `## Cluster facts`, the cluster's facts as the README records them, which Frame asks once and no later run asks again.
-21. For `research`, `research adopt` and `revision`, the files of the project that the completion criteria of the stages name: `code/`, `code/results/`, `code/attic/README.md`, `logs/` and the briefs and reports of `notes/code/`, or the project's own folders that `## Where things live` names.
-22. For `research`, `research adopt` and `revision`, the pages the session reads: `references/research_stages.md` at each stage ("research" items 4 to 17, "research adopt" items 1 and 2), `references/project_layout.md` ("research" items 1, 3 and 14, "research adopt" item 3), `references/research_brief.md` ("research" item 6), `references/slurm.md` at each job ("research" item 10), and `references/handoff_schemas.md`, Schema 9, with `references/artifact_reproducibility_pattern.md` for the record of the experiments ("research" item 17), each read in `revision` at the item of "research" that "revision" items 3 to 5 run.
+20. For `research`, `research adopt`, `full` and `revision`, the project's `README.md`, its entry file, read first, in the sections of `references/project_layout.md`, "The README": its `### The stage and campaign that stand` under `## Working state`, which names the stage that stands for a project `research` started, and its `### Cluster facts`, the cluster's facts as the README records them, which Frame asks once and no later run asks again; a README in the old layout is the stop of Steps 1.
+21. For `research`, `research adopt` and `revision`, the files of the project that the completion criteria of the stages name: `code/`, `code/results/`, `code/attic/README.md`, `logs/` and the briefs and reports of `notes/code/`, or the project's own folders that `### Where things live` names.
+22. For `research`, `research adopt`, `readme` and `revision`, the pages the session reads: `references/research_stages.md` at each stage ("research" items 4 to 17, "research adopt" items 1 and 2), `references/project_layout.md` ("research" items 1, 3, 14 and 16, "research adopt" item 3, "readme" items 1 to 5), `references/research_brief.md` ("research" item 6), `references/slurm.md` at each job ("research" item 10), and `references/handoff_schemas.md`, Schema 9, with `references/artifact_reproducibility_pattern.md` for the record of the experiments ("research" item 17), each read in `revision` at the item of "research" that "revision" items 3 to 5 run.
 23. The two role pages of the agents `research` and the campaigns of `revision` start: `agents/research_builder_agent.md`, read by the builder, and `agents/research_reviewer_agent.md`, read by the reviewer, each given `references/slurm.md` with it ("research" items 7 and 8).
 24. For `full`, the README's section `## Next`, which records the modes `full` runs, in order, with the mode that stands ("full" item 1).
+25. For `readme`, and for `research adopt` at its item 3, the files the rewrite drafts from ("readme" item 1):
+    - The project's `README.md`, when it exists.
+    - The `README.md` and the `.depositignore` of the project's code folder, found as "readme" item 1 gives it, when they exist.
+    - The project's files: the code, the results, `code/attic/README.md`, the notes with the novelty pages, and the manuscript of each manuscript's folder.
 
 ## Steps
 
-Steps 1 to 6 run in order for `integrity`, `manuscript` and `revision`, which needs Steps 4 and 5 for its integrity checks. A run of `novelty`, `idea`, `research` or `research adopt` runs Steps 1 and then Steps 6, and skips Steps 2 to 5, since it has no run folder, no record of the experiments to read, no `state.json` and no compliance questions. A run of `full` runs Steps 1 and then Steps 6, and runs Steps 2 to 5 for its run of `manuscript` when it reaches it ("full" item 6).
+Steps 1 to 6 run in order for `integrity`, `manuscript` and `revision`, which needs Steps 4 and 5 for its integrity checks. A run of `novelty`, `idea`, `research`, `research adopt` or `readme` runs Steps 1 and then Steps 6, and skips Steps 2 to 5, since it has no run folder, no record of the experiments to read, no `state.json` and no compliance questions. A run of `full` runs Steps 1 and then Steps 6, and runs Steps 2 to 5 for its run of `manuscript` when it reaches it ("full" item 6).
 
 1. Read the call and settle the mode, the depth and the entry stage.
-   - The call's first word after `/researcher` is the mode: `novelty`, `idea`, `research`, `full`, `integrity`, `manuscript` or `revision`, and `research adopt` is the adopt mode of `research`.
+   - The call's first word after `/researcher` is the mode: `novelty`, `idea`, `research`, `readme`, `full`, `integrity`, `manuscript` or `revision`, and `research adopt` is the adopt mode of `research`.
    - Check the folders and the file of "What it reads" 5 to 7 first, before anything is written.
-   - Check the arguments as "What it reads" 1 gives them, and for `revision` the project folder and the manuscript's folder as "What it reads" 3 gives them.
+   - Check the arguments as "What it reads" 1 gives them.
+   - For `idea`, `research`, `research adopt`, `full` and `revision`, a project's `README.md` in the old layout of `references/project_layout.md`, "A README in the old layout", is the stop "A README in the old layout", once the project folder is known, before any item of the mode and before the next bullet's checks.
+   - For `revision`, check the project folder and the manuscript's folder as "What it reads" 3 gives them.
    - `/researcher integrity <main.tex>` runs the check at the depth of Mode 2 of `agents/integrity_verification_agent.md`, the full depth of the final check.
    - `/researcher integrity pre-review <main.tex>` runs the check at the depth of Mode 1, the sampled depth of the check before a review.
    - `/researcher manuscript <project folder>` enters at Stage 2, and `/researcher manuscript <project folder> --manuscript <name>` enters at Stage 2 for the paper in `<project folder>/manuscript-<name>/`.
@@ -90,11 +97,12 @@ Steps 1 to 6 run in order for `integrity`, `manuscript` and `revision`, which ne
    - `/researcher manuscript <main.tex> <comments file>` enters at Stage 2.5 and goes on to Stage 4 with the comments file, as the row "INIT, Stage 4" of `references/pipeline_state_machine.md`, "Normal Flow Transitions", gives.
    - `/researcher revision <project folder> <comments file> [--manuscript <name>]` runs its subsection, "revision", on the `main.tex` of the manuscript's folder of "What it reads" 3, with the split of the comments ("revision" item 2) as its entry stage.
    - `/researcher novelty <idea> [<project folder>]` and `/researcher idea <project folder> [<sketch file>]` or `/researcher idea <sketch, more than two words>` run their subsections, with no depth and no entry stage.
-   - `/researcher research <project folder>`, `/researcher research adopt <project folder>` and `/researcher full <project folder> [<sketch file>]` or `/researcher full <sketch, more than two words>` run their subsections, "research", "research adopt" and "full", with no depth and no entry stage.
+   - `/researcher research <project folder>`, `/researcher research adopt <project folder>`, `/researcher readme <project folder>` and `/researcher full <project folder> [<sketch file>]` or `/researcher full <sketch, more than two words>` run their subsections, "research", "research adopt", "readme" and "full", with no depth and no entry stage.
    - A call with no mode word that asks whether an idea, a claim or a method is new, or for the closest prior work to one, is the stop "The entry point" with the line of `novelty` and the idea taken from the call.
    - A call with no mode word that asks to shape a sketch or a rough idea into a research question or claims is the stop "The entry point" with the line of `idea`.
    - A call with no mode word that asks to take an idea to results, or to run the experiments of a project, is the stop "The entry point" with the line of `research`.
-   - A call with no mode word that asks to continue a research project is the stop "The entry point" with the line of `research` when the project's README names a stage of `research` in `## The stage and campaign that stand`, and with the line of `research adopt` otherwise.
+   - A call with no mode word that asks to continue a research project is the stop "The entry point" with the line of `research` when the project's README names a stage of `research` in `### The stage and campaign that stand` under `## Working state`, and with the line of `research adopt` otherwise.
+   - A call with no mode word that asks to bring a project's README up to date, or to rewrite it or its code README for a newcomer, is the stop "The entry point" with the line of `readme`.
    - A call with no mode word that asks to go from an idea to a paper is the stop "The entry point" with the line of `full`.
    - A call with no mode word that asks for new experiments, new analyses, another dataset or another baseline that referees asked for, such as "the referees asked for more experiments", is the stop "The entry point" with the line of `revision`.
    - Any other call that matches no line of Quick start is read against `agents/pipeline_orchestrator_agent.md`, "1. Intent Detection", and `references/mode_advisor.md`, and the line it matches is the stop "The entry point".
@@ -133,7 +141,7 @@ Steps 1 to 6 run in order for `integrity`, `manuscript` and `revision`, which ne
    - For `revision`, the caps are one `/paper revision` run for the comments file, 8 coaching rounds of an external review, 3 correction rounds at each integrity check, and for each campaign the counts of `research`: 3 returns of a campaign to its own start, 2 returns of a piece of code to a builder after its first review, 2 implementation causes for one result, and the count of methods of the setting.
    - Ask, for the compliance agent, the AI tools used, each with its name, version, developer, stage and purpose, and the intended venue, the `user_metadata` of `agents/compliance_agent.md`, "Input contract".
    - Done when the user has confirmed the configuration, with each setting the user adjusted and the answers to the compliance questions written in `state.json`.
-6. Go on with the subsection of the mode: "novelty", "idea", "research", "research adopt", "full", "integrity", "manuscript" or "revision".
+6. Go on with the subsection of the mode: "novelty", "idea", "research", "research adopt", "readme", "full", "integrity", "manuscript" or "revision".
    - Done when that subsection's last item is done.
 
 ### novelty
@@ -235,53 +243,62 @@ The session holds the interview itself, in rounds of the interview, with no skil
     - The user's words go into the section as the Rules bullet on the user's words says.
     - Done when the user has confirmed the section, or corrected it and the corrected section is shown.
 11. Write the section into the project's `README.md` and close the progress file.
-    - In a `README.md` that exists, the section takes the place of the section of that heading, or stands first after the README's title when it has none, and every other section stays as it stands.
+    - In a `README.md` that exists, the section takes the place of the section of that heading where it stands.
+    - In a `README.md` with no section of that heading, the section stands at its place in the order of `references/project_layout.md`, "The README": after the title and after `## In short` and `## What it is and why` where the README holds them, and before every other section.
+    - Every other section of the README stays as it stands.
     - A project with no `README.md` gets one: a title line `# <the project folder's name>` and the section.
     - Write `The interview ended: <date>` into the progress file, with the README named.
     - Done when the README, read back, holds the section, and the progress file holds the end line.
 
 ### research
 
-The session directs the work through the six stages of `references/research_stages.md`, each with its completion criterion there, and builds nothing itself (Rules). `<lookup.py>` below is `python3 '<the paper skill's folder>/templates/lookup.py'` ("What it reads" 6). Each stage ends with the README written and the stage that stands named in `## The stage and campaign that stand` (Rules).
+The session directs the work through the six stages of `references/research_stages.md`, each with its completion criterion there, and builds nothing itself (Rules). `<lookup.py>` below is `python3 '<the paper skill's folder>/templates/lookup.py'` ("What it reads" 6). Each stage ends with the README written and the stage that stands named in `### The stage and campaign that stand` (Rules).
 
 1. Read the project folder and settle where the run starts, before anything is written.
    - A folder that does not exist or is empty is a new project, which starts at item 3.
    - A folder that holds only what `idea`, `novelty` and `full` write is a new project too, which starts at item 3.
    - What those modes write is a `README.md` whose `##` sections are `## Research questions and claims`, with or without a `## Next` that records the modes of `full`, and a `notes/` that holds only progress files, novelty pages and their `.bib` files.
-   - A `README.md` whose `## The stage and campaign that stand` names a stage of `research` is a project `research` started, which resumes at item 2.
+   - A `README.md` whose `### The stage and campaign that stand` under `## Working state` names a stage of `research` is a project `research` started, which resumes at item 2.
    - Any other folder is the stop "A project underway", which offers `/researcher research adopt <project folder>`.
    - Done when the run goes on at item 2 or item 3, or the stop is raised.
 2. Resume a project `research` started from its README alone.
-   - Read the README whole, then the files its `## The stage and campaign that stand` names: the brief and the two reports of the piece of code that stands, and the log and the result file of each job id it holds.
+   - Read the README whole, then the files its `### The stage and campaign that stand` names: the brief and the two reports of the piece of code that stands, and the log and the result file of each job id it holds.
    - A job whose log in `logs/` does not show its end has not ended: name it with its id at the stop "The jobs submitted", and poll only when the user asks for it, as `references/slurm.md`, "Submitting", gives.
    - The item of each stage is 4 for Frame, or 5 when the README holds each answer of item 4, 9 for Build, 11 for Baseline, 12 for Experiments, 13 for Compare and 16 for Consolidate.
    - Done when the stage and the campaign that stand and the state of each job are known, and the run goes on at the item of that stage.
 3. Make the layout of a new project, as `references/project_layout.md`, "The tree", gives it.
    - Make each folder with `mkdir -p '<project folder>/<folder>'`.
-   - Write `code/README.md` and `code/attic/README.md` with a title line each, and `code/.depositignore` with the line `data/`, each only when it does not exist.
-   - Write the README's sections of `references/project_layout.md`, "The README", in their order, each holding `None yet.` except the two sections the next bullets keep.
-   - A `## Research questions and claims` that `idea` wrote stays as it stands, first after the title.
-   - A `## Next` that records the modes of `full` stays as it stands, last.
+   - Write `code/attic/README.md` with a title line, only when it does not exist.
+   - Write `code/README.md` with the title and the seven sections of `references/project_layout.md`, "The code README", in their order, each section holding `None yet.`, only when it does not exist.
+   - Write `code/.depositignore` with the lines of `references/project_layout.md`, "The deposit", only when it does not exist.
+   - Write every section of `references/project_layout.md`, "The README", in its order, each section and each fixed `###` heading its item names holding `None yet.`, except the two sections the next bullets keep.
+   - Leave out the placeholder headings `### <dataset>`, `### <result>` and `### <method>`: `## Data`, `## Results and how to reproduce` and `## Dead ends (do not retry)` hold `None yet.` until their writer adds the first `###`.
+   - A `## Research questions and claims` that `idea` wrote stays as it stands, at its place in that order, after `## What it is and why` and before `## Data`.
+   - A `## Next` that records the modes of `full` stays as it stands, at its place in that order, after `## Dead ends (do not retry)` and before `## Working state`.
    - A project with no README gets the title line `# <the project folder's name>`.
-   - Write `Frame` as the stage that stands in `## The stage and campaign that stand`, so that a new session resumes at Frame.
-   - Done when each folder of the tree exists and the README, read back, holds every section in order and names Frame as the stage that stands.
+   - Write each folder of the tree into `### Where things live`.
+   - Write `Frame` as the stage that stands in `### The stage and campaign that stand`, so that a new session resumes at Frame.
+   - Done when each folder of the tree exists, `code/README.md` holds its eight headings, `code/.depositignore` holds its lines, and the README, read back, holds every section in order and names Frame as the stage that stands.
 4. Frame: ask what the run needs, the stop "Frame's questions", in one message.
    - Take the research questions and claims, each claim with its baseline and its metric, from `## Research questions and claims` when `idea` wrote it, and ask for them when it did not.
    - Ask what counts as good enough, and the limits on storage, compute, time and access.
    - Ask the setting, manual or automatic. Under manual the run stops at each result that does not beat the baseline or does not reach what was set. Under automatic it tries methods by itself until a result beats the baseline or the count of methods the user gives is reached.
-   - Ask the cluster's facts when `## Cluster facts` holds none: whether the work runs on a cluster, and for a cluster its scheduler, its partitions, its account, its modules, its scratch storage and its time limits.
+   - Ask the cluster's facts when `### Cluster facts` holds none: whether the work runs on a cluster, and for a cluster its scheduler, its partitions, its account, its modules, its scratch storage and its time limits.
+   - Ask what the project is, its problem, why it matters (for a method applied to a clinical dataset, its clinical relevance), what it does and its venue, where the project's files do not hold them.
    - Give each question its options and a recommendation, from what the project's files and a lookup show.
-   - Write the answers into `## Research questions and claims`, in the form `idea` writes it ("idea" item 10) when `idea` did not, into `## Constraints and limits` and into `## Cluster facts`.
-   - Done when the README, read back, holds each answer.
+   - Write the answers into `## Research questions and claims`, in the form `idea` writes it ("idea" item 10) when `idea` did not, into `## Constraints and limits` and into `### Cluster facts`.
+   - Write the line under the title, `## In short` and `## What it is and why` with its three `###` headings, from the research questions and claims and the user's answers.
+   - Write `### The closest prior work` from the project's novelty pages in `notes/`, each page linked, when the project has one.
+   - Done when the README, read back, holds each answer and each section this item writes.
 5. Frame: the dataset, the stop "The dataset".
    - Find candidate datasets with a web search, and the published works that report on each with `<lookup.py> search '<the dataset's name> <the task's key terms>'`.
    - Show each candidate with its size, its licence, how it is obtained, the published works that report on it and whether it fits each limit of `## Constraints and limits`, with one recommendation and its reason.
-   - Write the user's choice and its reason into `## Constraints and limits`, and where its raw inputs stand into `## Where things live`.
+   - Write the user's choice into `## Data`, as a `### <dataset>` with its source, its version, its access, where its raw inputs stand, by their local path and on a cluster their cluster path, and the reason it was chosen.
    - Done when Frame's completion criterion holds and the README names Build as the stage that stands.
 6. Write the brief of one piece of code, in the form of `references/research_brief.md`, to `notes/code/<piece>-brief-<n>.md`.
    - A piece of code is a unit a stage needs: in Build each piece the baseline needs, in Experiments a campaign's method, in Compare a dead end to keep or the fault an implementation cause names.
    - The research question and the user's words reach the brief as quoted lines, as the Rules bullet on the user's words says.
-   - Link the brief from `## The stage and campaign that stand`.
+   - Link the brief from `### The stage and campaign that stand`.
    - Done when the brief, read back, holds each section of the form.
 7. Start the builder of `agents/research_builder_agent.md` as a fresh agent through the Agent tool, on the runner's general-purpose agent with the runner's defaults.
    - Give it its role page, the brief, the README and `references/slurm.md`.
@@ -306,38 +323,41 @@ The session directs the work through the six stages of `references/research_stag
     - On a cluster, compute nothing on the login node.
     - Make `logs/` with `mkdir -p '<project folder>/logs'` before the first submission, since the scheduler makes no folder for a job's output.
     - Off a cluster, run the job's command where the session runs, with its output and its error file in `logs/`.
-    - After submitting, write each job id to `## The stage and campaign that stand`.
+    - After submitting, write each job id to `### The stage and campaign that stand`.
     - Once the job ids are written, stop at "The jobs submitted".
     - Poll only when the user asks for it in the run.
     - Stop polling when the user asks.
     - A job whose log shows an error, or whose result file lacks a value the metric asks for, is the stop "A job that fails".
     - Done when each job id stands in the README and the run has stopped, or each job has ended and its log and its result file are read.
 11. Baseline: run the baseline under the conditions of Frame, as item 10 gives a job.
-    - Write its result to `code/results/` with the command that made it, and its line into `## Results`.
+    - Write its result to `code/results/` with the command that made it, and its entry, a `### <result>`, into `## Results and how to reproduce`.
     - Done when Baseline's completion criterion holds and the README names Experiments as the stage that stands.
-12. Experiments: run each campaign, each with its own method and its own section in `## The stage and campaign that stand`.
+12. Experiments: run each campaign, each with its own method and its own section in `### The stage and campaign that stand`.
+    - Write each campaign's method into `### The approach` of `## Method` when the campaign starts.
     - Have each campaign's code built and read by items 6 to 8, and run its jobs by item 10.
     - A campaign can send the work back to its own start, with the reason in its section, at most 3 times, after which its results go on to Compare.
     - A new campaign is added with a section of its own.
-    - Write each result to `code/results/` with the command that made it, and its line into `## Results`.
-    - Done when Experiments' completion criterion holds and the README names Compare as the stage that stands.
+    - Write each result to `code/results/` with the command that made it, and its entry into `## Results and how to reproduce`.
+    - Done when Experiments' completion criterion holds, `### The approach` names the method of each campaign, and the README names Compare as the stage that stands.
 13. Compare: read each result against the baseline and against what Frame set as good enough.
-    - Write in `## Results`, for each result, whether it beats the baseline and whether it reaches what was set.
-    - Done when each result of the campaigns that stand has its line.
+    - Write in `## Results and how to reproduce`, for each result, whether it beats the baseline and whether it reaches what was set.
+    - Write into `### What is not claimed`, with each result's comparison, what the project does not claim from it, such as a dataset or a setting the result does not cover.
+    - Write into `### What this project adds`, with each result's comparison, what a result that beats the baseline adds beyond the closest prior work.
+    - Done when each result of the campaigns that stand has its entry, and the two sections hold what its comparison shows.
 14. Diagnose each result that does not beat the baseline or does not reach what was set.
     - Name the cause as the dataset, the method, the implementation or the research question, with the evidence from the result files, the logs and the code.
     - Write a proposal: a new method, which is a change of objective, of optimisation or of model structure; a change of the method; or another dataset.
     - Write the diagnosis and the proposal into the README, or into a file `notes/diagnosis-<campaign>-<YYYY-MM-DD>.md` that the README links.
-    - A method that did not beat the baseline is a dead end: have it moved into `code/attic/` by items 6 to 8, indexed in `code/attic/README.md` and listed in `## Dead ends` with why it failed, as `references/project_layout.md`, "The dead ends", gives.
+    - A method that did not beat the baseline is a dead end: have it moved into `code/attic/` by items 6 to 8, indexed in `code/attic/README.md` and listed in `## Dead ends (do not retry)` with why it failed, as `references/project_layout.md`, "The dead ends", gives.
     - Record each such result as guidance for the next method, as the Rules bullets on a result that does not beat the baseline say.
-    - Done when each such result has its diagnosis with its cause and its proposal, and each dead end stands in `code/attic/` and in `## Dead ends`.
+    - Done when each such result has its diagnosis with its cause and its proposal, and each dead end stands in `code/attic/` and in `## Dead ends (do not retry)`.
 15. Send the work on, by the setting of `## Constraints and limits`, which the user can change at any time in words.
     - Manual: a result that does not beat the baseline is the stop "A result that does not beat the baseline", which shows its diagnosis with what was tried and the proposal.
     - Manual: a result that beats the baseline and does not reach what was set is the stop "A result short of what was set, in `research`", which shows its diagnosis with what was tried and the proposal.
     - Automatic: go on by itself with each proposal, one method at a time with its diagnosis written.
     - Automatic: stop trying methods when a result beats the baseline, which goes on to Consolidate, or when the count of methods is reached, the stop "The count of methods reached".
     - A result that beats the baseline and does not reach what was set goes on to Consolidate in the automatic setting, and in the manual setting on the user's word at its stop.
-    - Such a result is named in `## Results` as below what was set, and item 18's message names it the same way.
+    - Such a result is named in `## Results and how to reproduce` as below what was set, and item 18's message names it the same way.
     - The causes below send on each result that does not go to Consolidate, and each proposal the user takes at a stop.
     - A dataset cause reopens Frame's choice of the dataset at item 5, the stop "The dataset", in either setting.
     - A research question cause reopens `idea` with the diagnosis as the reopening evidence, as "idea" item 2 gives it, in either setting, and Frame then runs again at item 4 on the research questions `idea` writes.
@@ -349,7 +369,7 @@ The session directs the work through the six stages of `references/research_stag
     - Done when the README names the stage the work goes to, or a stop is raised.
 16. Consolidate: run `code/run_all.sh` once from the raw inputs in a clean copy of `code/`, and compare what it yields with what is reported.
     - Make the clean copy with `rsync -a --exclude '/data/' --exclude '/results/' --exclude '/figures/' --exclude '/attic/' '<project folder>/code/' '<copy>/'`, which copies none of the four folders.
-    - `<copy>` is the folder `code` inside a folder `mktemp -d` makes, on the scratch storage `## Cluster facts` names on a cluster.
+    - `<copy>` is the folder `code` inside a folder `mktemp -d` makes, on the scratch storage `### Cluster facts` names on a cluster.
     - Make `logs/` beside `<copy>` with `mkdir -p`, so that the job scripts' `../../logs/` of `references/slurm.md` writes there.
     - Run `'<copy>/run_all.sh' '<the folder of the raw inputs>'` once, through the scheduler on a cluster as item 10 gives a job.
     - Compare each number and each table it yields by its values, and each figure by the values `paper.py` draws it from, with the reported one in `code/results/` and `code/figures/`, and write the comparison to `notes/reproduction-<YYYY-MM-DD>.md`, linked from the README.
@@ -357,15 +377,16 @@ The session directs the work through the six stages of `references/research_stag
     - A difference sends the work back to the stage that made the number, the table or the figure, Baseline or Experiments, and Consolidate then makes one more reproduction run.
     - A second reproduction run that still differs is the stop "A number that does not reproduce".
     - Copy the reproduction run's logs into the project's `logs/` with `cp`, then remove the folder `mktemp -d` made with `rm -r` once the comparison is written.
-    - Done when the comparison shows no difference, or the stop is raised.
+    - Bring `code/README.md` to the layout of `references/project_layout.md`, "The code README", from the code the reproduction run ran, its command and the files it yielded, once the comparison shows no difference.
+    - Done when the comparison shows no difference and `code/README.md`, read back, holds the eight headings of that layout, or the stop is raised.
 17. Consolidate: write the record of the experiments, `experiment-record.yaml` in the project folder, in the form of Schema 9 of `references/handoff_schemas.md`, "Experiment Provenance Intake".
     - Write `experiment_intake_declaration` with `status: experiments_declared`, `declared_at` and `declared_by: scholar`.
-    - Write one entry of `experiment_provenance[]` for each experiment of `## Results`: its `experiment_id`, its `title`, its `repro_lock` in the shape of `references/artifact_reproducibility_pattern.md`, its `planned_vs_executed[]` with each result file, metric and value, and its `known_limitations[]`.
-    - Fill each entry's `negative_results[]` from the dead ends of `## Dead ends` for that experiment: a list the integrity check holds claims against, which is never manuscript content.
-    - Load the file as YAML after the write, and check that it holds one entry for each experiment of `## Results`.
+    - Write one entry of `experiment_provenance[]` for each experiment of `## Results and how to reproduce`: its `experiment_id`, its `title`, its `repro_lock` in the shape of `references/artifact_reproducibility_pattern.md`, its `planned_vs_executed[]` with each result file, metric and value, and its `known_limitations[]`.
+    - Fill each entry's `negative_results[]` from the dead ends of `## Dead ends (do not retry)` for that experiment: a list the integrity check holds claims against, which is never manuscript content.
+    - Load the file as YAML after the write, and check that it holds one entry for each experiment of `## Results and how to reproduce`.
     - Done when Consolidate's completion criterion holds, so that the stop "The record of the experiments" does not arise for this project, and the README names the end of `research` as the stage that stands.
 18. End the run.
-    - Write `## Next` with the next actions.
+    - Write `## Next` with the next actions, as a short numbered list.
     - Write `## Papers` with each paper the results serve.
     - Name the results, `experiment-record.yaml` and the comparison of item 16 by their paths, each result below what was set named as such, and give the line `/researcher manuscript <project folder>` for the first paper and `/researcher manuscript <project folder> --manuscript <name>` for a further one.
     - A further paper the user asks for in words is written in `manuscript-<name>/`, or as a new project that copies the code it needs when the user asks for that, as `references/project_layout.md`, "Several papers", gives.
@@ -377,7 +398,7 @@ The session directs the work through the six stages of `references/research_stag
 The adopt mode reads a project underway that `research` did not start, moves nothing, and then goes on as `research`.
 
 1. Read the README first, when it is usable, and check each stage it calls done.
-   - A usable README holds the section `## The stage and campaign that stand`.
+   - A usable README holds the section `### The stage and campaign that stand` under `## Working state`.
    - Check each stage the README calls done, in stage order, against its completion criterion in `references/research_stages.md`, in the project's files.
    - A result that is partial, unfinished or below what Frame set as good enough counts as not done.
    - The first stage whose completion criterion fails is where the run continues.
@@ -386,14 +407,64 @@ The adopt mode reads a project underway that `research` did not start, moves not
    - Show, for each stage, what the files show of it, with the file that shows it, and whether its completion criterion holds, a result that is partial, unfinished or below what was set counted as not done.
    - The first stage whose completion criterion fails is where the run continues.
    - Done when the user has confirmed what was found, once, with each correction the user gives.
-3. Write the README's sections of `references/project_layout.md`, "The README", that the README lacks, after its own sections, and change none of its own.
-   - Record in `## Where things live` the project's own name for each folder, as `references/project_layout.md`, "A project underway", gives.
-   - Move no file and no folder of the project.
-   - Name the stage of item 1 or item 2 in `## The stage and campaign that stand`.
-   - A project with no README gets one, with the title line `# <the project folder's name>` and the sections.
-   - Done when the README, read back, holds every section of the layout and its own sections as they stood.
+3. Bring the README to the layout of `references/project_layout.md`, "The README", by the readme mode's rewrite, "readme" items 1 to 5, with its stop "The README drafts".
+   - The rewrite records the project's own folder names in `### Where things live` ("readme" item 2).
+   - The rewrite moves no file of the project ("readme" item 5).
+   - The draft names the stage of item 1 or item 2 in `### The stage and campaign that stand`.
+   - A project with no README gets its README drafted by the rewrite, from the project's files and what item 2 found.
+   - Done when the README, read back, is the draft the user approved, and names the stage of item 1 or item 2.
 4. Go on as `research` from that stage, at the item "research" item 2 names for it.
    - Done when the last item of "research" is done.
+
+### readme
+
+The readme mode drafts a project's `README.md`, and the `README.md` and `.depositignore` of its code folder, whole in the layouts of `references/project_layout.md`, and writes them only after the user approves the drafts. "research adopt" item 3 runs items 1 to 5.
+
+1. Find the files the drafts are made from, as "What it reads" 25 gives them.
+   - The code folder is the first of these that holds the project's code:
+     - the project's own code folder that the README names, in `### Where things live` or, in a README of another layout, where it says the code stands;
+     - `code/`;
+     - when neither holds it, the folder of the project's files that holds its code, its `run_all.sh`, its job scripts or its source files, noted with the files it was found by, which item 4 shows.
+   - The code folder is a folder inside the project folder, never the project folder itself: code that stands at the project's root gives no code folder, and the draft asks the user, as a question, which folder is the project's code folder.
+   - A project whose files hold no code has no code folder: the readme mode drafts its README alone and makes no code folder.
+   - Read no file of another tool, such as a project manifest, as the Rules bullet on other tools' files says.
+   - Done when each file of "What it reads" 25 that exists is read, and the code folder is known or known to be absent.
+2. Draft the README whole, in the order of `references/project_layout.md`, "The README".
+   - Put each fact of the old README under the section of the layout it belongs to, and for a README in the old layout as `references/project_layout.md`, "A README in the old layout", gives.
+   - Put a fact that no section of the layout holds in its form, such as a dated log, in a file `notes/<slug>.md` named as `references/project_layout.md`, "The README", gives, and keep a link to it in the section.
+   - A made-up example: a `## Next` that holds a dated log of forty lines becomes a short numbered list of the next actions, and the log goes to `notes/next.md`, or to `notes/next-2.md` when `notes/next.md` exists.
+   - Move a section past 200 lines to its `notes/<slug>.md` in the same way.
+   - Fill each section the old README lacks from the project's files: the results from `code/results/` and their commands, the dead ends from `code/attic/README.md`, the closest prior work from the novelty pages, the papers from each manuscript's folder.
+   - Draft a section the files cannot fill from the old README, the manuscript and the notes, with the source of each sentence, its file and its section, named in the draft.
+   - Write what no file holds as a question in the draft, under its section, for the user to answer at item 4.
+   - Write `None yet.` in a section with nothing to hold yet, such as `## Papers` in a project with no paper.
+   - Once a paper is the canonical record, give `## Method` and `## Related work` a pointer to it and what the paper does not hold.
+   - Record in `### Where things live` the project's own folder for each folder of the tree, as `references/project_layout.md`, "A project underway", gives, the code folder of item 1 among them.
+   - Done when the draft holds every section of the layout in its order, and each fact of the old README stands in a section of the draft or in a `notes/` file it links.
+3. Draft the code folder's `README.md` and `.depositignore`, when the project has a code folder.
+   - Draft `<code folder>/README.md` whole in the order of `references/project_layout.md`, "The code README", from the old code README and the code, its facts kept as item 2 keeps those of the README, its sources named and what no file holds a question.
+   - A made-up example: a project whose README names `src/` as its code folder, or whose code stands in `src/` and that has no README, gets its code README drafted at `src/README.md` and its `.depositignore` at `src/.depositignore`, `### Where things live` names `src/`, and no folder `code/` is made.
+   - Draft `<code folder>/.depositignore` with the lines of `references/project_layout.md`, "The deposit": a `.depositignore` that exists keeps each of its own lines, and the draft adds each line of that section it lacks.
+   - Done when both drafts stand, or the project has no code folder.
+4. Show the drafts, the stop "The README drafts".
+   - Show each draft whole, with every change from the file it replaces, and each `notes/` file it writes, with its name.
+   - Show, for each fact of the old text, the section or the `notes/` file it went to.
+   - Show each sentence's source and each question of the drafts.
+   - Show the code folder and, when no README named it, the files it was found by, for the user to confirm or correct.
+   - A code folder the user corrects, or names in answer to the question of item 1, gets its two files drafted again in that folder, and the draft's `### Where things live` names that folder.
+   - A user who answers that the project has no code folder gets the README alone, and no code folder's files are drafted or written.
+   - A draft the user corrects is shown again with the corrections, and each answer to a question goes into its section.
+   - Done when the user has approved each draft.
+5. Write the approved drafts.
+   - Write each `notes/` file of the drafts under its name, never over a file that exists, as `references/project_layout.md`, "The README", names it.
+   - Then write the README and, when the project has a code folder, its `README.md` and `.depositignore`.
+   - Move no file and no folder of the project.
+   - Write no file that the approved drafts do not hold.
+   - Done when each file, read back, is the draft the user approved.
+6. End the run.
+   - Name each file written by its path.
+   - Inside `research adopt`, this item is left out, and the adopt mode goes on at its item 4.
+   - Done when the message is sent.
 
 ### full
 
@@ -545,11 +616,11 @@ The adopt mode reads a project underway that `research` did not start, moves not
      - `kind`: `results` or `text`, as the split stands.
      - `state`: `open`, `in_campaign`, `answered_by_results` or `answered_in_text`.
      - `campaign`: the campaign's folder name under `code/experiments/`, or `null`.
-     - `results`: the lines of `## Results` that answer it, or an empty list.
+     - `results`: the entries of `## Results and how to reproduce` that answer it, or an empty list.
    - `pipeline_state` is `awaiting_confirmation` at each stop of items 2 to 5 that waits on the user's answer, as `agents/pipeline_orchestrator_agent.md`, "Writing the run's state", gives for a checkpoint.
    - `pipeline_state` is `paused` at the stop "The jobs submitted", where the session ends while the jobs run; in `revision` it marks that stop as well as a pause the user asks for.
    - `pipeline_state` is `running` again once the user answers or the run is continued, so that Steps 2 offers the run after any of these stops.
-   - A run continued at Steps 2 goes on at the item its `current_stage` names, and within `campaigns` at the campaign that stands, which "research" item 2 reads from the README's `## The stage and campaign that stand`.
+   - A run continued at Steps 2 goes on at the item its `current_stage` names, and within `campaigns` at the campaign that stands, which "research" item 2 reads from the README's `### The stage and campaign that stand`.
    - One run answers one comments file, and the referee comments of a later round are a new run, `/researcher revision` with their own comments file, once this run has ended.
    - Done when the item the run goes on at is known and `state.json` names it.
 2. Split the comments: invoke `/paper revision-coach '<comments file>' '<main.tex>'` through the Skill tool, with its own stops.
@@ -558,20 +629,20 @@ The adopt mode reads a project underway that `research` did not start, moves not
    - A comment with a commitment of type `add_experiment` or `add_analysis` is a results comment, and every other comment is a text comment: the types the coach gave decide, never the session's own reading of a comment.
    - Show the split at the stop "The split of the comments": each comment with its id, its commitments and their types, under results comments or under text comments.
    - A comment the user moves to the other side counts as a comment of that side from then on, so a text comment moved to results work gets its campaign at item 3.
-   - Write the split into `revision_comments` with `split_confirmed: true` (item 1), and each results comment, by its id and as quoted lines, into `## The stage and campaign that stand`.
+   - Write the split into `revision_comments` with `split_confirmed: true` (item 1), and each results comment, by its id and as quoted lines, into `### The stage and campaign that stand`.
    - Done when the user has confirmed the split and the README names each results comment.
 3. Run each results comment as one campaign of the project's Experiments stage, by "research" items 6 to 15, one comment at a time.
    - A results comment that needs a dataset the project does not hold first has that dataset chosen by "research" item 5, the stop "The dataset" with its candidates, their size, licence and fit to `## Constraints and limits`, for that comment only.
-   - The dataset chosen is written beside the project's dataset.
+   - The dataset chosen is written into `## Data` beside the project's dataset, as a `### <dataset>` of its own.
    - Frame's questions of "research" item 4 are not asked again.
    - A results comment that needs a new dataset or a new baseline then has the pieces of code it needs built and read in Build, by "research" item 9 for those pieces only, and the runs of the new baseline are then that comment's campaign.
    - Each brief of a campaign quotes, beside the research question, the results comment the campaign answers, as quoted lines, `> `, so that the builder and the reviewer read the code against the comment.
    - Write `state: in_campaign` and the campaign's folder name into the comment's entry of `revision_comments` when its campaign starts.
-   - Each campaign's section in `## The stage and campaign that stand` names the comment it answers by its id, and the run folder of the revision, so that a new session resumes the revision from the README (item 1).
+   - Each campaign's section in `### The stage and campaign that stand` names the comment it answers by its id, and the run folder of the revision, so that a new session resumes the revision from the README (item 1).
    - Each campaign keeps the counts of `research`: 3 returns to its own start ("research" item 12), 2 returns of a piece of code to a builder ("research" item 8), 2 implementation causes for one result and the count of methods of the setting ("research" item 15).
    - Compare reads each result of the campaign against the baseline as "research" items 13 and 14 give it, and for a comment that asks for a new baseline it reads the project's method against that new baseline.
    - "research" item 15 sends the work on with its stops as they stand, except for the causes and the count that item 4 gives.
-   - A results comment is answered when a result of its campaigns beats the baseline, a result that does not reach what Frame set as good enough named as below what was set in `## Results`, and its entry of `revision_comments` then holds `state: answered_by_results` and those results.
+   - A results comment is answered when a result of its campaigns beats the baseline, a result that does not reach what Frame set as good enough named as below what was set in `## Results and how to reproduce`, and its entry of `revision_comments` then holds `state: answered_by_results` and those results.
    - Done when each results comment is answered, or is answered in text alone at the stop of item 4.
 4. Stop at a results comment that the results do not answer yet: the stop "A comment the results do not answer yet".
    - It arises at a diagnosis whose cause is the dataset or the research question, which "research" item 15 sends to Frame or to `idea`, since neither runs in `revision`.
@@ -584,14 +655,14 @@ The adopt mode reads a project underway that `research` did not start, moves not
    - It runs whenever a campaign of the run produced a result, on a cluster or off one.
    - A run with no results comment left, every comment moved to text work at the split, skips this item, with `stages.consolidate.status: skipped`.
    - Copy the record's `experiment_intake_declaration` and `experiment_provenance[]` into `material-passport.yaml` again, as Steps 4 does.
-   - The end of `research` that "research" item 17 names stays the stage that stands in `## The stage and campaign that stand`, so that "What it reads" 3 and "research" item 1 still read the project as one `research` started.
+   - The end of `research` that "research" item 17 names stays the stage that stands in `### The stage and campaign that stand`, so that "What it reads" 3 and "research" item 1 still read the project as one `research` started.
    - Done when "research" item 17 is done, or the item is skipped.
 6. Stage 2.5 and the coaching: run "manuscript" items 1 to 3 for the stages of this run, then "manuscript" item 5, then the bullet of "manuscript" item 7 on the strategic coaching.
    - The parsed comments of item 2 are the structured list of `references/external_review_protocol.md`, "Step 1: Intake and Structuring", which the coaching reads.
    - Done when Stage 2.5 has ended as "manuscript" item 5 says, and the coaching has ended within its 8 rounds or the user has said "just fix it".
 7. Write `revision-comments.md` in the run folder.
    - Give each comment of the parsed list a section `## <id>`, in the list's order, with the comment as given, as quoted lines, and the response the coaching settled for it, when it settled one.
-   - For a results comment answered by results, add the lines of the README's `## Results` of each result that answers it and beats the baseline, each written as the scientific claim it supports, as the Rules bullet on a fact from code says.
+   - For a results comment answered by results, add the lines of the README's `## Results and how to reproduce` of each result that answers it and beats the baseline, each written as the scientific claim it supports, as the Rules bullet on a fact from code says.
    - For a results comment answered in text alone (item 4), add that it is answered in text, with what the revision does instead, and no result.
    - End the file with a section `## Result files for the results check`: the result file under `code/results/` of each result the file names, each marked as a source of the results check and no text of the manuscript or the response letter.
    - In that last section, name the `negative_results[]` of `experiment-record.yaml` as dead ends that no sentence of the manuscript or the response letter presents (Rules).
@@ -604,9 +675,9 @@ The adopt mode reads a project underway that `research` did not start, moves not
    - Done when "manuscript" item 9 is done.
 10. Stage 4.5 and the end of the run: run "manuscript" item 12, then "manuscript" item 13.
     - Before the message of "manuscript" item 13, write into the README's `## Papers`, beside the paper's folder, the results the revision added.
-    - Write the end of the revision, with its run folder and its comments file, into `## The stage and campaign that stand`, beside the end of `research`, which stays the stage that stands.
+    - Write the end of the revision, with its run folder and its comments file, into `### The stage and campaign that stand`, beside the end of `research`, which stays the stage that stands.
     - The message also names the results the revision added and each comment answered in text alone.
-    - Done when "manuscript" item 13 is done, `## Papers` names the results the revision added and `## The stage and campaign that stand` names the end of the revision beside the end of `research`.
+    - Done when "manuscript" item 13 is done, `## Papers` names the results the revision added and `### The stage and campaign that stand` names the end of the revision beside the end of `research`.
 
 ## Stops
 
@@ -615,6 +686,7 @@ The checkpoints wait for the user, and so does every other row but the thirteen 
 | Stop | When | What it shows | What resumes it |
 |---|---|---|---|
 | The entry point | A call matches no line of Quick start (Steps 1) | The Quick start line the request matches, with the materials found and what the entry stage needs | The user confirms the line or names another, and the run goes on with it |
+| A README in the old layout | A call of `idea`, `research`, `research adopt`, `full` or `revision` on a project whose `README.md` is in the old layout of `references/project_layout.md`, "A README in the old layout", before any item of the mode (Steps 1) | That the README is in the old layout, and the line `/researcher readme <project folder>` | `/researcher readme <project folder>`, whose drafts the user approves and which writes the README, then the call again |
 | An unfinished run | A run folder of the same mode holds an unfinished state (Steps 2) | The Progress Dashboard of that run and the stage it stopped at | The user continues that run from its stage, or starts a new run |
 | The record of the experiments | The project folder holds no `experiment-record.yaml` (Steps 4) | The question, asked once, whether the paper reports experiments of its own, with the result files found | The user's answer and, with experiments, the record built with the user, written before the run goes on |
 | The run's configuration | Before the first stage (Steps 5) | The entry stage, the run or depth of each stage, the token estimate, the interaction-count budget and the questions of the compliance agent | The user confirms or adjusts it and answers the questions |
@@ -646,23 +718,24 @@ The checkpoints wait for the user, and so does every other row but the thirteen 
 | A claim found done | The novelty page of a round of the interview gives a settled claim the verdict `done` ("idea" item 5) | The claim, the confirmed works that already do it and the page, as the first choice of the next round of the interview | The user's answer: a sharpened claim, another claim, or the claim dropped |
 | The end of the interview | No choice of the idea is open ("idea" item 10) | The section `## Research questions and claims` as the README will hold it | The user confirms it, and it is written, or corrects it and it is shown again |
 | A project underway | `research` on a folder that holds files beyond what `idea` and `novelty` write, whose README names no stage of `research` ("research" item 1) | What the folder holds, and the line `/researcher research adopt <project folder>` | The user runs `/researcher research adopt <project folder>` |
-| Frame's questions | Frame, before the dataset ("research" item 4) | Each question the README does not answer yet, the research questions and claims, what counts as good enough, the four limits, the setting with its count and the cluster's facts, each with its options and a recommendation | The user's answers, written into the README, and the run goes on to the dataset |
+| Frame's questions | Frame, before the dataset ("research" item 4) | Each question the README does not answer yet, the research questions and claims, what the project is, its problem, why it matters, what it does and its venue where the project's files do not hold them, what counts as good enough, the four limits, the setting with its count and the cluster's facts, each with its options and a recommendation | The user's answers, written into the README, and the run goes on to the dataset |
 | The dataset | Frame's choice of the dataset, a Compare diagnosis that blames the dataset ("research" items 5 and 15), and in `revision` a results comment that needs a dataset the project does not hold ("revision" item 3) | Each candidate dataset with its size, its licence, how it is obtained, the published works that report on it and whether it fits each limit, and the recommendation | The user's pick, written with its reason into the README, and the run goes on to Build |
 | A piece of code that does not pass its review | A third review of a piece still reports a finding that makes a result false ("research" item 8) | The findings of each review of the piece, with its briefs and reports in `notes/code/` | The user's word: a new brief from what the user says, another way to build the piece, or the work sent back to Frame |
 | The jobs submitted | Jobs were submitted, or a job of a resumed project has not ended ("research" items 2 and 10) | Each job id with its script, and that the README holds them | `/researcher research <project folder>`, in this session or a new one, which resumes from the README, or the user's request to poll |
 | A job that fails | A job's log shows an error, or its result file lacks a value the metric asks for ("research" item 10) | The job's script, the lines of its log that show the error, and the result file | The user's word: a brief for the fault through "research" items 6 to 8, the job submitted again as it stands, or the work sent back to Frame |
 | A result that does not beat the baseline | Under the manual setting, a result that does not beat the baseline, and in either setting a third implementation cause for one result ("research" item 15) | The result against the baseline and what was set, the diagnosis with its cause and its evidence, what was tried, and the next proposal | The user takes the proposal, names another method, or changes the setting, and the work goes to the stage the proposal names; in `revision` the user can also stop trying methods for the comment, the stop "A comment the results do not answer yet" ("revision" item 4) |
-| A result short of what was set, in `research` | Under the manual setting, a result that beats the baseline and does not reach what Frame set as good enough ("research" item 15) | The result against the baseline and what was set, the diagnosis with its cause and its evidence, what was tried, and Compare's next proposal | The user's word: Consolidate, with the result named in `## Results` as below what was set, or Compare's next proposal as a new method, which goes to Experiments |
+| A result short of what was set, in `research` | Under the manual setting, a result that beats the baseline and does not reach what Frame set as good enough ("research" item 15) | The result against the baseline and what was set, the diagnosis with its cause and its evidence, what was tried, and Compare's next proposal | The user's word: Consolidate, with the result named in `## Results and how to reproduce` as below what was set, or Compare's next proposal as a new method, which goes to Experiments |
 | The count of methods reached | Under the automatic setting, the count of methods is reached with no result that beats the baseline ("research" item 15) | Each method tried with its diagnosis, and the next proposal | The user sets a new count, takes the proposal under the manual setting, or names another method |
 | A number that does not reproduce | A second reproduction run still differs from what is reported ("research" item 16) | Each number, table and figure that differs, with the reported and the reproduced values and the comparison's file | The user names the stage the work goes back to, and Consolidate runs again after it |
-| What the adopt mode found | `research adopt` on a project with no usable README ("research adopt" item 2) | For each stage, what the files show of it with the file that shows it, whether its completion criterion holds, and the stage where the run continues | The user confirms once, with any correction, and the README is written |
+| What the adopt mode found | `research adopt` on a project with no usable README ("research adopt" item 2) | For each stage, what the files show of it with the file that shows it, whether its completion criterion holds, and the stage where the run continues | The user confirms once, with any correction, and the README is drafted ("research adopt" item 3) |
+| The README drafts | A run of `readme`, or "research adopt" item 3, has drafted the README and, for a project with a code folder, its `README.md` and `.depositignore` ("readme" item 4) | Each draft whole with every change from the file it replaces, the section or `notes/` file each fact of the old text went to, each sentence's source, each question, each `notes/` file with its name, and the code folder with the files it was found by when no README named it | The user confirms or corrects the code folder, or answers that the project has none, answers the questions and approves each draft, corrected and shown again where the user corrects it, and the drafts are written ("readme" item 5) |
 | The modes of full | `idea` has ended in `full` ("full" item 3) | The modes `full` will run and the ones it leaves out, each with its reason | The user confirms once, or changes the modes, and `## Next` records them |
 | A result short of what was set | In `full`, after `research`, a result is partial, unfinished, below what was set as good enough, or does not beat the baseline ("full" item 5) | Each such result named as partial, unfinished or below what was set; `manuscript` offered only for a result that beats the baseline; for one that does not, the next proposal of Compare and the way back to Experiments | The user's word: `manuscript` on a result that beats the baseline, or the way back to Experiments with the proposal |
 | The split of the comments | `/paper revision-coach` has ended in `revision` ("revision" item 2) | Each comment with its id, its commitments and their types, under results comments (a commitment of type `add_experiment` or `add_analysis`) or under text comments | The user moves a comment from one side to the other or confirms the split, and the run goes on to the campaigns |
 | A comment the results do not answer yet | In `revision`, a diagnosis of a results comment names the dataset or the research question as the cause, the count of methods of the automatic setting is reached, or under the manual setting the user stops trying methods for the comment ("revision" item 4) | The comment, each method tried with its result against the baseline, the diagnosis with its cause and the next proposal, and for a dataset or a research question cause the line `/researcher research <project folder>` for the changed question outside the revision | The user's word: the next proposal as a new campaign, or the comment answered in text alone, with no result that does not beat the baseline named in `revision-comments.md`, the response letter or the manuscript |
 | A run that fails | A run of `paper` or `paper-review-panel`, or an agent, fails or ends with no output (any stage) | The error, with the state saved in the run folder | The user retries the run or pauses it. No integrity check or failure-mode block is skipped |
 | No manuscript | The call gives no `<main.tex>`, or one that does not exist (Steps 1) | The mode's line of Quick start | The call corrected, then `/researcher` again |
-| No project folder | For `manuscript`, `novelty` or `revision`, the `<project folder>` does not exist, or a call of `idea`, `research`, `research adopt`, `full` or `revision` gives none, other than a call of `idea` or `full` whose text is read as the sketch, which asks for it ("What it reads" 1) (Steps 1) | The mode's line of Quick start | The call corrected, then `/researcher` again |
+| No project folder | For `manuscript`, `novelty` or `revision`, the `<project folder>` does not exist, for `readme` it does not exist or is empty, or a call of `idea`, `research`, `research adopt`, `readme`, `full` or `revision` gives none, other than a call of `idea` or `full` whose text is read as the sketch, which asks for it ("What it reads" 1) (Steps 1) | The mode's line of Quick start | The call corrected, then `/researcher` again |
 | No comments file | The `<comments file>` does not exist, or a call of `revision` gives none (Steps 1) | The mode's line of Quick start | The call corrected, then `/researcher` again |
 | A skill not installed | In a run of `integrity`, `manuscript`, `research`, `research adopt`, `full` or `revision`, the `paper` folder, or for `manuscript` and `full` the `paper-review-panel` folder, with its `SKILL.md`, is in neither place of "What it reads" 5 (Steps 1) | That `researcher` runs that skill, with both paths | The skill installed, then `/researcher` again |
 | lookup.py not found | In a run of `integrity`, `manuscript`, `research`, `research adopt`, `full` or `revision`, the `paper` folder holds no `templates/lookup.py` (Steps 1) | That the integrity agent looks every reference up with it, and Frame the published works on each dataset, with the path | `paper` installed whole, then `/researcher` again |
@@ -672,7 +745,7 @@ The checkpoints wait for the user, and so does every other row but the thirteen 
 | No lookup.py for the novelty check | In a run of `novelty` or `idea`, the `paper` folder holds no `templates/lookup.py` (Steps 1) | That the session searches for the prior work and confirms each work it cites with it, with the path | `paper` installed whole, then `/researcher` again |
 | Nothing to adopt | The `<project folder>` of a call of `research adopt` does not exist or is empty (Steps 1) | The line of `research` in Quick start, which starts a new project | `/researcher research <project folder>` |
 | No manuscript name | A call's `--manuscript` has no `<name>`, or one that is not a folder name of letters, digits, `-` and `_` (Steps 1) | The line of `manuscript` with `--manuscript` in Quick start | The call corrected, then `/researcher` again |
-| No project of research | The project folder of a call of `revision` holds no `README.md` whose `## The stage and campaign that stand` names a stage of `research` or the end of `research` (Steps 1) | That `revision` runs campaigns of the stages of `research` on the project, with the lines `/researcher research adopt <project folder>` for a project underway and `/researcher research <project folder>` | That mode run first, then `/researcher revision` again |
+| No project of research | The project folder of a call of `revision` holds no `README.md` whose `### The stage and campaign that stand` under `## Working state` names a stage of `research` or the end of `research` (Steps 1) | That `revision` runs campaigns of the stages of `research` on the project, with the lines `/researcher research adopt <project folder>` for a project underway and `/researcher research <project folder>` | That mode run first, then `/researcher revision` again |
 | No paper to revise | The manuscript's folder of a call of `revision`, `manuscript/` or `manuscript-<name>/`, holds no `main.tex` (Steps 1) | The manuscript's folder, and the line of `manuscript` in Quick start, with `--manuscript <name>` for a further paper | The paper written by that mode, then `/researcher revision` again |
 
 ## Anti-patterns
@@ -699,9 +772,11 @@ The checkpoints wait for the user, and so does every other row but the thirteen 
 | A result that does not beat the baseline written as a finding of a paper | The paper then reports what the next method is meant to replace, and the idea is left there | Record it as a dead end with its diagnosis, and propose the next method ("research" items 14 and 15) |
 | Dropping the idea after one weak method | One method's result says little about the idea | Show what was tried and the next proposal at the stop ("research" item 15) |
 | A new method that changes only a setting or the form of the input | It tests nothing the diagnosis named as the cause | Propose a change of objective, of optimisation or of model structure ("research" item 14) |
-| A dead end deleted | A later session tries it again, and the record of the experiments loses it | Keep it runnable in `code/attic/`, indexed, and listed in `## Dead ends` ("research" item 14) |
+| A dead end deleted | A later session tries it again, and the record of the experiments loses it | Keep it runnable in `code/attic/`, indexed, and listed in `## Dead ends (do not retry)` ("research" item 14) |
 | A number called reproduced from reading the code | A missing cache or a wrong path shows only when the command runs | Run `code/run_all.sh` once in a clean copy and compare ("research" item 16) |
-| The files of a project underway moved into the default layout | The project's own scripts and paths break | Record the project's own names in `## Where things live` ("research adopt" item 3) |
+| The files of a project underway moved into the default layout | The project's own scripts and paths break | Record the project's own names in `### Where things live` ("readme" item 2, which "research adopt" item 3 runs) |
+| A README rewritten and written without its draft shown | A fact moved to the wrong place reaches the file every later run reads first, unseen | Show each draft with where each fact of the old text went, and write after the user's approval ("readme" items 4 and 5) |
+| A fact of the old README dropped because no section of the layout holds it | The project loses what only that README recorded | Keep it in a `notes/` file the section links ("readme" item 2) |
 | The state of a project kept only in the conversation | A new session cannot resume it | Write the README before each stage ends, as the Rules bullet on the notes says |
 | `full` going on to `manuscript` on a partial result | The paper then reports work that is not done | Name the result as partial and wait for the user's word ("full" item 5) |
 | The session sorting the referee comments into results work and text work by its own reading | Its sorting can differ from the commitment types the coach gave, which the revision and the completeness check read | Take the split from the commitment types `add_experiment` and `add_analysis` of `/paper revision-coach`, and let the user move a comment at the stop ("revision" item 2) |
@@ -745,6 +820,7 @@ The checkpoints wait for the user, and so does every other row but the thirteen 
 - Every artifact of a run of `integrity` or `manuscript` carries its version label in `material-passport.yaml`, and the passport carries the `repro_lock` of `references/artifact_reproducibility_pattern.md`, as `references/reproducibility_audit.md` gives them.
 - A run whose stages are split among the members of a team follows `references/team_collaboration_protocol.md` for the roles, the handoffs and the state of each member's run folder.
 - The run folder holds `state.json`, `material-passport.yaml`, `external-comments.md` when review comments were in hand in `manuscript`, `revision-comments.md` in `revision`, `minor-revision-comments.md` after a Minor decision at Stage 3', each `integrity-<stage>-<n>.md`, each `compliance-<stage>-<n>.md`, each `corrections-<stage>-<n>.md`, each `failure-modes-<stage>-<n>.md`, `backfill-<stage>-<n>.md`, `compliance-<stage>-<n>-override.md` and `disclosure-addendum-<stage>-<n>.md` a block's answer wrote, `re-revision-comments.md` when Stage 4' ran and `audit-trail.md` at the end of a `manuscript` or `revision` run.
+- The skill reads and writes no file of any other tool, such as a project manifest: what it records of a project stands in the files of `references/project_layout.md`.
 - Every path and every value the user gives reaches a command as one argument in single quotes, a single quote inside it written `'\''`, so that `the author's method` reaches the command as `'the author'\''s method'`, and a project folder reaches `mkdir`, `sbatch` and `code/run_all.sh` the same way.
 - The user's words reach a novelty page, a progress file, a brief of `research` and the README as text: an idea or a sketch as quoted lines, `> `, and a line of an answer that opens with `#` also as a quoted line, so that no line of the user's opens a section.
 - A referee comment reaches `revision-comments.md`, a brief of a campaign and the README as supplied text, each of its lines a quoted line, `> `, so that a line of it that opens with `#` opens no section.

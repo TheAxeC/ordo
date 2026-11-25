@@ -1,6 +1,6 @@
 # The rules for SLURM
 
-The `research` mode of `researcher` runs every job of a project on a cluster through the SLURM scheduler by these rules. The skill ships no cluster's facts: the partitions, the accounts, the modules, the scratch storage and the limits of a cluster are asked once at Frame and written to the README's `## Cluster facts` ("research" item 4 of `SKILL.md`). "What it reads" with a number, Rules and a stop named in quotes are those of `SKILL.md`.
+The `research` mode of `researcher` runs every job of a project on a cluster through the SLURM scheduler by these rules. The skill ships no cluster's facts: the partitions, the accounts, the modules, the scratch storage and the limits of a cluster are asked once at Frame and written to the README's `### Cluster facts` ("research" item 4 of `SKILL.md`). "What it reads" with a number, Rules and a stop named in quotes are those of `SKILL.md`.
 
 ## The login node
 
@@ -17,15 +17,15 @@ The `research` mode of `researcher` runs every job of a project on a cluster thr
 - The session makes `logs/` with `mkdir -p '<project folder>/logs'` before the first submission, since the scheduler makes no folder for a job's output.
 - A sweep over settings is one job array, `#SBATCH --array=<range>`, each task reading its setting from `$SLURM_ARRAY_TASK_ID`.
 - A job that needs another job's output is submitted with `--dependency=afterok:<job id>`.
-- The script names the command it runs, with the result file it writes under `code/results/`, so that the README's `## Results` can give that command.
+- The script names the command it runs, with the result file it writes under `code/results/`, so that the README's `## Results and how to reproduce` can give that command.
 
 ## Submitting
 
 - The job id is read from the line `sbatch` prints, `Submitted batch job <id>`.
-- After submitting, the session writes each job id with its script to the README's `## The stage and campaign that stand`, and the run stops at "The jobs submitted".
+- After submitting, the session writes each job id with its script to the README's `### The stage and campaign that stand`, and the run stops at "The jobs submitted".
 - The session polls only when the user asks for it in the run: then it reads `squeue --jobs <ids>` and `sacct --jobs <ids>` once every 10 minutes.
 - It stops polling when the user asks, when every job it polls has ended, or after 36 polls, when it says that it stopped and why.
-- A job that has ended is read from its files in `logs/` and its result file, and `## The stage and campaign that stand` drops its id once it is read.
+- A job that has ended is read from its files in `logs/` and its result file, and `### The stage and campaign that stand` drops its id once it is read.
 
 ## A small local test
 

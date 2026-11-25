@@ -147,3 +147,123 @@ Other points judged on the evidence:
 - The base-tree run of the heading grep over `skills/academic/paper*` and `docs/adr/` (the four outside places and the two ADRs at the base): would need `git grep -n -P '<pattern>' 929e519 -- skills docs README.md`, a git command outside the prompt's list; the worktree run shows the same four outside lines unchanged and the diff does not touch those files.
 
 Reviewer usage: a0d3f8882c6d34f95, claude-opus-5-5, 228033 tokens, 41 tool uses, 8.3 minutes.
+
+## Repair round 1, refuted
+
+```
+$ printf '%s\0' README.md docs/adr/0055-*.md docs/glossary.md skills/academic/researcher/SKILL.md skills/academic/researcher/references/{project_layout,research_brief,research_stages,slurm}.md .scratch/27-.../agents/reviews/2-report.md | xargs -0 perl -CSD -ne '<the check of the brief, verbatim>'; echo "exit: $?"
+exit: 0
+
+$ python3 skills/ordo/ordo-init/templates/sync_rules.py . --only glossary; echo "exit: $?"
+ok: the plan-terms block equals the template
+exit: 0
+
+$ python3 -c 'import glob,yaml; [print(len(yaml.safe_load(open(f).read().split("---")[1])["description"]), f) for f in sorted(glob.glob("skills/*/*/SKILL.md"))]' | grep researcher
+1015 skills/academic/researcher/SKILL.md
+
+$ git grep -n -P '## (The stage and campaign that stand|Cluster facts|Where things live|Results|Dead ends|Constraints and limits)\b' -- skills docs README.md | wc -l
+91
+```
+
+Verify 4 prints 91 lines, equal to the report's 91 (it was 88 before the round). The three new lines are the new SKILL.md bullets (the found code folder, the placeholder headings, the confirmation of the code folder). Each hit is a `###` heading of `## Working state`, one of the three kept or renamed `##` headings, `project_layout.md:113`, ADR 0057 lines 11 and 30, ADR 0055:15, or one of the four places outside researcher.
+
+Commands the report quotes, rerun:
+
+```
+$ grep -n 'The stage and campaign that stand` \(of\|under\)' SKILL.md references/*.md
+SKILL.md lines 55, 73, 104, 261, 401, 744   (the report's six)
+$ grep -c 'of `## Working state`\|of its `## Working state`' SKILL.md
+0
+$ grep -c '### The stage and campaign that stand' SKILL.md references/*.md   (summed)
+25   (SKILL.md 19, project_layout 1, research_brief 1, slurm 2, research_stages 2; the report's 25)
+$ sed -n 51p references/project_layout.md | tail -c 120
+tands, the end of each revision with its run folder and its comments file ("revision" items 2, 3 and 10 of `SKILL.md`).
+$ git show 929e519:.../project_layout.md | sed -n 43p | tail -c 100
+ch revision with its run folder and its comments file ("revision" items 2, 3 and 10 of `SKILL.md`).
+$ git diff 929e519 --numstat   (same eight paths as the brief; the ledger files are untracked)
+$ diff of the snapshot against the worktree: 26 changed lines in SKILL.md, 2 in README.md, 2 in docs/glossary.md, 0 in the other five listed files.
+$ added lines grep -i 'research-hub|cathedra|game-engine|oculus|/Users/|~/': nothing
+```
+
+Every quoted output matches the report's.
+
+### Verdicts
+
+Items of "What to build", for the whole diff since the base:
+
+- 1 (README layout): holds.
+- 2 (code README): holds.
+- 3 (`.depositignore`): holds.
+- 4 (who writes each section): holds. Ruling 3 of the round closes the placeholder-heading defect. `SKILL.md:274-275` writes the fixed `###` headings with `None yet.` and leaves out `### <dataset>`, `### <result>` and `### <method>`.
+- 5 (every reference follows): holds. Every test of `### The stage and campaign that stand` reads "under `## Working state`" (lines 55, 73, 104, 261, 401, 744). The grep for "of `## Working state`" in SKILL.md prints 0. `project_layout.md:113` is a mapping of old sections, not a test.
+- 6 (a README in the old layout): holds.
+- 7 (the readme mode): holds, with Behaviour 1 below on the new code-folder rule.
+- 8 (the adopt mode): holds, with Behaviour 1.
+- 9 (`README.md` line 34): holds. The adopt sentence now reads "to the newcomer's layout that `/researcher readme` drafts, by the same rewrite", so "that layout" is gone.
+- 10 (`metadata.version`): holds, `"2.0.0"`.
+
+Cases of "Cases":
+
+- The heading grep: met (91 hits, each accounted for as above).
+- `project_layout.md`, "The README": met.
+- "research" item 3 on a new project: met. The placeholder headings are left out.
+- `idea` on a new-layout README without the section: met.
+- readme mode, dated log under `## Next`: met.
+- readme mode, an old paragraph and no manuscript or novelty page: met.
+- readme mode with a `project.yml`: met.
+- readme mode with a `.depositignore` holding only `data/`: met.
+- readme mode, code folder `src/` named in the README: met.
+- `research` on an old-layout README: met.
+- "research adopt" on a README of its own layout: met.
+- "research adopt" on code and no README: met for code in `src/`, where `src/README.md` and `src/.depositignore` are drafted. Partial for code at the project root (Behaviour 1).
+- readme mode on a missing or empty folder: met.
+- `full` and `revision` on an old-layout README: met.
+- `idea` on an old-layout README: met.
+- "research" item 3 on an `idea`-only folder: met.
+- The description count: met, 1015.
+
+Rulings of the round brief:
+
+- Ruling 1: closed, reproduced by the greps above.
+- Ruling 2: closed for the `src/` case. I read "readme" items 1 to 5 on a made-up project with code in `src/` and no README:
+  - Item 1 (`SKILL.md:425`) finds `src/` from its source files.
+  - Item 2 (`SKILL.md:439`) puts `src/` in `### Where things live`.
+  - Item 3 (`SKILL.md:443`) drafts `src/README.md` and `src/.depositignore`.
+  - Item 4 (`SKILL.md:450-451`) shows `src/` with the files it was found by, for the user to confirm or correct.
+  - Item 5 writes only after the approval.
+  - The Stops row "The README drafts" names the found folder.
+  - On a project whose files hold no code, `SKILL.md:426` gives no code folder, the README alone is drafted, and no code folder is made.
+  - Two defects remain in the rule: Behaviour 1 and Spec 1.
+- Ruling 3: closed (`SKILL.md:274-275`). It fixes what the placeholder headings guarded, and nothing was removed.
+- Ruling 4: closed. `docs/glossary.md:182` defines both uses. Its "Stated in" names `project_layout.md`, "The README" (lines 56-58, the slug rule and the 200-line move), and `SKILL.md`, "readme" item 2, where `notes/<slug>.md` appears at lines 431 and 433.
+- Ruling 5: closed (`README.md:34`).
+- Ruling 6: the premise is false and I reproduced that. Line 51 of `project_layout.md` ends with `.` and is identical to base line 43. Lines 52 and 53 end with a full stop and with a code span that holds one. No change is owed.
+- Ruling 7: reproduced, see above.
+
+### Findings
+
+- `skills/academic/researcher/SKILL.md:425` (also `:80`): "When no README names it, the code folder is the folder of the project's files that holds its code, its `run_all.sh`, its job scripts or its source files, noted with the files it was found by". What is wrong: the rule does not exclude the project folder itself. Behaviour 1; failure scenario: a project with no README whose `run_all.sh` and `*.py` files stand at its root has the project folder as its found code folder. Item 3 then drafts `<project folder>/README.md` as the code README, the same path as the project's own README drafted in item 2. Item 5 writes one file over the other, or the code README replaces the project README. The `.depositignore` is then drafted at the root, with `data/`, `attic/` and `results/` lines that fit no root layout. Verdict: item 7, item 8 and the case "research adopt on code and no README" partial. A clause is needed that a code folder is a folder other than the project folder, and that code at the root has no code folder or is put to the user as a question.
+- `skills/academic/researcher/SKILL.md:424-425`: "The code folder is `code/`, or the project's own code folder that the README names ... When no README names it, the code folder is the folder of the project's files that holds its code". What is wrong: the two bullets do not say which wins when `code/` exists, the README names no folder, and the code stands elsewhere as well (or `code/` holds none). Behaviour 2; failure scenario: a project with `code/` holding only `attic/` and `results/`, and its scripts in `src/`. Bullet 1 gives `code/`, bullet 2 gives `src/`, and the run picks either. The code README and `.depositignore` go to one of them. The user confirms at item 4 only the folder that was shown. Verdict: none (low).
+- `skills/academic/researcher/SKILL.md:727`, the Stops row "The README drafts", cell "What the user does": "The user answers the questions and approves each draft, corrected and shown again where the user corrects it, and the drafts are written". What is wrong: item 4 (`SKILL.md:450-451`) has the user confirm or correct the code folder, and the row's user cell does not name it. Spec 1; failure scenario: a reader of the Stops table alone does not know that the code folder is a thing to confirm, and a user who rejects the found folder (the code stands nowhere that counts, so there is no code folder) has no path. Item 4 covers only a corrected folder, not "none". Verdict: none (low).
+
+Proof: none. Standards: none. Item 4's new bullets, 27 and 30 words, and line 443, 52 words, are named in the report's Verify 5 as one rule with its qualifier. No private name, non-ASCII character or history wording is in the added lines. The description is 1015 characters.
+
+### Declined to judge
+
+- Whether the user accepts the user's ruled headings (D1, D15, ADR 0057 against "Headings are labels, not sentences."): ruled by the user, no finding raised.
+- Whether a found code folder should be searched beyond the project's own files, such as a sibling folder of the project: it needs a design ruling, and the brief names the project's files only.
+- The base-tree run of the heading grep over the other trees (`git grep ... 929e519 -- ...`): a git command outside the allowed list. The worktree run shows the four outside lines unchanged and the diff does not touch those files.
+
+Reviewer usage: a64f14efcb86d398c, claude-sonnet-5-5, 114905 tokens, 25 tool uses, 2.3 minutes.
+
+## Closed
+
+Round 1 ruling 6 (a stray comma at `references/project_layout.md` line 51): no change owed. The line ends with a full stop, as base line 43 did; the builder and the reviewer over the round both read it so.
+
+Each finding of the run over repair round 1, fixed on main at landing in `skills/academic/researcher/SKILL.md`:
+
+- Behaviour 1 (the project folder found as its own code folder): "readme" item 1 says the code folder is a folder inside the project folder, never the project folder itself; code at the project's root gives no code folder, and the draft asks the user which folder is the code folder.
+- Behaviour 2 (which rule wins): "readme" item 1 gives the order, the first that holds the project's code: the folder the README names, then `code/`, then the folder found from the project's files. "What it reads" 25 points at item 1.
+- Spec 1 (the Stops row and a user who answers "none"): item 4 takes a folder the user names in answer to item 1's question, and a user's answer that the project has no code folder gives the README alone; the Stops row "The README drafts" has the user confirm or correct the code folder, or answer that there is none.
+- After the fixes: the description is 1015 characters, the file has no character outside the set, and the verify list prints `checks: 16 commands passed`.
+- The user's reading of the text against ADR 0057 (the step's check): raised as Open item F.

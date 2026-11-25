@@ -23,7 +23,7 @@ you read the rewritten `README.md` and approve it; each image path in `README.md
 ## Steps, in execution order
 
 - ✅ 1 The figures under `docs/figures/` moved into the folders of `skills/` by the rule of D5, academic-pipeline's figure and script under `docs/figures/academic/researcher/`, the layout engine of `gen_figures.py` moved to `skills/code/handbook/templates/figures.py` and imported from there by `gen_figures.py` (ADR 0060), both scripts writing to the new paths, and `docs/dev/building.md`, `docs/dev/scripts.md`, ADRs 0043 and 0049 and every page that names a figure path following; check: for each figure `git ls-files docs/figures` lists, its folders are a group or a group and a skill folder; both scripts exit 0 and `git status --short docs/figures` then prints nothing; every `docs/figures/` path `git grep` finds in `README.md`, `docs/` and `skills/` exists (1 commit) (approved)
-- 2 `researcher`'s README and `code/README.md` in the layout of ADR 0057, `code/.depositignore` with what it names, the mode `/researcher readme <project folder>` with a section moved out of the README going to `notes/<the heading as a slug>.md`, the adopt mode bringing a README to the layout by that rewrite, every reference to the README's sections in `SKILL.md`, its references, its agent pages and the glossary entries campaign, cluster's facts, dead end and setting following, its `metadata.version` raised; check: the user reads the text against ADR 0057 and approves; a grep for each old heading across `skills/`, `docs/` and the glossary prints only the new places (1 commit) (approved)
+- ✅ 2 `researcher`'s README and `code/README.md` in the layout of ADR 0057, `code/.depositignore` with what it names, the mode `/researcher readme <project folder>` with a section moved out of the README going to `notes/<the heading as a slug>.md`, the adopt mode bringing a README to the layout by that rewrite, every reference to the README's sections in `SKILL.md`, its references, its agent pages and the glossary entries campaign, cluster's facts, dead end and setting following, its `metadata.version` raised; check: the user reads the text against ADR 0057 and approves; a grep for each old heading across `skills/`, `docs/` and the glossary prints only the new places (1 commit) (approved)
 - 3 The skill `skills/code/handbook` as ADRs 0058 and 0060 decide, with its kinds at the paths of D34, its `manual.html` script under `templates/` and that script's entry on `docs/dev/scripts.md`, the engine of step 1 copied into a documented repository's `utils/`, and its terms in the glossary; check: the user reads the text against ADRs 0058 and 0060 and approves; `/ordo-help skills` lists `handbook` with its Quick start; the description is at most 1,024 characters by the command of `docs/dev/skill-layout.md` (1 commit) (approved)
 - ✅ 4 The rulings file named `<ledger_root>/rulings/<number>.md` as ADR 0059 decides, in `grill`, `plan`, `plan-orchestration`'s `references/self-rule.md`, `ordo-init`'s `templates/plan-terms.md` and the glossary's block synced from it, each skill's `metadata.version` raised; check: `git grep -n 'rulings/<slug>'` over `skills/` and `docs/` prints nothing; the sync of the glossary block passes; the user reads the text of `grill` and `plan` on the rulings file and approves (1 commit) (approved)
 - 5 A figure for each of the fifteen skills the goal names, drawn by `gen_figures.py`, and researcher's lifecycle figure, with the script's head comment stating the folder rule of D5 and `docs/dev/building.md` naming the figures it writes; check: each of the fifteen skills has a figure file under `docs/figures/` (listed, one per skill); both scripts exit 0 and `git status --short docs/figures` prints nothing; the user reads each new figure against its skill's Steps and Stops and approves (1 commit) (approved)
@@ -51,6 +51,16 @@ you read the rewritten `README.md` and approve it; each image path in `README.md
 - Verification on main: `checks: 16 commands passed`, run again after the fixes at landing; `git diff --quiet -- docs/figures` exits 0 after both scripts ran.
 - The builder's first report did not pass its bar: one repair round of nine rulings, then two fixes at landing and one ruling from the run over the round, each named under "Closed" in `agents/reviews/1-refuter.md`.
 - Usage: brief check 214981 tokens, 45 tool uses, 6.4 minutes; builder 244429 tokens, 80 tool uses, 12.8 minutes, and round 1: 331484 tokens, 117 tool uses, 7.9 minutes; reviewer 185283 tokens, 47 tool uses, 8.0 minutes; reviewer over round 1: 172678 tokens, 31 tool uses, 3.9 minutes.
+
+### Step 2, researcher's project READMEs in the layout of ADR 0057 (landed 2026-11-26)
+
+- Landed: `skills/academic/researcher/SKILL.md` at 2.0.0 and its references: the project README in the twelve sections of ADR 0057 (`references/project_layout.md`, "The README"), the code README in its eight sections ("The code README"), `code/.depositignore` with the lines of "The deposit", the mapping of a README in the old layout and the stop it raises in every mode; the mode `/researcher readme <project folder>`, which drafts the README and the code folder's two files, moves a section past 200 lines or a fact with no form in the layout to `notes/<slug>.md`, and writes only after the user approves the drafts; the adopt mode drafting by that rewrite; who writes each section among the stages; the glossary's entry "slug, of a section of a project's README"; ADR 0055 line 15 and `README.md` line 34.
+- Premise corrections: the adopt note of the figures stands in `docs/figures/researcher-research.svg` (now `docs/figures/academic/researcher/research.svg`), not in `researcher.svg`; step 5's brief takes it, with the lines of `docs/figures/gen_figures.py` the step makes false (the builder's "Doc text" in `agents/reviews/2-report.md`).
+- The plan's verify list is unchanged.
+- Raised: Open item F, the user's reading of the text against ADR 0057, the step's check.
+- Verification on main: `checks: 16 commands passed`, run again after the fixes at landing; the heading grep of the step's check prints 91 lines, each in a place the brief allows (`agents/reviews/2-refuter.md`, "Repair round 1, refuted").
+- The builder's first report did not pass its bar: one repair round of seven rulings, of which one needed no change, then three fixes at landing from the run over the round, each named under "Closed" in `agents/reviews/2-refuter.md`.
+- Usage: brief check 195898 tokens, 28 tool uses, 4.8 minutes; builder 308527 tokens, 121 tool uses, 16.5 minutes, and round 1: 362147 tokens, 39 tool uses, 4.4 minutes; reviewer 228033 tokens, 41 tool uses, 8.3 minutes; reviewer over round 1: 114905 tokens, 25 tool uses, 2.3 minutes.
 
 ## Could run in parallel
 
@@ -116,10 +126,13 @@ Each agent a plan skill started for this plan has one bullet, with its agent id,
 - aa853461e0bda0675: builder of step 1, claude-opus-5-5
 - a87f37bb66e71447b: reviewer of step 1, claude-opus-5-5
 - a3e0d150656bdfa82: reviewer of step 1 over round 1, claude-sonnet-5-5
+- aa8df1549baebff17: brief check of step 2, claude-opus-5-5
+- a08312753d0d93b46: builder of step 2, claude-opus-5-5
+- a0d3f8882c6d34f95: reviewer of step 2, claude-opus-5-5
+- a64f14efcb86d398c: reviewer of step 2 over round 1, claude-sonnet-5-5
 
 ## Blocked, and by what
 
-- 3: waits on 1 for the engine at `skills/code/handbook/templates/figures.py`.
-- 5: waits on 1 for the folders, and on 2 and 3 for the readme mode and `handbook`, which the figures draw.
+- 5: waits on 3 for `handbook`, which the figures draw; steps 1 and 2 have landed.
 - 6: waits on 5 for the lifecycle figure and on 3 for `handbook`'s row of the skills table.
-- 8: waits on 2, 3, 4 and 6 for the tag it pins, and on the user for the two projects and the software repository it runs on.
+- 8: waits on 3 and 6 for the tag it pins (steps 2 and 4 have landed), and on the user for the two projects and the software repository it runs on.
