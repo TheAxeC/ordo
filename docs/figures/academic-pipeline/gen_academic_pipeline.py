@@ -57,12 +57,8 @@ PIPELINE_LEGEND = (
     L("pipe", "Grey: academic-pipeline itself"),
     L("dr", "Sand: deep-research"),
     L("paper", "Teal: paper, paper-review-panel and researcher"),
-    L("todo", "Dashed box: not built yet, with its roadmap entry"),
     L("none", "Red dotted box: no skill takes it"),
-    L(
-        "dotted",
-        "Dotted arrow: goes to a skill not built yet or to none; a solid arrow goes to a built skill",
-    ),
+    L("dotted", "Dotted arrow: goes to none; a solid arrow goes to a built skill"),
 )
 
 
@@ -122,7 +118,7 @@ class Stage(NamedTuple):
 
 
 STAGES = (
-    Stage("1 Research: deep-research", "dr", "RR", False),
+    Stage("1 Research: deep-research", "dr", "RR", True),
     Stage("2 Write: academic-paper", "ap", "P1", True),
     Stage("2.5 Integrity check", "pipe", "RS", True),
     Stage("3 Review", "rev", "PRV", True),
@@ -135,7 +131,7 @@ STAGES = (
 TARGETS = {
     "P1": ("paper plan and paper full", "paper"),
     "PRV": ("paper-review-panel", "paper"),
-    "RR": ("researcher research, entry 13", "todo"),
+    "RR": ("researcher research", "paper"),
     "RS": ("researcher: the integrity and ethics checks, and the manuscript mode that runs the stages", "paper"),
     "P2": ("paper revision", "paper"),
     "FC": ("paper format-convert", "paper"),

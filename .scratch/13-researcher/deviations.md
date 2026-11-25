@@ -183,3 +183,11 @@ Differences of `skills/academic/researcher/SKILL.md` from the source's `SKILL.md
 - `references/integrity_check.md` item 4 gains one bullet: each of its stops, and the stop "The third correction round failed" of item 6, is held as a checkpoint as `references/checkpoints.md` gives it, so that an `integrity` run reads the checkpoint rules it read when they were a section of `SKILL.md`.
 - `references/compliance_checkpoint_protocol.md` line 10 names `references/integrity_check.md` in place of the section "The integrity check" of `SKILL.md`.
 - The landed text of `SKILL.md` that the two modes made false was scoped to `integrity` and `manuscript`: the description, the title and its paragraph, "What it reads" 1, 3, 5, 6, 9 and 13, Steps 1 and 6 and the sentence on which items run in which mode, the Stops intro's count of refusals, the Rules bullets on the agents a run starts, on following the same stages in every session and on the Material Passport, and the Anti-patterns row on skipping an integrity check. No stage, check or stop of the two landed modes changed.
+
+## Added at the landing of step 4
+
+- `SKILL.md` gains the modes `research`, `research adopt` and `full`, which are this repository's own and copy nothing of academic-pipeline (ADR 0053, Consequences); with them six new pages, `references/research_stages.md`, `references/research_brief.md`, `references/project_layout.md`, `references/slurm.md`, `agents/research_builder_agent.md` and `agents/research_reviewer_agent.md`, none with a counterpart in the source.
+- The landed text of `SKILL.md` that the new modes made false was changed: the description, the title and its paragraph, the Quick start, Use instead, "What it reads" 1, 3, 5, 6, 7, 15 and the new 20 to 24, the Steps intro, Steps 1, 2, 3 and 6, "manuscript" item 4, the Stops intro and table, Anti-patterns and Rules.
+- `state.json` of a run gains the key `manuscript_folder`, which the structure of `agents/state_tracker_agent.md` does not have; the copied page is unchanged, and Steps 2 offers an unfinished run only of the same manuscript's folder.
+- No line of a copied page changed.
+

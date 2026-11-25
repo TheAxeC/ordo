@@ -17,9 +17,9 @@ Two writing quality features run in every drafting mode:
 ## Quick start
 
 ```
-/paper full <project folder>                                     write a paper from the project's materials, from intake to the formatted manuscript
-/paper plan <project folder>                                     plan the paper chapter by chapter with the Socratic mentor, to the chapter plan
-/paper outline-only <project folder>                             write the outline and the evidence map for approval
+/paper full <project folder> [--manuscript <name>]               write a paper from the project's materials, from intake to the formatted manuscript, in manuscript/ or manuscript-<name>/
+/paper plan <project folder> [--manuscript <name>]               plan the paper chapter by chapter with the Socratic mentor, to the chapter plan
+/paper outline-only <project folder> [--manuscript <name>]       write the outline and the evidence map for approval
 /paper revision <main.tex> <comments file>                       revise a manuscript for referee comments or a /writing report, by patch, and write the response letter
 /paper revision-coach <comments file> [<main.tex>]               parse reviewer comments into a revision roadmap, a tracking template and a response letter skeleton
 /paper rebuttal-audit <comments file> <response draft>           check a response letter you wrote against the reviewer comments
@@ -67,7 +67,7 @@ The `<manuscript>` of format-convert is a main `.tex`, a `.md`, a `.docx` or a `
 |---|---|
 | Reviewing a paper (structured review by a panel of reviewers and an editor), a different kind of review from `/paper draft-review` | `paper-review-panel` |
 | Someone else's paper to review as its referee | `referee` |
-| Full research-to-paper pipeline: the integrity check of a finished manuscript's references, claims, numbers and figures, its ethics check, and the stages from the writing to the final check | `researcher`, whose research stage is not built yet (roadmap entry 13) |
+| Full research-to-paper pipeline: the integrity check of a finished manuscript's references, claims, numbers and figures, its ethics check, and the stages from the research to the final check | `researcher` |
 | The prose of a draft to check | `writing` |
 
 ## What it reads
@@ -76,7 +76,7 @@ The `<manuscript>` of format-convert is a main `.tex`, a `.md`, a `.docx` or a `
    - `docs/dev/prose-standard.md` of the repository the session runs in, then `templates/docs/dev/prose-standard.md` in the `ordo-init` skill's folder, found from this skill's folder with every link resolved: the folder of that name beside it, and otherwise the folder of that name in a group folder beside this skill's group folder. A prose standard at neither the repository's path nor the template's path is a refusal that names both paths. When the `ordo-init` folder is in neither of those two folders, that refusal names the repository's path and the two folder paths.
    - The writing pages are `references/manuscript-prose-standard.md`, `references/rules.md` and `references/registers.md` in the `writing` skill's folder, found from this skill's folder with every link resolved: the folder of that name beside it, and otherwise the folder of that name in a group folder beside this skill's group folder. A folder found in neither place is named, with both paths, in the message the skill then gives. A missing page is a refusal that names the path.
    - The manuscript prose standard is the prose standard with the differences `references/manuscript-prose-standard.md` lists. It is the prose standard of every role of this skill and of the `/writing` review of Steps 13.
-2. The arguments of the mode, as Quick start gives them. Each file or folder argument is a path; one that does not exist is the refusal "An argument that does not exist", and so is a missing argument.
+2. The arguments of the mode, as Quick start gives them. Each file or folder argument is a path; one that does not exist is the refusal "An argument that does not exist", and so is a missing argument. For full, plan and outline-only, the optional `--manuscript <name>` names a further paper of the project, whose folder is `<project folder>/manuscript-<name>/`; a `<name>` that is not one folder name of letters, digits, `-` and `_`, or a `--manuscript` with no `<name>`, is the refusal "An argument that does not exist".
 3. For a mode or call given a main `.tex`, the files it inputs and includes, found as the `writing` skill's Steps 3 lists them. For format-convert given a `.md` or a `.docx`, the file itself, which `pandoc` reads, and given a `.bib`, the file itself, which `bibtex` reads.
 4. For revision, response-letter, citation-check, draft-review and format-convert given a `.tex`, its `.bib`.
    - The lines are those of the main file and the files it inputs, with the text after an unescaped `%` left out.
@@ -84,10 +84,10 @@ The `<manuscript>` of format-convert is a main `.tex`, a `.md`, a `.docx` or a `
    - The name is resolved against the main file's folder, and `.bib` is added to a name without it.
    - No such line, more than one such line, or a line that names more than one file is a refusal that names the lines.
    - A named file that does not exist is a refusal that names it.
-5. For full mode, the folder `<project folder>/manuscript/`. Plan and outline-only mode name that folder only to place their run folder, and write nothing in it.
+5. For full mode, the manuscript's folder, `<project folder>/manuscript/`, or `<project folder>/manuscript-<name>/` with `--manuscript <name>` (Steps 5). Plan and outline-only mode name that folder only to place their run folder, and write nothing in it.
    - An existing `main.tex` there is read as existing draft sections (intake's Existing Materials). The first draft replaces it only after the user confirms that at the intake confirmation.
    - An existing `refs.bib` is kept and changed only by a patch.
-6. For full and outline-only, the latest lit-review run's `review.md` and `refs.bib`, found in `<project folder>/paper-runs/` and in the `paper-runs/` of the folder the session runs in, which intake offers as the user's own sources (Checkpoint Rules 5). For full, the latest plan run's `chapter-plan.md`, `insights.md` and `dialogue.md`, found in `<project folder>/paper-runs/`, which intake offers as the plan mode output (`references/mode_selection_guide.md`, "Plan to Full Mode Conversion Protocol").
+6. For full and outline-only, the latest lit-review run's `review.md` and `refs.bib`, found in `<project folder>/paper-runs/` and in the `paper-runs/` of the folder the session runs in, which intake offers as the user's own sources (Checkpoint Rules 5). A lit-review run has no manuscript's folder and is offered to every manuscript's folder. For full, the latest plan run's `chapter-plan.md`, `insights.md` and `dialogue.md`, found in `<project folder>/paper-runs/`, which intake offers as the plan mode output (`references/mode_selection_guide.md`, "Plan to Full Mode Conversion Protocol"). Only a plan run whose `config.md` names the same manuscript's folder in its row Manuscript Folder is offered, a plan run whose `config.md` names none counted as `manuscript/`.
 7. The environment variables `S2_API_KEY`, `OPENALEX_API_KEY` and `CROSSREF_POLITE_EMAIL`, each optional, never printed, read by `templates/lookup.py`.
 8. The model identifier of the model the roles run on, such as `claude-opus-5-5`, which the AI disclosure names (Steps 4).
 9. The pages of the roles and their references, each read by the role or step that names it.
@@ -151,7 +151,7 @@ Steps 1 to 6 run once, in order, before the items of the mode. Steps 7 to 15 are
 
    Not sure? Start with `plan`: it will guide you step by step. `disclosure` is a finishing step: run it after the paper is drafted, targeting the venue you plan to submit to.
 2. Quote what reaches a command.
-   - Every path and every value the user gives reaches a command as one argument in single quotes. Such values are a project folder, a `.tex`, a `.md`, a `.docx`, a comments file, a response draft, a topic, a plain request, a target, a CSL file and a reference `.docx`.
+   - Every path and every value the user gives reaches a command as one argument in single quotes. Such values are a project folder, a `--manuscript` name, a `.tex`, a `.md`, a `.docx`, a comments file, a response draft, a topic, a plain request, a target, a CSL file and a reference `.docx`.
    - A single quote inside a value is written `'\''`, so the shell expands nothing in it.
    - Done when each file or folder argument is the absolute path of an existing file or folder, and each command line of the run holds each path and each user value as one single-quoted argument.
 3. Find the prose standard and the writing pages as "What it reads" 1 says.
@@ -164,14 +164,15 @@ Steps 1 to 6 run once, in order, before the items of the mode. Steps 7 to 15 are
 5. Make the run folder.
    - The date is the local date, `date +%Y-%m-%d`.
    - The run folder is `paper-runs/<mode>-<date>/` in the parent of the manuscript's folder.
-   - The manuscript's folder is `<project folder>/manuscript` for full, outline-only and plan, and the folder of the manuscript given for format-convert. For revision-coach and rebuttal-audit it is the folder of the comments file. For the other modes but lit-review, and for the calls, it is the folder of the main `.tex`.
+   - The manuscript's folder is `<project folder>/manuscript` for full, outline-only and plan, or `<project folder>/manuscript-<name>` with `--manuscript <name>`, and the folder of the manuscript given for format-convert. For revision-coach and rebuttal-audit it is the folder of the comments file. For the other modes but lit-review, and for the calls, it is the folder of the main `.tex`.
    - Lit-review has no manuscript, and its run folder is `paper-runs/lit-review-<date>/` in the folder the session runs in.
    - A new run makes a new empty folder. When the folder exists, the run takes `<mode>-<date>-2`, then `-3`, and so on for a further run of the same mode on the same day.
-   - Full mode also makes `<project folder>/manuscript/` when it does not exist.
+   - Full mode also makes the manuscript's folder when it does not exist.
    - Done when the run folder exists and is empty.
 6. Run intake (Phase 0: Configuration Interview).
    - Full, outline-only, abstract-only, lit-review and plan run the intake agent. See `agents/intake_agent.md` for the complete field definitions of the configuration interview. The interview covers 9 core items: paper type, discipline, target journal, citation format, output format, language, abstract, word count, and existing materials, plus co-authors, funding, optional style calibration, the domain evidence profile (Step 12), the citation-verification level (Step 13: mark only by default / strict opt-in, recorded in the row Citation Verification) and the rows of `paper`'s checks (Step 14). Plan mode runs the simplified interview of `agents/intake_agent.md`, "Plan Mode Detection". It outputs `config.md`, awaiting user confirmation.
    - Start the intake agent (Steps 8), given the call with its arguments, the earlier outputs of "What it reads" 6 and the files of "What it reads" 5. It writes `config.md` in the run folder.
+   - For full, plan and outline-only, the intake agent's prompt asks it to write the row `| **Manuscript Folder** | <folder> |` into the table of the Paper Configuration Record, after the row Operational Mode, with `manuscript/`, or `manuscript-<name>/` with `--manuscript <name>`. The session reads the row back before the stop "The intake confirmation".
    - Put its questions to the user, give the answers to the agent, resumed (Steps 8), and show `config.md` whole at the stop "The intake confirmation" (Checkpoint Rules 1). A change the user asks for goes to the agent the same way.
    - The modes with no intake agent (revision, response-letter, format-convert, citation-check, disclosure, revision-coach, rebuttal-audit, and the two calls) take what they need from the call; the session asks the user only for what the mode's items name, in one message, and writes the answers into `config.md`. That message is the stop "The session's questions". Revision asks the rows Closing review, Claim check, Incremental checks, Claims not to make and Earlier papers of `agents/intake_agent.md`, Step 14, and citation-check the rows Claims not to make and Earlier papers. Both also ask where the study's result files and code are, or "none", and write the answer into the row Existing Materials.
    - Done when the user has confirmed the record, or, in a mode with no intake agent, `config.md` holds the answers.
@@ -358,7 +359,7 @@ Phase 7: FORMAT        -> [the formatter]                  -> Final Output Packa
 Stops this mode can reach: the mode to run (only for a plain request), the intake confirmation, the sources' review, the outline's approval, a generator phase aborted, the draft review does not pass, a claim the run cannot support, a reference that cannot be confirmed (only under strict), the citation style to confirm, a structural patch, a patch that does not apply, a converted file to replace (only for a target other than `latex` and `pdf`), the reply to the closing review (only with the row Closing review yes), and a script failed.
 
 1. Phase 1: start the literature strategist (Steps 8), as the literature search of Steps 8 says, unless the user skips Phase 1 by providing own sources (Checkpoint Rules 5), such as an earlier lit-review run taken at intake.
-   - It is given `config.md` and the sources given: the `refs.bib` of `<project folder>/manuscript/` with its manifest (Steps 9) when one stands, and the `.bib` the Existing Materials row names.
+   - It is given `config.md` and the sources given: the `refs.bib` of the manuscript's folder with its manifest (Steps 9) when one stands, and the `.bib` the Existing Materials row names.
    - It screens the sources given and searches for what they miss, as `agents/literature_strategist_agent.md` gives under "Reading the sources the mode's item gives", with its search ending as that page gives under "Search Stopping Rules (Saturation Criteria)". It writes `review.md` and `refs.bib` in the run folder. For an existing `refs.bib` it writes a patch with the id `full` that adds the new entries.
    - An earlier lit-review run taken at intake gives its `review.md` and `refs.bib`, copied into the run folder with `cp` and checked with `cmp`, and the strategist is not started.
    - A plan run taken at intake gives its Chapter Plan's literature notes as seed keywords only, and the full systematic search runs (`references/mode_selection_guide.md`, "Plan to Full Mode Conversion Protocol").
@@ -368,9 +369,9 @@ Stops this mode can reach: the mode to run (only for a plain request), the intak
    - A change goes to the strategist that wrote `review.md`, resumed (Steps 8). It updates `review.md`, `refs.bib` and its patch.
    - Done when the user has gone on, or the item was skipped.
 3. Put the `.bib` in the manuscript's folder.
-   - When `<project folder>/manuscript/refs.bib` does not exist, copy to it with `cp` the run folder's `refs.bib`. Check the copy with `cmp`.
+   - When `refs.bib` of the manuscript's folder does not exist, copy to it with `cp` the run folder's `refs.bib`. Check the copy with `cmp`.
    - When it exists, apply the strategist's patch (Steps 10).
-   - Done when `<project folder>/manuscript/refs.bib` exists and holds the entries of the run.
+   - Done when `refs.bib` of the manuscript's folder exists and holds the entries of the run.
 4. Phase 2: start the structure architect (Steps 8), given `config.md` and `review.md`, and for a plan run taken at intake its `chapter-plan.md`, which it maps to formal sections. It writes `outline.md`: the structure pattern, the section-by-section outline with word count allocation, the evidence map and the figures it plans.
    - Done when `outline.md` exists.
 5. Raise the stop "The outline's approval" (Checkpoint Rules 2), showing `outline.md` with its evidence map.
@@ -382,11 +383,11 @@ Stops this mode can reach: the mode to run (only for a plain request), the intak
 7. Phase 4: the draft writer's two calls of the Generator-Evaluator Contract ("Generator-Evaluator Contract Protocol").
    - Phase 4a: start the draft writer (Steps 8) with the Phase 4a sub-section of `agents/draft_writer_agent.md` and the user content that sub-section names. Check its output against the Phase 4a lint; a failure is retried once with the lint gap hinted, and a second failure is the stop "A generator phase aborted".
    - Phase 4b: start a fresh draft writer with the Phase 4b sub-section and its user content: the Phase 4a output in `<phase4a_output>` delimiters, `config.md`, `outline.md`, `arguments.md`, `review.md`, `refs.bib`, the Existing Materials and the model identifier of Steps 4. An existing `main.tex` is copied first to `existing-main.tex` in the run folder with `cp` and checked with `cmp`.
-   - It writes `<project folder>/manuscript/main.tex` whole, with the Draft Body as `agents/draft_writer_agent.md`, "Paper's addition: the LaTeX manuscript", gives it, a marker `% FIGURE: <label>` for each figure the outline plans and the lines `% ABSTRACT` the abstract replaces, and `intended-claims.md` in the run folder. Its Dimension Scores, Failure Condition Checks and Writer Decision go to `draft-report.md` in the run folder, with the section "Trace table" (`agents/draft_writer_agent.md`, "The trace table"). A failure of the Phase 4b lint is the stop "A generator phase aborted".
+   - It writes `main.tex` of the manuscript's folder whole, with the Draft Body as `agents/draft_writer_agent.md`, "Paper's addition: the LaTeX manuscript", gives it, a marker `% FIGURE: <label>` for each figure the outline plans and the lines `% ABSTRACT` the abstract replaces, and `intended-claims.md` in the run folder. Its Dimension Scores, Failure Condition Checks and Writer Decision go to `draft-report.md` in the run folder, with the section "Trace table" (`agents/draft_writer_agent.md`, "The trace table"). A failure of the Phase 4b lint is the stop "A generator phase aborted".
    - Start the visualization agent (Steps 8) together with Phase 4b when the paper contains quantitative results the evidence map plans a figure for. It is given `config.md`, `outline.md`, `arguments.md` and the file names of the manuscript's folder and its `figures/` folder. It draws the figures into `figures/` of the run folder and writes `figures.md` with each figure's environment, as `agents/visualization_agent.md` gives.
    - Done when `main.tex`, `intended-claims.md` and `draft-report.md` exist and both lints passed, and `figures.md` exists when the visualization agent ran.
 8. Place the figures when the visualization agent ran.
-   - Copy each image to `<project folder>/manuscript/figures/` under the name `figures.md` gives under "Names", with `cp -n`.
+   - Copy each image to `figures/` of the manuscript's folder under the name `figures.md` gives under "Names", with `cp -n`.
    - Anchorize `main.tex` (Steps 9) and resume the visualization agent with the manifest and the patch path (Steps 8). It writes the patch with the id `figures` that replaces each marker block by its figure's environment, and apply it (Steps 10).
    - Done when `figures.md` says that no figure was drawn, or each figure it lists is in `main.tex`.
 9. Phase 5a and 5b, in parallel: the citations with the citation compliance agent (Steps 12), and the abstract with the abstract agent.
@@ -971,7 +972,7 @@ A run stops only at the stops its mode lists under its heading in "Steps", and t
 | The calibration's pairs | The calibration (Steps 12): the 25 pairs are built | The 25 pairs and how each was built | The user confirms or drops each pair; the calibration goes on with the confirmed pairs |
 | A script failed | `anchorize_tex.py` or `apply_tex_patch.py` exits 1, or `apply_tex_patch.py` exits 4 | The output as printed and the file left as it was | The cause put right, then `/paper` again |
 | Unknown mode | The mode is none of the twelve modes or the two calls, or the request is about something other than a paper | The twelve modes and the two calls | `/paper` again with a listed mode |
-| An argument that does not exist | An argument is missing, or names a file or folder that does not exist | The mode's line of Quick start, or the path | The call corrected, then `/paper` again |
+| An argument that does not exist | An argument is missing, names a file or folder that does not exist, or is a `--manuscript` name that is not one folder name | The mode's line of Quick start, or the path | The call corrected, then `/paper` again |
 | The `.bib` is not one file | The lines of "What it reads" 4 name none, more than one, or a file that does not exist | The lines, or the missing file | The manuscript corrected, then `/paper` again |
 | No prose standard | Neither of the two places of "What it reads" 1 holds the prose standard, or a page of the `writing` folder that it names is missing | Both paths, or the path of the page | A prose standard at one of them, or the `writing` skill installed, then `/paper` again |
 

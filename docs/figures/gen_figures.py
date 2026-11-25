@@ -16,6 +16,9 @@ Writes, beside this file:
 - researcher.svg: the stages, agents, runs of other skills and stops of the manuscript mode of
   the researcher skill, with what the integrity mode runs alone, and what the novelty and idea
   modes do with no agent started, in its note.
+- researcher-research.svg: the six stages of the research mode of the researcher skill, the
+  builder and the reviewer of each piece of code, the jobs, the stops and each way back to an
+  earlier stage, with what the adopt mode and the full mode run in its note.
 - submit.svg: the agent and stops of the submit skill, from the submission sheet to the page
   of the final submit.
 - grant.svg: the agents and stops of the draft mode of the grant skill, with what the other
@@ -34,9 +37,9 @@ Every figure but the last two shows the order of a run. A box is an agent start 
 resumed agent, solid when it always runs and dashed when it runs only when needed. A stop that
 waits on the user is an orange box. A cycle is a dotted arrow with its cap, and a check an agent
 repeats inside one start is a dotted loop on that agent with its cap. Scripts and the session's
-own steps are left out, except where a paper figure draws them: a script the session runs is a
-grey box, and a step where the session reads and judges is a rounded box, each with its legend
-line. paper/lifecycle.svg draws no run: a frame is a mode or what you do outside the skill, and
+own steps are left out, except where a paper figure or researcher-research.svg draws them: a
+script the session runs, and in researcher-research.svg the jobs the session submits, is a grey
+box, and a step where the session reads and judges is a rounded box, each with its legend line. paper/lifecycle.svg draws no run: a frame is a mode or what you do outside the skill, and
 a box in it is a part of that mode. paper/run-folder.svg draws the agents
 of a full run with the files each writes on its arrows, and stops and cycles are left out of
 it. Each of the two has its own legend.
@@ -2099,6 +2102,85 @@ def researcher() -> str:
     )
 
 
+def researcher_research() -> str:
+    """The research mode of the researcher skill: its stages, agents, jobs, stops and ways back."""
+    nodes = (
+        Node("FQ", "Frame: the research questions, the baseline, the metric, the limits, the cluster's facts and the setting", "stop"),
+        Node("FD", "Frame: the dataset, from candidates with their size, licence and fit to the limits", "stop"),
+        Node("B", "Builder: one piece of code from the session's brief, with its small local test"),
+        Node("R", "Reviewer: the code against the brief, the test again, what makes a result false"),
+        Node("RS", "A piece of code that does not pass its review", "stop"),
+        Node("BA", "Baseline: its jobs through the scheduler, under the conditions of Frame", "script"),
+        Node("EX", "Experiments: each campaign's jobs through the scheduler", "script"),
+        Node("C", "Compare: each result against the baseline, a diagnosis and a proposal for each that does not beat it", "choice"),
+        Node("M", "A result that does not beat the baseline, under the manual setting", "stop"),
+        Node("MS", "A result short of what was set, in research: it beats the baseline, under the manual setting", "stop"),
+        Node("I", "idea, reopened with the diagnosis: the rounds of the interview", "stop"),
+        Node("CO", "Consolidate: run_all.sh once in a clean copy through the scheduler, each number compared, the record written", "script"),
+        Node("N", "A number that does not reproduce", "stop"),
+    )
+    edges = (
+        Edge("FQ", "FD"),
+        Edge("FD", "FQ", "you change a limit or the dataset: Frame again", "back"),
+        Edge("FD", "B"),
+        Edge("B", "R"),
+        Edge("B", "FQ", "the dataset does not fit the limits", "back"),
+        Edge("R", "B", "a finding: a new brief, at most 2 times", "back"),
+        Edge("R", "RS", "still a finding after the third review"),
+        Edge("R", "BA", "no finding that makes a result false"),
+        Edge("BA", "EX"),
+        Edge("BA", "B", "a job that fails: a brief for the fault, on your word", "back"),
+        Edge("BA", "FQ", "the baseline cannot run inside the limits, or a job that fails, on your word", "back"),
+        Edge("EX", "B", "code every campaign shares, or a job that fails, on your word", "back"),
+        Edge("EX", "FQ", "a job that fails, on your word", "back"),
+        Edge("EX", "EX", "a campaign again from its start, at most 3 times", "back"),
+        Edge("EX", "C"),
+        Edge("C", "M", "manual setting: does not beat the baseline"),
+        Edge("C", "MS", "manual setting: beats the baseline, short of what was set"),
+        Edge("C", "EX", "a method cause: a new campaign", "back"),
+        Edge("C", "B", "an implementation cause, at most 2 times", "back"),
+        Edge("C", "FD", "a dataset cause", "back"),
+        Edge("C", "I", "a research question cause"),
+        Edge("I", "FQ", "the new research questions", "back"),
+        Edge("C", "CO", "a result beats the baseline, one short of what was set named as such"),
+        Edge("MS", "CO", "on your word, named as below what was set"),
+        Edge("CO", "N", "a second run still differs"),
+        Edge("CO", "BA", "a difference in a baseline number: back to Baseline, once", "back"),
+        Edge("CO", "EX", "a difference in a campaign's number: back to Experiments, once", "back"),
+    )
+    floating = (
+        Node("A", "A project underway: research adopt offered", "stop"),
+        Node("J", "The jobs submitted: the job ids in the README, and the run stops", "stop"),
+        Node("JF", "A job that fails: its log and its script", "stop"),
+        Node("K", "The count of methods reached with no result that beats the baseline, under the automatic setting", "stop"),
+    )
+    note = (
+        "The session writes each brief, starts each builder and each reviewer, submits the jobs "
+        "and writes the README before each stage ends, so that a new session resumes from the "
+        "README alone. Every job on a cluster runs from a script in code/hpc/, the small local "
+        "test as a short job, and the session polls only when you ask. research adopt reads a "
+        "project underway against each stage, writes the README sections it lacks, moves nothing "
+        "and goes on from the first stage not done. full runs idea, shows the modes it will run "
+        "and leaves out for you to confirm, then runs research or research adopt and manuscript, "
+        "and goes on to manuscript on a partial result, or one below what was set, only on your "
+        "word."
+    )
+    return _single(
+        "researcher-research.svg",
+        "The research mode of the researcher skill",
+        _graph(nodes, edges, floating),
+        note,
+        (
+            SIMPLE_LEGEND[0],
+            SIMPLE_LEGEND[2],
+            SIMPLE_LEGEND[3],
+            Legend("loop", "Dotted loop on one box: a campaign again from its start, with its cap"),
+            Legend("script", "Grey box: jobs the session submits through the scheduler"),
+            Legend("choice", "Rounded box: the session reads and judges"),
+        ),
+    )
+
+
 def submit() -> str:
     """The submit skill: its agent and its stops, from the sheet to the page of the final submit."""
     nodes = (
@@ -2479,6 +2561,7 @@ def figures() -> tuple[tuple[str, str], ...]:
         ("code-comments.svg", code_comments()),
         ("codebase-design.svg", codebase_design()),
         ("researcher.svg", researcher()),
+        ("researcher-research.svg", researcher_research()),
         *paper_figures(),
         ("paper/lifecycle.svg", paper_lifecycle()),
         ("paper/run-folder.svg", paper_run_folder()),
