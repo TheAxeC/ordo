@@ -2,7 +2,7 @@
 name: grill
 description: "Settle a roadmap entry's design decisions before its plan opens, by an interview in rounds: list the decisions the entry's goal and gate need, ask every decision whose prerequisites are settled in one round, each with its options, their pros and cons, a reference line for the configured design bar, one recommendation and the lazy option named, have facts looked up by agents instead of asked, and write each answer as it settles into the plan's Rulings or the entry's rulings file, each lookup agent into the Agents section of the same file, the roadmap entry, the glossary, the glossary's path in the standards list of plan.yaml and of each open plan's configuration block when it creates or lists a glossary, and a proposed ADR, written on the user's yes or, under `--self-rule`, on the orchestrator's recommendation. Triggers on: grill <entry>, grill me on the entry, settle the design decisions of an entry, interview me about the design, design decisions before the plan, stress-test the design of an entry."
 metadata:
-  version: "2.0.1"
+  version: "3.0.0"
 ---
 
 # Settle an entry's design decisions
@@ -46,11 +46,17 @@ metadata:
 5. The glossary, whole, found as `/plan`'s "What it reads" 1 says.
    - A repository without one gets it at the first term written, as "Steps / Writing what settled" 2 says.
    - A glossary without the plan-terms block gets its terms after the opening paragraph.
-6. The Rulings of the open plan, when a folder under `<ledger_root>/`, outside the folder `archive_root` names, holds a `plan.md` whose title, after `# Plan: `, equals `<entry>` or starts with `<entry>` and a space, a full stop after a number being allowed, and otherwise the rulings file `<ledger_root>/rulings/<slug>.md` when it exists.
-   - The slug is derived as the `plan` skill's Steps 1 derives it.
+6. The Rulings of the open plan, when a folder under `<ledger_root>/`, outside the folder `archive_root` names, holds a `plan.md` whose title, after `# Plan: `, equals `<entry>` or starts with `<entry>` and a space, a full stop after a number being allowed, and otherwise the rulings file `<ledger_root>/rulings/<number>.md` when it exists.
+   - The number is the entry's number written as the `plan` skill's "What it reads" 4 writes it.
+   - The file at that path is read only when its heading line names the entry, as the `plan` skill's "What it reads" 4 says: the number in the heading equals the entry's.
+   - A file at that path whose heading line does not hold the entry's number, holding another number or none, is the stop "Another entry's rulings file" ("Stops"), raised at Steps 2 when no plan is open for the entry.
+   - A file under `<ledger_root>/rulings/` at another path whose heading line holds the entry's number, written by that rule, is not read.
+   - A file under `<ledger_root>/rulings/` whose heading line holds no number, its text after `# Rulings: ` being the entry's title, is not read.
+   - The first round names each file this item does not read (Steps 6).
    - The Rulings are the `## Rulings` section of `plan.md`.
-   - Every other section whose heading begins `## Rulings` in a `plan.md` under `<ledger_root>/`, an archived plan's included, and every other rulings file under `<ledger_root>/rulings/`, is read for the bullets that name the entry by its number or its title and whose first line ends with "(the user)", with or without a full stop after it.
+   - Every other section whose heading begins `## Rulings` in a `plan.md` under `<ledger_root>/`, an archived plan's included, and every other rulings file under `<ledger_root>/rulings/` whose heading line does not hold the entry's number, is read for the bullets that name the entry by its number or its title and whose first line ends with "(the user)", with or without a full stop after it.
      - Such a bullet is a carried ruling.
+     - A file this item names as not read is not read for carried rulings either.
      - In an archived `plan.md` whose title, after `# Plan: `, equals `<entry>` or starts with `<entry>` and a space, a full stop after a number being allowed, every bullet whose first line ends with "(the user)", with or without a full stop after it, of a section whose heading begins `## Rulings`, is a carried ruling, whether or not it names the entry.
      - A bullet of an archived plan that a ruling of the user sets aside is no carried ruling, for any entry.
        - Such a bullet settles no decision.
@@ -98,7 +104,8 @@ metadata:
    - The step is done when the keys, the design bar and the entry are resolved, or the skill has refused.
 2. Read what "What it reads" 3 to 9 lists.
    - Each is read in full in this session, and none is taken from memory.
-   - The step is done when each has been read.
+   - The stop "Another entry's rulings file" of "What it reads" 6 is raised here, when no plan is open for the entry, before the first round and before anything is written.
+   - The step is done when each has been read, or the stop is raised.
 3. Draw the design tree.
    - List every decision the entry's goal and gate need, each with the decisions it waits on.
    - A decision is a node of the design tree.
@@ -163,6 +170,7 @@ metadata:
    - Only a `D<n>` that opens a bullet counts, since a `D<n>` inside a line can cite a decision of another interview or plan.
    - The message ends with the answer form: `D<n> => <letter or text>` one line per decision, `D<n> Agree` to take the recommendation, and `D<a>-<b> Agree` to take it for each decision of a range.
    - The first round also lists, unnumbered and after the answer form, each decision a carried ruling settles, as Steps 3 shows it.
+   - The first round also names each file under `<ledger_root>/rulings/` that "What it reads" 6 does not read, with its path, saying that it is not read, and that it is read once it stands at `<ledger_root>/rulings/<number>.md` with a heading line `# Rulings: <number>. <title>` that holds the entry's number.
    - The first round also lists each archived plan whose bullets would otherwise be carried rulings for the entry and that a ruling sets aside, whole or in part, with each ruling that sets it aside quoted as written and its `<path>:<line>`.
    - The round ends the turn and waits for the answers ("Stops").
    - Under `--self-rule`, the round is not sent: each decision of the frontier outside the six kinds of `plan-orchestration`'s `references/self-rule.md`, "The six kinds left open", is answered with its recommendation, as the orchestrator's choice.
@@ -197,6 +205,7 @@ metadata:
       - The decisions carried rulings settle are listed among them, each with its carried ruling's `<path>:<line>`, those of an interview whose first pass found no frontier included.
     - List each "carried from" bullet removed ("Steps / Writing what settled" 1), with the bullet as it stood and its `<path>:<line>`.
     - List each archived plan a ruling sets aside, as the first round lists it (Steps 6), those of an interview whose first pass found no frontier included.
+    - List each rulings file "What it reads" 6 does not read, as the first round names it (Steps 6), those of an interview that sent no round included.
     - List each lookup agent written to an Agents section ("Steps / Looking up a fact" 4), with its bullet and its `<path>:<line>`.
     - An entry changed under a quoted ruling is listed with the ruling's name and its ledger file.
     - List each change owed to an open plan ("Steps / A plan already open"): a step whose text an answer changed, and the lines of `plan.md`'s "## Goal" or "## Gate" an answer changed.
@@ -232,7 +241,7 @@ metadata:
    - The item is done when the agent is running.
 4. Right after the start, read the agent's id and the model the runner served it, from the runner's record of the agent as `plan-orchestration`'s "Launching a builder" says.
    - Write the agent as one bullet `- <agent id>: grill lookup, <served model>` to the `## Agents` section of the file the interview writes its rulings to.
-   - That file is the open plan's `plan.md`, or else the rulings file, created with its heading line as "Steps / Writing what settled" 1 says.
+   - That file is the open plan's `plan.md`, or else the rulings file, its heading line written as "Steps / Writing what settled" 1 says.
    - A `plan.md` without the section gets it before `## Blocked, and by what`.
    - A rulings file without the section gets it at its end.
    - For a lookup agent started as the effort agent, a served model that is not the configured one is the stop "A lookup agent served another model" ("Stops"): the agent is stopped through the runner's stop tool, and nothing it found is used.
@@ -279,7 +288,8 @@ metadata:
 ### Writing what settled
 
 1. Write the ruling for every settled answer, the roadmap diff, "record as ADR?", rule-clash and term decisions included.
-   - It goes to the `## Rulings` section of the open plan's `plan.md`, or else to the rulings file, created with the heading line `# Rulings: <entry>` when it is absent.
+   - It goes to the `## Rulings` section of the open plan's `plan.md`, or else to the rulings file `<ledger_root>/rulings/<number>.md` ("What it reads" 6), created when it is absent.
+   - At every write of the rulings file, its first line is written as the heading line `# Rulings: <entry>`, `<entry>` being the entry's number and title as the roadmap writes them after the round's roadmap diff, such as `# Rulings: 12. One object per file`.
    - In a rulings file that has an `## Agents` section, a ruling bullet is written above that heading, so the rulings stay together and `/plan` reads the agents under their heading.
    - It is one bullet: `- D<n> <the decision, as a phrase> (<date>): <the answer in one line> (the user).`
    - Under `--self-rule`, a decision answered with its recommendation is written as `- D<n> <the decision, as a phrase> (<date>): <the answer in one line> (self-rule).`
@@ -375,12 +385,13 @@ Every decision of a round has these parts, in this order, and `references/decisi
 
 ## Stops
 
-The first three rows are stops, which wait on the user. The rest are refusals, which name their cause and change nothing.
+The first four rows are stops, which wait on the user. The rest are refusals, which name their cause and change nothing.
 
 | Stop | When | What it shows | What resumes it |
 |---|---|---|---|
-| A round | Every round, at Steps 6, or under `--self-rule` a round of decisions of the six kinds; the "record as ADR?" decisions and each roadmap diff no quoted ruling states ride in it | The frontier as decisions in the decision form, the answer form, and in the first round the decisions carried rulings settle and the archived plans a ruling sets aside | The user's answers |
+| A round | Every round, at Steps 6, or under `--self-rule` a round of decisions of the six kinds; the "record as ADR?" decisions and each roadmap diff no quoted ruling states ride in it | The frontier as decisions in the decision form, the answer form, and in the first round the decisions carried rulings settle, the rulings files not read and the archived plans a ruling sets aside | The user's answers |
 | The end | Steps 10, except under `--self-rule` | The decisions settled with where each was written, the step changes owed, and the question of the shared understanding and the commit | The user's confirmation and answer on the commit |
+| Another entry's rulings file | No plan is open for the entry, and the file at `<ledger_root>/rulings/<number>.md` has a heading line that does not hold the entry's number, holding another number or none ("What it reads" 6, Steps 2); nothing is read or written | The file's path and its heading line | The user moves or renames the file, or writes the entry's number into its heading line, then `/grill <entry>` again |
 | A lookup agent served another model | The runner served a lookup agent started as the effort agent a model that is not the configured one ("Steps / Looking up a fact") | The configured value of `reviewer` and the served model | The user's instruction, then the lookup started again |
 | No configuration | No `plan.yaml` is in the folder the call names or in the three places at the repository root | A refusal that names the places looked in and `/ordo-init` | `/ordo-init`, then `/grill` again |
 | No such entry | `<entry>` matches no roadmap entry | A refusal that names `/roadmap add <goal>` | `/grill` with an entry that exists |

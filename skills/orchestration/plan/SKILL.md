@@ -2,7 +2,7 @@
 name: plan
 description: "Open a plan for one roadmap entry: create its ledger folder from the repository's plan configuration, write plan.md with the entry's goal, gate and a drafted step list for approval, the gate and each step's check asked whether it could pass without the goal being reached, each approved step tagged (approved), and orchestrator-state.md with the configuration block filled from the repository. Triggers on: open a plan, start a plan, plan <roadmap entry>, new plan for <entry>."
 metadata:
-  version: "6.0.0"
+  version: "7.0.0"
 ---
 
 # Open a plan
@@ -48,6 +48,11 @@ metadata:
      - When the list names more than one such page, the glossary is the first in the list's order.
      - A skill that reads the standards from the configuration block of an open plan's state file reads the glossary's path from that block's `standards` list.
    - Its keys, which of them are required and the default of each optional one are in `templates/plan.yaml` (one project) and `templates/plan.projects.yaml` (several, listed under `projects:`, with `<entry>` then `<project>/<entry>`).
+     - Each `plan.yaml` of the repository, and each project of the `projects:` form, has a ledger root of its own, since a rulings file is named by the entry's number alone ("What it reads" 4).
+     - The `ordo-init` skill's `templates/check_config.py` refuses two projects of one `projects:` form whose `ledger_root` values resolve to one folder.
+     - Two `plan.yaml` files whose ledger roots resolve to one folder are not checked.
+     - On such a shared root, another entry's file at the rulings file's path is the `grill` skill's stop "Another entry's rulings file".
+     - On such a shared root, Steps 3 shows another entry's file at that path as "What it reads" 4 says.
    - An optional key missing takes the default the example file gives it.
      - A default that is a path is read from the repository root, wherever the file stands: `adr` is then `docs/adr` and `worktree_root` is `.agents/worktrees`.
    - No file in any place of the order, and a required key missing, are stops ("Stops").
@@ -58,7 +63,21 @@ metadata:
 3. The verification page the configuration names, for the commands every step runs.
    - Each command of the page runs from the repository root, whatever folder holds the `plan.yaml`.
    - A page in a project folder therefore writes each command as it runs from the root: `test -d apps/web/src` for a check of `src` in `apps/web`.
-4. The rulings file `<ledger_root>/rulings/<slug>.md`, the slug as Steps 1 derives it, when it exists: the settled design answers for the entry, the user's and those `/grill --self-rule` wrote, written while no plan was open, and, under its `## Agents` heading, the lookup agents `/grill` started while no plan was open.
+4. The rulings file `<ledger_root>/rulings/<number>.md`, when it exists and its heading line names the entry: the settled design answers for the entry, the user's and those `/grill --self-rule` wrote, written while no plan was open, and, under its `## Agents` heading, the lookup agents `/grill` started while no plan was open.
+   - `<number>` is the entry's number as the roadmap writes it before the title, changed in three ways.
+     - A full stop that ends it is dropped.
+     - A project prefix is dropped, as Steps 1 drops it.
+     - It is written in lower case, with each run of characters other than letters and digits as a single `-`.
+   - The entry `2.E.A. self-rule` gives `2-e-a.md`.
+   - `/plan web/12` gives `12.md` under the `ledger_root` of the project `web`.
+   - The heading line `# Rulings: <entry>` names the entry when the number it holds before the title, written by the same rule, equals the entry's.
+   - The title in the heading is not compared.
+   - A file at that path whose heading line does not hold the entry's number, holding another number or none, is another entry's file.
+     - Steps 3 shows it with the draft.
+     - It is neither copied nor removed.
+   - A file under `<ledger_root>/rulings/` at another path whose heading line holds the entry's number is not read.
+   - A file under `<ledger_root>/rulings/` whose heading line holds no number, its text after `# Rulings: ` being the entry's title, is not read.
+   - Steps 3 names each file that is not read with the draft, saying that it is not read, and that it is read once it stands at `<ledger_root>/rulings/<number>.md` with a heading line `# Rulings: <number>. <title>` that holds the entry's number.
 5. The ADRs in the folder the configuration's `adr` names (`docs/adr` when it has none): each `NNNN-*.md` record for its part in force, as the `spec` skill's "What it reads" 5 says.
 6. The quoted ruling, when the invocation ends with `--ruling <ledger file> "<name>"`.
    - `<ledger file>` is a plan's `plan.md` or a rulings file, given by a path the skill can read from where it runs.
@@ -146,6 +165,8 @@ metadata:
    - With the draft, name each design decision the drafted steps rest on that no ADR in force and no line of the Rulings section settles: a public shape, a wire format, a config key, a vocabulary, a format or a rule the builder applies across the tree, or a library choice.
      - The list is shown, not written into `plan.md`.
    - With the draft, show each line of the rulings file that Steps 2 did not copy as a bullet line, for the user to place.
+   - With the draft, show the file at the rulings file's path that is another entry's file, as "What it reads" 4 says.
+   - With the draft, name each file that is not read, as "What it reads" 4 says.
    - `/grill <entry>` settles such decisions before the plan opens.
      - It is not required: the user may approve the list with them unsettled.
    - Write `plan.md` once the user has approved or corrected it.
@@ -156,7 +177,7 @@ metadata:
        - No line of the rulings file is left to place.
      - Otherwise the draft is shown whole with what differs, what could pass without the goal and what is unsettled, and the stop stands.
      - The ruling's bullet and every line under it are copied into the Rulings section of a plan written under a quoted ruling, unless Steps 2 copied them from the rulings file.
-   - Under `--self-rule`, the stop "The drafted step list" is raised as `Open item A` of the new plan, written in full as a stop is: the draft, the answers of "## Gate", the lines of the rulings file left to place, the options "open the plan with the list as drafted" and "keep the draft for the user", their pros and cons, the recommendation and the lazy option.
+   - Under `--self-rule`, the stop "The drafted step list" is raised as `Open item A` of the new plan, written in full as a stop is: the draft, the answers of "## Gate", the lines of the rulings file left to place, the files "What it reads" 4 shows as another entry's or names as not read, the options "open the plan with the list as drafted" and "keep the draft for the user", their pros and cons, the recommendation and the lazy option.
      - The first option is the recommendation.
      - The second option, which leaves the plan unopened, is named as the lazy option.
      - A line of the rulings file left to place does not keep the stop.
@@ -211,7 +232,7 @@ metadata:
 | Stop | When | What it shows | What resumes it |
 |---|---|---|---|
 | A gate with no count | The copied gate is met only by fixing and checking again until nothing fails (Steps 2) | The gate, the words that need the repeated fixing, and the round cap of `plan-orchestration`'s Rules | The user's gate, written through `/roadmap`, then `/plan` again |
-| The drafted step list | Every plan, after Steps 2, except a draft written under a quoted ruling as Steps 3 says, or under `--self-rule` outside the cases Steps 3 keeps with the user: the skill does the mechanical half of opening a plan and stops at the design half | The drafted `plan.md`: the goal, the gate, the steps and each step's check, and in "## Gate" the answer to "could this pass without the goal being reached?" with its reason for the gate and for each step's check, and the design decisions no ADR in force or ruling settles and the rulings file's lines left to place (Steps 3) | The user's approval or correction |
+| The drafted step list | Every plan, after Steps 2, except a draft written under a quoted ruling as Steps 3 says, or under `--self-rule` outside the cases Steps 3 keeps with the user: the skill does the mechanical half of opening a plan and stops at the design half | The drafted `plan.md`: the goal, the gate, the steps and each step's check, and in "## Gate" the answer to "could this pass without the goal being reached?" with its reason for the gate and for each step's check, and the design decisions no ADR in force or ruling settles, the rulings file's lines left to place and the rulings files shown as another entry's or named as not read (Steps 3) | The user's approval or correction |
 | No configuration | No `plan.yaml` is in the folder the call names or in the three places at the repository root ("What it reads" 1): no file, no run | That the file is missing, the places looked in, and `/ordo-init`, which writes it | `/ordo-init`, then `/plan` again |
 | A required key missing | A required key is not in the `plan.yaml` found, in the folder the call names or else at the repository root; the refusal names the key | The key | The key added, then `/plan` again |
 | A path refused | A refusal: a path of the `plan.yaml` found resolves outside the repository, or its `ledger_root` or `worktree_root` resolves to the repository root ("What it reads" 1) | The file, the key and its value | The value corrected, then `/plan` again |

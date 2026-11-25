@@ -16,6 +16,7 @@ The keys, which of them are required and each optional key's default come from t
 - a value of the wrong kind: a worker or reviewer that is not claude:<model> (one written with no value included), a review that is neither every nor earned, a libraries that is neither check nor avoid, and any other value whose kind differs from its default's;
 - <key> is not a path under the repository root, a path that resolves outside the repository, and for adr an absolute path as well;
 - ledger_root or worktree_root is the repository root;
+- the projects <name> and <name> have one ledger_root: <folder>, two or more projects of the projects: form whose ledger_root values resolve to one folder, since a rulings file under the ledger root is named by the entry's number alone; the line names the folder from the repository root and every project that names it;
 - adr is not a folder path (not a non-empty string), or adr names a folder that does not exist (absent, or not a folder);
 - design_bar is not industry, state-of-the-art or novel;
 - design_references is not a list of text;
@@ -195,6 +196,7 @@ def check_switch(prefix, key, value, errors):
 
 
 def check_project(paths, label, config, keys, errors, notes):
+    """Check one project's keys, or the keys of the one-project form; return the folder its ledger_root resolves to, or None when it has none or an error."""
     prefix = f"{label}: " if label else ""
     for key, default in keys.items():
         if key not in config:
@@ -264,6 +266,7 @@ def check_project(paths, label, config, keys, errors, notes):
         probe = os.path.join(paths.shown(worktree_root), "step-worktree")
         if git(paths.root, "check-ignore", "-q", "--no-index", "--", probe) != 0:
             errors.append(f"{prefix}worktree_root is not ignored by git: {paths.shown(worktree_root)}")
+    return roots.get("ledger_root")
 
 
 def find(arguments):
@@ -321,8 +324,14 @@ def check(arguments):
     if "projects" in config:
         if set(config) != {"projects"}:
             errors.append(f"keys beside projects: {sorted(set(config) - {'projects'})}")
+        projects_of = {}
         for project_name, project in (config["projects"] or {}).items():
-            check_project(paths, project_name, project or {}, keys, errors, notes)
+            ledger_root = check_project(paths, project_name, project or {}, keys, errors, notes)
+            if ledger_root is not None:
+                projects_of.setdefault(ledger_root, []).append(str(project_name))
+        for ledger_root, names in projects_of.items():
+            if len(names) > 1:
+                errors.append(f"the projects {' and '.join(names)} have one ledger_root: {paths.shown(ledger_root)}")
     else:
         check_project(paths, "", config, keys, errors, notes)
     ignored = git(paths.root, "check-ignore", "-q", "--no-index", "--", name) == 0

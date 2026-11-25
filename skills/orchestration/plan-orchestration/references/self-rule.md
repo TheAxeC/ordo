@@ -77,7 +77,7 @@ Next-entry mode runs the next open roadmap entry that has no open plan after a p
   3. The loop on the new plan, which runs under its own configuration block.
   - In the `projects:` form `<entry>` is `<project>/<entry>`, and under an invocation that named a folder it has that folder in front.
   - The steps of the other plans the invocation runs go on while the first two run.
-- The taking of the next entry stops at an item of the six kinds, at a stop "The counts" names, at a stop that the `plan` skill's Steps 3 keeps with the user under `--self-rule`, and at a refusal of `/grill` or `/plan`.
+- The taking of the next entry stops at an item of the six kinds, at a stop "The counts" names, at a stop that the `plan` skill's Steps 3 keeps with the user under `--self-rule`, at a refusal of `/grill` or `/plan`, and at a stop of `/grill` other than a round, such as "Another entry's rulings file".
   - Such a stop blocks only that entry, and the steps of the other plans the invocation runs go on.
   - A `/grill` round of decisions of the six kinds waits for the user's answers.
     - The user's answers resume `/grill`, which goes on under `--self-rule` with the next frontier.
@@ -112,7 +112,7 @@ The lines of that template below those two show the form of an entry and a choic
   - `Booked:` names the Rulings bullet by its path relative to the repository root as it stands at the booking, its line, and the bullet's opening words, which the review searches by and a `replacing` clause quotes.
   - The opening words are `Open item <L>` for a bullet "Closing an open item" books, and `D<n> <the decision, as a phrase>` for a bullet `/grill --self-rule` writes.
   - A step's tag names the bullet as the `spec` skill's "What it reads" 4 reads it.
-  - Before a plan is open for the entry, `Booked:` names the rulings file `<ledger_root>/rulings/<slug>.md`.
+  - Before a plan is open for the entry, `Booked:` names the rulings file `<ledger_root>/rulings/<number>.md`, the number as the `plan` skill's "What it reads" 4 writes it.
   - When `/plan` copies the bullet into the new `plan.md`, it rewrites `Booked:` to that `plan.md` and the line the bullet stands on there, as the `plan` skill's Steps 3 says.
   - `Builds on it:` names the step the open item stopped and each step whose line the ruling rewrote or added.
   - `Builds on it:` also takes `the roadmap entry <n>` for an entry `/roadmap add` wrote under the choice's bullet ("A skill with its own approval stop").
@@ -139,7 +139,7 @@ C<n> Agree
 C<n> => <the user's ruling, one clause per question the open item asked>
 ```
 
-- The session finds the choice's bullet by the opening words its `Booked:` line gives, in the file that line names: the Rulings section of a plan's `plan.md` (for a closed plan, of the archived `plan.md` whose folder has the same slug under `<archive_root>/`) or the entry's rulings file `<ledger_root>/rulings/<slug>.md`.
+- The session finds the choice's bullet by the opening words its `Booked:` line gives, in the file that line names: the Rulings section of a plan's `plan.md` (for a closed plan, of the archived `plan.md` whose folder has the same slug under `<archive_root>/`) or the entry's rulings file `<ledger_root>/rulings/<number>.md`.
   - The line number of `Booked:` is the place it looks first, since lines above the bullet may have been added or removed since the booking.
 - A bullet with those opening words that does not end "(self-rule)" or "(self-rule)." is a refusal that names it, and nothing is written.
 - `C<n> Agree`:

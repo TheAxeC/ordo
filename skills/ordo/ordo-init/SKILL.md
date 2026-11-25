@@ -2,7 +2,7 @@
 name: ordo-init
 description: "Set a repository up for the plan skills, by what the folder holds. In an empty folder it sets up a new repository: CLAUDE.md with the shared rules, docs/ with the change and prose standards, the standards pages, a roadmap, a glossary and an ADR folder, src/, utils/ with the build driver, .gitignore, LICENSE, README, the project skills and docs/plan.yaml. In an existing repository with no plan.yaml it drafts docs/plan.yaml and offers what it lacks: pages, the shared rules, the plan terms, the ignore rules. With a plan.yaml it checks that file and syncs the two blocks with their templates. The mode build writes utils/build.py from the verification page, with build, test, check and gate, and makes the page name them. It shows every draft and writes after approval. Triggers on: ordo-init, set up the plan skills, init plan.yaml, configure ordo, check plan.yaml, set up a new repo, scaffold a repository, new project repo, sync the shared rules, sync the glossary, ordo-init build, write the build driver."
 metadata:
-  version: "5.0.1"
+  version: "6.0.0"
 ---
 
 # Set a repository up for the plan skills
@@ -356,6 +356,7 @@ Run from the repository root, the folder `<path>` names or else the current fold
      - `adr` not naming a folder under the repository root.
      - A path that resolves outside the repository.
      - A `ledger_root` or a `worktree_root` that is the repository root.
+     - Two projects of the `projects:` form whose `ledger_root` values resolve to one folder.
      - `design_bar` outside `industry`, `state-of-the-art` and `novel`.
      - `design_references` not a list of text.
      - `worker_effort` or `reviewer_effort` outside `low`, `medium`, `high`, `xhigh` and `max`.

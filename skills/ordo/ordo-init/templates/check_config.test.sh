@@ -1,8 +1,8 @@
 #!/bin/sh
 # Exercise check_config.py on scratch repositories, each case one configuration it must refuse or pass, or one search it must answer.
 # Each case is kept because its failure accepts a wrong configuration, reads another file than the one meant, or refuses a right one so that a setup cannot finish.
-# The check is run on the path of the file. The example configuration of each form passes at docs/plan.yaml, as does a file at .agents/plan.yaml under .agents/* with !.agents/plan.yaml after it, and a project that takes another's keys through a merge key (<<: *base) and overrides one of them.
-# A configuration is refused, with the line that names the file and its error, when it misses a required key (reviewer; worker in a project of the projects: form, named with its project), holds an unknown key, names a page that does not exist, leaves the worktree root not ignored, is itself ignored by git, writes a key twice (in a project with its name, beside a merge key and inside a merge key's mapping included), or holds a wrong value: a worker that is not claude:<model>, repair_rounds of the wrong kind, libraries, design_bar, design_references, worker_effort, self_rule, repair_reviewer and adr, which names a folder that does not exist or one outside the repository.
+# The check is run on the path of the file. The example configuration of each form passes at docs/plan.yaml, as does a file at .agents/plan.yaml under .agents/* with !.agents/plan.yaml after it, a project that takes another's keys through a merge key (<<: *base) and overrides some of them, and two projects whose ledger roots are two folders, one inside the other.
+# A configuration is refused, with the line that names the file and its error, when it misses a required key (reviewer; worker in a project of the projects: form, named with its project), holds an unknown key, gives two projects of the projects: form ledger_root values that resolve to one folder (named with the folder and both projects), names a page that does not exist, leaves the worktree root not ignored, is itself ignored by git, writes a key twice (in a project with its name, beside a merge key and inside a merge key's mapping included), or holds a wrong value: a worker that is not claude:<model>, repair_rounds of the wrong kind, libraries, design_bar, design_references, worker_effort, self_rule, repair_reviewer and adr, which names a folder that does not exist or one outside the repository.
 # The search: --find prints the first plan.yaml of the folder named, .scratch, docs and .agents, with one file, with two, with a folder named with a trailing slash and with a folder that holds no file; it exits 1 with the places named when there is no file, and with the folder named when the folder lies outside the repository.
 # The paths: a file in apps/web reads its pages and its ledger root from apps/web, and a page that exists only at the repository root is named missing by its path from the repository root; a path that resolves outside the repository is refused with its key, and so is a ledger root that is the repository root, while ledger_root: . in .scratch/plan.yaml passes; a file with no worktree_root passes when git ignores .agents/worktrees and is refused when it does not; a file with no adr key at docs/plan.yaml is noted with the default docs/adr; a repository reached through a symbolic link prints what its real path prints.
 # The arguments: no argument, a repository root in place of a file, and a file in no git repository each exit 1 with an error line.
@@ -215,12 +215,22 @@ set_project_key projects-twice tool-b worker_effort low
 printf '    worker_effort: max\n' >>"$test_root/projects-twice/docs/plan.yaml"
 expect_error projects-twice ": tool-b: key written twice: worker_effort"
 
-# Several-projects form where tool-b takes tool-a's keys through a YAML merge key and overrides worker_effort: a merge key is not a key written twice, and a key written twice beside it is still refused with its project.
+# Two projects whose ledger_root values are two strings that resolve to one folder are refused with the folder and both projects; two ledger roots that resolve to two folders, one inside the other, pass.
+make_projects_repo projects-one-ledger
+set_project_key projects-one-ledger tool-a ledger_root .scratch
+set_project_key projects-one-ledger tool-b ledger_root ./.scratch
+expect_error projects-one-ledger ": the projects tool-a and tool-b have one ledger_root: docs/.scratch"
+make_projects_repo projects-two-ledgers
+set_project_key projects-two-ledgers tool-a ledger_root .scratch
+set_project_key projects-two-ledgers tool-b ledger_root ./.scratch/tool-b
+expect_pass projects-two-ledgers
+
+# Several-projects form where tool-b takes tool-a's keys through a YAML merge key and overrides roadmap, verification, ledger_root, archive_root and worker_effort: a merge key is not a key written twice, and a key written twice beside it is still refused with its project.
 make_merge_repo() {
     make_projects_repo "$1"
     file=$test_root/$1/docs/plan.yaml
     sed -e 's/^  tool-a:$/  tool-a: \&base/' -e '/^  tool-b:/,$d' "$file" >"$file.new" && mv "$file.new" "$file"
-    printf '  tool-b:\n    <<: *base\n    roadmap: ../tools/tool-b/ROADMAP.md\n    verification: ../tools/tool-b/docs/building.md\n    worker_effort: max\n' >>"$file"
+    printf '  tool-b:\n    <<: *base\n    roadmap: ../tools/tool-b/ROADMAP.md\n    verification: ../tools/tool-b/docs/building.md\n    ledger_root: ../tools/tool-b/.scratch\n    archive_root: ../tools/tool-b/.scratch/archive\n    worker_effort: max\n' >>"$file"
 }
 make_merge_repo merge-key
 expect_pass merge-key

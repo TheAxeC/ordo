@@ -74,25 +74,14 @@ dispatch:                    # one entry per step in flight, written by /spec, s
   landing: not-started
   round: 1
   shared_paths: "docs/glossary.md with step 4 of this plan: step 2 writes lines 146-190, Ordo's own terms, and step 4 lines 5-144, the plan-terms block; README.md with step 1 of this plan: step 2 writes line 34, the researcher row, and step 1 lines 72-132, the figure lines; the ranges do not touch, so the cherry-pick merges them without conflict"
-- step: 4
-  executor: agent
-  worker: claude:opus
-  session_id: ac96504d9c4e48105 (claude-opus-5-5)
-  worktree: .agents/worktrees/27-a-newcomer-s-readme-researcher-s-project-readmes-a-skill-for-a-software-repository-s-documentation-and-a-figure-for-every-skill-4
-  base: e4e0198
-  launched: 2026-11-25
-  report: .scratch/27-a-newcomer-s-readme-researcher-s-project-readmes-a-skill-for-a-software-repository-s-documentation-and-a-figure-for-every-skill/agents/reviews/4-report.md
-  builder_usage: "134369 tokens, 19 tool uses, 2.5 minutes to the hand-back of its cases; after the cases ruling: 219168 tokens, 31 tool uses, 7.8 minutes; round 1: 286847 tokens, 75 tool uses, 6.8 minutes"
-  reviewer_report: .scratch/27-a-newcomer-s-readme-researcher-s-project-readmes-a-skill-for-a-software-repository-s-documentation-and-a-figure-for-every-skill/agents/reviews/4-refuter.md (a8b65453be25f0c4e, claude-opus-5-5, 169524 tokens, 29 tool uses, 6.5 minutes)
-  brief_check: .scratch/27-a-newcomer-s-readme-researcher-s-project-readmes-a-skill-for-a-software-repository-s-documentation-and-a-figure-for-every-skill/agents/reviews/4-brief-check.md (af6924bb5a482c6d5, claude-opus-5-5, 169399 tokens, 37 tool uses, 5.9 minutes)
-  landing: not-started
-  round: 1
-  shared_paths: "docs/glossary.md with step 2 of this plan: step 4 writes lines 5-144, the plan-terms block, and step 2 writes lines 146-190, Ordo's own terms; the ranges do not touch, so the cherry-pick merges them without conflict"
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled or, under `self_rule: on`, until the orchestrator closes it as `plan-orchestration`'s `references/self-rule.md`, "Closing an open item", says)
 
-- none.
+- Open item E (2026-11-26), step 4's check: your reading of `grill` and `plan` on the rulings file. Step 4 is on main. Read `skills/orchestration/grill/SKILL.md` "What it reads" 6, Steps 2, Steps 6 (the first round's naming of files not read) and the Stops row "Another entry's rulings file", and `skills/orchestration/plan/SKILL.md` "What it reads" 1 and 4 and Steps 3.
+  - (a) Approve the text as it stands. Pro: the step's check passes and the plan's gate item for step 4 is met. Con: none, if the text reads right to you.
+  - (b) Name what reads wrong. Pro: the text is fixed before the plan closes. Con: the change becomes a step of its own only as `plan-orchestration`'s "What earns a step of its own" allows, since step 4 has landed.
+  - Recommendation: (a), my judgment after the reviews: both reviews' findings are fixed, the last five at landing. The lazy option is (a) taken without reading the text, since the reading is the check.
 
 ## Closed items (the log of what was raised and how it ended; no report carries it)
 
@@ -126,7 +115,7 @@ dispatch:                    # one entry per step in flight, written by /spec, s
 
 ## Current position (rewritten before every step commit of this plan)
 
-- 2026-11-25. The plan is opened; nothing has landed. The working tree holds only this plan's opening files.
-- Verified: nothing run yet for this plan.
-- Next step: 1, 2 and 4, which nothing blocks and which can run in parallel.
-- Open on the user's side: none.
+- 2026-11-26. Step 4 has landed. Steps 1 and 2 are in flight: step 1's repair round 1 is reviewed and waits for its landing; step 2's repair round 1 is built and waits for its review.
+- Verified: `checks: 16 commands passed` on main at step 4's landing.
+- Next step: land step 1, review step 2's round and land it; then /spec steps 3, 5, 6 and 7.
+- Open on the user's side: Open item E.
