@@ -203,3 +203,15 @@ Differences of `skills/academic/researcher/SKILL.md` from the source's `SKILL.md
 
 - `references/pipeline_state_machine.md` row "Stage 4.5 (retry)", `references/integrity_check.md` item 4 and the Done line of item 6, `SKILL.md` "manuscript" item 12 and the Stops row "A FAIL of an integrity check": at Stage 4.5 of `manuscript`, a PASS WITH NOTES goes to the correction round with its notes as the list, within the same 3 rounds. The source's verdict table releases a PASS WITH NOTES with its notes attached, while its Stage 4.5 rule says the final check must pass with zero issues; the copy follows the zero-issues rule, so that the minor issues are fixed before the end. In a run of `integrity` and at Stage 2.5 a PASS WITH NOTES ends the check, as in the source.
 - `SKILL.md` Rules: every path and every value the user gives reaches a command as one argument in single quotes, a single quote inside it written `'\''`. The source has no such rule; it is the rule of this repository's `paper` and `writing` skills, so that a path with a space or a quote in it cannot break a command.
+
+## Corrections at the gate (the second comparison, `agents/reviews/6-differences-2.md`)
+
+- `agents/pipeline_orchestrator_agent.md`: the handoff table keeps the source's Stage 1 to Stage 2 row, reworded as "Research materials to Stage 2 ... Given to the `/paper` run as its materials" (D5, K19); it is not removed.
+- `references/handoff_schemas.md`: the sections `data_access_level` and `task_type` state the value of `researcher` on that page in place of the source's sentence "Every top-level SKILL.md declares metadata.<field>", since the frontmatter holds only the keys of the skill layout (the first row of the step 2 table). The pre-#268 "Legacy normalization" paragraph of Schema 11 is removed (K4), and the pointer to `style_calibration_protocol.md` is removed (K7).
+- `agents/integrity_verification_agent.md`: "(D4 derivation rule)" is removed as a line naming a design document (Open item B).
+- `examples/full_pipeline_example.md`: the source's four reviewers are the five reviewers of `/paper-review-panel full`, with the Devil's Advocate, named by role (D5, K13, K5).
+- `examples/integrity_failure_recovery.md`: the progress bar drops Research and Finalization (K19).
+- `references/ai_research_failure_modes.md`: the sentence on 3 correction rounds (K11).
+- `references/reproducibility_audit.md`: hard wraps joined and the pointer to `references/artifact_reproducibility_pattern.md` (K3, K6).
+- `references/score_trajectory_protocol.md` and `references/handoff_schemas.md` (the Schema 6 `dimension_scores` row): the scores read from the Dimension Scores of the Editorial Decision and of the Verification Review Report (Open items E and F).
+- `agents/compliance_agent.md`: "(or standalone skill)" removed (D23).

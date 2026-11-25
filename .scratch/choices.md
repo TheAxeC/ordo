@@ -2,7 +2,7 @@
 
 Each choice the orchestrator took under self-rule waits here for the user's review, grouped by roadmap entry. The user agrees with a choice by typing `C<n> Agree`, or replaces it by typing `C<n> => <ruling>`, in any session on the repository. A reviewed choice leaves this file.
 
-Last number: C159
+Last number: C160
 
 # Entry 2.I Several plans in one session
 
@@ -983,3 +983,18 @@ Lazy option: (b).
 Taken: (a)
 Booked: `.scratch/13-researcher/plan.md:150` (D43 Record the revision mode's decisions as an ADR)
 Builds on it: the record docs/adr/0055-researcher-s-revision-mode-runs-each-comment-that-needs-new-results-as-a-campaign-of-the-research-stages-then-paper-s-revision.md
+
+## C160. The impact factor dropped from the target-journal line of an example (2026-11-25)
+
+- (a) restore "(SSCI Q1, IF: 12.0)", the source's line. Pro: the copy follows the source, and the gate's comparison then names no difference without a ruling. Con: one more step.
+- (b) keep it dropped and write it in `deviations.md`. Con: no reason for the change exists, so the ruling would excuse a difference from the source.
+
+Rule: a copy follows its source; a difference needs a ruling with a reason.
+
+Recommend (a).
+
+Lazy option: (b).
+
+Taken: (a)
+Booked: `.scratch/13-researcher/plan.md:166` (D44 The impact factor dropped from the target-journal line)
+Builds on it: step 10 of roadmap entry 13

@@ -19,6 +19,7 @@ one `novelty` run on an idea you name, its page read by you, each work it cites 
 - Step 6: could this pass without the goal being reached? no, each run is made on the installed skill and each output is read by the user.
 - Step 8: could this pass without the goal being reached? no for the text: the goal's sentence on `revision` or a ruling with no step shows as "none"; a run of the mode is outside the gate.
 - Step 9: could this pass without the goal being reached? no for the text: a page that still says every job waits for the review, or that leaves the test job unnamed, shows when each page is read; the gate's goal check is run again after it.
+- Step 10: could this pass without the goal being reached? no, the comparison of the gate is run again over the whole copy after it.
 
 ## Steps, in execution order
 
@@ -29,6 +30,7 @@ one `novelty` run on an idea you name, its page read by you, each work it cites 
 - ✅ 5 `ordo-help` covers every skill: `/ordo-help skills` prints per skill one line on what it is for and then its Quick start block, and `/ordo-help <a sentence on what the user wants to do>` names the skill, the mode and the command, recognised as ruling D33 says, with the row of `ordo-help` in `README.md` saying so; check: the skill's text is read against rulings D15 and D33 (1 commit) (approved)
 - ✅ 8 the mode `revision`: `SKILL.md`, its `references/` and the figure hold `/researcher revision <project folder> <comments file> [--manuscript <name>]` as rulings D36 to D42 and ADR 0055 give it: the comments split by `paper`'s revision coach at one stop, each comment that needs results work run as a campaign of the project's `research` stages with Consolidate after it, a result that does not beat the baseline sent to Compare and never written up, the new results reaching `/paper revision` through its comments file and its row Existing Materials, and the stages of `manuscript` for comments in hand after it; check: a fresh agent reads the skill once and lists, for the goal's sentence on `revision` and for each of rulings D36 to D42, the step of the skill that carries it, or "none", and the list holds no "none" (1 commit) (ruling J)
 - ✅ 9 the test job before review: `skills/academic/researcher/agents/research_builder_agent.md`, `references/slurm.md`, and each other page of the skill that states that a piece of code is read by its reviewer before a job of it is submitted (`SKILL.md` "research" item 8 and its Rules, `agents/research_reviewer_agent.md`, `references/research_brief.md`), state that on a cluster the builder's small local test, a short job of at most 10 minutes, is the one job submitted before the reviewer reads the code, because nothing may compute on the login node and the test produces no result, as ruling L gives it; check: each of those pages is read for it, and no page says that every job waits for the review (1 commit) (ruling L)
+- 10 the target-journal line: `skills/academic/researcher/examples/mid_entry_example.md` gives the target journal as the source's line does, "Computers & Education (SSCI Q1, IF: 12.0)", as ruling D44 gives it; check: `diff` of the file against the source shows no hunk on that line (1 commit) (ruling D44)
 - 6 the gate's runs and readings, on a release candidate tagged and pinned on the user's word, each run made by a separate agent that invokes the installed skill, its stops answered by the orchestrator: one `/researcher novelty` run on an idea the user names, each work it cites confirmed as the gate says; one run of `/ordo-help skills`, read against `ls skills/*/`, and one run of `/ordo-help` with a sentence the user names; the user reads the novelty page, the two outputs, the list of step 1's differences, the lists of steps 4 and 8, and the text of the `idea` mode, the `research` mode, its adopt mode, the `full` mode and the `revision` mode; check: the user reads each of them (1 commit; orchestrator, no agent) (approved) (ruling J)
 - 7 the closing: the closing report written (the cost script's output, or that the plan started no agent), the roadmap entry ticked with the gate's output, this folder moved to the archive (orchestrator, no agent) (approved)
 
@@ -161,6 +163,7 @@ Independent of each other; the standing rule of one agent at a time still serial
 - Open item L (2026-11-25), ruled (a) by the user: on a cluster the builder's small local test, at most 10 minutes on a small input, stays a short job submitted before the reviewer reads the code, and the skill states it as the one job submitted before review, with its reason; built as step 9; it contradicts ADR 0053's sentence "Jobs are submitted only after it.", and the ruling is carried out by ADR 0056, status proposed, which supersedes that sentence (the user).
 - Open item M (2026-11-25), ruled (a) by the user: the two differences from academic-pipeline stay, a PASS WITH NOTES at Stage 4.5 going to the correction round and the Rules bullet on quoted arguments, and are written in `deviations.md` with their reasons (the user).
 - The novelty run of the gate (2026-11-25): the user runs `/researcher idea` on the sketch in a session of their own, its novelty checks giving the gate's novelty pages, and gives the session id so that the orchestrator reads its results; the lazy option was `novelty` on the sketch unchanged (the user).
+- D44 The impact factor dropped from the target-journal line of `examples/mid_entry_example.md` (2026-11-25): the second comparison of the gate finds it the one difference no ruling names; the line is restored to the source's "(SSCI Q1, IF: 12.0)", built as step 10 (self-rule).
 
 ## Agents
 
@@ -199,7 +202,7 @@ Each agent a plan skill started for this plan has one bullet, with its agent id,
 
 ## Blocked, and by what
 
-- 6: the goal check and the comparison are run again on a release candidate tagged and pinned on the user's word; the user gives the session id of their `/researcher idea` run.
+- 6: step 10 lands and the comparison is run again; the release candidate is tagged and pinned on the user's word; the user gives the session id of their `/researcher idea` run.
 
 ### Step 5, `ordo-help` covers every skill (landed 2026-11-25)
 
