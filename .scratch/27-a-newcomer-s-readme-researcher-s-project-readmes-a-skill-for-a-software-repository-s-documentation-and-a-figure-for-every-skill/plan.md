@@ -80,6 +80,9 @@ Independent of each other; the standing rule of one agent at a time still serial
 - D40 record D32 as an ADR (2026-11-25): yes, 0059 (the user).
 - D41 record D38 as an ADR (2026-11-25): yes, 0060 (the user).
 - Open item A (2026-11-25): the layout engine's file is `skills/code/handbook/templates/figures.py`, which step 1 writes and step 3 copies into a documented repository's `utils/` (the user).
+- Open item B (2026-11-25): the gate's part on figure paths reads "every `docs/figures/` path that `git grep` finds in `README.md`, `docs/` outside `docs/roadmap.md`, and `skills/` names a file that exists", written into entry 27's gate by `/roadmap` at the closing; entry 25's done line keeps the path you read (the user).
+- Open item C (2026-11-25): D33's check reads "`git grep -n 'rulings/<slug>' -- skills docs ':!docs/roadmap.md'` prints nothing", in D33 and in entry 27's gate, written by `/roadmap` at the closing (the user).
+- Open item D (2026-11-25): the README and code README headings of D1, D15 and ADR 0057 stand as ruled, `### Why it matters`, `### What is not claimed` and `## Dead ends (do not retry)` among them, against the prose standard's "Headings are labels, not sentences." (the user).
 
 ## Agents
 

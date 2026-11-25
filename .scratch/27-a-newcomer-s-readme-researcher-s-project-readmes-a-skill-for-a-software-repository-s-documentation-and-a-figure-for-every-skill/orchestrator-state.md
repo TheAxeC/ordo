@@ -55,6 +55,7 @@ dispatch:                    # one entry per step in flight, written by /spec, s
   base: 50a98c8
   launched: 2026-11-25
   report: .scratch/27-a-newcomer-s-readme-researcher-s-project-readmes-a-skill-for-a-software-repository-s-documentation-and-a-figure-for-every-skill/agents/reviews/1-report.md
+  builder_usage: "244429 tokens, 80 tool uses, 12.8 minutes"
   brief_check: .scratch/27-a-newcomer-s-readme-researcher-s-project-readmes-a-skill-for-a-software-repository-s-documentation-and-a-figure-for-every-skill/agents/reviews/1-brief-check.md (a2f96bd6829d5adb2, claude-opus-5-5, 214981 tokens, 45 tool uses, 6.4 minutes)
   landing: not-started
   round: 0
@@ -78,6 +79,7 @@ dispatch:                    # one entry per step in flight, written by /spec, s
   base: e4e0198
   launched: 2026-11-25
   report: .scratch/27-a-newcomer-s-readme-researcher-s-project-readmes-a-skill-for-a-software-repository-s-documentation-and-a-figure-for-every-skill/agents/reviews/4-report.md
+  builder_usage: "134369 tokens, 19 tool uses, 2.5 minutes to the hand-back of its cases; after the cases ruling: 219168 tokens, 31 tool uses, 7.8 minutes"
   brief_check: .scratch/27-a-newcomer-s-readme-researcher-s-project-readmes-a-skill-for-a-software-repository-s-documentation-and-a-figure-for-every-skill/agents/reviews/4-brief-check.md (af6924bb5a482c6d5, claude-opus-5-5, 169399 tokens, 37 tool uses, 5.9 minutes)
   landing: not-started
   round: 0
@@ -86,21 +88,13 @@ dispatch:                    # one entry per step in flight, written by /spec, s
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled or, under `self_rule: on`, until the orchestrator closes it as `plan-orchestration`'s `references/self-rule.md`, "Closing an open item", says)
 
-- Open item B (2026-11-25, step 1, kind 4, the roadmap's gate): the gate's part "every `docs/figures/` path that `git grep` finds in `README.md`, `docs/` and `skills/` names a file that exists" cannot pass once step 1 moves the figures, because `docs/roadmap.md` line 67, the done line of entry 25, records that you read `docs/figures/paper/lifecycle.svg`, a path that then no longer exists (`git grep -n 'docs/figures/paper/lifecycle' -- docs/roadmap.md` prints line 67). Step 1 goes on meanwhile and runs its check without `docs/roadmap.md`, quoting both runs.
-  - (a) Recommended. The gate's part reads "... in `README.md`, `docs/` outside `docs/roadmap.md`, and `skills/` ...", written into entry 27's gate by `/roadmap` at the closing. Pro: the done line stays the true record of what you read; the check still covers every page that shows a figure. Con: the roadmap's own figure paths go unchecked, and today it names none outside done lines.
-  - (b) Entry 25's done line is edited to `docs/figures/academic/paper/lifecycle.svg`. Pro: the gate stays as written. Con: a done entry's record is rewritten to a path that did not exist when you read it.
-  - Lazy option: neither; leaving the gate as written and accepting a failed part at the closing.
-- Open item C (2026-11-25, step 4, kind 3, ruling D33): D33's check "`git grep -n 'rulings/<slug>'` over `skills/` and `docs/` prints nothing" can never print nothing, because `docs/roadmap.md` line 27, entry 27's own gate, holds the pattern (`git grep -n 'rulings/<slug>' -- docs/roadmap.md` prints line 27). Step 4 goes on meanwhile: it rewrites ADR 0059's Context line so it no longer holds the pattern, and runs the check without `docs/roadmap.md`, quoting both runs.
-  - (a) Recommended. The check reads "`git grep -n 'rulings/<slug>' -- skills docs ':!docs/roadmap.md'` prints nothing", in D33 and in entry 27's gate, written by `/roadmap` at the closing. Pro: it checks every page that states the rule; the one line left out is the check itself. Con: none found.
-  - (b) The gate keeps D33's words, and the closing records that the check printed its own line. Pro: no change to the ruling. Con: the gate's output then shows a part that did not pass as written.
-  - Lazy option: (b), since it changes nothing now and leaves a failed check in the record.
-- Open item D (2026-11-25, step 2, kind 3, a ruling against a standard): your rulings D1 and D15 and ADR 0057 give the README headings `### Why it matters`, `## What it is and why`, `### What it does`, `### What is not claimed`, `### What this project adds`, `## What each result comes from` and `## Dead ends (do not retry)`. The prose standard says "Headings are labels, not sentences." and gives "Why it is separate at all" as a heading it rejects. Step 2 writes the ruled headings meanwhile.
-  - (a) Recommended. Keep the ruled headings. Pro: they are the list you approved, and each says what a newcomer finds under it; the standard's own heading `## How it is applied` and the brief template's `## What to build` already use this form. Con: they read close to the example the standard rejects.
-  - (b) Shorten them to labels: `### Relevance`, `## Overview`, `### Scope`, `### Not claimed`, `### Contribution`, `## Provenance of results` and `## Dead ends`. Pro: the standard is met word for word. Con: a newcomer reads less from each heading, and D1, D15 and ADR 0057 are changed.
-  - Lazy option: neither ruling, leaving the clash unstated.
+- none.
 
 ## Closed items (the log of what was raised and how it ended; no report carries it)
 
+- 2026-11-25: the gate's figure-path check leaves out `docs/roadmap.md`, ruled (a) by the user (Open item B).
+- 2026-11-25: D33's check leaves out `docs/roadmap.md`, ruled (a) by the user (Open item C).
+- 2026-11-25: the README headings stand as ruled against the prose standard, ruled (a) by the user (Open item D).
 - 2026-11-25: the layout engine's file name: `skills/code/handbook/templates/figures.py`, ruled by the user (Open item A).
 
 ## The standing demands (from the user, in force)
