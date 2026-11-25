@@ -159,6 +159,7 @@ Each use was read against its entry; none uses a term in a sense its entry lacks
 | Use instead | "A revision for comments in hand, with no integrity check" | "A revision for comments in hand, with no new results to make and no integrity check" |
 | `docs/figures/researcher-revision.svg` | absent | the figure of the mode, shown in `README.md` after the research figure, with its alt text |
 | `README.md`, the `researcher` row | six modes | the `revision` mode described |
+| Stops row "A result that does not beat the baseline", What resumes it | "The user takes the proposal, names another method, or changes the setting, and the work goes to the stage the proposal names" | the same, then "; in `revision` the user can also stop trying methods for the comment, the stop "A comment the results do not answer yet" ("revision" item 4)" |
 
 ## Anything in the brief that was wrong or impossible
 
@@ -169,3 +170,117 @@ Each use was read against its entry; none uses a term in a sense its entry lacks
   - In `references/project_layout.md`, line 43 is item 5 of the README's list, `## The stage and campaign that stand`, a list item and not a heading. `## Papers` is item 8 at line 46. Line 50 is the bullet on a section with nothing to hold yet.
   - The changes were made at the named items, not at the line numbers.
   - `SKILL.md` has 651 lines on the base (`git show 0658dc7:skills/academic/researcher/SKILL.md | wc -l`), as the brief says.
+
+## Repair round 1
+
+Every ruling of `.scratch/13-researcher/agents/briefs/8-round-1.md` is done. None was handed back.
+
+### The rulings
+
+1. **Spec 1, Consolidate.** Done. In `SKILL.md`, "revision" item 5, line 573 reads "It runs whenever a campaign of the run produced a result, on a cluster or off one." Line 574 skips the item only for a run with no results comment left, every comment moved to text work at the split, and writes `stages.consolidate.status: skipped`. The condition on submitted jobs is gone: `grep -n 'submitted no job'` prints nothing (exit 1).
+2. **Spec 2, the brief of a campaign.** Done.
+   - "revision" item 3, line 557: "Each brief of a campaign quotes, beside the research question, the results comment the campaign answers, as quoted lines, `> `, so that the builder and the reviewer read the code against the comment."
+   - The Rules bullet at line 738 now reads "A referee comment reaches `revision-comments.md`, a brief of a campaign and the README as supplied text, ...".
+3. **Spec 3, the figure.** Done. `researcher_revision()` in `docs/figures/gen_figures.py` now draws:
+   - "The record of the experiments, when the project holds none", before the run's configuration.
+   - "The dataset" for a comment that needs another dataset (ruling 4).
+   - "A result short of what was set, in research", with its edge from Compare and its edge to Consolidate on your word.
+   - "A number that does not reproduce".
+   - A Baseline box, with the cycle from Consolidate ("a difference in a baseline number: back to Baseline, once", dotted, and "Consolidate again" back).
+   - The return to Experiments ("a difference in a campaign's number: back to Experiments, once").
+   - The edge from Compare to Consolidate, labelled "every results comment answered".
+   - The edge from Consolidate to the first integrity check, labelled "no difference".
+   - The figure's note names the one part of Frame that runs.
+   - The alt text in `README.md`, line 92, was rewritten to match.
+   - The reverse check: each node and edge was listed from the function with a script and read against the text. Each one is in `SKILL.md`, as below.
+
+   | Drawn | Where the text has it |
+   |---|---|
+   | The record of the experiments | Steps 4 |
+   | The run's configuration | Steps 5 |
+   | The coach, the split, and the split's three edges | item 2, item 3 and item 5 (the skip with no results comment) |
+   | The dataset | item 3 |
+   | The builder, the reviewer and their stop | "research" items 7 and 8, through item 3 |
+   | Experiments with its loop | "research" item 12 |
+   | Compare and its causes | "research" items 13 to 15, and item 4 |
+   | The three result stops and their edges | "research" item 15 and item 4 |
+   | Consolidate, its stop and its two returns | "research" item 16, through item 5 |
+   | The stages after | items 6 to 10 |
+   | The two floating stops | "research" item 10 |
+
+4. **Spec 5, another dataset.** Done.
+   - "revision" item 3, line 555: a results comment that needs a dataset the project does not hold first has that dataset chosen by "research" item 5, the stop "The dataset" with its candidates, their size, licence and fit to `## Constraints and limits`, for that comment only. The choice is written beside the project's dataset, and Frame's questions of "research" item 4 are not asked again.
+   - The subsection head, line 530, now ends "and Frame is not run again, except its choice of a dataset for a results comment that needs a dataset the project does not hold (item 3)".
+   - The Stops row "The dataset" (line 638) names this case in its When cell.
+5. **Standards 1, `state.json`.** Done. "revision" item 1 (lines 533 to 542) names the keys in the structure of `agents/state_tracker_agent.md`, "Tracked State Structure", and the other items write them by name (items 2, 3, 4 and 5).
+   - `current_stage`: `split`, `campaigns`, `consolidate`, then `2.5`, `4`, `3p` and `4.5`. The stage id of Stage 3' is now `3p`, the id that page's `update_stage` uses.
+   - `stages.split`, `stages.campaigns` and `stages.consolidate`, with `name`, `status` (`pending`, `in_progress`, `completed` or `skipped`), `outputs`, `started_at` and `completed_at`, and for the split also `skill: paper` and `mode: revision-coach`.
+   - `split_confirmed`.
+   - `revision_comments`, one entry per comment with `id`, `kind` (`results` or `text`), `state` (`open`, `in_campaign`, `answered_by_results` or `answered_in_text`), `campaign` and `results`.
+6. **Behaviour 1, the README after a revision.** Done. A second `/researcher revision` and a `/researcher research` on the project now run as before, by reading:
+   - "revision" item 5, line 576: the end of `research` that "research" item 17 names stays the stage that stands.
+   - "revision" item 10, line 596, writes the end of the revision, with its run folder and its comments file, beside it in `## The stage and campaign that stand`.
+   - "What it reads" 3 (line 52) and the refusal row "No project of research" (line 663) accept a stage of `research` or the end of `research`.
+   - `references/project_layout.md`, "The README" item 5, names the end of each revision beside the end of `research`.
+   - The removed text is gone: `grep -n 'end of the campaigns of the revision'` prints nothing.
+   - A second `/researcher revision` passes "What it reads" 3, because the README names the end of `research`.
+   - A `/researcher research` reads that README as "research" item 1 reads a project whose `research` ended, which is unchanged by this step.
+7. **Behaviour 2, `pipeline_state`.** Done. `agents/pipeline_orchestrator_agent.md`, "Writing the run's state", sets `running` when a checkpoint is passed and `awaiting_confirmation` while a checkpoint waits. `references/pipeline_state_machine.md` gives `paused` as "User paused, can resume at any time". For `revision`:
+   - Steps 5 (line 130): "For `revision`, write `pipeline_state: running` into `state.json` once the user confirms".
+   - "revision" item 1 (line 542): `awaiting_confirmation` at each stop of items 2 to 5 that waits on the user, and `paused` at "The jobs submitted".
+   - The same line sets `running` again once the user answers or the run is continued, so Steps 2 offers the run after any of these stops.
+8. **The Stops row clause.** Done. The table "Host- or user-visible changes" gained the row for "A result that does not beat the baseline", What resumes it, with its before and its after.
+
+Spec 4 (`deviations.md`) is left to the orchestrator, as the round's brief says.
+
+### The checks, rerun
+
+Each command ran from the worktree's root, the Python ones under `env -u CLAUDE_CONFIG_DIR -u ORDO_SKILL_DIRS -u ORDO_STABLE`.
+
+| Check | Output as printed |
+|---|---|
+| 1. The character-set check over the nine changed files and this report | nothing, `charset exit 0` |
+| 2. `python3 docs/figures/gen_figures.py` | exit 0 |
+| 2. `python3 docs/figures/academic-pipeline/gen_academic_pipeline.py` | `wrote docs/figures/academic-pipeline/academic-pipeline.svg (22164 bytes)`, exit 0 |
+| 2. `git status --short` | ` M README.md`, ` M docs/dev/building.md`, ` M docs/dev/scripts.md`, ` M docs/figures/gen_figures.py`, ` M docs/glossary.md`, ` M skills/academic/researcher/SKILL.md`, ` M skills/academic/researcher/references/project_layout.md`, ` M skills/academic/researcher/references/research_stages.md`, `?? .scratch/13-researcher/agents/briefs/8-round-1.md`, `?? .scratch/13-researcher/agents/reviews/8-report.md`, `?? docs/figures/researcher-revision.svg` |
+| 3. The description counts | `1022 skills/academic/researcher/SKILL.md` |
+| 4. `sync_rules.py . --only glossary` | `ok: the plan-terms block equals the template`, exit 0 |
+| 5. The front matter | `researcher 1022 {'version': '1.0.0'}` |
+| 5. The Quick start block | `12` lines |
+| 5. The negative and null grep | lines `716` and `722`, both forbidding a write-up |
+| 5. The routing grep | `97` |
+| Old text gone | `grep -n 'submitted no job\|end of the campaigns of the revision'` printed nothing, exit 1 |
+
+On `git status`:
+
+- `.scratch/13-researcher/agents/briefs/8-round-1.md` is the orchestrator's brief for this round. It is untracked in the worktree, and I did not write it.
+- `docs/figures/researcher-research.svg` is unchanged.
+
+Files after the round (`wc -l`, then `git diff --numstat` added and removed):
+
+| File | Lines | Added | Removed |
+|---|---|---|---|
+| `skills/academic/researcher/SKILL.md` | 739 | 124 | 36 |
+| `docs/figures/gen_figures.py` | 2720 | 117 | 3 |
+| `docs/figures/researcher-revision.svg` | 278 | new | |
+| `README.md` | 270 | 4 | 2 |
+| `skills/academic/researcher/references/project_layout.md` | 70 | 2 | 2 |
+
+The other changed files are as in the first report.
+
+### Judgment calls of this round
+
+- **The cycle to Baseline.** The figure draws the arrow from Consolidate to Baseline as a dotted forward arrow, and Baseline's return to Consolidate as a back arrow. This mode has no Baseline stage above Consolidate, so this is the form the layout allows for that cycle. Both arrows are dotted, as the legend gives a cycle.
+- **The edge from "A result short of what was set" to Consolidate** is labelled "on your word". The script found no free place beside that arrow for a longer label, and the figure's note says that such a result goes on, on your word, named as below what was set.
+- **Stage 3' in `current_stage`** is now `3p`, the id of `agents/state_tracker_agent.md`. The item headings and prose keep "Stage 3'".
+
+## Added at landing (the orchestrator)
+
+Visible changes the report's table did not list, from the run over round 1, Behaviour 1:
+
+| Surface | Before | After |
+|---|---|---|
+| The Stops row "The dataset", When | Frame's choice of the dataset only | also, in `revision`, a results comment that needs a dataset the project does not hold |
+| The README's `## The stage and campaign that stand` | the end of `research` | the end of `research`, with the end of each revision, its run folder and its comments file, beside it |
+| Steps 5 and `pipeline_state` of a `revision` run | no `revision` run | `running` at the confirmation of the run's configuration, `awaiting_confirmation` at each stop of items 2 to 5, `paused` at "The jobs submitted" |
+| "What it reads" 3 and the refusal "No project of research" | no `revision` mode | a README whose stage that stands is a stage of `research` or the end of `research` |

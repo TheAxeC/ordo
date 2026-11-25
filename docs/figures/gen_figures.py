@@ -19,6 +19,9 @@ Writes, beside this file:
 - researcher-research.svg: the six stages of the research mode of the researcher skill, the
   builder and the reviewer of each piece of code, the jobs, the stops and each way back to an
   earlier stage, with what the adopt mode and the full mode run in its note.
+- researcher-revision.svg: the revision mode of the researcher skill: the split of the referee
+  comments with its stop, the campaigns with their builder and reviewer, Compare and its stops,
+  Consolidate, /paper revision, and the stages of the manuscript mode that follow it.
 - submit.svg: the agent and stops of the submit skill, from the submission sheet to the page
   of the final submit.
 - grant.svg: the agents and stops of the draft mode of the grant skill, with what the other
@@ -37,9 +40,9 @@ Every figure but the last two shows the order of a run. A box is an agent start 
 resumed agent, solid when it always runs and dashed when it runs only when needed. A stop that
 waits on the user is an orange box. A cycle is a dotted arrow with its cap, and a check an agent
 repeats inside one start is a dotted loop on that agent with its cap. Scripts and the session's
-own steps are left out, except where a paper figure or researcher-research.svg draws them: a
-script the session runs, and in researcher-research.svg the jobs the session submits, is a grey
-box, and a step where the session reads and judges is a rounded box, each with its legend line. paper/lifecycle.svg draws no run: a frame is a mode or what you do outside the skill, and
+own steps are left out, except where a paper figure, researcher-research.svg or
+researcher-revision.svg draws them: a script the session runs, and in researcher-research.svg and
+researcher-revision.svg the jobs the session submits, is a grey box, and a step where the session reads and judges is a rounded box, each with its legend line. paper/lifecycle.svg draws no run: a frame is a mode or what you do outside the skill, and
 a box in it is a part of that mode. paper/run-folder.svg draws the agents
 of a full run with the files each writes on its arrows, and stops and cycles are left out of
 it. Each of the two has its own legend.
@@ -2181,6 +2184,116 @@ def researcher_research() -> str:
     )
 
 
+def researcher_revision() -> str:
+    """The revision mode of the researcher skill: the split, the campaigns and the stages after."""
+    first, first_edges = _integrity_check(
+        "2.5", "the sampled depth", "Integrity agent", "PASS", "FAIL"
+    )
+    final, final_edges = _integrity_check(
+        "4.5",
+        "the full depth",
+        "A fresh integrity agent",
+        "PASS with zero issues",
+        "FAIL, or PASS WITH NOTES",
+    )
+    nodes = (
+        Node("X", "The record of the experiments, when the project holds none", "stop"),
+        Node("G", "You confirm the run's configuration and its budget", "stop"),
+        Node("RC", "/paper revision-coach: the parsed comments with their commitments", "paper"),
+        Node("SP", "The split of the comments: results comments and text comments", "stop"),
+        Node("FD", "The dataset, for a comment that needs one the project does not hold: candidates with their size, licence and fit to the limits", "stop"),
+        Node("B", "Builder: one piece of code a results comment needs, from the session's brief"),
+        Node("R", "Reviewer: the code against the brief, the test again, what makes a result false"),
+        Node("RS", "A piece of code that does not pass its review", "stop"),
+        Node("EX", "Experiments: one campaign per results comment, its jobs through the scheduler", "script"),
+        Node("C", "Compare: each result against the baseline, a diagnosis and a proposal for each that does not beat it", "choice"),
+        Node("M", "A result that does not beat the baseline, under the manual setting", "stop"),
+        Node("MS", "A result short of what was set, in research: it beats the baseline, under the manual setting", "stop"),
+        Node("CA", "A comment the results do not answer yet: what was tried, the cause and the next proposal", "stop"),
+        Node("CO", "Consolidate, once: run_all.sh in a clean copy through the scheduler, each number compared, the record written again", "script"),
+        Node("N", "A number that does not reproduce", "stop"),
+        Node("BA", "Baseline: its jobs again through the scheduler, for a baseline number that differs", "script"),
+        *first,
+        Node("CH", "The strategic coaching, at most 8 rounds, unless you say just fix it", "stop"),
+        Node("PR", "/paper revision: the revision, Stage 4, on revision-comments.md with the result files", "paper"),
+        Node("K4", "The checkpoint after Stage 4", "stop"),
+        Node("CC", "The completeness check of each comment's answer, Stage 3', in place of the re-review", "choice"),
+        Node("KC", "The checkpoint after the completeness check", "stop"),
+        *final,
+    )
+    edges = (
+        Edge("X", "G"),
+        Edge("G", "RC"),
+        Edge("RC", "SP"),
+        Edge("SP", "B", "each results comment, one campaign"),
+        Edge("SP", "FD", "a comment that needs another dataset"),
+        Edge("FD", "B"),
+        Edge("SP", "I25", "no results comment"),
+        Edge("B", "R"),
+        Edge("R", "B", "a finding: a new brief, at most 2 times", "back"),
+        Edge("R", "RS", "still a finding after the third review"),
+        Edge("R", "EX", "no finding that makes a result false"),
+        Edge("EX", "EX", "a campaign again from its start, at most 3 times", "back"),
+        Edge("EX", "C"),
+        Edge("C", "M", "manual setting: does not beat the baseline"),
+        Edge("C", "MS", "manual setting: beats the baseline, short of what was set"),
+        Edge("C", "CA", "a dataset or a question cause, or the count of methods reached"),
+        Edge("M", "CA", "you stop trying methods for the comment"),
+        Edge("C", "EX", "a method cause: a new campaign", "back"),
+        Edge("C", "B", "an implementation cause, at most 2 times", "back"),
+        Edge("CA", "EX", "the next proposal: a new campaign", "back"),
+        Edge("C", "CO", "every results comment answered"),
+        Edge("MS", "CO", "on your word"),
+        Edge("CA", "CO", "answered in text alone, no result named"),
+        Edge("CO", "I25", "no difference"),
+        Edge("CO", "N", "a second run still differs"),
+        Edge("CO", "BA", "a difference in a baseline number: back to Baseline, once", "back"),
+        Edge("BA", "C", "Compare and Consolidate again"),
+        Edge("CO", "EX", "a difference in a campaign's number: back to Experiments, once", "back"),
+        *first_edges,
+        Edge("K25", "CH"),
+        Edge("CH", "PR"),
+        Edge("PR", "K4"),
+        Edge("K4", "CC"),
+        Edge("CC", "KC"),
+        Edge("KC", "I45"),
+        *final_edges,
+    )
+    floating = (
+        Node("J", "The jobs submitted: the job ids in the README, and the run stops", "stop"),
+        Node("JF", "A job that fails: its log and its script", "stop"),
+    )
+    note = (
+        "revision answers one comments file on a paper of a project that research started or "
+        "adopted. The split takes the commitment types the coach gave: add_experiment and "
+        "add_analysis mark a results comment. Each results comment is one campaign of the "
+        "project's Experiments stage, with Build first only for a new dataset or a new baseline, "
+        "and of Frame only the choice of a dataset runs, for a comment that needs one the project "
+        "does not hold. A result short of what was set goes on, on your word, named as below what "
+        "was set. Only a result that beats the baseline reaches "
+        "revision-comments.md and /paper revision; a result that does not is a dead end, named in "
+        "no response and no manuscript text. The README names each campaign with the comment it "
+        "answers, so that a new session resumes the revision from it. Each run of paper is "
+        "invoked through the Skill tool with its own stops, which are not drawn. A second round "
+        "of comments is a new run."
+    )
+    return _single(
+        "researcher-revision.svg",
+        "The revision mode of the researcher skill",
+        _graph(nodes, edges, floating),
+        note,
+        (
+            SIMPLE_LEGEND[0],
+            SIMPLE_LEGEND[2],
+            SIMPLE_LEGEND[3],
+            Legend("loop", "Dotted loop on one box: a campaign again from its start, with its cap"),
+            Legend("script", "Grey box: jobs the session submits through the scheduler"),
+            Legend("choice", "Rounded box: the session reads and judges"),
+            Legend("paper", "Teal box: a run of the paper skill"),
+        ),
+    )
+
+
 def submit() -> str:
     """The submit skill: its agent and its stops, from the sheet to the page of the final submit."""
     nodes = (
@@ -2562,6 +2675,7 @@ def figures() -> tuple[tuple[str, str], ...]:
         ("codebase-design.svg", codebase_design()),
         ("researcher.svg", researcher()),
         ("researcher-research.svg", researcher_research()),
+        ("researcher-revision.svg", researcher_revision()),
         *paper_figures(),
         ("paper/lifecycle.svg", paper_lifecycle()),
         ("paper/run-folder.svg", paper_run_folder()),

@@ -40,10 +40,10 @@ The `research` mode of `researcher` makes this layout in a new project at "resea
 2. `## Constraints and limits`: what counts as good enough, the limits on storage, compute, time and access, the setting (manual or automatic) with its count of methods, and the dataset with the reason it was chosen.
 3. `## Where things live`: each folder of the tree above, or the project's own name for it in a project underway.
 4. `## Cluster facts`: the cluster's facts of Frame, or the line `No cluster: the jobs run where the session runs.`
-5. `## The stage and campaign that stand`: the stage that stands, the campaign that stands within Experiments, each job id submitted and not yet read, and a link to the brief and the two reports of each piece of code in `notes/`.
+5. `## The stage and campaign that stand`: the stage that stands, the campaign that stands within Experiments, each job id submitted and not yet read, a link to the brief and the two reports of each piece of code in `notes/`, for a campaign of the `revision` mode the referee comment it answers, by its id and as quoted lines, with the run folder of the revision, and beside the end of `research`, which stays the stage that stands, the end of each revision with its run folder and its comments file ("revision" items 2, 3 and 10 of `SKILL.md`).
 6. `## Results`: each result with its file under `code/results/` and the command that made it, and whether it beats the baseline and reaches what was set as good enough. A result that goes on to Consolidate below what was set is named as such.
 7. `## Dead ends`: each method that did not beat the baseline, with its folder in `code/attic/`, its diagnosis and why it failed.
-8. `## Papers`: each paper's folder with the results it reports.
+8. `## Papers`: each paper's folder with the results it reports, and the results a run of `revision` added to it ("revision" item 10 of `SKILL.md`).
 9. `## Next`: the next actions, and for `full` the modes it runs, in order, with the mode that stands.
 
 - A section that grows past 200 lines moves to a file of `notes/`, named after the section, and the README keeps the heading with a link to the file.

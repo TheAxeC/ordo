@@ -126,3 +126,126 @@ Host- and user-visible changes the report states, each with a before and after: 
 - The prose standard's sentence-length rule over each new bullet (Verify 6) was not judged bullet by bullet. The builder names the departure, most new bullets running past 20 words, and gives its reason.
 
 Usage: a2ec2be82468551b2, claude-opus-5-5, 175561 tokens, 39 tool uses, 6m 48s
+
+## Repair round 1, refuted
+
+### Verification
+
+Run from /Users/axelfaes/workspace/ordo/.agents/worktrees/13-researcher-8. Python ran under `env -u CLAUDE_CONFIG_DIR -u ORDO_SKILL_DIRS -u ORDO_STABLE`.
+
+1. Character-set check (the brief's perl command) over the nine changed files and `8-report.md`: it printed nothing, `charset exit 0`.
+2. `python3 docs/figures/gen_figures.py`: its last lines were `wrote docs/figures/paper/run-folder.svg (21112 bytes)`. The exit status was not captured because of the pipe to `tail`; the checksum of `researcher-revision.svg` was identical before and after the run (074c4f6c...), so the committed figure equals what the script writes.
+3. `python3 docs/figures/academic-pipeline/gen_academic_pipeline.py` printed `wrote docs/figures/academic-pipeline/academic-pipeline.svg (22164 bytes)`, exit 0.
+4. `git status --short` lists 11 entries: the 8 modified paths of the brief, the untracked `.scratch/.../8-round-1.md` (orchestrator's), `.scratch/.../8-report.md` and `docs/figures/researcher-revision.svg`. All are step paths or the orchestrator's brief.
+5. The description count printed `1022 skills/academic/researcher/SKILL.md`.
+6. `sync_rules.py . --only glossary` printed `ok: the plan-terms block equals the template`.
+7. The Quick start block lists 12 command lines, with the revision line among them. The negative and null grep hit lines 716 and 722, and both forbid writing a result up.
+8. `grep -n 'submitted no job\|end of the campaigns of the revision'` over skills, README.md and docs printed nothing.
+9. `grep -c 'A result short of what was set, in `research`'` printed 2, so the stop named in the figure matches the Stops table.
+10. I rendered the figure with `rsvg-convert` and read the picture. Every node and edge the builder lists is drawn.
+11. The delta was read in full for every path of `files.txt`. The files outside it are the orchestrator's `8-round-1.md` and the report. The report's section "## Repair round 1" was read last.
+
+### The rulings of the round
+
+1. Spec 1, Consolidate: carried out. Item 5 reads "It runs whenever a campaign of the run produced a result, on a cluster or off one", and the skip is only for a run with no results comment left. The condition on submitted jobs is gone.
+2. Spec 2, the brief of a campaign: carried out. Item 3 has the bullet that each brief quotes the results comment as `> ` lines, and the Rules bullet now names "a brief of a campaign".
+3. Spec 3, the figure: carried out. I found the following drawn and in the text:
+   - "A number that does not reproduce" and its two return edges, the one to Baseline and the one to Experiments.
+   - The stop "A result short of what was set, in research", with its edge to Consolidate.
+   - "The record of the experiments".
+   - The edge from Compare to Consolidate, labelled "every results comment answered".
+   - The dataset stop.
+   - The alt text in README.md matches the nodes and edges.
+4. Spec 5, another dataset: carried out. Item 3 bullet 1 runs "research" item 5's stop "The dataset" for that comment only, and Frame's questions are not asked again. The subsection head names the exception. The Stops row "The dataset" names the case in its When cell.
+5. Standards 1, `state.json`: carried out. Item 1 names `current_stage` (with `3p`), `stages.split`, `stages.campaigns` and `stages.consolidate`, `split_confirmed`, `revision_comments` with its keys `id`, `kind`, `state`, `campaign` and `results`, and `pipeline_state`. Items 2, 3 and 4 name those keys when they write them.
+6. Behaviour 1, the README after a revision: carried out. Item 5 keeps the end of `research` as the stage that stands, and item 10 writes the revision's end beside it. "What it reads" 3, the refusal row and `project_layout.md` accept both.
+   - I read a second `/researcher revision` and a `/researcher research` against this. Both pass the README tests as before.
+7. Behaviour 2, `pipeline_state`: carried out in text. Steps 5 sets `running` at the confirmation, and item 1 sets `awaiting_confirmation` and `paused` at the stops and `running` again after. See Standards 3 for the sense of `paused`.
+8. The Stops row clause for the report: carried out. The report's table "Host- or user-visible changes" has the row with its before and after (line 162 of the report).
+
+### Verdicts, items
+
+Over the whole diff since 0658dc7.
+
+1. Holds.
+2. Holds. Spec 1, Behaviour 1 and Behaviour 2 of the first refutation are closed in text.
+3. Holds.
+4. Holds.
+5. Holds.
+6. Holds.
+7. Holds. The figure now draws the stops and cycles the mode reaches.
+8. Holds.
+9. Holds. The handed-back sentence of ADR 0055 stays handed back, as the first refuter confirmed.
+10. Holds.
+11. Holds. The report's list is still correct. Consolidate is carried by item 5.
+
+### Verdicts, cases
+
+- Front matter: met. `researcher 1022`, version 1.0.0.
+- Quick start, twelve lines with the line of D36: met.
+- Three comments (ablation, new baseline, clearer sentence): met.
+- The ablation does not beat the baseline, setting manual: met.
+- The clearer-sentence comment moved to results work: met, and its brief now quotes the comment.
+- A new session mid-revision: met. Item 1 sets `awaiting_confirmation` or `paused` at the stops, so Steps 2 offers the run.
+- `--manuscript second`: met.
+- A project folder `research` never ran on: met.
+- A comments file that does not exist: met.
+- A second round of comments after a finished run: met. The README still names the end of `research`, so "What it reads" 3 passes.
+- The negative and null grep: met.
+- The six landed modes followed through the Steps: met. `research` on a project after a revision reads the end of `research` as item 17 gives it.
+- The goal's sentence and D36 to D42: met.
+- The two figure scripts: met. `git status --short docs/figures` lists `gen_figures.py` and `researcher-revision.svg`.
+- A diagnosis that blames the dataset: met.
+- A referee comment line opening with `#`: met. The Rules bullet now also covers the brief.
+- "the referees asked for more experiments": met.
+- `sync_rules.py --only glossary`: met.
+
+### Findings
+
+#### Spec
+
+none.
+
+#### Proof
+
+none. Every closure the builder claims reproduces: the greps, the checksum of the figure, the counts, and the text at the places named.
+
+#### Standards
+
+1. **A bullet that holds three rules.** Place: SKILL.md "revision" item 1, last bullet: "`pipeline_state` is `awaiting_confirmation` at each stop of items 2 to 5 that waits on the user's answer, `paused` at the stop "The jobs submitted", and `running` again once the user answers or the run is continued, ...". It sets three values at three moments. The prose standard asks one rule per bullet. Failure scenario: a reader changing the value at one stop edits a sentence that also carries the other two. Fix: three bullets.
+2. **The `stages.*` bullet and item 3 bullet 1 each hold more than one rule.** Item 1 bullet 2 gives the keys of three stages, the `name` values, the `status` values, and for the split `skill` and `mode`, beside the later stages. Item 3 bullet 1 states the dataset stop, where its result is written, and that Frame's questions are not asked again. Failure scenario: the same as in 1. Fix: split each into one rule per bullet.
+3. **A state value used outside the sense of its page.**
+   - `paused` is set at the stop "The jobs submitted". The page `references/pipeline_state_machine.md` gives `paused` as "User paused, can resume at any time", and the orchestrator page sets it on the user's `pause`. At that stop the session ends and the user did not say pause.
+   - `stages.consolidate.status: skipped` is set for a run with no results comment. The state tracker page says "Skipped status means the user skipped this stage".
+   - Failure scenario: a reader of the dashboard sees a user choice that was not made. Fix: name in item 1 that `revision` uses these two values in this sense, or use the page's own values.
+4. **Stage ids outside the page's list.** `stages.split`, `stages.campaigns` and `stages.consolidate` are keys that the page's `update_stage` does not list (its `stage_id` holds "2", "2.5", "3", "4", "3p", "4p", "4.5"). Item 1 says the keys are written in the structure of that page, and the page's own list stays unchanged. Failure scenario: a session that follows the page's `update_stage` literally refuses the three ids. Fix: say in item 1 that `revision` adds these three ids to the page's list.
+
+#### Behaviour
+
+1. **A visible change is unstated.** The report's table does not list:
+   - the new When clause of the Stops row "The dataset" ("in `revision` a results comment that needs a dataset the project does not hold");
+   - the README's `## The stage and campaign that stand` now holding the end of each revision beside the end of `research` (`project_layout.md` item 5, SKILL.md item 10);
+   - the new Steps 5 bullet and the `pipeline_state` values written during a revision;
+   - the changed "What it reads" 3 bullet and the refusal row "No project of research".
+   Failure scenario: a user or the gate reads the table as the complete list of what the round changed. Fix: add the rows with before and after.
+2. **The figure's cycle to Baseline is hard to read.** Place: `researcher_revision()`, `Edge("CO", "BA", ..., "dotted")` with `Edge("BA", "CO", "Consolidate again", "back")`. In the rendered picture, two dotted arrows run between Consolidate and the Baseline box, which stands on the row of the Stage 2.5 integrity agent, and the arrow "no difference" from Consolidate to the integrity agent runs beside them. A reader can take the Baseline box for a step before Stage 2.5. The builder already names this as a form the layout allows. This is legibility only; every label matches the text.
+
+### Declined to judge
+
+- Whether `paused` and `skipped` are the best values for those stops. The pages give no value for a session that ends at a stop, so I judged only the sense they give (Standards 3).
+- The sentence length of each new bullet, bullet by bullet. The report names the departure and its reason, and I did not judge each one.
+- The ADR 0055 sentence, already confirmed false by the first refuter, and `deviations.md` (Spec 4 of the first refutation), which is the orchestrator's at landing.
+
+Usage: a5d978c0616308574, claude-sonnet-5-5, 117299 tokens, 19 tool uses, 2m 19s
+
+## Closed
+
+- First run, Spec 1, 2, 3, 5, Standards 1, Behaviour 1, 2: closed in repair round 1 (`agents/briefs/8-round-1.md`, rulings 1 to 7), each confirmed by the run over round 1.
+- First run, Spec 4: closed at landing, the section "Added at the landing of step 8" of `deviations.md`.
+- First run, the report's unstated clause of the Stops row "A result that does not beat the baseline": closed in round 1, ruling 8.
+- First run, the handed-back sentence of ADR 0055: closed at landing, the Decision's second bullet rewritten to say the coach's parsed comments give each commitment its type.
+- Round 1, Standards 1 and 2: closed at landing, the `pipeline_state` bullet, the `stages.*` bullet and item 3's dataset bullet each split into one rule per bullet.
+- Round 1, Standards 3: closed at landing, item 1 names that `revision` uses `skipped` for a Consolidate with no results comment and `paused` at "The jobs submitted".
+- Round 1, Standards 4: closed at landing, item 1 says `revision` adds the stage ids `split`, `campaigns` and `consolidate` to the `stage_id` list of `update_stage`.
+- Round 1, Behaviour 1: closed at landing, the section "Added at landing" of `agents/reviews/8-report.md` with each change's before and after.
+- Round 1, Behaviour 2: closed at landing, `researcher_revision()` draws Baseline as a box Consolidate returns to, leading into Compare ("Compare and Consolidate again"), placed apart from Stage 2.5; the alt text of `README.md` follows.

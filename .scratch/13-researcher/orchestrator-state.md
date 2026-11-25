@@ -47,19 +47,6 @@ repair_reviewer: claude:sonnet  # the model the run of /refute over a repair rou
 
 ```yaml
 dispatch:                    # one entry per step in flight, written by /spec, since docs/plan.yaml's workers_at_once is 5.
-- step: 8
-  executor: agent
-  worker: ordo-medium
-  worktree: .agents/worktrees/13-researcher-8
-  base: 0658dc7
-  launched: 2026-11-25
-  session_id: a96f07919efa565ec (claude-opus-5-5)
-  report: .scratch/13-researcher/agents/reviews/8-report.md
-  builder_usage: 282054 tokens, 76 tool uses, 14m 47s
-  brief_check: .scratch/13-researcher/agents/reviews/8-brief-check.md (a0516fcf1aaec457a, claude-opus-5-5, 202392 tokens, 45 tool uses, 7m 18s)
-  reviewer_report: .scratch/13-researcher/agents/reviews/8-refuter.md (a2ec2be82468551b2, claude-opus-5-5, 175561 tokens, 39 tool uses, 6m 48s)
-  round: 1
-  landing: not-started
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled or, under `self_rule: on`, until the orchestrator closes it as `plan-orchestration`'s `references/self-rule.md`, "Closing an open item", says)
@@ -108,5 +95,5 @@ A finding that is neither closed in the repair rounds nor fixed at landing is an
 
 - 2026-11-25. Steps 1, 2, 3, 4 and 5 have landed. No step is in flight.
 - Verified: `templates/checks.sh` on this file printed `checks: 16 commands passed` on main with step 4 staged and its fixes at landing made.
-- Roadmap entry 13 (researcher). Plan step 8 of 8: the mode `revision`, being prepared. Next: step 6, the gate runs, after step 8 lands and on the user's word for the release candidate's tag and pin, the idea of the `novelty` run and the sentence of the `/ordo-help` run.
+- Roadmap entry 13 (researcher). Plan step 8 of 8: the mode `revision`, landed. Next: step 6, the gate runs, which waits on the user's word for the release candidate's tag and pin, the idea of the `novelty` run and the sentence of the `/ordo-help` run.
 - Open on the user's side: the review of the choices C144 to C151 in `.scratch/choices.md`, which blocks nothing.

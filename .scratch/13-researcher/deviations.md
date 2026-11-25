@@ -191,3 +191,10 @@ Differences of `skills/academic/researcher/SKILL.md` from the source's `SKILL.md
 - `state.json` of a run gains the key `manuscript_folder`, which the structure of `agents/state_tracker_agent.md` does not have; the copied page is unchanged, and Steps 2 offers an unfinished run only of the same manuscript's folder.
 - No line of a copied page changed.
 
+
+## Added at the landing of step 8
+
+- `SKILL.md` gains the mode `revision`, which is this repository's own and copies nothing of academic-pipeline (ADR 0055); its subsection `### revision`, its Quick start line, its two stops "The split of the comments" and "A comment the results do not answer yet" and its two refusals "No project of research" and "No paper to revise".
+- The landed text of the copied modes that the new mode made incomplete was scoped to name `revision` where it holds for it: the Rules bullets on the roles of `agents/pipeline_orchestrator_agent.md` and `agents/state_tracker_agent.md`, the bullet on what the run folder holds, the revision-loop cap (now "of `manuscript`", with a bullet of its own for `revision`), the Anti-patterns row on skipping an integrity check, the Stops rows "No comments file", "A skill not installed" and "lookup.py not found", and the Stops row "A result that does not beat the baseline", whose What resumes it gains the clause for `revision`.
+- `state.json` of a `revision` run gains the keys `mode`, `split_confirmed`, `revision_comments` and the stage ids `split`, `campaigns` and `consolidate`, which the structure of `agents/state_tracker_agent.md` does not have; `revision` uses `paused` also at the stop "The jobs submitted" and `skipped` also for a Consolidate with no results comment. The copied page is unchanged.
+- No line of a copied page changed.
