@@ -63,3 +63,114 @@ Per file (from the `diff` commands above):
 
 - `references/ethics.md`, "Verdict and stop": one bullet added. An issue that Phase A to E of the same record already reports goes to the correction round of the integrity verdict, and the ethics check blocks for it only when it is still there after the correction rounds. Ruled by: D17 and D3, so the ethics check and the correction rounds agree.
 - `examples/integrity_failure_recovery.md`, "Phase F: Ethics Check": the ethics check names the fabricated reference as the issue of Phase A. Ruled by: the same.
+
+## Added at the landing of step 2: `SKILL.md` and the pages changed with it
+
+Differences of `skills/academic/researcher/SKILL.md` from the source's `SKILL.md` (academic-pipeline 3.13.0), in the columns of `.scratch/13-researcher/deviations.md`.
+
+| Source has | `researcher` has | Reason | Ruled by |
+|---|---|---|---|
+| frontmatter `last_updated`, `depends_on`, `status`, `data_access_level`, `task_type`, `related_skills` | `name`, `description`, `metadata.version: "1.0.0"`; the two values stated in `references/handoff_schemas.md` | the layout's frontmatter | forced: `docs/dev/skill-layout.md` Frontmatter; brief decisions 1 and 4 |
+| title with a version, the "v2.0 Core Improvements" list, version notes, routing-discipline note | a title and one paragraph | no history; the layout's row 1 | forced: change standard, skill layout |
+| Quick Start as three sample requests and `resume_from_passport` | five command lines with comments | the layout's Quick start; the reset boundary left out | Open item D; Open item A |
+| Trigger Keywords, Non-Trigger Scenarios, Trigger Exclusions | the description's `Triggers on:` and the Use instead table with this repository's skills | the layout | forced: skill layout; brief item 1 |
+| "Execution flow" list | Steps 1 to 6 and the mode subsections | the layout's Steps | forced: skill layout |
+| 10 stages, with Stage 1, 5 and 6 | Stages 2, 2.5, 3, 4, 3', 4', 4.5 | the parts the goal names | D16; ADR 0052 |
+| Stage 2 in plan or full mode, Stage 3 full | `/paper full`, `/paper-review-panel full`, `/paper revision`, `/paper-review-panel re-review`, fixed | the runs of the stages | D5 |
+| Step 2 mode recommendation by user type (socratic, plan, guided, quick) and the quality standard "Mode recommendation" | Steps 5: the fixed runs shown with the differences between depths and runs explained, and the user's adjustments within those runs | D5 fixes the runs, so the recommendation can only explain them | D5 |
+| the parallelization note on Stage 2 | left out | it describes the phases inside `paper`'s full mode, which `/paper full` runs with its own rules | D5 |
+| Step 1 detection: no materials to Stage 1, revised draft to Stage 3', final draft to Stage 5, verified paper to Stage 3 | the five command lines; a draft of any kind enters at Stage 2.5; a call matching no line is the stop "The entry point" | Stage 1 and 5 left out; Stage 2.5 never skipped | D4, D16, Open item D |
+| Mid-entry exception: a previous integrity report with unmodified content skips Stage 2.5 | a prior report informs the first check and never replaces it | D4 | D4 |
+| the orchestrator and the state tracker as agents dispatched | the session holds both roles and starts no agent for them | only the session can invoke a skill through the Skill tool, and it writes the state | D5, D6; brief decision 2 |
+| the run's state in the Material Passport only | `state.json`, each integrity record, each compliance report and each correction list as files of `researcher-runs/<mode>-<date>/` | D6 | D6; brief decision 5 |
+| integrity corrections dispatched to academic-paper | the issue list written to `corrections-<stage>-<n>.md` and given to `/paper revision` as its comments | D5 | D5 |
+| the compliance override's disclosure addendum injected by the orchestrator | the addendum goes to `/paper revision` as its comment | every change to the manuscript goes through `paper` | D5; brief decision 6 |
+| Stage 4.5 FAIL: "fix and re-verify" with no count in the state machine list | at most 3 correction rounds, then the user decides | D3 | D3 |
+| "Integrity Review Protocol: 5 phases" | the integrity agent's six phases, the ethics check Phase F last, at both depths | D17 | D17 |
+| references checked by the agent's own lookups | `lookup.py resolve`, confirmed at a ratio of 0.70 or above with no `DOI_MISMATCH`; a judged claim on a passage read in the run, checked with `lookup.py quote-check`; the web originality screen at both depths | D1, D14, D21 | D1, D14, D21; ADR 0024 |
+| no record of the experiments step | Steps 4: the record read from the project, or asked once and built with the user | D31 | D31 |
+| no null-result rule | Rules: no correction or record asks that a recorded null result be written in; a claim contradicting `negative_results[]` is a FAIL | D20 | D20 |
+| no wording rule | Rules: the corrections and record text that reach the manuscript hold no software wording | D24 | D24; ADR 0026 |
+| Anti-pattern 7, inflating Collaboration Quality scores | left out | the collaboration observer and Stage 6 are left out | D16 |
+| Anti-pattern 8: overrides "recorded for Stage 6"; the IRON RULE's Stage 6 failure-mode audit log | overrides recorded with the user's reasons in `state.json` | Stage 6 left out | D16, D6 |
+| Adaptive rule 5 and the MANDATORY checkpoint "Stage 5" | left out | Stage 5 left out | D16 |
+| Budget transparency: the cross-model toggle in the estimate; confirmation "before Stage 1" | estimate from length and mode; confirmation before the first stage | the cross-model check and Stage 1 left out | D16 |
+| Error Recovery rows Stage 1 and Stage 2 "missing research foundation" | left out | they send the user to Stage 1 | D16 |
+| Error Recovery row "Any: skill execution failure: retry, pause or mode switch" | the row "A run that fails": retry or pause | a mode switch leaves D5's runs | D5 |
+| Phase-by-phase Invocation Contract (Mode A, Mode B, phase buckets, `ARS_PASSPORT_RESET`) | left out; the session runs the stages end to end (Mode A's content in Rules) | Mode B rests on the reset boundary | Open item A |
+| Stage 6, Collaboration Depth Observer, claim audit, cross-model check | left out | D16 | D16 |
+| Agent File References, Reference Files, Templates, Examples tables | "What it reads" 9 to 14, each page named at the step that reads it | the layout's "What it reads" and pointer rules | forced: skill layout; Open item B |
+| Integration with Other Skills, Related Skills (deep-research, academic-paper, academic-paper-reviewer, Stage 5 formatting steps) | Use instead, Rules on the four runs, and the refusals "A skill not installed" and "lookup.py not found" | names of this repository; Stage 5 left out | Open item B, D5, D16 |
+| Version Info, Changelog | `metadata.version` only | no history | forced: change standard |
+| the reinforcement template with an emoji, a box arrow and an em dash | the same template in ASCII (`->`, `-`), in a code block | ASCII | forced: prose standard |
+| the decision dashboard block with box-drawing rules | pointed at in `agents/pipeline_orchestrator_agent.md`, "FULL Checkpoint Template (with Decision Dashboard)", where the copied page holds it in ASCII | one meaning in one place | forced: skill layout "Where a rule goes" |
+| Checkpoint Types and Adaptive Rules 1, 3, 4, 6 written in `SKILL.md` | pointed at in `agents/pipeline_orchestrator_agent.md`, "3. Checkpoint Management", which states them; Checkpoint Rules 1 to 5 and the self-check questions written out in "Checkpoints" | a rule a copied page states in full is pointed at | forced: skill layout "Writing for an agent"; brief item 2 |
+
+### Map of the source's headings
+
+| Source heading | Where its matter stands now |
+|---|---|
+| Quick Start | `## Quick start`; the sample requests become command lines; `resume_from_passport` left out (Open item A) |
+| Trigger Conditions | the description's `Triggers on:`; `## Use instead` |
+| Trigger Keywords | `Triggers on:` (academic pipeline, full paper workflow, take my draft through review and revision; the research-only phrases left out with Stage 1) |
+| Non-Trigger Scenarios | `## Use instead` rows (`paper lit-review`, `paper`, `paper-review-panel`, `paper citation-check`, `paper format-convert`) |
+| Trigger Exclusions | `## Use instead` (a run of a mode already under way; a single function) and Steps 1, last bullet but one |
+| Pipeline Stages (10 Stages) | the title paragraph; `### manuscript` items 3 to 9; Stage 1, 5, 6 left out (D16) |
+| Pipeline State Machine | `### manuscript` item 1, pointing at `references/pipeline_state_machine.md`; the branches in items 5 and 7 and the Stops rows |
+| Adaptive Checkpoint System | `## Checkpoints` |
+| Checkpoint Types | `## Checkpoints`, lead, pointing at `agents/pipeline_orchestrator_agent.md`, "3. Checkpoint Management" |
+| Decision Dashboard | `## Checkpoints`, "A FULL checkpoint shows the decision dashboard" |
+| Adaptive Rules | `## Checkpoints` bullets 1, 6, 7 and the page's "Checkpoint Type Rules"; rule 5 left out (Stage 5) |
+| Checkpoint Rules | `## Checkpoints` bullets 2 to 5 and 8 |
+| Self-Check Questions | `## Checkpoints`, the numbered list |
+| Agent Team (5 Agents) | Rules bullets 1 to 3; "What it reads" 9 and 10; the collaboration agent and the claim audit agent left out (D16) |
+| Orchestrator Workflow | Steps 1 to 6 and `### manuscript` |
+| Step 1: INTAKE & DETECTION | Steps 1 |
+| Step 2: MODE RECOMMENDATION | Steps 5, bullets 1 and 2 (D5) |
+| Step 3: STAGE EXECUTION | `### manuscript` items 2 to 9 and Rules on the Skill tool |
+| Step 4: TRANSITION | `### manuscript` item 2, pointing at the page's "4. Transition Management" handoff table |
+| Mid-Conversation Reinforcement Protocol | `### manuscript` item 2 and its template; `references/reinforcement_content.md` |
+| Phase-by-phase Invocation Contract | left out (Open item A); Mode A's content in Rules bullets 1 to 3 |
+| Integrity Review Protocol | `## The integrity check`; "What it reads" 11 |
+| Two-Stage Review Protocol | `### manuscript` items 5 and 7, pointing at `references/two_stage_review_protocol.md` |
+| Mid-Entry Protocol | Steps 1 and Steps 5, bullet 3 (D4) |
+| External Review Protocol | `### manuscript` items 6 and 7, pointing at `references/external_review_protocol.md`; Stops "The parsed comments" |
+| Progress Dashboard | `## Checkpoints`, the "status" bullet; `### manuscript` item 10 |
+| Revision Loop Management | Rules (the cap, Stage 4' once, the override of `paper`'s cap); `### manuscript` items 6 and 8 (history, Acknowledged Limitations), item 10 (cumulative history) |
+| Early-Stopping Criterion | `### manuscript` item 7; Stops "The early-stopping suggestion" |
+| Budget Transparency | Steps 5, bullets 4 to 6; `## Checkpoints`, the round-trip bullets |
+| Reproducibility | Rules (same input, versioned artifacts); `### manuscript` item 10 (audit trail) |
+| Stage 6: Process Summary Protocol | left out (D16) |
+| Collaboration Depth Observer | left out (D16) |
+| Anti-Patterns | `## Anti-patterns`, rows 1 to 6 and 7 (the source's 8); the source's 7 left out (D16); row 8 added for D5 |
+| Quality Standards | Steps 1 (stage detection), Steps 5 (mode recommendation), `### manuscript` item 2 (handoff), Steps 3 and item 2 (state), `## Checkpoints` (mandatory checkpoint), `## The integrity check` (mandatory checks and checklist), Anti-patterns row 2 (no overstepping), Rules (no forcing, reproducible), item 7 (convergence), Steps 5 (budget) |
+| Error Recovery | Stops rows "The entry point", "The third correction round failed", "The review decision", "An incomplete revision", "The re-review decision", item 8 (Acknowledged Limitations), "The integrity check" item 5, Steps 2 and "Checkpoints" (pause and resume), "A run that fails"; the Stage 1 and 2 rows left out (D16) |
+| Agent File References | "What it reads" 9 and 10 |
+| Reference Files | "What it reads" 11 to 13, each page named at its step |
+| Templates | "What it reads" 13; `## Checkpoints` (`templates/pipeline_status_template.md`) |
+| Examples | "What it reads" 14; `### manuscript` item 1 |
+| Output Language | Rules, last bullet |
+| Integration with Other Skills | Rules on the four runs; "What it reads" 5 to 7; Stage 1 and 5 parts left out (D16) |
+| Related Skills | `## Use instead`; "What it reads" 5 to 7 |
+| Version Info | `metadata.version` |
+| Changelog | left out (no history) |
+
+### Added in repair round 1 of step 2
+
+
+| Source has | `researcher` has | Reason | Ruled by |
+|---|---|---|---|
+| the Material Passport attached to each artifact by the orchestrator agent | `material-passport.yaml` in the run folder, written by the session at the start, the entry, each stage's end and each compliance report | the session holds the orchestrator's role and writes the run's records | D6; round 1 ruling 1 |
+| a compliance override's addendum auto-injected into the manuscript | the compliance agent started again with the override, its addendum written to a file and given to `/paper revision` | every change goes through `paper` | D5; brief decision 6; round 1 ruling 2 |
+| the external review's Stage 3' run by the reviewer in re-review mode with adjustments | the session's own completeness check of "Step 4", no re-review invoked, with a MANDATORY checkpoint | that step reassesses no quality and issues no decision | round 1 ruling 4 |
+| SKILL.md Checkpoint Rule 5: a FULL checkpoint after 4 or more continues | SLIM with the awareness prompt, as the orchestrator page gives it | `SKILL.md` holds checkpoints as that page gives them | round 1 ruling 7 |
+| a confirmed failure-mode flag and a compliance backfill return to Stage 2 | the fix or the material goes to `/paper revision` and the check or the compliance agent runs again | every change goes through `paper`; Stage 2 is not re-run | D5; round 1 ruling 8 |
+| the minor items of a Minor decision at Stage 3' handled in the finalizing stage | one `/paper revision` run for those items before Stage 4.5 | the finalizing stage is left out | D16; round 1 ruling 12 |
+| (`paper-review-panel`) re-review without dimension scores | the editorial synthesizer's 7 dimension scores and Weighted Average in the Verification Review Report | the deltas of Stage 3' need them | Open item E, option (a); round 1 ruling 13 |
+| (`paper-review-panel`) an Editorial Decision without dimension scores | the editorial synthesizer's 7 dimension scores and Weighted Average in the Editorial Decision of the full mode | the deltas of Stage 3' need a baseline scored by the same role | Open item F, option (a); round 1 ruling 14 |
+
+### Added at the landing of step 2
+
+- `paper-review-panel`, the Editorial Decision's scores: ruling 14 named the scoring matrix of the sprint contract as their source; that matrix holds block, warn or pass values, so the scores rest on seven score rows added to the Reviewer Summary Matrix, and on the reviewers' reports where those rows are empty (Open item F, C148).
+- `agents/state_tracker_agent.md`: the key `score_trajectory`, which the source's state structure does not have (Open item E).
+- `references/pipeline_state_machine.md` and `references/two_stage_review_protocol.md`: a Minor decision at Stage 3' goes to one `/paper revision` run before Stage 4.5; the source handles the minor items in its finalizing stage, which is left out (D16).

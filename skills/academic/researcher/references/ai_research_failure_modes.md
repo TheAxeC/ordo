@@ -135,7 +135,7 @@ Run all 7 modes. For each mode, produce one of three outcomes:
 **Block condition**: pipeline blocks if **any** mode is SUSPECTED, or if Modes 1, 3, 5, or 6 are INSUFFICIENT EVIDENCE (these four require user-provided logs to rule out and should not be silently skipped). Modes 2, 4, 7 INSUFFICIENT EVIDENCE can proceed with a warning and will be re-checked at 4.5.
 
 **User acknowledgement options at block**:
-- Confirm the flag: return to Stage 2 WRITE (or earlier) to fix
+- Confirm the flag: the passage is fixed by `/paper revision`, given the flag and its evidence as its comments, and the check runs again
 - Override with reasoning: user explicitly states why the flag is a false positive, reasoning is recorded in the run's state in the run folder
 - Revise the specific passage and re-run the check
 

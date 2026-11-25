@@ -295,7 +295,7 @@ phases: {
 
 Present only when the integrity report is for a re-review (Stage 3' or 4'). Tracks rubric score changes across revision rounds.
 
-Dimension names match the 7 universal review dimensions from the `paper-review-panel` skill's `references/review_criteria_framework.md` plus an overall score. The scoring scale is **0-100**, per the `paper-review-panel` skill's `references/quality_rubrics.md`: the scale the report template instructs reviewers to score on, and the scale the SKILL.md Early-Stopping Criterion ("delta < 3 points on the 0-100 rubric") and the delta thresholds below assume:
+Dimension names match the 7 universal review dimensions from the `paper-review-panel` skill's `references/review_criteria_framework.md` plus an overall score. The scoring scale is **0-100**, per the `paper-review-panel` skill's `references/quality_rubrics.md`: the scale the report template instructs reviewers to score on, and the scale the early-stopping criterion of `SKILL.md`, Steps, "manuscript" item 8 ("delta < 3 points on the 0-100 rubric"), and the delta thresholds below assume:
 
 ```
 score_trajectory: {
@@ -362,6 +362,7 @@ score_trajectory: {
 | `consensus` | enum | `"CONSENSUS-4"` / `"CONSENSUS-3"` / `"SPLIT"` / `"DA-CRITICAL"` |
 | `revision_roadmap` | list[RoadmapItem] | Prioritized list of required changes |
 | `confidence_score` | integer | 0-100 editorial confidence |
+| `dimension_scores` | object | The editorial synthesizer's 7 dimension scores and the Weighted Average as `overall`, 0-100 per the `paper-review-panel` skill's `references/quality_rubrics.md`, from the "Dimension Scores" of the Editorial Decision at Stage 3 and of the Verification Review Report at Stage 3' |
 
 ### ReviewerReport Object
 
@@ -709,7 +710,7 @@ Ordering: chronological by `generated_at`. A Stage 2.5 FAIL followed by backfill
 
 ## `data_access_level`
 
-The skill's `SKILL.md` declares `metadata.data_access_level` with one of three values:
+The value of `researcher` is `verified_only`, stated on this page, since the frontmatter of its `SKILL.md` holds only the keys of the skill layout. The compliance agent declares the same value in the frontmatter of `agents/compliance_agent.md`. The three values:
 
 - `raw`: consumes unverified sources; must assume adversarial/hallucinated input
 - `redacted`: operates on sanitized material; no new raw ingestion
@@ -719,7 +720,7 @@ This is a declarative signal (not a runtime permission system). When adding a ne
 
 ## `task_type`
 
-The skill's `SKILL.md` declares `metadata.task_type` with one of two values:
+The value of `researcher` is `open-ended`, stated on this page for the same reason. The compliance agent declares the same value in the frontmatter of `agents/compliance_agent.md`. The two values:
 
 - `outcome-gradable`: the task has an objective scalar metric the skill optimizes against; a third party can score the output without deep context
 - `open-ended`: the task's quality depends on domain judgment, interpretive work, or context no metric captures

@@ -1,6 +1,6 @@
 # Mid-Conversation Reinforcement Content
 
-Stage-specific reinforcement content for the Mid-Conversation Reinforcement Protocol. At every stage transition, the orchestrator injects the relevant row from this table into the reinforcement template.
+Stage-specific reinforcement content for the reinforcement of `SKILL.md`, Steps, "manuscript" item 2. At every stage transition, the orchestrator injects the relevant row from this table into the reinforcement template.
 
 | Transition | Reinforcement Focus |
 |-----------|-------------------|

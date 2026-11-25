@@ -56,7 +56,7 @@ PIPELINE_LEGEND = (
     L("rev", "Purple: academic-paper-reviewer"),
     L("pipe", "Grey: academic-pipeline itself"),
     L("dr", "Sand: deep-research"),
-    L("paper", "Teal: paper and paper-review-panel"),
+    L("paper", "Teal: paper, paper-review-panel and researcher"),
     L("todo", "Dashed box: not built yet, with its roadmap entry"),
     L("none", "Red dotted box: no skill takes it"),
     L(
@@ -122,12 +122,12 @@ class Stage(NamedTuple):
 
 
 STAGES = (
-    Stage("1 Research: deep-research", "dr", "RS", False),
+    Stage("1 Research: deep-research", "dr", "RR", False),
     Stage("2 Write: academic-paper", "ap", "P1", True),
-    Stage("2.5 Integrity check", "pipe", "RS", False),
+    Stage("2.5 Integrity check", "pipe", "RS", True),
     Stage("3 Review", "rev", "PRV", True),
     Stage("4, 3', 4' Revise and re-review", "ap", "P2", True),
-    Stage("4.5 Final integrity check", "pipe", "RS", False),
+    Stage("4.5 Final integrity check", "pipe", "RS", True),
     Stage("5 Finalize", "ap", "FC", True),
     Stage("6 Process summary", "pipe", "NO", False),
 )
@@ -135,7 +135,8 @@ STAGES = (
 TARGETS = {
     "P1": ("paper plan and paper full", "paper"),
     "PRV": ("paper-review-panel", "paper"),
-    "RS": ("researcher, entry 13: integrity and ethics checks, the stage loop", "todo"),
+    "RR": ("researcher research, entry 13", "todo"),
+    "RS": ("researcher: the integrity and ethics checks, and the manuscript mode that runs the stages", "paper"),
     "P2": ("paper revision", "paper"),
     "FC": ("paper format-convert", "paper"),
     "NO": ("none", "none"),

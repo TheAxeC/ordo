@@ -94,7 +94,7 @@ The session writes these states, and every transition below, to the run's state 
        |   [DECISION]  [DECISION]             |
        |        |          |                  |
        |     Accept      Major                |
-       |     /Minor        |                  |
+       |     /Minor (*)    |                  |
        |        |     [checkpoint]            |
        |        |          |                  |
        |        |          v                  |
@@ -127,6 +127,8 @@ The session writes these states, and every transition below, to the run's state 
    +-------+                                  |
 ```
 
+(*) After a Minor decision at Stage 3', the minor items go to one `/paper revision` run before Stage 4.5, as the row "Decision = Minor" of "Normal Flow Transitions" gives.
+
 ---
 
 ## Legal State Transitions
@@ -150,14 +152,17 @@ The writing, the review, the revision and the re-review are runs of other skills
 | checkpoint | Stage 4 | Decision = Minor/Major, user confirms | Pass Revision Roadmap to `/paper revision` |
 | checkpoint | Stage 4.5 | Decision = Accept, user confirms | Skip revision, go directly to final verification |
 | Stage 4 | **checkpoint** | Stage 4 completed | Wait for user confirmation |
-| checkpoint | Stage 3' | User confirms | Pass Revised Draft + Response to Reviewers to `/paper-review-panel re-review` |
+| checkpoint | Stage 3' | User confirms, after a Stage 3 | Pass Revised Draft + Response to Reviewers to `/paper-review-panel re-review` |
+| checkpoint | Stage 3' (completeness check) | User confirms, after a Stage 4 for review comments in hand | The session compares the structured comments with the Response to Reviewers, as `references/external_review_protocol.md`, "Step 4", gives, with no re-review invoked |
+| Stage 3' (completeness check) | **checkpoint** | Check completed | Wait for user confirmation, then pass the revised draft to final verification |
 | Stage 3' | **checkpoint** | Decision produced | Wait for user confirmation |
-| checkpoint | Stage 4.5 | Decision = Accept/Minor, user confirms | Pass final draft to final verification |
+| checkpoint | Stage 4.5 | Decision = Accept, user confirms | Pass final draft to final verification |
+| checkpoint | Stage 4.5 | Decision = Minor, user confirms | Send the minor items to one `/paper revision` run as its comments file, then pass the revised draft to final verification |
 | checkpoint | Stage 4' | Decision = Major, user confirms | Pass new Revision Roadmap to `/paper revision` |
 | Stage 4' | **checkpoint** | Stage 4' completed | Wait for user confirmation |
 | checkpoint | Stage 4.5 | User confirms | Pass revised draft to final verification |
 | Stage 4.5 | **checkpoint** | PASS (zero issues) | Wait for user confirmation |
-| Stage 4.5 | Stage 4.5 (retry) | FAIL | Send the issue list to `/paper revision` as its comments, re-verify (max 3 rounds, then the user decides) |
+| Stage 4.5 | Stage 4.5 (retry) | FAIL, or PASS WITH NOTES | Send the issue list to `/paper revision` as its comments, re-verify (max 3 rounds, then the user decides) |
 | checkpoint | END | User confirms | Deliver the final verified draft |
 
 ### Special Flow Transitions
@@ -249,7 +254,8 @@ Stage 3 (First REVIEW)
   -> Decision: Minor/Major -> Stage 4
       -> Stage 4 (REVISE)
           -> Stage 3' (RE-REVIEW, verification)
-              -> Decision: Accept/Minor -> Stage 4.5
+              -> Decision: Accept -> Stage 4.5
+              -> Decision: Minor -> one /paper revision run for the minor items -> Stage 4.5
               -> Decision: Major -> Stage 4' (last revision)
                   -> Stage 4.5 (go directly to final verification, no return to review)
 

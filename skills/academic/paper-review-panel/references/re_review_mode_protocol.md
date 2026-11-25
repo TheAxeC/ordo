@@ -12,7 +12,7 @@ Input:
 
 Phase 0: Reads the Revision Roadmap, builds a checklist
 Phase 1: EIC checks each item (other reviewers not activated)
-Phase 2: Editorial Synthesis -> New Decision
+Phase 2: Editorial Synthesis -> Dimension Scores + New Decision
 ```
 
 ### Verification Logic
@@ -69,6 +69,20 @@ In addition to checking old items, EIC also scans for:
 - Whether revisions cause inconsistencies
 ```
 
+### Dimension Scores
+
+```
+In Phase 2 the editorial synthesizer scores the revised manuscript:
+- Each of the 7 dimensions of references/quality_rubrics.md scored 0-100 on its
+  rubric, with the range descriptor that best matches, as the Editorial
+  Decision gives its scores in the full mode (templates/editorial_decision_template.md,
+  "Dimension Scores")
+- The same dimension names as that table
+- The Weighted Average by the Aggregation Formula of references/quality_rubrics.md,
+  as the overall score
+- Each score rests on the revised manuscript and the Revision Response Checklist
+```
+
 ### Socratic Guidance After Re-Review
 
 ```
@@ -90,6 +104,19 @@ If Re-Review Decision = Major Revision:
 
 ## Decision
 [Accept / Minor Revision / Major Revision]
+
+## Dimension Scores
+
+| Dimension | Score (0-100) | Descriptor | Notes |
+|-----------|--------------|------------|-------|
+| Originality (20%) | | [Exceptional/Strong/Adequate/Weak/Insufficient] | |
+| Methodological Rigor (25%) | | [Exceptional/Strong/Adequate/Weak/Insufficient] | |
+| Evidence Sufficiency (25%) | | [Exceptional/Strong/Adequate/Weak/Insufficient] | |
+| Argument Coherence (15%) | | [Exceptional/Strong/Adequate/Weak/Insufficient] | |
+| Writing Quality (15%) | | [Exceptional/Strong/Adequate/Weak/Insufficient] | |
+| Literature Integration (optional) | | [See rubrics] | |
+| Significance & Impact (optional) | | [See rubrics] | |
+| **Weighted Average** | | **[Accept/Minor/Major/Reject]** | |
 
 ## Revision Response Checklist
 

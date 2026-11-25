@@ -47,9 +47,9 @@ Based on user preferences and material status, recommend the optimal mode for ea
 
 | Signal | Determination | Recommended Combination |
 |--------|--------------|------------------------|
-| "Guide me" "walk me through" "step by step" "I'm not sure" | Novice/wants guidance | plan + guided |
-| "Just do it for me" "quick" "I'm experienced" | Experienced/wants direct output | full + full |
-| "Short on time" "brief" "key points only" | Time-limited | full + quick |
+| "Guide me" "walk me through" "step by step" "I'm not sure" | Novice/wants guidance | full + full: `/paper full` at Stage 2, `/paper-review-panel full` at Stage 3 |
+| "Just do it for me" "quick" "I'm experienced" | Experienced/wants direct output | full + full: `/paper full` at Stage 2, `/paper-review-panel full` at Stage 3 |
+| "Short on time" "brief" "key points only" | Time-limited | full + full: `/paper full` at Stage 2, `/paper-review-panel full` at Stage 3 |
 | "I already have research data" | Has research foundation | Go directly to Stage 2 |
 | "I already have a paper" | Has complete draft | Skip Stage 2, go directly to Stage 2.5 |
 
@@ -64,7 +64,7 @@ Stage 3 REVIEW:    [mode]: [one-sentence explanation why]
 
 Integrity checks (Stage 2.5 & 4.5) are mandatory and cannot be skipped.
 
-You can adjust any stage's mode at any time. Ready to begin?
+At each FULL or MANDATORY checkpoint you can change the settings of the next step, within these runs, or pause. Ready to begin?
 ```
 
 ### 3. Checkpoint Management (Adaptive Checkpoint System)
@@ -213,10 +213,7 @@ Users may request changing a sub-skill's mode at a checkpoint. Not all switches 
 
 | Switch | Safety | Notes |
 |--------|--------|-------|
-| `paper`: plan to full | SAFE | Standard progression |
-| `paper`: full to plan | PROHIBITED | Cannot un-write a draft |
-| `paper-review-panel`: quick to guided | SAFE | More interactive review |
-| `paper-review-panel`: guided to quick | DANGEROUS | Loses interactive depth |
+| `paper` or `paper-review-panel`: any run other than `/paper full` at Stage 2, `/paper-review-panel full` at Stage 3, `/paper revision` at Stage 4 and 4', `/paper-review-panel re-review` at Stage 3' | PROHIBITED | The run of each stage is fixed by the pipeline's design (`SKILL.md`, Steps 5) |
 | Any integrity check mode change | PROHIBITED | Integrity verification modes are fixed by pipeline design |
 
 **DANGEROUS switches**: Orchestrator MUST display warning: "This switch reduces quality. Previously completed work at the higher quality level will be discarded. Are you sure? (yes/no)"

@@ -2,7 +2,7 @@
 name: paper
 description: "Write, revise, plan and format a LaTeX manuscript with twelve roles, each a fresh agent: intake, literature strategist, structure architect, argument builder, draft writer, citation compliance, abstract, peer reviewer, formatter, Socratic mentor, visualization and revision coach. Twelve modes: full, outline-only, revision, abstract-only, lit-review, format-convert, citation-check, plan, revision-coach, disclosure, rebuttal-audit and response-letter. Two calls, draft-review and figures, run one role. Every change to the manuscript is a patch applied by script, and every cited claim rests on a passage read in the run. Triggers on: /paper, write a paper, outline a paper, revise a manuscript, write the response letter, parse reviewer comments, audit my rebuttal, write an abstract, review the literature on a topic, check the citations, write an AI disclosure statement, help me plan my paper, convert my paper to DOCX, convert the citations to <style>, review my draft, draw the figures."
 metadata:
-  version: "5.0.0"
+  version: "5.0.1"
 ---
 
 # Write and revise a manuscript
@@ -67,7 +67,7 @@ The `<manuscript>` of format-convert is a main `.tex`, a `.md`, a `.docx` or a `
 |---|---|
 | Reviewing a paper (structured review by a panel of reviewers and an editor), a different kind of review from `/paper draft-review` | `paper-review-panel` |
 | Someone else's paper to review as its referee | `referee` |
-| Full research-to-paper pipeline: the research stage, the integrity check of a finished manuscript's references, claims, numbers and figures, and its ethics check | `researcher` (roadmap entry 13, not built yet) |
+| Full research-to-paper pipeline: the integrity check of a finished manuscript's references, claims, numbers and figures, its ethics check, and the stages from the writing to the final check | `researcher`, whose research stage is not built yet (roadmap entry 13) |
 | The prose of a draft to check | `writing` |
 
 ## What it reads

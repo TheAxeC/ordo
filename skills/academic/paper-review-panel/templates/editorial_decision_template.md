@@ -26,6 +26,23 @@ This template is used by the editorial synthesizer to produce the final Editoria
 
 ---
 
+## Dimension Scores *
+
+[The editorial synthesizer's score of each of the 7 dimensions of `references/quality_rubrics.md`, from the reviewers' scores in its Reviewer Summary Matrix, and the Weighted Average by that page's Aggregation Formula]
+
+| Dimension | Score (0-100) | Descriptor | Notes |
+|-----------|--------------|------------|-------|
+| Originality (20%) | | [Exceptional/Strong/Adequate/Weak/Insufficient] | |
+| Methodological Rigor (25%) | | [Exceptional/Strong/Adequate/Weak/Insufficient] | |
+| Evidence Sufficiency (25%) | | [Exceptional/Strong/Adequate/Weak/Insufficient] | |
+| Argument Coherence (15%) | | [Exceptional/Strong/Adequate/Weak/Insufficient] | |
+| Writing Quality (15%) | | [Exceptional/Strong/Adequate/Weak/Insufficient] | |
+| Literature Integration (optional) | | [See rubrics] | |
+| Significance & Impact (optional) | | [See rubrics] | |
+| **Weighted Average** | | **[Accept/Minor/Major/Reject]** | |
+
+---
+
 ## Reviewer Summary
 
 | Reviewer | Role | Recommendation | Confidence |

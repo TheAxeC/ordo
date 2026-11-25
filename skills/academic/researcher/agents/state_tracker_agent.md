@@ -199,6 +199,11 @@ Every material artifact produced by the pipeline carries a version label. These 
       "items_pending": []
     }
   ],
+  "score_trajectory": {
+    "baseline": {"originality": 72, "methodological_rigor": 61, "evidence_sufficiency": 66, "argument_coherence": 70, "writing_quality": 74, "literature_integration": 68, "significance_impact": 71, "overall": 67},
+    "re_review": null,
+    "deltas": null
+  },
   "integrity_history": [
     {
       "stage": "2.5",

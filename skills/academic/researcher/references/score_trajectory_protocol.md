@@ -17,11 +17,11 @@ Inspired by PaperOrchestra's Content Refinement Agent (Song et al., 2026), which
 
 ### At Stage 3 (REVIEW)
 
-The editorial synthesizer produces dimension scores in the Review Report (Schema 6). These are the **baseline scores**.
+The editorial synthesizer produces dimension scores in the "Dimension Scores" of the Editorial Decision (Schema 6, `dimension_scores`). These are the **baseline scores**.
 
 ### At Stage 3' (RE-REVIEW)
 
-The editorial synthesizer produces new dimension scores. The orchestrator computes deltas:
+The editorial synthesizer produces new dimension scores in the "Dimension Scores" of the Verification Review Report. The orchestrator computes deltas:
 
 ```
 For each dimension d in {originality, methodological_rigor, evidence_sufficiency,
@@ -33,7 +33,7 @@ the paper-review-panel skill's references/review_criteria_framework.md plus over
 Scores are on the 0-100 scale per
 the paper-review-panel skill's references/quality_rubrics.md, the scale the
 delta thresholds below and the Early-Stopping Criterion
-("delta < 3 points on the 0-100 rubric", SKILL.md) assume.
+("delta < 3 points on the 0-100 rubric", SKILL.md, Steps, "manuscript" item 8) assume.
 ```
 
 ### Decision rules

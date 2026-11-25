@@ -13,6 +13,8 @@ Writes, beside this file:
   roles the other five modes start in its note.
 - referee.svg: the agents and stops of the first round of the referee skill, with what the
   second round starts in its note.
+- researcher.svg: the stages, agents, runs of other skills and stops of the manuscript mode of
+  the researcher skill, with what the integrity mode runs alone in its note.
 - submit.svg: the agent and stops of the submit skill, from the submission sheet to the page
   of the final submit.
 - grant.svg: the agents and stops of the draft mode of the grant skill, with what the other
@@ -1078,6 +1080,7 @@ def describe(title: str, panels: Sequence[Panel]) -> str:
             "choice": "question",
             "todo": "not built yet",
             "none": "none",
+            "paper": "a run of another skill",
         }
         boxes = [
             f"{node.label} ({names.get(node.kind, node.kind)})"
@@ -1986,6 +1989,111 @@ def referee() -> str:
     )
 
 
+def _integrity_check(
+    stage: str, depth: str, agent: str, done: str, fail: str
+) -> tuple[
+    tuple[Node, ...], tuple[Edge, ...]
+]:
+    """The boxes and arrows of one integrity check of the researcher skill, at one stage."""
+    k = stage.replace(".", "")
+    nodes = (
+        Node(f"I{k}", f"{agent}, Stage {stage}: {depth}, the ethics check last"),
+        Node(f"C{k}", f"Compliance agent, Stage {stage}"),
+        Node(f"B{k}", "A failure-mode block, a compliance block, or a BLOCKED or CONDITIONAL ethics verdict", "stop"),
+        Node(f"F{k}", "A FAIL: the correction list to confirm", "stop"),
+        Node(f"V{k}", "/paper revision: the correction round", "paper"),
+        Node(f"T{k}", "The third correction round failed: you decide", "stop"),
+        Node(f"K{k}", f"The checkpoint after Stage {stage}", "stop"),
+    )
+    edges = (
+        Edge(f"I{k}", f"C{k}"),
+        Edge(f"C{k}", f"B{k}", "a stop of the check"),
+        Edge(f"C{k}", f"F{k}", fail),
+        Edge(f"C{k}", f"K{k}", done),
+        Edge(f"B{k}", f"V{k}", "a fix, a backfill or an addendum"),
+        Edge(f"F{k}", f"V{k}"),
+        Edge(f"V{k}", f"I{k}", "the check again, at most 3 rounds", "back"),
+        Edge(f"V{k}", f"T{k}", "not passed after 3 rounds"),
+    )
+    return nodes, edges
+
+
+def researcher() -> str:
+    """The manuscript mode of the researcher skill: its stages, agents, runs and stops."""
+    first, first_edges = _integrity_check(
+        "2.5", "the sampled depth", "Integrity agent", "PASS", "FAIL"
+    )
+    final, final_edges = _integrity_check(
+        "4.5",
+        "the full depth",
+        "A fresh integrity agent",
+        "PASS with zero issues",
+        "FAIL, or PASS WITH NOTES",
+    )
+    nodes = (
+        Node("X", "The record of the experiments, when the project holds none", "stop"),
+        Node("G", "You confirm the run's configuration and its budget", "stop"),
+        Node("W", "/paper full: the draft, Stage 2", "paper"),
+        Node("K2", "The checkpoint after Stage 2", "stop"),
+        *first,
+        Node("P", "/paper-review-panel full: the review, Stage 3", "paper"),
+        Node("D", "The review decision", "stop"),
+        Node("R", "/paper revision: the revision, Stage 4", "paper"),
+        Node("K4", "The checkpoint after Stage 4", "stop"),
+        Node("Q", "/paper-review-panel re-review: the re-review, Stage 3'", "paper"),
+        Node("S", "A regression, or the early-stopping suggestion, from the score deltas", "stop"),
+        Node("E", "The re-review decision", "stop"),
+        Node("M", "/paper revision: the minor items of a Minor decision, once", "paper"),
+        Node("Y", "/paper revision: the re-revision, Stage 4', once", "paper"),
+        Node("K4b", "The checkpoint after Stage 4'", "stop"),
+        *final,
+    )
+    edges = (
+        Edge("X", "G"),
+        Edge("G", "W"),
+        Edge("W", "K2"),
+        Edge("K2", "I25"),
+        *first_edges,
+        Edge("K25", "P"),
+        Edge("P", "D"),
+        Edge("D", "W", "Reject, your choice: Stage 2 again", "back"),
+        Edge("D", "R", "Minor or Major Revision"),
+        Edge("D", "I45", "Accept"),
+        Edge("R", "K4"),
+        Edge("K4", "Q"),
+        Edge("Q", "S"),
+        Edge("S", "E"),
+        Edge("E", "Y", "Major"),
+        Edge("E", "M", "Minor"),
+        Edge("M", "I45"),
+        Edge("E", "I45", "Accept"),
+        Edge("Y", "K4b"),
+        Edge("K4b", "I45"),
+        *final_edges,
+    )
+    note = (
+        "integrity runs one check alone: the integrity agent at the full depth, or with "
+        "pre-review at the sampled depth, then the compliance agent, the same blocks and at "
+        "most 3 correction rounds through /paper revision, and the run ends. A draft given "
+        "to manuscript enters at Stage 2.5. With a comments file it goes from Stage 2.5 to "
+        "Stage 4 with the comments, then to the session's completeness check in place of the "
+        "re-review, a stop, and to Stage 4.5. Each run of paper and paper-review-panel is invoked "
+        "through the Skill tool with its own stops, which are not drawn. The session holds "
+        "every checkpoint and writes the run's state and the Material Passport. Each "
+        "integrity record and each compliance report is a file of the run folder."
+    )
+    return _single(
+        "researcher.svg",
+        "The manuscript mode of the researcher skill",
+        _graph(nodes, edges),
+        note,
+        (
+            *SIMPLE_LEGEND,
+            Legend("paper", "Teal box: a run of the paper or paper-review-panel skill"),
+        ),
+    )
+
+
 def submit() -> str:
     """The submit skill: its agent and its stops, from the sheet to the page of the final submit."""
     nodes = (
@@ -2365,6 +2473,7 @@ def figures() -> tuple[tuple[str, str], ...]:
         ("grant.svg", grant()),
         ("code-comments.svg", code_comments()),
         ("codebase-design.svg", codebase_design()),
+        ("researcher.svg", researcher()),
         *paper_figures(),
         ("paper/lifecycle.svg", paper_lifecycle()),
         ("paper/run-folder.svg", paper_run_folder()),

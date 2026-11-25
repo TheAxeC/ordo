@@ -7,7 +7,7 @@ applies_to: "agents/compliance_agent.md"
 
 Defines how the compliance agent participates in Stage 2.5 and Stage 4.5 Integrity Gates, how its decision interacts with the existing FAIL loop, and how user overrides are processed.
 
-**Used by**: the compliance agent, `SKILL.md` Stage 2.5 / 4.5.
+**Used by**: the compliance agent, `SKILL.md`, "The integrity check" items 2, 4 and 5, at Stage 2.5 / 4.5.
 
 ## Dual-gate summary
 
@@ -52,7 +52,8 @@ PRISMA-trAIce Mandatory fails: M4 (Input Data)
 RAISE principles fail: reproducibility
 
 Choose:
-  (a) backfill: return to Stage 2 and add missing material
+  (a) backfill: give the missing material; it reaches the manuscript
+      through /paper revision, and the compliance agent runs again
   (b) manual handling: edit manuscript directly, rerun compliance
   (c) acknowledge limitation: invoke user override (see Override Ladder)
 ```
@@ -91,7 +92,7 @@ Round count is per-stage-per-pipeline-run, stored in `compliance_history[].user_
 
 > **Enforcement boundary.** This ladder is enforced at **runtime by the compliance agent** using the `compliance_history[]` round counter, NOT by Schema 12, which accepts a `user_override.rationale` of any length of 1 or more. The round-counter increment and >=100-char rationale check live in the agent's write-path. If you bypass the agent and hand-write a `user_override` entry into the passport, Schema 12 will accept any rationale length, but that entry will not have gone through the friction ladder and must be treated as unaudited.
 
-On any successful override, the agent generates `disclosure_addendum` text and the orchestrator **auto-injects** it into the manuscript's AI disclosure section. The addendum is non-removable: this is the concrete form of the `no detection evasion` iron rule.
+On any successful override, the session starts the compliance agent again with the override and its rationale, and the agent generates the `disclosure_addendum` text. The session writes it to a file of the run folder and gives that file to `/paper revision` as its comments, which puts it into the manuscript's AI disclosure section. The addendum is non-removable: this is the concrete form of the `no detection evasion` iron rule.
 
 ### `disclosure_addendum` template
 

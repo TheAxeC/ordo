@@ -36,17 +36,16 @@ after it passes, you proceed to Stage 3 (REVIEW).
 
 Before starting, let me confirm a few things:
 1. What's the paper structure? (IMRaD / other)
-2. What review mode would you like?
-   - full: Complete 4-person review (EIC + 3 Peer Reviewers)
-   - quick: EIC quick assessment (15-minute version)
-   - guided: Socratic guided review (interactive dialogue)
-3. Which journal (or what tier) are you targeting?
-4. Will you need revision after the review?
+2. Which journal (or what tier) are you targeting?
 
-If you later want to revise based on review comments, I'll automatically guide you to Stage 4.
+The review at Stage 3 runs /paper-review-panel full: a field analyst, the
+EIC, three peer reviewers and a Devil's Advocate reviewer, then the
+editorial synthesizer's decision. If the decision asks for revision,
+Stage 4 runs /paper revision with the Revision Roadmap, and Stage 3'
+runs /paper-review-panel re-review on the revised draft.
 ```
 
-**User**: IMRaD structure, I'd like a quick review first to see if there are any big-picture issues. Targeting Computers & Education (SSCI Q1). Will decide about revision after the review.
+**User**: IMRaD structure. Targeting Computers & Education (SSCI Q1).
 
 ### Orchestrator: Confirm Configuration
 
@@ -55,8 +54,9 @@ Got it. Pipeline configuration:
 
   Stage 2 WRITE           [--] Skipped (you already have a complete paper)
   Stage 2.5 INTEGRITY:    Mode 1 (pre-review) -- mandatory, cannot be skipped
-  Stage 3 REVIEW:         quick -- EIC quick assessment first, checking the big picture
-  Stage 4 REVISE:         TBD -- based on Stage 3 results
+  Stage 3 REVIEW:         /paper-review-panel full -- five reviewers and an Editorial Decision
+  Stage 4 REVISE:         /paper revision -- if the decision asks for revision
+  Stage 3' RE-REVIEW:     /paper-review-panel re-review -- after the revision
   Stage 4.5 FINAL INTEGRITY: mandatory, after the revision
 
 Start Stage 2.5 (INTEGRITY)?
@@ -102,7 +102,7 @@ Issues: SERIOUS 0 / MEDIUM 0 / MINOR 0
 ```
 Stage 2.5 (INTEGRITY) PASS. The paper is cleared for review.
 
-Start Stage 3 (REVIEW) quick mode?
+Start Stage 3 (REVIEW)?
 
 Progress: [--]Writing -> [v]Integrity -> [..]Review -> [ ]Revision -> [ ]Final integrity
 ```
@@ -111,33 +111,38 @@ Progress: [--]Writing -> [v]Integrity -> [..]Review -> [ ]Revision -> [ ]Final i
 
 ---
 
-### Stage 3: REVIEW (quick mode)
+### Stage 3: REVIEW (/paper-review-panel full)
 
 ```
-Entering Stage 3 (REVIEW) -- invoking /paper-review-panel quick through the Skill tool
+Entering Stage 3 (REVIEW) -- invoking /paper-review-panel full through the Skill tool
 
 Receiving user-provided paper draft...
 the field analyst analyzing paper domain...
-the EIC executing quick assessment...
 ```
 
-**Field Analysis (quick version):**
+**Reviewer Configuration Card:**
 ```
 Paper domain: Educational Data Mining / Higher Education
 Method type: Machine Learning (Supervised Classification)
-Target journal: Computers & Education (SSCI Q1, IF: 12.0)
+Target journal: Computers & Education (SSCI Q1)
 
-EIC Persona:
-  Computers & Education Associate Editor
-  Specialization: Learning Analytics, Educational AI
+EIC:                  Computers & Education Associate Editor
+                      Learning Analytics, Educational AI
+Methodology reviewer: Machine Learning expert
+                      Predictive modeling, Model evaluation
+Domain reviewer:      Higher Education researcher
+                      Student success, Retention strategies
+Perspective reviewer: Research Ethics / Data Science ethicist
+                      Algorithmic fairness, Educational data mining ethics
+Devil's Advocate:     Challenges the paper's core argument
 ```
 
-**EIC Quick Assessment:**
+*(The user confirms the reviewer configuration at the panel's own stop. The five reviewers review in parallel... the editorial synthesizer compiles...)*
+
+**Editorial Decision: Major Revision**
 
 ```
-Overall: Promising but needs work (Minor-to-Major Revision range)
-
-Key Strengths (top 3):
+Key Strengths:
 1. Timely topic -- university attrition prediction highly relevant
    in Taiwan's demographic context
 2. Good feature engineering -- combining MOE open data with
@@ -145,65 +150,45 @@ Key Strengths (top 3):
 3. Clear methodology -- model comparison (RF, XGBoost, LSTM)
    is well-structured
 
-Key Concerns (top 3):
+Revision Roadmap (must_fix):
 C1: [CRITICAL] Ethical considerations section is missing.
     C&E requires explicit discussion of algorithmic fairness,
     student privacy, and potential discriminatory outcomes.
+    -- Perspective reviewer, EIC
 C2: [MAJOR] Model interpretability not discussed.
     C&E reviewers expect SHAP values or similar explainability
     analysis, not just accuracy metrics.
+    -- Methodology reviewer
 C3: [MAJOR] Literature gap -- no mention of Dropout Factory
     literature (Balfanz & Legters, 2004) or recent European
     attrition studies. Too Taiwan-centric for an international
     journal.
-
-Quick Verdict: Major Revision
-  Before full submission, address C1-C3.
-  Estimated revision effort: 2-3 weeks.
+    -- Domain reviewer, Devil's Advocate
 ```
 
+*(The EIC offers its revision coaching at the panel's own stop. The user says "just fix it", which skips it.)*
+
 **Stage 3 Deliverables:**
-- EIC Quick Assessment Report
-- 3 key issues list (priority sorted)
+- 5 review reports
+- Editorial Decision and Revision Roadmap (3 must_fix items, priority sorted)
 
 ---
 
-### Orchestrator: Transition Recommendation
+### Orchestrator: Stage 3 Checkpoint
 
 ```
-Stage 3 (REVIEW) quick mode Complete!
+[MANDATORY] Stage 3 (REVIEW) Complete!
 
-Review result: Major Revision direction
+Editorial Decision: Major Revision
   C1: [CRITICAL] Missing ethics discussion (hard requirement for C&E)
   C2: [MAJOR] Missing model interpretability analysis
   C3: [MAJOR] Literature review lacks international perspective
 
-This is the quick review result. You have several options:
+Next step: Stage 4 (REVISE) -- /paper revision with the Revision Roadmap.
+After the revision, Stage 3' (RE-REVIEW) runs /paper-review-panel re-review.
 
-  a) Proceed directly to Stage 4 (REVISE) to address these 3 issues
-  b) Upgrade to full review (complete 4-person review),
-     to see if there are other issues
-  c) Revise on your own first, come back when done
-
-My recommendation: Since you're targeting C&E (Q1 journal),
-fix C1-C3 first, then do a full review to ensure quality.
-
-Which do you choose?
-```
-
-**User**: Fix C1-C3 first, then do full review.
-
-### Orchestrator: Update Configuration
-
-```
-OK, updating pipeline:
-
-  Stage 3 REVIEW (quick):  [v] Completed
-  Stage 4 REVISE:          [..] Next -- fix C1-C3
-  Stage 3' RE-REVIEW:      full mode -- full review after revision
-  Stage 4.5 FINAL INTEGRITY: after the re-review
-
-Start Stage 4 (REVISE)?
+This checkpoint requires your explicit confirmation.
+Continue?
 
 Progress: [--]Writing -> [v]Integrity -> [v]Review -> [..]Revision -> [ ]Re-review -> [ ]Final integrity
 ```
@@ -217,7 +202,7 @@ Progress: [--]Writing -> [v]Integrity -> [v]Review -> [..]Revision -> [ ]Re-revi
 ```
 Entering Stage 4 (REVISE) -- invoking /paper revision through the Skill tool
 
-Passing Paper Draft + Quick Assessment Report...
+Passing Paper Draft + Revision Roadmap...
 ```
 
 **Revision Progress Tracking:**
@@ -258,11 +243,11 @@ Revision results:
 - Added Ethics section, SHAP analysis, international literature
 - Added 11 new citations
 
-Next step is Stage 3' (RE-REVIEW) -- this time using full mode.
-4 reviewers will do a complete review of the revised version.
+Next step is Stage 3' (RE-REVIEW) -- /paper-review-panel re-review checks
+each Revision Roadmap item against the revised version.
 This is revision cycle 1 (max 2 cycles).
 
-Submit for full review?
+Submit for re-review?
 
 Progress: [--]Writing -> [v]Integrity -> [v]Review -> [v]Revision -> [..]Re-review -> [ ]Final integrity
 ```
@@ -271,50 +256,33 @@ Progress: [--]Writing -> [v]Integrity -> [v]Review -> [v]Revision -> [..]Re-revi
 
 ---
 
-### Stage 3': RE-REVIEW (full mode, Loop 1)
+### Stage 3': RE-REVIEW (re-review mode, Loop 1)
 
 ```
-Entering Stage 3' (RE-REVIEW) -- full mode, Loop 1/2
+Entering Stage 3' (RE-REVIEW) -- Loop 1/2
 
-Invoking /paper-review-panel full through the Skill tool...
-Passing Revised Draft + Response to Reviewers...
-the field analyst re-analyzing...
+Invoking /paper-review-panel re-review through the Skill tool...
+Passing Revised Draft + Revision Roadmap + Response to Reviewers...
+the field analyst, the EIC and the editorial synthesizer verifying each roadmap item...
 ```
 
-**Reviewer Configuration:**
-```
-EIC:        Computers & Education Associate Editor
-            Educational AI, Learning Analytics
-Reviewer 1: Machine Learning expert
-            Predictive modeling, Model evaluation
-Reviewer 2: Higher Education researcher
-            Student success, Retention strategies
-Reviewer 3: Research Ethics / Data Science ethicist
-            Algorithmic fairness, Educational data mining ethics
-```
-
-**4 Review Reports Compiled:**
+**Verification Review Report (R&R Traceability Matrix):**
 
 ```
-EIC: Minor Revision
-  - C1 response adequate, Ethics section well-structured
-  - Recommend updating Abstract to reflect new ethics + interpretability contributions
-  - Recommend adding a Practical Implications section for university administrators
+C1 Ethics section:        Author's claim: added Section 5.3   Verified? [v]
+  - Ethics section well-structured; recommend a "limitations of
+    fairness metrics" reflection paragraph
+C2 Interpretability:      Author's claim: added Section 4.3   Verified? [v]
+  - SHAP analysis thorough; Table 3 precision/recall should
+    include confidence intervals
+C3 International lit.:    Author's claim: expanded Section 2  Verified? [v]
+  - Coverage greatly improved; recommend Discussion add dialogue
+    with Tinto's Student Integration Model; Section 2.1 citation
+    Chen (2023) should be Chen (2024)
 
-Reviewer 1: Accept
-  - SHAP analysis thorough and insightful
-  - Model comparison fair and well-documented
-  - Minor: Table 3 precision/recall should include confidence intervals
-
-Reviewer 2: Minor Revision
-  - International literature coverage greatly improved
-  - Recommend Discussion add dialogue with Tinto's Student Integration Model
-  - Minor: Section 2.1 citation Chen (2023) should be Chen (2024)
-
-Reviewer 3: Accept
-  - Ethics section quality is high, exceeding typical C&E standards
-  - Algorithmic fairness metrics well-chosen
-  - Recommend adding a "limitations of fairness metrics" reflection paragraph
+Residual issues:
+  - Abstract does not reflect the new ethics + interpretability contributions
+  - No Practical Implications section for university administrators
 ```
 
 **Editorial Decision: Minor Revision (Accept direction)**
@@ -333,27 +301,26 @@ S4: Add fairness metrics limitations paragraph
 
 ---
 
-### Orchestrator: Quick Revision + FINAL INTEGRITY
+### Orchestrator: Stage 3' to 4.5 Transition
 
 ```
 Stage 3' (RE-REVIEW) Complete!
 
 Review result: Minor Revision (Accept direction)
-  - 2 out of 4 reviewers Accept + 2 Minor Revision
+  - Every roadmap item verified
   - 2 required items (Abstract update + Practical Implications)
   - 4 suggested modifications
 
-These are all minor changes that can be handled in one /paper revision run,
-followed directly by Stage 4.5 (FINAL INTEGRITY).
-Or would you prefer a formal Stage 4 revision before another review?
+With a Minor decision, these items go to one /paper revision run, with
+the items as its comments file, followed directly by Stage 4.5 (FINAL
+INTEGRITY). No further review follows.
 
-My recommendation: Since all items are minor, handle them together in one
-revision run and proceed directly to Stage 4.5.
+Continue?
 
 Progress: [--]Writing -> [v]Integrity -> [v]Review -> [v]Revision -> [v]Re-review -> [..]Final integrity
 ```
 
-**User**: Handle them together, then the final check.
+**User**: Continue.
 
 ---
 
@@ -401,12 +368,12 @@ Ethics check: CLEARED, dual-use level None
   Stage 2 WRITE       [--] Skipped
   Stage 2.5 INTEGRITY [v] PASS
   Stage 3 REVIEW      [v] Completed
-    Mode: quick
+    Run: /paper-review-panel full
     Decision: Major Revision (3 items)
   Stage 4 REVISE      [v] Completed
     Round: 1, Addressed: 3/3
   Stage 3' RE-REVIEW  [v] Completed
-    Mode: full, Loop: 1/2
+    Run: /paper-review-panel re-review, Loop: 1/2
     Decision: Minor Revision (Accept)
   Stage 4.5 FINAL INTEGRITY [v] PASS (zero issues)
 
@@ -417,7 +384,7 @@ Ethics check: CLEARED, dual-use level None
 |   [--] Bibliography (skipped)           |
 |   [--] Synthesis (skipped)              |
 |   [v] Paper Draft (user-provided)       |
-|   [v] Review Reports (quick + full)     |
+|   [v] Review Reports (5) + Re-review    |
 |   [v] Revision Roadmap                  |
 |   [v] Revised Draft (9,500 words)       |
 |   [v] Response to Reviewers             |

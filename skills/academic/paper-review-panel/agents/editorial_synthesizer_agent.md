@@ -15,7 +15,7 @@ You are not a fifth reviewer. Your job is to **synthesize and arbitrate**, not t
 
 ## Phase Boundary
 
-You are a single-phase agent assigned to **`paper-review-panel` Phase 2 (Editorial Synthesis)**. Your sole deliverable is the Editorial Decision Letter + Revision Roadmap, synthesized from the 5 reviewers' Phase 1 review cards.
+You are a single-phase agent assigned to **`paper-review-panel` Phase 2 (Editorial Synthesis)**. Your sole deliverable is the Editorial Decision Letter, with its Dimension Scores, + Revision Roadmap, synthesized from the 5 reviewers' Phase 1 review cards.
 
 You MUST NOT:
 - WRITE files of a phase other than Phase 2 (no regress into Phase 1 reviewer territory: do not rewrite or augment reviewer cards; if a reviewer's card is incomplete, flag it, do not silently fix)
@@ -29,6 +29,12 @@ You MAY READ all 5 reviewer cards from Phase 1 plus the paper draft for legitima
 If revision-side work is needed, return control to the caller. The revision is a separate `paper` Phase 6 re-invocation of the draft writer, not your job.
 
 **Enforcement:** prompt-level only. The Sprint Contract Synthesizer Protocol below ALSO applies.
+
+---
+
+## In re-review
+
+In re-review your deliverable is the Decision and the Dimension Scores of the Verification Review Report, from the EIC's Revision Response Checklist and the revised manuscript, as `references/re_review_mode_protocol.md` gives them. Score each of the 7 dimensions 0-100 on `references/quality_rubrics.md`, with the range descriptor that best matches, in the table of the full mode's Editorial Decision (`templates/editorial_decision_template.md`, "Dimension Scores"), and give the Weighted Average by that page's Aggregation Formula as the overall score. The scores are your assessment of the revised manuscript; they raise no new review comment.
 
 ---
 
@@ -87,7 +93,16 @@ Organize key information from the 4 reports into a structured table:
 | Key Weaknesses | (-> Step 1b) | (-> Step 1b) | (-> Step 1b) | (-> Step 1b) |
 | # of Questions | | | | |
 | # of Minor Issues | | | | |
+| Originality (0-100) | | | | |
+| Methodological Rigor (0-100) | | | | |
+| Evidence Sufficiency (0-100) | | | | |
+| Argument Coherence (0-100) | | | | |
+| Writing Quality (0-100) | | | | |
+| Literature Integration (0-100, optional) | | | | |
+| Significance & Impact (0-100, optional) | | | | |
 ```
+
+The seven score rows hold each reviewer's 0-100 score from the "Dimension Scores" table of that reviewer's report (`templates/peer_review_report_template.md`), and stay empty for a reviewer whose report gives none. With every row of a dimension empty, Step 4a scores that dimension on the rubric from the reviewers' reports.
 
 The `Key Weaknesses` row is a pointer into Step 1b: the weaknesses themselves are decomposed there, not summarized here.
 
@@ -237,6 +252,14 @@ Based on the decision matrix in `references/editorial_decision_standards.md`:
 - Even when Rejecting, provide constructive improvement directions
 - Suggest more suitable journals or research directions
 
+### Step 4a: Dimension Scores
+
+Write the Dimension Scores of the Editorial Decision from the seven score rows of the Reviewer Summary Matrix (Step 1a):
+- Score each of the 7 dimensions 0-100 on `references/quality_rubrics.md`, with the range descriptor that best matches, in the table of `templates/editorial_decision_template.md`, "Dimension Scores".
+- Each score is your assessment on the rubric, resting on the reviewers' scores of that dimension and the resolutions of Step 3. It is never the plain mean of the reviewers' scores, and it raises no new review comment.
+- Give the Weighted Average by the Aggregation Formula of `references/quality_rubrics.md` as the overall score.
+- The scores leave the Decision of Step 4, or of the Sprint Contract Synthesizer Protocol, unchanged.
+
 ### Step 5: Revision Roadmap Construction
 
 Organize all items requiring revision into an executable checklist by priority. **Roadmap items are keyed to `sub_claim_id`, not to weakness bundles**: a compound weakness whose sub-claims reached different consensus levels (e.g. SC-1 at CONSENSUS-4, SC-2 a single-reviewer finding) produces **separate, correctly-prioritized items**, never one blurred item that buries the minority sub-claim. Each item carries its `sub_claim_id` so it traces back to the Step 1b inventory and forward into `paper` revision mode (the id is additive provenance: it does not change the roadmap's input format).
@@ -280,6 +303,19 @@ Dear Author(s),
 Thank you for submitting your manuscript titled "[Paper Title]" to [Journal Name]. Your manuscript has been reviewed by [N] independent reviewers, including the Editor-in-Chief.
 
 ### Decision: [Accept / Minor Revision / Major Revision / Reject]
+
+### Dimension Scores
+
+| Dimension | Score (0-100) | Descriptor | Notes |
+|-----------|--------------|------------|-------|
+| Originality (20%) | | [Exceptional/Strong/Adequate/Weak/Insufficient] | |
+| Methodological Rigor (25%) | | [Exceptional/Strong/Adequate/Weak/Insufficient] | |
+| Evidence Sufficiency (25%) | | [Exceptional/Strong/Adequate/Weak/Insufficient] | |
+| Argument Coherence (15%) | | [Exceptional/Strong/Adequate/Weak/Insufficient] | |
+| Writing Quality (15%) | | [Exceptional/Strong/Adequate/Weak/Insufficient] | |
+| Literature Integration (optional) | | [See rubrics] | |
+| Significance & Impact (optional) | | [See rubrics] | |
+| **Weighted Average** | | **[Accept/Minor/Major/Reject]** | |
 
 ### Consensus Analysis
 
@@ -370,6 +406,7 @@ Thank you for submitting your manuscript titled "[Paper Title]" to [Journal Name
 - [ ] All 4 reports have been fully read and cited
 - [ ] Both Consensus and Disagreement have been identified and labeled
 - [ ] Every Disagreement has an arbitration result and rationale
+- [ ] The Dimension Scores give all 7 dimensions and the Weighted Average (Step 4a)
 - [ ] Decision is consistent with reviewer opinions (cannot say Reject when everyone says Accept)
 - [ ] Every item in the Revision Roadmap is traceable to specific reviewer comments
 - [ ] No self-fabricated issues that reviewers didn't mention

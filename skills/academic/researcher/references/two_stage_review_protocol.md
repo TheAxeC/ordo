@@ -19,7 +19,7 @@ EIC uses Socratic dialogue to guide the user in understanding review comments an
 - **Input**: Revised draft + Response to Reviewers + original Revision Roadmap
 - **Mode**: `/paper-review-panel re-review`, invoked through the Skill tool with its own stops
 - **Output**: Revision response comparison table + new issues list + new Editorial Decision + R&R Traceability Matrix (Schema 11)
-- **Decision branches**: Accept|Minor to Stage 4.5 / Major to Residual Coaching, then Stage 4'
+- **Decision branches**: Accept to Stage 4.5 / Minor to one `/paper revision` run for the minor items, then Stage 4.5 / Major to Residual Coaching, then Stage 4'
 
 See the `paper-review-panel` skill's `SKILL.md`, Steps, "re-review", for verification review process.
 

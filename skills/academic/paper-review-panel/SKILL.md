@@ -2,7 +2,7 @@
 name: paper-review-panel
 description: "Multi-perspective academic paper review with dynamic reviewer personas. Simulates 5 independent reviewers (EIC + 3 peer reviewers + Devil's Advocate) with field-specific expertise. Supports full review, re-review (verification), quick assessment, methodology focus, Socratic guided, and calibration modes. Triggers on: /paper-review-panel, review paper, peer review, manuscript review, review my paper, critique paper, simulate review, editorial review, calibrate reviewer, reviewer calibration, measure reviewer accuracy."
 metadata:
-  version: "1.0.1"
+  version: "1.1.0"
 ---
 
 # Academic Paper Reviewer: Multi-Perspective Academic Paper Review Agent Team
@@ -54,9 +54,9 @@ Review this paper: [paste paper or provide file]                                
    | `references/top_journals_by_field.md` | Top journal lists for major academic fields (EIC role calibration) | the field analyst, the EIC |
    | `references/editorial_decision_standards.md` | Accept/Minor/Major/Reject criteria and decision matrix | the EIC, the editorial synthesizer |
    | `references/statistical_reporting_standards.md` | Statistical reporting standards + APA 7.0 format quick reference + red flag list | the methodology reviewer |
-   | `references/quality_rubrics.md` | Calibrated 0-100 scoring rubrics for 7 review dimensions with decision mapping | all reviewers |
+   | `references/quality_rubrics.md` | Calibrated 0-100 scoring rubrics for 7 review dimensions with decision mapping | all reviewers, the editorial synthesizer |
    | `references/review_quality_thinking.md` | Cognitive framework for review quality: three lenses (internal validity, external validity, contribution), common reviewer traps, calibration questions | all reviewers |
-   | `references/re_review_mode_protocol.md` | Full re-review verification logic, R&R traceability output format, Socratic guidance after re-review | the EIC, the editorial synthesizer |
+   | `references/re_review_mode_protocol.md` | Full re-review verification logic, R&R traceability output format, dimension scores, Socratic guidance after re-review | the EIC, the editorial synthesizer |
    | `references/guided_mode_protocol.md` | Guided mode dialogue flow, progressive revelation sequence, dialogue rules | all reviewers |
    | `references/calibration_mode_protocol.md` | Calibration mode: FNR/FPR/balanced accuracy measurement against user-supplied gold set, 5x ensembling, session-scoped confidence disclosure | all reviewers |
    | `references/integration_guide.md` | Complete 8-step pipeline usage example | - |
@@ -65,7 +65,7 @@ Review this paper: [paste paper or provide file]                                
    | Template | Purpose |
    |----------|---------|
    | `templates/peer_review_report_template.md` | Review report template used by each reviewer |
-   | `templates/editorial_decision_template.md` | EIC final decision letter template |
+   | `templates/editorial_decision_template.md` | EIC final decision letter template, with the dimension scores |
    | `templates/revision_response_template.md` | Revision response template for authors (R->A->C format) |
 6. The examples.
 
@@ -81,8 +81,8 @@ The 6 operational modes:
 
 | Mode | Trigger | Agents | Output |
 |------|---------|--------|--------|
-| `full` | Default / "full review" | All 7 agents | 5 review reports + Editorial Decision + Revision Roadmap |
-| **`re-review`** | **"verification review"** | **the field analyst + the EIC + the editorial synthesizer** | **Revision response checklist + residual issues + new Decision** |
+| `full` | Default / "full review" | All 7 agents | 5 review reports + Editorial Decision with dimension scores + Revision Roadmap |
+| **`re-review`** | **"verification review"** | **the field analyst + the EIC + the editorial synthesizer** | **Revision response checklist + residual issues + dimension scores + new Decision** |
 | `quick` | "quick review" | the field analyst + the EIC | EIC quick assessment + key issues list (15-minute version) |
 | `methodology-focus` | "check methodology" | the field analyst + the EIC + the methodology reviewer | In-depth methodology review report (panel 2 under the sprint contract: EIC + methodology) |
 | `guided` | "guide me" | All + Socratic dialogue | Socratic issue-by-issue guided review |
@@ -178,7 +178,7 @@ The orchestration workflow of 3 phases, which starts from the user's request (Us
    - Identifies consensus (5 agree) vs. disagreement (divergent opinions)
    - Arbitration and argumentation for disputed issues
    - Devil's Advocate CRITICAL issues are specially flagged in the Editorial Decision
-   - Editorial Decision Letter
+   - Editorial Decision Letter, with the editorial synthesizer's 7 dimension scores 0-100 and the Weighted Average (`agents/editorial_synthesizer_agent.md`, "Step 4a: Dimension Scores")
    - Revision Roadmap (prioritized, can be directly input to `paper` revision mode)
    - Done when the Editorial Decision with the Revision Roadmap stands in the run folder, or the stop "`[EXPRESSION-UNRECOGNISED]`" is raised.
 5. Phase 2.5: REVISION COACHING (Socratic Revision Guidance). Only triggered when Decision = Minor/Major Revision.
@@ -203,12 +203,13 @@ The orchestration workflow of 3 phases, which starts from the user's request (Us
 Dedicated mode that verifies whether revisions address first-round review comments. Uses R&R Traceability Matrix (Schema 11) with Author's Claim + Verified? columns.
 
 **Input**: Original Revision Roadmap + Revised manuscript + Response to Reviewers (optional)
-**Output**: Verification Review Report with traceability matrix + new issues + Decision
+**Output**: Verification Review Report with traceability matrix + new issues + dimension scores + Decision
 
 > See `references/re_review_mode_protocol.md` for full verification logic, output format template, and Socratic guidance details.
 
 1. Start the agents of the row `re-review` of the modes table, in the phases `references/re_review_mode_protocol.md`, "How It Works", gives, each in one call, with no sprint contract.
-   - Done when the Verification Review Report stands in the run folder.
+   - The editorial synthesizer scores the revised manuscript on the 7 dimensions of `references/quality_rubrics.md`, 0-100 each with the Weighted Average, as `references/re_review_mode_protocol.md`, "Dimension Scores", gives.
+   - Done when the Verification Review Report stands in the run folder with its dimension scores.
 2. Hold the Socratic guidance after the re-review, under the condition and within the number of rounds that `references/re_review_mode_protocol.md`, "Socratic Guidance After Re-Review", gives.
    - The run's EIC agent is resumed for the dialogue, and the session passes each question and each answer as full item 5 says.
    - Each question is the stop "The residual coaching question".

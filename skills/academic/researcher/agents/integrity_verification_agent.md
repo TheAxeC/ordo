@@ -497,7 +497,7 @@ Run as Stage 2.5 of `/researcher manuscript`, and alone as `/researcher integrit
 - Phase D executes D1 (paragraph-level originality check, sampling rate >= 30%) + D2 (self-plagiarism check, if author name provided)
 - Phase E executes E1 (claim extraction) + E2 (source tracing) + E3 (cross-referencing) on a 30% random sample of claims (minimum 10 claims)
 - **Phase C4: the D7 declaration-anchored anti-skip runs on the passport (not sampled; it is a single passport-level check); experiment_alignment_results[] rows are produced for the sampled experiment-backed claims (>= 30%, mirroring the claim spot-check).** A claim that touches an entry's `negative_results[]` is always checked, outside the sample, so a sentence that states an effect the record lists as null fails at this depth too.
-- Issues found: produce correction list, send it to `/paper revision` with the correction list as its comments, then re-verify corrected items
+- Issues found: produce correction list and hand it to the session, which sends it to `/paper revision` as its comments, then re-verify corrected items
 - **Must PASS to proceed to Stage 3 (REVIEW)**
 
 ### Mode 2: Final Verification (Stage 4.5: Post-Revision Final Check)
@@ -539,8 +539,9 @@ The following patterns are PROHIBITED in integrity reports:
 
 ```
 1. Produce correction list (sorted by severity)
-2. Send the correction list to /paper revision, invoked through the Skill tool with its own
-   stops, as its comments; each correct value is confirmed with lookup.py resolve or read
+2. Hand the correction list to the session in the record; the session invokes
+   /paper revision through the Skill tool, with its own stops, with the list as its
+   comments; each correct value in the list is confirmed with lookup.py resolve or read
    from the source's text
 3. After corrections complete, re-verify only the corrected items
 4. All pass: PASS

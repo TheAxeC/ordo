@@ -30,49 +30,39 @@ Detection results:
 - Materials: RQ Brief + Methodology Blueprint + Bibliography (22 references) + Synthesis Report
 - Goal: Full workflow
 - Entry point: Stage 2 (WRITE)
-- User preference: First time writing a paper --> recommend guided mode
+- User preference: First time writing a paper --> FULL checkpoints, each stage explained
 
-Recommended Pipeline Configuration:
+Pipeline Configuration:
 
-  Stage 2 WRITE:    plan     -- Chapter-by-chapter guidance to plan your paper structure
+  Stage 2 WRITE:    /paper full -- the complete draft from your research materials
   Stage 2.5 INTEGRITY: Mode 1 (pre-review) -- mandatory, cannot be skipped
-  Stage 3 REVIEW:   full     -- Complete 4-person review, simulating real submission experience
-  Stage 4 REVISE:   revision -- Item-by-item revision based on review comments
+  Stage 3 REVIEW:   /paper-review-panel full -- five reviewers, simulating real submission experience
+  Stage 4 REVISE:   /paper revision -- item-by-item revision based on review comments
+  Stage 3' RE-REVIEW: /paper-review-panel re-review -- checks the revision against the Revision Roadmap
   Stage 4.5 FINAL INTEGRITY: final check -- Verify the final version before delivery
 
-You can adjust any stage's mode at any time. Ready to begin?
+The run of each stage is fixed. At each checkpoint you can change the
+settings of the next step within these runs, or pause. Ready to begin?
 ```
 
 **User**: Yes, let's start!
 
 ---
 
-### Stage 2: WRITE (plan, then full mode)
+### Stage 2: WRITE (/paper full)
 
 ```
-Entering Stage 2 (WRITE) -- invoking /paper plan through the Skill tool
+Entering Stage 2 (WRITE) -- invoking /paper full through the Skill tool
 
 handoff materials: RQ Brief + Bibliography + Synthesis
 the intake agent detected the research materials, skipping redundant Phase 0 questions
-Launching the Socratic mentor (plan mode)...
 ```
 
-**Plan Mode Mentor**: I've reviewed your RQ Brief. The research question is clear. Let's plan the paper chapter by chapter. Starting with the Introduction.
-
-What sense of urgency do you want the reader to feel? In other words, why should the reader read this paper right now?
-
-**User**: Because the declining birthrate is already happening; many universities might close within 5 years.
-
-**Plan Mode Mentor**: Good. Your Introduction opening could use a specific number to convey urgency. Do you know how many private universities have closed or suspended enrollment in the past 5 years?
-
-*(Plan mode dialogue continues for 12 rounds, covering 6 chapters...)*
-
-**Plan Mode Complete: switch to full mode**
+*(The intake of `/paper full` asks its own questions at its own stops: the paper type, the target journal, the citation format, the language and the bilingual abstract. The user answers and confirms the configuration.)*
 
 ```
-Chapter Plan complete. Invoking /paper full through the Skill tool to write the complete draft.
-
-the draft writer writing based on Chapter Plan...
+the structure architect writing the outline for your approval...
+the draft writer writing based on the approved outline...
 the citation compliance agent verifying citations...
 the abstract agent writing bilingual abstract...
 ```
@@ -98,8 +88,8 @@ Deliverables:
   - References: 22 entries (APA 7.0)
 
 Next step is Stage 2.5 (INTEGRITY), which cannot be skipped.
-After it passes, Stage 3 (REVIEW) uses full mode, simulating a complete
-review process with 4 reviewers.
+After it passes, Stage 3 (REVIEW) runs /paper-review-panel full, simulating a
+complete review process with five reviewers.
 After review, an Editorial Decision and Revision Roadmap will be produced.
 
 Continue?
@@ -145,7 +135,7 @@ Issues: SERIOUS 0 / MEDIUM 0 / MINOR 0
 ```
 Stage 2.5 (INTEGRITY) PASS. The paper is cleared for review.
 
-Start Stage 3 (REVIEW) full mode?
+Start Stage 3 (REVIEW)?
 
 Progress: [v]Writing -> [v]Integrity -> [..]Review -> [ ]Revision -> [ ]Final integrity
 ```
@@ -154,7 +144,7 @@ Progress: [v]Writing -> [v]Integrity -> [..]Review -> [ ]Revision -> [ ]Final in
 
 ---
 
-### Stage 3: REVIEW (full mode)
+### Stage 3: REVIEW (/paper-review-panel full)
 
 ```
 Entering Stage 3 (REVIEW) -- invoking /paper-review-panel full through the Skill tool
@@ -170,32 +160,33 @@ Research paradigm: Pragmatism (mixed methods)
 Method type: Quantitative (secondary data analysis) + Qualitative (interviews)
 
 Reviewer Configuration:
-  EIC:        Journal of Education Policy Editor, specializing in economics of education
-  Reviewer 1: Quantitative methods expert, specializing in education statistics and large database analysis
-  Reviewer 2: Higher education management scholar, specializing in university governance and enrollment policy
-  Reviewer 3: Demographer, specializing in declining birthrate and labor market, interdisciplinary perspective
+  EIC:                  Journal of Education Policy Editor, specializing in economics of education
+  Methodology reviewer: Quantitative methods expert, specializing in education statistics and large database analysis
+  Domain reviewer:      Higher education management scholar, specializing in university governance and enrollment policy
+  Perspective reviewer: Demographer, specializing in declining birthrate and labor market, interdisciplinary perspective
+  Devil's Advocate:     Challenges the paper's core argument
 ```
 
-*(4 reviewers review in parallel... the editorial synthesizer compiles...)*
+*(The user confirms the reviewer configuration. The five reviewers review in parallel... the editorial synthesizer compiles...)*
 
 **Editorial Decision: Major Revision**
 
 ```
 Required Revisions:
 R1: [Methodology] Quantitative analysis lacks control variables (school size, geographic location)
-    -- Reviewer 1, Priority 1
+    -- Methodology reviewer, Priority 1
 R2: [Literature]  Literature review missing the most recent 2024-2026 studies
-    -- Reviewer 2, Priority 1
+    -- Domain reviewer, Priority 1
 R3: [Results]     Qualitative interviews with only 3 schools, sample representativeness insufficient
-    -- Reviewer 1 & 3 consensus, Priority 2
+    -- Methodology & Perspective reviewers consensus, Priority 2
 R4: [Discussion]  Conclusions too general, need to differentiate between general/technical-vocational universities
-    -- Reviewer 2, Priority 2
+    -- Domain reviewer, Priority 2
 R5: [Introduction] Research gap argumentation not sharp enough, needs more specific data support
     -- EIC, Priority 3
 ```
 
 **Stage 3 Deliverables:**
-- 4 independent review reports
+- 5 independent review reports
 - Editorial Decision Letter: Major Revision
 - Revision Roadmap (5 required items + 3 suggested modifications)
 
@@ -264,7 +255,7 @@ Revision results:
 - Response to Reviewers completed
 
 Next step is Stage 3' (RE-REVIEW).
-Using re-review mode to confirm revision quality.
+/paper-review-panel re-review checks each Revision Roadmap item against the revision.
 This is revision cycle 1 (max 2 cycles).
 
 Submit for re-review?
@@ -282,8 +273,8 @@ Progress: [v]Writing -> [v]Integrity -> [v]Review -> [v]Revision -> [..]Re-revie
 Entering Stage 3' (RE-REVIEW) -- Loop 1/2
 
 Invoking /paper-review-panel re-review through the Skill tool...
-Passing Revised Draft + Response to Reviewers...
-4 reviewers re-reviewing revision quality...
+Passing Revised Draft + Revision Roadmap + Response to Reviewers...
+the field analyst, the EIC and the editorial synthesizer verifying each roadmap item...
 ```
 
 **Editorial Decision: Minor Revision**
@@ -362,7 +353,7 @@ Ethics check: CLEARED, dual-use level None
 +-----------------------------------------+
 
   Stage 2 WRITE       [v] Completed
-    Mode: plan -> full
+    Run: /paper full
     Outputs: Paper Draft
              (5,200 words, IMRaD)
 
@@ -370,7 +361,7 @@ Ethics check: CLEARED, dual-use level None
     Issues: 0
 
   Stage 3 REVIEW      [v] Completed
-    Mode: full
+    Run: /paper-review-panel full
     Decision: Major Revision
     Required Revisions: 5 items
 
@@ -392,7 +383,7 @@ Ethics check: CLEARED, dual-use level None
 |   [v] Bibliography (30 sources)         |
 |   [v] Synthesis Report                  |
 |   [v] Paper Draft                       |
-|   [v] Review Reports (4)               |
+|   [v] Review Reports (5)               |
 |   [v] Revision Roadmap                  |
 |   [v] Revised Draft                     |
 |   [v] Response to Reviewers             |

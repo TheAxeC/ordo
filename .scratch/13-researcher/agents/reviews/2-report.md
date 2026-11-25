@@ -271,3 +271,144 @@ Differences of `skills/academic/researcher/SKILL.md` from the source's `SKILL.md
 
 - The brief's "Paths this step writes" gives `README.md lines 9-176`. Two inserted lines move the old line 176 to 179; `git diff -U0 README.md` gives the hunks `-33,0 +34`, `-37 +38`, `-77 +78`, `-86,0 +88,2`, `-165 +168` and `-176 +179`, all within the old lines 9 to 176.
 - Nothing else.
+
+## Repair round 1
+
+All 14 rulings are carried out, and nothing of the round is handed back.
+
+### Per ruling
+
+1. Material Passport. `skills/academic/researcher/SKILL.md`:
+   - Steps 3 lines 80 to 82: write `material-passport.yaml` in the run folder in the form of Schema 9; for a draft that enters midway, run "Mid-Entry Material Passport Check" and write what it finds.
+   - Steps 4 lines 87 and 88: copy `experiment_intake_declaration` and `experiment_provenance[]` into the passport.
+   - Steps 5: the midway bullet shows the result of that check.
+   - manuscript item 2, lines 121 and 122: check the version label, as step 3 of "Schema validation step" says, and pass on the path of the passport.
+   - New manuscript item 3, lines 139 to 143: when a stage ends, write `version_label`, `origin_date`, `upstream_dependencies` and `verification_status`, and carry the aggregates forward.
+   - "The integrity check" items 1 and 2 (lines 205 and 212 to 214): both agents get the path of the passport, and `compliance_history[]` is appended to it.
+   - Item 3 (line 216): a check that passed sets `VERIFIED` and `integrity_pass_date`.
+   - Rules: version labels in the passport (line 342), and the passport is in the list of the run folder's files (line 344).
+2. Disclosure addendum. `SKILL.md`, "The integrity check" item 5 (lines 233 to 235):
+   - The session starts the compliance agent again with the override and its rationale, as the Override Ladder gives it.
+   - The report goes to `compliance-<stage>-<n>-override.md` and is appended to `compliance_history[]`.
+   - The addendum goes to `disclosure-addendum-<stage>-<n>.md`, and `/paper revision` is invoked with that file.
+   - The Stops row "The compliance block" says the same.
+   - `references/compliance_checkpoint_protocol.md` line 95 says the same, and "auto-injects" is gone from that page.
+3. PASS WITH NOTES at Stage 4.5.
+   - In `SKILL.md`: manuscript item 12 (line 190); "The integrity check" 4 (lines 226 and 227, where a run of `integrity` still ends on PASS WITH NOTES with the notes shown) and 6 (its Done line, 245); the Stops rows "A FAIL of an integrity check" and "The third correction round failed".
+   - Further line corrected with it: `references/pipeline_state_machine.md`, row "Stage 4.5 to Stage 4.5 (retry)", precondition "FAIL, or PASS WITH NOTES".
+4. Stage 3' for the entry with a comments file.
+   - `SKILL.md` manuscript item 7: the structured comments are written to `external-comments.md`, which is the comments file of `/paper revision` (lines 159 and 160).
+   - New item 9 (lines 174 to 178): the session's own check under "Step 4: Self-Verification (Completeness Check)". It invokes no re-review, reassesses no quality, issues no Editorial Decision and raises no revision request. A new stop, "The checkpoint after the completeness check", shows the result. A comment left unanswered goes to "An incomplete revision", whose When cell now names item 9. The run then goes on to Stage 4.5.
+   - Item 8 is headed "after a Stage 3", and the item 8 bullet that compared the comments in hand was removed.
+   - Rules list `external-comments.md`.
+   - Further lines corrected with it: `references/pipeline_state_machine.md`. The row "checkpoint to Stage 3'" is limited to "after a Stage 3", and two rows are added for the completeness check and its checkpoint.
+5. CONDITIONAL ethics verdict. `SKILL.md`:
+   - "The integrity check" 4 (line 224): a CONDITIONAL verdict is a stop.
+   - Item 5 (lines 236 and 237): each issue with its exact fix goes to `/paper revision` in a correction round counted with the others. A fix that needs a fact only the user has is named in the final message and addressed before the run ends.
+   - New Stops row "A CONDITIONAL ethics verdict" (line 302).
+6. Strategic coaching. New Stops row "The strategic coaching" (line 288): the questions of "Step 2", at most 8 rounds; "just fix it" skips it.
+7. 4 or more continues. `SKILL.md` "Checkpoints" lines 256 and 257 follow `agents/pipeline_orchestrator_agent.md`: SLIM with the awareness prompt of "User Engagement Tracking", and SLIM after 2 or more. This is now a line of Deviations. The judgment call of the first report on this point no longer holds.
+8. Failure-mode confirm and backfill.
+   - `SKILL.md` "The integrity check" item 5 (lines 230 and 231): a confirmed flag goes to `/paper revision` with the flagged modes and their evidence, in `failure-modes-<stage>-<n>.md`, and the check runs again as a correction round.
+   - Backfill: the user's material goes to `/paper revision` in `backfill-<stage>-<n>.md`, and the compliance agent runs again.
+   - Choice (b), manual handling: the user's own edit, then the compliance agent runs again. The Rules bullet now reads "Every change the run makes to the manuscript".
+   - The Stops rows "The failure-mode block" and "The compliance block" say so.
+   - `references/ai_research_failure_modes.md` line 138 reads "Confirm the flag: the passage is fixed by `/paper revision`, given the flag and its evidence as its comments, and the check runs again".
+   - `references/compliance_checkpoint_protocol.md` lines 55 and 56, choice (a), read "give the missing material; it reaches the manuscript through /paper revision, and the compliance agent runs again". None of this text depends on a stage, so it holds in `integrity` alone.
+9. `agents/integrity_verification_agent.md` line 500: "produce correction list and hand it to the session, which sends it to `/paper revision` as its comments, then re-verify corrected items".
+10. `agents/pipeline_orchestrator_agent.md` line 67: "At each FULL or MANDATORY checkpoint you can change the settings of the next step, within these runs, or pause."
+11. Examples.
+   - `examples/full_pipeline_example.md`:
+     - The configuration (lines 33 to 45) gives the four runs and the adjustment sentence.
+     - Stage 2 is `/paper full`, with its intake and outline approval at its own stops. The plan-mode dialogue is removed.
+     - Stage 3 has five reviewers, named Methodology, Domain, Perspective and Devil's Advocate.
+     - The re-review is run by the field analyst, the EIC and the editorial synthesizer, as `paper-review-panel` gives it.
+     - The status box gives "Run: /paper full" and "Run: /paper-review-panel full", and "Review Reports (5)".
+   - `examples/mid_entry_example.md`:
+     - The review-mode question is replaced by a description of the runs.
+     - Stage 3 is `/paper-review-panel full`, with the Reviewer Configuration Card, the Editorial Decision Major Revision with the Revision Roadmap C1 to C3, and the coaching skipped with "just fix it".
+     - The quick-mode transition and "Update Configuration" are replaced by the MANDATORY Stage 3 checkpoint. This covers the old lines 181 to 209, 203 included.
+     - Old line 261 now gives the re-review.
+     - Old lines 274 to 279: Stage 3' is `/paper-review-panel re-review`, with a Verification Review Report (R&R Traceability Matrix) in place of four reviewer reports.
+     - The offer of "a formal Stage 4 revision before another review" (old line 348) is removed. The Minor items go to one `/paper revision` run, with no further review.
+     - The status box (old lines 404, 409 and 420).
+   - `grep -n -iE 'quick|guided|socratic|4 reviewers|4-person|Reviewer [0-9]|full mode|any stage'` over the three examples printed nothing.
+12. Minor decision at Stage 3'.
+   - `SKILL.md`:
+     - item 8: the decision line, with Minor to item 10;
+     - new item 10 (lines 180 to 183): `minor-revision-comments.md`, one `/paper revision` run, then Stage 4.5;
+     - the Stops row "The re-review decision";
+     - the Rules revision-loop bullet;
+     - the Steps 5 caps (now also with the 8 coaching rounds of an external review);
+     - the run-folder list in Rules.
+   - `references/pipeline_state_machine.md`: the Accept/Minor row is split into an Accept row and a Minor row with the one revision run.
+   - The figure has the node "/paper revision: the minor items of a Minor decision, once".
+   - This is now a line of Deviations.
+13. Stage 3' scores, as ruled after the rewrite (option (a)). In `skills/academic/paper-review-panel/`:
+   - `references/re_review_mode_protocol.md`:
+     - "How It Works" Phase 2 reads "Editorial Synthesis -> Dimension Scores + New Decision";
+     - a new section "Dimension Scores" says the editorial synthesizer scores the 7 dimensions 0-100 on `references/quality_rubrics.md`, in the table of `templates/peer_review_report_template.md`, "Dimension Scores", with the Weighted Average;
+     - "Re-Review Output Format" gains that table under "## Dimension Scores", with the same dimension names.
+   - `SKILL.md`:
+     - the version is 1.1.0;
+     - the modes table row and the **Output** line name the dimension scores;
+     - re-review item 1 says the editorial synthesizer scores, and its Done line;
+     - the reference table rows of `quality_rubrics.md` (now also used by the editorial synthesizer in re-review) and of `re_review_mode_protocol.md`.
+   - `agents/editorial_synthesizer_agent.md` has a new section "In re-review".
+   - The panel has no template or example of the re-review report: `grep -rn -i 're-review'` over its `templates/` and `examples/` finds only the two decision lines of the peer review template.
+   - README: the `paper-review-panel` row now says re-review "scores it on the seven dimensions of the rubric".
+   - The figure `paper-review-panel.svg` says nothing of what re-review writes, so it is unchanged (`git status` lists no change to it).
+   - In `researcher`, `SKILL.md` manuscript item 8 (line 168) reads the Stage 3' scores from the "Dimension Scores" of the re-review report and never makes a score up. The sentence for a report without scores is gone: `grep -n 'no dimension scores' skills/academic/researcher/SKILL.md` prints nothing.
+14. Stage 3 baseline (Open item F, option (a)). In `skills/academic/paper-review-panel/`, version still 1.1.0:
+   - `templates/editorial_decision_template.md`: a new section "## Dimension Scores *" under the Decision, with the table of 7 dimensions and the Weighted Average, the same as the re-review's.
+   - `agents/editorial_synthesizer_agent.md`:
+     - the Phase Boundary names the Dimension Scores in the deliverable;
+     - the Reviewer Summary Matrix of Step 1a gains seven score rows, filled from each reviewer's 0-100 "Dimension Scores" table (`templates/peer_review_report_template.md`);
+     - a new "Step 4a: Dimension Scores" says the synthesizer scores each dimension on the rubric from those rows and the resolutions of Step 3, never as a plain mean, gives the Weighted Average, and leaves the Decision unchanged;
+     - the "Output Format" carries the table under the Decision;
+     - the Quality Gates gain a line for the table;
+     - "In re-review" now points at the Editorial Decision's table.
+   - The matrix of the Sprint Contract Synthesizer Protocol holds `block | warn | pass` values, not 0-100 scores, and its Forbidden operations forbid averaging within a dimension. So the 0-100 scores are taken from the Reviewer Summary Matrix of the general Synthesis Protocol, the other matrix the synthesizer builds, and Step 4a forbids a plain mean.
+   - `references/re_review_mode_protocol.md`, "Dimension Scores": the re-review scores in the form of the Editorial Decision of the full mode.
+   - `SKILL.md`:
+     - full item 4 names the scores in the Editorial Decision Letter;
+     - the modes row `full` reads "Editorial Decision with dimension scores";
+     - the reference rows of `quality_rubrics.md` and `editorial_decision_template.md` say the same.
+   - In `researcher`:
+     - `SKILL.md` manuscript item 6 (lines 154 and 155) reads the baseline from the "Dimension Scores" of the Editorial Decision and writes it to `state.json`;
+     - item 8 (line 169) takes the Stage 3 scores from that baseline.
+   - `references/score_trajectory_protocol.md` lines 20 and 24 say where both sets of scores stand: the Editorial Decision, and the Verification Review Report.
+   - `references/handoff_schemas.md` Schema 6 gains the field `dimension_scores` (line 365) with both places.
+   - The README row and the figure label of `paper-review-panel` name "the Editorial Decision and the Revision Roadmap" and stay true, so they are unchanged.
+
+### Figure and README
+
+- `docs/figures/gen_figures.py`: `_integrity_check` takes the FAIL label per stage ("FAIL" at 2.5, "FAIL, or PASS WITH NOTES" at 4.5). Its block node reads "A failure-mode block, a compliance block, or a BLOCKED or CONDITIONAL ethics verdict", on the edges "a stop of the check" and "a fix, a backfill or an addendum", with "not passed after 3 rounds". The node for the minor items is added. The note gives the completeness check for the comments entry and that the session writes the Material Passport.
+- `README.md` line 88: the alt text follows these boxes.
+
+### Checks, run after the round
+
+- Character set: `(git diff --name-only; git ls-files --others --exclude-standard) | sort -u | tr '\n' '\0' | xargs -0 perl -CSD -ne '...'` printed nothing, `perl exit 0`.
+- `LC_ALL=C grep -n '[^ -~]' skills/academic/researcher/SKILL.md`: printed nothing, exit 1.
+- `python3 docs/figures/gen_figures.py`: exit 0, `wrote docs/figures/researcher.svg (36532 bytes)`. The other figures are byte-stable: `git status --short docs/figures` lists only `gen_figures.py`, `researcher.svg` and the two files of `academic-pipeline/`.
+- `python3 docs/figures/academic-pipeline/gen_academic_pipeline.py`: exit 0, `wrote docs/figures/academic-pipeline/academic-pipeline.svg (22636 bytes)`.
+- `git status --short`: the paths of the brief and of this round's list, plus the two ledger files of `.scratch/13-researcher/agents/` (this report and the round's brief).
+- Ruling 14 was checked with the same commands after its edits: perl exit 0, `LC_ALL=C grep` exit 1, `gen_figures.py` exit 0 with no figure changed beyond those above, 3 semicolons.
+- Descriptions: `1010 {'version': '1.0.0'} skills/academic/researcher/SKILL.md`, `522 {'version': '1.1.0'} skills/academic/paper-review-panel/SKILL.md`, `994 {'version': '5.0.1'} skills/academic/paper/SKILL.md`.
+- Headings: `## Quick start`, `## Use instead`, `## What it reads`, `## Steps`, `## The integrity check`, `## Checkpoints`, `## Stops`, `## Anti-patterns`, `## Rules`.
+- Exclusion grep: nothing, exit 1.
+- `SKILL.md` has 346 lines and 7339 words, with 3 semicolons (`grep -c ';'`).
+- Pointers from the copied pages: `score_trajectory_protocol.md:36` and `handoff_schemas.md:298` name manuscript item 8 (the re-review); `reinforcement_content.md:3` item 2 (the transition); `compliance_checkpoint_protocol.md:10` "The integrity check" items 2, 4 and 5.
+
+### Added lines of Deviations
+
+| Source has | `researcher` has | Reason | Ruled by |
+|---|---|---|---|
+| the Material Passport attached to each artifact by the orchestrator agent | `material-passport.yaml` in the run folder, written by the session at the start, the entry, each stage's end and each compliance report | the session holds the orchestrator's role and writes the run's records | D6; round 1 ruling 1 |
+| a compliance override's addendum auto-injected into the manuscript | the compliance agent started again with the override, its addendum written to a file and given to `/paper revision` | every change goes through `paper` | D5; brief decision 6; round 1 ruling 2 |
+| the external review's Stage 3' run by the reviewer in re-review mode with adjustments | the session's own completeness check of "Step 4", no re-review invoked, with a MANDATORY checkpoint | that step reassesses no quality and issues no decision | round 1 ruling 4 |
+| SKILL.md Checkpoint Rule 5: a FULL checkpoint after 4 or more continues | SLIM with the awareness prompt, as the orchestrator page gives it | `SKILL.md` holds checkpoints as that page gives them | round 1 ruling 7 |
+| a confirmed failure-mode flag and a compliance backfill return to Stage 2 | the fix or the material goes to `/paper revision` and the check or the compliance agent runs again | every change goes through `paper`; Stage 2 is not re-run | D5; round 1 ruling 8 |
+| the minor items of a Minor decision at Stage 3' handled in the finalizing stage | one `/paper revision` run for those items before Stage 4.5 | the finalizing stage is left out | D16; round 1 ruling 12 |
+| (`paper-review-panel`) re-review without dimension scores | the editorial synthesizer's 7 dimension scores and Weighted Average in the Verification Review Report | the deltas of Stage 3' need them | Open item E, option (a); round 1 ruling 13 |
+| (`paper-review-panel`) an Editorial Decision without dimension scores | the editorial synthesizer's 7 dimension scores and Weighted Average in the Editorial Decision of the full mode | the deltas of Stage 3' need a baseline scored by the same role | Open item F, option (a); round 1 ruling 14 |
