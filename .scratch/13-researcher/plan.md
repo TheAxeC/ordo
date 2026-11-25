@@ -66,6 +66,18 @@ one `novelty` run on an idea you name, its page read by you, each work it cites 
   - Option (b): the novelty page beside the idea file, or in a run folder `researcher-runs/novelty-<date>/`. Con: D9 puts such material in `notes/`, and a run folder holds a run's state, which `novelty` does not have.
   - Recommendation: (a). Neither option is the cheaper one.
 
+## Step 4, Step 0
+
+- Open item H (2026-11-25), closed under self-rule as C150. Step 4 writes the Quick start lines of `research`, its adopt mode and `full`, and no ruling gives them. Step 3's lines (C149) take a project folder first.
+  - Option (a), recommended: `/researcher research <project folder>`, which starts a new project at Frame, the default layout made when the folder is empty or missing, or goes on with a project whose README says `research` stands at a stage; `/researcher research adopt <project folder>`, the adopt mode, for a project underway that `research` did not start; `/researcher full <project folder> [<sketch file>]`, `idea` with the sketch, then the modes `full` shows and you confirm. Polling, the manual or automatic setting and a further paper are asked in words, since they are settings of the run that the README records. Pro: the form of the four lines that stand; `adopt` read as a mode of `research`, as the goal calls it. Con: none found.
+  - Option (b): a mode word of its own, `/researcher adopt <project folder>`. Con: the goal and ADR 0053 call it the adopt mode of `research`, and a fifth mode word hides that it runs `research`'s stages.
+  - Recommendation: (a). Neither option is the cheaper one.
+
+- Open item I (2026-11-25), closed under self-rule as C151. Ruling D28 puts a further paper of a project in `manuscript-<name>/`, and `researcher`'s `manuscript` mode writes a paper through `/paper full <project folder>`, which always writes `<project folder>/manuscript/` (`skills/academic/paper/SKILL.md`, "What it reads" 5, and seven more places). So no command writes a further paper where D28 puts it.
+  - Option (a), recommended: `paper`'s full, plan and outline-only modes take an optional `--manuscript <name>`, read as the folder `<project folder>/manuscript-<name>/` in place of `<project folder>/manuscript/` in every place that names it, and `/researcher manuscript <project folder> --manuscript <name>` passes it on; with no `--manuscript` every run is as it is. `paper`'s version stays 5.0.1, raised once in this plan. Pro: D28's layout works with one argument, and every landed run is unchanged. Con: `paper` gains an argument; it is a change of this repository's own folder rule of `paper`, which academic-paper does not have.
+  - Option (b): a further paper only as a new project that copies the code it needs, D28's optional form. Con: D28 rules (a) as the form, with (b) optional; the lazy option, since it leaves the ruled form undone.
+  - Recommendation: (a). (b) is the lazy option.
+
 ## Could run in parallel
 
 Independent of each other; the standing rule of one agent at a time still serialises them unless `plan.yaml`'s `workers_at_once` allows more.
@@ -117,6 +129,8 @@ Independent of each other; the standing rule of one agent at a time still serial
 - Open item E (2026-11-25): (a), the re-review of `paper-review-panel` gains the seven dimension scores and the overall score on the 0-100 rubric in its output, given by the editorial synthesizer as in the full mode, and `researcher` reads them; the lazy option was (b), leaving the score deltas and the two stops out of `researcher` (the user).
 - Open item F (2026-11-25): the full mode's editorial synthesizer of `paper-review-panel` also writes the seven dimension scores and the Weighted Average into the Editorial Decision, as the baseline of the deltas ruling E asks for; which lets repair round 1 of step 2 end (self-rule).
 - Open item G (2026-11-25): the command lines are `/researcher novelty <idea> [<project folder>]` and `/researcher idea <project folder> [<sketch file>]`, and a novelty page is `notes/novelty-<YYYY-MM-DD>.md` in the project folder; which lets step 3's brief be written (self-rule).
+- Open item H (2026-11-25): the command lines are `/researcher research <project folder>`, `/researcher research adopt <project folder>` and `/researcher full <project folder> [<sketch file>]`, polling, the manual or automatic setting and a further paper asked in words; which lets step 4's brief be written (self-rule).
+- Open item I (2026-11-25): `paper`'s full, plan and outline-only modes take an optional `--manuscript <name>`, the folder `<project folder>/manuscript-<name>/` in place of `<project folder>/manuscript/`, and `/researcher manuscript <project folder> --manuscript <name>` passes it on; which lets ruling D28's further paper be written (self-rule).
 
 ## Agents
 

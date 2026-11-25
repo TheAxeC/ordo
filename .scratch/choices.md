@@ -2,7 +2,7 @@
 
 Each choice the orchestrator took under self-rule waits here for the user's review, grouped by roadmap entry. The user agrees with a choice by typing `C<n> Agree`, or replaces it by typing `C<n> => <ruling>`, in any session on the repository. A reviewed choice leaves this file.
 
-Last number: C149
+Last number: C151
 
 # Entry 2.I Several plans in one session
 
@@ -839,3 +839,25 @@ Step 3 writes the Quick start lines of `novelty` and `idea` and names the file e
 Taken: (a)
 Booked: `.scratch/13-researcher/plan.md:119` (Open item G)
 Builds on it: step 3
+
+## C150. The command lines of `research`, its adopt mode and `full` (2026-11-25)
+
+Step 4 writes the Quick start lines of `research`, its adopt mode and `full`, and no ruling gives them. Step 3's lines (C149) take a project folder first.
+  - Option (a), recommended: `/researcher research <project folder>`, which starts a new project at Frame, the default layout made when the folder is empty or missing, or goes on with a project whose README says `research` stands at a stage; `/researcher research adopt <project folder>`, the adopt mode, for a project underway that `research` did not start; `/researcher full <project folder> [<sketch file>]`, `idea` with the sketch, then the modes `full` shows and you confirm. Polling, the manual or automatic setting and a further paper are asked in words, since they are settings of the run that the README records. Pro: the form of the four lines that stand; `adopt` read as a mode of `research`, as the goal calls it. Con: none found.
+  - Option (b): a mode word of its own, `/researcher adopt <project folder>`. Con: the goal and ADR 0053 call it the adopt mode of `research`, and a fifth mode word hides that it runs `research`'s stages.
+  - Recommendation: (a). Neither option is the cheaper one.
+
+Taken: (a)
+Booked: `.scratch/13-researcher/plan.md:127` (Open item H)
+Builds on it: step 4
+
+## C151. Where a further paper of a project is written (2026-11-25)
+
+Ruling D28 puts a further paper of a project in `manuscript-<name>/`, and `researcher`'s `manuscript` mode writes a paper through `/paper full <project folder>`, which always writes `<project folder>/manuscript/` (`skills/academic/paper/SKILL.md`, "What it reads" 5, and seven more places). So no command writes a further paper where D28 puts it.
+  - Option (a), recommended: `paper`'s full, plan and outline-only modes take an optional `--manuscript <name>`, read as the folder `<project folder>/manuscript-<name>/` in place of `<project folder>/manuscript/` in every place that names it, and `/researcher manuscript <project folder> --manuscript <name>` passes it on; with no `--manuscript` every run is as it is. `paper`'s version stays 5.0.1, raised once in this plan. Pro: D28's layout works with one argument, and every landed run is unchanged. Con: `paper` gains an argument; it is a change of this repository's own folder rule of `paper`, which academic-paper does not have.
+  - Option (b): a further paper only as a new project that copies the code it needs, D28's optional form. Con: D28 rules (a) as the form, with (b) optional; the lazy option, since it leaves the ruled form undone.
+  - Recommendation: (a). (b) is the lazy option.
+
+Taken: (a)
+Booked: `.scratch/13-researcher/plan.md:133` (Open item I)
+Builds on it: step 4
