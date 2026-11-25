@@ -59,20 +59,6 @@ dispatch:                    # one entry per step in flight, written by /spec, s
   landing: not-started
   round: 0
   shared_paths: "README.md, with step 5 of this plan: this step changes line 263 and step 5 line 22, so the cherry-pick merges them without a hand edit"
-- step: 5
-  session_id: a6b13ac6347fbb68a (claude-opus-5-5)
-  executor: agent
-  worker: claude:opus
-  worktree: .agents/worktrees/13-researcher-5
-  base: 6dacf2b
-  launched: 2026-11-25
-  report: .scratch/13-researcher/agents/reviews/5-report.md
-  builder_usage: 166884 tokens, 21 tool uses, 342 s
-  reviewer_report: .scratch/13-researcher/agents/reviews/5-refuter.md (a0f7721f21de23fac, claude-opus-5-5, 151881 tokens, 31 tool uses, 351 s)
-  brief_check: .scratch/13-researcher/agents/reviews/5-brief-check.md (af1105b279c18c7ed, claude-opus-5-5, 159691 tokens, 22 tool uses, 267 s)
-  landing: not-started
-  round: 1
-  shared_paths: "README.md, with step 1 of this plan: step 1 changes line 263 and this step line 22, so the cherry-pick merges them without a hand edit"
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled or, under `self_rule: on`, until the orchestrator closes it as `plan-orchestration`'s `references/self-rule.md`, "Closing an open item", says)
@@ -111,7 +97,7 @@ A finding that is neither closed in the repair rounds nor fixed at landing is an
 
 ## Current position (rewritten before every step commit of this plan)
 
-- 2026-11-25. Nothing of the plan has landed. Steps 1 and 5 are in flight, each with its builder running in its worktree; the dispatch block names them.
-- Verified: `git worktree list` printed the worktrees `13-researcher-1` at cc3965a and `13-researcher-5` at 6dacf2b.
+- 2026-11-25. Step 5 has landed. Step 1 is in flight, its builder running in its worktree; the dispatch block names it.
+- Verified: `templates/checks.sh` on this file printed `checks: 16 commands passed` on main with step 5 staged.
 - Roadmap entry 13 (researcher). Plan step 1 of 7: the copied pages. Next: step 2, the modes `integrity` and `manuscript`.
 - Open on the user's side: the review of the choices C144 and C145 in `.scratch/choices.md`, which blocks nothing.

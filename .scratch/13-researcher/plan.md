@@ -24,7 +24,7 @@ one `novelty` run on an idea you name, its page read by you, each work it cites 
 - 2 the modes `integrity` and `manuscript`: `skills/academic/researcher/SKILL.md` carries academic-pipeline's `SKILL.md` into the sections of `docs/dev/skill-layout.md` with the two modes as rulings D1 to D6, D16, D17, D20 and D31 and ADR 0052 give them, the row of `researcher` stands in `README.md`, its figure under `docs/figures/`, and the academic-pipeline figure names what `researcher` holds; check: `python3 docs/figures/gen_figures.py` runs from the repository root, and the skill's text is read against ADR 0052 item by item, with `deviations.md` extended by each difference of `SKILL.md` (1 commit) (approved)
 - 3 the modes `novelty` and `idea`: `SKILL.md` and its `references/` hold `novelty` as the goal gives it, made by the session with no agent started, a work confirmed as ruling D14 says, and `idea` as ruling D26 and ADR 0054 give it; check: the text is read against ADR 0054 item by item and against each sentence of the goal on the two modes (1 commit) (approved)
 - 4 the modes `research`, with its adopt mode, and `full`: `SKILL.md`, its `references/` and its `agents/` hold the six stages with their completion criteria and loops, the campaigns, the brief and the reviewer of a builder, Frame with the limits and the choice of the dataset, the diagnosis and the manual or automatic setting, the rules for SLURM, the one command, the README as entry file and the default layout, several manuscripts, the record of the experiments, the adopt mode, and `full`, as rulings D7 to D13 and D25 to D31 and ADRs 0053 and 0054 give them; check: a fresh agent reads the skill once and lists, for each sentence of the goal on `idea`, `research`, its adopt mode and `full` and for each of the four rules, the step of the skill that carries it, or "none", and the list holds no "none" (1 commit) (approved)
-- 5 `ordo-help` covers every skill: `/ordo-help skills` prints per skill one line on what it is for and then its Quick start block, and `/ordo-help <a sentence on what the user wants to do>` names the skill, the mode and the command, recognised as ruling D33 says, with the row of `ordo-help` in `README.md` saying so; check: the skill's text is read against rulings D15 and D33 (1 commit) (approved)
+- ✅ 5 `ordo-help` covers every skill: `/ordo-help skills` prints per skill one line on what it is for and then its Quick start block, and `/ordo-help <a sentence on what the user wants to do>` names the skill, the mode and the command, recognised as ruling D33 says, with the row of `ordo-help` in `README.md` saying so; check: the skill's text is read against rulings D15 and D33 (1 commit) (approved)
 - 6 the gate's runs and readings, on a release candidate tagged and pinned on the user's word, each run made by a separate agent that invokes the installed skill, its stops answered by the orchestrator: one `/researcher novelty` run on an idea the user names, each work it cites confirmed as the gate says; one run of `/ordo-help skills`, read against `ls skills/*/`, and one run of `/ordo-help` with a sentence the user names; the user reads the novelty page, the two outputs, the list of step 1's differences, the list of step 4, and the text of the `idea` mode, the `research` mode, its adopt mode and the `full` mode; check: the user reads each of them (1 commit; orchestrator, no agent) (approved)
 - 7 the closing: the closing report written (the cost script's output, or that the plan started no agent), the roadmap entry ticked with the gate's output, this folder moved to the archive (orchestrator, no agent) (approved)
 
@@ -94,7 +94,22 @@ Each agent a plan skill started for this plan has one bullet, with its agent id,
 - a95e2aa1f07c9faf8: grill lookup, claude-opus-5-5
 - a0d372b5be59b285c: grill lookup, claude-opus-5-5
 - a1b3dec8561c0aab2: grill lookup, claude-opus-5-5
+- a6b13ac6347fbb68a: builder of step 5, claude-opus-5-5
+- af1105b279c18c7ed: brief check of step 5, claude-opus-5-5
+- a0f7721f21de23fac: reviewer of step 5, claude-opus-5-5
+- a3dcc47add2b65486: reviewer of step 5 over round 1, claude-sonnet-5-5
 
 ## Blocked, and by what
 
 - 6: the release candidate is tagged and pinned on the user's word, and the user names the idea of the novelty run and the sentence of the `/ordo-help` run.
+
+### Step 5, `ordo-help` covers every skill (landed 2026-11-25)
+
+- Landed: `skills/ordo/ordo-help/SKILL.md` at version 5.2.0 and line 22 of `README.md`, from the base 6dacf2b. `/ordo-help skills` prints per skill one line on what it is for and then its Quick start block. `/ordo-help <a sentence on what you want to do>` names at most three skills, each with its mode and the command to type. The number of an entry with no open plan, alone or followed by its title, is answered from the roadmap.
+- Premise corrections: none.
+- The builder's first report did not pass its bar: the first review found that the title of an entry with no open plan was read as an entry, against ruling D33, so `/ordo-help paper` printed that entry 5 is done. Repair round 1 carried six rulings (`agents/briefs/5-round-1.md`), and the run over it gives every item and every case as holding.
+- Fix at landing, one: the bullet on a missing `plan.yaml` or a missing required key says that the folder named alone is one that holds a `plan.yaml`, and that a word naming a folder with no `plan.yaml` is a sentence (Spec 1 of the run over round 1).
+- Findings outside the brief: none.
+- Verification on main, after the fix at landing: `checks: 16 commands passed`, printed by `templates/checks.sh` on the state file. The verify list was not changed.
+- A/B: none, the configuration names no `bench:`. Look: none, `look:` is empty.
+- Usage: builder a6b13ac6347fbb68a, 166884 tokens, 21 tool uses, 342 s, and for round 1 189423 tokens, 18 tool uses, 140 s; brief check af1105b279c18c7ed, 159691 tokens, 22 tool uses, 267 s; reviewer a0f7721f21de23fac, 151881 tokens, 31 tool uses, 351 s; reviewer over round 1 a3dcc47add2b65486, 123214 tokens, 11 tool uses, 133 s.

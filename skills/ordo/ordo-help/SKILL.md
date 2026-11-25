@@ -1,22 +1,23 @@
 ---
 name: ordo-help
-description: "Print the command sequence for running a plan step by step (open, spec, build, refute, diagnose, close, land, and the loop inside a step) with the choices awaiting review that the orchestrator took under self-rule, with no entry the position and open items of each open plan, and for the plan named, where it stands: the position, the open items, the step in flight, which of its artifacts exist, and the command that comes next. With the argument skills, print instead the name and the Quick start block of every skill in the folder that holds this skill, in folder-name order. Triggers on: ordo-help, ordo help, what do I type next, where is the plan, how does the plan loop work, which choices await my review, ordo-help skills, which skills are there, list every skill and its modes, what modes does a skill have."
+description: "Print the command sequence for running a plan step by step (open, spec, build, refute, diagnose, close, land, and the loop inside a step) with the choices awaiting review that the orchestrator took under self-rule, with no entry the position and open items of each open plan, and for the plan named, where it stands: the position, the open items, the step in flight, which of its artifacts exist, and the command that comes next. With the argument skills, print instead the name, one line on what it is for and the Quick start block of every skill in the folder that holds this skill, in folder-name order. With a sentence on what you want to do, print the skills that fit, each with its mode and the command to type. Triggers on: ordo-help, ordo help, what do I type next, where is the plan, how does the plan loop work, which choices await my review, ordo-help skills, which skills are there, list every skill and its modes, what modes does a skill have, which skill do I use for, which command do I type to."
 metadata:
-  version: "5.1.0"
+  version: "5.2.0"
 ---
 
 # Ordo help
 
-`/ordo-help` prints the command sequence for running a plan step by step and the position of each open plan, and, for a named plan, where that plan stands and the command that comes next. `/ordo-help skills` prints the name and the Quick start block of every skill in the folder that holds this skill, and nothing else.
+`/ordo-help` prints the command sequence for running a plan step by step and the position of each open plan, and, for a named plan, where that plan stands and the command that comes next, or, for the number of a roadmap entry with no open plan, what the roadmap says of it. `/ordo-help skills` prints, for every skill in the folder that holds this skill, its name, one line on what it is for and its Quick start block, and nothing else. `/ordo-help <what you want to do>` reads a sentence on what you want to do and names the skills that fit, each with its mode and the command to type.
 
 ## Quick start
 
 ```
 /ordo-help            print the sequence and the choices awaiting review, then the position and open items of each open plan
-/ordo-help <entry>    print the sequence and the choices awaiting review, then the named plan's position and the command that comes next
+/ordo-help <entry>    print the sequence and the choices awaiting review, then the named plan's position and the command that comes next; for the number of an entry with no open plan, what the roadmap says of it
 /ordo-help <folder>            the first line, for the plans of the plan.yaml in <folder>, a path from the repository root
 /ordo-help <folder>/<entry>    the second line, for a plan of the plan.yaml in <folder>
-/ordo-help skills     print each skill's name and its Quick start block, in folder-name order
+/ordo-help skills     print each skill's name, one line on what it is for and its Quick start block, in folder-name order
+/ordo-help <what you want to do>    name the skills that fit a sentence on what you want to do, such as I want to revise a paper, each with its mode and the command to type
 ```
 
 ## Use instead
@@ -31,32 +32,46 @@ metadata:
 
 ## What it reads
 
-1. The argument, read first.
-   - An argument that is exactly `skills` is the `skills` mode, before `<entry>` is matched against the roadmap or a ledger folder.
-   - Any other argument is `<entry>`, with the folder a call names in front of it, or is that folder alone ("What it reads" 4).
-2. For `/ordo-help skills`, the skills folder, found from this skill's folder after that folder is resolved to its real path.
+1. The argument, read first, by the bullets below in their order, the first that matches deciding the form.
+   - An argument that is exactly `skills` is the `skills` mode, before anything is matched against the roadmap or a ledger folder.
+   - `skills` followed by more words is a sentence on what you want to do.
+   - No argument is `/ordo-help`.
+   - A folder that holds a `plan.yaml`, named alone, is `/ordo-help <folder>`, read as "What it reads" 4 says.
+   - With no `plan.yaml` found, or with one whose required key is missing, no argument and a folder that holds a `plan.yaml`, named alone, are refused as "What it reads" 4 says, and every other argument, a word that names a folder with no `plan.yaml` included, `<folder>/<entry>` and `<project>/<entry>` included, is a sentence on what you want to do, answered with no roadmap read.
+   - A folder that holds a `plan.yaml`, or a project of the `projects:` form, in front of the rest of the argument is read as `/plan`'s "What it reads" 1 reads it ("What it reads" 4), and the rest is then read, as the whole argument, by the bullets on an entry that has an open plan, on the number of an entry with no open plan and on a number that matches no entry.
+   - A folder or a project followed by words that match none of the bullets on an entry that has an open plan, on the number of an entry with no open plan and on a number that matches no entry makes the whole argument a sentence on what you want to do.
+   - An argument that is, whole, the number, the title, or the number and title of a roadmap entry that has an open plan is `/ordo-help <entry>`, that plan's position ("What it reads" 5).
+   - An argument that is, whole, the number of a roadmap entry with no open plan, alone or followed by its title, is read from the roadmap ("Steps / The number of an entry with no open plan").
+   - An argument that is a number in the roadmap's numbering, such as `37`, `4.A` or `12.5`, and matches no entry gets the line that no skill fits ("Steps / A sentence on what you want to do" 4).
+   - Any other argument, the title of a roadmap entry with no open plan included, is a sentence on what you want to do ("Steps / A sentence on what you want to do"), so that `/ordo-help paper` names the skill `paper`.
+2. For `/ordo-help skills` and for a sentence on what you want to do, the skills folder, found from this skill's folder after that folder is resolved to its real path.
    - This skill's folder is the base directory the runner states when the skill loads, resolved through any link by `cd <base directory> && pwd -P`.
    - A parent of the resolved path that is a folder directly inside a folder named `skills` is a group folder, as it is when the skills are links into a checkout that groups them. The folder named `skills` is then the skills folder, and the skill folders are the folders in each folder of it.
    - Any other parent of the resolved path is the skills folder, as it is when the skills are copied side by side, and the skill folders are the folders in it.
    - The parent of the base directory as stated is never the skills folder.
-3. For `/ordo-help skills`, the `SKILL.md` of each skill folder.
-4. For `/ordo-help` and `/ordo-help <entry>`, the plan configuration, found and its paths read as `/plan`'s "What it reads" 1 says, a folder named alone or in front of `<entry>` as a path from the repository root; its required keys and defaults as `/plan` states them.
-   - A required key missing is a refusal ("Stops").
-5. For `/ordo-help <entry>`, the ledger folder: `<entry>` resolves to the folder under `<ledger_root>/` whose `plan.md` opens with `# Plan: <entry>` (the number, or the number and title).
+3. The `SKILL.md` of each skill folder.
+   - For `/ordo-help skills`, its frontmatter `description` and the code block under `## Quick start`.
+   - For a sentence on what you want to do, its frontmatter `description`, the code block under `## Quick start` and the table under `## Use instead`.
+4. For every form but `/ordo-help skills`, the plan configuration, found and its paths read as `/plan`'s "What it reads" 1 says, a folder named alone or in front of `<entry>` as a path from the repository root; its required keys and defaults as `/plan` states them.
+   - For a sentence on what you want to do, the plan configuration is read when a `plan.yaml` is found, to tell an entry from a sentence ("What it reads" 1).
+   - A required key missing is a refusal for `/ordo-help` with no argument and for a folder named alone ("Stops"), and makes every other argument a sentence on what you want to do ("What it reads" 1).
+5. For `/ordo-help <entry>`, the ledger folder: `<entry>` resolves to the folder of the open plan whose `plan.md` opens with `# Plan: <entry>` (the number, the title, or the number and title).
    - `/plan` names a new folder by the entry's slug, and an older plan keeps whatever folder it has.
-   - No such folder is a refusal ("Stops").
+   - The number of an entry with no such folder, alone or followed by its title, is read from the roadmap ("What it reads" 8), and its title alone is a sentence on what you want to do ("What it reads" 1).
 6. For `/ordo-help` and `/ordo-help <entry>`, the state file of each plan it prints.
    - For `/ordo-help` with no entry, that of each open plan, in the roadmap's order.
    - For `/ordo-help <entry>`, that of the named plan's folder, and the brief, the report and the refuter report of the step in flight.
 7. For `/ordo-help` and `/ordo-help <entry>`, the choices file `<ledger_root>/choices.md`, when it exists.
-8. For `/ordo-help` with no entry, the roadmap file the plan configuration's `roadmap:` names, for the order "Steps / The sequence and the plans" 3 prints the open plans in.
+8. The roadmap file the plan configuration's `roadmap:` names.
+   - For `/ordo-help` with no entry, for the order "Steps / The sequence and the plans" 3 prints the open plans in.
    - In the `projects:` form, the order of the projects in the plan configuration comes first.
+   - For every argument but `skills`, when a `plan.yaml` is found that holds every required key, to match the argument against the entries of every section by number or title, with the section each entry stands in: the open order, "Not yet specified", or the entries marked done or dropped.
 
 ## Steps
 
 ### The sequence and the plans
 
-`/ordo-help` and `/ordo-help <entry>` run these steps.
+`/ordo-help`, `/ordo-help <folder>`, and `/ordo-help <entry>` for an entry with an open plan, with or without its folder or project in front, run these steps.
 
 1. Print the sequence in "The sequence, printed verbatim".
 2. Print the choices awaiting review, for `/ordo-help` and for `/ordo-help <entry>`.
@@ -85,13 +100,48 @@ metadata:
    - The step is done when the skills folder and the skill folders are known.
 2. Sort the names of the skill folders bytewise, as `LC_ALL=C ls -1` sorts them, so `plan` comes before `plan-orchestration` and `plan-retro`.
    - The step is done when the sorted names are known.
-3. For each folder in the sorted order, print the skill's name line and its Quick start block.
+3. For each folder in the sorted order, print the skill's name line, its line on what it is for and its Quick start block.
    - A folder with no `SKILL.md` is skipped.
    - For a folder that holds a `SKILL.md`, print the line `/<name>`, `<name>` being the folder's name.
-   - Under that line, print the lines of the code block under `## Quick start`, from its opening fence line to its closing fence line, both included, copied from the `SKILL.md` this step reads.
-   - A `SKILL.md` with no code block under `## Quick start` gets its name line and then the line `no Quick start block`.
+   - Under that line, print one line on what the skill is for: one sentence of at most 25 words, written in this run from the frontmatter `description` of the `SKILL.md` this step reads, holding nothing the description does not say.
+   - Under the line on what the skill is for, print the lines of the code block under `## Quick start`, from its opening fence line to its closing fence line, both included, copied from the `SKILL.md` this step reads.
+   - A `SKILL.md` with no code block under `## Quick start` gets its name line, its line on what it is for and then the line `no Quick start block`.
    - A blank line stands between one skill's block and the next skill's name line.
    - The step is done when every folder in the sorted order is skipped or printed.
+
+### A sentence on what you want to do
+
+`/ordo-help <what you want to do>`, such as `/ordo-help I want to revise a paper`, runs these steps.
+
+1. Find the skills folder as "What it reads" 2 says.
+   - The step is done when the skills folder and the skill folders are known.
+2. Read the `SKILL.md` of each skill folder, its `description`, its Quick start block and its Use instead table, in this run.
+   - A folder with no `SKILL.md` is skipped.
+   - The step is done when every `SKILL.md` has been read.
+3. Choose the skills that fit the sentence, at most three, the best fit first.
+   - A skill fits when its description says it does what the sentence asks for.
+   - A row of a Use instead table read in step 2 that names another skill for the situation the sentence describes makes that other skill the fit.
+   - For each skill chosen, its line is the line of its Quick start block that does what the sentence asks for.
+   - The mode is the word that follows the skill's name on that line, such as `revision` in `/paper revision <main.tex> <comments file>`; a placeholder in angle brackets is no mode word, so a line such as `/referee <manuscript>` has none, and its mode is what the line's comment says it runs.
+   - When the sentence asks for work that several skills do in an order of use, such as a review and then a revision, the skills stand in that order of use.
+   - The step is done when the skills chosen, each with its line and its mode, are known, or when none fits.
+4. When no skill fits, print one line that says no skill fits the sentence and names `/ordo-help skills`, which lists every skill.
+   - The step is done when the line is printed, and the run ends there.
+5. When the skills chosen stand in an order of use, print one line that says the order, such as `First /paper-review-panel, then /paper revision.`
+   - The step is done when the line is printed, or when the skills stand in no order of use.
+6. For each skill chosen, in the order step 3 gives, print its name `/<name>` with its mode, the command to type as its Quick start line writes it, and one sentence on why it fits, from its description.
+   - The step is done when every skill chosen is printed.
+
+### The number of an entry with no open plan
+
+`/ordo-help <entry>` for the number of a roadmap entry with no open plan, alone or followed by its title, with or without its folder or project in front, runs this step.
+
+1. Print one line from the section of the roadmap the entry stands in.
+   - An entry of the open order, which has a gate: the line names `/plan <entry>`, with the folder or project in front as the argument wrote it, which opens its plan.
+   - An entry under "Not yet specified": the line names `/roadmap add <entry>`, which names its gate.
+   - An entry the roadmap marks done: one line that the entry is done.
+   - An entry the roadmap marks dropped: one line that the entry is dropped.
+   - The step is done when the line is printed.
 
 ## The sequence, printed verbatim
 
@@ -146,18 +196,21 @@ C<n> => <your ruling>         under self-rule: you replace a choice with your ru
 
 | Stop | When | What it shows | What resumes it |
 |---|---|---|---|
-| No stop | The skill never stops for a decision; the rows below are refusals of `/ordo-help` and `/ordo-help <entry>`, which name their cause and leave nothing, and `/ordo-help skills` refuses nothing | Nothing | Nothing |
-| A required key missing | A required key is not in the `plan.yaml` found, in the folder the call names or else at the repository root; the refusal names it; a path of that file refused as `/plan`'s Stops row "A path refused" says is refused here too, and that row says what the refusal shows and what resumes it, with this skill's call in place of `/plan` | The key | The key added, then `/ordo-help` again |
-| No ledger folder | No folder under `<ledger_root>/` holds a `plan.md` that opens with `# Plan: <entry>` | A refusal that names `/plan` | `/plan <entry>`, or `/ordo-help` with an entry that has a plan |
+| No stop | The skill never stops for a decision; the row below is a refusal of `/ordo-help` with no argument and of a folder named alone, which names its cause and leaves nothing, and `/ordo-help skills`, a sentence on what you want to do, the number of an entry with no open plan and a number that matches no entry refuse nothing | Nothing | Nothing |
+| A required key missing | A required key is not in the `plan.yaml` found, in the folder the call names or else at the repository root, for `/ordo-help` with no argument or a folder named alone, every other argument being read as a sentence on what you want to do; the refusal names it; a path of that file refused as `/plan`'s Stops row "A path refused" says is refused here too, and that row says what the refusal shows and what resumes it, with this skill's call in place of `/plan` | The key | The key added, then `/ordo-help` again |
 
 ## Anti-patterns
 
 | Anti-pattern | Why it fails | Do instead |
 |---|---|---|
 | Printing the sequence in other words | A reader matching what they typed against the sequence finds lines that are not there | "Steps / The sequence and the plans" 1 |
-| Printing a skill's Quick start block from memory, from an earlier output or in other words | A reader then types a mode the skill no longer has, or misses one it has | "Steps / skills" 3 |
+| Printing a skill's Quick start block from memory, from an earlier output or in other words, or its line on what it is for from memory or from another run | A reader then types a mode the skill no longer has, misses one it has, or picks a skill for a purpose its description does not state | "Steps / skills" 3 |
+| Naming a skill, a mode or a command for a sentence from memory, or a command in other words than its Quick start line | The user types a command the skill does not take, or misses the skill that fits | "Steps / A sentence on what you want to do" 2 and 6 |
 
 ## Rules
 
 - The skill writes nothing.
-- The `skills` mode prints only the name lines, the Quick start blocks, the `no Quick start block` lines and the blank lines between skills.
+- The `skills` mode prints only the name lines, the lines on what each skill is for, each written from the description read in the same run, the Quick start blocks, the `no Quick start block` lines and the blank lines between skills.
+- A sentence on what you want to do, the number of an entry with no open plan and a number that matches no entry get only the lines Steps gives them, with no sequence, no choices awaiting review and no position.
+- A sentence on what you want to do invokes no skill: it names the command for the user to type.
+- A sentence on what you want to do starts no agent: the session reads each `SKILL.md` itself.

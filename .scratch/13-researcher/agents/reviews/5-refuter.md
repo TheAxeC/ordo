@@ -150,3 +150,123 @@ Cases of the brief's "Cases" (each walked through "What it reads" 1 of the new t
 - Brief decision 2 against D33 (Spec 2): the user's or the orchestrator's call, not the reviewer's.
 
 Reviewer usage: agent a0f7721f21de23fac, claude-opus-5-5, 151881 tokens, 31 tool uses, 6 minutes.
+
+## Repair round 1, refuted
+
+```
+$ cd /Users/axelfaes/workspace/ordo/.agents/worktrees/13-researcher-5
+$ printf '%s\0' skills/ordo/ordo-help/SKILL.md README.md | xargs -0 perl -CSD -ne '<brief verify 1 as written>'; echo "exit $?"
+exit 0
+(nothing printed before the exit line)
+
+$ env -u CLAUDE_CONFIG_DIR -u ORDO_SKILL_DIRS -u ORDO_STABLE python3 -c 'import yaml; d=yaml.safe_load(open("skills/ordo/ordo-help/SKILL.md").read().split("---")[1]); print(len(d["description"]), d["metadata"]["version"])'
+1010 5.2.0
+exit 0
+
+$ git diff 6dacf2b --stat     (brief verify 3 is `git diff --stat`; see Declined to judge)
+ README.md                      |   2 +-
+ skills/ordo/ordo-help/SKILL.md | 101 +++++++++++++++++++++++++++++++----------
+ 2 files changed, 78 insertions(+), 25 deletions(-)
+
+$ git status --short
+ M README.md
+ M skills/ordo/ordo-help/SKILL.md
+?? .scratch/13-researcher/agents/briefs/5-round-1.md
+?? .scratch/13-researcher/agents/reviews/5-report.md
+
+$ diff -u <snapshot copy> <worktree file>   (files.txt lists README.md and skills/ordo/ordo-help/SKILL.md)
+README.md: no difference (the round did not touch it)
+SKILL.md: differences on lines 10, 16, 40-46, 57, 60, 68, 125, 135-137, 199-200 and 214
+
+$ grep -n 'An entry with no open plan\|folder form\|next three\|No ledger folder' skills/ordo/ordo-help/SKILL.md
+(nothing printed)
+
+$ grep -rn 'An entry with no open plan\|the folder forms\|folder form' skills docs utils README.md   (outside the skill)
+(no hit about ordo-help; the hits are "no open plan" in plan-terms.md, the glossary, plan-orchestration and self-rule.md, each about an open plan or next-entry mode)
+
+$ wc -w on lines of SKILL.md:  40: 50   41: 75   42: 53   43: 34   44: 38   45: 39   46: 42   57: 37   60: 42   68: 50   125: 52
+```
+
+### Verdicts
+
+Items of the brief's "What to build", over the whole diff since 6dacf2b:
+
+- 1: holds. SKILL.md:103-108 print `/<name>`, a line of at most 25 words written in the run from the description, then the Quick start block copied. The Rules bullet (line 213) allows the line. The Anti-patterns row (line 207) forbids it from memory or from another run.
+- 2: holds, with Spec 1 on one input the brief does not name. The six rulings of the round are in the text:
+  - Ruling 1: line 40 stands before the entry bullets (lines 43-45). It names no argument and a folder named alone as the two refusals, and makes every other argument a sentence with no roadmap read. Line 57, line 68 and the Stops rows (lines 199-200) say the same.
+  - Ruling 2: line 44 takes the number only, and line 46 sends the title of an entry with no open plan to a sentence. Line 60 says it again.
+  - Ruling 3: line 44 and line 137 accept the number followed by the title.
+  - Ruling 4: lines 41 and 42 name the same three bullets by what each matches.
+  - Ruling 5: line 214 names a number that matches no entry.
+  - Ruling 6: line 125.
+  - Grepped for the renamed subsection ("An entry with no open plan"): no sentence made false.
+- 3: holds. The rerun prints `1010 5.2.0`.
+- 4: holds. Each name the round changed was grepped across `skills/`, `docs/`, `utils/` and `README.md`: "the folder forms", "a folder form", "next three bullets" and the old subsection name. None remains in the skill, and none appears elsewhere as a reference to it. The opening paragraph, Quick start, "What it reads" 4, 5 and 8, the Stops rows, the Anti-patterns rows and the Rules are consistent with one another.
+- 5: holds. README.md line 22 was not changed in the round. It says the two additions and states nothing the round makes false, because it names neither a title nor a number.
+
+Cases of the brief and of the round. Each is walked through "What it reads" 1 by line number, in order: 36 `skills`, 37 `skills` and words, 38 no argument, 39 folder alone, 40 missing plan.yaml or key, 41 and 42 folder or project in front, 43 open-plan entry, 44 number of an entry with no open plan, 45 unmatched number, 46 anything else.
+
+- `/ordo-help skills`: met. Line 36 decides it. "Steps / skills" 3 prints `/<name>`, the line, then the block, and skips a folder with no `SKILL.md` (line 104).
+- `/ordo-help I want to revise a paper`: met. Lines 36-45 do not match, since `I` is no folder, no project and no entry, so line 46 decides it. Step 3 gives `paper`, the line `/paper revision <main.tex> <comments file>` and the mode `revision` (line 125). Rules line 214 prints no sequence.
+- `... someone asked me to review a manuscript for a journal`: met. Line 46 decides it. `referee` fits through its description and the Use instead row of `paper` (line 123). Its line is `/referee <manuscript>`, which has no mode word, so the mode is what the comment says it runs (line 125).
+- `... I want to bake bread`: met. Line 46 decides it, and step 4 prints the no-fit line naming `/ordo-help skills`.
+- `/ordo-help 13` with plan 13 open: met. Line 43 decides it (`.scratch/13-researcher/plan.md` opens `# Plan: 13. researcher`).
+- The number of an open entry with a gate and no open plan: met by reading. Line 44 decides it, and "Steps / The number of an entry with no open plan" 1 names `/plan <entry>`. No such entry is on the tree: `docs/roadmap.md` has `## 13. researcher` as the only open entry.
+- `/ordo-help 4.A`: met. Its plan is under `archive_root`, so line 43 does not match. Line 44 does match, and `docs/roadmap.md:60` holds `- [x] 4.A ordo-help skills`, so the line says the entry is done.
+- `<folder>/<entry>` and `<project>/<entry>` with a plan open: met. Line 41 strips the folder or project, and line 43 decides the rest.
+- `/ordo-help researcher`: met. Line 43 decides it, since entry 13 has an open plan, and the position is printed. `/ordo-help I want to work on researcher`: met. It is not a whole title, so line 46 decides it and it is a sentence.
+- `I want to revise a paper` with no plan.yaml found: met. Line 40 decides it: a sentence, with no roadmap read. Step 2 of the sentence form reads the configuration only when a plan.yaml is found (line 56).
+- `I want my paper reviewed and then revised`: met. Line 46 decides it. Line 126 gives the order, step 5 prints the order line, and step 6 prints each skill.
+- `/ordo-help` with no argument: met, line 38. `/ordo-help <folder>` with a plan.yaml: met, line 39.
+- Round cases:
+  - `/ordo-help paper`: met. No line from 36 to 45 matches, because `paper` is not a roadmap number and entry 5 `paper` has no open plan. Line 46 decides it, and `paper` is printed.
+  - `/ordo-help wizard`: met, by the same walk, and `wizard` is printed.
+  - `/ordo-help 4.A ordo-help skills`: met. Line 37 does not match, since the argument does not begin with `skills`. Line 44 matches: the number followed by its title, and the roadmap title is `ordo-help skills`.
+  - `/ordo-help 13` with a required key missing: met. Line 40 decides it before line 43: a sentence, no roadmap read, and the no-fit line is printed.
+  - `/ordo-help` with a required key missing: met. Line 38 decides it, and the refusal comes through "What it reads" 4 and the Stops row.
+  - `/ordo-help <folder>` with a required key missing: met. Line 39 decides it, and the refusal names the key.
+  - `/ordo-help <folder>/37` with no entry 37: met. Line 41 reads `37` by line 45 and prints the no-fit line. Line 42 would reach the same answer.
+  - `/ordo-help I want to review a step`: met. Line 46 decides it. `/refute` is printed with its line `/refute <entry> <step>`, and by line 125 the mode is what the comment says it runs.
+  - `skills and more words`: met. Line 37 decides it and it is a sentence.
+
+I found no input that the order of these bullets sends to the wrong form. The one input whose form is not decided by the text is under Spec 1.
+
+### Findings
+
+**1. Spec**
+
+- SKILL.md:40 and 39: "With no `plan.yaml` found, or with one whose required key is missing, no argument and a folder named alone are refused as "What it reads" 4 says, and every other argument ... is a sentence". Line 39 defines the folder form as "A folder that holds a `plan.yaml`". What is wrong: with no `plan.yaml` found anywhere, a word that names an existing folder without a `plan.yaml` is not a folder under line 39, and the text does not say whether line 40 calls it "a folder named alone". The brief keeps the refusal for a folder alone and answers every other argument. Failure scenario: in a manuscript repository with a `paper/` folder and no `plan.yaml`, `/ordo-help paper` is refused with a missing key by one reader and answered as a sentence naming the skill `paper` by another. Verdict: none. Item 2 still holds for the brief's cases.
+
+**2. Proof**
+
+- `.scratch/13-researcher/agents/reviews/5-report.md`, "Verify 4": "the bullets of lines 40 to 44 run 30 to 50 words". What is wrong: `wc -w` on the lines gives 50, 75, 53, 34 and 38 for lines 40 to 44. Lines 41 and 42 are 75 and 53 words, over the stated range. Lines 125 (52 words) and 68 (50 words) are also long and are not named as departures. Line 125 names its form. Decision resting on it: whether verify 4 is complete, which the landing reads. Failure scenario: the orchestrator accepts the departure list as it stands and lands sentences of 75 and 53 words with no stated reason. Verdict: none.
+
+**3. Standards**
+
+- SKILL.md:41-42: "and the rest is then read, as the whole argument, by the bullets on an entry that has an open plan, on the number of an entry with no open plan and on a number that matches no entry" and "A folder or a project followed by words that match none of the bullets on an entry that has an open plan, on the number of an entry with no open plan and on a number that matches no entry makes the whole argument a sentence". What is wrong: two bullets of 75 and 53 words restate the same three-bullet list that lines 43-45 already carry, and line 42 gives the same outcome as line 46. The prose standard E (Sentence length, "under roughly 20 words unless the mechanism needs more") and `docs/dev/skill-layout.md` "Writing for an agent" ("One meaning has one place") are not met, because the names of the three bullets are written twice in a row and a reader checking the first match must hold them in mind. Failure scenario: a reader who edits one of the three bullets later changes only some of the lists, and `<folder>/<entry>` then reads differently from `<entry>`. Verdict: none.
+
+**4. Behaviour**
+
+- "Host- or user-visible changes, before and after" of the builder's report: "`/ordo-help <number of an entry with no open plan>`, alone or followed by its title: before, the refusal "No ledger folder"". What is wrong: the first refuter's Behaviour 1 stands unanswered in this report. For `4.A`, whose archived plan sits under `ledger_root` (`.scratch/archive/4-a-ordo-help-skills/`), the report's own first run says the old result was "the archived plan's position or the refusal", and line 58 now reads only "the folder of the open plan". The change list gives the before as the refusal alone. Failure scenario: a reader of the list does not learn that `/ordo-help <archived entry>` may have printed the archived plan's position before and now prints "done". This also bears on the minor version bump (see Declined to judge). Verdict: none.
+
+### Declined to judge
+
+- Brief verify 3 as written, `git diff --stat` with no base: not run. I ran `git diff 6dacf2b --stat`, which names the same two files. `git log --oneline 6dacf2b..HEAD` would show whether the worktree has commits past the base.
+- `.scratch/13-researcher/agents/briefs/5-round-1.md` is untracked in the worktree, and the brief's paths list only `5-report.md` under `.scratch`. Who wrote it, and whether it is part of the step's change, is not settled by `git status --short`. `git log` in the main checkout, or the dispatch entry, would settle it.
+- Whether the old "the folder under `<ledger_root>/`" took in `<ledger_root>/archive/...`, and so whether the minor bump to 5.2.0 holds against `docs/dev/skill-layout.md` Frontmatter (Behaviour 1). A run of `/ordo-help 4.A` at 6dacf2b would settle it, and this review cannot make it.
+- Whether a session running the sentence form picks the skills the cases expect: judged by reading only. A run of the installed skill would settle it.
+- Which skill line a bare word such as `paper` or `wizard` selects among several Quick start lines (line 124): a judgment of the session, not settled by the text.
+
+Reviewer usage: agent a3dcc47add2b65486, claude-sonnet-5-5, 123214 tokens, 11 tool uses, 2 minutes.
+
+## Closed
+
+First run:
+
+- Spec 1, 2 and 3, Standards 1, 2 and 3: closed by the builder in repair round 1, rulings 1 to 6 of `agents/briefs/5-round-1.md`; the run over round 1 gives item 2 and every case as holding.
+- Proof 1, Standards 4 and Behaviour 1: closed with no change. No output of the skill depends on them.
+
+Run over round 1:
+
+- Spec 1: fixed at landing. The bullet on a missing `plan.yaml` or a missing required key says which folder it means.
+- Proof, Standards and Behaviour: closed with no change. No output of the skill depends on them.
