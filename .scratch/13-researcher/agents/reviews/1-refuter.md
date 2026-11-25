@@ -92,3 +92,120 @@ Cases of the brief's "Cases":
 - The model line of agents/compliance_agent.md ("`model: sonnet` or higher", source "per user CLAUDE.md: never haiku"): judged acceptable; the rule is kept and the reference to a user file is removed, which the shipped-file rule requires. No finding.
 
 Reviewer usage: agent aa05eb7854278e73e, claude-opus-5-5, 131902 tokens, 83 tool uses, 13 minutes.
+
+## Repair round 1, refuted
+
+```
+(from /Users/axelfaes/workspace/ordo/.agents/worktrees/13-researcher-1)
+1. brief check 1 (perl character-set check over the 27 files of skills/academic/researcher, NOTICE.md, README.md): printed nothing; exit=0
+2. LC_ALL=C grep -rn '[^ -~]' skills/academic/researcher NOTICE.md: printed nothing; exit=1
+3. diff -rq <source> skills/academic/researcher: only in the source SKILL.md, agents/claim_ref_alignment_audit_agent.md, agents/collaboration_depth_agent.md, references/adapters, references/changelog.md, references/claim_audit_calibration_protocol.md, references/literature_corpus_consumers.md, references/passport_as_reset_boundary.md, references/process_summary_protocol.md; only in the copy agents/compliance_agent.md, references/artifact_reproducibility_pattern.md, compliance_checkpoint_protocol.md, ethics.md, handoff_schemas.md, prisma_trAIce_protocol.md, raise_framework.md; the 20 copied files differ
+   diff -r of the two folders: 3462 lines
+   per-document diffs (lines): compliance_agent 95, handoff_schemas 510, compliance_checkpoint_protocol 76, raise_framework 135, prisma_trAIce_protocol 200, artifact_reproducibility_pattern 174
+   git show f9a00ab:skills/paper/references/ethics.md | diff - ...: not run (see Declined to judge); wc -l of the copy prints 145
+4. grep -rn 'scripts/\|shared/\|docs/design' skills/academic/researcher: no hit, exit 1
+   grep -rniE 'claim_ref|collaboration_depth|literature_corpus|ARS_PASSPORT|ARS_CROSS_MODEL|cross.model|process.summary|academic-pipeline|academic-paper|deep-research|research-hub|/Users/' skills/academic/researcher: no hit, exit 1
+   grep -rnE 'v[0-9]+\.[0-9]+' skills/academic/researcher: six lines (handoff_schemas.md:490, team_collaboration_protocol.md:101-105), none a version marker
+   find skills/academic/researcher -type f | wc -l: 27
+Round greps:
+   grep -rn 'planned_experiment_ids\|ref:slug' skills/academic/researcher: no hit, exit 1
+   grep -rn -i 'null result' skills/academic/researcher/references/handoff_schemas.md: no hit, exit 1
+Delta: diff -ru <snapshot>/skills <worktree>/skills: 530 lines (read whole); it changes the ten pages named plus references/integrity_review_protocol.md; the other lines are "Only in" lines for folders outside skills/academic/researcher
+   diff -q <snapshot>/README.md <worktree>/README.md and NOTICE.md: both print nothing (unchanged since the snapshot)
+Report-quoted evidence rerun:
+   wc -l and diff | wc -l of the report's table, for the 10 pages of the table that the round touched (integrity 662/540, orchestrator 434/851, state tracker 447/225, full example 420/378, recovery example 399/208, mid example 444/200, mode_advisor 110/124, state machine 266/324, integrity_review_protocol 52/49, ethics 145/0): all equal the report's table
+   grep -rn -i '3 rounds\|3 correction rounds\|max 3': the lines the report names (state machine 120, 147, 160, 226; protocol 22, 44; integrity agent 53, 516, 547, 548; orchestrator 235, 279, 378; recovery example 395)
+   grep -n '^###\|Progress:' examples/full_pipeline_example.md: Stage 2, 2 to 2.5 transition, Stage 2.5, 2.5 checkpoint, Stage 3, 3 to 4, Stage 4, 4 to 3', Stage 3', 3' to 4.5, "Minor Revision and Stage 4.5", Pipeline Complete; each progress bar from line 107 on has the Integrity step; matches the report
+   wc -l NOTICE.md prints 11 (the report says 12); no decision rests on it
+```
+
+### Verdicts (whole step)
+
+Items of the brief's "What to build":
+
+- 1: holds. The three round findings are closed: data_access_level and task_type again say "The skill's `SKILL.md` declares `metadata.<field>`" (handoff_schemas.md, sections `data_access_level` and `task_type`, both ending "When adding a new skill"); mode_advisor rows restored (below); the Stage 2.5 FAIL row of the fallback matrix keeps "never full-mode re-drafting; reference-level fixes are the most block-local edit class in the pipeline" and drops only the half that names the left-out gate.
+- 2: holds. `diff -rq` lists the six documents at the paths Open item B gives.
+- 3: holds for characters, names, pointers and layout (checks 1, 2 and the greps above print what they should; scan of the added lines of the delta: no non-ASCII, no arrow or aside dash in prose; hits for ` -- ` and `->` are inside fenced blocks, as in the unchanged lines around them). The sentence-length part of item 5 has Standards 1.
+- 4: violated, Spec 1 (the recovery example gives the ethics check a verdict that `references/ethics.md` does not give for the same record). Every other part of item 4 holds: D1, D2, D3 (grep above), D4, D5 (orchestrator line 12, state machine "Normal Flow Transitions"), D6 (state tracker Role Definition, state machine line 30), D17 at both depths (below), D20 (below), D24 (integrity agent "Wording of corrections and records"), D31 (C4, second paragraph), D16 and Open item A (grep 2 prints nothing).
+- 5: holds. The report's hand-backs H1 and H2 are closed by rulings 2 and 10, applied.
+- 6: holds. NOTICE.md is byte-equal to the snapshot's (`diff -q` prints nothing); the first refuter read its facts.
+- 7: holds. README.md is byte-equal to the snapshot's; the first refuter read the line.
+- 8: holds with Standards 1. Rows K16 and K21 to K25 exist, and the per-file lists of the integrity agent, orchestrator, state tracker, full example, recovery example, mid example, mode_advisor, handoff_schemas and ethics.md name each difference of the delta (checked hunk by hunk).
+
+Ruling-by-ruling check of the round's eleven rulings:
+
+1. holds. integrity_verification_agent.md "Phase F: Ethics Check" says "at both depths: in Mode 1 and in Mode 2"; the Mode 1 line (496) and the Mode 2 line (508) both end with Phase F; the Output Format ends "## Ethics check [At both depths: ...]"; integrity_review_protocol.md lines 17 and 39; the orchestrator's MANDATORY template ("- Ethics check: [CLEARED/CONDITIONAL/BLOCKED]", line 180); ethics.md line 3; the three examples. No other page lists the phases a depth runs (grep for `Phase A`, `Phase E`, `A-E`, `originality`, `claim verification` over the other pages).
+2. holds. full_pipeline_example.md has the Stage 2.5 scene (lines 114 to 150) between Stage 2 and Stage 3 and a Stage 4.5 scene (328 to 351) at its end, in mid_entry_example.md's form; the configuration block (line 38), the five progress bars, the Stage 2 to 2.5 transition, the status block ("Stage 2.5 INTEGRITY [v] PASS Issues: 0"), the materials list and the final deliverables agree; no LaTeX deliverable remains (`grep -n -i latex` finds none).
+3. holds. mid_entry_example.md line 374 "Executing: Phase A-F at full depth ... and the ethics check as Phase F", the result line "Ethics check: CLEARED, dual-use level None", the deliverable "ending with its ethics check"; its Stage 2.5 section has Phase F on the executing line (80), the result (92), the deliverable (98).
+4. holds. The REV-007 example (handoff_schemas.md, Schema 8 Example) is now causal wording in a cross-sectional design, with Reviewer Comment, Status, Response and Changes, the same four fields the REV-001 example shows; the grep for 'null result' prints nothing; no other page puts a null result into the prose (grep of 'null', 'negative result', 'non-significant', 'pre-registered' over the folder prints only the record field `negative_results` and the check-3 verdict).
+5. holds. See item 1 above.
+6. holds. state_tracker_agent.md line 66 `"pipeline_version": "<metadata.version of SKILL.md>"` and line 258, naming `metadata.version` as artifact_reproducibility_pattern.md does for `ars_version` (lines 31 and 60 of that page).
+7. holds. mode_advisor.md has "Just give me a quick paper" (`/paper full`), "Graduate student (first paper)" (`/paper plan`, then `/researcher manuscript`), "Conference paper (short deadline)" (`/paper full`, conference type), "Thesis chapter" (`/paper full`), "Policy brief" (`/paper full`, policy_brief type). Every mode named (`full`, `plan`, `lit-review`, `format-convert`, `citation-check`) is in the Quick start of skills/academic/paper/SKILL.md, and `conference_paper_template.md` and `policy_brief_template.md` are listed there under Templates. I compared each other removed row with the source's mode_advisor.md: the remaining removed rows ("Write me a paper on X", "I need a systematic review", the deep-research matrix, capability and flowchart rows, Stage 1 and Stage 5 entry rows, "Skipping research", "Using fact-check mode") hold no paper part that stands without the research stage.
+8. holds. See item 1 above; the orchestrator's row 233 keeps the rule.
+9. holds. Row 236 is labelled "Stage 4.5 correction round (`/paper revision` after a failed final check)" and keeps the source's escalation options; it follows the Stage 4.5 FAIL row as the source's order has it.
+10. holds. See "Behaviour 1 recheck" below. Neither `planned_experiment_ids` nor `<!--ref:slug-->` appears (grep above); handoff_schemas.md rows for `experiment_provenance` (line 502) and item 3 of the intake (line 554) say the same selection by reading.
+11. holds, with Standards 1. The report's Deviations section has K16 and K21 to K25 and the corrected per-file lists.
+
+Cases of the brief's "Cases" and of the round's cases:
+
+- How a reference is verified: met (A0 and A1 `lookup.py resolve`, A2 reads the `Crossref notice:` lines; no web search checks existence).
+- The two depths: met (Mode 1 line 493 and Mode 2 line 505).
+- A failed final check, 3 rounds then the user: met (grep above, every hit).
+- A midway entry runs the first check: met (state machine INIT rows 142 and 143, integrity_review_protocol line 5, handoff_schemas rule 11, orchestrator "Mid-Entry Material Passport Check" Rules, mid_entry_example).
+- Left-out parts, and the four D5 runs: met (grep 2 prints nothing; orchestrator line 12, state machine "Normal Flow Transitions").
+- Negative results and limitations (D20): met. No rule puts a null result into prose; the check-3 verdict is kept (C4 check (3)(b) and the Severity list "(check 3) alignment_verdict is one of {OVERSTATED, NOT_SUPPORTED_BY_PROVENANCE}").
+- The ethics page and the ethics check as last part of the record (D17): met by the page, at both depths (rulings 1 and 3). The recovery example's own record contradicts the page, see Spec 1.
+- State in `researcher-runs/<mode>-<date>/` written by the session (D6): met.
+- D24 wording rule: met.
+- Where the record of the experiments is read (D31): met (C4, second paragraph; handoff_schemas "Experiment Provenance Intake").
+- grep scripts/shared/docs/design; the left-out names grep; `v[0-9]+.[0-9]+` grep: met (outputs above).
+- A plagiarism paragraph no ruling touches: not rechecked in this round; the file is not in the delta (the first refuter's verdict stands, 56 diff lines).
+- NOTICE.md: met (unchanged since the snapshot).
+- Round case, each page that states what the check before the review runs ends with the ethics check: met (rulings 1 and 3).
+- Round case, full example Stage 2, 2.5, 3, then to a Stage 4.5 scene with no step the state machine forbids: met. Each transition is a row of "Normal Flow Transitions" (Stage 2 to checkpoint to 2.5 to checkpoint to 3 to checkpoint to 4 to checkpoint to 3' to checkpoint to 4.5), and none of the "Prohibited Transitions" occurs; counts agree (22 references at Stage 2, "all 22 references" at Stage 2.5, 5,200 words to 6,800, 8 added citations to "Citations: 30", "Review Reports (4)" with "4 independent review reports").
+- Round case, grep for `planned_experiment_ids` and `ref:slug`: met.
+- Round case, a manuscript sentence that states an effect the record lists as a null result leads to FAIL at both depths: met by reading (Behaviour 1 recheck).
+- Round case, no 'null result' in handoff_schemas.md: met.
+- Round case, every case and check of the brief: met except as Spec 1 says.
+
+### Findings
+
+#### 1. Spec
+
+- Spec 1. examples/integrity_failure_recovery.md, section "Phase F: Ethics Check" (before "### Verdict: FAIL"): "The ethics check of `references/ethics.md`, the last part of the record. Verdict: CLEARED. Dual-use level: None. Each of the eight dimensions passes. No issue."; what is wrong: the same Round 1 record finds a fabricated reference ("Ghost reference (Ref 12: Martinez, 2023)", Phase A, SERIOUS). `references/ethics.md`, "Verdict and stop", says "BLOCKED is reserved for these integrity violations: one fabricated reference, ...", its "Attribution" section says the check "reads their issues and does not repeat them", and its "Record" section lists "no fabricated citation was found" among the confirmations. By that page the verdict of this record is BLOCKED, or at least not CLEARED with every dimension passing. The Round 2 table row "Ethics Check (F) | 8 | 8 | 0 (CLEARED, dual-use level None)" sits in a summary of a re-check of "9 corrected items", where every other row's Total (45 references, 18 claims) is also the full count, so it follows the example's own pattern. Brief item 4 asks that no two pages disagree. Failure scenario: a session reads this example as the model of a Stage 2.5 record, writes CLEARED for a draft whose Phase A found a fabricated reference, and the BLOCKED stop of `references/ethics.md` never fires; or it follows `references/ethics.md`, stops once for the user at Stage 2.5 on every draft with a ghost reference instead of going to the correction round of `agents/integrity_verification_agent.md` "Correction Process on FAIL", and the example it was shown disagrees. The conflict is made reachable by ruling 1: before the round, Mode 1 ran no ethics check, so a fabricated reference found at Stage 2.5 never met the BLOCKED rule. Which of the two routes a fabricated reference at Stage 2.5 takes (the BLOCKED stop or the correction round) is not stated in any page; I give no verdict on which is right, the page and the example must at least agree. verdict: item 4 violated.
+
+#### 2. Proof
+
+none.
+
+#### 3. Standards
+
+- Standards 1. agents/integrity_verification_agent.md, "Phase F: Ethics Check": "The ethics check is the last part of the integrity record, in its section "Ethics check", with the verdict, the dimensions, the issues and the confirmations that page lists." (about 40 words); and agents/state_tracker_agent.md line 258: "`pipeline_version` is the skill's version, read from `metadata.version` in `SKILL.md`, as `references/artifact_reproducibility_pattern.md` reads its `ars_version`." (about 25 words). what is wrong: brief item 5 asks that each of the builder's own sentences above about 20 words be named in the report with why it needs its form. The report's "Judgment calls" list of long sentences names the state tracker's D6 paragraph, the C4 sentences, the Mode 1 sentence, the row-field sentence, the lookup paragraph and others, and does not name these two (the Phase F sentence was reworded in this round; the `pipeline_version` sentence is new in this round). failure scenario: a reader of the report cannot tell whether the two sentences were read against the sentence-length rule; the departure goes unrecorded. verdict: item 8 and item 3 hold, the report is incomplete on brief item 5.
+
+#### 4. Behaviour
+
+none. (Behaviour 1 recheck, ruling 10, the C4 walk-through: a session reading agents/integrity_verification_agent.md C4 as written (a) picks the claims by reading: "each sentence that reports an outcome of the author's own experiments is a claim of the check, and you match it to the entry of `experiment_provenance[]` whose result it reports"; (b) runs D7 first, with a record that has `experiments_declared` and a non-empty `experiment_provenance[]`, so conditions 1 to 3 do not fire; (c) takes, per matched entry, check (0) well-formedness, check (1) completeness (a claim that matches no entry is a structural FAIL), check (3) "(b) the experiment's negative_results[]: a claim asserting an effect a negative_results[] entry says was null/absent is NOT_SUPPORTED_BY_PROVENANCE (this is a verdict-level FAIL)", and the Severity list FAIL "(check 3) alignment_verdict is one of {OVERSTATED, NOT_SUPPORTED_BY_PROVENANCE}". At Mode 2 (line 513) every experiment-backed claim is checked. At Mode 1 (line 499) the sampled claims are checked and "A claim that touches an entry's `negative_results[]` is always checked, outside the sample", so the FAIL is reachable at both depths. The row fields `scoped_manifest_id` and `claim_id` have a source (the `paper` draft writer's `intended-claims.md`, which exists: skills/academic/paper/agents/draft_writer_agent.md line 486) or a stated fallback. No sentence of the copy names `claim_intent_manifest`, `planned_experiment_ids`, `planned_refs` or a `<!--ref:...-->` marker (greps above). No sentence names a Stage 1, Stage 5, Stage 6, FINALIZE or RESEARCH stage (grep prints nothing).)
+
+### Declined to judge
+
+- `git show f9a00ab:skills/paper/references/ethics.md | diff - skills/academic/researcher/references/ethics.md`: not run, as the review's rules require. It would settle whether `references/ethics.md` is word for word that page apart from the differences the report lists; this round changed only line 3 (read in the delta).
+- Whether ethics.md's "Record" section, which lists confirmations "before delivery", is meant to be written at the check before the review as well as at the final check: the page was changed only on line 3, and the user's ruling D17 does not say. It is part of the question Spec 1 leaves open.
+- Both examples (full and mid-entry) end at "Pipeline Complete" with no user confirmation after Stage 4.5 PASS, while the state machine has "Stage 4.5 | checkpoint | PASS | Wait for user confirmation" and "checkpoint | END | User confirms". The source's examples had the same ending and the round's ruling 2 asked for the mid-entry example's form; I judged it not a finding of this round.
+- The minor-revision run between Stage 3' and Stage 4.5 in the full example ("handled in one /paper revision run before the final check") is not a row of the state machine; it matches the mid-entry example's form, which the ruling set as the model.
+- ` -- ` and `->` inside fenced blocks (for example "Entering Stage 2.5 (INTEGRITY) -- Mode 1 (Pre-Review)"): the brief's item 3 and the prose standard bind prose and arrows outside code; I applied them to prose only, as the first review did.
+- The pointers "SKILL.md Early-Stopping Criterion" and "SKILL.md Stage 2.5 / 4.5" and whether `SKILL.md` will start the compliance agent: `SKILL.md` is written in step 2.
+- A paragraph of references/plagiarism_detection_protocol.md that no ruling touches: not rechecked; the file is outside the round's delta.
+
+Reviewer usage: agent a13bf81b661469dae, claude-sonnet-5-5, 250100 tokens, 47 tool uses, 5 minutes.
+
+
+## Closed
+
+First run:
+
+- Spec 1 to 9, Proof 1 and Behaviour 1: closed by the builder in repair round 1, rulings 1 to 11 of `agents/briefs/1-round-1.md`, with Open item C of `plan.md` for Spec 2 and Behaviour 1; the run over round 1 gives each ruling as holding.
+
+Run over round 1:
+
+- Spec 1: fixed at landing. `references/ethics.md` says that an issue a phase of the same record already reports goes to the correction round of the integrity verdict, and that the ethics check blocks for it only when it is still there after the correction rounds; the recovery example's ethics check says the same of its fabricated reference.
+- Standards 1: closed with no change. Nothing a run does depends on it.

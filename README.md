@@ -260,4 +260,4 @@ Moving to a new version is a tag on `main` and `utils/pin.sh <tag>`; going back 
 
 ## License
 
-MIT. See `LICENSE`.
+MIT, see `LICENSE`, except the parts `NOTICE.md` names, which are under CC BY-NC 4.0.

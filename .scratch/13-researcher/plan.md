@@ -20,7 +20,7 @@ one `novelty` run on an idea you name, its page read by you, each work it cites 
 
 ## Steps, in execution order
 
-- 1 the copied pages: `skills/academic/researcher/` holds, each under its source's folder and name, the files of academic-pipeline at v3.13.0 that ADR 0052 keeps, and in `agents/` and `references/` the six documents taken from the same version of its public repository, with the differences ADR 0052 lists and the ones this repository forces (ASCII, the prose standard, no history), `deviations.md` in this ledger lists every difference with its reason and its ruling, the six documents are saved as fetched under `.agents/sources/academic-research-skills-v3.13.0/`, a folder git ignores, since they hold characters the character-set check refuses in a tracked file, and `NOTICE.md` stands at the repository root with its line in `README.md`; check: `diff -r` of the copied pages against the source folder and the saved documents prints only differences `deviations.md` lists, read once by the reviewer, who names each difference with its ruling, or none (1 commit) (approved)
+- ✅ 1 the copied pages: `skills/academic/researcher/` holds, each under its source's folder and name, the files of academic-pipeline at v3.13.0 that ADR 0052 keeps, and in `agents/` and `references/` the six documents taken from the same version of its public repository, with the differences ADR 0052 lists and the ones this repository forces (ASCII, the prose standard, no history), `deviations.md` in this ledger lists every difference with its reason and its ruling, the six documents are saved as fetched under `.agents/sources/academic-research-skills-v3.13.0/`, a folder git ignores, since they hold characters the character-set check refuses in a tracked file, and `NOTICE.md` stands at the repository root with its line in `README.md`; check: `diff -r` of the copied pages against the source folder and the saved documents prints only differences `deviations.md` lists, read once by the reviewer, who names each difference with its ruling, or none (1 commit) (approved)
 - 2 the modes `integrity` and `manuscript`: `skills/academic/researcher/SKILL.md` carries academic-pipeline's `SKILL.md` into the sections of `docs/dev/skill-layout.md` with the two modes as rulings D1 to D6, D16, D17, D20 and D31 and ADR 0052 give them, the row of `researcher` stands in `README.md`, its figure under `docs/figures/`, and the academic-pipeline figure names what `researcher` holds; check: `python3 docs/figures/gen_figures.py` runs from the repository root, and the skill's text is read against ADR 0052 item by item, with `deviations.md` extended by each difference of `SKILL.md` (1 commit) (approved)
 - 3 the modes `novelty` and `idea`: `SKILL.md` and its `references/` hold `novelty` as the goal gives it, made by the session with no agent started, a work confirmed as ruling D14 says, and `idea` as ruling D26 and ADR 0054 give it; check: the text is read against ADR 0054 item by item and against each sentence of the goal on the two modes (1 commit) (approved)
 - 4 the modes `research`, with its adopt mode, and `full`: `SKILL.md`, its `references/` and its `agents/` hold the six stages with their completion criteria and loops, the campaigns, the brief and the reviewer of a builder, Frame with the limits and the choice of the dataset, the diagnosis and the manual or automatic setting, the rules for SLURM, the one command, the README as entry file and the default layout, several manuscripts, the record of the experiments, the adopt mode, and `full`, as rulings D7 to D13 and D25 to D31 and ADRs 0053 and 0054 give them; check: a fresh agent reads the skill once and lists, for each sentence of the goal on `idea`, `research`, its adopt mode and `full` and for each of the four rules, the step of the skill that carries it, or "none", and the list holds no "none" (1 commit) (approved)
@@ -103,6 +103,10 @@ Each agent a plan skill started for this plan has one bullet, with its agent id,
 - af1105b279c18c7ed: brief check of step 5, claude-opus-5-5
 - a0f7721f21de23fac: reviewer of step 5, claude-opus-5-5
 - a3dcc47add2b65486: reviewer of step 5 over round 1, claude-sonnet-5-5
+- a90f7dfac5ca2a866: builder of step 1, claude-opus-5-5
+- a88f2b2030a881ff2: brief check of step 1, claude-opus-5-5
+- aa05eb7854278e73e: reviewer of step 1, claude-opus-5-5
+- a13bf81b661469dae: reviewer of step 1 over round 1, claude-sonnet-5-5
 
 ## Blocked, and by what
 
@@ -118,3 +122,15 @@ Each agent a plan skill started for this plan has one bullet, with its agent id,
 - Verification on main, after the fix at landing: `checks: 16 commands passed`, printed by `templates/checks.sh` on the state file. The verify list was not changed.
 - A/B: none, the configuration names no `bench:`. Look: none, `look:` is empty.
 - Usage: builder a6b13ac6347fbb68a, 166884 tokens, 21 tool uses, 342 s, and for round 1 189423 tokens, 18 tool uses, 140 s; brief check af1105b279c18c7ed, 159691 tokens, 22 tool uses, 267 s; reviewer a0f7721f21de23fac, 151881 tokens, 31 tool uses, 351 s; reviewer over round 1 a3dcc47add2b65486, 123214 tokens, 11 tool uses, 133 s.
+
+### Step 1, the copied pages (landed 2026-11-25)
+
+- Landed: `skills/academic/researcher/` with 27 pages (20 copied from academic-pipeline v3.13.0, the six upstream documents at `agents/compliance_agent.md` and `references/`, and `references/ethics.md`), `NOTICE.md` at the repository root and line 263 of `README.md`, from the base cc3965a. No `SKILL.md` yet: step 2 writes it. `deviations.md` in this ledger holds the differences from the source, 25 kinds with the ruling behind each and a list per file.
+- Premise correction: the sources are saved under `.agents/sources/academic-research-skills-v3.13.0/`, which git ignores, and not in the ledger.
+- Choices booked under self-rule for this step: Open item A (C144), Open item B (C145), Open item C (C146).
+- The builder's first report did not pass its bar: it handed back two cases, and the first review gave items 1, 4, 5 and 8 as violated. Repair round 1 carried eleven rulings (`agents/briefs/1-round-1.md`); the run over it gives each ruling as holding.
+- Fix at landing, one: `references/ethics.md` says that an issue a phase of the same record already reports goes to the correction round of the integrity verdict, and `examples/integrity_failure_recovery.md` says the same of its fabricated reference (Spec 1 of the run over round 1).
+- Findings outside the brief: none.
+- Verification on main, after the fix at landing: `checks: 16 commands passed`, printed by `templates/checks.sh` on the state file. The verify list was not changed.
+- A/B: none, the configuration names no `bench:`. Look: none, `look:` is empty.
+- Usage: builder a90f7dfac5ca2a866, 305562 tokens, 215 tool uses, 2297 s, and for round 1 168875 tokens, 98 tool uses, 619 s; brief check a88f2b2030a881ff2, 234088 tokens, 48 tool uses, 448 s; reviewer aa05eb7854278e73e, 131902 tokens, 83 tool uses, 793 s; reviewer over round 1 a13bf81b661469dae, 250100 tokens, 47 tool uses, 291 s.
