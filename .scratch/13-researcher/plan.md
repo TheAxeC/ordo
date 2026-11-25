@@ -43,6 +43,13 @@ one `novelty` run on an idea you name, its page read by you, each work it cites 
   - Option (b): the example as the source has it, and the field added to the claim list of `paper`'s draft writer. Pro: the source's words in `researcher`. Con: an example that contradicts the state machine; a change to `paper`, which is a copy of academic-paper and was closed with its own gate.
   - Recommendation: (a), since ADR 0052 makes `researcher` the copy that is adapted and the brief's rule that no two pages disagree ranks the example. (a) is also the smaller change; it is taken for the reasons given.
 
+## Step 2, Step 0
+
+- Open item D (2026-11-25), closed under self-rule as C147. Step 2 writes the Quick start of `researcher`, and the plan fixes the command lines of the `integrity` mode only (ruling D2: `/researcher integrity` and `/researcher integrity pre-review`). What each command takes as its argument, and how `manuscript` is told that a draft already exists, is a public shape no ruling gives. The source takes a sentence in plain words and detects the stage; `paper` takes `/paper full <project folder>` and `/paper revision <main.tex> <comments file>`.
+  - Option (a), recommended: `/researcher integrity <main.tex>`, `/researcher integrity pre-review <main.tex>`, `/researcher manuscript <project folder>` for a paper written from the project's materials, and `/researcher manuscript <main.tex>` for a draft that exists, which enters at the first integrity check as ruling D4 says, and `/researcher manuscript <main.tex> <comments file>` for a draft with review comments in hand, which runs the first integrity check and then the revision, as the copied state machine's entry at Stage 4 has it. Pro: the arguments of `paper`, which `manuscript` runs, so a user types the same thing to both; the midway entry is told by what the argument is, with no extra word. Con: none found.
+  - Option (b): the source's plain sentence, with the stage detected from it. Pro: the source's form. Con: `/ordo-help` prints a skill's command lines from its Quick start, and a plain sentence gives it no line per mode; every other skill of this repository names its mode as a word.
+  - Recommendation: (a), since `docs/dev/skill-layout.md` asks the Quick start for every invocation, one per line. Neither option is the cheaper one.
+
 ## Could run in parallel
 
 Independent of each other; the standing rule of one agent at a time still serialises them unless `plan.yaml`'s `workers_at_once` allows more.
@@ -90,6 +97,7 @@ Independent of each other; the standing rule of one agent at a time still serial
 - Open item A (2026-11-25): of the source's files no ruling names, `references/adapters/overview.md`, `references/adapters/.gitkeep`, `references/literature_corpus_consumers.md`, `references/passport_as_reset_boundary.md` and `references/changelog.md` are left out with the parts of the copied files that name them, and every other file of academic-pipeline is copied, which lets step 1's brief list the files it copies (self-rule).
 - Open item B (2026-11-25): the six upstream documents stand at `agents/compliance_agent.md` and `references/<the same name>`; copied text follows the prose standard's section 0 and its section F on hard wraps and otherwise keeps the source's words; a pointer to a file that is not taken is removed with the sentence or row that exists only for it, a line naming a design document is removed as history, and a pointer to a file of `paper` or `paper-review-panel` names that skill; which lets step 1's brief be closed after its brief check (self-rule).
 - Open item C (2026-11-25): `examples/full_pipeline_example.md` gains a Stage 2.5 scene and a Stage 4.5 scene in the form of `examples/mid_entry_example.md`, and the integrity agent picks the claims it checks against the record of the experiments by reading the manuscript, the field `planned_experiment_ids` named nowhere in the copy; which lets repair round 1 of step 1 be sent (self-rule).
+- Open item D (2026-11-25): the command lines of the two modes are `/researcher integrity <main.tex>`, `/researcher integrity pre-review <main.tex>`, `/researcher manuscript <project folder>`, for a draft that exists `/researcher manuscript <main.tex>`, and with review comments `/researcher manuscript <main.tex> <comments file>`; which lets step 2's brief be written (self-rule).
 
 ## Agents
 

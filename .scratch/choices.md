@@ -2,7 +2,7 @@
 
 Each choice the orchestrator took under self-rule waits here for the user's review, grouped by roadmap entry. The user agrees with a choice by typing `C<n> Agree`, or replaces it by typing `C<n> => <ruling>`, in any session on the repository. A reviewed choice leaves this file.
 
-Last number: C146
+Last number: C147
 
 # Entry 2.I Several plans in one session
 
@@ -805,3 +805,14 @@ The review of step 1 (`.scratch/13-researcher/agents/reviews/1-refuter.md`, Spec
 Taken: (a)
 Booked: `.scratch/13-researcher/plan.md:92` (Open item C)
 Builds on it: step 1
+
+## C147. The command lines of `integrity` and `manuscript` (2026-11-25)
+
+Step 2 writes the Quick start of `researcher`, and the plan fixes the command lines of the `integrity` mode only (ruling D2: `/researcher integrity` and `/researcher integrity pre-review`). What each command takes as its argument, and how `manuscript` is told that a draft already exists, is a public shape no ruling gives. The source takes a sentence in plain words and detects the stage; `paper` takes `/paper full <project folder>` and `/paper revision <main.tex> <comments file>`.
+  - Option (a), recommended: `/researcher integrity <main.tex>`, `/researcher integrity pre-review <main.tex>`, `/researcher manuscript <project folder>` for a paper written from the project's materials, and `/researcher manuscript <main.tex>` for a draft that exists, which enters at the first integrity check as ruling D4 says, and `/researcher manuscript <main.tex> <comments file>` for a draft with review comments in hand, which runs the first integrity check and then the revision, as the copied state machine's entry at Stage 4 has it. Pro: the arguments of `paper`, which `manuscript` runs, so a user types the same thing to both; the midway entry is told by what the argument is, with no extra word. Con: none found.
+  - Option (b): the source's plain sentence, with the stage detected from it. Pro: the source's form. Con: `/ordo-help` prints a skill's command lines from its Quick start, and a plain sentence gives it no line per mode; every other skill of this repository names its mode as a word.
+  - Recommendation: (a), since `docs/dev/skill-layout.md` asks the Quick start for every invocation, one per line. Neither option is the cheaper one.
+
+Taken: (a)
+Booked: `.scratch/13-researcher/plan.md:100` (Open item D)
+Builds on it: step 2

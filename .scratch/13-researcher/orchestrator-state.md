@@ -47,6 +47,9 @@ repair_reviewer: claude:sonnet  # the model the run of /refute over a repair rou
 
 ```yaml
 dispatch:                    # one entry per step in flight, written by /spec, since docs/plan.yaml's workers_at_once is 5.
+- step: 2
+  landing: preparing
+  brief_check: "running: a7ab1a8b91934c83b"
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled or, under `self_rule: on`, until the orchestrator closes it as `plan-orchestration`'s `references/self-rule.md`, "Closing an open item", says)
@@ -60,6 +63,7 @@ A finding that is neither closed in the repair rounds nor fixed at landing is an
 - 2026-11-25: Open item A, the source's files no ruling names: closed under self-rule, C144.
 - 2026-11-25: Open item B, three differences of the copy no ruling names: closed under self-rule, C145.
 - 2026-11-25: Open item C, the full example's integrity stages and how the integrity agent picks its claims: closed under self-rule, C146.
+- 2026-11-25: Open item D, the command lines of `integrity` and `manuscript`: closed under self-rule, C147.
 
 ## The standing demands (from the user, in force)
 
@@ -89,4 +93,4 @@ A finding that is neither closed in the repair rounds nor fixed at landing is an
 - 2026-11-25. Steps 1 and 5 have landed. No step is in flight.
 - Verified: `templates/checks.sh` on this file printed `checks: 16 commands passed` on main with step 1 staged.
 - Roadmap entry 13 (researcher). Plan step 2 of 7: the modes `integrity` and `manuscript`. Next: step 3, the modes `novelty` and `idea`.
-- Open on the user's side: the review of the choices C144, C145 and C146 in `.scratch/choices.md`, which blocks nothing.
+- Open on the user's side: the review of the choices C144, C145, C146 and C147 in `.scratch/choices.md`, which blocks nothing.
