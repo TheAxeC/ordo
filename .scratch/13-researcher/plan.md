@@ -172,6 +172,7 @@ Independent of each other; the standing rule of one agent at a time still serial
 - Open item Q (2026-11-25), ruled (a) by the user: no release candidate after `v11.1.0-rc.1` and no new gate run for step 11; the user's run gave what the gate measures, step 11 changes nothing of how a work is confirmed, and the user reads the new text when step 11 lands (the user).
 - D45 A call of full whose text is a sentence (2026-11-25): (a), a call of `full` with more arguments than `full <project folder> [<sketch file>]` takes reads its text as the sketch it hands to `idea`, and the first message asks for the project folder, as ruling O gives it for `idea`; built in step 11; the lazy option was `full` left as it is (self-rule).
 - The user's reading of the novelty pages (2026-11-25): the three novelty pages of the interview of the user's `/researcher idea` run, `research-hub/projects/ideas/cr-geometry-kspace/notes/novelty-2026-11-25.md`, `-2.md` and `-3.md`, are read, and the orchestrator's assessment of them is accepted: 26 cited works, each confirmed by `lookup.py resolve` at a title ratio of 0.99 or above with no `DOI_MISMATCH` (the user).
+- The user's reading of step 11 (2026-11-25): the text of step 11, the sentence call of `idea` and `full` and the quoted idea of a novelty page made by `idea`, is read and accepted, as ruling Q asks (the user).
 
 ## Agents
 
