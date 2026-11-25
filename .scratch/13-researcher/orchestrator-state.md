@@ -55,8 +55,10 @@ dispatch:                    # one entry per step in flight, written by /spec, s
   launched: 2026-11-25
   session_id: a8e79c1e64120e263 (claude-opus-5-5)
   report: .scratch/13-researcher/agents/reviews/3-report.md
-  round: 0
+  builder_usage: 278062 tokens, 92 tool uses, 1010 s
+  round: 1
   brief_check: .scratch/13-researcher/agents/reviews/3-brief-check.md (a5b81d093a7ce8107, claude-opus-5-5, 217367 tokens, 55 tool uses, 487 s)
+  reviewer_report: .scratch/13-researcher/agents/reviews/3-refuter.md (a779a2f818f5c41bd, claude-opus-5-5, 191071 tokens, 45 tool uses, 536 s)
   landing: not-started
 ```
 
@@ -103,5 +105,5 @@ A finding that is neither closed in the repair rounds nor fixed at landing is an
 
 - 2026-11-25. Steps 1, 2 and 5 have landed. No step is in flight.
 - Verified: `templates/checks.sh` on this file printed `checks: 16 commands passed` on main with step 2 staged and its fixes at landing made.
-- Roadmap entry 13 (researcher). Plan step 3 of 7: the modes `novelty` and `idea`, its builder running. Next: step 4, the modes `research` and `full`.
+- Roadmap entry 13 (researcher). Plan step 3 of 7: the modes `novelty` and `idea`, repair round 1 sent. Next: step 4, the modes `research` and `full`.
 - Open on the user's side: the review of the choices C144, C145, C146, C147, C148 and C149 in `.scratch/choices.md`, which blocks nothing.
