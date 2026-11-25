@@ -55,9 +55,11 @@ dispatch:                    # one entry per step in flight, written by /spec, s
   base: cc3965a
   launched: 2026-11-25
   report: .scratch/13-researcher/agents/reviews/1-report.md
+  builder_usage: 305562 tokens, 215 tool uses, 2297 s
+  reviewer_report: .scratch/13-researcher/agents/reviews/1-refuter.md (aa05eb7854278e73e, claude-opus-5-5, 131902 tokens, 83 tool uses, 793 s)
   brief_check: .scratch/13-researcher/agents/reviews/1-brief-check.md (a88f2b2030a881ff2, claude-opus-5-5, 234088 tokens, 48 tool uses, 448 s)
   landing: not-started
-  round: 0
+  round: 1
   shared_paths: "README.md, with step 5 of this plan: this step changes line 263 and step 5 line 22, so the cherry-pick merges them without a hand edit"
 ```
 
@@ -71,6 +73,7 @@ A finding that is neither closed in the repair rounds nor fixed at landing is an
 
 - 2026-11-25: Open item A, the source's files no ruling names: closed under self-rule, C144.
 - 2026-11-25: Open item B, three differences of the copy no ruling names: closed under self-rule, C145.
+- 2026-11-25: Open item C, the full example's integrity stages and how the integrity agent picks its claims: closed under self-rule, C146.
 
 ## The standing demands (from the user, in force)
 
@@ -100,4 +103,4 @@ A finding that is neither closed in the repair rounds nor fixed at landing is an
 - 2026-11-25. Step 5 has landed. Step 1 is in flight, its builder running in its worktree; the dispatch block names it.
 - Verified: `templates/checks.sh` on this file printed `checks: 16 commands passed` on main with step 5 staged.
 - Roadmap entry 13 (researcher). Plan step 1 of 7: the copied pages. Next: step 2, the modes `integrity` and `manuscript`.
-- Open on the user's side: the review of the choices C144 and C145 in `.scratch/choices.md`, which blocks nothing.
+- Open on the user's side: the review of the choices C144, C145 and C146 in `.scratch/choices.md`, which blocks nothing.

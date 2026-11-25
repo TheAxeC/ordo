@@ -2,7 +2,7 @@
 
 Each choice the orchestrator took under self-rule waits here for the user's review, grouped by roadmap entry. The user agrees with a choice by typing `C<n> Agree`, or replaces it by typing `C<n> => <ruling>`, in any session on the repository. A reviewed choice leaves this file.
 
-Last number: C145
+Last number: C146
 
 # Entry 2.I Several plans in one session
 
@@ -793,4 +793,15 @@ The brief check of step 1 (`.scratch/13-researcher/agents/reviews/1-brief-check.
 
 Taken: (a)
 Booked: `.scratch/13-researcher/plan.md:87` (Open item B)
+Builds on it: step 1
+
+## C146. The full example's integrity stages and how the integrity agent picks its claims (2026-11-25)
+
+The review of step 1 (`.scratch/13-researcher/agents/reviews/1-refuter.md`, Spec 2 and Behaviour 1) and the builder's two hand-backs (`agents/reviews/1-report.md`, H1 and H2) show two places where the copy cannot keep the source's text and no ruling says what stands there. First, the source's worked example of a whole run, `examples/full_pipeline_example.md`, has no integrity stage: it goes from writing to review and ends without a final check, while the state machine forbids both and every other copied page runs both checks. Second, the integrity agent picks the claims it checks against the record of the experiments through a field of the draft writer's claim list, `planned_experiment_ids`, and the draft writer of `paper` writes no such field (`grep -rn planned_experiment_ids skills/academic/paper` prints nothing), so in a `researcher` run the check picks no claim and a claim that contradicts a recorded result passes.
+  - Option (a), recommended: (1) the full example gains a Stage 2.5 scene and a Stage 4.5 scene in the form `examples/mid_entry_example.md` has them, so the example agrees with the state machine. (2) The integrity agent picks the claims by reading the manuscript: each sentence that reports an outcome of the author's own experiments is a claim of the check and is matched to the entry of the record it reports; the field `planned_experiment_ids` is named nowhere in the copy. Pro: both stay inside `researcher`; the example no longer shows a run the state machine forbids; the check on a claim that contradicts a recorded result, which ruling D20 keeps, can fail a manuscript. Con: the example and the check differ from the source in these two places, and matching a sentence to an entry is a reading where the source had a declared link.
+  - Option (b): the example as the source has it, and the field added to the claim list of `paper`'s draft writer. Pro: the source's words in `researcher`. Con: an example that contradicts the state machine; a change to `paper`, which is a copy of academic-paper and was closed with its own gate.
+  - Recommendation: (a), since ADR 0052 makes `researcher` the copy that is adapted and the brief's rule that no two pages disagree ranks the example. (a) is also the smaller change; it is taken for the reasons given.
+
+Taken: (a)
+Booked: `.scratch/13-researcher/plan.md:92` (Open item C)
 Builds on it: step 1
