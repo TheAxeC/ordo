@@ -59,6 +59,13 @@ one `novelty` run on an idea you name, its page read by you, each work it cites 
   - Option (c): the re-review's scores are compared with each reviewer's own scores. Con: five deltas per dimension, where the copied page defines one.
   - Recommendation: (a). The cheaper option is (b).
 
+## Step 3, Step 0
+
+- Open item G (2026-11-25), closed under self-rule as C149. Step 3 writes the Quick start lines of `novelty` and `idea` and names the file each leaves, and no ruling gives either. Ruling D9 gives a project a `notes/` folder "for other material" and makes `README.md` the entry file; ruling D29 opens the README with the question and claims.
+  - Option (a), recommended: `/researcher novelty <idea> [<project folder>]`, the idea a sentence in quotes or the path of a file that holds it, the page written to `notes/novelty-<YYYY-MM-DD>.md` in the project folder (the folder the session runs in when none is given), with `-2`, `-3` for a further page of the same day; `/researcher idea <project folder> [<sketch file>]`, the sketch taken from the file or asked in the first round, the questions and claims written into the section of `<project folder>/README.md` that D29 opens the README with, and each novelty page of a round written to `notes/` as above. Pro: the layout the user ruled, and the argument forms of `paper`. Con: none found.
+  - Option (b): the novelty page beside the idea file, or in a run folder `researcher-runs/novelty-<date>/`. Con: D9 puts such material in `notes/`, and a run folder holds a run's state, which `novelty` does not have.
+  - Recommendation: (a). Neither option is the cheaper one.
+
 ## Could run in parallel
 
 Independent of each other; the standing rule of one agent at a time still serialises them unless `plan.yaml`'s `workers_at_once` allows more.
@@ -109,6 +116,7 @@ Independent of each other; the standing rule of one agent at a time still serial
 - Open item D (2026-11-25): the command lines of the two modes are `/researcher integrity <main.tex>`, `/researcher integrity pre-review <main.tex>`, `/researcher manuscript <project folder>`, for a draft that exists `/researcher manuscript <main.tex>`, and with review comments `/researcher manuscript <main.tex> <comments file>`; which lets step 2's brief be written (self-rule).
 - Open item E (2026-11-25): (a), the re-review of `paper-review-panel` gains the seven dimension scores and the overall score on the 0-100 rubric in its output, given by the editorial synthesizer as in the full mode, and `researcher` reads them; the lazy option was (b), leaving the score deltas and the two stops out of `researcher` (the user).
 - Open item F (2026-11-25): the full mode's editorial synthesizer of `paper-review-panel` also writes the seven dimension scores and the Weighted Average into the Editorial Decision, as the baseline of the deltas ruling E asks for; which lets repair round 1 of step 2 end (self-rule).
+- Open item G (2026-11-25): the command lines are `/researcher novelty <idea> [<project folder>]` and `/researcher idea <project folder> [<sketch file>]`, and a novelty page is `notes/novelty-<YYYY-MM-DD>.md` in the project folder; which lets step 3's brief be written (self-rule).
 
 ## Agents
 

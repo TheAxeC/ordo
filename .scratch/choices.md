@@ -2,7 +2,7 @@
 
 Each choice the orchestrator took under self-rule waits here for the user's review, grouped by roadmap entry. The user agrees with a choice by typing `C<n> Agree`, or replaces it by typing `C<n> => <ruling>`, in any session on the repository. A reviewed choice leaves this file.
 
-Last number: C148
+Last number: C149
 
 # Entry 2.I Several plans in one session
 
@@ -828,3 +828,14 @@ The Stage 3 scores that the score deltas start from are not in the full mode's E
 Taken: (a)
 Booked: `.scratch/13-researcher/plan.md:111` (Open item F)
 Builds on it: step 2
+
+## C149. The command lines of `novelty` and `idea`, and where a novelty page is written (2026-11-25)
+
+Step 3 writes the Quick start lines of `novelty` and `idea` and names the file each leaves, and no ruling gives either. Ruling D9 gives a project a `notes/` folder "for other material" and makes `README.md` the entry file; ruling D29 opens the README with the question and claims.
+  - Option (a), recommended: `/researcher novelty <idea> [<project folder>]`, the idea a sentence in quotes or the path of a file that holds it, the page written to `notes/novelty-<YYYY-MM-DD>.md` in the project folder (the folder the session runs in when none is given), with `-2`, `-3` for a further page of the same day; `/researcher idea <project folder> [<sketch file>]`, the sketch taken from the file or asked in the first round, the questions and claims written into the section of `<project folder>/README.md` that D29 opens the README with, and each novelty page of a round written to `notes/` as above. Pro: the layout the user ruled, and the argument forms of `paper`. Con: none found.
+  - Option (b): the novelty page beside the idea file, or in a run folder `researcher-runs/novelty-<date>/`. Con: D9 puts such material in `notes/`, and a run folder holds a run's state, which `novelty` does not have.
+  - Recommendation: (a). Neither option is the cheaper one.
+
+Taken: (a)
+Booked: `.scratch/13-researcher/plan.md:119` (Open item G)
+Builds on it: step 3
