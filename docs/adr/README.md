@@ -65,3 +65,5 @@ A record is `NNNN-<decision-as-a-phrase>.md` from `template.md`, numbered in ord
 | [0056](0056-on-a-cluster-the-builder-s-small-local-test-of-a-piece-of-code-is-the-one-job-submitted-before-its-review.md) | On a cluster, the builder's small local test of a piece of code is the one job submitted before its review |
 | [0057](0057-researcher-writes-a-project-s-readme-and-code-readme-in-a-newcomer-s-layout-and-its-readme-mode-brings-both-up-to-date.md) | researcher writes a project's README and code README in a newcomer's layout, and its readme mode brings both up to date |
 | [0058](0058-handbook-writes-a-software-repository-s-readme-and-its-supporting-documentation-from-the-code-from-a-fixed-set-of-kinds-the-user-confirms.md) | handbook writes a software repository's README and its supporting documentation from the code, from a fixed set of kinds the user confirms |
+| [0059](0059-a-rulings-file-is-named-by-its-entry-s-number.md) | A rulings file is named by its entry's number |
+| [0060](0060-one-standard-library-drawing-engine-kept-in-handbook-draws-every-figure.md) | One standard-library drawing engine, kept in handbook, draws every figure |
