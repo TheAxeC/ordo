@@ -2,7 +2,7 @@
 
 Each choice the orchestrator took under self-rule waits here for the user's review, grouped by roadmap entry. The user agrees with a choice by typing `C<n> Agree`, or replaces it by typing `C<n> => <ruling>`, in any session on the repository. A reviewed choice leaves this file.
 
-Last number: C143
+Last number: C144
 
 # Entry 2.I Several plans in one session
 
@@ -770,3 +770,16 @@ The goal has `land.sh` and `check_config.py` given the path of the file found, a
 Taken: (a)
 Booked: `.scratch/5-a-skill-groups-plan-yaml-found-by-a-search-order-and-agents-on-fable/agents/briefs/3.md`, "What to build" 5 and 6 and "Decisions taken in this brief" 4 and 5
 Builds on it: step 3
+
+# Entry 13 researcher
+
+## C144. The source's files no ruling names (2026-11-25)
+
+Step 1 copies academic-pipeline's files, and the gate lets the comparison print only differences the plan's Rulings name. What the tree shows: the source holds 30 files (`find . -type f` in the source folder). Rulings D16 and D17 and ADR 0052 settle the claim audit, the cross-model check, the patch scripts, the collaboration observer, the research stage, the finalizing stage and the process summary. No ruling names what happens to four other files: `references/adapters/overview.md` with `references/adapters/.gitkeep`, `references/literature_corpus_consumers.md`, `references/passport_as_reset_boundary.md` and `references/changelog.md`.
+  - Option (a), recommended: those files are left out, and every other file of the source is copied. `references/adapters/` and `references/literature_corpus_consumers.md` state how the agents of the source's research stage and its literature strategist read a literature corpus produced by adapter scripts under upstream's `scripts/adapters/` and checked by JSON schemas under `shared/contracts/passport/`; the research stage is not copied, and no file under `skills/` names `literature_corpus` (`grep -rl literature_corpus skills` prints nothing). `references/passport_as_reset_boundary.md` applies only when the environment variable `ARS_PASSPORT_RESET=1` is set (source `agents/pipeline_orchestrator_agent.md:179`), rests on a schema file that is not taken, and ruling D6 already keeps a run's state in files of the run folder. `references/changelog.md` is history, which `docs/dev/change-standard.md` keeps out of shipped text. The parts of the copied files that name these four are removed with them. Pro: the copy holds no page whose reader or whose files do not exist here, by the same line ruling D16 draws for the documents a default run needs. Con: a later wish for a literature corpus or for the reset boundary has to take those pages then.
+  - Option (b): the three pages are copied too, with the schema files and the adapter scripts they rest on taken from upstream. Pro: nothing of the source is left out beyond what the user ruled. Con: the copy gains Python scripts and JSON schemas that nothing in this repository runs or tests, for agents that are not copied, and a script needs its test in the verify list, a change to the configuration that is the user's.
+  - Recommendation: (a), since the pages' readers and files are absent from the copy and ruling D16 leaves out what a default run does not need. The lazy option is (a) as well, the one that costs less; it is taken for the reason given and not for its cost.
+
+Taken: (a)
+Booked: `.scratch/13-researcher/plan.md:82` (Open item A)
+Builds on it: step 1

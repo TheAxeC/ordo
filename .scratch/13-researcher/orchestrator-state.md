@@ -57,7 +57,7 @@ A finding that is neither closed in the repair rounds nor fixed at landing is an
 
 ## Closed items (the log of what was raised and how it ended; no report carries it)
 
-- none.
+- 2026-11-25: Open item A, the source's files no ruling names: closed under self-rule, C144.
 
 ## The standing demands (from the user, in force)
 
