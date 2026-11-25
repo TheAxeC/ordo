@@ -48,8 +48,16 @@ repair_reviewer: claude:sonnet  # the model the run of /refute over a repair rou
 ```yaml
 dispatch:                    # one entry per step in flight, written by /spec, since docs/plan.yaml's workers_at_once is 5.
 - step: 8
-  brief_check: "running: a0516fcf1aaec457a"
-  landing: preparing
+  executor: agent
+  worker: ordo-medium
+  worktree: .agents/worktrees/13-researcher-8
+  base: 0658dc7
+  launched: 2026-11-25
+  session_id: a96f07919efa565ec (claude-opus-5-5)
+  report: .scratch/13-researcher/agents/reviews/8-report.md
+  brief_check: .scratch/13-researcher/agents/reviews/8-brief-check.md (a0516fcf1aaec457a, claude-opus-5-5, 202392 tokens, 45 tool uses, 7m 18s)
+  round: 0
+  landing: not-started
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled or, under `self_rule: on`, until the orchestrator closes it as `plan-orchestration`'s `references/self-rule.md`, "Closing an open item", says)
