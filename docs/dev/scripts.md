@@ -6,14 +6,17 @@ Every script in this repository outside `.scratch/` is listed here with its kind
 
 | Script | Job |
 |---|---|
-| `docs/figures/gen_figures.py` | Writes the SVG figures of the README from the labels written in the file: `pipeline.svg`, `plan-loop.svg`, `grill.svg`, `writing.svg`, `paper-review-panel.svg`, `referee.svg`, `submit.svg`, `grant.svg`, `code-comments.svg`, `codebase-design.svg`, `researcher.svg`, `researcher-research.svg`, `researcher-revision.svg` and, under `docs/figures/paper/`, one figure for each of the twelve modes of `paper`, `lifecycle.svg` for the path of a manuscript through the modes and `run-folder.svg` for the files of a full run from agent to agent |
-| `docs/figures/academic-pipeline/gen_academic_pipeline.py` | Writes `academic-pipeline.svg`, the stages of academic-pipeline and the skill each goes to, into its own folder, from the labels written in the file, using the layout code of `gen_figures.py` |
+| `docs/figures/gen_figures.py` | Writes the SVG figures of the README from the labels written in the file, using the engine `skills/code/handbook/templates/figures.py` and the kind `paper` of `docs/figures/ordo_kinds.py`: under `docs/figures/`, `orchestration/pipeline.svg`, `orchestration/plan-loop.svg`, `orchestration/grill.svg`, `academic/writing.svg`, `academic/paper-review-panel.svg`, `academic/referee.svg`, `academic/submit.svg`, `academic/grant.svg`, `code/code-comments.svg`, `code/codebase-design.svg`, `academic/researcher/manuscript.svg`, `academic/researcher/research.svg`, `academic/researcher/revision.svg` and, under `docs/figures/academic/paper/`, one figure for each of the twelve modes of `paper`, `lifecycle.svg` for the path of a manuscript through the modes and `run-folder.svg` for the files of a full run from agent to agent |
+| `docs/figures/academic/researcher/gen_academic_pipeline.py` | Writes `docs/figures/academic/researcher/academic-pipeline.svg`, the stages of academic-pipeline and the skill each goes to, from the labels written in the file, using the engine `skills/code/handbook/templates/figures.py` and the kind `paper` of `docs/figures/ordo_kinds.py` |
 | `utils/pin.sh` | Pins the installed skills and agents to a tag of this repository, or checks the pin |
+
+A figure stands in the folder of its group of `skills/`: `docs/figures/<group>/<skill>.svg` for a skill with one figure, `docs/figures/<group>/<skill>/<name>.svg` for a skill with several, and `docs/figures/<group>/<name>.svg` for a figure over several skills, in the group most of them belong to.
 
 ## User scripts
 
 | Script | Job |
 |---|---|
+| `skills/code/handbook/templates/figures.py` | The drawing engine that both figure scripts of this repository import: it lays out boxes and arrows, draws them with a legend and a note as an SVG file, and writes each file and reads it back. A script that draws kinds of box of its own builds a read-only mapping of the engine's kinds and its own with `with_kinds` and passes it to each drawing call |
 | `skills/code/code-comments/templates/strip_comments.py` | Prints the code of a C, C++ or CMake file without its comments, and with `--compare` says whether two files have the same code, so that a rewrite of comments is kept only when it changed no code |
 | `skills/code/wizard/templates/template.sh` | The script the `wizard` skill copies and fills with stages. Run by a person, it walks that person through a setup, both the actions only a person can take and the commands a stage runs, each shown and confirmed first, reads each value, writes it to `.env`, a GitHub secret or a GitHub variable, and asks before an irreversible action |
 | `skills/orchestration/land/templates/checks.sh` | Runs a plan's verify list and says whether every command exited 0 |

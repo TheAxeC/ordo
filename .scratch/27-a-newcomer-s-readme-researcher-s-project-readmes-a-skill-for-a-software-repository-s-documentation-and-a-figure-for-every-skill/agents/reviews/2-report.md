@@ -1,23 +1,16 @@
-# Report: step 2, researcher's two project READMEs in the layout of ADR 0057, the readme mode, and the adopt mode's rewrite
+# Report: step 2, researcher's two project READMEs in the layout of ADR 0057, the readme mode, and the adopt mode's rewrite, with repair round 1
 
-Everything in the brief is done.
+Everything in the brief and in the round brief is done, except ruling 6 of the round brief, whose premise the tree shows false: `references/project_layout.md` line 51 already ends with a full stop (see "Repair round 1", ruling 6). That line is unchanged.
 
 ## Open items of the state file, verbatim
 
-- Open item B (2026-11-25, step 1, kind 4, the roadmap's gate): the gate's part "every `docs/figures/` path that `git grep` finds in `README.md`, `docs/` and `skills/` names a file that exists" cannot pass once step 1 moves the figures, because `docs/roadmap.md` line 67, the done line of entry 25, records that you read `docs/figures/paper/lifecycle.svg`, a path that then no longer exists (`git grep -n 'docs/figures/paper/lifecycle' -- docs/roadmap.md` prints line 67). Step 1 goes on meanwhile and runs its check without `docs/roadmap.md`, quoting both runs.
-  - (a) Recommended. The gate's part reads "... in `README.md`, `docs/` outside `docs/roadmap.md`, and `skills/` ...", written into entry 27's gate by `/roadmap` at the closing. Pro: the done line stays the true record of what you read; the check still covers every page that shows a figure. Con: the roadmap's own figure paths go unchecked, and today it names none outside done lines.
-  - (b) Entry 25's done line is edited to `docs/figures/academic/paper/lifecycle.svg`. Pro: the gate stays as written. Con: a done entry's record is rewritten to a path that did not exist when you read it.
-  - Lazy option: neither; leaving the gate as written and accepting a failed part at the closing.
-- Open item C (2026-11-25, step 4, kind 3, ruling D33): D33's check "`git grep -n 'rulings/<slug>'` over `skills/` and `docs/` prints nothing" can never print nothing, because `docs/roadmap.md` line 27, entry 27's own gate, holds the pattern (`git grep -n 'rulings/<slug>' -- docs/roadmap.md` prints line 27). Step 4 goes on meanwhile: it rewrites ADR 0059's Context line so it no longer holds the pattern, and runs the check without `docs/roadmap.md`, quoting both runs.
-  - (a) Recommended. The check reads "`git grep -n 'rulings/<slug>' -- skills docs ':!docs/roadmap.md'` prints nothing", in D33 and in entry 27's gate, written by `/roadmap` at the closing. Pro: it checks every page that states the rule; the one line left out is the check itself. Con: none found.
-  - (b) The gate keeps D33's words, and the closing records that the check printed its own line. Pro: no change to the ruling. Con: the gate's output then shows a part that did not pass as written.
-  - Lazy option: (b), since it changes nothing now and leaves a failed check in the record.
-- Open item D (2026-11-25, step 2, kind 3, a ruling against a standard): your rulings D1 and D15 and ADR 0057 give the README headings `### Why it matters`, `## What it is and why`, `### What it does`, `### What is not claimed`, `### What this project adds`, `## What each result comes from` and `## Dead ends (do not retry)`. The prose standard says "Headings are labels, not sentences." and gives "Why it is separate at all" as a heading it rejects. Step 2 writes the ruled headings meanwhile.
-  - (a) Recommended. Keep the ruled headings. Pro: they are the list you approved, and each says what a newcomer finds under it; the standard's own heading `## How it is applied` and the brief template's `## What to build` already use this form. Con: they read close to the example the standard rejects.
-  - (b) Shorten them to labels: `### Relevance`, `## Overview`, `### Scope`, `### Not claimed`, `### Contribution`, `## Provenance of results` and `## Dead ends`. Pro: the standard is met word for word. Con: a newcomer reads less from each heading, and D1, D15 and ADR 0057 are changed.
-  - Lazy option: neither ruling, leaving the clash unstated.
+The state file on main (`git -C /Users/axelfaes/workspace/ordo show HEAD:.scratch/27-.../orchestrator-state.md`, its "Open items" section) reads:
 
-The step writes the ruled headings, as the brief says; a ruling of Open item D that changes them is a later round.
+```text
+- none.
+```
+
+Open item D was ruled (a) by the user, as the round brief says: the headings stand as ruled in D1, D15 and ADR 0057.
 
 ## The cases' first run, on the unchanged tree at 929e519
 
@@ -60,16 +53,16 @@ No case is one the brief's own rules get wrong, so no case was handed back.
 
 1. The heading grep: every hit is quoted and named under "DONE / NOT DONE", Verify 4. Met.
 2. `project_layout.md`, "The README": the title with its one line, then the twelve `##` sections numbered 1 to 12 in the order of ADR 0057's Decision, with `### The problem`, `### Why it matters`, `### What it does`, `### <dataset>`, `### The approach`, `### What is not claimed`, `### The closest prior work`, `### What this project adds`, `### <result>`, `### <method>`, `### The stage and campaign that stand`, `### Where things live` and `### Cluster facts`, then the paper pointer, the 200-line rule, the slug rule, the next free name and `None yet.`. Met.
-3. "research" item 3: every section and fixed `###` heading written in order with `None yet.`, the two kept sections at their places, `code/.depositignore` with the lines of `project_layout.md`, "The deposit", which are the lines of Decisions 5, and `code/README.md` with the title and the seven sections, eight headings. Met.
+3. "research" item 3: every section and fixed `###` heading written in order with `None yet.`, the placeholder headings `### <dataset>`, `### <result>` and `### <method>` left out (Repair round 1, ruling 3), the two kept sections at their places, `code/.depositignore` with the lines of `project_layout.md`, "The deposit", which are the lines of Decisions 5, and `code/README.md` with the title and the seven sections, eight headings. Met.
 4. `idea` item 11: a README with no section of that heading gets it "after the title and after `## In short` and `## What it is and why` where the README holds them, and before every other section", so after `## What it is and why` and before `## Data`. Met.
 5. "readme" item 2: the made-up example states it: the forty-line log goes to `notes/next.md` (slug of `## Next`), or `notes/next-2.md` when `notes/next.md` exists, and `## Next` becomes a short numbered list. Met.
 6. "readme" item 2: a section the files cannot fill is drafted from the old README, the manuscript and the notes with each sentence's source named; what no file holds is a question. `## In short` is drafted from the paragraph with its source, and `### The closest prior work`, with no novelty page and no manuscript, is a question. Met.
 7. "readme" item 1 and Rules: "The skill reads and writes no file of any other tool, such as a project manifest"; item 5 writes only the drafts. `project.yml` is neither read nor written. Met.
 8. "readme" item 3: an existing `.depositignore` keeps each of its own lines and the draft adds each line of "The deposit" it lacks, so `data/` is kept and the thirteen other lines are added. Met.
-9. "readme" items 1 and 3, with the made-up `src/` example: the code README is drafted at `src/README.md`, and no `code/` is made. Met.
+9. "readme" items 1 and 3, with the made-up `src/` example: the code README is drafted at `src/README.md`, `### Where things live` names `src/`, and no `code/` is made. Met.
 10. Steps 1: `research` on an old-layout README is the stop "A README in the old layout", before any item of the mode. Met.
 11. "research adopt" item 3 runs "readme" items 1 to 5, which draft the README whole, keep every fact, and write only after the stop "The README drafts" is approved. Met.
-12. "research adopt" on code with no README: item 3 drafts the README by the rewrite from the project's files and what item 2 found; the readme refusal applies only to a folder that does not exist or is empty, so no refusal. Met.
+12. "research adopt" on code with no README: item 3 drafts the README by the rewrite from the project's files and what item 2 found, and, with the code in a made-up `src/`, "readme" item 1 finds `src/` from the files that hold the code, item 3 drafts `src/README.md` and `src/.depositignore`, and item 2 names `src/` in `### Where things live`, confirmed at "The README drafts" (Repair round 1, ruling 2); the readme refusal applies only to a folder that does not exist or is empty, so no refusal. Met.
 13. "What it reads" 1 and the Stops row "No project folder": for `readme` a folder that does not exist or is empty is that refusal, raised in Steps 1 before anything is written. Met.
 14. `full` and `revision` on an old-layout README: the stop of Steps 1, before the `revision` checks of the next bullet. Met.
 15. `idea` on an old-layout README: the stop of Steps 1, before any item of the mode and so before any round. Met.
@@ -84,7 +77,7 @@ No case is one the brief's own rules get wrong, so no case was handed back.
 | 2. `code/README.md` | DONE | read "The tree" and "The code README" | eight headings; the own code folder in a project underway |
 | 3. `code/.depositignore` | DONE | read "The deposit", "research" item 3, "readme" item 3 | the 14 lines of Decisions 5 with the reasons |
 | 4. A writer for every section | DONE | read "research" items 3, 4, 5, 11 to 18, "idea" item 11, `research_stages.md` | see "Every judgment call" 1 to 3 |
-| 5. Every reference follows | DONE | the heading grep, Verify 4 below | every hit named there |
+| 5. Every reference follows | DONE | the heading grep, Verify 4 below; `grep -n 'The stage and campaign that stand\` \(of\|under\)'` | every hit named; every test reads "under `## Working state`" (round, ruling 1) |
 | 6. The stop "A README in the old layout" | DONE | read Steps 1, the Stops row, `project_layout.md` "A README in the old layout" | for `idea`, `research`, `research adopt`, `full`, `revision` |
 | 7. The readme mode | DONE | read Quick start, the introduction, Steps introduction, Steps 1 and 6, "What it reads" 1, 3, 22, 25, "readme", Stops, the description | as the cases above |
 | 8. The adopt mode | DONE | read "research adopt" items 1 to 3, the Stops row "What the adopt mode found" | item 3 runs "readme" items 1 to 5 |
@@ -93,10 +86,10 @@ No case is one the brief's own rules get wrong, so no case was handed back.
 | Verify 1, the character-set check | DONE | `git diff --name-only -z \| xargs -0 perl -CSD -ne '<the check of the brief>'; echo "exit: $?"` | `exit: 0` and no other line |
 | Verify 2, the glossary sync | DONE | `python3 skills/ordo/ordo-init/templates/sync_rules.py . --only glossary; echo "exit: $?"` | `ok: the plan-terms block equals the template` then `exit: 0` |
 | Verify 3, the description count | DONE | `python3 -c 'import glob,yaml; [print(len(yaml.safe_load(open(f).read().split("---")[1])["description"]), f) for f in sorted(glob.glob("skills/*/*/SKILL.md"))]' \| grep researcher` | `1015 skills/academic/researcher/SKILL.md` |
-| Verify 4, the heading grep | DONE | below | below |
+| Verify 4, the heading grep | DONE | below | below, 91 lines |
 | Verify 5, list items and sentence length | DONE | reading | below |
 
-Verify 4. The grep of "Cases", piped to a `perl` filter that prints each hit's file and line with the headings it names (the two ADR names shortened to `ADR 0055` and `ADR 0057` by the filter), printed:
+Verify 4. `git grep -n -P '## (The stage and campaign that stand|Cluster facts|Where things live|Results|Dead ends|Constraints and limits)\b' -- skills docs README.md`, piped to a `perl` filter that prints each hit's file and line with the headings it names (the two ADR names shortened to `ADR 0055` and `ADR 0057` by the filter), run after the round, printed these 91 lines:
 
 ```text
 ADR 0055:15: ## Results and how to reproduce
@@ -118,45 +111,48 @@ skills/academic/researcher/SKILL.md:104: ### The stage and campaign that stand
 skills/academic/researcher/SKILL.md:255: ### The stage and campaign that stand
 skills/academic/researcher/SKILL.md:261: ### The stage and campaign that stand
 skills/academic/researcher/SKILL.md:265: ### The stage and campaign that stand
-skills/academic/researcher/SKILL.md:276: ## Dead ends (do not retry)
-skills/academic/researcher/SKILL.md:278: ### Where things live
-skills/academic/researcher/SKILL.md:279: ### The stage and campaign that stand
-skills/academic/researcher/SKILL.md:285: ### Cluster facts
-skills/academic/researcher/SKILL.md:288: ## Constraints and limits | ### Cluster facts
-skills/academic/researcher/SKILL.md:294: ## Constraints and limits
-skills/academic/researcher/SKILL.md:300: ### The stage and campaign that stand
-skills/academic/researcher/SKILL.md:325: ### The stage and campaign that stand
-skills/academic/researcher/SKILL.md:332: ## Results and how to reproduce
-skills/academic/researcher/SKILL.md:334: ### The stage and campaign that stand
-skills/academic/researcher/SKILL.md:339: ## Results and how to reproduce
-skills/academic/researcher/SKILL.md:342: ## Results and how to reproduce
-skills/academic/researcher/SKILL.md:350: ## Dead ends (do not retry)
-skills/academic/researcher/SKILL.md:352: ## Dead ends (do not retry)
-skills/academic/researcher/SKILL.md:353: ## Constraints and limits
-skills/academic/researcher/SKILL.md:359: ## Results and how to reproduce
-skills/academic/researcher/SKILL.md:371: ### Cluster facts
-skills/academic/researcher/SKILL.md:383: ## Results and how to reproduce
-skills/academic/researcher/SKILL.md:384: ## Dead ends (do not retry)
-skills/academic/researcher/SKILL.md:385: ## Results and how to reproduce
-skills/academic/researcher/SKILL.md:400: ### The stage and campaign that stand
-skills/academic/researcher/SKILL.md:410: ### Where things live
-skills/academic/researcher/SKILL.md:412: ### The stage and campaign that stand
-skills/academic/researcher/SKILL.md:423: ### Where things live
-skills/academic/researcher/SKILL.md:437: ### Where things live
-skills/academic/researcher/SKILL.md:611: ## Results and how to reproduce
-skills/academic/researcher/SKILL.md:615: ### The stage and campaign that stand
-skills/academic/researcher/SKILL.md:624: ### The stage and campaign that stand
-skills/academic/researcher/SKILL.md:627: ## Constraints and limits
-skills/academic/researcher/SKILL.md:633: ### The stage and campaign that stand
-skills/academic/researcher/SKILL.md:637: ## Results and how to reproduce
-skills/academic/researcher/SKILL.md:650: ### The stage and campaign that stand
-skills/academic/researcher/SKILL.md:657: ## Results and how to reproduce
-skills/academic/researcher/SKILL.md:670: ### The stage and campaign that stand
-skills/academic/researcher/SKILL.md:672: ### The stage and campaign that stand
-skills/academic/researcher/SKILL.md:719: ## Results and how to reproduce
-skills/academic/researcher/SKILL.md:740: ### The stage and campaign that stand
-skills/academic/researcher/SKILL.md:767: ## Dead ends (do not retry)
-skills/academic/researcher/SKILL.md:769: ### Where things live
+skills/academic/researcher/SKILL.md:275: ## Results and how to reproduce | ## Dead ends (do not retry)
+skills/academic/researcher/SKILL.md:277: ## Dead ends (do not retry)
+skills/academic/researcher/SKILL.md:279: ### Where things live
+skills/academic/researcher/SKILL.md:280: ### The stage and campaign that stand
+skills/academic/researcher/SKILL.md:286: ### Cluster facts
+skills/academic/researcher/SKILL.md:289: ## Constraints and limits | ### Cluster facts
+skills/academic/researcher/SKILL.md:295: ## Constraints and limits
+skills/academic/researcher/SKILL.md:301: ### The stage and campaign that stand
+skills/academic/researcher/SKILL.md:326: ### The stage and campaign that stand
+skills/academic/researcher/SKILL.md:333: ## Results and how to reproduce
+skills/academic/researcher/SKILL.md:335: ### The stage and campaign that stand
+skills/academic/researcher/SKILL.md:340: ## Results and how to reproduce
+skills/academic/researcher/SKILL.md:343: ## Results and how to reproduce
+skills/academic/researcher/SKILL.md:351: ## Dead ends (do not retry)
+skills/academic/researcher/SKILL.md:353: ## Dead ends (do not retry)
+skills/academic/researcher/SKILL.md:354: ## Constraints and limits
+skills/academic/researcher/SKILL.md:360: ## Results and how to reproduce
+skills/academic/researcher/SKILL.md:372: ### Cluster facts
+skills/academic/researcher/SKILL.md:384: ## Results and how to reproduce
+skills/academic/researcher/SKILL.md:385: ## Dead ends (do not retry)
+skills/academic/researcher/SKILL.md:386: ## Results and how to reproduce
+skills/academic/researcher/SKILL.md:401: ### The stage and campaign that stand
+skills/academic/researcher/SKILL.md:411: ### Where things live
+skills/academic/researcher/SKILL.md:413: ### The stage and campaign that stand
+skills/academic/researcher/SKILL.md:424: ### Where things live
+skills/academic/researcher/SKILL.md:439: ### Where things live
+skills/academic/researcher/SKILL.md:443: ### Where things live
+skills/academic/researcher/SKILL.md:451: ### Where things live
+skills/academic/researcher/SKILL.md:615: ## Results and how to reproduce
+skills/academic/researcher/SKILL.md:619: ### The stage and campaign that stand
+skills/academic/researcher/SKILL.md:628: ### The stage and campaign that stand
+skills/academic/researcher/SKILL.md:631: ## Constraints and limits
+skills/academic/researcher/SKILL.md:637: ### The stage and campaign that stand
+skills/academic/researcher/SKILL.md:641: ## Results and how to reproduce
+skills/academic/researcher/SKILL.md:654: ### The stage and campaign that stand
+skills/academic/researcher/SKILL.md:661: ## Results and how to reproduce
+skills/academic/researcher/SKILL.md:674: ### The stage and campaign that stand
+skills/academic/researcher/SKILL.md:676: ### The stage and campaign that stand
+skills/academic/researcher/SKILL.md:723: ## Results and how to reproduce
+skills/academic/researcher/SKILL.md:744: ### The stage and campaign that stand
+skills/academic/researcher/SKILL.md:771: ## Dead ends (do not retry)
+skills/academic/researcher/SKILL.md:773: ### Where things live
 skills/academic/researcher/references/project_layout.md:44: ## Constraints and limits
 skills/academic/researcher/references/project_layout.md:46: ## Results and how to reproduce
 skills/academic/researcher/references/project_layout.md:48: ## Dead ends (do not retry)
@@ -189,7 +185,7 @@ skills/academic/researcher/references/slurm.md:25: ### The stage and campaign th
 skills/academic/researcher/references/slurm.md:28: ### The stage and campaign that stand
 ```
 
-Each hit named: every `###` hit is a `###` heading under `## Working state`; every `## Constraints and limits`, `## Results and how to reproduce` and `## Dead ends (do not retry)` hit is that heading; `project_layout.md:112` is the old-layout test of "What to build" 6; `ADR 0057:11` and `ADR 0057:30` are ADR 0057; the four `####`/`###` Results hits outside researcher are `methodology_reviewer_agent.md:239`, `peer_review_report_template.md:154`, `citation_compliance_agent.md:940` and `socratic_mentor_agent.md:239`. ADR 0053 has no hit: its superseded bullet names the stage and campaign that stand without `## `. `project_layout.md:113` is the old-layout mapping, which names the old sections in plain words and only their new headings in code.
+Each hit named: every `###` hit is a `###` heading under `## Working state`; every `## Constraints and limits`, `## Results and how to reproduce` and `## Dead ends (do not retry)` hit is that heading; `project_layout.md:112` is the old-layout test of "What to build" 6; `ADR 0057:11` and `ADR 0057:30` are ADR 0057; the four Results hits outside researcher are `methodology_reviewer_agent.md:239`, `peer_review_report_template.md:154`, `citation_compliance_agent.md:940` and `socratic_mentor_agent.md:239`. ADR 0053 has no hit. `project_layout.md:113` is the old-layout mapping, which names the old sections in plain words and only their new headings in code. `SKILL.md:275` is the round's bullet on the placeholder headings.
 
 Verify 5. Each new or changed list item and sentence was read against `docs/dev/skill-layout.md`, "Lists and tables", and the prose standard, E, "Sentence length". The places over roughly 20 words, each kept in its form:
 
@@ -201,21 +197,22 @@ Verify 5. Each new or changed list item and sentence was read against `docs/dev/
 - `SKILL.md`, "idea" item 11 bullet 2, "research" item 3 bullets 5 to 7, item 4 bullets 5 and 6, item 5 bullet 3, item 16 bullet on the code README, "readme" item 2 bullets 1 to 6, item 3 bullets 1 and 3: each one rule with the qualifier that changes it (a place, a source, an exception), as "Lists and tables" asks.
 - `SKILL.md`, "What it reads" 1, 3, 20 and 22, and the Stops rows: existing long items, where the change adds a mode name or a heading inside the existing sentence.
 - `README.md` line 34: the row's form is one cell of running sentences; the added sentences are 63, 37 and 11 words, and the adopt sentence grew by one clause.
+- The round's new bullets (`SKILL.md` "research" item 3 bullet 6, "readme" item 1 bullet 2, item 3's example, item 4 bullets 4 and 5) and the glossary entry's second sentence: each one rule with its qualifier, as "Lists and tables" asks.
 
 ## The terms
 
-- **slug, of a section of a project's README**: added to "Ordo's own terms", since the plan term **slug** means the ledger folder's name and `project_layout.md` now names `notes/<slug>.md` in another sense. "Stated in: `skills/academic/researcher/references/project_layout.md`, "The README"": `grep -n '<slug>' skills/academic/researcher/references/project_layout.md` prints lines 56, 57 and 58, all under "The README" (which runs from line 35 to the next `##` at line 62).
-- **campaign**: changed to `### The stage and campaign that stand`, under `## Working state`. "Stated in": `grep -n` printed `SKILL.md:334: 12. Experiments: run each campaign, ...` ("research" item 12), `SKILL.md:626: 3. Run each results comment as one campaign ...` ("revision" item 3), and `research_stages.md:33`, "Experiments".
-- **cluster's facts**: changed to `### Cluster facts`, under `## Working state`. "Stated in": `SKILL.md:285: - Ask the cluster's facts when `### Cluster facts` holds none` ("research" item 4) and `references/slurm.md:3`.
-- **dead end**: changed to `## Dead ends (do not retry)`. "Stated in": `SKILL.md:350` and `352` ("research" item 14), `SKILL.md:384` (item 17), `SKILL.md:660` ("revision" item 7), `project_layout.md:121: ## The dead ends`.
-- **setting, of `research`**: unchanged; it names `## Constraints and limits`, which is the new heading too. "Stated in": `SKILL.md:284` ("research" item 4), `SKILL.md:353` (item 15), and "revision" item 4.
-- Terms used in new places, each read against its entry: **stop** (the two new stops, each a halt for the user's decision), **refusal** ("No project folder" for `readme`, which leaves nothing), **completion criterion, of a stage** (unchanged in meaning; Frame's names `## Data` for the dataset), **campaign** ("research" item 12's `### The approach`), **dead end** ("readme" item 2's dead ends from `code/attic/README.md`), **verdict, of a novelty check** (not used anew).
+- **slug, of a section of a project's README**: added to "Ordo's own terms", since the plan term **slug** means the ledger folder's name. After the round it defines both uses: a whole section moved to `notes/<slug>.md` past 200 lines, and a fact a section holds in no form of the layout, such as a dated log, that the readme mode puts in a `notes/<slug>.md` the section links. "Stated in": `grep -n '<slug>' skills/academic/researcher/SKILL.md skills/academic/researcher/references/project_layout.md` prints `project_layout.md` lines 56, 57 and 58 (under "The README", lines 35 to 61) and `SKILL.md` lines 431 and 433, under "readme" item 2, which `grep -n` puts at line 429 (item 3 at line 441).
+- **campaign**: changed to `### The stage and campaign that stand`, under `## Working state`. "Stated in": `SKILL.md:335: 12. Experiments: run each campaign, ...` ("research" item 12), `SKILL.md:630: 3. Run each results comment as one campaign ...` ("revision" item 3), and `research_stages.md:33`, "Experiments".
+- **cluster's facts**: changed to `### Cluster facts`, under `## Working state`. "Stated in": `SKILL.md:286: - Ask the cluster's facts when ...` ("research" item 4) and `references/slurm.md:3`.
+- **dead end**: changed to `## Dead ends (do not retry)`. "Stated in": `SKILL.md:351` ("research" item 14), `SKILL.md:385` (item 17), `SKILL.md:664` ("revision" item 7), `project_layout.md:121: ## The dead ends`.
+- **setting, of `research`**: unchanged; it names `## Constraints and limits`, which is the new heading too. "Stated in": `SKILL.md:285` ("research" item 4), `SKILL.md:354` (item 15), `SKILL.md:643` ("revision" item 4).
+- Terms used in new places, each read against its entry: **stop** (the two new stops), **refusal** ("No project folder" for `readme`, which leaves nothing), **completion criterion, of a stage** (Frame's names `## Data` for the dataset), **campaign** ("research" item 12's `### The approach`), **dead end** ("readme" item 2's dead ends from `code/attic/README.md`).
 
 ## Files with line counts
 
 | File | Lines after | `git diff --numstat` |
 |---|---|---|
-| `skills/academic/researcher/SKILL.md` | 819 | 139 added, 71 removed |
+| `skills/academic/researcher/SKILL.md` | 823 | 143 added, 71 removed |
 | `skills/academic/researcher/references/project_layout.md` | 133 | 81 added, 18 removed |
 | `skills/academic/researcher/references/research_stages.md` | 55 | 13 added, 13 removed |
 | `skills/academic/researcher/references/slurm.md` | 39 | 4 added, 4 removed |
@@ -249,11 +246,29 @@ Verify 5. Each new or changed list item and sentence was read against `docs/dev/
 - `idea` item 11 on a README without the section: before, first after the title; after, after `## In short` and `## What it is and why`.
 - `metadata.version`: before `1.0.0`, after `2.0.0`.
 - The description: before 1022 characters, after 1015, with `readme` added.
-- `README.md` line 34: names `readme` among the repository's own modes, adds the readme mode's sentences, and says that the adopt mode brings the README to the layout by the same rewrite.
+- `README.md` line 34: names `readme` among the repository's own modes, adds the readme mode's sentences, and says that the adopt mode brings the README to "the newcomer's layout that `/researcher readme` drafts", by the same rewrite.
 
 ## Anything in the brief that was wrong or impossible
 
 - "What is on the tree" says the rendered `researcher.svg` line 158 carries the adopt mode's note. On the base, `git show HEAD:docs/figures/researcher.svg | grep -c 'adopt'` prints `0`; line 158 of `researcher.svg` holds the note on `novelty` and `idea`. The adopt note stands in `researcher-research.svg` lines 156 and 157 (`grep -n -o '>[^<]*sections it lacks[^<]*<' docs/figures/*.svg` prints line 157), not line 157 alone.
+
+- Round brief ruling 6: its premise does not hold on the tree; see "Repair round 1", ruling 6.
+
+## Repair round 1
+
+The rulings of `agents/briefs/2-round-1.md` on the findings of `agents/reviews/2-refuter.md`.
+
+1. The heading tests under `## Working state`. `SKILL.md:104` (Steps 1, the call with no mode word) and `SKILL.md:744` (the Stops row "No project of research", line 740 before the round) now read `### The stage and campaign that stand` under `## Working state`. The grep of every test of that heading: `grep -n '### The stage and campaign that stand' SKILL.md references/*.md` listed 25 uses. The tests among them are `SKILL.md` lines 55 ("What it reads" 3), 73 ("What it reads" 20), 104, 261 ("research" item 1), 401 ("research adopt" item 1) and 744, numbered after the round; every other use writes into the subsection or reads what it names. Lines 55, 73 and 261 read "of `## Working state`" and now read "under `## Working state`", as line 401 did. `grep -n 'The stage and campaign that stand` \(of\|under\)' SKILL.md references/*.md` prints `SKILL.md` lines 55, 73, 104, 261, 401 and 744, and `grep -c 'of `## Working state`\|of its `## Working state`' SKILL.md` prints `0`.
+2. The code folder found from the project's files. "readme" item 1 gains the bullet "When no README names it, the code folder is the folder of the project's files that holds its code, its `run_all.sh`, its job scripts or its source files, noted with the files it was found by, which item 4 shows." The next bullet reads "A project whose files hold no code has no code folder". Item 2's `### Where things live` bullet ends "the code folder of item 1 among them". Item 3's made-up example reads "a project whose README names `src/` as its code folder, or whose code stands in `src/` and that has no README, gets its code README drafted at `src/README.md` and its `.depositignore` at `src/.depositignore`, `### Where things live` names `src/`, and no folder `code/` is made." Item 4 shows the code folder with the files it was found by, for the user to confirm or correct, and a corrected folder gets its two files drafted again there and named in `### Where things live`. "What it reads" 25 and the Stops row "The README drafts" name the found code folder. Read of the case, "research adopt" on a made-up project with code in `src/` and no README: adopt item 3 runs "readme" items 1 to 5. Item 1 finds `src/` from its source files. Item 3 drafts `src/README.md` and `src/.depositignore`. Item 2 names `src/` in `### Where things live`. Item 4 shows `src/` with its files for confirmation. Met.
+3. The placeholder headings. "research" item 3 (`SKILL.md:274-275`) reads "each section and each fixed `###` heading its item names holding `None yet.`" and "Leave out the placeholder headings `### <dataset>`, `### <result>` and `### <method>`: `## Data`, `## Results and how to reproduce` and `## Dead ends (do not retry)` hold `None yet.` until their writer adds the first `###`." Read of the case, "research" item 3 on a new project: the fixed `###` headings (`### The problem`, `### Why it matters`, `### What it does`, `### The approach`, `### What is not claimed`, `### The closest prior work`, `### What this project adds` and the three of `## Working state`) are written with `None yet.`, and no placeholder heading is. Met.
+4. The glossary entry's two uses. `docs/glossary.md:182` now reads, after the slug rule: "The file holds either the whole section, moved there once it grows past 200 lines, or a fact the section holds in no form of the layout, such as a dated log, which the readme mode puts there while the section stays in the README and links it." Its "Stated in" names `project_layout.md`, "The README", and `SKILL.md`, Steps, "readme" item 2, both checked by `grep -n` under "The terms". `sync_rules.py . --only glossary` prints `ok: the plan-terms block equals the template`.
+5. `README.md` line 34. Before: "brings its README to that layout by the same rewrite". After: "brings its README to the newcomer's layout that `/researcher readme` drafts, by the same rewrite". The sentence names its layout on its own.
+6. `references/project_layout.md` line 51. The ruling says the bullet ends with a comma and asks for a full stop. `sed -n '51p' skills/academic/researcher/references/project_layout.md | tail -c 120` prints `tands, the end of each revision with its run folder and its comments file ("revision" items 2, 3 and 10 of `SKILL.md`).`, so the bullet already ends with a full stop, as the base line it carries (`git show HEAD:.../project_layout.md | sed -n '43p'`) does. The line is left unchanged. The bullet after it, line 53, ends with the code span `No cluster: the jobs run where the session runs.`, whose full stop stands inside the code. The orchestrator rules whether another change was meant.
+7. The reruns after the round, quoted above: Verify 1 printed `exit: 0` and no other line. Verify 2 printed `ok: the plan-terms block equals the template` and `exit: 0`. Verify 3 printed `1015 skills/academic/researcher/SKILL.md`. Verify 4 printed the 91 lines quoted above. The reads of the cases the round touches:
+   - Steps 1 with no mode word: `sed -n '104p' SKILL.md` reads "... when the project's README names a stage of `research` in `### The stage and campaign that stand` under `## Working state`, and with the line of `research adopt` otherwise." Met.
+   - The Stops row "No project of research": `sed -n '744p' SKILL.md` reads "... holds no `README.md` whose `### The stage and campaign that stand` under `## Working state` names a stage of `research` or the end of `research` (Steps 1) ...". Met.
+   - "research adopt" on code in `src/` and no README: as ruling 2. Met.
+   - "research" item 3 on a new project: as ruling 3. Met.
 
 ## Doc text
 

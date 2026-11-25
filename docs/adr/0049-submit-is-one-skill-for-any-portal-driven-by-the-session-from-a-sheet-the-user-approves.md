@@ -15,7 +15,7 @@ Roadmap entry 25's goal names a skill that makes a submission through a web port
 - The session drives the browser and fills what the sheet holds. A field the portal asks that the sheet lacks is added to the sheet as a question to the user.
 - The session never types a password, never agrees to a licence, a copyright transfer or a payment, and never presses the final submit.
 - Without the extension connected, the skill writes the sheet and stops.
-- `docs/figures/paper/lifecycle.svg` names `/submit` at "You submit" and "You resubmit".
+- `docs/figures/academic/paper/lifecycle.svg` names `/submit` at "You submit" and "You resubmit".
 
 ## Alternatives rejected
 

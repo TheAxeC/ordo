@@ -22,7 +22,7 @@ you read the rewritten `README.md` and approve it; each image path in `README.md
 
 ## Steps, in execution order
 
-- 1 The figures under `docs/figures/` moved into the folders of `skills/` by the rule of D5, academic-pipeline's figure and script under `docs/figures/academic/researcher/`, the layout engine of `gen_figures.py` moved to `skills/code/handbook/templates/figures.py` and imported from there by `gen_figures.py` (ADR 0060), both scripts writing to the new paths, and `docs/dev/building.md`, `docs/dev/scripts.md`, ADRs 0043 and 0049 and every page that names a figure path following; check: for each figure `git ls-files docs/figures` lists, its folders are a group or a group and a skill folder; both scripts exit 0 and `git status --short docs/figures` then prints nothing; every `docs/figures/` path `git grep` finds in `README.md`, `docs/` and `skills/` exists (1 commit) (approved)
+- ✅ 1 The figures under `docs/figures/` moved into the folders of `skills/` by the rule of D5, academic-pipeline's figure and script under `docs/figures/academic/researcher/`, the layout engine of `gen_figures.py` moved to `skills/code/handbook/templates/figures.py` and imported from there by `gen_figures.py` (ADR 0060), both scripts writing to the new paths, and `docs/dev/building.md`, `docs/dev/scripts.md`, ADRs 0043 and 0049 and every page that names a figure path following; check: for each figure `git ls-files docs/figures` lists, its folders are a group or a group and a skill folder; both scripts exit 0 and `git status --short docs/figures` then prints nothing; every `docs/figures/` path `git grep` finds in `README.md`, `docs/` and `skills/` exists (1 commit) (approved)
 - 2 `researcher`'s README and `code/README.md` in the layout of ADR 0057, `code/.depositignore` with what it names, the mode `/researcher readme <project folder>` with a section moved out of the README going to `notes/<the heading as a slug>.md`, the adopt mode bringing a README to the layout by that rewrite, every reference to the README's sections in `SKILL.md`, its references, its agent pages and the glossary entries campaign, cluster's facts, dead end and setting following, its `metadata.version` raised; check: the user reads the text against ADR 0057 and approves; a grep for each old heading across `skills/`, `docs/` and the glossary prints only the new places (1 commit) (approved)
 - 3 The skill `skills/code/handbook` as ADRs 0058 and 0060 decide, with its kinds at the paths of D34, its `manual.html` script under `templates/` and that script's entry on `docs/dev/scripts.md`, the engine of step 1 copied into a documented repository's `utils/`, and its terms in the glossary; check: the user reads the text against ADRs 0058 and 0060 and approves; `/ordo-help skills` lists `handbook` with its Quick start; the description is at most 1,024 characters by the command of `docs/dev/skill-layout.md` (1 commit) (approved)
 - ✅ 4 The rulings file named `<ledger_root>/rulings/<number>.md` as ADR 0059 decides, in `grill`, `plan`, `plan-orchestration`'s `references/self-rule.md`, `ordo-init`'s `templates/plan-terms.md` and the glossary's block synced from it, each skill's `metadata.version` raised; check: `git grep -n 'rulings/<slug>'` over `skills/` and `docs/` prints nothing; the sync of the glossary block passes; the user reads the text of `grill` and `plan` on the rulings file and approves (1 commit) (approved)
@@ -41,6 +41,16 @@ you read the rewritten `README.md` and approve it; each image path in `README.md
 - Verification on main: `checks: 16 commands passed`, run again after the fixes at landing.
 - The builder's first report did not pass its bar: a cases ruling (`agents/briefs/4-cases.md`), one repair round of eight rulings, then five fixes at landing from the run over the round, each named under "Closed" in `agents/reviews/4-refuter.md`.
 - Usage: brief check 169399 tokens, 37 tool uses, 5.9 minutes; builder 134369 tokens, 19 tool uses, 2.5 minutes to the hand-back of its cases, 219168 tokens, 31 tool uses, 7.8 minutes after the cases ruling, and round 1: 286847 tokens, 75 tool uses, 6.8 minutes; reviewer 169524 tokens, 29 tool uses, 6.5 minutes; reviewer over round 1: 135553 tokens, 18 tool uses, 3.2 minutes.
+
+### Step 1, the figures in their groups' folders and the layout engine under `handbook` (landed 2026-11-26)
+
+- Landed: the 28 figures under `docs/figures/` moved into the folders of their groups of `skills/` by the rule of D5 (`orchestration/`, `academic/`, `academic/paper/`, `academic/researcher/`, `code/`), each byte-identical to its old file; academic-pipeline's figure and script under `docs/figures/academic/researcher/`; the layout engine at `skills/code/handbook/templates/figures.py` (standard library only, names no repository path or skill), with its kinds in a read-only table `KINDS` of `Kind(style, words)`, `with_kinds` for a script's own kinds, a `FigureError` for a kind a figure's mapping lacks, and `write_figures` checking its root, its folder and each file name; `docs/figures/ordo_kinds.py` with the `paper` kind both scripts import; `README.md`'s 27 image paths, `docs/dev/building.md`, `docs/dev/scripts.md` and ADRs 0043 and 0049 following the new paths.
+- Premise corrections: none.
+- The plan's verify list is unchanged: the step changes `docs/dev/building.md`'s prose and none of its commands.
+- Raised: nothing. The gate's figure-path check leaves out `docs/roadmap.md`, as the user ruled (Open item B); its one old path is `docs/roadmap.md:67`.
+- Verification on main: `checks: 16 commands passed`, run again after the fixes at landing; `git diff --quiet -- docs/figures` exits 0 after both scripts ran.
+- The builder's first report did not pass its bar: one repair round of nine rulings, then two fixes at landing and one ruling from the run over the round, each named under "Closed" in `agents/reviews/1-refuter.md`.
+- Usage: brief check 214981 tokens, 45 tool uses, 6.4 minutes; builder 244429 tokens, 80 tool uses, 12.8 minutes, and round 1: 331484 tokens, 117 tool uses, 7.9 minutes; reviewer 185283 tokens, 47 tool uses, 8.0 minutes; reviewer over round 1: 172678 tokens, 31 tool uses, 3.9 minutes.
 
 ## Could run in parallel
 
@@ -102,6 +112,10 @@ Each agent a plan skill started for this plan has one bullet, with its agent id,
 - ac96504d9c4e48105: builder of step 4, claude-opus-5-5
 - a8b65453be25f0c4e: reviewer of step 4, claude-opus-5-5
 - a17fd6fa34a365aba: reviewer of step 4 over round 1, claude-sonnet-5-5
+- a2f96bd6829d5adb2: brief check of step 1, claude-opus-5-5
+- aa853461e0bda0675: builder of step 1, claude-opus-5-5
+- a87f37bb66e71447b: reviewer of step 1, claude-opus-5-5
+- a3e0d150656bdfa82: reviewer of step 1 over round 1, claude-sonnet-5-5
 
 ## Blocked, and by what
 

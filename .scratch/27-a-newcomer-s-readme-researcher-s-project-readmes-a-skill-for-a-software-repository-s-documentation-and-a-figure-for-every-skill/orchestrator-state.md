@@ -47,19 +47,6 @@ repair_reviewer: claude:sonnet  # the model the run of /refute over a repair rou
 
 ```yaml
 dispatch:                    # one entry per step in flight, written by /spec, since docs/plan.yaml's workers_at_once is 5.
-- step: 1
-  executor: agent
-  worker: claude:opus
-  session_id: aa853461e0bda0675 (claude-opus-5-5)
-  worktree: .agents/worktrees/27-a-newcomer-s-readme-researcher-s-project-readmes-a-skill-for-a-software-repository-s-documentation-and-a-figure-for-every-skill-1
-  base: 50a98c8
-  launched: 2026-11-25
-  report: .scratch/27-a-newcomer-s-readme-researcher-s-project-readmes-a-skill-for-a-software-repository-s-documentation-and-a-figure-for-every-skill/agents/reviews/1-report.md
-  builder_usage: "244429 tokens, 80 tool uses, 12.8 minutes; round 1: 331484 tokens, 117 tool uses, 7.9 minutes"
-  reviewer_report: .scratch/27-a-newcomer-s-readme-researcher-s-project-readmes-a-skill-for-a-software-repository-s-documentation-and-a-figure-for-every-skill/agents/reviews/1-refuter.md (a87f37bb66e71447b, claude-opus-5-5, 185283 tokens, 47 tool uses, 8.0 minutes)
-  brief_check: .scratch/27-a-newcomer-s-readme-researcher-s-project-readmes-a-skill-for-a-software-repository-s-documentation-and-a-figure-for-every-skill/agents/reviews/1-brief-check.md (a2f96bd6829d5adb2, claude-opus-5-5, 214981 tokens, 45 tool uses, 6.4 minutes)
-  landing: not-started
-  round: 1
 - step: 2
   executor: agent
   worker: claude:opus
@@ -68,7 +55,7 @@ dispatch:                    # one entry per step in flight, written by /spec, s
   base: 929e519
   launched: 2026-11-25
   report: .scratch/27-a-newcomer-s-readme-researcher-s-project-readmes-a-skill-for-a-software-repository-s-documentation-and-a-figure-for-every-skill/agents/reviews/2-report.md
-  builder_usage: "308527 tokens, 121 tool uses, 16.5 minutes"
+  builder_usage: "308527 tokens, 121 tool uses, 16.5 minutes; round 1: 362147 tokens, 39 tool uses, 4.4 minutes"
   reviewer_report: .scratch/27-a-newcomer-s-readme-researcher-s-project-readmes-a-skill-for-a-software-repository-s-documentation-and-a-figure-for-every-skill/agents/reviews/2-refuter.md (a0d3f8882c6d34f95, claude-opus-5-5, 228033 tokens, 41 tool uses, 8.3 minutes)
   brief_check: .scratch/27-a-newcomer-s-readme-researcher-s-project-readmes-a-skill-for-a-software-repository-s-documentation-and-a-figure-for-every-skill/agents/reviews/2-brief-check.md (aa8df1549baebff17, claude-opus-5-5, 195898 tokens, 28 tool uses, 4.8 minutes)
   landing: not-started
@@ -115,7 +102,7 @@ dispatch:                    # one entry per step in flight, written by /spec, s
 
 ## Current position (rewritten before every step commit of this plan)
 
-- 2026-11-26. Step 4 has landed. Steps 1 and 2 are in flight: step 1's repair round 1 is reviewed and waits for its landing; step 2's repair round 1 is built and waits for its review.
-- Verified: `checks: 16 commands passed` on main at step 4's landing.
-- Next step: land step 1, review step 2's round and land it; then /spec steps 3, 5, 6 and 7.
+- 2026-11-26. Steps 1 and 4 have landed. Step 2 is in flight: its repair round 1 is built and reviewed, and waits for its landing.
+- Verified: `checks: 16 commands passed` on main at step 1's landing.
+- Next step: land step 2; then /spec steps 3, 5, 6 and 7.
 - Open on the user's side: Open item E.

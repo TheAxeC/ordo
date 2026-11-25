@@ -308,3 +308,177 @@ Cases of the brief's "Cases":
 - Whether the D5 sentence's extension "in the group most of them belong to" is a change of D5's meaning. D5 reads "a figure over several skills of one group". The extension comes from the brief's Decisions 1, so the orchestrator owns it.
 
 Reviewer usage: a87f37bb66e71447b, claude-opus-5-5, 185283 tokens, 47 tool uses, 8.0 minutes.
+
+## Repair round 1, refuted
+
+```
+$ python3 --version
+Python 3.13.4
+$ python3 docs/figures/gen_figures.py        (from the worktree root)
+wrote docs/figures/orchestration/pipeline.svg (23294 bytes)
+... 27 `wrote` lines, the last: wrote docs/figures/academic/paper/run-folder.svg (21112 bytes)
+exit=0
+$ python3 docs/figures/academic/researcher/gen_academic_pipeline.py
+wrote docs/figures/academic/researcher/academic-pipeline.svg (22164 bytes)
+exit=0
+$ cd /tmp && python3 <worktree>/docs/figures/gen_figures.py >/dev/null
+gen_figures from /tmp exit=0
+$ cd /tmp && python3 <worktree>/docs/figures/academic/researcher/gen_academic_pipeline.py
+wrote docs/figures/academic/researcher/academic-pipeline.svg (22164 bytes)
+exit=0
+
+$ cmp loop: 14 single figures by the brief's table + 14 under paper/, each `git show 50a98c8:docs/figures/<old> | cmp - docs/figures/<new>`
+compared=28 bad=0
+$ find skills docs/figures -name __pycache__
+(prints nothing)
+
+$ grep -n -E '^(class|def) (FigureError|Rect|Style|Node|Edge|Graph|Canvas|FlowLayout|Panel|Legend|Lane|Row|wrap|draw_node|draw_legend|compose|describe|lanes_figure|write_figures|with_kinds|graph|parts|Kind)\b' docs/figures/gen_figures.py docs/figures/academic/researcher/gen_academic_pipeline.py docs/figures/ordo_kinds.py
+(prints nothing)
+$ grep -n 'import' <the two scripts and ordo_kinds.py>
+gen_academic_pipeline.py:54:    import figures as fg
+gen_academic_pipeline.py:62:    from ordo_kinds import PAPER
+gen_figures.py:119:    from figures import (
+gen_figures.py:145:    from ordo_kinds import PAPER
+ordo_kinds.py:11:from figures import Kind, Style
+(plus the standard-library imports and head-comment lines; no line imports gen_figures)
+$ grep -n -i 'docs/figures\|research\|paper\|grill\|plan\|referee\|submit\|orchestration\|ordo' skills/code/handbook/templates/figures.py
+(prints nothing)
+
+$ folder case over files on disk (each file under docs/figures, its folders a group of skills/ or a group and a skill of it)
+FLAT gen_figures.py
+FLAT ordo_kinds.py        (the two scripts; every figure passes)
+$ ls docs/figures/paper docs/figures/academic-pipeline
+ls: docs/figures/academic-pipeline: No such file or directory
+ls: docs/figures/paper: No such file or directory   (exit 1)
+$ ls count of *.svg: academic 5, academic/paper 14, academic/researcher 4, code 2, orchestration 3  (= 28)
+$ git ls-files -co --exclude-standard docs/figures | (entries that do not exist on disk) | wc -l
+29   (the 28 old figures and the old pipeline script; the report says 28, counting figures only)
+
+$ git grep -n -o 'docs/figures/[A-Za-z0-9/._-]*' -- README.md docs skills ':!docs/roadmap.md'   -> 55 hits, every path exists (no MISSING)
+$ the same without the exclusion -> MISSING docs/figures/paper/lifecycle.svg
+$ git grep -n 'docs/figures/paper/lifecycle' -- docs/roadmap.md -> docs/roadmap.md:67 (the done line of entry 25)
+$ the same with --untracked, roadmap left out: 62 hits, none missing; with the roadmap: the same one missing
+$ git grep -n -E '(^|[^/a-z-])(researcher|researcher-research|researcher-revision|pipeline|plan-loop)\.svg|academic-pipeline/' -- README.md docs/dev
+(prints nothing)
+$ character-set check over the 40 files the diff adds or changes plus the untracked (the figures, scripts, pages, ADRs, the round brief, both reports)
+(prints nothing) exit=0
+
+$ grep -n 'open(\|read_text' skills/code/handbook/templates/figures.py
+1307:            with path.open("w", encoding="utf-8", newline="\n") as handle:
+1309:            written = path.read_text(encoding="utf-8")
+$ ruff check --select F,W2 <engine, gen_figures.py, ordo_kinds.py, the pipeline script> -> All checks passed!
+$ ruff check --preview --select E3 <the same four> -> All checks passed!
+$ grep -n 'STYLES\|WORDS\|add_kind' <engine, both scripts, docs/dev/scripts.md> -> prints nothing
+$ git grep -n -F '_g(' ; git grep -n -F 'add_kind' (outside .scratch and docs/roadmap.md) -> prints nothing
+$ grep -n -E '\b(KINDS|STYLES|WORDS)\[[^]]*\] *=|\b(KINDS|STYLES|WORDS)\.(update|setdefault|pop|clear)\(|^ +global ' <engine> -> prints nothing, exit=1
+$ grep -n '^[A-Z_]* = \|^[a-z_]* = ' <engine>
+lines 96-132 and 1135-1137: each a string or number constant (colours, font, sizes, DOTTED, DASHED, FLOW_WIDTH, LANE_PAD, LANE_HEAD, LANE_GAP). KINDS (line 166, `KINDS: Mapping[str, Kind] = MappingProxyType(`) is the one mapping; nothing assigns into it.
+$ grep -n 'graph: Graph' docs/figures/gen_figures.py ; grep -n 'parts = \[\]' <engine> -> both print nothing
+$ grep for a parameter, local or loop variable named graph or parts in the engine and both scripts (outside self.) -> only the Panel field `graph: Graph` (engine:994) and the imports at gen_figures.py:131,134
+$ git diff 50a98c8 --numstat -- README.md docs/dev docs/adr
+27 27 README.md / 1 1 each ADR / 1 1 docs/dev/building.md / 5 2 docs/dev/scripts.md
+$ grep -n 'compose(\|lanes_figure(\|describe(' docs/figures/gen_figures.py, each call parsed for FIGURE_KINDS
+8 calls (lines 184, 186, 672, 737, 1342, 1344, 1440, 1549), all pass FIGURE_KINDS
+
+Reads of the engine's kind handling (a scratch `python3 -` over the engine, nothing written to the tree; `find skills docs/figures -name __pycache__` afterwards prints nothing):
+with_kinds({"stop": ...}) -> FigureError: the kind 'stop' is one of the engine's kinds
+KINDS["x"] = ... -> TypeError: 'mappingproxy' object does not support item assignment
+Node("A","x","scirpt") through describe -> FigureError: T: the kind 'scirpt' is not one of the figure's kinds
+the same through compose -> FigureError: fig.svg: the kind 'scirpt' is not one of the figure's kinds
+Legend("zzz", ...) -> FigureError: fig.svg: the kind 'zzz' is not one of the figure's kinds
+write_figures(base outside root) -> FigureError: the folder <base> is not under the root <root>
+write_figures(name "../x.svg") -> FigureError: ../x.svg: the file is not under the folder <base>
+write_figures(non-ASCII body) -> FigureError: ok/x.svg: the body holds a character that is not ASCII; no file written (the folder stayed empty)
+```
+
+Method note: besides `git diff`, `git status` and `git show`, I ran `git grep` and `git ls-files -co`/`-o` read-only, because the brief's path and folder cases are defined by them. The scratch probes above only read the engine.
+
+### Verdicts
+
+Items of the brief's "What to build", as the round amends them:
+
+- 1: holds. 28 `cmp` runs against 50a98c8 exit 0; both old folders are gone; the folder case passes over the files on disk.
+- 2: holds. The script stands at `docs/figures/academic/researcher/` and writes `academic-pipeline.svg` beside itself, from the root and from `/tmp`.
+- 3 (the engine, with Decisions 4 to 7 as the round amends them): holds, with one departure from the round brief's letter (Spec 1).
+  - The six kinds sit in one `MappingProxyType` table `KINDS`, built of `Kind(style, words)`; `add_kind`, `STYLES` and `WORDS` are gone.
+  - `with_kinds` returns a new read-only mapping and raises `FigureError` for an engine name.
+  - `_kind` raises `FigureError` naming the figure (or the title in `describe`) and the kind, in place of `KeyError`.
+  - No module-level mapping is written after import (the greps above).
+  - The engine imports only the standard library and names no repository path or skill (the word grep prints nothing).
+  - `write_figures` takes `root` and now refuses a base outside the root before any write.
+  - The head comment carries the new shape and every new error (lines 34-75).
+- 4: holds. `gen_figures.py` defines no engine name, builds `FIGURE_KINDS = with_kinds({"paper": PAPER})` once and passes it to all 8 draw and describe calls; its head comment lists the new paths, the D5 rule, the engine, the `ordo_kinds` import and the kind error.
+- 5: holds. The pipeline script imports nothing from `gen_figures.py`, builds its own mapping with `with_kinds` (`ap`, `rev`, `pipe`, `dr`, `paper`), passes it to `Canvas`, and lists the new errors.
+- 6: holds. 28 of 28 `cmp` exit 0.
+- 7: holds. README changes only the 27 image paths (27/27 numstat); `building.md`, `scripts.md` and both ADRs follow. The engine's row in `scripts.md` no longer says `handbook` copies it. `scripts.md` rows 9 and 10 name `ordo_kinds.py`.
+- Round ruling 1: holds in its ends (read-only table, `with_kinds`, `FigureError` for a missing kind, no global written). It departs from the ruling's letter on where `kinds` is passed (Spec 1).
+- Round ruling 2: holds. `docs/figures/ordo_kinds.py` (13 lines) holds `PAPER` only. Both scripts import it after `sys.dont_write_bytecode`; the pipeline script still imports nothing from `gen_figures.py`; `ap`, `rev`, `pipe` and `dr` stay in the pipeline script; `scripts.md` lists it.
+- Round ruling 3: holds (`sed -n 19p docs/dev/scripts.md` shows the clause is gone).
+- Round ruling 4: holds (engine lines 51-52).
+- Round ruling 5: holds (the `root` check), plus one further check (see Declined or Findings: judged to hold).
+- Round ruling 6: holds. `_g` is gone, and `pipeline_flow` calls `fg.graph(nodes, edges, width=NODE_WIDTH)`. The figure is byte-identical.
+- Round ruling 7: holds. No parameter or local shadows `graph` or `parts` any more, including `FlowLayout.__init__`, which the builder also renamed. Renaming `FlowLayout.__init__`'s parameter is the same defect as the ruling's, so it is within the finding.
+- Round ruling 8: holds. The folder case is run over the files on disk, and the literal `-co` behaviour is stated.
+- Round ruling 9: holds. Every case was rerun here and matches the report, except that the report counts 28 deleted paths in the literal list where I count 29 (the 28 figures plus the old pipeline script); this changes no decision.
+
+The two places the builder went past the round brief:
+
+- A legend sample must now be a kind, "dotted" or "loop": holds. At the base, `draw_legend` took any non-kind, non-"dotted" word as the loop sample, so a mistyped sample was drawn as a loop with no error. The ruling requires a legend entry whose kind the mapping lacks to raise `FigureError`, and that cannot be built on the base's `else` branch. The legends of both scripts use only kinds, "dotted" and "loop" (the sample grep), and the figures stay byte-identical. The head comment's "any other word for a dotted loop" is changed to "loop" and the new error is listed.
+- `write_figures` refuses a file name that resolves outside `base`: holds. A name such as `../x.svg` would otherwise be written outside the folder and then fail at `relative_to` with a `ValueError`, which is the first refuter's Behaviour 1 failure reached through the name. It is also a supplied value that reaches a path (change standard rule 15). It is documented in the docstring and the error list, and it is within the finding's cause, not a separate concern.
+
+Cases of the brief's "Cases":
+
+- `gen_figures.py` from the root: met. Exit 0, 27 `wrote` lines at the table's paths.
+- The pipeline script from the root: met.
+- Both scripts from another directory: met. Both exit 0 from `/tmp`.
+- `cmp` of the 28 figures and `git status` of `docs/figures skills/code/handbook`: met. `compared=28 bad=0` against 50a98c8; the status shows 29 deletions, `M gen_figures.py`, and the new `academic/`, `code/`, `orchestration/`, `ordo_kinds.py` and `skills/code/handbook/`.
+- `__pycache__`: met. It prints nothing.
+- The definitions grep: met. No engine name, `with_kinds`, `graph`, `parts` or `Kind` is defined in either script or in `ordo_kinds.py`.
+- The import grep: met. Both scripts import `figures` and `ordo_kinds`; no `gen_figures` import in the pipeline script.
+- The engine's word grep: met. It prints nothing.
+- The folder case and `ls` of the old folders: met over the files on disk. The only entries that are not figures are the two scripts, which the case does not cover.
+- The path case without `docs/roadmap.md`: met (55 hits, none missing; 62 with `--untracked`, none missing). With `docs/roadmap.md`: the one missing path is `docs/roadmap.md:67:docs/figures/paper/lifecycle.svg`, Open item B, as the user ruled the gate leaves it out.
+- The old-name grep: met. It prints nothing.
+- The module-level mapping run: met (above).
+- The read of `with_kinds` and of the kind lookup: met (above).
+
+### Findings
+
+1. Spec.
+   - `skills/code/handbook/templates/figures.py:419-420` and `:1013`: "def draw_node(canvas: Canvas, area: Rect, kind: str, lines: Sequence[str])" ... "style = _kind(canvas.name, canvas.kinds, kind).style".
+   - What is wrong: round ruling 1 says "`compose`, `lanes_figure`, `describe` and every engine function that reads a kind's style or words today (`Canvas`, `draw_node`, `draw_legend`, and those they call) take that mapping as a `kinds` parameter". Built: `Canvas` takes `kinds` and stores it, and `draw_node` and `draw_legend` keep their signatures and read `canvas.kinds`. The builder lists it as its judgment call 7, not as a stop, although the signature of public engine functions is a shape the rules file's rule 4 reserves to the orchestrator.
+   - The ruling's ends hold: nothing global is written, one mapping per figure is passed down, and the mapping cannot differ between a canvas and its nodes.
+   - Failure scenario: none that produces a wrong figure. A later brief that calls `draw_node(canvas, area, kind, lines, kinds)` as the ruling reads fails with a `TypeError`.
+   - Verdict: item 3 holds in its ends; the orchestrator rules whether the Canvas-held shape stands, and the documented behaviour is consistent with it.
+2. Behaviour.
+   - `skills/code/handbook/templates/figures.py:178-183` and `:1012`: "for name in extra: if name in KINDS: raise ..." and "if row.sample not in ("dotted", "loop"):".
+   - What is wrong: `with_kinds` accepts a kind named "dotted" or "loop", and a Legend row with that sample then always draws the arrow or the loop, never the box. At the base an added kind of that name would have drawn as a box. The head comment lists neither name as reserved.
+   - Failure scenario: a documented repository's diagram script adds `with_kinds({"loop": Kind(...)})` and a legend `Legend("loop", "...")`. The legend shows a dotted loop where the author drew a box kind, with no error.
+   - Verdict: none on the items; a case of rule 15's kind (a caller-supplied name reaching generated text), low.
+3. Standards.
+   - `skills/code/handbook/templates/figures.py:462` and `:957`: "self.kinds = {node.key: node.kind for node in ...}" and "draw_node(canvas, area, self.kinds[key], self.lines[key])", next to `Canvas.kinds` at `:314`.
+   - What is wrong: the round gives two attributes of one module the name `kinds` with different meanings: `FlowLayout.kinds` maps a box's key to its kind name, `Canvas.kinds` maps a kind name to its `Kind`. Line 957 reads `self.kinds[key]` and passes it to a function that reads `canvas.kinds`.
+   - Failure scenario: an edit near line 957 that reads `self.kinds[key].style` fails with `AttributeError: 'str' object has no attribute 'style'`.
+   - Verdict: none; low.
+4. Proof: none. Every claim of the report that a decision rests on reproduced: the 28 `cmp` runs, both script runs and exits, the greps, the numstat, the read-back lines, both `ruff` runs, the 55 and 62 hit counts and the `KINDS` write error. The one differing number, 28 against 29 deleted paths in the literal `-co` list, is a count by figure against a count by entry and decides nothing.
+5. Closure judgments: no finding was closed by removing a check rather than fixing what it guarded, and none is closed by a claim my rerun does not reproduce. The `_g` removal, the `Sequence` import removal, the renames and the `ordo_kinds.py` file reach exactly the findings they close. History in a comment, `add_kind`, `STYLES`, `WORDS`, `_g`, `ordo_kinds` and `handbook` sentences made false by the round, and non-ASCII: none found (greps above; the character-set check exits 0).
+
+### Declined to judge
+
+- Whether 50a98c8 and the brief's ee15921 hold the same `docs/figures`, README, `docs/dev` and ADR content. I ran every `cmp` against 50a98c8; the builder's report quotes ee15921. `git diff ee15921 50a98c8 -- docs/figures README.md docs/dev docs/adr` would settle it.
+- The first run of the cases on the unchanged tree: I did not rerun it, since the base pipeline script writes `__pycache__` into the tree.
+- `docs/figures/academic/researcher/gen_academic_pipeline.py` lines 11-12, "taken from the files of academic-pipeline in research-hub". The line is unchanged from the base and only moved. Whether `docs/figures/` counts as a shipped file under `CLAUDE.md` is the orchestrator's call.
+- Whether the Canvas-held `kinds` shape (Spec 1) stands in place of the ruling's wording. That is the orchestrator's ruling.
+- The running of each guarded import's error path (engine or `ordo_kinds.py` missing): checked by reading only, since running it would take the file away.
+
+Reviewer usage: a3e0d150656bdfa82, claude-sonnet-5-5, 172678 tokens, 31 tool uses, 3.9 minutes.
+
+## Closed
+
+Each finding of the run over repair round 1, closed at landing:
+
+- 1 (Spec, `kinds` held by `Canvas` where round ruling 1 named a parameter of `draw_node` and `draw_legend`): ruled by the orchestrator that the shape stands. One mapping per figure reaches every drawing call through the canvas it draws on, so a node and its canvas cannot be given two mappings that disagree; the head comment states the shape. No code change.
+- 2 (Behaviour, `with_kinds` accepting "dotted" or "loop"): fixed on main. `figures.py` holds `LEGEND_MARKS = ("dotted", "loop")`; `with_kinds` raises `FigureError` "the kind 'loop' is a legend mark, not a kind" for either name; `draw_legend` tests the sample against `LEGEND_MARKS`; the head comment's error list names the two marks. A read through `python3 -` with bytecode off printed the error for "loop" and "dotted" and the engine-name error for "stop".
+- 3 (Standards, two attributes named `kinds`): fixed on main. `FlowLayout.kinds`, the map of a box's key to its kind name, is `FlowLayout.kind_of` at its six uses; `Canvas.kinds` is unchanged.
+- After both fixes: both scripts run from the root, `git diff --quiet -- docs/figures` exits 0 (every figure byte-identical), `ruff check --select F,W2` and `ruff check --preview --select E3` print `All checks passed!`, no `__pycache__` under `skills` or `docs/figures`, and the verify list prints `checks: 16 commands passed`.
+- Declined point on the two bases: `git diff --stat ee15921 50a98c8 -- docs/figures README.md docs/dev docs/adr` prints nothing, so the builder's `cmp` runs against ee15921 and the reviewer's against 50a98c8 compare the same figures.
