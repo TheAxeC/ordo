@@ -204,7 +204,7 @@ Each agent a plan skill started for this plan has one bullet, with its agent id,
 
 ## Blocked, and by what
 
-- 6: the comparison is run again; the release candidate is tagged and pinned on the user's word; the user gives the session id of their `/researcher idea` run.
+- 6: the release candidate is tagged and pinned on the user's word; the user gives the session id of their `/researcher idea` run.
 
 ### Step 5, `ordo-help` covers every skill (landed 2026-11-25)
 

@@ -215,3 +215,10 @@ Differences of `skills/academic/researcher/SKILL.md` from the source's `SKILL.md
 - `references/reproducibility_audit.md`: hard wraps joined and the pointer to `references/artifact_reproducibility_pattern.md` (K3, K6).
 - `references/score_trajectory_protocol.md` and `references/handoff_schemas.md` (the Schema 6 `dimension_scores` row): the scores read from the Dimension Scores of the Editorial Decision and of the Verification Review Report (Open items E and F).
 - `agents/compliance_agent.md`: "(or standalone skill)" removed (D23).
+
+## Corrections at the gate (the third comparison, `agents/reviews/6-differences-3.md`)
+
+- `SKILL.md` Steps 5 and the Stops row "The run's configuration": at the configuration stop the session asks the user for the compliance agent's `user_metadata`, the AI tools used (name, version, developer, stage, purpose) and the intended venue. The source's input contract (`shared/agents/compliance_agent.md`, "Input contract") requires `user_metadata` and says the orchestrator passes it, without saying where it comes from; the session holds the orchestrator's role (D5, D6, the step 2 table row "the session holds both roles"), and only the user knows the AI tools used, so the session asks for it once at the stop where the run's configuration is set.
+- `examples/mid_entry_example.md`: the source's quick review and its question on the review mode are replaced by `/paper-review-panel full`, and the full four-reviewer re-review by `/paper-review-panel re-review` (D5, K13).
+- `agents/pipeline_orchestrator_agent.md`: the mode combinations and "adjust any stage's mode" (source lines 103 to 107) and the mode-switching rows of `academic-paper` and the reviewer (345 to 350) are replaced by the fixed runs and one PROHIBITED row for any other run (D5).
+- `references/ethics.md` line 34 names the copy's own `agents/integrity_verification_agent.md`; `paper` has no such page, and the line of `deviations.md` for this page is read with that.

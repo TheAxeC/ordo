@@ -97,5 +97,5 @@ A finding that is neither closed in the repair rounds nor fixed at landing is an
 
 - 2026-11-25. Steps 1, 2, 3, 4 and 5 have landed. No step is in flight.
 - Verified: `templates/checks.sh` on this file printed `checks: 16 commands passed` on main with step 4 staged and its fixes at landing made.
-- Roadmap entry 13 (researcher). Plan step 10 of 10: the target-journal line, landed. Next: step 6, the gate; the comparison is run again, the release candidate is tagged and pinned on the user's word, and the user's `/researcher idea` run gives the novelty pages.
+- Roadmap entry 13 (researcher). Plan step 10 of 10: the target-journal line, landed. Next: step 6, the gate: the goal check and the comparison pass on main at 7657b25; the release candidate is tagged and pinned on the user's word, and the user's `/researcher idea` run gives the novelty pages.
 - Open on the user's side: the review of the choices C144 to C151 in `.scratch/choices.md`, which blocks nothing.
