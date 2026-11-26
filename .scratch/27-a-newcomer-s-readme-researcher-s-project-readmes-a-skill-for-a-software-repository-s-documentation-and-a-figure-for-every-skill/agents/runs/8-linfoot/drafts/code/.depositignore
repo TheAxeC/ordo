@@ -1,0 +1,39 @@
+# Deposit-exclude list (NOT a hub .gitignore). oculus's Deposit writes these patterns into the
+# deposit's .gitignore. The hub tracks results/ and attic/ in full.
+
+# dead-end code
+attic/
+
+# generated outputs, except the shipped weights
+results/*
+!results/phase2_scaled.pt
+!results/batch1/
+results/batch1/*
+!results/batch1/weights/
+results/batch1/weights/*
+!results/batch1/weights/phase2_parampl0z_s20260820.pt
+
+# fetched third-party model and the local environment
+vendor/*.keras
+vendor/venv/
+
+# caches
+__pycache__/
+*.py[cod]
+
+# OS
+.DS_Store
+
+# lines of the project layout this file lacked
+data/
+results/
+figures/
+*.pyc
+.cache/
+.pytest_cache/
+.ipynb_checkpoints/
+.env
+.env.*
+*.pem
+*.key
+secrets/

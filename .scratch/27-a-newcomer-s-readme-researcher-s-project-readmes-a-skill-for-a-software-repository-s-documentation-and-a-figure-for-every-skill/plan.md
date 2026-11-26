@@ -29,6 +29,7 @@ you read the rewritten `README.md` and approve it; each image path in `README.md
 - ✅ 5 A figure for each of the fifteen skills the goal names, drawn by `gen_figures.py`, and researcher's lifecycle figure, with the script's head comment stating the folder rule of D5 and `docs/dev/building.md` naming the figures it writes; check: each of the fifteen skills has a figure file under `docs/figures/` (listed, one per skill); both scripts exit 0 and `git status --short docs/figures` prints nothing; the user reads each new figure against its skill's Steps and Stops and approves (1 commit) (approved)
 - ✅ 6 Ordo's `README.md` rewritten as the goal says, with the skills table holding `handbook`, the three figures of "How to use", and "Working on Ordo" moved to `docs/dev/working-on-ordo.md`, which `docs/dev/change-standard.md`'s pin rule and the glossary entry pin cite; check: the user reads and approves the README; each image path in `README.md` exists, and there are three; `git grep -n 'Working on Ordo'` outside `.scratch/` prints no line that names the README (1 commit) (approved)
 - ✅ 7 The README section of `research-hub/README.md` names researcher's layout of ADR 0057, built by an agent in that repository and left uncommitted for the user; check: the user reads the changed section against ADR 0057 and approves (no commit in Ordo) (approved)
+- 10 `researcher`'s rule for `code/.depositignore` and two gaps of `handbook`, found by step 8's runs: `references/project_layout.md`, "The deposit", writes the folder lines of what a run makes or holds anchored (`/data/`, `/attic/`, `/results/`, `/figures/`), `secrets/` kept unanchored so a secret folder at any depth stays out of the deposit, and `readme` item 3 and `research`'s first writing of the file add a line of that list only when no line of the file already excludes that folder (`results/`, `/results/`, `results/*`), a `!` line or a line on a folder below it never counting, so that no added line overrides a re-include and no part of the folder reaches the deposit; `handbook`'s `references/kinds.md` gains the feature-map status `untested` (the code holds it and no test covers it); before its drafts stop `handbook` runs the repository's own format and lint commands, on a copy of its working tree in the scratch folder, on each file it writes and, where the check rejects one, drafts the line of the check's ignore file that leaves it out, for the user's approval; each skill's `metadata.version` left as this plan set it, since a plan raises a skill's version once (`docs/dev/skill-layout.md`), and every page and figure that states these rules following; check: the user reads the changed text against the two runs' findings and approves; `git grep -n -e '^data/$' -e '^results/$' -e '^figures/$' -e '^attic/$'` over `skills/academic/researcher/` prints nothing (1 commit) (ruling L) (ruling M)
 - 8 The installed skills pinned at a tag of main after steps 1 to 6 through `utils/pin.sh <tag>`, then one run of `/researcher readme` on each of two projects under `research-hub/projects/` the user names and one run of `/handbook` on one software repository the user names, each made by a separate agent that invokes the installed skill, its stops answered by the orchestrator and its drafts shown to the user and written on the user's approval; check: the user reads each old file beside its new one and approves (orchestrator, no agent) (approved)
 - 9 the closing: the closing report written (the cost script's output, or that the plan started no agent), the roadmap entry ticked with the gate's output, this folder moved to the archive (orchestrator, no agent) (approved)
 
@@ -166,6 +167,11 @@ Independent of each other; the standing rule of one agent at a time still serial
 - Open item H (2026-11-26): step 3's check passes: the user read the text of `handbook` against ADRs 0058 and 0060 and approved it as it stands (the user).
 - Open item I (2026-11-26): step 5's check passes: the user read the sixteen new figures and the changed figures against their skills and approved them as they stand (the user).
 - Open item J (2026-11-26): step 6's check passes: the user read the README, asked for a paragraph on the name and for the academic skills brought forward in the introduction, and approved it with both (the user).
+- Step 8's inputs (2026-11-26): the tag v11.2.0, made at main's 6013f22 and pinned by `utils/pin.sh v11.2.0`, and the software repository `officium` for the run of `/handbook` (the user).
+- Step 8's projects (2026-11-26): `projects/manuscripts/linfoot-estimator` and `projects/active/engram` of research-hub for the two runs of `/researcher readme` (the user).
+- Open item L (2026-11-26): `researcher`'s rule for `code/.depositignore` is fixed in step 10 (anchored folder lines; a line added only when the file does not already name that folder), and after step 10 lands both projects are run again by fresh agents on the pin v11.2.1, a tag of main after step 10, in place of v11.2.0, with the user's answers to both runs' questions passed in (the user).
+- Open item M (2026-11-26): `handbook` gains the feature-map status `untested` and a format check of the files it generates, with the ignore line drafted for approval, in step 10, and `/handbook` on officium is run again by a fresh agent on the new pin, with the answers to its stops passed in (the user).
+- Open item K (2026-11-26): officium ignored `/docs/` by accident, so `/docs/` is removed from its `.gitignore`, from `tests/privacy.test.ts` and from `.agents/building.md` and `.agents/plan.yaml`, left uncommitted in officium for the user; `handbook` keeps the paths of `references/kinds.md` and is not changed (the user).
 
 ## Agents
 
@@ -199,7 +205,12 @@ Each agent a plan skill started for this plan has one bullet, with its agent id,
 - aea116595a1666e4b: builder of step 6, claude-opus-5-5
 - a42e8ad1b4355625a: reviewer of step 6, claude-opus-5-5
 - afae27d9fa1f4b23f: reviewer of step 6 over round 1, claude-sonnet-5-5
+- a9cddaa77d1b7a90f: step 8 run of `/researcher readme` on linfoot-estimator, claude-opus-5-5
+- a1a026f00a0b024af: step 8 run of `/researcher readme` on engram, claude-opus-5-5
+- ab642d67e3b49ae76: step 8 run of `/handbook` on officium, claude-opus-5-5
+- a829b4222f644a0a3: step 8 run of `/ordo-help skills`, claude-opus-5-5
 
 ## Blocked, and by what
 
-- 8: waits on the user: the tag to pin (steps 1 to 7 have landed), the two projects under `research-hub/projects/` and the software repository it runs on.
+- 10: nothing blocks it.
+- 8: waits on 10 for the tag v11.2.1 and the reruns, and on the user's answers to the runs' questions and the user's reading of the drafts.

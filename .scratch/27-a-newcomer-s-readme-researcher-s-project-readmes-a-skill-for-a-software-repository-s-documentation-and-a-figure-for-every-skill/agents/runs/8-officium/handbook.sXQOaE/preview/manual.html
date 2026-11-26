@@ -1,0 +1,946 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>drafts manual</title>
+<style>
+:root { --bg: #ffffff; --fg: #0f172a; --muted: #475569; --line: #cbd5e1;
+  --code: #f1f5f9; --tab: #e2e8f0; --accent: #4f46e5; }
+@media (prefers-color-scheme: dark) {
+  :root { --bg: #0f172a; --fg: #e2e8f0; --muted: #94a3b8; --line: #334155;
+    --code: #1e293b; --tab: #1e293b; --accent: #a5b4fc; }
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--fg);
+  font: 16px/1.55 ui-sans-serif, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+nav { display: flex; flex-wrap: wrap; gap: 4px; padding: 12px 16px;
+  border-bottom: 1px solid var(--line); }
+nav a { padding: 6px 10px; border-radius: 6px; background: var(--tab); color: var(--fg);
+  text-decoration: none; font-size: 14px; }
+main { max-width: 860px; margin: 0 auto; padding: 8px 16px 48px; }
+.doc { display: none; }
+.doc:first-child, .doc:target { display: block; }
+main:has(.doc:target) .doc:first-child:not(:target) { display: none; }
+body:not(:has(.doc:target)) nav a:first-child { background: var(--accent); color: var(--bg); }
+a { color: var(--accent); }
+img { max-width: 100%; }
+pre, code { font-family: ui-monospace, Menlo, Consolas, monospace; font-size: 14px; }
+code { background: var(--code); padding: 1px 4px; border-radius: 4px; }
+pre { background: var(--code); padding: 12px; border-radius: 6px; overflow-x: auto; }
+pre code { padding: 0; }
+table { border-collapse: collapse; margin: 12px 0; display: block; overflow-x: auto; }
+th, td { border: 1px solid var(--line); padding: 6px 10px; text-align: left;
+  vertical-align: top; }
+th { background: var(--code); }
+h1, h2, h3, h4, h5, h6 { line-height: 1.25; }
+body:has([id="readme-md"]:target) nav a[href="#readme-md"] { background: var(--accent); color: var(--bg); }
+body:has([id="docs-readme-md"]:target) nav a[href="#docs-readme-md"] { background: var(--accent); color: var(--bg); }
+body:has([id="docs-user-manual-reader-md"]:target) nav a[href="#docs-user-manual-reader-md"] { background: var(--accent); color: var(--bg); }
+body:has([id="docs-user-manual-library-md"]:target) nav a[href="#docs-user-manual-library-md"] { background: var(--accent); color: var(--bg); }
+body:has([id="docs-user-manual-browser-md"]:target) nav a[href="#docs-user-manual-browser-md"] { background: var(--accent); color: var(--bg); }
+body:has([id="docs-user-manual-desktop-md"]:target) nav a[href="#docs-user-manual-desktop-md"] { background: var(--accent); color: var(--bg); }
+body:has([id="docs-user-manual-oculus-md"]:target) nav a[href="#docs-user-manual-oculus-md"] { background: var(--accent); color: var(--bg); }
+body:has([id="docs-user-reference-document-format-md"]:target) nav a[href="#docs-user-reference-document-format-md"] { background: var(--accent); color: var(--bg); }
+body:has([id="docs-user-reference-endpoints-md"]:target) nav a[href="#docs-user-reference-endpoints-md"] { background: var(--accent); color: var(--bg); }
+body:has([id="docs-user-reference-npm-scripts-md"]:target) nav a[href="#docs-user-reference-npm-scripts-md"] { background: var(--accent); color: var(--bg); }
+body:has([id="docs-user-reference-text-catalogue-md"]:target) nav a[href="#docs-user-reference-text-catalogue-md"] { background: var(--accent); color: var(--bg); }
+body:has([id="docs-user-reference-environment-variables-md"]:target) nav a[href="#docs-user-reference-environment-variables-md"] { background: var(--accent); color: var(--bg); }
+body:has([id="docs-user-feature-map-readme-md"]:target) nav a[href="#docs-user-feature-map-readme-md"] { background: var(--accent); color: var(--bg); }
+</style>
+</head>
+<body>
+<nav>
+<a href="#readme-md">README.md</a>
+<a href="#docs-readme-md">docs/README.md</a>
+<a href="#docs-user-manual-reader-md">docs/user/manual/reader.md</a>
+<a href="#docs-user-manual-library-md">docs/user/manual/library.md</a>
+<a href="#docs-user-manual-browser-md">docs/user/manual/browser.md</a>
+<a href="#docs-user-manual-desktop-md">docs/user/manual/desktop.md</a>
+<a href="#docs-user-manual-oculus-md">docs/user/manual/oculus.md</a>
+<a href="#docs-user-reference-document-format-md">docs/user/reference/document-format.md</a>
+<a href="#docs-user-reference-endpoints-md">docs/user/reference/endpoints.md</a>
+<a href="#docs-user-reference-npm-scripts-md">docs/user/reference/npm-scripts.md</a>
+<a href="#docs-user-reference-text-catalogue-md">docs/user/reference/text-catalogue.md</a>
+<a href="#docs-user-reference-environment-variables-md">docs/user/reference/environment-variables.md</a>
+<a href="#docs-user-feature-map-readme-md">docs/user/feature-map/README.md</a>
+</nav>
+<main>
+<section class="doc" id="readme-md">
+<h1>Officium</h1>
+<p>Officium is a local reader for studying structured documents. It keeps the complete document visible while indexing and highlighting the spoken passages and assigned actions of a selected role. It also supports ordered study material made from explanatory text, prompts, and question-and-answer pairs.</p>
+<p>The public repository contains the application, schema validator, tests, and fictional examples. Personal documents remain in an ignored local library and are never required to build the public application.</p>
+<h2>What it looks like</h2>
+<p><img src="../../assets/officium-reader.png" alt="Officium showing a fictional training script with role-based navigation"></p>
+<p>Officium has three builds that share one data layer, one set of reader functions and one set of views. Each build reads the library in its own way and hands the documents to the same code:</p>
+<p><img src="diagrams/parts.svg" alt="The parts of Officium: the library folder, the browser, desktop and oculus builds, the data layer, the reader functions and the views"></p>
+<h2>Run</h2>
+<p>Install Node.js 24, then run:</p>
+<pre><code>npm install
+npm run dev</code></pre>
+<p>Open the address printed by Vite. The browser version loads personal documents from <code>rituals/</code> when they exist and otherwise loads the fictional documents from <code>examples/rituals/</code>.</p>
+<h2>Desktop application</h2>
+<p>Officium uses Tauri to build native applications for macOS, Windows, and Linux while retaining the Svelte interface. Install the current stable Rust toolchain and the platform prerequisites listed by Tauri, then run:</p>
+<pre><code>npm run tauri:dev</code></pre>
+<p>The first desktop launch opens a native directory picker. Select the local document-library directory. Officium remembers that directory for later launches. The <code>Bibliotheek</code> button selects a different directory, and source links open the corresponding PDF in the operating system&#x27;s default application.</p>
+<p>Build the public application without personal documents:</p>
+<pre><code>npm run tauri:build</code></pre>
+<p>Build a personal application containing the ignored local library:</p>
+<pre><code>npm run tauri:build:private</code></pre>
+<p>Bundled personal files are ordinary application resources and are not encrypted. Do not distribute a personal build. The public build never includes the local library.</p>
+<p>Platform-specific configuration produces <code>.app</code> and <code>.dmg</code> bundles on macOS, NSIS and MSI installers on Windows, and AppImage, DEB, and RPM packages on Linux. <code>.github/workflows/desktop-build.yml</code> builds all three operating systems, including Apple Silicon and Intel macOS targets.</p>
+<p>The workflow signs packages when the corresponding repository secrets exist and otherwise produces unsigned artifacts. Apple signing and notarization use <code>APPLE_CERTIFICATE</code>, <code>APPLE_CERTIFICATE_PASSWORD</code>, <code>APPLE_SIGNING_IDENTITY</code>, <code>APPLE_ID</code>, <code>APPLE_PASSWORD</code>, and <code>APPLE_TEAM_ID</code>. Windows Authenticode signing uses <code>WINDOWS_CERTIFICATE</code>, <code>WINDOWS_CERTIFICATE_PASSWORD</code>, and <code>WINDOWS_TIMESTAMP_URL</code>. Linux AppImage and RPM signing use <code>LINUX_GPG_PRIVATE_KEY</code>, <code>LINUX_GPG_KEY_ID</code>, and <code>LINUX_GPG_PASSPHRASE</code>. Signing credentials never belong in the repository.</p>
+<p>The desktop manual, <code>docs/user/manual/desktop.md</code>, gives the start-up order, the builds and the workflow in full.</p>
+<h2>Run in oculus</h2>
+<p>Officium runs as an app in the oculus workbench when this folder is a folder of the oculus workspace. Run <code>npm run build:oculus</code>, which writes the app to <code>.oculus/apps/officium/</code>; Git, Prettier and ESLint ignore that folder. Oculus finds the app while it runs and lists it in its view catalogue, and the first open asks for your approval.</p>
+<p>The app reads the library through oculus&#x27;s file bridge, from <code>rituals/</code> and, without personal documents, from <code>examples/rituals/</code>, so the library is the one in this folder and there is no library picker. A source button opens the PDF in oculus&#x27;s file viewer at the PDF page of its entry. The reading position is kept per oculus tab, and the colours follow the oculus theme.</p>
+<p>A changed app asks for approval again, unless it was approved with &quot;Keep approved while I edit&quot;. Run <code>npm run build:oculus</code> again after changing the interface.</p>
+<h2>Add personal documents</h2>
+<p>Create <code>rituals/</code> at the repository root and put source PDFs in <code>rituals/sources/</code>. The whole <code>rituals/</code> directory is ignored by Git. The <code>source.file</code>, <code>answer_image</code> and image <code>file</code> paths are relative to this directory and must remain inside it.</p>
+<p>Use the fictional files under <code>examples/rituals/</code> as format references. Do not place personal content under <code>examples/</code> or another tracked directory.</p>
+<p>When at least one valid document exists below <code>rituals/</code>, Officium shows only those personal documents. Without personal documents, it shows the fictional examples.</p>
+<p>The library manual, <code>docs/user/manual/library.md</code>, says how each build finds the documents and what it refuses.</p>
+<h2>YAML structure</h2>
+<p>This section gives the format with its examples; <code>docs/user/reference/document-format.md</code> gives every key with its type, its rule, the message the validator prints when the rule is broken, and the source file that defines it.</p>
+<p>Every selectable document is either one standalone YAML file or a directory containing a <code>document.yaml</code> manifest. A standalone file contains the complete document, including its sections. The directory format keeps document metadata in <code>document.yaml</code> and stores each section in a separate, semantically named file under <code>sections/</code>.</p>
+<h3>Common document keys</h3>
+<table>
+<thead><tr>
+<th>Key</th>
+<th>Required</th>
+<th>Allowed value</th>
+</tr></thead>
+<tbody>
+<tr><td><code>schema_version</code></td><td>Yes</td><td>The integer <code>1</code></td></tr>
+<tr><td><code>id</code></td><td>Yes</td><td>A unique lowercase ASCII identifier containing letters, numbers, and single hyphens</td></tr>
+<tr><td><code>order</code></td><td>Yes</td><td>A positive integer that determines library position and is unique within the library</td></tr>
+<tr><td><code>document_type</code></td><td>Yes</td><td><code>ritual</code> for a role-based script or <code>catechism</code> for question-and-answer study material</td></tr>
+<tr><td><code>title</code></td><td>Yes</td><td>The displayed document title</td></tr>
+<tr><td><code>language</code></td><td>Yes</td><td>A nonempty language identifier such as <code>en</code> or <code>nl</code></td></tr>
+<tr><td><code>source.file</code></td><td>Yes</td><td>A relative <code>.pdf</code> path without <code>.</code> or <code>..</code> path segments</td></tr>
+<tr><td><code>sections</code></td><td>Yes</td><td>Inline section objects in a standalone file, or ordered section-file paths in a directory manifest</td></tr>
+</tbody></table>
+<p>The order of the <code>sections</code> list is the order shown by Officium. File names do not determine section order. A section-file path must have the form <code>sections/opening.yaml</code>, using a lowercase ASCII name made from letters, numbers, and hyphens.</p>
+<h3>Role-based document directory</h3>
+<pre><code>rituals/
+    sources/
+        training-session.pdf
+    training-session/
+        document.yaml
+        sections/
+            preparation.yaml
+            opening.yaml
+            exercise.yaml
+            closing.yaml</code></pre>
+<p><code>rituals/training-session/document.yaml</code> contains the document metadata, roles, and ordered section paths:</p>
+<pre><code>schema_version: 1
+id: training-session
+order: 10
+document_type: ritual
+title: Training Session
+language: en
+source:
+    file: sources/training-session.pdf
+sections:
+    - sections/preparation.yaml
+    - sections/opening.yaml
+    - sections/exercise.yaml
+    - sections/closing.yaml
+roles:
+    - id: chair
+      label: Chair
+    - id: coordinator
+      label: Coordinator</code></pre>
+<p>Each role has these keys:</p>
+<table>
+<thead><tr>
+<th>Key</th>
+<th>Required</th>
+<th>Allowed value</th>
+</tr></thead>
+<tbody>
+<tr><td><code>id</code></td><td>Yes</td><td>A unique lowercase ASCII identifier containing letters, numbers, and single hyphens</td></tr>
+<tr><td><code>label</code></td><td>Yes</td><td>The role name shown in the function selector</td></tr>
+</tbody></table>
+<p>Every <code>speaker</code> and every item in <code>roles</code> on an action must refer to a role declared in the document manifest.</p>
+<h3>Sections and entries</h3>
+<p>A role-based section file contains one section object:</p>
+<pre><code>id: opening
+title: Opening
+entries:
+    - id: opening-heading
+      kind: text
+      text: TRAINING SESSION
+      source:
+          pdf_page: 1
+          printed_page: &#x27;1&#x27;
+    - id: opening-direction
+      kind: direction
+      text: The room becomes quiet.
+      source:
+          pdf_page: 1
+          printed_page: &#x27;1&#x27;
+    - id: opening-action
+      kind: action
+      roles:
+          - coordinator
+      text: The coordinator places the training cards on the table.
+      source:
+          pdf_page: 1
+          printed_page: &#x27;1&#x27;
+    - id: opening-speech
+      kind: speech
+      speaker: chair
+      text: The exercise begins.
+      source:
+          pdf_page: 1
+          printed_page: &#x27;1&#x27;</code></pre>
+<p>Each section requires a unique <code>id</code>, a displayed <code>title</code>, and a nonempty ordered <code>entries</code> list.</p>
+<table>
+<thead><tr>
+<th><code>kind</code></th>
+<th>Purpose</th>
+<th>Additional required keys</th>
+<th>Appears in the selected-role index</th>
+</tr></thead>
+<tbody>
+<tr><td><code>speech</code></td><td>Words spoken by one role</td><td><code>speaker</code></td><td>Yes, for that speaker</td></tr>
+<tr><td><code>action</code></td><td>An action assigned to one or more roles</td><td><code>roles</code>, a nonempty list of unique role IDs</td><td>Yes, for every assigned role</td></tr>
+<tr><td><code>direction</code></td><td>A stage direction, atmosphere, music, lighting, or another instruction</td><td>None</td><td>No</td></tr>
+<tr><td><code>text</code></td><td>A source heading or explanatory passage</td><td>None</td><td>No</td></tr>
+</tbody></table>
+<p>Every entry also requires:</p>
+<table>
+<thead><tr>
+<th>Key</th>
+<th>Required</th>
+<th>Allowed value</th>
+</tr></thead>
+<tbody>
+<tr><td><code>id</code></td><td>Yes</td><td>A document-wide unique lowercase ASCII identifier</td></tr>
+<tr><td><code>text</code></td><td>One of</td><td>Nonempty source text</td></tr>
+<tr><td><code>content</code></td><td>One of</td><td>A nonempty ordered list of text and image parts</td></tr>
+<tr><td><code>source.pdf_page</code></td><td>Yes</td><td>A positive integer containing the physical PDF page index</td></tr>
+<tr><td><code>source.printed_page</code></td><td>No</td><td>A nonempty string containing the page label printed in the document</td></tr>
+</tbody></table>
+<p>Use exactly one of <code>text</code> or <code>content</code>. Use <code>text</code> for an entry containing only text. Use <code>content</code> when an illustration occurs before, between, or after pieces of text:</p>
+<pre><code>content:
+    - type: text
+      text: First part of the instruction.
+    - type: image
+      file: assets/demonstration-symbol.png
+      alt: Demonstration symbol
+      display: inline
+    - type: text
+      text: Second part of the instruction.</code></pre>
+<p>Every content part has one of these forms:</p>
+<table>
+<thead><tr>
+<th><code>type</code></th>
+<th>Required keys</th>
+<th>Allowed values</th>
+</tr></thead>
+<tbody>
+<tr><td><code>text</code></td><td><code>text</code></td><td>Nonempty source text</td></tr>
+<tr><td><code>image</code></td><td><code>file</code>, <code>alt</code>, and <code>display</code></td><td>A relative PNG, JPEG, or WebP path, a nonempty description, and <code>inline</code> or <code>block</code></td></tr>
+</tbody></table>
+<p>An entry using <code>content</code> must contain at least one text part. <code>inline</code> places the image in the text flow. <code>block</code> centers it on its own line. Image paths are relative to the selected library for personal documents and <code>examples/</code> for fictional documents.</p>
+<p>A standalone role-based document uses the same section and entry objects inline.</p>
+<h3>Question-and-answer blocks</h3>
+<p>A question-and-answer document normally fits in one standalone YAML file:</p>
+<pre><code>schema_version: 1
+id: review-questions
+order: 20
+document_type: catechism
+title: Review Questions
+language: en
+source:
+    file: sources/review-questions.pdf
+sections:
+    - id: review
+      title: Review
+      blocks:
+          - id: introduction
+            type: text
+            text: Read the source before answering the questions.
+            source:
+                pdf_page: 1
+                printed_page: &#x27;1&#x27;
+          - id: preparation
+            type: prompt
+            text: Summarize the preceding section.
+            source:
+                pdf_page: 1
+                printed_page: &#x27;1&#x27;
+          - id: first-question
+            type: pair
+            question: Why is the complete document kept visible?
+            answer: Because each contribution depends on its surrounding context.
+            source:
+                pdf_page: 1
+                printed_page: &#x27;1&#x27;
+          - id: illustrated-answer
+            type: pair
+            question: Identify the illustrated arrangement.
+            answer_image: assets/arrangement.png
+            source:
+                pdf_page: 2
+                printed_page: &#x27;2&#x27;</code></pre>
+<p>Each question-and-answer section requires a unique <code>id</code>, a displayed <code>title</code>, and a nonempty ordered <code>blocks</code> list.</p>
+<table>
+<thead><tr>
+<th><code>type</code></th>
+<th>Purpose</th>
+<th>Additional required keys</th>
+<th>Appears in the question index</th>
+</tr></thead>
+<tbody>
+<tr><td><code>text</code></td><td>Introduction or explanation</td><td><code>text</code></td><td>No</td></tr>
+<tr><td><code>prompt</code></td><td>A command or question without a stored answer</td><td><code>text</code></td><td>Yes</td></tr>
+<tr><td><code>pair</code></td><td>A question with one answer</td><td><code>question</code> and exactly one of <code>answer</code> or <code>answer_image</code></td><td>Yes</td></tr>
+</tbody></table>
+<p>Every block also requires a document-wide unique <code>id</code> and <code>source.pdf_page</code>. <code>source.printed_page</code> is optional. An <code>answer_image</code> must be a relative <code>.png</code>, <code>.jpg</code>, <code>.jpeg</code>, or <code>.webp</code> path without <code>.</code> or <code>..</code> path segments.</p>
+<p>Use YAML block scalars when source text contains line breaks. Officium preserves the stored spelling, punctuation, and line breaks:</p>
+<pre><code>text: |
+    First line.
+    Second line.</code></pre>
+<h2>Verify</h2>
+<p>Every command runs from the repository root:</p>
+<pre><code>npm test
+npm run test:browser
+npm run check
+npm run lint
+npm run build
+npm run format:check
+npm run build:oculus</code></pre>
+<table>
+<thead><tr>
+<th>Command</th>
+<th>What it checks</th>
+</tr></thead>
+<tbody>
+<tr><td><code>npm test</code></td><td>vitest over <code>tests/</code>: data, reader, server, oculus, architecture, privacy</td></tr>
+<tr><td><code>npm run test:browser</code></td><td>Playwright in Chrome: the app on <code>npm run dev</code> on 127.0.0.1:8793, and the oculus build served through routes under the oculus policy</td></tr>
+<tr><td><code>npm run check</code></td><td><code>svelte-kit sync</code> and <code>svelte-check</code></td></tr>
+<tr><td><code>npm run lint</code></td><td><code>eslint .</code></td></tr>
+<tr><td><code>npm run build</code></td><td><code>vite build</code> with adapter-node</td></tr>
+<tr><td><code>npm run format:check</code></td><td><code>prettier --check .</code></td></tr>
+<tr><td><code>npm run build:oculus</code></td><td><code>vite build</code> of the oculus app into <code>.oculus/apps/officium/</code></td></tr>
+</tbody></table>
+<p>The privacy test requires <code>/rituals/</code>, <code>/AGENTS.md</code> and <code>/CLAUDE.md</code> to stay in <code>.gitignore</code>, and fails when Git reports a tracked path below <code>rituals/</code>.</p>
+<h2>Where to look</h2>
+<ul><li><code>docs/README.md</code>: the documentation index, with the manual pages, the reference pages, the feature map, the diagrams and the one-page <code>docs/user/manual.html</code>.</li><li><code>src/lib/data/</code>: the document model, the YAML parser and the validator, shared by every build.</li><li><code>src/lib/reader/</code>: the contribution and question index and the saved reading position.</li><li><code>src/lib/views/</code>: the Svelte views of the reader.</li><li><code>src/routes/</code>: the browser build&#x27;s page and its four endpoints under <code>src/routes/api/</code>.</li><li><code>src-tauri/</code>: the desktop shell, with the library commands in <code>src-tauri/src/library.rs</code>.</li><li><code>src/oculus/</code>: the oculus app, its manifest <code>src/oculus/public/app.yml</code> and its theme <code>src/oculus/theme.css</code>.</li><li><code>config/text.yml</code>: every string the interface shows.</li><li><code>examples/</code>: the fictional documents and their source PDFs.</li><li><code>tests/</code>: 44 vitest cases in 10 files, and 13 Playwright cases in <code>tests/browser/</code>. The two Rust tests in <code>src-tauri/src/library.rs</code> are run by no npm script and no workflow.</li></ul>
+<p>The code keeps these rules:</p>
+<ul><li>Four spaces for indentation. Each handwritten source file stays below 1,000 lines, which <code>tests/architecture.test.ts</code> checks.</li><li>The data layer imports no reader or view code. The reader imports the validated data model and no Svelte component or server filesystem code. Views receive validated documents and use reader functions. <code>tests/architecture.test.ts</code> checks the first two.</li><li>User-facing strings live in <code>config/text.yml</code> and interface colours in <code>src/app.css</code>; the oculus build maps oculus&#x27;s theme tokens onto those colours in <code>src/oculus/theme.css</code>. The one exception for strings is <code>src/oculus/public/app.yml</code>, whose <code>title</code> and <code>description</code> oculus reads from the manifest.</li><li>Real documents live only under the ignored <code>rituals/</code> directory, and tracked examples are fictional. The public repository builds without <code>rituals/</code>.</li></ul>
+<h2>Publishing to a WordPress membership site (planned)</h2>
+<p>This section describes a planned feature that is not built yet. Officium would be shown on a WordPress site that uses the Simple Membership plugin, for logged-in members only. The login cookie of the site is sent only to the site&#x27;s own host, so the library is served from the site itself and not from a subdomain or a separate Node server.</p>
+<ol><li>An export step on the author&#x27;s machine loads the library with the existing validator and writes a catalogue file, the source PDFs, and the images to an output directory that Git ignores.</li><li>The author uploads that directory by SFTP to a directory that the web server does not serve to the public.</li><li>A WordPress plugin kept in this repository, without any library content, provides the catalogue, source PDF, answer image, and entry image endpoints. Each endpoint serves a file only to a logged-in Simple Membership member or to a WordPress administrator. The plugin can limit each document to specific membership levels.</li><li>A static build of the application, made with its own build mode, fetches the library from those endpoints. A shortcode shows the application in an iframe on a page of the member portal.</li></ol>
+<p>The exported library is private content and never belongs in Git. Members with a permitted level, WordPress administrators, and anyone with file access to the web host can read it.</p>
+<h2>License</h2>
+<p>Officium is available under the <a href="../../LICENSE">MIT License</a>.</p>
+</section>
+<section class="doc" id="docs-readme-md">
+<h1>Officium&#x27;s documentation</h1>
+<p>Each page of Officium&#x27;s documentation, grouped by kind, with what it holds. The README at the repository root, <code>README.md</code>, says what Officium is and how to run it.</p>
+<h2>Manual pages</h2>
+<ul><li><code>docs/user/manual/reader.md</code>: the reader every build shows: the selectors, the index, moving through a document, the source link, the reading position and the library screen.</li><li><code>docs/user/manual/library.md</code>: the personal and example libraries, how each build finds the documents, what a library refuses and when a change is seen.</li><li><code>docs/user/manual/browser.md</code>: the browser build on its Node server: running it, building it and its errors.</li><li><code>docs/user/manual/desktop.md</code>: the desktop application: choosing the library, the public and personal builds, the packages and the build workflow.</li><li><code>docs/user/manual/oculus.md</code>: the oculus app: building and opening it, its library, the source button, the reading position, the theme and its errors.</li></ul>
+<h2>Reference pages</h2>
+<ul><li><code>docs/user/reference/document-format.md</code>: every key of a document, with its type, its rule and the validator&#x27;s message.</li><li><code>docs/user/reference/endpoints.md</code>: the four endpoints of the browser build and the catalogue&#x27;s JSON.</li><li><code>docs/user/reference/npm-scripts.md</code>: every script of <code>package.json</code> and the checks before a change is called verified.</li><li><code>docs/user/reference/text-catalogue.md</code>: every key of <code>config/text.yml</code>, with its text and the views that show it.</li><li><code>docs/user/reference/environment-variables.md</code>: <code>OFFICIUM_DESKTOP</code> and the signing secrets of the build workflow.</li></ul>
+<h2>The feature map</h2>
+<ul><li><code>docs/user/feature-map/README.md</code>: each capability of Officium by part, with its status and the files and tests that show it.</li></ul>
+<h2>Diagrams</h2>
+<ul><li><code>docs/user/diagrams/parts.svg</code>: the three builds, where each reads the library, and the shared data, reader and view code. The README shows it.</li><li><code>docs/user/diagrams/document-path.svg</code>: the path of a document from its YAML file to the reader, and the library screen for a refused document. <code>docs/user/manual/library.md</code> shows it.</li></ul>
+<p>The diagrams are drawn by <code>utils/diagrams.py</code> with the drawing engine <code>utils/figures.py</code>.</p>
+<h2>The one-page manual</h2>
+<ul><li><code>docs/user/manual.html</code>: every page above and the README in one HTML page, one tab per page, readable offline. It is built by <code>utils/manual.py</code>.</li></ul>
+<h2>Rebuilding the generated files</h2>
+<p>Run from the repository root, with Python 3.10 or later:</p>
+<pre><code>python3 utils/diagrams.py
+python3 utils/manual.py . README.md docs/README.md docs/user/manual/reader.md docs/user/manual/library.md docs/user/manual/browser.md docs/user/manual/desktop.md docs/user/manual/oculus.md docs/user/reference/document-format.md docs/user/reference/endpoints.md docs/user/reference/npm-scripts.md docs/user/reference/text-catalogue.md docs/user/reference/environment-variables.md docs/user/feature-map/README.md</code></pre>
+<p><code>python3 utils/diagrams.py</code> writes the two diagrams under <code>docs/user/diagrams/</code>, and <code>python3 utils/manual.py</code> writes <code>docs/user/manual.html</code>, with the tabs in the order the command names the pages. Run the second command again after changing any page it names.</p>
+</section>
+<section class="doc" id="docs-user-manual-reader-md">
+<h1>The reader</h1>
+<p>The reader is the interface every build of Officium shows: the browser build, the desktop application and the oculus app. It shows one document of the library at a time, whole, and indexes the parts of it a reader studies: for a role-based document (<code>document_type: ritual</code>) the spoken passages and actions of the selected role, and for a question-and-answer document (<code>document_type: catechism</code>) its questions and prompts. The interface text is Dutch and comes from <code>config/text.yml</code>; the labels below are the ones that file holds.</p>
+<h2>The header</h2>
+<ul><li><strong>Document</strong>: a selector of every document of the library, in the order of their <code>order</code> keys. Selecting a document selects its first role and its first section.</li><li><strong>Rol</strong>: a selector of the roles of a role-based document, in the order of its <code>roles</code> list. It is shown only for a role-based document, and the first role is selected when a document is opened.</li><li><strong>Bibliotheek</strong>: a button that chooses another library folder. Only the desktop application shows it.</li><li>The progress: the place of the current item in the index, as &quot;3 van 7 bijdragen&quot; for a role-based document or &quot;3 van 7 vragen&quot; for a question-and-answer document, and 0 before an item is selected. It is hidden on a window 760 pixels wide or narrower.</li><li><strong>Bijdragen</strong> or <strong>Vragen</strong>: the button that opens and closes the index, shown only on a window 760 pixels wide or narrower. On such a window the index is hidden until this button opens it, and the button then reads <strong>Sluiten</strong>. On a wider window the index stands beside the document.</li></ul>
+<h2>The index</h2>
+<p>For a role-based document the index lists, in document order, each <code>speech</code> entry whose <code>speaker</code> is the selected role and each <code>action</code> entry whose <code>roles</code> hold it. A <code>direction</code> or a <code>text</code> entry is never listed, and neither is a speech by another role that names the selected role. For a question-and-answer document the index lists each <code>pair</code> and each <code>prompt</code> block; a <code>text</code> block stays in the document only.</p>
+<p>Each item shows its section&#x27;s title, its text (the question for a pair) and its page: &quot;p. 12&quot; when the entry has a <code>printed_page</code>, and &quot;PDF 14&quot; from its <code>pdf_page</code> when it has none. When the selected role has no contribution, the index reads &quot;Voor deze functie zijn geen bijdragen vastgelegd.&quot;</p>
+<p>Selecting an item makes it the current item, scrolls the document to it and closes the index on a narrow window.</p>
+<h2>Moving through the document</h2>
+<ul><li>The arrow buttons <strong>Vorige</strong> and <strong>Volgende</strong> above the document move to the previous and the next item of the index, and show the place as &quot;3 / 7&quot;. Before an item is selected, <strong>Volgende</strong> moves to the first item.</li><li><strong>Sectie</strong>: a selector of the document&#x27;s sections, shown when the document has more than one. Selecting a section scrolls the document to it.</li><li>The header and the arrow buttons stay in place while the document scrolls.</li></ul>
+<h2>The document</h2>
+<p>Each section is shown under its title, with every entry or block in its order. A role-based entry is labelled by its kind: <strong>Gesproken tekst</strong> for a speech, with the speaker&#x27;s role label beside the text; <strong>Handeling</strong> for an action, with the labels of its roles; <strong>Regie</strong> for a direction; and <strong>Toelichting</strong> for a text entry. An entry of the selected role carries the badge <strong>Bijdrage</strong> and is highlighted, and the current item is marked. A question-and-answer block shows <strong>Vraag</strong> with its question or prompt and, for a pair, <strong>Antwoord</strong> with the answer text or the answer image. Images of a <code>content</code> list are drawn in the text flow (<code>display: inline</code>) or centred on their own line (<code>display: block</code>).</p>
+<h2>The source link</h2>
+<p>Each entry and block shows its page as a source link. What the link does depends on the build:</p>
+<ul><li>In the browser build it opens <code>/api/source/&lt;document id&gt;#page=&lt;pdf_page&gt;</code> in a new tab.</li><li>In the desktop application it opens the document&#x27;s PDF in the operating system&#x27;s default application. The command that opens it, <code>open_source</code> in <code>src-tauri/src/library.rs</code>, takes the file and no page.</li><li>In the oculus app it opens the PDF in oculus&#x27;s file viewer at the entry&#x27;s <code>pdf_page</code>.</li></ul>
+<h2>The reading position</h2>
+<p>The reader keeps the selected document, the selected role and the current item, and restores them when the reader opens again. The browser build and the desktop application keep them in the browser storage of the window under the key <code>officium.reader.v1</code>, as <code>{&quot;version&quot;: 1, &quot;documentId&quot;: ..., &quot;roleId&quot;: ..., &quot;itemId&quot;: ...}</code>. The oculus app keeps them through the oculus bridge, per oculus tab. A kept document that no longer exists opens the first document instead; a kept role that the document no longer holds selects its first role; a kept item that the index no longer holds leaves no item selected.</p>
+<h2>The library screen</h2>
+<p>When the library is loading, the reader shows &quot;Bibliotheek laden...&quot;. When the library holds no document, or cannot be loaded, it shows the library screen instead of the reader:</p>
+<ul><li>with no document and no error: &quot;Kies uw documentenmap&quot; and, in the desktop application, the button <strong>Kies documentenmap</strong>; the oculus app says that no documents were found in <code>rituals/</code> or <code>examples/rituals/</code> of its folder;</li><li>with an error: &quot;De bibliotheek kon niet worden geladen&quot; and the error message.</li></ul>
+<h2>Colours</h2>
+<p>The browser build and the desktop application use the colours of <code>src/app.css</code>, with a dark palette when the system asks for a dark colour scheme. The oculus app maps oculus&#x27;s theme tokens onto those colours in <code>src/oculus/theme.css</code>, so it follows the oculus theme whatever the system scheme.</p>
+<h2>An example</h2>
+<p>Run <code>npm run dev</code> with no <code>rituals/</code> folder and open the address Vite prints. The reader opens the fictional role-based document &quot;Demonstratiescript&quot; of <code>examples/rituals/demonstration-ritual.yaml</code> with its first role selected. Selecting the role <strong>Spreker</strong> in <strong>Rol</strong> lists one contribution, the speech of the section &quot;Overweging&quot;, and <strong>Volgende</strong> makes it the current item.</p>
+<h2>Where its code lives</h2>
+<ul><li><code>src/lib/views/Reader.svelte</code>: the header, the arrow buttons, the section selector and the saved position; <code>Navigation.svelte</code>, <code>RitualDocument.svelte</code>, <code>CatechismDocument.svelte</code> and <code>SourceLink.svelte</code> beside it.</li><li><code>src/lib/reader/contributions.ts</code>: which entries and blocks the index lists.</li><li><code>src/lib/reader/state.ts</code>: the stored form of the reading position.</li></ul>
+<p>The data layer imports no reader or view code, and the reader imports the validated data model and no Svelte component or server filesystem code; <code>tests/architecture.test.ts</code> checks both. Views receive validated documents and use reader functions. Every string a view shows comes from <code>config/text.yml</code>, whose keys <code>docs/user/reference/text-catalogue.md</code> lists.</p>
+</section>
+<section class="doc" id="docs-user-manual-library-md">
+<h1>The library</h1>
+<p>The library is the set of YAML documents Officium reads, with their source PDFs and images. A library is either the personal library under <code>rituals/</code>, which Git ignores, or the fictional example library under <code>examples/</code>, which the repository holds. This page says how each build finds the documents, which library it shows and what it refuses. The format of a document is in <code>docs/user/reference/document-format.md</code>.</p>
+<h2>The two libraries</h2>
+<table>
+<thead><tr>
+<th>Library</th>
+<th>Documents under</th>
+<th>Source PDFs and images relative to</th>
+<th>Tracked by Git</th>
+</tr></thead>
+<tbody>
+<tr><td>Personal</td><td><code>rituals/</code></td><td><code>rituals/</code></td><td>No</td></tr>
+<tr><td>Examples</td><td><code>examples/rituals/</code></td><td><code>examples/</code></td><td>Yes</td></tr>
+</tbody></table>
+<p>The browser build and the oculus app show the personal library when it holds at least one document, and the example library otherwise; they never show both. The desktop application reads the folder it was given instead, as <code>docs/user/manual/desktop.md</code> says, and the <code>source.file</code>, <code>answer_image</code> and image <code>file</code> paths of its documents are relative to that folder.</p>
+<p>Real documents live only under <code>rituals/</code>. A test, an example, the source code and the documentation hold fictional text only, and the public repository builds without <code>rituals/</code>. <code>tests/privacy.test.ts</code> requires <code>/rituals/</code> to stay in <code>.gitignore</code> and fails when Git tracks a path below <code>rituals/</code>.</p>
+<h2>A personal library</h2>
+<pre><code>rituals/
+    sources/
+        training-session.pdf
+        review-questions.pdf
+    assets/
+        arrangement.png
+    training-session/
+        document.yaml
+        sections/
+            opening.yaml
+            closing.yaml
+    review-questions.yaml</code></pre>
+<p>Here <code>training-session/</code> is a directory document and <code>review-questions.yaml</code> a standalone document. <code>source.file: sources/training-session.pdf</code> and <code>answer_image: assets/arrangement.png</code> name files relative to <code>rituals/</code>.</p>
+<h2>How the documents are found</h2>
+<p>Each build walks the library&#x27;s document folder and its subfolders:</p>
+<ul><li>A folder that holds a <code>document.yaml</code> is one directory document. Its sections are the files its <code>sections</code> list names, in that order, and every other file and folder inside it is not read as a document.</li><li>In any other folder, each file ending in <code>.yaml</code> or <code>.yml</code> is one standalone document, and each subfolder is walked in turn.</li><li>The desktop application does not walk folders named <code>sources</code> or <code>assets</code>.</li><li>The oculus app does not read an entry that is a link.</li></ul>
+<p>The documents are then sorted by their <code>order</code> key, and two documents with the same <code>id</code> or the same <code>order</code> refuse the whole library.</p>
+<p><img src="diagrams/document-path.svg" alt="The path of a document: found, parsed, validated, its paths checked, ordered and shown, or refused to the library screen"></p>
+<h2>What a library refuses</h2>
+<p>A document that breaks a rule of the format refuses the whole library, and the reader shows the library screen with the error, as <code>docs/user/manual/reader.md</code> says. The message names the document&#x27;s path, the field and the rule, as <code>&lt;document path&gt;: &lt;field&gt;: &lt;message&gt;</code>:</p>
+<pre><code>rituals/training-session/document.yaml: sections[0].entries[2].speaker: unknown role &#x27;reader&#x27;
+rituals/review-questions.yaml: source.file: file does not exist: sources/review-questions.pdf
+duplicate document order &#x27;10&#x27;</code></pre>
+<p>The paths a document names are checked as well:</p>
+<ul><li>In every build, the validator refuses a <code>source.file</code>, <code>answer_image</code> or image <code>file</code> path that starts with <code>/</code> or holds a <code>.</code> or <code>..</code> segment.</li><li>The browser build also refuses such a path when it resolves, through a link, to a place outside the library (&quot;path escapes the corpus root&quot; or &quot;resolved path escapes the corpus root&quot;), and the desktop application when it leaves the chosen folder (&quot;library path leaves the selected directory&quot;).</li><li>A missing source PDF is refused when the library loads in the browser build and the oculus app (&quot;file does not exist&quot;). The desktop application does not check the PDF when the library loads; a source link to a missing PDF then opens nothing, and the reader shows no message, since <code>src/routes/+page.svelte</code> does not catch the error of the <code>open_source</code> command.</li><li>In the browser build and the oculus app, a section path of a directory document must have the form <code>sections/&lt;name&gt;.yaml</code> (&quot;expected a path shaped like &#x27;sections/opening.yaml&#x27;&quot;), and the browser build refuses one that does not exist (&quot;file does not exist: sections/&lt;name&gt;.yaml&quot;). The desktop application accepts any relative section path inside the chosen folder without <code>.</code> or <code>..</code> segments.</li></ul>
+<p>The validator&#x27;s messages are listed with their keys in <code>docs/user/reference/document-format.md</code>.</p>
+<h2>When a change is seen</h2>
+<ul><li>The browser build reads the library again for every request to its endpoints, so a changed document is seen when the page is reloaded.</li><li>The desktop application reads the library when it starts and when a folder is chosen with <strong>Bibliotheek</strong>.</li><li>The oculus app reads the library when its tab opens.</li></ul>
+<h2>Where its code lives</h2>
+<ul><li><code>src/lib/server/catalogue.ts</code>: the browser build&#x27;s library, read from the file system on the server.</li><li><code>src-tauri/src/library.rs</code>: the desktop application&#x27;s commands that read the folder, its images and its PDFs.</li><li><code>src/lib/oculus/library.ts</code>: the oculus app&#x27;s library, read through the oculus file bridge.</li><li><code>src/lib/data/</code>: the parser, the validator and the order checks that every build uses.</li></ul>
+</section>
+<section class="doc" id="docs-user-manual-browser-md">
+<h1>The browser build</h1>
+<p>The browser build runs Officium as a SvelteKit application on a Node server. The server reads the library from the repository folder and serves it to the reader in the browser through four endpoints. It is the build to use for working on Officium and for reading a library without installing the desktop application.</p>
+<h2>Running it</h2>
+<p>Install Node.js 24, then, from the repository root:</p>
+<pre><code>npm install
+npm run dev</code></pre>
+<p><code>npm run dev</code> starts the Vite development server on the address <code>127.0.0.1</code>, which <code>vite.config.ts</code> sets, and prints the address with its port. Open that address in a browser. The reader shows the personal library under <code>rituals/</code> when it holds a document, and the fictional examples under <code>examples/rituals/</code> otherwise, as <code>docs/user/manual/library.md</code> says.</p>
+<p>The server reads the library from the folder it is started in, so <code>npm run dev</code> runs from the repository root.</p>
+<h2>Building it</h2>
+<pre><code>npm run build
+npm run preview</code></pre>
+<p><code>npm run build</code> builds the application with <code>@sveltejs/adapter-node</code>, the adapter <code>svelte.config.js</code> selects when <code>OFFICIUM_DESKTOP</code> is not <code>1</code>, into <code>build/</code>, which Git ignores. <code>npm run preview</code> serves that build with Vite&#x27;s preview server.</p>
+<p>Question: no file of the repository gives the command that runs the built server on its own (adapter-node&#x27;s output in <code>build/</code>). Which command, if any, should this page give?</p>
+<h2>How the page gets the library</h2>
+<p>The page renders in the browser only: <code>src/routes/+layout.ts</code> sets <code>ssr = false</code>. When it opens, it requests <code>GET /api/catalogue</code>, which returns every document of the library as validated JSON. A source link points at <code>GET /api/source/&lt;document id&gt;#page=&lt;pdf_page&gt;</code>, and the images of a document are served by <code>GET /api/entry-image/...</code> and <code>GET /api/answer-image/...</code>. <code>docs/user/reference/endpoints.md</code> lists the endpoints with their answers and errors.</p>
+<p>Every request to an endpoint reads the library again, so a changed document is seen when the page is reloaded.</p>
+<h2>Its errors</h2>
+<ul><li>When <code>GET /api/catalogue</code> does not answer with a success, the library screen shows &quot;De bibliotheek kon niet worden geladen&quot; and <code>HTTP &lt;status&gt;</code>, such as <code>HTTP 500</code>.</li><li>A source PDF or an image the endpoints cannot find is answered with 404 and &quot;Bronbestand niet gevonden.&quot; or &quot;Afbeelding niet gevonden.&quot;.</li></ul>
+<p>Question: the validator&#x27;s message for a refused document (<code>&lt;document path&gt;: &lt;field&gt;: &lt;message&gt;</code>) is thrown on the server, and the page shows only the HTTP status. No file of the repository says where the message itself appears. Where should this page tell a user to look for it?</p>
+<h2>Where its code lives</h2>
+<ul><li><code>src/routes/+page.svelte</code>: the page, which loads the catalogue and shows the reader or the library screen.</li><li><code>src/routes/api/</code>: the four endpoints.</li><li><code>src/lib/server/catalogue.ts</code>: the library read from the file system.</li></ul>
+</section>
+<section class="doc" id="docs-user-manual-desktop-md">
+<h1>The desktop application</h1>
+<p>The desktop application runs Officium as a native application for macOS, Windows and Linux, built with Tauri around the same Svelte interface. It reads a library folder the user chooses on the computer, or a library bundled into a personal build, and opens source PDFs in the operating system&#x27;s default application.</p>
+<h2>What it needs</h2>
+<ul><li>Node.js 24 and <code>npm install</code>, as for the browser build.</li><li>The current stable Rust toolchain; <code>src-tauri/Cargo.toml</code> names Rust 1.77.2 as the oldest version it builds with.</li><li>The platform prerequisites listed by Tauri.</li></ul>
+<h2>Running it while working on it</h2>
+<pre><code>npm run tauri:dev</code></pre>
+<p>This starts <code>npm run dev</code>, as <code>src-tauri/tauri.conf.json</code> says in <code>beforeDevCommand</code>, and opens the application window on <code>http://127.0.0.1:5173</code>. The window opens at 1280 by 800 pixels and can be made no smaller than 900 by 600.</p>
+<h2>Choosing the library</h2>
+<p>When the application starts it opens, in this order:</p>
+<ol><li>the folder it remembers from an earlier start;</li><li>otherwise, the library bundled into a personal build;</li><li>otherwise, the library screen with the button <strong>Kies documentenmap</strong>, which opens a native folder picker.</li></ol>
+<p>A folder chosen with the picker is remembered once it has loaded without an error, in the application&#x27;s settings file <code>settings.json</code> under the key <code>ritual-library</code>. The <strong>Bibliotheek</strong> button in the header opens the picker again to choose another folder.</p>
+<p>The chosen folder is the library root: the documents are found in it as <code>docs/user/manual/library.md</code> says, and every <code>source.file</code>, <code>answer_image</code> and image <code>file</code> path is relative to it. A folder with no document shows &quot;Geen YAML-documenten gevonden.&quot;.</p>
+<p>A source link opens the document&#x27;s PDF in the operating system&#x27;s default application. The application reads only PNG, JPEG and WebP files as images (&quot;only PNG, JPEG, and WebP library assets can be read&quot;) and opens only a PDF as a source (&quot;source path must refer to a PDF&quot;).</p>
+<h2>Building it</h2>
+<p>Build the public application, without personal documents:</p>
+<pre><code>npm run tauri:build</code></pre>
+<p>Build a personal application that holds the ignored <code>rituals/</code> folder:</p>
+<pre><code>npm run tauri:build:private</code></pre>
+<p>Both builds first run <code>npm run build:desktop</code>, which builds the interface with <code>@sveltejs/adapter-static</code> into <code>build/</code>, selected by <code>OFFICIUM_DESKTOP=1</code>. The personal build adds <code>src-tauri/tauri.private.conf.json</code>, which copies <code>rituals/</code> into the application&#x27;s resources as <code>rituals/</code>; the application then opens that library when it remembers no folder.</p>
+<p>Bundled personal files are ordinary application resources and are not encrypted. Do not distribute a personal build. The public build never includes the local library.</p>
+<table>
+<thead><tr>
+<th>Platform</th>
+<th>Packages</th>
+<th>Configuration</th>
+</tr></thead>
+<tbody>
+<tr><td>macOS</td><td><code>.app</code> and <code>.dmg</code></td><td><code>src-tauri/tauri.macos.conf.json</code>, macOS 10.15 or later</td></tr>
+<tr><td>Windows</td><td>NSIS and MSI installers</td><td><code>src-tauri/tauri.windows.conf.json</code>, which installs the WebView2 runtime with its downloaded bootstrapper</td></tr>
+<tr><td>Linux</td><td>AppImage, DEB and RPM</td><td><code>src-tauri/tauri.linux.conf.json</code></td></tr>
+</tbody></table>
+<h2>The build workflow</h2>
+<p><code>.github/workflows/desktop-build.yml</code> builds the public application on GitHub Actions when it is started by hand or when a tag starting with <code>v</code> is pushed. It builds four targets: Apple Silicon and Intel macOS, Windows x86-64 and Linux x86-64 on Ubuntu 22.04. Each job runs <code>npm ci</code>, <code>npm test</code>, <code>npm run check</code> and <code>npm run lint</code>, then the Tauri build, and uploads the packages as the workflow artifact <code>officium-&lt;target&gt;</code>.</p>
+<p>The workflow signs packages when the corresponding repository secrets exist and otherwise produces unsigned artifacts. Apple signing and notarization use <code>APPLE_CERTIFICATE</code>, <code>APPLE_CERTIFICATE_PASSWORD</code>, <code>APPLE_SIGNING_IDENTITY</code>, <code>APPLE_ID</code>, <code>APPLE_PASSWORD</code>, and <code>APPLE_TEAM_ID</code>. Windows Authenticode signing uses <code>WINDOWS_CERTIFICATE</code>, <code>WINDOWS_CERTIFICATE_PASSWORD</code>, and <code>WINDOWS_TIMESTAMP_URL</code>; the Windows signing configuration is written to <code>src-tauri/tauri.signing.conf.json</code>, which Git ignores. Linux AppImage and RPM signing use <code>LINUX_GPG_PRIVATE_KEY</code>, <code>LINUX_GPG_KEY_ID</code>, and <code>LINUX_GPG_PASSPHRASE</code>. Signing credentials never belong in the repository. <code>docs/user/reference/environment-variables.md</code> lists the secrets.</p>
+<h2>Its errors</h2>
+<p>A library that cannot be loaded shows the library screen with &quot;De bibliotheek kon niet worden geladen&quot; and the message, such as a validator message (<code>&lt;document path&gt;: &lt;field&gt;: &lt;message&gt;</code>), &quot;the selected ritual library is not a directory&quot; or &quot;library paths must be relative and may not contain dot segments&quot;.</p>
+<h2>Where its code lives</h2>
+<ul><li><code>src/lib/desktop/library.ts</code>: the interface side, which calls the commands and parses the documents.</li><li><code>src-tauri/src/library.rs</code>: the commands <code>bundled_library_path</code>, <code>load_library</code>, <code>read_library_file</code> and <code>open_source</code>, and the two Rust tests of the library walk and the path check.</li><li><code>src-tauri/src/lib.rs</code>: the application, with the dialog, store and opener plugins.</li></ul>
+</section>
+<section class="doc" id="docs-user-manual-oculus-md">
+<h1>The oculus app</h1>
+<p>The oculus app runs Officium&#x27;s reader as an app in the oculus workbench, in an oculus tab, when this folder is a folder of the oculus workspace. It reads the library of this folder through oculus&#x27;s file bridge, keeps the reading position per oculus tab, opens source PDFs in oculus&#x27;s file viewer and follows the oculus theme.</p>
+<h2>Building and opening it</h2>
+<pre><code>npm run build:oculus</code></pre>
+<p>This builds the app with <code>vite.oculus.config.ts</code> into <code>.oculus/apps/officium/</code>, which Git, Prettier and ESLint ignore. Oculus finds the app while it runs and lists it in its view catalogue, and the first open asks for your approval. A changed app asks for approval again, unless it was approved with &quot;Keep approved while I edit&quot;. Run <code>npm run build:oculus</code> again after changing the interface.</p>
+<p>Oculus reads the app&#x27;s name, title and description from its manifest, <code>src/oculus/public/app.yml</code>:</p>
+<pre><code>name: officium
+title: Officium
+description: Reads the documents of the officium library from this folder.
+glyph: page
+bridge: 1</code></pre>
+<p>The app&#x27;s address has the form <code>/apps/@&lt;root&gt;/&lt;name&gt;/&lt;key&gt;/</code>, and the app takes the folder it reads from the <code>&lt;root&gt;</code> part. An address of another form is refused with &quot;expected an address of the form /apps/@&lt;root&gt;/&lt;name&gt;/&lt;key&gt;/&quot;.</p>
+<h2>The library</h2>
+<p>The app reads <code>rituals/</code> of this folder and, when it holds no document, <code>examples/rituals/</code>, through the bridge, so the library is the one in this folder and there is no library picker. The documents are found as <code>docs/user/manual/library.md</code> says. The images of a document are read through the bridge and put into the page as <code>data:</code> addresses.</p>
+<h2>The source button</h2>
+<p>A source button opens the PDF in oculus&#x27;s file viewer at the PDF page of its entry. It asks the bridge to open the file <code>&lt;library&gt;/&lt;source.file&gt;</code> of this folder, such as <code>examples/sources/demonstration-ritual.pdf</code>, with the entry&#x27;s <code>pdf_page</code>.</p>
+<h2>The reading position and the theme</h2>
+<p>The reading position (the document, the role and the current item) is kept through the bridge for each oculus tab, so no file is written into this folder. The colours follow the oculus theme: <code>src/oculus/theme.css</code> maps the tokens oculus paints on the page onto the palette of <code>src/app.css</code>.</p>
+<h2>Its errors</h2>
+<ul><li>A library that cannot be read shows the library screen with the folder and oculus&#x27;s refusal, such as <code>rituals: failed:500</code>.</li><li>A folder that holds no document shows &quot;Er zijn geen documenten gevonden in rituals/ of examples/rituals/ van deze map.&quot;</li><li>A source the bridge does not open shows the notice &quot;Het bronbestand kon niet worden geopend: &lt;refusal&gt;&quot; above the reader, with a <strong>Sluiten</strong> button.</li><li>A reading position the bridge does not keep shows the notice &quot;De leespositie kon niet worden bewaard: &lt;refusal&gt;&quot;.</li></ul>
+<h2>Where its code lives</h2>
+<ul><li><code>src/oculus/</code>: the app&#x27;s page, <code>App.svelte</code>, its manifest and its theme.</li><li><code>src/lib/oculus/</code>: the address, the connection to the bridge module <code>/apps/-/oculus.js</code>, and the library read through the bridge.</li><li><code>tests/browser/oculus.spec.ts</code>: the built app served under the oculus policy with a stand-in bridge.</li></ul>
+</section>
+<section class="doc" id="docs-user-reference-document-format-md">
+<h1>The document format</h1>
+<p>Every key of an Officium document, with its type, whether it is required, its rule and the message the validator prints when the rule is broken. The validator is <code>src/lib/data/validate.ts</code>, and the section paths of a directory document are checked by <code>src/lib/data/sections.ts</code>. The README&#x27;s &quot;YAML structure&quot; section gives the format with complete examples.</p>
+<p>A message is printed as <code>&lt;document path&gt;: &lt;field&gt;: &lt;message&gt;</code>, where the field is the path of the key in the document, such as <code>sections[0].entries[2].speaker</code>. The two library-wide messages, for a duplicate <code>id</code> or <code>order</code>, carry no path. No key has a default: a key that is not required is left out when it has no value.</p>
+<h2>The two forms of a document</h2>
+<ul><li>A standalone document is one YAML file, ending in <code>.yaml</code> or <code>.yml</code>, that holds every key below, with its sections inline.</li><li>A directory document is a folder that holds <code>document.yaml</code>. The manifest holds every key below, and its <code>sections</code> list names the section files, each one section object. The sections are read in the order of that list.</li></ul>
+<h2>Values</h2>
+<table>
+<thead><tr>
+<th>Name</th>
+<th>Rule</th>
+<th>Message</th>
+</tr></thead>
+<tbody>
+<tr><td>identifier</td><td>A string of lowercase ASCII letters and digits in runs joined by single hyphens, such as <code>opening-speech</code></td><td><code>expected a lowercase ASCII identifier</code></td></tr>
+<tr><td>nonempty string</td><td>A string that holds a character other than white space</td><td><code>expected a nonempty string</code></td></tr>
+<tr><td>positive integer</td><td>An integer of 1 or more</td><td><code>expected a positive integer</code></td></tr>
+<tr><td>object</td><td>A YAML mapping</td><td><code>expected an object</code></td></tr>
+<tr><td>list</td><td>A YAML sequence</td><td><code>expected an array</code></td></tr>
+<tr><td>nonempty list</td><td>A list with at least one item</td><td><code>must not be empty</code></td></tr>
+<tr><td>PDF path</td><td>A path relative to the library root, not starting with <code>/</code>, with no <code>.</code> or <code>..</code> segment, ending in <code>.pdf</code></td><td><code>expected a relative PDF path without dot segments</code></td></tr>
+<tr><td>image path</td><td>A path relative to the library root, not starting with <code>/</code>, with no <code>.</code> or <code>..</code> segment, ending in <code>.png</code>, <code>.jpg</code>, <code>.jpeg</code> or <code>.webp</code>, in any case</td><td><code>expected a relative PNG, JPEG, or WebP path without dot segments</code></td></tr>
+</tbody></table>
+<h2>The document</h2>
+<table>
+<thead><tr>
+<th>Key</th>
+<th>Type</th>
+<th>Required</th>
+<th>Rule</th>
+<th>Message on a break</th>
+</tr></thead>
+<tbody>
+<tr><td><code>schema_version</code></td><td>integer</td><td>Yes</td><td>The integer <code>1</code></td><td><code>expected 1</code></td></tr>
+<tr><td><code>id</code></td><td>identifier</td><td>Yes</td><td>Unique in the library</td><td><code>duplicate document identifier &#x27;&lt;id&gt;&#x27;</code></td></tr>
+<tr><td><code>order</code></td><td>positive integer</td><td>Yes</td><td>Unique in the library; the library is sorted by it, then by title</td><td><code>duplicate document order &#x27;&lt;order&gt;&#x27;</code></td></tr>
+<tr><td><code>document_type</code></td><td>string</td><td>Yes</td><td><code>ritual</code> or <code>catechism</code></td><td><code>expected &#x27;ritual&#x27; or &#x27;catechism&#x27;</code></td></tr>
+<tr><td><code>title</code></td><td>nonempty string</td><td>Yes</td><td>Shown in the document selector and above the document</td><td></td></tr>
+<tr><td><code>language</code></td><td>nonempty string</td><td>Yes</td><td>A language identifier such as <code>en</code> or <code>nl</code></td><td></td></tr>
+<tr><td><code>source</code></td><td>object</td><td>Yes</td><td>Holds <code>file</code></td><td></td></tr>
+<tr><td><code>source.file</code></td><td>PDF path</td><td>Yes</td><td>The source PDF; the browser build and the oculus app also require the file to exist</td><td><code>file does not exist: &lt;path&gt;</code></td></tr>
+<tr><td><code>roles</code></td><td>nonempty list of roles</td><td>Yes, for <code>ritual</code></td><td>Role identifiers are unique</td><td><code>duplicate identifier &#x27;&lt;id&gt;&#x27;</code></td></tr>
+<tr><td><code>sections</code></td><td>nonempty list</td><td>Yes</td><td>Section objects in a standalone file, section-file paths in a manifest; section identifiers are unique</td><td><code>duplicate identifier &#x27;&lt;id&gt;&#x27;</code></td></tr>
+</tbody></table>
+<p>Every entry or block identifier is unique across the whole document: <code>duplicate identifier &#x27;&lt;id&gt;&#x27;</code>.</p>
+<h2>A section-file path</h2>
+<p>A path in the <code>sections</code> list of <code>document.yaml</code>.</p>
+<table>
+<thead><tr>
+<th>Rule</th>
+<th>Message</th>
+</tr></thead>
+<tbody>
+<tr><td>The list exists and holds at least one path</td><td><code>expected a non-empty list of section file paths</code></td></tr>
+<tr><td>The path has the form <code>sections/&lt;name&gt;.yaml</code>, the name of lowercase ASCII letters, digits and hyphens</td><td><code>expected a path shaped like &#x27;sections/opening.yaml&#x27;</code></td></tr>
+<tr><td>The file exists, checked by the browser build</td><td><code>file does not exist: sections/&lt;name&gt;.yaml</code></td></tr>
+</tbody></table>
+<p>The desktop application checks only that the path is relative, has no <code>.</code> or <code>..</code> segment and stays inside the chosen folder; <code>docs/user/manual/library.md</code> gives the difference.</p>
+<h2>A role</h2>
+<table>
+<thead><tr>
+<th>Key</th>
+<th>Type</th>
+<th>Required</th>
+<th>Rule</th>
+</tr></thead>
+<tbody>
+<tr><td><code>id</code></td><td>identifier</td><td>Yes</td><td>Unique among the document&#x27;s roles</td></tr>
+<tr><td><code>label</code></td><td>nonempty string</td><td>Yes</td><td>The role name shown in the <strong>Rol</strong> selector</td></tr>
+</tbody></table>
+<h2>A section of a role-based document</h2>
+<table>
+<thead><tr>
+<th>Key</th>
+<th>Type</th>
+<th>Required</th>
+<th>Rule</th>
+</tr></thead>
+<tbody>
+<tr><td><code>id</code></td><td>identifier</td><td>Yes</td><td>Unique among the sections</td></tr>
+<tr><td><code>title</code></td><td>nonempty string</td><td>Yes</td><td>Shown above the section and in the <strong>Sectie</strong> selector</td></tr>
+<tr><td><code>entries</code></td><td>nonempty list</td><td>Yes</td><td>The entries, in reading order</td></tr>
+</tbody></table>
+<h2>An entry</h2>
+<table>
+<thead><tr>
+<th>Key</th>
+<th>Type</th>
+<th>Required</th>
+<th>Rule</th>
+<th>Message on a break</th>
+</tr></thead>
+<tbody>
+<tr><td><code>id</code></td><td>identifier</td><td>Yes</td><td>Unique in the document</td><td><code>duplicate identifier &#x27;&lt;id&gt;&#x27;</code></td></tr>
+<tr><td><code>kind</code></td><td>string</td><td>Yes</td><td><code>speech</code>, <code>action</code>, <code>direction</code> or <code>text</code></td><td><code>expected speech, action, direction, or text</code></td></tr>
+<tr><td><code>speaker</code></td><td>identifier</td><td>Yes, for <code>speech</code></td><td>A role of the document</td><td><code>unknown role &#x27;&lt;id&gt;&#x27;</code></td></tr>
+<tr><td><code>roles</code></td><td>nonempty list of identifiers</td><td>Yes, for <code>action</code></td><td>Each a role of the document, none twice</td><td><code>unknown role &#x27;&lt;id&gt;&#x27;</code>, <code>duplicate identifier &#x27;&lt;id&gt;&#x27;</code></td></tr>
+<tr><td><code>text</code></td><td>nonempty string</td><td>Exactly one of <code>text</code> and <code>content</code></td><td></td><td><code>expected exactly one of text or content</code></td></tr>
+<tr><td><code>content</code></td><td>nonempty list of parts</td><td>Exactly one of <code>text</code> and <code>content</code></td><td>At least one text part</td><td><code>expected at least one text part</code></td></tr>
+<tr><td><code>source</code></td><td>object</td><td>Yes</td><td>Holds <code>pdf_page</code></td><td></td></tr>
+<tr><td><code>source.pdf_page</code></td><td>positive integer</td><td>Yes</td><td>The physical page of the source PDF</td><td></td></tr>
+<tr><td><code>source.printed_page</code></td><td>nonempty string</td><td>No</td><td>The page label printed in the document; shown as &quot;p. &lt;label&gt;&quot; in place of &quot;PDF &lt;pdf_page&gt;&quot;</td><td></td></tr>
+</tbody></table>
+<p>An entry of <code>content</code> is indexed and labelled by the text of its text parts, joined by single spaces.</p>
+<h2>A content part</h2>
+<table>
+<thead><tr>
+<th>Key</th>
+<th>Type</th>
+<th>Required</th>
+<th>Rule</th>
+<th>Message on a break</th>
+</tr></thead>
+<tbody>
+<tr><td><code>type</code></td><td>string</td><td>Yes</td><td><code>text</code> or <code>image</code></td><td><code>expected &#x27;text&#x27; or &#x27;image&#x27;</code></td></tr>
+<tr><td><code>text</code></td><td>nonempty string</td><td>Yes, for <code>text</code></td><td></td><td></td></tr>
+<tr><td><code>file</code></td><td>image path</td><td>Yes, for <code>image</code></td><td>Relative to the library root</td><td></td></tr>
+<tr><td><code>alt</code></td><td>nonempty string</td><td>Yes, for <code>image</code></td><td>The image&#x27;s description</td><td></td></tr>
+<tr><td><code>display</code></td><td>string</td><td>Yes, for <code>image</code></td><td><code>inline</code> in the text flow, <code>block</code> centred on its own line</td><td><code>expected &#x27;inline&#x27; or &#x27;block&#x27;</code></td></tr>
+</tbody></table>
+<h2>A section of a question-and-answer document</h2>
+<table>
+<thead><tr>
+<th>Key</th>
+<th>Type</th>
+<th>Required</th>
+<th>Rule</th>
+</tr></thead>
+<tbody>
+<tr><td><code>id</code></td><td>identifier</td><td>Yes</td><td>Unique among the sections</td></tr>
+<tr><td><code>title</code></td><td>nonempty string</td><td>Yes</td><td>Shown above the section and in the <strong>Sectie</strong> selector</td></tr>
+<tr><td><code>blocks</code></td><td>nonempty list</td><td>Yes</td><td>The blocks, in reading order</td></tr>
+</tbody></table>
+<h2>A block</h2>
+<table>
+<thead><tr>
+<th>Key</th>
+<th>Type</th>
+<th>Required</th>
+<th>Rule</th>
+<th>Message on a break</th>
+</tr></thead>
+<tbody>
+<tr><td><code>id</code></td><td>identifier</td><td>Yes</td><td>Unique in the document</td><td><code>duplicate identifier &#x27;&lt;id&gt;&#x27;</code></td></tr>
+<tr><td><code>type</code></td><td>string</td><td>Yes</td><td><code>text</code>, <code>prompt</code> or <code>pair</code></td><td><code>expected text, prompt, or pair</code></td></tr>
+<tr><td><code>text</code></td><td>nonempty string</td><td>Yes, for <code>text</code> and <code>prompt</code></td><td></td><td></td></tr>
+<tr><td><code>question</code></td><td>nonempty string</td><td>Yes, for <code>pair</code></td><td></td><td></td></tr>
+<tr><td><code>answer</code></td><td>nonempty string</td><td>Exactly one of <code>answer</code> and <code>answer_image</code>, for <code>pair</code></td><td></td><td><code>expected exactly one of answer or answer_image</code></td></tr>
+<tr><td><code>answer_image</code></td><td>image path</td><td>Exactly one of <code>answer</code> and <code>answer_image</code>, for <code>pair</code></td><td>Relative to the library root</td><td><code>expected exactly one of answer or answer_image</code></td></tr>
+<tr><td><code>source.pdf_page</code></td><td>positive integer</td><td>Yes</td><td>The physical page of the source PDF</td><td></td></tr>
+<tr><td><code>source.printed_page</code></td><td>nonempty string</td><td>No</td><td>The page label printed in the document</td><td></td></tr>
+</tbody></table>
+<h2>Where it is defined</h2>
+<ul><li><code>src/lib/data/validate.ts</code>: every rule above but the section-file paths and the library-wide uniqueness.</li><li><code>src/lib/data/sections.ts</code>: the section-file paths of a manifest.</li><li><code>src/lib/data/order.ts</code>: the unique <code>id</code> and <code>order</code> across the library, and the sort.</li><li><code>src/lib/data/model.ts</code>: the validated document, the shape <code>GET /api/catalogue</code> returns.</li></ul>
+</section>
+<section class="doc" id="docs-user-reference-endpoints-md">
+<h1>The endpoints of the browser build</h1>
+<p>The browser build&#x27;s server answers four <code>GET</code> endpoints, each under <code>src/routes/api/</code>. Each reads the library again for every request, as <code>docs/user/manual/library.md</code> says. The desktop application and the oculus app use none of them.</p>
+<table>
+<thead><tr>
+<th>Endpoint</th>
+<th>Answer</th>
+<th>Headers</th>
+<th>Error</th>
+<th>Defined in</th>
+</tr></thead>
+<tbody>
+<tr><td><code>/api/catalogue</code></td><td>JSON: the list of validated documents of the library, sorted by <code>order</code></td><td>Written by SvelteKit&#x27;s <code>json</code> helper</td><td>A refused library fails the request</td><td><code>src/routes/api/catalogue/+server.ts</code></td></tr>
+<tr><td><code>/api/source/&lt;document&gt;</code></td><td>The source PDF of the document with that <code>id</code></td><td><code>content-type: application/pdf</code>, <code>content-disposition: inline; filename=&quot;&lt;id&gt;.pdf&quot;</code>, <code>cache-control: private, no-store</code></td><td>404, <code>Bronbestand niet gevonden.</code></td><td><code>src/routes/api/source/[document]/+server.ts</code></td></tr>
+<tr><td><code>/api/answer-image/&lt;document&gt;/&lt;block&gt;</code></td><td>The <code>answer_image</code> of the pair block with that <code>id</code></td><td><code>content-type</code> from the extension (<code>image/png</code>, <code>image/jpeg</code> or <code>image/webp</code>), <code>cache-control: private, no-store</code></td><td>404, <code>Afbeelding niet gevonden.</code></td><td><code>src/routes/api/answer-image/[document]/[block]/+server.ts</code></td></tr>
+<tr><td><code>/api/entry-image/&lt;document&gt;/&lt;entry&gt;/&lt;part&gt;</code></td><td>The image <code>file</code> of the content part at index <code>&lt;part&gt;</code>, counted from 0, of the entry with that <code>id</code></td><td><code>content-type</code> from the extension, <code>cache-control: private, no-store</code></td><td>404, <code>Afbeelding niet gevonden.</code>, also for a <code>&lt;part&gt;</code> that is not an integer</td><td><code>src/routes/api/entry-image/[document]/[entry]/[part]/+server.ts</code></td></tr>
+</tbody></table>
+<h2>The catalogue&#x27;s JSON</h2>
+<p>Each document of <code>/api/catalogue</code> has the shape of <code>OfficiumDocument</code> in <code>src/lib/data/model.ts</code>: the keys of the YAML in camel case (<code>schemaVersion</code>, <code>documentType</code>, <code>pdfPage</code>, <code>printedPage</code>, <code>answerImage</code>), with the <code>type</code> of a block read as <code>kind</code>, and every entry of a role-based document carrying both its <code>text</code> and its <code>content</code> list. An entry written with <code>text</code> gets a <code>content</code> list of one text part, and an entry written with <code>content</code> gets a <code>text</code> of its text parts joined by single spaces.</p>
+<p>A shortened example, from <code>examples/rituals/demonstration-catechism.yaml</code>:</p>
+<pre><code>[
+    {
+        &quot;schemaVersion&quot;: 1,
+        &quot;id&quot;: &quot;demonstration-catechism&quot;,
+        &quot;order&quot;: 20,
+        &quot;title&quot;: &quot;Demonstratiecatechismus&quot;,
+        &quot;language&quot;: &quot;nl&quot;,
+        &quot;source&quot;: { &quot;file&quot;: &quot;sources/demonstration-catechism.pdf&quot; },
+        &quot;documentType&quot;: &quot;catechism&quot;,
+        &quot;sections&quot;: [
+            {
+                &quot;id&quot;: &quot;reading&quot;,
+                &quot;title&quot;: &quot;Lezen en herinneren&quot;,
+                &quot;blocks&quot;: [
+                    {
+                        &quot;id&quot;: &quot;purpose&quot;,
+                        &quot;source&quot;: { &quot;pdfPage&quot;: 1, &quot;printedPage&quot;: &quot;1&quot; },
+                        &quot;kind&quot;: &quot;pair&quot;,
+                        &quot;question&quot;: &quot;Waarom lezen wij een tekst meer dan eenmaal?&quot;,
+                        &quot;answer&quot;: &quot;Omdat herhaling de volgorde, de verbanden en de bedoeling beter zichtbaar maakt.&quot;
+                    }
+                ]
+            }
+        ]
+    }
+]</code></pre>
+</section>
+<section class="doc" id="docs-user-reference-npm-scripts-md">
+<h1>The npm scripts</h1>
+<p>Every script of <code>package.json</code>, run as <code>npm run &lt;script&gt;</code> from the repository root (<code>npm test</code> for <code>test</code>). Install Node.js 24 and run <code>npm install</code> first.</p>
+<table>
+<thead><tr>
+<th>Script</th>
+<th>Runs</th>
+<th>What it does</th>
+</tr></thead>
+<tbody>
+<tr><td><code>dev</code></td><td><code>vite dev</code></td><td>Starts the browser build&#x27;s development server on <code>127.0.0.1</code></td></tr>
+<tr><td><code>build</code></td><td><code>vite build</code></td><td>Builds the browser build with adapter-node into <code>build/</code></td></tr>
+<tr><td><code>build:desktop</code></td><td><code>cross-env OFFICIUM_DESKTOP=1 vite build</code></td><td>Builds the interface with adapter-static into <code>build/</code>, for the desktop application</td></tr>
+<tr><td><code>build:oculus</code></td><td><code>vite build --config vite.oculus.config.ts</code></td><td>Builds the oculus app into <code>.oculus/apps/officium/</code></td></tr>
+<tr><td><code>tauri</code></td><td><code>tauri</code></td><td>The Tauri command line, for any of its commands</td></tr>
+<tr><td><code>tauri:dev</code></td><td><code>tauri dev</code></td><td>Starts <code>npm run dev</code> and opens the desktop application on it</td></tr>
+<tr><td><code>tauri:build</code></td><td><code>tauri build</code></td><td>Builds the public desktop application and its packages, after <code>npm run build:desktop</code></td></tr>
+<tr><td><code>tauri:build:private</code></td><td><code>tauri build --config src-tauri/tauri.private.conf.json</code></td><td>Builds a personal desktop application that bundles <code>rituals/</code></td></tr>
+<tr><td><code>preview</code></td><td><code>vite preview</code></td><td>Serves the output of <code>npm run build</code></td></tr>
+<tr><td><code>check</code></td><td><code>svelte-kit sync &amp;&amp; svelte-check --tsconfig ./tsconfig.json</code></td><td>Generates SvelteKit&#x27;s types and checks the TypeScript and Svelte files</td></tr>
+<tr><td><code>lint</code></td><td><code>eslint .</code></td><td>Lints the repository with <code>eslint.config.js</code></td></tr>
+<tr><td><code>test</code></td><td><code>vitest run</code></td><td>Runs the vitest cases under <code>tests/</code>: data, reader, server, oculus, architecture, privacy</td></tr>
+<tr><td><code>test:browser</code></td><td><code>playwright test</code></td><td>Runs Playwright in Chrome: the app on <code>npm run dev</code> on 127.0.0.1:8793, and the oculus build served through routes under the oculus policy</td></tr>
+<tr><td><code>format</code></td><td><code>prettier --write .</code></td><td>Formats the repository with <code>.prettierrc</code></td></tr>
+<tr><td><code>format:check</code></td><td><code>prettier --check .</code></td><td>Checks that every file Prettier formats is formatted</td></tr>
+</tbody></table>
+<h2>The checks before a change is called verified</h2>
+<p><code>npm test</code>, <code>npm run test:browser</code>, <code>npm run check</code>, <code>npm run lint</code>, <code>npm run build</code>, <code>npm run format:check</code> and <code>npm run build:oculus</code>, each run from the repository root and each exiting 0. <code>npm run test:browser</code> builds the oculus app itself before its oculus cases, and starts its own server on port 8793.</p>
+<p>The privacy test in <code>npm test</code> requires <code>/rituals/</code>, <code>/AGENTS.md</code> and <code>/CLAUDE.md</code> to stay in <code>.gitignore</code>, and fails when Git reports a tracked path below <code>rituals/</code>. The two Rust tests in <code>src-tauri/src/library.rs</code> are run by none of these scripts.</p>
+</section>
+<section class="doc" id="docs-user-reference-text-catalogue-md">
+<h1>The text catalogue</h1>
+<p><code>config/text.yml</code> holds every string the interface shows, as one key and its text per line. <code>validateTextCatalog</code> in <code>src/lib/data/text.ts</code> reads it when the page loads and requires each of the 34 keys below to hold a nonempty string; a key that is missing or empty stops the page with <code>config/text.yml: &lt;key&gt;: expected a nonempty string</code>. A key the file holds beyond these is ignored. Translating the interface means changing the texts of this file.</p>
+<p>The one exception is <code>src/oculus/public/app.yml</code>, whose <code>title</code> and <code>description</code> oculus reads from the app&#x27;s manifest, as <code>docs/user/manual/oculus.md</code> says.</p>
+<table>
+<thead><tr>
+<th>Key</th>
+<th>Text</th>
+<th>Shown by</th>
+</tr></thead>
+<tbody>
+<tr><td><code>app.title</code></td><td>Officium</td><td><code>src/lib/views/Reader.svelte</code>, <code>src/oculus/App.svelte</code>, <code>src/routes/+page.svelte</code></td></tr>
+<tr><td><code>app.subtitle</code></td><td>Gestructureerde documenten bestuderen met behoud van de volledige context.</td><td><code>src/routes/+page.svelte</code></td></tr>
+<tr><td><code>library.choose</code></td><td>Kies documentenmap</td><td><code>src/routes/+page.svelte</code></td></tr>
+<tr><td><code>library.change</code></td><td>Bibliotheek</td><td><code>src/lib/views/Reader.svelte</code></td></tr>
+<tr><td><code>library.loading</code></td><td>Bibliotheek laden...</td><td><code>src/oculus/App.svelte</code>, <code>src/routes/+page.svelte</code></td></tr>
+<tr><td><code>library.none_title</code></td><td>Kies uw documentenmap</td><td><code>src/oculus/App.svelte</code>, <code>src/routes/+page.svelte</code></td></tr>
+<tr><td><code>library.none_body</code></td><td>Selecteer de map die de documenten, bronnen en afbeeldingen bevat.</td><td><code>src/routes/+page.svelte</code></td></tr>
+<tr><td><code>library.error_title</code></td><td>De bibliotheek kon niet worden geladen</td><td><code>src/oculus/App.svelte</code>, <code>src/routes/+page.svelte</code></td></tr>
+<tr><td><code>oculus.none_body</code></td><td>Er zijn geen documenten gevonden in rituals/ of examples/rituals/ van deze map.</td><td><code>src/oculus/App.svelte</code></td></tr>
+<tr><td><code>oculus.source_failed</code></td><td>Het bronbestand kon niet worden geopend</td><td><code>src/oculus/App.svelte</code></td></tr>
+<tr><td><code>oculus.state_failed</code></td><td>De leespositie kon niet worden bewaard</td><td><code>src/oculus/App.svelte</code></td></tr>
+<tr><td><code>reader.document</code></td><td>Document</td><td><code>src/lib/views/Reader.svelte</code></td></tr>
+<tr><td><code>reader.role</code></td><td>Rol</td><td><code>src/lib/views/Reader.svelte</code></td></tr>
+<tr><td><code>reader.ritual</code></td><td>Script</td><td><code>src/lib/views/RitualDocument.svelte</code></td></tr>
+<tr><td><code>reader.catechism</code></td><td>Studiegids</td><td><code>src/lib/views/CatechismDocument.svelte</code></td></tr>
+<tr><td><code>reader.contributions</code></td><td>Bijdragen</td><td><code>src/lib/views/Navigation.svelte</code>, <code>src/lib/views/Reader.svelte</code></td></tr>
+<tr><td><code>reader.questions</code></td><td>Vragen</td><td><code>src/lib/views/Navigation.svelte</code>, <code>src/lib/views/Reader.svelte</code></td></tr>
+<tr><td><code>reader.close</code></td><td>Sluiten</td><td><code>src/lib/views/Reader.svelte</code>, <code>src/oculus/App.svelte</code></td></tr>
+<tr><td><code>reader.of</code></td><td>van</td><td><code>src/lib/views/Reader.svelte</code></td></tr>
+<tr><td><code>reader.previous</code></td><td>Vorige</td><td><code>src/lib/views/Reader.svelte</code></td></tr>
+<tr><td><code>reader.next</code></td><td>Volgende</td><td><code>src/lib/views/Reader.svelte</code></td></tr>
+<tr><td><code>reader.source</code></td><td>Bron</td><td><code>src/lib/views/SourceLink.svelte</code></td></tr>
+<tr><td><code>reader.page</code></td><td>Pagina</td><td>No view; the key is required but no file under <code>src/</code> reads it</td></tr>
+<tr><td><code>reader.page_short</code></td><td>p.</td><td><code>src/lib/views/Navigation.svelte</code>, <code>src/lib/views/SourceLink.svelte</code></td></tr>
+<tr><td><code>reader.pdf_page_short</code></td><td>PDF</td><td><code>src/lib/views/Navigation.svelte</code>, <code>src/lib/views/SourceLink.svelte</code></td></tr>
+<tr><td><code>reader.section</code></td><td>Sectie</td><td><code>src/lib/views/Reader.svelte</code></td></tr>
+<tr><td><code>reader.speech</code></td><td>Gesproken tekst</td><td><code>src/lib/views/RitualDocument.svelte</code></td></tr>
+<tr><td><code>reader.action</code></td><td>Handeling</td><td><code>src/lib/views/RitualDocument.svelte</code></td></tr>
+<tr><td><code>reader.direction</code></td><td>Regie</td><td><code>src/lib/views/RitualDocument.svelte</code></td></tr>
+<tr><td><code>reader.text</code></td><td>Toelichting</td><td><code>src/lib/views/CatechismDocument.svelte</code>, <code>src/lib/views/RitualDocument.svelte</code></td></tr>
+<tr><td><code>reader.contribution</code></td><td>Bijdrage</td><td><code>src/lib/views/RitualDocument.svelte</code></td></tr>
+<tr><td><code>reader.question</code></td><td>Vraag</td><td><code>src/lib/views/CatechismDocument.svelte</code></td></tr>
+<tr><td><code>reader.answer</code></td><td>Antwoord</td><td><code>src/lib/views/CatechismDocument.svelte</code></td></tr>
+<tr><td><code>reader.empty</code></td><td>Voor deze functie zijn geen bijdragen vastgelegd.</td><td><code>src/lib/views/Navigation.svelte</code></td></tr>
+</tbody></table>
+</section>
+<section class="doc" id="docs-user-reference-environment-variables-md">
+<h1>The environment variables</h1>
+<h2>Of the build</h2>
+<table>
+<thead><tr>
+<th>Variable</th>
+<th>Type</th>
+<th>Default</th>
+<th>Effect</th>
+<th>Defined in</th>
+</tr></thead>
+<tbody>
+<tr><td><code>OFFICIUM_DESKTOP</code></td><td><code>1</code> or unset</td><td>unset</td><td><code>1</code> builds the interface with <code>@sveltejs/adapter-static</code> and the fallback page <code>index.html</code>, for the desktop application; any other value builds it with <code>@sveltejs/adapter-node</code></td><td><code>svelte.config.js</code></td></tr>
+</tbody></table>
+<p><code>npm run build:desktop</code> sets it with <code>cross-env OFFICIUM_DESKTOP=1</code>, and <code>npm run tauri:build</code> and <code>npm run tauri:build:private</code> run that script first, as <code>src-tauri/tauri.conf.json</code> says in <code>beforeBuildCommand</code>.</p>
+<h2>The signing secrets of the build workflow</h2>
+<p><code>.github/workflows/desktop-build.yml</code> reads these repository secrets into the environment of each job. Each is optional: a platform whose secrets are absent gets unsigned packages. Signing credentials never belong in the repository.</p>
+<table>
+<thead><tr>
+<th>Secret</th>
+<th>Platform</th>
+<th>Used for</th>
+</tr></thead>
+<tbody>
+<tr><td><code>APPLE_CERTIFICATE</code></td><td>macOS</td><td>Signing and notarization</td></tr>
+<tr><td><code>APPLE_CERTIFICATE_PASSWORD</code></td><td>macOS</td><td>Signing and notarization</td></tr>
+<tr><td><code>APPLE_SIGNING_IDENTITY</code></td><td>macOS</td><td>Signing and notarization</td></tr>
+<tr><td><code>APPLE_ID</code></td><td>macOS</td><td>Signing and notarization</td></tr>
+<tr><td><code>APPLE_PASSWORD</code></td><td>macOS</td><td>Signing and notarization</td></tr>
+<tr><td><code>APPLE_TEAM_ID</code></td><td>macOS</td><td>Signing and notarization</td></tr>
+<tr><td><code>WINDOWS_CERTIFICATE</code></td><td>Windows</td><td>Authenticode signing: the certificate as base64, imported into the job&#x27;s certificate store</td></tr>
+<tr><td><code>WINDOWS_CERTIFICATE_PASSWORD</code></td><td>Windows</td><td>Authenticode signing: the certificate&#x27;s password</td></tr>
+<tr><td><code>WINDOWS_TIMESTAMP_URL</code></td><td>Windows</td><td>Authenticode signing: the timestamp server; without it nothing is signed</td></tr>
+<tr><td><code>LINUX_GPG_PRIVATE_KEY</code></td><td>Linux</td><td>AppImage and RPM signing: the key imported with <code>gpg</code></td></tr>
+<tr><td><code>LINUX_GPG_KEY_ID</code></td><td>Linux</td><td>AppImage and RPM signing: the key to sign with</td></tr>
+<tr><td><code>LINUX_GPG_PASSPHRASE</code></td><td>Linux</td><td>AppImage and RPM signing: the key&#x27;s passphrase</td></tr>
+</tbody></table>
+</section>
+<section class="doc" id="docs-user-feature-map-readme-md">
+<h1>The feature map</h1>
+<p>Each capability of Officium, grouped by part, with its status and the files that show it. A capability <code>works</code> when the code holds it and a test covers it, is <code>partial</code> when the code holds part of it, and is <code>planned</code> when the documentation names it and no code holds it.</p>
+<p>Question: several capabilities of the desktop application are held by the code with no test that covers them. The three statuses do not name that case; they are marked below as &quot;in the code, no test&quot;. Which status should they carry?</p>
+<h2>The reader</h2>
+<table>
+<thead><tr>
+<th>Capability</th>
+<th>Status</th>
+<th>Files</th>
+</tr></thead>
+<tbody>
+<tr><td>The whole document stays visible, with the selected role&#x27;s entries highlighted</td><td>works</td><td><code>src/lib/views/RitualDocument.svelte</code>; <code>tests/browser/reader.spec.ts</code>, <code>tests/browser/oculus.spec.ts</code></td></tr>
+<tr><td>An index of the selected role&#x27;s speeches and actions, in document order</td><td>works</td><td><code>src/lib/reader/contributions.ts</code>; <code>tests/reader/contributions.test.ts</code></td></tr>
+<tr><td>An index of the questions and prompts of a question-and-answer document</td><td>works</td><td><code>src/lib/reader/contributions.ts</code>; <code>tests/reader/contributions.test.ts</code>, <code>tests/browser/reader.spec.ts</code></td></tr>
+<tr><td>Previous and next item</td><td>works</td><td><code>src/lib/views/Reader.svelte</code>; <code>tests/browser/reader.spec.ts</code></td></tr>
+<tr><td>A jump to a section</td><td>works</td><td><code>src/lib/views/Reader.svelte</code>; <code>tests/browser/reader.spec.ts</code></td></tr>
+<tr><td>The header and the arrow buttons stay in place while the document scrolls</td><td>works</td><td><code>src/app.css</code>; <code>tests/browser/reader.spec.ts</code></td></tr>
+<tr><td>The index opened and closed by a button on a narrow window</td><td>works</td><td><code>src/app.css</code>, <code>src/lib/views/Reader.svelte</code>; <code>tests/browser/reader.spec.ts</code></td></tr>
+<tr><td>A source link per entry, with the printed page or the PDF page</td><td>works</td><td><code>src/lib/views/SourceLink.svelte</code>; <code>tests/browser/reader.spec.ts</code></td></tr>
+<tr><td>The reading position kept and restored</td><td>works</td><td><code>src/lib/reader/state.ts</code>; <code>tests/reader/state.test.ts</code>, <code>tests/browser/oculus.spec.ts</code></td></tr>
+<tr><td>Every interface string from <code>config/text.yml</code></td><td>works</td><td><code>src/lib/data/text.ts</code>; the Dutch labels the browser tests select by</td></tr>
+</tbody></table>
+<h2>The library and its format</h2>
+<table>
+<thead><tr>
+<th>Capability</th>
+<th>Status</th>
+<th>Files</th>
+</tr></thead>
+<tbody>
+<tr><td>Validation of every document, with messages that name the document and the field</td><td>works</td><td><code>src/lib/data/validate.ts</code>; <code>tests/data/validate.test.ts</code></td></tr>
+<tr><td>Directory documents, with their sections in the manifest&#x27;s order</td><td>works</td><td><code>src/lib/data/sections.ts</code>, <code>src/lib/server/catalogue.ts</code>, <code>src/lib/oculus/library.ts</code>, <code>src-tauri/src/library.rs</code>; <code>tests/data/sections.test.ts</code>, <code>tests/server/catalogue.test.ts</code>, <code>tests/oculus/library.test.ts</code>, the Rust test <code>loads_standalone_and_composed_documents_in_manifest_order</code></td></tr>
+<tr><td>Images inside entries and as answers</td><td>works</td><td><code>src/lib/data/validate.ts</code>, <code>src/lib/data/images.ts</code>; <code>tests/data/validate.test.ts</code>, <code>tests/server/catalogue.test.ts</code>, <code>tests/oculus/library.test.ts</code></td></tr>
+<tr><td>The library sorted by <code>order</code>, with a duplicate <code>id</code> or <code>order</code> refused</td><td>works</td><td><code>src/lib/data/order.ts</code>; <code>tests/data/order.test.ts</code></td></tr>
+<tr><td>The personal library shown in place of the examples when it holds a document</td><td>works</td><td><code>src/lib/server/catalogue.ts</code>, <code>src/lib/oculus/library.ts</code>; <code>tests/server/catalogue.test.ts</code>, <code>tests/oculus/library.test.ts</code></td></tr>
+<tr><td>Paths that leave the library refused</td><td>works</td><td><code>src/lib/data/validate.ts</code>, <code>src/lib/server/catalogue.ts</code>, <code>src-tauri/src/library.rs</code>; <code>tests/data/validate.test.ts</code>, <code>tests/oculus/library.test.ts</code>, the Rust test <code>rejects_paths_that_leave_the_library</code></td></tr>
+<tr><td>No path below <code>rituals/</code> tracked by Git</td><td>works</td><td><code>.gitignore</code>; <code>tests/privacy.test.ts</code></td></tr>
+</tbody></table>
+<h2>The browser build</h2>
+<table>
+<thead><tr>
+<th>Capability</th>
+<th>Status</th>
+<th>Files</th>
+</tr></thead>
+<tbody>
+<tr><td>The catalogue and the source PDF served by the server</td><td>works</td><td><code>src/routes/api/catalogue/+server.ts</code>, <code>src/routes/api/source/[document]/+server.ts</code>; <code>tests/browser/reader.spec.ts</code></td></tr>
+<tr><td>Entry and answer images served by the server</td><td>works</td><td><code>src/routes/api/entry-image/[document]/[entry]/[part]/+server.ts</code>, <code>src/routes/api/answer-image/[document]/[block]/+server.ts</code>; <code>tests/server/catalogue.test.ts</code> covers the lookups <code>findEntryImage</code> and <code>findAnswerImage</code>, and no test requests the two endpoints</td></tr>
+</tbody></table>
+<h2>The desktop application</h2>
+<table>
+<thead><tr>
+<th>Capability</th>
+<th>Status</th>
+<th>Files</th>
+</tr></thead>
+<tbody>
+<tr><td>The library read from a chosen folder</td><td>works</td><td><code>src-tauri/src/library.rs</code>, <code>src/lib/desktop/library.ts</code>; the Rust tests in <code>src-tauri/src/library.rs</code></td></tr>
+<tr><td>The folder picker, the remembered folder and the <strong>Bibliotheek</strong> button</td><td>in the code, no test</td><td><code>src/lib/desktop/library.ts</code>, <code>src/routes/+page.svelte</code></td></tr>
+<tr><td>Source PDFs opened in the operating system&#x27;s default application</td><td>in the code, no test</td><td><code>src-tauri/src/library.rs</code> (<code>open_source</code>)</td></tr>
+<tr><td>A personal build that bundles <code>rituals/</code></td><td>in the code, no test</td><td><code>src-tauri/tauri.private.conf.json</code>, <code>src-tauri/src/library.rs</code> (<code>bundled_library_path</code>)</td></tr>
+<tr><td>Packages for macOS, Windows and Linux, built and signed by the workflow</td><td>in the code, no test</td><td><code>src-tauri/tauri.*.conf.json</code>, <code>.github/workflows/desktop-build.yml</code></td></tr>
+</tbody></table>
+<h2>The oculus app</h2>
+<table>
+<thead><tr>
+<th>Capability</th>
+<th>Status</th>
+<th>Files</th>
+</tr></thead>
+<tbody>
+<tr><td>Officium runs as an oculus root app, reading the library through the file bridge</td><td>works</td><td><code>src/oculus/</code>, <code>src/lib/oculus/</code>; <code>tests/oculus/library.test.ts</code>, <code>tests/oculus/address.test.ts</code>, <code>tests/browser/oculus.spec.ts</code>; done as entry 1 of <code>.agents/roadmap.md</code>, checked by the user in oculus</td></tr>
+<tr><td>Source PDFs opened in oculus&#x27;s file viewer at the entry&#x27;s page</td><td>works</td><td><code>src/oculus/App.svelte</code>, <code>src/lib/oculus/library.ts</code>; <code>tests/browser/oculus.spec.ts</code>, <code>tests/oculus/library.test.ts</code></td></tr>
+<tr><td>The reading position kept per oculus tab</td><td>works</td><td><code>src/oculus/App.svelte</code>; <code>tests/browser/oculus.spec.ts</code></td></tr>
+<tr><td>The colours follow the oculus theme</td><td>works</td><td><code>src/oculus/theme.css</code>; <code>tests/browser/oculus.spec.ts</code></td></tr>
+<tr><td>A notice when the bridge refuses to open a source or keep the position</td><td>works</td><td><code>src/oculus/App.svelte</code>; <code>tests/browser/oculus.spec.ts</code></td></tr>
+</tbody></table>
+<h2>The code</h2>
+<table>
+<thead><tr>
+<th>Capability</th>
+<th>Status</th>
+<th>Files</th>
+</tr></thead>
+<tbody>
+<tr><td>The layer direction: data imports no reader, view or server code, and the reader no view or server code</td><td>works</td><td><code>tests/architecture.test.ts</code></td></tr>
+<tr><td>Every handwritten source file below 1,000 lines</td><td>works</td><td><code>tests/architecture.test.ts</code></td></tr>
+</tbody></table>
+<h2>Planned</h2>
+<table>
+<thead><tr>
+<th>Capability</th>
+<th>Status</th>
+<th>Files</th>
+</tr></thead>
+<tbody>
+<tr><td>Publishing to a WordPress membership site: an export of the library, a WordPress plugin with the four endpoints for logged-in members, and a static build that reads from them</td><td>planned</td><td>The README&#x27;s section &quot;Publishing to a WordPress membership site (planned)&quot;</td></tr>
+</tbody></table>
+</section>
+</main>
+</body>
+</html>

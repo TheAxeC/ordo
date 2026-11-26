@@ -1,0 +1,38 @@
+__pycache__/
+*.py[cod]
+.venv/
+*.egg-info/
+.pytest_cache/
+.ruff_cache/
+
+# Run outputs. Checkpoints and caches are rebuilt from configs/ and the raw corpus.
+runs/
+checkpoints/
+wandb/
+
+# Corpora never enter the tree. Everything local lives under ~/data/<dataset>.
+# Anchored with a leading slash. Unanchored, `data/` matches at any depth, which silently
+# excluded the whole of src/engram/data/ (nine source files) from every commit.
+/data/
+*.npy
+*.npz
+*.arrow
+
+# Assistant-facing notes and state, kept out of the deposit.
+.agents/
+.claude/
+.codex/
+
+# Dead ends, rebuilt outputs, caches and secrets stay out of a public deposit.
+data/
+attic/
+results/
+figures/
+*.pyc
+.cache/
+.ipynb_checkpoints/
+.env
+.env.*
+*.pem
+*.key
+secrets/

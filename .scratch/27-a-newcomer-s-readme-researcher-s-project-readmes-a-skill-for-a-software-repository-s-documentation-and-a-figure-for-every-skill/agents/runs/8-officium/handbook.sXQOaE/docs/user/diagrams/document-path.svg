@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 772" width="640" height="772" role="img" aria-label="The path of a document. Boxes: Find each document: a document.yaml folder or a .yaml file (part of Officium); Parse the YAML, src/lib/data/parse.ts (part of Officium); Validate the fields, src/lib/data/validate.ts (part of Officium); Check the images, and in the browser and oculus builds the PDF, lie in the library (part of Officium); Check unique id and order, then sort, src/lib/data/order.ts (part of Officium); The reader shows the documents (part of Officium); Library screen: the load error (what the user sees on a refusal).">
+<title>The path of a document. Boxes: Find each document: a document.yaml folder or a .yaml file (part of Officium); Parse the YAML, src/lib/data/parse.ts (part of Officium); Validate the fields, src/lib/data/validate.ts (part of Officium); Check the images, and in the browser and oculus builds the PDF, lie in the library (part of Officium); Check unique id and order, then sort, src/lib/data/order.ts (part of Officium); The reader shows the documents (part of Officium); Library screen: the load error (what the user sees on a refusal).</title>
+<defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#4f46e5"/></marker></defs>
+<rect x="0" y="0" width="640" height="772" rx="10" fill="#f8fafc" stroke="#64748b"/>
+<path d="M320,116 L320,162" fill="none" stroke="#4f46e5" stroke-width="1.8" marker-end="url(#arrow)" stroke-linejoin="round"/>
+<path d="M320,208 L320,254" fill="none" stroke="#4f46e5" stroke-width="1.8" marker-end="url(#arrow)" stroke-linejoin="round"/>
+<path d="M320,300 L196,347" fill="none" stroke="#4f46e5" stroke-width="1.8" marker-end="url(#arrow)" stroke-linejoin="round"/>
+<path d="M196,407 L196,453" fill="none" stroke="#4f46e5" stroke-width="1.8" marker-end="url(#arrow)" stroke-linejoin="round"/>
+<path d="M196,513 L196,559" fill="none" stroke="#4f46e5" stroke-width="1.8" marker-end="url(#arrow)" stroke-linejoin="round"/>
+<path d="M320,300 L444,354" fill="none" stroke="#4f46e5" stroke-width="1.8" stroke-dasharray="2 4" marker-end="url(#arrow)" stroke-linejoin="round"/>
+<rect x="213" y="56" width="214" height="60" rx="8" fill="#ffffff" stroke="#64748b" stroke-width="1.5"/>
+<text x="320" y="75.4" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="middle">Find each document: a</text>
+<text x="320" y="89.4" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="middle">document.yaml folder or a</text>
+<text x="320" y="103.4" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="middle">.yaml file</text>
+<rect x="213" y="162" width="214" height="46" rx="8" fill="#ffffff" stroke="#64748b" stroke-width="1.5"/>
+<text x="320" y="181.4" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="middle">Parse the YAML,</text>
+<text x="320" y="195.4" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="middle">src/lib/data/parse.ts</text>
+<rect x="213" y="254" width="214" height="46" rx="8" fill="#ffffff" stroke="#64748b" stroke-width="1.5"/>
+<text x="320" y="273.4" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="middle">Validate the fields,</text>
+<text x="320" y="287.4" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="middle">src/lib/data/validate.ts</text>
+<rect x="89" y="347" width="214" height="60" rx="8" fill="#ffffff" stroke="#64748b" stroke-width="1.5"/>
+<text x="196" y="366.4" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="middle">Check the images, and in the</text>
+<text x="196" y="380.4" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="middle">browser and oculus builds</text>
+<text x="196" y="394.4" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="middle">the PDF, lie in the library</text>
+<rect x="89" y="453" width="214" height="60" rx="8" fill="#ffffff" stroke="#64748b" stroke-width="1.5"/>
+<text x="196" y="472.4" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="middle">Check unique id and order,</text>
+<text x="196" y="486.4" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="middle">then sort,</text>
+<text x="196" y="500.4" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="middle">src/lib/data/order.ts</text>
+<rect x="89" y="559" width="214" height="46" rx="8" fill="#ffffff" stroke="#64748b" stroke-width="1.5"/>
+<text x="196" y="578.4" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="middle">The reader shows the</text>
+<text x="196" y="592.4" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="middle">documents</text>
+<rect x="337" y="354" width="214" height="46" rx="8" fill="#fff1e6" stroke="#b45309" stroke-width="2"/>
+<text x="444" y="373.4" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#7c2d12" font-weight="400" text-anchor="middle">Library screen: the load</text>
+<text x="444" y="387.4" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#7c2d12" font-weight="400" text-anchor="middle">error</text>
+<text x="439.1" y="330.6" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="10.5" fill="#475569" font-weight="400" text-anchor="middle" stroke="#f8fafc" stroke-width="4" stroke-linejoin="round" paint-order="stroke">refused</text>
+<text x="16" y="645" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#475569" font-weight="400" text-anchor="start">Any step that refuses leads to the library screen; the arrow shows validation.</text>
+<text x="16" y="682" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="10" fill="#475569" font-weight="700" text-anchor="start">HOW TO READ THE FIGURE</text>
+<rect x="16" y="696" width="28" height="14" rx="4" fill="#ffffff" stroke="#64748b" stroke-width="1.5"/>
+<text x="56" y="707" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#0f172a" font-weight="400" text-anchor="start">Solid box: a step of loading the library</text>
+<rect x="16" y="716" width="28" height="14" rx="4" fill="#fff1e6" stroke="#b45309" stroke-width="2"/>
+<text x="56" y="727" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#0f172a" font-weight="400" text-anchor="start">Orange box: what the reader shows when a step refuses</text>
+<path d="M16,743 L44,743" fill="none" stroke="#4f46e5" stroke-width="1.8" stroke-dasharray="2 4" marker-end="url(#arrow)" stroke-linejoin="round"/>
+<text x="56" y="747" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#0f172a" font-weight="400" text-anchor="start">Dotted arrow: taken only when a step refuses</text>
+</svg>

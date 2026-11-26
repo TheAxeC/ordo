@@ -46,7 +46,10 @@ repair_reviewer: claude:sonnet  # the model the run of /refute over a repair rou
 ```
 
 ```yaml
-dispatch: none                    # one entry per step in flight, written by /spec, since docs/plan.yaml's workers_at_once is 5.
+dispatch:                    # one entry per step in flight, written by /spec, since docs/plan.yaml's workers_at_once is 5.
+- step: 10
+  brief_check: .scratch/27-a-newcomer-s-readme-researcher-s-project-readmes-a-skill-for-a-software-repository-s-documentation-and-a-figure-for-every-skill/agents/reviews/10-brief-check.md (a8c25cbeecbc26775, claude-opus-5-5, 165475 tokens, 36 tool uses, 8 min 36 s)
+  landing: preparing
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled or, under `self_rule: on`, until the orchestrator closes it as `plan-orchestration`'s `references/self-rule.md`, "Closing an open item", says)
@@ -91,7 +94,7 @@ None.
 
 ## Current position (rewritten before every step commit of this plan)
 
-- 2026-11-26. Steps 1, 2, 3, 4, 5, 6 and 7 have landed. Nothing is in flight.
+- 2026-11-26. Steps 1, 2, 3, 4, 5, 6 and 7 have landed. Step 10 is being prepared: its brief and its brief check are written.
 - Verified: `checks: 16 commands passed` on main at step 5's landing, after its fixes at landing.
 - Next step: step 8, which waits on the user naming the tag, the two projects and the software repository.
 - Open on the user's side: nothing.

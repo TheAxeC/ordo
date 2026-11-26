@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 774 594" width="774" height="594" role="img" aria-label="The parts of Officium. Boxes: Library folder: rituals/ or examples/rituals/ (files outside the code); Browser build: Node server, src/lib/server/ (part of Officium); Desktop build: Tauri, src-tauri/src/library.rs (part of Officium); Oculus build: file bridge, src/lib/oculus/ (part of Officium); Data layer: parse and validate, src/lib/data/ (part of Officium); Reader functions: src/lib/reader/ (part of Officium); Views: src/lib/views/Reader.svelte (part of Officium).">
+<title>The parts of Officium. Boxes: Library folder: rituals/ or examples/rituals/ (files outside the code); Browser build: Node server, src/lib/server/ (part of Officium); Desktop build: Tauri, src-tauri/src/library.rs (part of Officium); Oculus build: file bridge, src/lib/oculus/ (part of Officium); Data layer: parse and validate, src/lib/data/ (part of Officium); Reader functions: src/lib/reader/ (part of Officium); Views: src/lib/views/Reader.svelte (part of Officium).</title>
+<defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#4f46e5"/></marker></defs>
+<rect x="0" y="0" width="774" height="594" rx="10" fill="#f8fafc" stroke="#64748b"/>
+<path d="M387,102 L139,148" fill="none" stroke="#4f46e5" stroke-width="1.8" marker-end="url(#arrow)" stroke-linejoin="round"/>
+<path d="M387,102 L387,148" fill="none" stroke="#4f46e5" stroke-width="1.8" marker-end="url(#arrow)" stroke-linejoin="round"/>
+<path d="M387,102 L635,148" fill="none" stroke="#4f46e5" stroke-width="1.8" marker-end="url(#arrow)" stroke-linejoin="round"/>
+<path d="M139,194 L387,240" fill="none" stroke="#4f46e5" stroke-width="1.8" marker-end="url(#arrow)" stroke-linejoin="round"/>
+<path d="M387,194 L387,240" fill="none" stroke="#4f46e5" stroke-width="1.8" marker-end="url(#arrow)" stroke-linejoin="round"/>
+<path d="M635,194 L387,240" fill="none" stroke="#4f46e5" stroke-width="1.8" marker-end="url(#arrow)" stroke-linejoin="round"/>
+<path d="M387,286 L387,333" fill="none" stroke="#4f46e5" stroke-width="1.8" marker-end="url(#arrow)" stroke-linejoin="round"/>
+<path d="M387,379 L387,426" fill="none" stroke="#4f46e5" stroke-width="1.8" marker-end="url(#arrow)" stroke-linejoin="round"/>
+<rect x="280" y="56" width="214" height="46" rx="8" fill="#eceff3" stroke="#64748b" stroke-width="1.5" stroke-dasharray="6 4"/>
+<text x="387" y="75.4" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="middle">Library folder: rituals/ or</text>
+<text x="387" y="89.4" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="middle">examples/rituals/</text>
+<rect x="32" y="148" width="214" height="46" rx="8" fill="#ffffff" stroke="#64748b" stroke-width="1.5"/>
+<text x="139" y="167.4" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="middle">Browser build: Node server,</text>
+<text x="139" y="181.4" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="middle">src/lib/server/</text>
+<rect x="280" y="148" width="214" height="46" rx="8" fill="#ffffff" stroke="#64748b" stroke-width="1.5"/>
+<text x="387" y="167.4" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="middle">Desktop build: Tauri,</text>
+<text x="387" y="181.4" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="middle">src-tauri/src/library.rs</text>
+<rect x="528" y="148" width="214" height="46" rx="8" fill="#ffffff" stroke="#64748b" stroke-width="1.5"/>
+<text x="635" y="167.4" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="middle">Oculus build: file bridge,</text>
+<text x="635" y="181.4" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="middle">src/lib/oculus/</text>
+<rect x="280" y="240" width="214" height="46" rx="8" fill="#ffffff" stroke="#64748b" stroke-width="1.5"/>
+<text x="387" y="259.4" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="middle">Data layer: parse and</text>
+<text x="387" y="273.4" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="middle">validate, src/lib/data/</text>
+<rect x="280" y="333" width="214" height="46" rx="8" fill="#ffffff" stroke="#64748b" stroke-width="1.5"/>
+<text x="387" y="352.4" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="middle">Reader functions:</text>
+<text x="387" y="366.4" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="middle">src/lib/reader/</text>
+<rect x="280" y="426" width="214" height="46" rx="8" fill="#ffffff" stroke="#64748b" stroke-width="1.5"/>
+<text x="387" y="445.4" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="middle">Views:</text>
+<text x="387" y="459.4" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="middle">src/lib/views/Reader.svelte</text>
+<text x="427.4" y="313.1" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="10.5" fill="#475569" font-weight="400" text-anchor="middle" stroke="#f8fafc" stroke-width="4" stroke-linejoin="round" paint-order="stroke">documents</text>
+<text x="433.6" y="406.1" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="10.5" fill="#475569" font-weight="400" text-anchor="middle" stroke="#f8fafc" stroke-width="4" stroke-linejoin="round" paint-order="stroke">index items</text>
+<text x="16" y="524" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="10" fill="#475569" font-weight="700" text-anchor="start">HOW TO READ THE FIGURE</text>
+<rect x="16" y="538" width="28" height="14" rx="4" fill="#eceff3" stroke="#64748b" stroke-width="1.5" stroke-dasharray="6 4"/>
+<text x="56" y="549" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#0f172a" font-weight="400" text-anchor="start">Dashed grey box: files the user keeps, outside the code</text>
+<rect x="16" y="558" width="28" height="14" rx="4" fill="#ffffff" stroke="#64748b" stroke-width="1.5"/>
+<text x="56" y="569" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#0f172a" font-weight="400" text-anchor="start">Solid box: a part of Officium</text>
+</svg>
