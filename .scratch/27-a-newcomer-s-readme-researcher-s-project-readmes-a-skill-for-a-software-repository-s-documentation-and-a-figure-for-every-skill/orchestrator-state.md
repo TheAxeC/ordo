@@ -55,7 +55,9 @@ dispatch:                    # one entry per step in flight, written by /spec, s
   session_id: ad11c3888bf0dab20 (claude-opus-5-5)
   launched: 2026-11-26 12:38
   report: .scratch/27-a-newcomer-s-readme-researcher-s-project-readmes-a-skill-for-a-software-repository-s-documentation-and-a-figure-for-every-skill/agents/reviews/10-report.md
-  round: 0
+  builder_usage: 203519 tokens, 51 tool uses, 10 min 41 s
+  round: 1
+  reviewer_report: .scratch/27-a-newcomer-s-readme-researcher-s-project-readmes-a-skill-for-a-software-repository-s-documentation-and-a-figure-for-every-skill/agents/reviews/10-refuter.md (af1e418a616f06810, claude-opus-5-5, 187333 tokens, 36 tool uses, 7 min 17 s)
   brief_check: .scratch/27-a-newcomer-s-readme-researcher-s-project-readmes-a-skill-for-a-software-repository-s-documentation-and-a-figure-for-every-skill/agents/reviews/10-brief-check.md (a8c25cbeecbc26775, claude-opus-5-5, 165475 tokens, 36 tool uses, 8 min 36 s)
   landing: not-started
 ```
