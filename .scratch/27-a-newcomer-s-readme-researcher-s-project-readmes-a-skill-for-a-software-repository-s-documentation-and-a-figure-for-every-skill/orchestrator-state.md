@@ -48,8 +48,16 @@ repair_reviewer: claude:sonnet  # the model the run of /refute over a repair rou
 ```yaml
 dispatch:                    # one entry per step in flight, written by /spec, since docs/plan.yaml's workers_at_once is 5.
 - step: 5
-  brief_check: "running: a9a2c1a5a8e296d2c"
-  landing: preparing
+  executor: agent
+  worker: claude:opus
+  worktree: .agents/worktrees/27-a-newcomer-s-readme-researcher-s-project-readmes-a-skill-for-a-software-repository-s-documentation-and-a-figure-for-every-skill-5
+  base: 6947c94
+  session_id: a88b86c8d82539450 (claude-opus-5-5)
+  launched: 2026-11-26 09:01
+  report: .scratch/27-a-newcomer-s-readme-researcher-s-project-readmes-a-skill-for-a-software-repository-s-documentation-and-a-figure-for-every-skill/agents/reviews/5-report.md
+  round: 0
+  brief_check: .scratch/27-a-newcomer-s-readme-researcher-s-project-readmes-a-skill-for-a-software-repository-s-documentation-and-a-figure-for-every-skill/agents/reviews/5-brief-check.md (a9a2c1a5a8e296d2c, claude-opus-5-5, 183573 tokens, 57 tool uses, 9 min 17 s)
+  landing: not-started
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled or, under `self_rule: on`, until the orchestrator closes it as `plan-orchestration`'s `references/self-rule.md`, "Closing an open item", says)
@@ -92,7 +100,7 @@ None.
 
 ## Current position (rewritten before every step commit of this plan)
 
-- 2026-11-26. Steps 1, 2, 3, 4 and 7 have landed. No step is in flight.
+- 2026-11-26. Steps 1, 2, 3, 4 and 7 have landed. Step 5 is in flight: its builder runs.
 - Verified: `checks: 16 commands passed` on main at step 3's landing, after its fixes at landing.
-- Next step: step 5 (`/spec 27 5`), then step 6; step 8 waits on 5, 6 and the user.
+- Next step: step 5's review and landing, then step 6; step 8 waits on 5, 6 and the user.
 - Open on the user's side: nothing.
