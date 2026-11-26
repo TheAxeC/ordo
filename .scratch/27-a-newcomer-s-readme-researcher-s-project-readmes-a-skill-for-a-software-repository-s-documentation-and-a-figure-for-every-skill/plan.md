@@ -24,7 +24,7 @@ you read the rewritten `README.md` and approve it; each image path in `README.md
 
 - ✅ 1 The figures under `docs/figures/` moved into the folders of `skills/` by the rule of D5, academic-pipeline's figure and script under `docs/figures/academic/researcher/`, the layout engine of `gen_figures.py` moved to `skills/code/handbook/templates/figures.py` and imported from there by `gen_figures.py` (ADR 0060), both scripts writing to the new paths, and `docs/dev/building.md`, `docs/dev/scripts.md`, ADRs 0043 and 0049 and every page that names a figure path following; check: for each figure `git ls-files docs/figures` lists, its folders are a group or a group and a skill folder; both scripts exit 0 and `git status --short docs/figures` then prints nothing; every `docs/figures/` path `git grep` finds in `README.md`, `docs/` and `skills/` exists (1 commit) (approved)
 - ✅ 2 `researcher`'s README and `code/README.md` in the layout of ADR 0057, `code/.depositignore` with what it names, the mode `/researcher readme <project folder>` with a section moved out of the README going to `notes/<the heading as a slug>.md`, the adopt mode bringing a README to the layout by that rewrite, every reference to the README's sections in `SKILL.md`, its references, its agent pages and the glossary entries campaign, cluster's facts, dead end and setting following, its `metadata.version` raised; check: the user reads the text against ADR 0057 and approves; a grep for each old heading across `skills/`, `docs/` and the glossary prints only the new places (1 commit) (approved)
-- 3 The skill `skills/code/handbook` as ADRs 0058 and 0060 decide, with its kinds at the paths of D34, its `manual.html` script under `templates/` and that script's entry on `docs/dev/scripts.md`, the engine of step 1 copied into a documented repository's `utils/`, and its terms in the glossary; check: the user reads the text against ADRs 0058 and 0060 and approves; `/ordo-help skills` lists `handbook` with its Quick start; the description is at most 1,024 characters by the command of `docs/dev/skill-layout.md` (1 commit) (approved)
+- ✅ 3 The skill `skills/code/handbook` as ADRs 0058 and 0060 decide, with its kinds at the paths of D34, its `manual.html` script under `templates/` and that script's entry on `docs/dev/scripts.md`, the engine of step 1 copied into a documented repository's `utils/`, and its terms in the glossary; check: the user reads the text against ADRs 0058 and 0060 and approves; `/ordo-help skills` lists `handbook` with its Quick start; the description is at most 1,024 characters by the command of `docs/dev/skill-layout.md` (1 commit) (approved)
 - ✅ 4 The rulings file named `<ledger_root>/rulings/<number>.md` as ADR 0059 decides, in `grill`, `plan`, `plan-orchestration`'s `references/self-rule.md`, `ordo-init`'s `templates/plan-terms.md` and the glossary's block synced from it, each skill's `metadata.version` raised; check: `git grep -n 'rulings/<slug>'` over `skills/` and `docs/` prints nothing; the sync of the glossary block passes; the user reads the text of `grill` and `plan` on the rulings file and approves (1 commit) (approved)
 - 5 A figure for each of the fifteen skills the goal names, drawn by `gen_figures.py`, and researcher's lifecycle figure, with the script's head comment stating the folder rule of D5 and `docs/dev/building.md` naming the figures it writes; check: each of the fifteen skills has a figure file under `docs/figures/` (listed, one per skill); both scripts exit 0 and `git status --short docs/figures` prints nothing; the user reads each new figure against its skill's Steps and Stops and approves (1 commit) (approved)
 - 6 Ordo's `README.md` rewritten as the goal says, with the skills table holding `handbook`, the three figures of "How to use", and "Working on Ordo" moved to `docs/dev/working-on-ordo.md`, which `docs/dev/change-standard.md`'s pin rule and the glossary entry pin cite; check: the user reads and approves the README; each image path in `README.md` exists, and there are three; `git grep -n 'Working on Ordo'` outside `.scratch/` prints no line that names the README (1 commit) (approved)
@@ -71,6 +71,17 @@ you read the rewritten `README.md` and approve it; each image path in `README.md
 - Verification on main: `checks: 16 commands passed`; the range `ada4e20..` held no commit, the step's one file standing in research-hub.
 - The builder's first report did not pass its bar: one repair round of two rulings (`agents/briefs/7-round-1.md`); the run over the round found nothing.
 - Usage: brief check 128993 tokens, 25 tool uses, 4 min 22 s; builder 154376 tokens, 36 tool uses, 5 min 57 s, and round 1: 164398 tokens, 4 tool uses, 58 s; reviewer 143431 tokens, 19 tool uses, 3 min 8 s; reviewer over round 1: 97713 tokens, 9 tool uses, 46 s.
+
+### Step 3, the skill `handbook` (landed 2026-11-26)
+
+- Landed: `skills/code/handbook/` with `SKILL.md` (the description 1006 characters; Stops: Not a repository, No code, The kinds, The drafts, A command that fails), `references/kinds.md` (each kind with its paths of D34 and its use), `references/diagrams.md` (the diagram file `utils/diagrams.py` on the engine of step 1, copied into a documented repository's `utils/` as ADR 0060 decides) and `templates/manual.py` (the one-page `docs/user/manual.html`: escaped text, tabs by lower-cased ids with `-2`, `-3` for a repeat, relative links rewritten, a remote image written as a link, no script and nothing loaded from the network, Python 3.9 or later); `manual.py`'s row on `docs/dev/scripts.md`; eleven glossary entries; ADR 0058's Status line naming 0060 as superseding it in the diagrams part; the README's skill count, twenty-five, and `code/handbook` in its tree.
+- Premise correction: ADR 0058's Decision says "diagrams as `.dot` with their `.svg`", which ruling D38 and ADR 0060 decide anew; corrected in the brief before the build by the Status line above, D24 left as ruled. The brief check's findings are closed under "Closed" in `agents/reviews/3-brief-check.md`.
+- The plan's verify list is unchanged.
+- Fixes at landing, the two findings of the run over round 1 (`agents/reviews/3-refuter.md`, "Closed"): an image whose address starts with `//` is written as a link, not as `<img>`; three bullets of `SKILL.md` that each held two rules are split.
+- Raised: Open item H, the user's reading of the text against ADRs 0058 and 0060, the step's check. The check "`/ordo-help skills` lists `handbook` with its Quick start" is carried to step 8 ("Step 8, carried").
+- Verification on main: `checks: 16 commands passed`, by `land.sh` after the cherry-pick and again after the fixes at landing.
+- The builder's first report did not pass its bar: one repair round of five rulings (`agents/briefs/3-round-1.md`); the run over the round found two findings, fixed at landing.
+- Usage: brief check 182732 tokens, 44 tool uses, 7 min 45 s; builder 231675 tokens, 51 tool uses, 12 min 36 s, and round 1: 273433 tokens, 19 tool uses, 4 min 58 s; reviewer 184814 tokens, 33 tool uses, 7 min 12 s; reviewer over round 1: 136257 tokens, 23 tool uses, 2 min 54 s.
 
 ### Step 8, carried
 
@@ -151,9 +162,13 @@ Each agent a plan skill started for this plan has one bullet, with its agent id,
 - a657185e09bea583a: builder of step 7, claude-opus-5-5
 - aff4b9ac101cacafe: reviewer of step 7, claude-opus-5-5
 - aca6b0752431a7acd: reviewer of step 7 over round 1, claude-sonnet-5-5
+- af894f369408218fe: brief check of step 3, claude-opus-5-5
+- a15970d264f25815b: builder of step 3, claude-opus-5-5
+- a70dc44bade66da5f: reviewer of step 3, claude-opus-5-5
+- af7bdca8540146551: reviewer of step 3 over round 1, claude-sonnet-5-5
 
 ## Blocked, and by what
 
-- 5: waits on 3 for `handbook`, which the figures draw; steps 1 and 2 have landed.
-- 6: waits on 5 for the lifecycle figure and on 3 for `handbook`'s row of the skills table.
-- 8: waits on 3 and 6 for the tag it pins (steps 2 and 4 have landed), and on the user for the two projects and the software repository it runs on.
+- 5: nothing blocks it; steps 1, 2 and 3 have landed.
+- 6: waits on 5 for the lifecycle figure; step 3 has landed.
+- 8: waits on 5 and 6 for the tag it pins (steps 1, 2, 3 and 4 have landed), and on the user for the two projects and the software repository it runs on.

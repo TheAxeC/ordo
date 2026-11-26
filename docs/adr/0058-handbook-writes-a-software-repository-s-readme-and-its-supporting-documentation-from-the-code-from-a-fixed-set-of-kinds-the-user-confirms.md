@@ -1,6 +1,6 @@
 # 0058. handbook writes a software repository's README and its supporting documentation from the code, from a fixed set of kinds the user confirms
 
-Status: proposed
+Status: proposed; superseded by 0060 in the kinds bullet's "diagrams as `.dot` with their `.svg`"
 
 ## Context
 

@@ -238,3 +238,145 @@ Cases of the brief's "Cases":
 - What git ignores in a documented repository, for Steps 10's `check-ignore`. This is not needed for a verdict, and it would take `git check-ignore`, which is outside the three git commands allowed.
 
 Reviewer usage: a70dc44bade66da5f, claude-opus-5-5, 184814 tokens, 33 tool uses, 7 min 12 s.
+
+## Repair round 1, refuted
+
+```
+$ env -u CLAUDE_CONFIG_DIR -u ORDO_SKILL_DIRS -u ORDO_STABLE python3 skills/ordo/ordo-init/templates/sync_rules.py . --only glossary
+ok: the plan-terms block equals the template
+$ printf '%s\0' <SKILL.md, references/*.md, manual.py, scripts.md, glossary.md, ADR 0058, README.md, 3-report.md> | xargs -0 perl -CSD -ne '...'; echo "exit: $?"
+exit: 0
+$ python3 -c 'import glob,yaml; ...' | grep handbook
+1006 skills/code/handbook/SKILL.md
+$ ruff check --select F,W2 skills/code/handbook/templates/manual.py
+All checks passed!
+$ ruff check --preview --select E3 skills/code/handbook/templates/manual.py
+All checks passed!
+$ awk 'length>100' skills/code/handbook/templates/manual.py
+(nothing)
+$ awk '/^## Quick start/{f=1;next} ...' skills/code/handbook/SKILL.md
+closed
+$ grep -n '^## ' skills/code/handbook/SKILL.md
+12 Quick start, 18 Use instead, 27 What it reads, 41 Steps, 137 Stops, 147 Anti-patterns, 158 Rules
+$ grep -n 'templates/manual.py' docs/dev/scripts.md   -> line 20 (the new row)
+$ grep -n 'figures.py' docs/dev/scripts.md | grep -c copies
+1
+$ grep -rn -i 'research-hub\|cathedra\|game-engine\|oculus\|/Users/\|~/' skills/code/handbook; echo "exit $?"
+exit 1
+$ README: sed -n 38p | grep -c handbook; sed -n 172p | grep -c 'code/codebase-design code/handbook'; sed -n 183p | grep -c twenty-five; grep -c twenty-four README.md
+1 / 1 / 1 / 0
+$ sed -n 3p docs/adr/0058-*.md
+Status: proposed; superseded by 0060 in the kinds bullet's "diagrams as `.dot` with their `.svg`"
+$ ls skills/*/*/SKILL.md | wc -l
+25
+$ cmp skills/code/handbook/templates/figures.py <(git show 749f499:skills/code/handbook/templates/figures.py)
+figures-unchanged
+$ find skills docs -name __pycache__          (nothing)
+```
+
+The round's delta is SKILL.md, references/kinds.md, references/diagrams.md and templates/manual.py. README.md, ADR 0058, scripts.md and glossary.md are identical to the snapshot. No path outside `files.txt` changed besides the report.
+
+`manual.py` runs, in `step3-round-review/repo`. The document set is `README.md`, `DESIGN.md` and `docs/README.md`, with no `docs/user/`:
+
+```
+$ python3 utils/manual.py . README.md DESIGN.md docs/README.md   -> wrote docs/user/manual.html (3528 bytes), exit 0
+44:<a href="#readme-md">README.md</a>
+45:<a href="#design-md">DESIGN.md</a>
+46:<a href="#docs-readme-md">docs/README.md</a>
+49:<section class="doc" id="readme-md">   68: id="design-md"   72: id="docs-readme-md"
+63:<p>See <a href="#docs-readme-md">the index</a>, <a href="#design-md">the design</a>, [x](javascript:alert(1)) and <a href="../../a&quot;b.md">q</a>.</p>
+61:<pre><code>&lt;script&gt;alert(1)&lt;/script&gt;</code></pre>
+62:<p>&lt;p align=&quot;center&quot;&gt;</p>
+64:<p><img src="../figures/a.svg" alt="A figure"></p>
+65:<p>Badge: <a href="https://img.shields.io/badge/x.svg">build status</a>, empty: <a href="https://example.org/b.png">https://example.org/b.png</a>, caps: <a href="HTTPS://example.org/c.png">c</a>, ...
+$ grep -c '<script' docs/user/manual.html            -> 0
+$ LC_ALL=C grep -c '[^ -~]' docs/user/manual.html    -> 0
+$ grep -n -i 'http://\|https://\|<link\|<script src' -> only the link lines of line 65 (anchors, no <img>)
+66:<p>Proto: <img src="//evil.example/p.png" alt="p"> and root: <img src="/abs/r.png" alt="r"> and mail <img src="mailto:a@b.c" alt="m"></p>
+```
+
+- The same set under `/usr/bin/python3` (3.9.6) exits 0.
+- No document: exit 2 with the usage line, and again with no argument at all. `docs/user` is not created.
+- Root `./nothere` and root `README.md`: exit 1, "error: the root ... is not a directory".
+- Missing document: exit 1 naming the path.
+- `../outside.md`: exit 1, "lies outside the repository root".
+- A Latin-1 document: exit 1, "is not UTF-8". Nothing was written.
+- An absolute document path inside the root: exit 0.
+- Run from another directory: it wrote `<scratch>/docs/user/manual.html` and 0 entries in the working directory.
+- `x/a_b.md`, `x/a-b.md` and `x/a.b.md` give `x-a-b-md`, `x-a-b-md-2` and `x-a-b-md-3`.
+- `x/a-b.md`, `x/a_b.md` and `x/a-b-2.md` give `x-a-b-md`, `x-a-b-md-2` and `x-a-b-2-md`.
+- `README.md` given twice gives `readme-md` and `readme-md-2`.
+
+Diagram case, in `step3-round-review/diag`. `utils/figures.py` is the template, and `utils/diagrams.py` is the code block of `references/diagrams.md` with the label made `'Reads "a\\b"'`:
+
+```
+$ python3 utils/diagrams.py -> wrote docs/user/diagrams/parts.svg (4158 bytes), exit 0
+$ grep -o 'Reads "a.b"' docs/user/diagrams/parts.svg   -> Reads "a\b"
+from another directory: exit 0, 0 entries in the working directory; the sha of the .svg is the same as before (d920ac9d..., for the unedited form)
+a label of 120 x's: "error: parts.svg: box 'model': the word 'xxxx...", exit 1, nothing written
+$ find <scratch> -name __pycache__   (nothing)
+```
+
+### Verdicts
+
+Items of the brief's "What to build", for the whole diff since the base:
+
+- 1: holds. Frontmatter, the 1006-character description, the Quick start block and the Use instead rows are as before. The round's edits to `SKILL.md` leave the section order unchanged.
+- 2: holds. `references/kinds.md` is intact. The splits keep what each bullet says, and the new "Offline" bullet says the same as the head comment.
+- 3: holds. Steps 3 and 5 are unchanged in effect.
+- 4: holds. Steps 6 and `kinds.md` "The README" give the core's order, and the split of "Its own sections" and "Their place" keeps the rule.
+- 5: holds. Steps 6 and 8 are as before. The split bullets keep their meaning.
+- 6: holds. Ruling 3 closes Behaviour 1. Steps 7 now has three bullets, and the second copies `<scratch>/utils/figures.py` from the repository's own copy when the user kept it at the first stop, and from `templates/figures.py` otherwise. Steps 9 skips copying "a copy the user kept". The drafts stop and the commit therefore use the same engine. The diagram runs above reproduce the root from `__file__`, `repr`, the error and no `__pycache__`.
+- 7: violated, Spec 1 below. The tab id rule (ruling 2) holds in my runs. The `http`/`https` image is now a link in my runs. A protocol-relative image target still loads from the network.
+- 8: holds. `scripts.md` line 20 is the new row, and the `copies` count is 1.
+- 9: holds. The glossary is identical to the snapshot. The "Stated in" of `core`, `diagram file`, `documentation index`, `scratch folder`, `one-page manual` and `kind` still point at sections and steps that exist, and no Steps number changed.
+- 10: holds. Line 3 of ADR 0058 prints as item 10 asks.
+- 11: holds. README counts are 1, 1, 1 and 0, and the tree has 25 skills.
+- 12: holds for ordering and commit rules. "Stops" still has five rows, the refusals come before the writes, and the commit names its paths. The one-rule-per-bullet part of the item is not fully met, see Standards 1.
+- 13: holds for what the step does, as in the first report.
+
+Cases of the brief's "Cases":
+
+- Description count, Quick start closed and sections in order: met (`1006`, `closed`, the seven headings).
+- The C++ library, `docs/manual/install.md`, a differing `utils/figures.py` or `utils/manual.py`, an existing `utils/diagrams.py`, Python 3.9, a refused label, and not a repository or no code: met by reading. The round's edits keep these paths. The differing-figures case is now also consistent between Steps 7 and 9.
+- `manual.py` main run: met. The escapes, the `../figures/a.svg` image, the tab link, the `javascript:` text link and the escaped quote are all as the brief asks.
+- The page is ASCII and loads nothing from the network: partial. The brief's document gives `0` and an empty grep. A document holding `![p](//evil.example/p.png)` gives `<img src="//evil.example/p.png">`. See Spec 1.
+- `/usr/bin/python3` 3.9.6, no document, bad root, missing document, `../outside.md`, non-UTF-8 and another working directory: met.
+- Diagram case: met.
+- `scripts.md` rows, private names, README lines and ADR 0058 line 3: met.
+- Round 1 runs: the three-document run with a link from `README.md` to DESIGN's tab (met), and a badge image written as a link (met).
+
+### Findings
+
+1. Spec: `skills/code/handbook/templates/manual.py:199` and `:264-267`. The line `if raw.startswith(("#", "/")) or not raw: return raw` keeps a target such as `//evil.example/p.png`. In `link_html`, `scheme = SCHEME.match(href)` finds no scheme for it, so the image branch gives `<img src="//evil.example/p.png" alt="p">`.
+   - What is wrong: ruling 1 claims the page "loads nothing from the network" and that an image at a remote address is never an `<img>`. My run (`step3-round-review/repo`, `README.md` line `Proto: ![p](//evil.example/p.png)`) gives output line 66 with that `<img>`. The head comment (line 33), `references/kinds.md` ("Offline"), `SKILL.md` Steps 9 and the report all say the page loads nothing. A `http` target, and one in capitals (`HTTPS://`), are handled. The scheme-relative target is not.
+   - Failure scenario: a README with `![badge](//img.example.org/b.svg)` gives a `manual.html` that fetches the image when opened over `http` or `https`. A reader of `kinds.md` expects an offline page.
+   - Verdict: item 7 violated. The case "loads nothing from the network" is partial. The fix keeps the ruling's intent: write a target that starts with `//` as an image link too, or refuse it as an image.
+
+2. Standards: `skills/code/handbook/SKILL.md` lines 60, 66 and 102. Ruling 4 told the builder to split every bullet found with the same fault, and the report lists the bullets it split under "found in the further reading". Three bullets that join independent rules are still whole, so the report's claim of completeness is not reproduced.
+   - Line 60: "A version below 3.10 is a question for the first stop: the engine needs Python 3.10 or later, and the diagrams kind is left out until the user answers that `python3` now is 3.10 or later, which this step reads again."
+   - Line 66: "A tool that is not installed is named at the first stop with its install command, and the API pages kind is left out of the run with that reason."
+   - Line 102: "Each diagram gets at most three corrections; a diagram still refused after the third is left out of the draft, and the drafts stop shows it with the engine's error."
+   - Rule broken: `docs/dev/skill-layout.md`, "Lists and tables": two requirements that can each be broken while the other holds, joined by 'and' or a semicolon, are two bullets.
+   - Failure scenario: a later diff of any of these bullets cannot tell which requirement a change dropped. In line 102, a builder can keep the limit of three and drop "shows it with the engine's error". Each of the three has this form, and none changes behaviour.
+   - Verdict: none (item 12 is unaffected in behaviour).
+
+3. Proof, Behaviour: none. Ruling 1 for `http`, `https` and `HTTPS` images, ruling 2, ruling 3 and ruling 5 are reproduced by my own runs and by reading. The report's three-document run, the `-2` run and the badge run give the lines it quotes. Nothing was closed by removing a check: the splits of `kinds.md` and `diagrams.md` keep each rule's meaning, no "Steps n" reference moved, and the glossary was not touched. The extra bullet in `SKILL.md` Steps 9 (line 120) restates `manual.py`'s head comment, which ruling 1 asked for, and I raise no finding on it.
+
+### Declined to judge
+
+- How the page renders in a browser, including the CSS `:target` and `:has` tabs. This needs a browser, and the report marks it not verified.
+- The `/ordo-help skills` run after the pin, and the user's reading of the text against ADRs 0058 and 0060. The brief carries both (item 13).
+- Whether the remaining bullets of `kinds.md` that list two conditions of one rule (lines 63, 69 and 76) and `SKILL.md` Rules bullet 1 are one rule or two. I read them as one rule with its condition and raise no finding.
+- `git check-ignore` for Steps 10. It is outside the three git commands I may run.
+
+Reviewer usage: af7bdca8540146551, claude-sonnet-5-5, 136257 tokens, 23 tool uses, 2 min 54 s.
+
+## Closed
+
+Each finding of the run over repair round 1, closed at landing:
+
+- 1 (Spec, an image whose address starts with `//` written as `<img>`): fixed on main. In `link_html` of `templates/manual.py`, an image whose target has the scheme `http` or `https`, or starts with `//`, is written as a link to its address; the head comment, `references/kinds.md` "Offline" and `SKILL.md` Steps 9 name the `//` form. On a scratch repository whose `README.md` holds `![p](//evil.example/p.png)`, `https`, a local image and a `//` text link, the page holds `<a href="//evil.example/p.png">p</a>`, one `<img>` (the local `../figures/a.svg`), and `grep -n -i 'src="//\|src="http'` prints nothing, under `python3` and `/usr/bin/python3` 3.9.6; the reviewer's run before the fix gave `<img src="//evil.example/p.png" alt="p">`.
+- 2 (Standards, three bullets of `SKILL.md` each holding two rules): fixed on main. Steps 3's Python bullet and API tool bullet are two bullets each, and Steps 7's corrections bullet is three; no Steps number moved.
+- After both fixes: `ruff check --select F,W2` and `ruff check --preview --select E3` print `All checks passed!`, `awk 'length>100'` prints nothing, the description is 1006 characters, and the verify list prints `checks: 16 commands passed`.
+
