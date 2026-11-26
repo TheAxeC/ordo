@@ -444,7 +444,7 @@ The readme mode drafts a project's `README.md`, and the `README.md` and `.deposi
 3. Draft the code folder's `README.md` and `.depositignore`, when the project has a code folder.
    - Draft `<code folder>/README.md` whole in the order of `references/project_layout.md`, "The code README", from the old code README and the code, its facts kept as item 2 keeps those of the README, its sources named and what no file holds a question.
    - A made-up example: a project whose README names `src/` as its code folder, or whose code stands in `src/` and that has no README, gets its code README drafted at `src/README.md` and its `.depositignore` at `src/.depositignore`, `### Where things live` names `src/`, and no folder `code/` is made.
-   - Draft `<code folder>/.depositignore` with the lines of `references/project_layout.md`, "The deposit": a `.depositignore` that exists keeps each of its own lines, and the draft adds each line of that section it lacks.
+   - Draft `<code folder>/.depositignore` as `references/project_layout.md`, "The deposit", gives it: the section's lines for a new file, and its rules for adding them to a file that exists.
    - Done when both drafts stand, or the project has no code folder.
 4. Show the drafts, the stop "The README drafts".
    - Show each draft whole, with every change from the file it replaces, and each `notes/` file it writes, with its name.

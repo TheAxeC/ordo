@@ -82,10 +82,10 @@ The `research` mode of `researcher` makes this layout in a new project at "resea
 `code/.depositignore` names what stays out of a public deposit of `code/`, one pattern per line, as a `.gitignore` names them:
 
 ```text
-data/
-attic/
-results/
-figures/
+/data/
+/attic/
+/results/
+/figures/
 __pycache__/
 *.pyc
 .cache/
@@ -98,14 +98,51 @@ __pycache__/
 secrets/
 ```
 
-- `attic/` stays out so that no dead end is published.
-- `results/` and `figures/` stay out so that every result is rebuilt by `run_all.sh`.
-- `data/` stays out since a newcomer obtains the raw inputs as the code README's `## Data` says.
+- `/attic/` stays out so that no dead end is published.
+- `/results/` and `/figures/` stay out so that every result is rebuilt by `run_all.sh`.
+- `/data/` stays out since a newcomer obtains the raw inputs as the code README's `## Data` says.
+- The four folder lines start with `/`, so each names the folder beside `.depositignore` and no source folder of the same name deeper down, such as `src/<package>/data/`.
 - The caches stay out since a run rebuilds them.
-- The secrets stay out since a deposit is public.
+- The secrets stay out at any depth since a deposit is public.
 - In a project underway, `.depositignore` stands in the project's own code folder, beside its code README.
 - "research" item 3 writes these lines.
-- The `readme` mode adds to a `.depositignore` that exists each of these lines it lacks, keeps its own lines and shows the additions in its draft ("readme" item 3 of `SKILL.md`).
+- The `readme` mode drafts a `.depositignore` that exists by these rules ("readme" item 3 of `SKILL.md`):
+  - The draft keeps every line of the file, in its order, comments and blank lines included.
+  - A line of the list is added when the file does not already have it.
+  - A comment or a blank line of the file has no line of the list.
+  - A folder line of the list, such as `/data/`, is had when a line of the file that does not start with `!`, read without a leading `/` and without a trailing `/`, `/*` or `/**`, is that folder's name.
+  - So `data/`, `/data/`, `data` and `results/*` have their folder, and `data/raw/`, `/data/*.csv`, `**/data/`, `src/data/` and `!data/README.md` have none.
+  - Any other line of the list is had when the file holds that exact line.
+  - The lines added stand together under one comment line, above the file's first line that starts with `!`, or at its end when it has none, so that no added line overrides a re-include of the file.
+  - The draft shows each line it adds and, for each line of the list it does not add, the line of the file that has it.
+
+A made-up example, built from no real project, of a `.depositignore` that holds two lines:
+
+```text
+results/*
+!results/model.pt
+```
+
+Its draft keeps both lines, has `/results/` by `results/*`, and adds every other line of the list above `!results/model.pt`:
+
+```text
+results/*
+# Left out of a public deposit
+/data/
+/attic/
+/figures/
+__pycache__/
+*.pyc
+.cache/
+.pytest_cache/
+.ipynb_checkpoints/
+.env
+.env.*
+*.pem
+*.key
+secrets/
+!results/model.pt
+```
 
 ## A README in the old layout
 

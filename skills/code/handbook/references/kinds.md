@@ -52,7 +52,8 @@ A `<part>`, `<surface>` or `<name>` is written in lower case, each run of charac
 
 - **What it holds.** Each capability of the product, grouped by part, with its status and the files that show it:
   - `works`: the code holds it and a test covers it;
-  - `partial`: the code holds part of it, and the entry names the part that is missing;
+  - `untested`: the code holds all of it and no test covers it;
+  - `partial`: the code holds part of it, whether a test covers that part or not, and the entry names the part that is missing;
   - `planned`: the roadmap, an issue file or the existing documentation names it, and no code holds it.
 - **When a repository has a use for it.** A product with ten or more capabilities, or with capabilities whose status a user needs to know before relying on them. It is left out of a small library whose README lists what it does.
 

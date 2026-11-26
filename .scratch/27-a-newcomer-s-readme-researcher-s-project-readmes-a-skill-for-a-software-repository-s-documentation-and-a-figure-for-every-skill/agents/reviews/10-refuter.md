@@ -130,3 +130,158 @@ none
 - What git ignores in the worktree, beyond `git status --short`. Settling it needs `git check-ignore -v <path>`, which is outside the three git commands allowed.
 
 Reviewer usage: af1e418a616f06810, claude-opus-5-5, 187333 tokens, 36 tool uses, 7 min 17 s.
+
+## Repair round 1, refuted
+
+```
+$ python3 skills/ordo/ordo-init/templates/sync_rules.py . --only glossary
+ok: the plan-terms block equals the template
+
+$ printf '%s\0' <the ten paths of Verify 1, ADR 0058 in place of 0061> | xargs -0 perl -CSD -ne '...'; echo "exit: $?"
+exit: 0
+
+$ git grep -n -e '^data/$' -e '^results/$' -e '^figures/$' -e '^attic/$' -- skills/academic/researcher/; echo "grep exit $?"
+grep exit 1
+
+$ sed -n '/^## The deposit/,/^## A README/p' .../project_layout.md | grep -c -x -e '/data/' -e '/attic/' -e '/results/' -e '/figures/' -e 'secrets/'
+9
+$ sed -n '/^## The deposit/,/^- `\/attic/p' .../project_layout.md | grep -c -x -e '/data/' ... -e 'secrets/'      (the list alone)
+5
+(the 9 includes the made-up example in the same section; over the list alone it is 5, as the round brief says)
+
+$ python3 docs/figures/gen_figures.py >/dev/null; echo "exit $?"; git status --short docs/figures
+exit 0
+ M docs/figures/code/handbook.svg
+ M docs/figures/gen_figures.py
+
+$ python3 -c '...description length...' | grep -e handbook -e researcher
+1015 skills/academic/researcher/SKILL.md
+1021 skills/code/handbook/SKILL.md
+
+$ git grep -n 0061 -- skills docs README.md; echo "0061 exit $?"
+0061 exit 1
+
+$ git status --short   (relevant lines)
+ M docs/adr/0058-...-the-user-confirms.md      (docs/adr/README.md is not listed; 0061 is not on disk)
+
+The report's quoted commands, rerun:
+- find probe (scratch folder holding repo/.venv/old older than the marker, a link check/.venv to it, x written through the link after the marker):
+  find -L .../check/.venv -type f -newer .../marker -print  printed only  .../check/.venv/x ; exit 0
+- man find, -L: "Cause the file information and file type (see stat(2)) returned for each symbolic link to be those of the file referenced by the link, not the link itself. If the referenced file does not exist, the file information and type will be for the link itself."
+- man find, -newer: "True if the current file has a more recent last modification time than file."  Both as the report quotes them.
+- ruff, docs.astral.sh/ruff/configuration/ "Config file discovery": "the `.ruff.toml` file will take precedence over the `ruff.toml` file, and the `ruff.toml` file will take precedence over the `pyproject.toml` file."
+- ruff, docs.astral.sh/ruff/settings/, `extend-exclude`: "A list of file patterns to omit from formatting and linting, in addition to those specified by `exclude`." `exclude` has a default list (`.git`, `.venv`, `node_modules`, ...) and the note "you'll typically want to use extend-exclude to modify the excluded paths."
+```
+
+The ruff sentence in Steps 8 matches the documentation: the file order is right, and `extend-exclude` adds to the default `exclude` list. The page and sentence the report gives are the ones I read. The `exclude` default is a list in the documentation. That setting `exclude` replaces it is an inference from the documentation, and an ordinary one.
+
+The delta, as read:
+- Files.txt paths with a difference: `skills/code/handbook/SKILL.md`, `docs/adr/README.md` (the 0061 row removed) and the deleted 0061 file.
+- Files.txt paths with no difference: `gen_figures.py`, `handbook.svg`, `glossary.md`, researcher `SKILL.md`, `project_layout.md`, `kinds.md`.
+- ADR 0058 is listed in no files.txt and changed now. Its part of `git diff eb17dd9` is read.
+
+### Verdicts
+
+Items of "What to build", for the whole diff since the base:
+
+- 1: holds. The four folder lines are anchored, as in the first report. The round did not change `project_layout.md`: its delta against the snapshot is 0 lines.
+- 2: holds. The delta against the snapshot is 0 lines, so the rule stays written once in "The deposit", and readme item 3 still names the section.
+- 3: holds. The round changed neither researcher `SKILL.md` nor `project_layout.md`.
+- 4: holds. The round changed neither `kinds.md` nor the glossary (delta 0), and the glossary's `feature map, of handbook` entry names `works`, `untested`, `partial` or `planned`.
+- 5: holds on the text the brief asks for. Standards 1 and 2 are the gaps in the new text. The condition of Steps 8 now reads "when Steps 2 kept one and Steps 3 found its tool installed", which closes the first report's Spec 2. The Steps 2 bullet on caching tools, the `PYTHONDONTWRITEBYTECODE=1` bullet, the marker and the `find` are in place. The drafts stop and the Stops row name each file the `find` printed. The Rules bullet is added.
+- 6: as the round's ruling 1 replaced it: holds.
+  - ADR 0058 now says the following. Its Context states that a generated file can fail the repository's own format check, in one sentence with no private name. The Decision bullet on drafts names "each drafted exclusion line for a generated file". A new Decision bullet states the check: where the commands are read from, what is left out, the copy in a scratch folder, one run before and one after the drafts, at most three rounds, and an approved exclusion committed with the drafts. Alternatives rejected gains the three alternatives. Consequences gains one sentence. The Status line is unchanged.
+  - 0061 is not on disk, `docs/adr/README.md` is not among the files changed since the base, and `git grep -n 0061 -- skills docs README.md` prints nothing.
+  - The 0058 text contains no date or history.
+- 7: holds. The delta of `gen_figures.py` and `handbook.svg` against the snapshot is 0 lines. The script exits 0, and only `handbook.svg` and `gen_figures.py` are listed.
+- 8: holds. I grepped `PYTHONDONTWRITEBYTECODE`, `marker`, `extend-exclude`, `ruff.toml` and `0061` across `skills/`, `docs/` and `README.md`, leaving out the figure SVGs.
+  - The only hits that bear on the delta are the new lines in `handbook`'s `SKILL.md` (127, 128, 136, 141).
+  - The ADR 0045 hits are an unrelated word, "marker".
+  - `docs/dev/building.md:39` is a different "marker".
+  - `build.test.sh:12` is an unrelated `unset`.
+  - The glossary's `scratch folder, of handbook` entry ("Steps 7, 8 and 12") stays true with the marker inside the scratch folder.
+
+Cases:
+
+- engram's file: met. The text of the rule is unchanged in the round, so the first report's reading stands.
+- linfoot's file: met, as above.
+- `!data/README.md` only: met, as above.
+- `data/raw/` only: met, as above.
+- `database/`: met, as above.
+- `.env*` with `!.env.example`: met, as above.
+- No `.depositignore`: met, as above.
+- The feature map: met, as above.
+- officium: not verifiable. Settling it needs a run of Steps 8 on officium, Open item M's rerun. By reading, `format:check` (`prettier --check .`) and `lint` (`eslint .`) are kept, `npm run check` is left out, and the `.prettierignore` line is drafted. I know of no default cache for those two tools. That is from memory, not run here.
+- No format or lint command: met. The Steps 5 bullet and the "A run with no such command goes on to Steps 9" bullet are unchanged.
+- No diagrams kind: met. The line "Make the scratch folder with `mktemp -d` when Steps 7 did not make one" is unchanged.
+- `gen_figures.py`: met. Exit 0, and only `handbook.svg` is listed beside the changed `gen_figures.py`.
+
+### Findings
+
+Closures, ruling by ruling:
+
+- Ruling 1: reproduced by the greps and the diff above. The ADR carries every item the ruling lists, and the record leaves no 0061.
+- Ruling 2: reproduced. Steps 8, first line.
+- Ruling 3: reproduced, as judged above.
+- Ruling 4: reproduced for the sentence. The three places the report names exist.
+  - "with its core" is at `SKILL.md:98` and `kinds.md:21`.
+  - The engine and Python 3.10 are at `SKILL.md:67` and `:111`.
+  - The tool being installed is at `:73`, and the API tool's configuration at `:100`.
+  - Those lines hold the idea, not the phrase. The phrase "the language's own tool" is in `kinds.md:14` and `:74`, and the report does not name those two places.
+  - The description is unchanged at 1021.
+- Ruling 5: partly reproduced. The find probe reproduced, and the `man find` quotes are exact. The Steps 2 bullet, the environment variable, the marker and the Rules bullet are in the text. Standards 1 and 2 below hold, and Standards 3 is the wording of the Rules bullet.
+
+No finding was closed by removing a check. No fix reaches beyond its finding.
+
+## 1. Spec
+
+none
+
+## 2. Proof
+
+none
+
+## 3. Standards
+
+1. `skills/code/handbook/SKILL.md:62` (Steps 2): "Leave out a command whose tool writes a cache by default, such as `next lint`, with its reason."
+   - What is wrong: read literally, it contradicts the Steps 2 line 59 example that names `ruff check` as a command to keep. Ruff writes `.ruff_cache` by default; `docs.astral.sh/ruff/settings/`, `cache-dir`, says "By default, Ruff stores cache results in a `.ruff_cache` directory in the current project root."
+   - Rule broken: `change-standard.md`, rule 19, "A change leaves no two statements that contradict each other".
+   - The harm the ruling guards against is a write into a linked folder. A cache written into the copy, not through a link, does no harm. The bullet states the wider condition.
+   - Failure scenario: a Python repository whose `format:check` or `lint` runs `ruff check`. The session reads the bullet and leaves out the command, so the check never runs. Or it reads line 59 and keeps it, and cannot tell which line holds. In either case a `ruff.toml`-excluded file is never tested.
+   - Verdict: item 5 holds, with this finding.
+2. `skills/code/handbook/SKILL.md:141` and `:136` (Steps 8): "After the last run, run `find -L ... -print` for each linked folder: each file it prints was written into the repository by a command, and the drafts stop names it with the commands that ran in the copy, since one search after the last run cannot tell which of them wrote it."
+   - What is wrong: this bullet is 58 words and holds the search, what a hit means and a reason. Line 136, the ruff example, is 39 words. `skill-layout.md`, "Lists and tables", asks for one rule per bullet, and the prose standard asks for sentences under roughly 20 words.
+   - The report's "Departures from the length and list rules" (Verify 5) names the bullets at 35, 50 and "30 or 40" words and then says "Every other new sentence is under about 25 words". The round added two bullets over that and named neither. Report Verify 5 requires each departure to be named with why it needs its form.
+   - Failure scenario: a reader of the skill sees the stop named in a clause behind a colon and reads the explanation of why the command is not named as the rule.
+   - Verdict: item 5 holds, with this finding.
+3. `skills/code/handbook/SKILL.md:201` (Rules): "The commands of Steps 8 write nothing into the repository, and a file found written through a linked folder is named at the drafts stop."
+   - What is wrong: the first clause is a claim of prevention. The mechanism only detects: `PYTHONDONTWRITEBYTECODE` covers Python tools only, the cache rule covers the tools the session recognises, and the `find` runs after the writes. The second clause says that a write can happen. The two clauses contradict each other, and the line above (`:200`) says the skill writes no file of the repository before approval. A file found is already in the repository when the drafts stop names it.
+   - Rule broken: `change-standard.md`, rule 19.
+   - Failure scenario: a reader trusts the first clause, finds a `__pycache__` or `.next/cache` file in an ignored folder after a run, and takes the skill as broken. The text should say that the run takes the three measures and names any file it could not prevent.
+   - Verdict: item 5 holds, with this finding. The round brief's own wording for this bullet is the cause, so the orchestrator's call is whether to keep it or change it.
+
+## 4. Behaviour
+
+none. The report's "Host- or user-visible changes" and its "Repair round 1" section state the new Steps 2 bullet, the environment variable, the marker, the search and the stop line, with before and after.
+
+### Declined to judge
+
+- That `next lint` writes a cache by default, that `uv`-made `.venv`s are left without bytecode when the variable is unset, and that `eslint` and `prettier --check` write no cache by default. These are tool behaviours stated from documentation or memory, not run here.
+- Whether a search after the last run names the command that wrote a file. The builder departs from the ruling's wording ("the commands that ran in the copy", not "the command") and names the reason. Whether to keep it or to search after each run is the orchestrator's call.
+- Whether the 0058 Decision bullet on the check (about 95 words) is too long for an ADR. The prose standard is the standard for the skills' pages and the ADR has no length rule I could cite.
+- Whether the officium run passes (Open item M's rerun).
+- What git ignores in the worktree beyond `git status --short`. Settling it needs `git check-ignore -v`, outside the three git commands allowed.
+
+Reviewer usage: ad6d31d762deb1ecf, claude-sonnet-5-5, 123000 tokens, 26 tool uses, 2 min 38 s.
+
+## Closed
+
+- First run, Spec 1 (ADR 0061 not recorded as a refinement of 0058): closed in repair round 1, ruling 1; ADR 0058 edited to its current state, 0061 and its row removed, as `docs/adr/README.md` says; `git grep -n 0061 -- skills docs README.md` prints nothing.
+- First run, Spec 2 (the condition of Steps 8): closed in round 1, ruling 2.
+- First run, Spec 3 (ruff's order and `extend-exclude`): closed in round 1, ruling 3; at landing the bullet was split into the example and one sentence on the file ruff reads (Standards 2 of the round's run).
+- First run, Proof 1 (the report's sentence on the description): closed in round 1, ruling 4.
+- First run, Behaviour 1 (writes through a linked folder): closed in round 1, ruling 5, and at landing: a fresh marker before each run and the `find` after each run, so the drafts stop names the command that wrote a file, in place of one search after the last run.
+- Round 1, Standards 1 (the cache bullet against `ruff check`): fixed at landing; Steps 2 leaves out a command whose tool writes a cache by default into a folder Steps 8 links, such as `next lint` into a linked `.next`, and keeps one whose cache stays inside the copy, such as `ruff check` into `.ruff_cache`.
+- Round 1, Standards 2 (two long bullets): fixed at landing; the `find` bullet is now three bullets beside the marker, and the ruff example two bullets.
+- Round 1, Standards 3 (the Rules bullet claims prevention): fixed at landing; it reads "Steps 2 and 8 keep the commands of Steps 8 from writing into the repository where they can; a file a command writes through a linked folder all the same is found after its run and named at the drafts stop with that command."
+- Verification after the fixes: `checks.sh` printed `checks: 16 commands passed`; the `handbook` description is 1021 characters.

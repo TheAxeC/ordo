@@ -46,25 +46,16 @@ repair_reviewer: claude:sonnet  # the model the run of /refute over a repair rou
 ```
 
 ```yaml
-dispatch:                    # one entry per step in flight, written by /spec, since docs/plan.yaml's workers_at_once is 5.
-- step: 10
-  executor: agent
-  worker: claude:opus
-  worktree: .agents/worktrees/27-a-newcomer-s-readme-researcher-s-project-readmes-a-skill-for-a-software-repository-s-documentation-and-a-figure-for-every-skill-10
-  base: eb17dd9
-  session_id: ad11c3888bf0dab20 (claude-opus-5-5)
-  launched: 2026-11-26 12:38
-  report: .scratch/27-a-newcomer-s-readme-researcher-s-project-readmes-a-skill-for-a-software-repository-s-documentation-and-a-figure-for-every-skill/agents/reviews/10-report.md
-  builder_usage: 203519 tokens, 51 tool uses, 10 min 41 s
-  round: 1
-  reviewer_report: .scratch/27-a-newcomer-s-readme-researcher-s-project-readmes-a-skill-for-a-software-repository-s-documentation-and-a-figure-for-every-skill/agents/reviews/10-refuter.md (af1e418a616f06810, claude-opus-5-5, 187333 tokens, 36 tool uses, 7 min 17 s)
-  brief_check: .scratch/27-a-newcomer-s-readme-researcher-s-project-readmes-a-skill-for-a-software-repository-s-documentation-and-a-figure-for-every-skill/agents/reviews/10-brief-check.md (a8c25cbeecbc26775, claude-opus-5-5, 165475 tokens, 36 tool uses, 8 min 36 s)
-  landing: not-started
+dispatch: none               # one entry per step in flight, written by /spec, since docs/plan.yaml's workers_at_once is 5.
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled or, under `self_rule: on`, until the orchestrator closes it as `plan-orchestration`'s `references/self-rule.md`, "Closing an open item", says)
 
-None.
+- Open item N, step 10's check: the user reads the changed text of step 10 against the two runs' findings and approves.
+  - What changed: `skills/academic/researcher/references/project_layout.md`, "The deposit" (the four anchored folder lines, `secrets/` unanchored, the rule for a `.depositignore` that exists, the made-up example); `researcher`'s readme item 3; `skills/code/handbook/references/kinds.md` (`untested`); `skills/code/handbook/SKILL.md` Steps 2, 3, 5, the new Steps 8, Steps 9 to 12, the Stops, the Rules, the description; ADR 0058; the glossary lines 148, 167 and 191; `docs/figures/code/handbook.svg`.
+  - (a) Approve the text as landed: then tag v11.2.1 at main, pin it, and run the three reruns of rulings L and M. Pro: the reruns read the text you approved. Con: none found.
+  - (b) Correct it: the corrections are made at main, then (a). Pro: the reruns read the corrected text. Con: a further commit before the tag.
+  - Recommendation: (a) once you have read it, since the reviews found nothing left open. The lazy option: tagging before your reading.
 
 ## Closed items (the log of what was raised and how it ended; no report carries it)
 
@@ -104,7 +95,7 @@ None.
 
 ## Current position (rewritten before every step commit of this plan)
 
-- 2026-11-26. Steps 1, 2, 3, 4, 5, 6 and 7 have landed. Step 10 is in flight: its builder is running.
-- Verified: `checks: 16 commands passed` on main at step 5's landing, after its fixes at landing.
-- Next step: step 8, which waits on the user naming the tag, the two projects and the software repository.
-- Open on the user's side: nothing.
+- 2026-11-26. Steps 1, 2, 3, 4, 5, 6, 7 and 10 have landed. Nothing is in flight.
+- Verified: `checks: 16 commands passed` on main at step 10's landing, after its fixes at landing.
+- Next step: step 8: the tag v11.2.1 and its pin after Open item N, then the reruns of rulings L and M by fresh agents.
+- Open on the user's side: Open item N; the answers to the engram run's questions Q1 to Q14 and the linfoot run's questions 2 to 8; the commit in officium of its four changes of ruling K.
