@@ -67,7 +67,7 @@ you read the rewritten `README.md` and approve it; each image path in `README.md
 - Landed: research-hub's `README.md`, uncommitted there for the user to commit: `### The private README.md` names researcher's layout of ADR 0057 as the hub's standard with its source, lists the title line and the twelve sections in order with every `###`, keeps the hub's own rules and its per-section details (the private-only status note, the compute of a result, each dataset's cache recipe and registry key, the paths of each item of `## Next`), and states the 200-line rule with `notes/<slug>.md`, `None yet.`, novelty pages in `notes/` and the mode `/researcher readme`; the tree's `README.md` and `notes/` lines follow; `### The code/ folder` names `run_all.sh` beside `paper.py` (`run_all.sh` rebuilds every result from the raw inputs, then runs `paper.py`), leaves `data/` out of the deposit, and lists the code README's eight sections. Nothing of Ordo's tree changes but this ledger.
 - Premise corrections: the brief's premise that the hub's README names no `run_all.sh` was false (line 19 names it), corrected in the brief before the build; the brief check's findings are closed under "Closed" in `agents/reviews/7-brief-check.md`.
 - The plan's verify list is unchanged.
-- Raised: Open item G, the user's reading of the changed section against ADR 0057, the step's check, with the places outside the step's paths where the hub and the layout still differ.
+- Raised: Open item G, the user's reading of the changed section against ADR 0057, the step's check, with the places outside the step's paths where the hub and the layout still differ; approved by the user on 2026-11-26.
 - Verification on main: `checks: 16 commands passed`; the range `ada4e20..` held no commit, the step's one file standing in research-hub.
 - The builder's first report did not pass its bar: one repair round of two rulings (`agents/briefs/7-round-1.md`); the run over the round found nothing.
 - Usage: brief check 128993 tokens, 25 tool uses, 4 min 22 s; builder 154376 tokens, 36 tool uses, 5 min 57 s, and round 1: 164398 tokens, 4 tool uses, 58 s; reviewer 143431 tokens, 19 tool uses, 3 min 8 s; reviewer over round 1: 97713 tokens, 9 tool uses, 46 s.
@@ -129,6 +129,7 @@ Independent of each other; the standing rule of one agent at a time still serial
 - Open item D (2026-11-25): the README and code README headings of D1, D15 and ADR 0057 stand as ruled, `### Why it matters`, `### What is not claimed` and `## Dead ends (do not retry)` among them, against the prose standard's "Headings are labels, not sentences." (the user).
 - Open item E (2026-11-26): step 4's check passes: the user read `grill` and `plan` on the rulings file and approved the text as it stands (the user).
 - Open item F (2026-11-26): step 2's check passes: the user read researcher's text against ADR 0057 and approved it as it stands (the user).
+- Open item G (2026-11-26): step 7's check passes: the user read research-hub's `README.md` against ADR 0057 and approved it as it stands, to commit it in research-hub after step 8's pin (the user).
 
 ## Agents
 

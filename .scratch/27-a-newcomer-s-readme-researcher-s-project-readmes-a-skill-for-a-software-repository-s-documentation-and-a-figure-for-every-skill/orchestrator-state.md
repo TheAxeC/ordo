@@ -56,17 +56,15 @@ dispatch:                    # one entry per step in flight, written by /spec, s
   launched: 2026-11-26 00:50
   report: .scratch/27-a-newcomer-s-readme-researcher-s-project-readmes-a-skill-for-a-software-repository-s-documentation-and-a-figure-for-every-skill/agents/reviews/3-report.md
   builder_usage: 231675 tokens, 51 tool uses, 12 min 36 s
-  round: 0
+  reviewer_report: .scratch/27-a-newcomer-s-readme-researcher-s-project-readmes-a-skill-for-a-software-repository-s-documentation-and-a-figure-for-every-skill/agents/reviews/3-refuter.md (a70dc44bade66da5f, claude-opus-5-5, 184814 tokens, 33 tool uses, 7 min 12 s)
+  round: 1
   brief_check: .scratch/27-a-newcomer-s-readme-researcher-s-project-readmes-a-skill-for-a-software-repository-s-documentation-and-a-figure-for-every-skill/agents/reviews/3-brief-check.md (af894f369408218fe, claude-opus-5-5, 182732 tokens, 44 tool uses, 7 min 45 s)
   landing: not-started
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled or, under `self_rule: on`, until the orchestrator closes it as `plan-orchestration`'s `references/self-rule.md`, "Closing an open item", says)
 
-- Open item G (2026-11-26), step 7's check: your reading of research-hub's `README.md` against ADR 0057. Step 7 is booked; the change stands uncommitted in research-hub (`git diff README.md` there), sections `### The private README.md` and `### The code/ folder` and the tree's `README.md` and `notes/` lines. Places outside the step's paths where the hub and researcher's layout still differ, each with the words that would bring it in line in `agents/reviews/7-report.md`: the hub's `CLAUDE.md` line 88 (the six old sections); `.oculus/config.yml` lines 41-44 (`default_ignore: [attic/]`); README line 124 (the deposit check runs `paper.py` alone); the project tree, lines 30 to 39 (no `logs/`, proofs in `theory/`); the 51 project READMEs still in the old layout, which `/researcher readme` brings over once step 8 pins it. The hub's README is best committed after that pin.
-  - (a) Approve the text as it stands, and commit it in research-hub yourself after step 8's pin. Pro: the step's check passes. Con: the places listed stay as they are until you change them.
-  - (b) Name what reads wrong. Pro: it is fixed before you commit. Con: the change becomes a step of its own only as `plan-orchestration`'s "What earns a step of its own" allows, since step 7 is booked.
-  - Recommendation: (a), my judgment after the reviews: the one finding was fixed in the round, and the run over it found nothing. The lazy option is (a) taken without reading the text, since the reading is the check.
+None.
 
 ## Closed items (the log of what was raised and how it ended; no report carries it)
 
@@ -76,6 +74,7 @@ dispatch:                    # one entry per step in flight, written by /spec, s
 - 2026-11-25: the layout engine's file name: `skills/code/handbook/templates/figures.py`, ruled by the user (Open item A).
 - 2026-11-26: step 4's check, the user's reading of `grill` and `plan` on the rulings file, approved, ruled (a) by the user (Open item E).
 - 2026-11-26: step 2's check, the user's reading of researcher's text against ADR 0057, approved, ruled (a) by the user (Open item F).
+- 2026-11-26: step 7's check, the user's reading of research-hub's `README.md` against ADR 0057, approved; the user commits it in research-hub after step 8's pin, ruled (a) by the user (Open item G).
 
 ## The standing demands (from the user, in force)
 
@@ -105,4 +104,4 @@ dispatch:                    # one entry per step in flight, written by /spec, s
 - 2026-11-26. Steps 1, 2, 4 and 7 have landed. Step 3 is in flight: built, its review running.
 - Verified: `checks: 16 commands passed` on main at step 7's landing.
 - Next step: land step 3 after its review; then step 5, then step 6; step 8 waits on 3, 6 and the user.
-- Open on the user's side: Open item G.
+- Open on the user's side: nothing.
