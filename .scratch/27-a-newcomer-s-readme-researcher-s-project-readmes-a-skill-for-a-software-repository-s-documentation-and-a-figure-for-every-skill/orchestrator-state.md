@@ -51,11 +51,7 @@ dispatch: none               # one entry per step in flight, written by /spec, s
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled or, under `self_rule: on`, until the orchestrator closes it as `plan-orchestration`'s `references/self-rule.md`, "Closing an open item", says)
 
-- Open item N, step 10's check: the user reads the changed text of step 10 against the two runs' findings and approves.
-  - What changed: `skills/academic/researcher/references/project_layout.md`, "The deposit" (the four anchored folder lines, `secrets/` unanchored, the rule for a `.depositignore` that exists, the made-up example); `researcher`'s readme item 3; `skills/code/handbook/references/kinds.md` (`untested`); `skills/code/handbook/SKILL.md` Steps 2, 3, 5, the new Steps 8, Steps 9 to 12, the Stops, the Rules, the description; ADR 0058; the glossary lines 148, 167 and 191; `docs/figures/code/handbook.svg`.
-  - (a) Approve the text as landed: then tag v11.2.1 at main, pin it, and run the three reruns of rulings L and M. Pro: the reruns read the text you approved. Con: none found.
-  - (b) Correct it: the corrections are made at main, then (a). Pro: the reruns read the corrected text. Con: a further commit before the tag.
-  - Recommendation: (a) once you have read it, since the reviews found nothing left open. The lazy option: tagging before your reading.
+None.
 
 ## Closed items (the log of what was raised and how it ended; no report carries it)
 
@@ -69,6 +65,7 @@ dispatch: none               # one entry per step in flight, written by /spec, s
 - 2026-11-26: step 3's check, the user's reading of `handbook` against ADRs 0058 and 0060, approved, ruled (a) by the user (Open item H).
 - 2026-11-26: step 5's check, the user's reading of the figures against their skills, approved, ruled (a) by the user (Open item I).
 - 2026-11-26: step 6's check, the user's reading of the README, approved after the name paragraph and the academic skills paragraph were added to the introduction, ruled (a) by the user (Open item J).
+- 2026-11-26: step 10's check, the user's reading of the changed text, approved, ruled (a) by the user (Open item N).
 
 ## The standing demands (from the user, in force)
 
@@ -97,5 +94,5 @@ dispatch: none               # one entry per step in flight, written by /spec, s
 
 - 2026-11-26. Steps 1, 2, 3, 4, 5, 6, 7 and 10 have landed. Nothing is in flight.
 - Verified: `checks: 16 commands passed` on main at step 10's landing, after its fixes at landing.
-- Next step: step 8: the tag v11.2.1 and its pin after Open item N, then the reruns of rulings L and M by fresh agents.
-- Open on the user's side: Open item N; the answers to the engram run's questions Q1 to Q14 and the linfoot run's questions 2 to 8; the commit in officium of its four changes of ruling K.
+- Next step: step 8: v11.2.1 tagged and pinned, then the reruns of rulings L and M by fresh agents, the orchestrator answering their stops.
+- Open on the user's side: the reading of the reruns' drafts; the commit in officium of its four changes of ruling K.

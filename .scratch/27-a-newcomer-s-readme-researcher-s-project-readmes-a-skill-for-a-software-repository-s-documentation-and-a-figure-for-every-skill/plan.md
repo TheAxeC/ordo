@@ -182,6 +182,8 @@ Independent of each other; the standing rule of one agent at a time still serial
 - Step 8's projects (2026-11-26): `projects/manuscripts/linfoot-estimator` and `projects/active/engram` of research-hub for the two runs of `/researcher readme` (the user).
 - Open item L (2026-11-26): `researcher`'s rule for `code/.depositignore` is fixed in step 10 (anchored folder lines; a line added only when the file does not already name that folder), and after step 10 lands both projects are run again by fresh agents on the pin v11.2.1, a tag of main after step 10, in place of v11.2.0, with the user's answers to both runs' questions passed in (the user).
 - Open item M (2026-11-26): `handbook` gains the feature-map status `untested` and a format check of the files it generates, with the ignore line drafted for approval, in step 10, and `/handbook` on officium is run again by a fresh agent on the new pin, with the answers to its stops passed in (the user).
+- Open item N (2026-11-26): step 10's check, the user's reading of the changed text, approved; v11.2.1 is tagged at main and pinned, and the reruns of rulings L and M start (the user).
+- The runs' questions (2026-11-26): the orchestrator answers the questions of the engram and linfoot runs of step 8 from the projects' files, read only, and passes the answers to the reruns, each answer with the file it rests on (the user).
 - Open item K (2026-11-26): officium ignored `/docs/` by accident, so `/docs/` is removed from its `.gitignore`, from `tests/privacy.test.ts` and from `.agents/building.md` and `.agents/plan.yaml`, left uncommitted in officium for the user; `handbook` keeps the paths of `references/kinds.md` and is not changed (the user).
 
 ## Agents
@@ -227,4 +229,4 @@ Each agent a plan skill started for this plan has one bullet, with its agent id,
 
 ## Blocked, and by what
 
-- 8: waits on the user's reading of step 10's text (Open item N), on the user's answers to the runs' questions and the user's reading of the drafts.
+- 8: waits on the reruns and the user's reading of the drafts.
