@@ -1,10 +1,14 @@
 # Ordo
 
-Ordo is a set of agent skills for Claude Code that run a multi-step change as a plan. The skills carry no project name and no path. Everything specific to a repository comes from that repository's `plan.yaml`, the plan configuration. The same skills therefore run a C++ engine, a TypeScript tool or a research project.
+Ordo is a set of agent skills for Claude Code for two kinds of work: running a multi-step change to a repository as a plan, and taking research from an idea to a submitted paper or grant application.
 
-A plan is opened for one roadmap entry, an item of the repository's ordered list of planned work. It is kept in a ledger folder that holds its step list, its briefs and its reviews. Each step of the plan gets a brief, its written specification, and is built in its own git worktree. A fresh reviewer that changes nothing reviews the step. The step is cherry-picked onto `main` only after its checks pass there.
+The name comes from the *ordo*, the book a church prints each year that lists, for each day, which services are held and in what order. The skills do the same for a repository's work. The roadmap lists what is to be done, each plan sets out its steps in order, and the skills carry the steps out one by one.
 
-The code skills find the cause of a defect, review the comments of a diff, write setup scripts and document a repository, the paper and research skills take a project from an idea to a submitted paper, and the explain skills teach a topic or explain a message again.
+A plan is opened for one roadmap entry, an item of the repository's ordered list of planned work. It is kept in a ledger folder that holds its step list, its briefs and its reviews. Each step of the plan gets a brief, its written specification, and is built in its own git worktree. A fresh reviewer that changes nothing reviews the step. The step is cherry-picked onto `main` only after its checks pass there. The skills carry no project name and no path. Everything specific to a repository comes from that repository's `plan.yaml`, the plan configuration, so the same skills run a C++ engine, a TypeScript tool or a research project.
+
+The academic skills cover research from start to finish. `researcher` takes an idea through its novelty, its questions and its experiments to results. `paper` writes and revises the LaTeX manuscript, `paper-review-panel` reviews it with five reviewers and an editor, `writing` reviews its prose, and `submit` makes the submission through the journal's or funder's web portal. `grant` drafts and checks a grant application against the funder's call, and `referee` writes a referee report on someone else's paper.
+
+The code skills find the cause of a defect, review the comments of a diff, write setup scripts and document a repository. The explain skills teach a topic or explain a message again.
 
 ## The skills
 
