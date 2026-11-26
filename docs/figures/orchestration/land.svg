@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1045.4 1101" width="1045.4" height="1101" role="img" aria-label="The land skill. Boxes: The step&#x27;s agents stopped (a step of the session); landing: cherry-picking set, the verify list compared with the page (a step of the session); land.sh: the wip commit, the cherry-pick, the ledger restored, the verify list on main (script); A lock held (stop); A red line for the user (stop); A rule clash (stop); The look and the A/B, where configured (a step of the session); The booking, the state file, the landing report (a step of the session); The commit by explicit path (a step of the session); The worktree and branches removed (a step of the session); A worktree that cannot be removed (stop).">
+<title>The land skill. Boxes: The step's agents stopped (a step of the session); landing: cherry-picking set, the verify list compared with the page (a step of the session); land.sh: the wip commit, the cherry-pick, the ledger restored, the verify list on main (script); A lock held (stop); A red line for the user (stop); A rule clash (stop); The look and the A/B, where configured (a step of the session); The booking, the state file, the landing report (a step of the session); The commit by explicit path (a step of the session); The worktree and branches removed (a step of the session); A worktree that cannot be removed (stop).</title>
+<defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#4f46e5"/></marker></defs>
+<rect x="0" y="0" width="1045.4" height="1101" rx="10" fill="#f8fafc" stroke="#64748b"/>
+<path d="M511,90 L511,136" fill="none" stroke="#4f46e5" stroke-width="1.8" marker-end="url(#arrow)" stroke-linejoin="round"/>
+<path d="M511,196 L511,242" fill="none" stroke="#4f46e5" stroke-width="1.8" marker-end="url(#arrow)" stroke-linejoin="round"/>
+<path d="M511,316 L139,496" fill="none" stroke="#4f46e5" stroke-width="1.8" marker-end="url(#arrow)" stroke-linejoin="round"/>
+<path d="M511,316 L387,496" fill="none" stroke="#4f46e5" stroke-width="1.8" marker-end="url(#arrow)" stroke-linejoin="round"/>
+<path d="M511,316 L635,496" fill="none" stroke="#4f46e5" stroke-width="1.8" marker-end="url(#arrow)" stroke-linejoin="round"/>
+<path d="M511,316 L883,490" fill="none" stroke="#4f46e5" stroke-width="1.8" marker-end="url(#arrow)" stroke-linejoin="round"/>
+<path d="M883,536 L883,582" fill="none" stroke="#4f46e5" stroke-width="1.8" marker-end="url(#arrow)" stroke-linejoin="round"/>
+<path d="M883,628 L883,674" fill="none" stroke="#4f46e5" stroke-width="1.8" marker-end="url(#arrow)" stroke-linejoin="round"/>
+<path d="M883,708 L883,754" fill="none" stroke="#4f46e5" stroke-width="1.8" marker-end="url(#arrow)" stroke-linejoin="round"/>
+<path d="M883,800 L883,873" fill="none" stroke="#4f46e5" stroke-width="1.8" marker-end="url(#arrow)" stroke-linejoin="round"/>
+<rect x="404" y="56" width="214" height="34" rx="17" fill="#ffffff" stroke="#64748b" stroke-width="1.5"/>
+<text x="511" y="76.4" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="middle">The step's agents stopped</text>
+<rect x="404" y="136" width="214" height="60" rx="30" fill="#ffffff" stroke="#64748b" stroke-width="1.5"/>
+<text x="511" y="155.4" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="middle">landing: cherry-picking set,</text>
+<text x="511" y="169.4" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="middle">the verify list compared</text>
+<text x="511" y="183.4" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="middle">with the page</text>
+<rect x="404" y="242" width="214" height="74" rx="8" fill="#eceff3" stroke="#64748b" stroke-width="1.5"/>
+<text x="511" y="261.4" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="middle">land.sh: the wip commit, the</text>
+<text x="511" y="275.4" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="middle">cherry-pick, the ledger</text>
+<text x="511" y="289.4" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="middle">restored, the verify list on</text>
+<text x="511" y="303.4" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="middle">main</text>
+<rect x="32" y="496" width="214" height="34" rx="8" fill="#fff1e6" stroke="#b45309" stroke-width="2"/>
+<text x="139" y="516.4" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#7c2d12" font-weight="400" text-anchor="middle">A lock held</text>
+<rect x="280" y="496" width="214" height="34" rx="8" fill="#fff1e6" stroke="#b45309" stroke-width="2"/>
+<text x="387" y="516.4" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#7c2d12" font-weight="400" text-anchor="middle">A red line for the user</text>
+<rect x="528" y="496" width="214" height="34" rx="8" fill="#fff1e6" stroke="#b45309" stroke-width="2"/>
+<text x="635" y="516.4" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#7c2d12" font-weight="400" text-anchor="middle">A rule clash</text>
+<rect x="776" y="490" width="214" height="46" rx="23" fill="#ffffff" stroke="#64748b" stroke-width="1.5"/>
+<text x="883" y="509.4" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="middle">The look and the A/B, where</text>
+<text x="883" y="523.4" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="middle">configured</text>
+<rect x="776" y="582" width="214" height="46" rx="23" fill="#ffffff" stroke="#64748b" stroke-width="1.5"/>
+<text x="883" y="601.4" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="middle">The booking, the state file,</text>
+<text x="883" y="615.4" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="middle">the landing report</text>
+<rect x="776" y="674" width="214" height="34" rx="17" fill="#ffffff" stroke="#64748b" stroke-width="1.5"/>
+<text x="883" y="694.4" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="middle">The commit by explicit path</text>
+<rect x="776" y="754" width="214" height="46" rx="23" fill="#ffffff" stroke="#64748b" stroke-width="1.5"/>
+<text x="883" y="773.4" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="middle">The worktree and branches</text>
+<text x="883" y="787.4" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="middle">removed</text>
+<rect x="776" y="873" width="214" height="46" rx="8" fill="#fff1e6" stroke="#b45309" stroke-width="2"/>
+<text x="883" y="892.4" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#7c2d12" font-weight="400" text-anchor="middle">A worktree that cannot be</text>
+<text x="883" y="906.4" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#7c2d12" font-weight="400" text-anchor="middle">removed</text>
+<text x="325" y="341.1" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="10.5" fill="#475569" font-weight="400" text-anchor="middle" stroke="#f8fafc" stroke-width="4" stroke-linejoin="round" paint-order="stroke">an index.lock still</text>
+<text x="325" y="354.1" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="10.5" fill="#475569" font-weight="400" text-anchor="middle" stroke="#f8fafc" stroke-width="4" stroke-linejoin="round" paint-order="stroke">there after 60 s</text>
+<text x="505.3" y="457.1" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="10.5" fill="#475569" font-weight="400" text-anchor="middle" stroke="#f8fafc" stroke-width="4" stroke-linejoin="round" paint-order="stroke">a red line no fix</text>
+<text x="505.3" y="470.1" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="10.5" fill="#475569" font-weight="400" text-anchor="middle" stroke="#f8fafc" stroke-width="4" stroke-linejoin="round" paint-order="stroke">inside the brief closes</text>
+<text x="700.5" y="457.1" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="10.5" fill="#475569" font-weight="400" text-anchor="middle" stroke="#f8fafc" stroke-width="4" stroke-linejoin="round" paint-order="stroke">a clash between two of</text>
+<text x="700.5" y="470.1" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="10.5" fill="#475569" font-weight="400" text-anchor="middle" stroke="#f8fafc" stroke-width="4" stroke-linejoin="round" paint-order="stroke">your rulings</text>
+<text x="951.7" y="827.1" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="10.5" fill="#475569" font-weight="400" text-anchor="middle" stroke="#f8fafc" stroke-width="4" stroke-linejoin="round" paint-order="stroke">a path outside the</text>
+<text x="951.7" y="840.1" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="10.5" fill="#475569" font-weight="400" text-anchor="middle" stroke="#f8fafc" stroke-width="4" stroke-linejoin="round" paint-order="stroke">ledger root, or a</text>
+<text x="951.7" y="853.1" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="10.5" fill="#475569" font-weight="400" text-anchor="middle" stroke="#f8fafc" stroke-width="4" stroke-linejoin="round" paint-order="stroke">removal that fails</text>
+<text x="16" y="959" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#475569" font-weight="400" text-anchor="start">The skill has one mode, /land &lt;entry&gt; &lt;step&gt;, and starts no agent. A red line that a fix inside the brief closes is fixed on main. The refusals are not</text>
+<text x="16" y="974" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#475569" font-weight="400" text-anchor="start">drawn.</text>
+<text x="16" y="1011" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="10" fill="#475569" font-weight="700" text-anchor="start">HOW TO READ THE FIGURE</text>
+<rect x="16" y="1025" width="28" height="14" rx="7" fill="#ffffff" stroke="#64748b" stroke-width="1.5"/>
+<text x="56" y="1036" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#0f172a" font-weight="400" text-anchor="start">Rounded box: a step the session does itself</text>
+<rect x="16" y="1045" width="28" height="14" rx="4" fill="#eceff3" stroke="#64748b" stroke-width="1.5"/>
+<text x="56" y="1056" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#0f172a" font-weight="400" text-anchor="start">Grey box: a script the skill ships, which the session runs</text>
+<rect x="16" y="1065" width="28" height="14" rx="4" fill="#fff1e6" stroke="#b45309" stroke-width="2"/>
+<text x="56" y="1076" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#0f172a" font-weight="400" text-anchor="start">Orange box: the run stops for you</text>
+</svg>

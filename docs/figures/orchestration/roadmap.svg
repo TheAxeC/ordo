@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280.8 690" width="1280.8" height="690" role="img" aria-label="The add mode of the roadmap skill: /roadmap add &lt;goal&gt;. Boxes: The file&#x27;s format read (a step of the session); The draft: title, goal, gate and its answer, what it waits on, its place (a step of the session); No gate (stop); The level (stop); The insertion form (stop); A missing dependency (stop); The change (stop); Written and committed (a step of the session).">
+<title>The add mode of the roadmap skill: /roadmap add &lt;goal&gt;. Boxes: The file's format read (a step of the session); The draft: title, goal, gate and its answer, what it waits on, its place (a step of the session); No gate (stop); The level (stop); The insertion form (stop); A missing dependency (stop); The change (stop); Written and committed (a step of the session).</title>
+<defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#4f46e5"/></marker></defs>
+<rect x="0" y="0" width="1280.8" height="690" rx="10" fill="#f8fafc" stroke="#64748b"/>
+<path d="M635,90 L635,136" fill="none" stroke="#4f46e5" stroke-width="1.8" marker-end="url(#arrow)" stroke-linejoin="round"/>
+<path d="M635,196 L139,400" fill="none" stroke="#4f46e5" stroke-width="1.8" marker-end="url(#arrow)" stroke-linejoin="round"/>
+<path d="M635,196 L387,400" fill="none" stroke="#4f46e5" stroke-width="1.8" marker-end="url(#arrow)" stroke-linejoin="round"/>
+<path d="M635,196 L635,400" fill="none" stroke="#4f46e5" stroke-width="1.8" marker-end="url(#arrow)" stroke-linejoin="round"/>
+<path d="M635,196 L883,400" fill="none" stroke="#4f46e5" stroke-width="1.8" marker-end="url(#arrow)" stroke-linejoin="round"/>
+<path d="M635,196 L1131,400" fill="none" stroke="#4f46e5" stroke-width="1.8" marker-end="url(#arrow)" stroke-linejoin="round"/>
+<path d="M1131,434 L1131,494" fill="none" stroke="#4f46e5" stroke-width="1.8" marker-end="url(#arrow)" stroke-linejoin="round"/>
+<rect x="528" y="56" width="214" height="34" rx="17" fill="#ffffff" stroke="#64748b" stroke-width="1.5"/>
+<text x="635" y="76.4" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="middle">The file's format read</text>
+<rect x="528" y="136" width="214" height="60" rx="30" fill="#ffffff" stroke="#64748b" stroke-width="1.5"/>
+<text x="635" y="155.4" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="middle">The draft: title, goal, gate</text>
+<text x="635" y="169.4" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="middle">and its answer, what it</text>
+<text x="635" y="183.4" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="middle">waits on, its place</text>
+<rect x="32" y="400" width="214" height="34" rx="8" fill="#fff1e6" stroke="#b45309" stroke-width="2"/>
+<text x="139" y="420.4" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#7c2d12" font-weight="400" text-anchor="middle">No gate</text>
+<rect x="280" y="400" width="214" height="34" rx="8" fill="#fff1e6" stroke="#b45309" stroke-width="2"/>
+<text x="387" y="420.4" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#7c2d12" font-weight="400" text-anchor="middle">The level</text>
+<rect x="528" y="400" width="214" height="34" rx="8" fill="#fff1e6" stroke="#b45309" stroke-width="2"/>
+<text x="635" y="420.4" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#7c2d12" font-weight="400" text-anchor="middle">The insertion form</text>
+<rect x="776" y="400" width="214" height="34" rx="8" fill="#fff1e6" stroke="#b45309" stroke-width="2"/>
+<text x="883" y="420.4" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#7c2d12" font-weight="400" text-anchor="middle">A missing dependency</text>
+<rect x="1024" y="400" width="214" height="34" rx="8" fill="#fff1e6" stroke="#b45309" stroke-width="2"/>
+<text x="1131" y="420.4" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#7c2d12" font-weight="400" text-anchor="middle">The change</text>
+<rect x="1024" y="494" width="214" height="34" rx="17" fill="#ffffff" stroke="#64748b" stroke-width="1.5"/>
+<text x="1131" y="514.4" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="middle">Written and committed</text>
+<text x="387" y="233.1" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="10.5" fill="#475569" font-weight="400" text-anchor="middle" stroke="#f8fafc" stroke-width="4" stroke-linejoin="round" paint-order="stroke">the gate cannot be</text>
+<text x="387" y="246.1" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="10.5" fill="#475569" font-weight="400" text-anchor="middle" stroke="#f8fafc" stroke-width="4" stroke-linejoin="round" paint-order="stroke">named</text>
+<text x="548.5" y="342.4" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="10.5" fill="#475569" font-weight="400" text-anchor="middle" stroke="#f8fafc" stroke-width="4" stroke-linejoin="round" paint-order="stroke">entries at two levels</text>
+<text x="713.1" y="342.4" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="10.5" fill="#475569" font-weight="400" text-anchor="middle" stroke="#f8fafc" stroke-width="4" stroke-linejoin="round" paint-order="stroke">no insertion form yet</text>
+<text x="959.4" y="376.7" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="10.5" fill="#475569" font-weight="400" text-anchor="middle" stroke="#f8fafc" stroke-width="4" stroke-linejoin="round" paint-order="stroke">a dependency the</text>
+<text x="959.4" y="389.7" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="10.5" fill="#475569" font-weight="400" text-anchor="middle" stroke="#f8fafc" stroke-width="4" stroke-linejoin="round" paint-order="stroke">roadmap does not hold</text>
+<text x="883" y="266.1" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="10.5" fill="#475569" font-weight="400" text-anchor="middle" stroke="#f8fafc" stroke-width="4" stroke-linejoin="round" paint-order="stroke">the diff</text>
+<text x="1193.4" y="461.1" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="10.5" fill="#475569" font-weight="400" text-anchor="middle" stroke="#f8fafc" stroke-width="4" stroke-linejoin="round" paint-order="stroke">your approval or</text>
+<text x="1193.4" y="474.1" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="10.5" fill="#475569" font-weight="400" text-anchor="middle" stroke="#f8fafc" stroke-width="4" stroke-linejoin="round" paint-order="stroke">correction</text>
+<text x="16" y="568" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#475569" font-weight="400" text-anchor="start">/roadmap shows the open entries in order, then those not yet specified. move, done and drop draft their change and stop at The change too, and --ruling writes a ruled change without it. The</text>
+<text x="16" y="583" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#475569" font-weight="400" text-anchor="start">refusals are not drawn.</text>
+<text x="16" y="620" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="10" fill="#475569" font-weight="700" text-anchor="start">HOW TO READ THE FIGURE</text>
+<rect x="16" y="634" width="28" height="14" rx="7" fill="#ffffff" stroke="#64748b" stroke-width="1.5"/>
+<text x="56" y="645" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#0f172a" font-weight="400" text-anchor="start">Rounded box: a step the session does itself</text>
+<rect x="16" y="654" width="28" height="14" rx="4" fill="#fff1e6" stroke="#b45309" stroke-width="2"/>
+<text x="56" y="665" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#0f172a" font-weight="400" text-anchor="start">Orange box: the run stops for you</text>
+</svg>

@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 286" width="640" height="286" role="img" aria-label="The wait-what skill. Boxes: The last message explained again: a little context, ASD-STE100 Simplified Technical English, the terms of the glossary (a step of the session).">
+<title>The wait-what skill. Boxes: The last message explained again: a little context, ASD-STE100 Simplified Technical English, the terms of the glossary (a step of the session).</title>
+<defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#4f46e5"/></marker></defs>
+<rect x="0" y="0" width="640" height="286" rx="10" fill="#f8fafc" stroke="#64748b"/>
+<rect x="213" y="56" width="214" height="88" rx="44" fill="#ffffff" stroke="#64748b" stroke-width="1.5"/>
+<text x="320" y="75.4" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="middle">The last message explained</text>
+<text x="320" y="89.4" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="middle">again: a little context,</text>
+<text x="320" y="103.4" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="middle">ASD-STE100 Simplified</text>
+<text x="320" y="117.4" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="middle">Technical English, the terms</text>
+<text x="320" y="131.4" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="middle">of the glossary</text>
+<text x="16" y="184" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#475569" font-weight="400" text-anchor="start">The skill has one mode, writes no file, starts no agent and asks you nothing. Its Stops row</text>
+<text x="16" y="199" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#475569" font-weight="400" text-anchor="start">is No stop, so no box is orange, and it has no refusal.</text>
+<text x="16" y="236" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="10" fill="#475569" font-weight="700" text-anchor="start">HOW TO READ THE FIGURE</text>
+<rect x="16" y="250" width="28" height="14" rx="7" fill="#ffffff" stroke="#64748b" stroke-width="1.5"/>
+<text x="56" y="261" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#0f172a" font-weight="400" text-anchor="start">Rounded box: a step the session does itself</text>
+</svg>

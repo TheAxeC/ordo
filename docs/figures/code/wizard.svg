@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 752" width="640" height="752" role="img" aria-label="The wizard skill. Boxes: Scope the procedure: each action, command and value (a step of the session); The stage list (stop); Map each stage&#x27;s journey (a step of the session); An action not known (stop); The script from templates/template.sh, a stage function for each stage (a step of the session); The script checked, not run (a step of the session); How to run it (a step of the session).">
+<title>The wizard skill. Boxes: Scope the procedure: each action, command and value (a step of the session); The stage list (stop); Map each stage's journey (a step of the session); An action not known (stop); The script from templates/template.sh, a stage function for each stage (a step of the session); The script checked, not run (a step of the session); How to run it (a step of the session).</title>
+<defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#4f46e5"/></marker></defs>
+<rect x="0" y="0" width="640" height="752" rx="10" fill="#f8fafc" stroke="#64748b"/>
+<path d="M331.6,102 L331.6,148" fill="none" stroke="#4f46e5" stroke-width="1.8" marker-end="url(#arrow)" stroke-linejoin="round"/>
+<path d="M331.6,182 L331.6,229" fill="none" stroke="#4f46e5" stroke-width="1.8" marker-end="url(#arrow)" stroke-linejoin="round"/>
+<path d="M331.6,263 L207.6,356" fill="none" stroke="#4f46e5" stroke-width="1.8" marker-end="url(#arrow)" stroke-linejoin="round"/>
+<path d="M331.6,263 L455.6,336" fill="none" stroke="#4f46e5" stroke-width="1.8" marker-end="url(#arrow)" stroke-linejoin="round"/>
+<path d="M455.6,410 L455.6,456" fill="none" stroke="#4f46e5" stroke-width="1.8" marker-end="url(#arrow)" stroke-linejoin="round"/>
+<path d="M455.6,490 L455.6,536" fill="none" stroke="#4f46e5" stroke-width="1.8" marker-end="url(#arrow)" stroke-linejoin="round"/>
+<path d="M233.6,356 L357.6,263" fill="none" stroke="#4f46e5" stroke-width="1.8" stroke-dasharray="2 4" marker-end="url(#arrow)" stroke-linejoin="round"/>
+<rect x="224.6" y="56" width="214" height="46" rx="23" fill="#ffffff" stroke="#64748b" stroke-width="1.5"/>
+<text x="331.6" y="75.4" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="middle">Scope the procedure: each</text>
+<text x="331.6" y="89.4" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="middle">action, command and value</text>
+<rect x="224.6" y="148" width="214" height="34" rx="8" fill="#fff1e6" stroke="#b45309" stroke-width="2"/>
+<text x="331.6" y="168.4" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#7c2d12" font-weight="400" text-anchor="middle">The stage list</text>
+<rect x="224.6" y="229" width="214" height="34" rx="17" fill="#ffffff" stroke="#64748b" stroke-width="1.5"/>
+<text x="331.6" y="249.4" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="middle">Map each stage's journey</text>
+<rect x="100.6" y="356" width="214" height="34" rx="8" fill="#fff1e6" stroke="#b45309" stroke-width="2"/>
+<text x="207.6" y="376.4" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#7c2d12" font-weight="400" text-anchor="middle">An action not known</text>
+<rect x="348.6" y="336" width="214" height="74" rx="37" fill="#ffffff" stroke="#64748b" stroke-width="1.5"/>
+<text x="455.6" y="355.4" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="middle">The script from</text>
+<text x="455.6" y="369.4" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="middle">templates/template.sh, a</text>
+<text x="455.6" y="383.4" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="middle">stage function for each</text>
+<text x="455.6" y="397.4" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="middle">stage</text>
+<rect x="348.6" y="456" width="214" height="34" rx="17" fill="#ffffff" stroke="#64748b" stroke-width="1.5"/>
+<text x="455.6" y="476.4" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="middle">The script checked, not run</text>
+<rect x="348.6" y="536" width="214" height="34" rx="17" fill="#ffffff" stroke="#64748b" stroke-width="1.5"/>
+<text x="455.6" y="556.4" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="middle">How to run it</text>
+<text x="397.2" y="209.1" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="10.5" fill="#475569" font-weight="400" text-anchor="middle" stroke="#f8fafc" stroke-width="4" stroke-linejoin="round" paint-order="stroke">your confirmation</text>
+<text x="148.5" y="300.1" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="10.5" fill="#475569" font-weight="400" text-anchor="middle" stroke="#f8fafc" stroke-width="4" stroke-linejoin="round" paint-order="stroke">a UI or a command not</text>
+<text x="148.5" y="313.1" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="10.5" fill="#475569" font-weight="400" text-anchor="middle" stroke="#f8fafc" stroke-width="4" stroke-linejoin="round" paint-order="stroke">known, and not in the</text>
+<text x="148.5" y="326.1" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="10.5" fill="#475569" font-weight="400" text-anchor="middle" stroke="#f8fafc" stroke-width="4" stroke-linejoin="round" paint-order="stroke">documentation</text>
+<text x="338.9" y="322.4" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="10.5" fill="#475569" font-weight="400" text-anchor="middle" stroke="#f8fafc" stroke-width="4" stroke-linejoin="round" paint-order="stroke">your answer</text>
+<text x="16" y="610" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#475569" font-weight="400" text-anchor="start">The skill has one mode, starts no agent and has no refusal. The session never runs the</text>
+<text x="16" y="625" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#475569" font-weight="400" text-anchor="start">script it writes.</text>
+<text x="16" y="662" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="10" fill="#475569" font-weight="700" text-anchor="start">HOW TO READ THE FIGURE</text>
+<rect x="16" y="676" width="28" height="14" rx="7" fill="#ffffff" stroke="#64748b" stroke-width="1.5"/>
+<text x="56" y="687" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#0f172a" font-weight="400" text-anchor="start">Rounded box: a step the session does itself</text>
+<rect x="16" y="696" width="28" height="14" rx="4" fill="#fff1e6" stroke="#b45309" stroke-width="2"/>
+<text x="56" y="707" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#0f172a" font-weight="400" text-anchor="start">Orange box: the run stops for you</text>
+<path d="M16,723 L44,723" fill="none" stroke="#4f46e5" stroke-width="1.8" stroke-dasharray="2 4" marker-end="url(#arrow)" stroke-linejoin="round"/>
+<text x="56" y="727" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#0f172a" font-weight="400" text-anchor="start">Dotted arrow: a cycle, with its cap</text>
+</svg>

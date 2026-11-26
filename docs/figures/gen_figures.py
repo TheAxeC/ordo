@@ -1,4 +1,4 @@
-"""Write the SVG figures of the README: the runs of the skills that start agents.
+"""Write the SVG figures of the skills under docs/figures/, one or more for each skill.
 
 Writes these figures, each at its path under docs/figures/:
 
@@ -6,23 +6,37 @@ Writes these figures, each at its path under docs/figures/:
   start and the stops that wait on the user.
 - orchestration/plan-loop.svg: the commands of one step, /spec, build it, /refute, close them,
   /refute over the round and /land, with the /plan-orchestration band.
+- orchestration/land.svg, orchestration/plan.svg, orchestration/plan-retro.svg: the steps and
+  stops of each skill.
+- orchestration/plan-orchestration.svg: the loop of the plan-orchestration skill over the steps
+  of every open plan, with its builder, its stops and the commands it invokes.
+- orchestration/refute.svg: the reviewer and the steps of the first run of the refute skill,
+  with the run over a repair round as its cycle.
+- orchestration/roadmap.svg: the steps and stops of the add mode of the roadmap skill.
+- orchestration/spec.svg: the steps, the diagnosis agent, the brief-check agent and the stops of
+  the spec skill.
 - orchestration/grill.svg, academic/writing.svg, code/code-comments.svg: the agents, stops and
   cycles of each skill.
 - code/codebase-design.svg: the agents and stops of the standards mode and the review mode of
   the codebase-design skill.
+- code/diagnose.svg: the steps, stops and cycles of the diagnose skill run by a person.
+- code/wizard.svg, code/handbook.svg: the steps and stops of each skill.
 - academic/paper-review-panel.svg: the agents and stops of the full mode of the
   paper-review-panel skill, with the roles the other five modes start in its note.
 - academic/referee.svg: the agents and stops of the first round of the referee skill, with what
   the second round starts in its note.
 - academic/researcher/manuscript.svg: the stages, agents, runs of other skills and stops of the
   manuscript mode of the researcher skill, with what the integrity mode runs alone, and what the
-  novelty and idea modes do with no agent started, in its note.
+  novelty, idea and readme modes do with no agent started, in its note.
 - academic/researcher/research.svg: the six stages of the research mode of the researcher skill,
   the builder and the reviewer of each piece of code, the jobs, the stops and each way back to
   an earlier stage, with what the adopt mode and the full mode run in its note.
 - academic/researcher/revision.svg: the revision mode of the researcher skill: the split of the
   referee comments with its stop, the campaigns with their builder and reviewer, Compare and its
   stops, Consolidate, /paper revision, and the stages of the manuscript mode that follow it.
+- academic/researcher/lifecycle.svg: the modes of the researcher skill in the order a project
+  goes through them, the six stages of research with the ways back from Compare, the project's
+  README with the modes that read and write it, and the readme mode beside them.
 - academic/submit.svg: the agent and stops of the submit skill, from the submission sheet to the
   page of the final submit.
 - academic/grant.svg: the agents and stops of the draft mode of the grant skill, with what the
@@ -38,35 +52,53 @@ Writes these figures, each at its path under docs/figures/:
   each part with the mode or call that runs it alone.
 - academic/paper/run-folder.svg: the agents of a full run in order, each arrow with the files the
   agent writes, and the path of a patch from an agent to the manuscript.
+- explain/wait-what.svg: the one step of the wait-what skill, which never stops.
+- explain/tutor.svg: the steps and stops of the teaching mode of the tutor skill.
+- ordo/ordo-help.svg: the steps of the ordo-help skill for one plan, which never stops.
+- ordo/ordo-init.svg: the steps, scripts and stops of the ordo-init skill in an existing
+  repository with no plan.yaml.
+- ordo/session-retro.svg: the steps, the reader script and the stops of the session-retro skill
+  for one plan.
 
 A figure stands in the folder of its group of skills/: docs/figures/<group>/<skill>.svg for a
 skill with one figure, docs/figures/<group>/<skill>/<name>.svg for a skill with several, and
 docs/figures/<group>/<name>.svg for a figure over several skills, in the group most of them
 belong to.
 
-Every figure but the last two shows the order of a run. A box is an agent start or a task of a
-resumed agent, solid when it always runs and dashed when it runs only when needed. A stop that
-waits on the user is an orange box. A cycle is a dotted arrow with its cap, and a check an agent
-repeats inside one start is a dotted loop on that agent with its cap. Scripts and the session's
-own steps are left out, except where a paper figure, academic/researcher/research.svg or
-academic/researcher/revision.svg draws them: a script the session runs, and in
-academic/researcher/research.svg and academic/researcher/revision.svg the jobs the session
-submits, is a grey box, and a step where the session reads and judges is a rounded box, each
-with its legend line. academic/paper/lifecycle.svg draws no run: a frame is a mode or what you
-do outside the skill, and a box in it is a part of that mode. academic/paper/run-folder.svg
-draws the agents of a full run with the files each writes on its arrows, and stops and cycles
-are left out of it. Each of the two has its own legend.
+Every figure but three shows the order of a run: academic/paper/lifecycle.svg,
+academic/paper/run-folder.svg and academic/researcher/lifecycle.svg draw no run. A box is an
+agent start or a task of a resumed agent, solid when it always runs and dashed when it runs only
+when needed. A stop that waits on the user is an orange box, and a refusal is not drawn. A cycle
+is a dotted arrow with its cap, and a check an agent repeats inside one start is a dotted loop
+on that agent with its cap. Scripts and the session's own steps are left out, except where a
+paper figure, academic/researcher/research.svg, academic/researcher/revision.svg or a figure of
+a skill's steps draws them: a script the session runs, and in academic/researcher/research.svg
+and academic/researcher/revision.svg the jobs the session submits, is a grey box, and a step
+where the session reads and judges is a rounded box, each with its legend line. A figure listed
+above with the steps of a skill draws a step, or a run of steps that make one move, as one box:
+a rounded box for a step the session does itself, a grey box for a script the skill ships, a
+solid or dashed box for an agent the step starts, and an orange box after the step a stop comes
+from. Its note names the modes it leaves out. academic/paper/lifecycle.svg draws no run: a frame
+is a mode or what you do outside the skill, and a box in it is a part of that mode.
+academic/paper/run-folder.svg draws the agents of a full run with the files each writes on its
+arrows, and stops and cycles are left out of it. In academic/researcher/lifecycle.svg a frame is
+a mode, a stage of research or the project's README, and a box in it is a part of it. Each of
+the three has its own legend.
 
 Every box, arrow and label is written in this file, taken from each skill's SKILL.md and Stops
 table, and for academic/paper/lifecycle.svg also from the paper skill's mode selection guide;
 the script reads no skill file and no other input. A change to a Stops table, to a skill's
-agents, its cycles or its name is made in the labels below, and the script is run again.
+Steps, its agents, its cycles or its name is made in the labels below, and the script is run
+again.
 
 The drawing engine is skills/code/handbook/templates/figures.py, which this file imports, found
 from its own location, with sys.dont_write_bytecode set so that no __pycache__ folder is
 written. It imports the kind PAPER, a run of another skill, from docs/figures/ordo_kinds.py
-beside it, builds its mapping of kinds once with the engine's with_kinds, the engine's kinds and
-paper, and passes that mapping to each compose, lanes_figure and describe call.
+beside it. It builds its mapping of kinds once with the engine's with_kinds, from the engine's
+kinds, paper and three rounded kinds. The three are drawn in the style of the engine's rounded
+box, and each has its own words for the text alternative. The kind step reads "a step of the
+session", judge reads "the session reads and judges" and folder reads "a folder". The file
+passes that mapping to each compose, lanes_figure and describe call.
 
 Run, from the repository root: python3 docs/figures/gen_figures.py
 The script finds its files from its own location, so it also runs from any other directory when
@@ -117,9 +149,11 @@ sys.dont_write_bytecode = True
 sys.path.insert(0, str(ROOT / ENGINE.parent))
 try:
     from figures import (
+        KINDS,
         Edge,
         FigureError,
         Graph,
+        Kind,
         Lane,
         Legend,
         Node,
@@ -153,7 +187,15 @@ except ImportError as error:
 # ---------------------------------------------------------------------------------------
 # The figures.
 
-FIGURE_KINDS = with_kinds({"paper": PAPER})
+ROUNDED = next(kind.style for kind in KINDS.values() if kind.style.pill)
+FIGURE_KINDS = with_kinds(
+    {
+        "paper": PAPER,
+        "step": Kind(ROUNDED, "a step of the session"),
+        "judge": Kind(ROUNDED, "the session reads and judges"),
+        "folder": Kind(ROUNDED, "a folder"),
+    }
+)
 
 SIMPLE_LEGEND = (
     Legend("agent", "Solid box: an agent start, or a task of a resumed agent, that always runs"),
@@ -171,7 +213,7 @@ SIMPLE_LEGEND = (
 
 PAPER_KIND_LEGEND = (
     Legend("script", "Grey box: a script the session runs, whose output is a fact"),
-    Legend("choice", "Rounded box: the session reads and judges"),
+    Legend("judge", "Rounded box: the session reads and judges"),
 )
 
 MODEL = "A model other than the configured one"
@@ -189,6 +231,28 @@ def _single(
         note,
         FIGURE_KINDS,
     )
+
+
+STEP_LEGEND = Legend("step", "Rounded box: a step the session does itself")
+SHIPPED_LEGEND = Legend("script", "Grey box: a script the skill ships, which the session runs")
+STEP_LOOP_LEGEND = Legend("loop", "Dotted loop on one box: a step repeated, with its cap")
+
+
+def _steps(name: str, title: str, flow: Graph, note: str) -> str:
+    """A figure of a skill's own steps, with a legend of the kinds and arrows it draws."""
+    kinds = {node.kind for node in (*flow.nodes, *flow.floating)}
+    backs = [edge for edge in flow.edges if edge.style == "back"]
+    rows = (
+        (SIMPLE_LEGEND[0], "agent" in kinds),
+        (SIMPLE_LEGEND[1], "maybe" in kinds),
+        (STEP_LEGEND, "step" in kinds),
+        (SHIPPED_LEGEND, "script" in kinds),
+        (SIMPLE_LEGEND[2], "stop" in kinds),
+        (SIMPLE_LEGEND[3], any(edge.src != edge.dst for edge in backs)),
+        (STEP_LOOP_LEGEND, any(edge.src == edge.dst for edge in backs)),
+    )
+    legend = tuple(row for row, drawn in rows if drawn)
+    return _single(name, title, flow, note, legend)
 
 
 STOPS_NOT_DRAWN = (
@@ -253,7 +317,7 @@ LIMIT_CUT = "Draft writer, resumed: content cut once, when over a declared word 
 def _search(after: str) -> tuple[tuple[Node, ...], tuple[Edge, ...]]:
     """The session's choice of one literature strategist or several with a merge."""
     nodes = (
-        Node("S", STRUCTURE, "choice"),
+        Node("S", STRUCTURE, "judge"),
         Node("L", "Literature strategist, unless you give your own sources", "maybe"),
         Node("T2", STARTS, "maybe"),
         Node("M", MERGE + "review.md and refs.bib", "maybe"),
@@ -393,11 +457,11 @@ def paper_revision_graph() -> Graph:
 def paper_lit_review_graph() -> Graph:
     nodes = (
         Node("I", "Intake agent: you confirm", "stop"),
-        Node("S", STRUCTURE, "choice"),
+        Node("S", STRUCTURE, "judge"),
         Node("L", "Literature strategist: the synthesis analysis too; " + CONFIRMED, "maybe"),
         Node("T2", STARTS, "maybe"),
         Node("M", MERGE + "the synthesis analysis too; " + CONFIRMED, "maybe"),
-        Node("SJ", "Session: each start's report read", "choice"),
+        Node("SJ", "Session: each start's report read", "judge"),
         Node("SC", "Script: every entry's DOI or arXiv ID resolved, one resolve over refs.bib", "script"),
         Node("L2", "Literature strategist that wrote refs.bib, resumed with the identifier check: titles resolved, strict: a failing identifier corrected or removed", "maybe"),
         Node("CK", "Script: every entry resolved again, one resolve over refs.bib", "script"),
@@ -477,16 +541,19 @@ def paper_citation_check_graph() -> Graph:
 
 def paper_disclosure_graph() -> Graph:
     nodes = (
-        Node(
-            "S",
-            "You name the venue, and paste the policy of a venue it does not know",
-            "stop",
-        ),
+        Node("C", "The selector of the call: --venue=<v> or --policy-anchor=<a>", "judge"),
+        Node("S", "The session's questions: the venue, for a call with no selector", "stop"),
+        Node("V", "The venue's policy: you paste it, for a venue not in the database", "stop"),
         Node("F", "Formatter: each kind of AI use marked, the statement as a patch"),
         Node("U", "You confirm each uncertain kind of AI use", "stop"),
     )
     edges = (
+        Edge("C", "S", "no selector"),
+        Edge("C", "V", "a venue not in the database"),
+        Edge("C", "F"),
+        Edge("S", "V", "a venue not in the database"),
         Edge("S", "F"),
+        Edge("V", "F"),
         Edge("F", "U", "a kind marked uncertain"),
         Edge("U", "F", "your answer", "back"),
     )
@@ -677,7 +744,7 @@ def paper_lifecycle() -> str:
 RUN_FOLDER_LEGEND = (
     Legend("agent", "Solid box: an agent of the run"),
     Legend("script", "Grey box: a script the session runs"),
-    Legend("choice", "Rounded box: a folder, with the files that end up in it"),
+    Legend("folder", "Rounded box: a folder, with the files that end up in it"),
 )
 
 
@@ -693,7 +760,12 @@ def paper_run_folder() -> str:
         Node("AB", "Abstract agent"),
         Node("R", "Peer reviewer"),
         Node("F", "Formatter"),
-        Node("M", "The manuscript's folder: main.tex, refs.bib, figures/, the PDF and the other targets", "choice"),
+        Node(
+            "M",
+            "The manuscript's folder: main.tex, refs.bib, figures/, the PDF and the other "
+            "targets",
+            "folder",
+        ),
     )
     run_edges = (
         Edge("I", "S", "config.md"),
@@ -712,8 +784,13 @@ def paper_run_folder() -> str:
     patch = (
         Node("PA", "An agent"),
         Node("PS", "Script: the patch applied to the file by its block hashes", "script"),
-        Node("PM", "The manuscript's folder: the changed file", "choice"),
-        Node("PP", "patches/ in the run folder: the manifest, the patch, the patched file and the apply report", "choice"),
+        Node("PM", "The manuscript's folder: the changed file", "folder"),
+        Node(
+            "PP",
+            "patches/ in the run folder: the manifest, the patch, the patched file and the "
+            "apply report",
+            "folder",
+        ),
     )
     patch_edges = (
         Edge("PA", "PS", "<nn>-<file name>.patch.json"),
@@ -741,6 +818,7 @@ def paper_run_folder() -> str:
 
 def grill() -> str:
     nodes = (
+        Node("RF", "Another entry's rulings file", "stop"),
         Node(
             "LA",
             "Lookup agent, when a decision needs a fact a file read does not give",
@@ -751,6 +829,7 @@ def grill() -> str:
         Node("E", "The end", "stop"),
     )
     edges = (
+        Edge("RF", "R", "the file put right, then /grill again"),
         Edge("LA", "SM", "served a model other than the configured one"),
         Edge("LA", "R", "the fact joins the next round"),
         Edge("R", "R", "until no decision is open", "back"),
@@ -874,12 +953,21 @@ def referee() -> str:
         "follow as in the first round. A plain request that does not say the round is asked "
         "which round it is."
     )
+    floating = (Node("RD", "The round, for a plain request that does not say it", "stop"),)
     return _single(
         "academic/referee.svg",
         "The first round of the referee skill",
-        graph(nodes, edges),
+        graph(nodes, edges, floating),
         note,
     )
+
+
+ENTRY_POINT = Node(
+    "EP", "The entry point: the line of Quick start a call without a mode matches", "stop"
+)
+UNFINISHED_RUN = Node("UR", "An unfinished run: continue it or start a new one", "stop")
+RUN_FAILS = Node("RF", "A run that fails: retry it or pause it", "stop")
+INCOMPLETE_REVISION = "An incomplete revision: each item left, with its reason"
 
 
 def _integrity_check(
@@ -932,6 +1020,7 @@ def researcher() -> str:
         Node("P", "/paper-review-panel full: the review, Stage 3", "paper"),
         Node("D", "The review decision", "stop"),
         Node("R", "/paper revision: the revision, Stage 4", "paper"),
+        Node("IR", INCOMPLETE_REVISION, "stop"),
         Node("K4", "The checkpoint after Stage 4", "stop"),
         Node("Q", "/paper-review-panel re-review: the re-review, Stage 3'", "paper"),
         Node("S", "A regression, or the early-stopping suggestion, from the score deltas", "stop"),
@@ -952,6 +1041,7 @@ def researcher() -> str:
         Edge("D", "W", "Reject, your choice: Stage 2 again", "back"),
         Edge("D", "R", "Minor or Major Revision"),
         Edge("D", "I45", "Accept"),
+        Edge("R", "IR", "items left unaddressed"),
         Edge("R", "K4"),
         Edge("K4", "Q"),
         Edge("Q", "S"),
@@ -973,16 +1063,30 @@ def researcher() -> str:
         "re-review, a stop, and to Stage 4.5. Each run of paper and paper-review-panel is invoked "
         "through the Skill tool with its own stops, which are not drawn. The session holds "
         "every checkpoint and writes the run's state and the Material Passport. Each "
-        "integrity record and each compliance report is a file of the run folder. novelty and "
-        "idea start no agent and are not drawn: novelty searches the closest prior work on each "
-        "claim of an idea, confirms each work it cites with lookup.py resolve and writes a page "
-        "with a verdict per claim, and idea puts the choices of the idea to you in rounds of the "
-        "interview, runs novelty between them and writes the research questions and claims into the README."
+        "integrity record and each compliance report is a file of the run folder. "
+        "novelty, idea and readme start no agent and are not drawn: novelty searches the "
+        "closest prior work on each claim of an idea, confirms each work it cites with "
+        "lookup.py resolve and writes a page with a verdict per claim, idea puts the choices "
+        "of the idea to you in rounds of the interview, runs novelty between them and writes "
+        "the research questions and claims into the README, and readme drafts the project's "
+        "README and code README for a newcomer and writes them after you approve the drafts."
+    )
+    floating = (
+        ENTRY_POINT,
+        UNFINISHED_RUN,
+        RUN_FAILS,
+        Node("PC", "The parsed comments, with a comments file", "stop"),
+        Node("SC", "The strategic coaching, with a comments file, at most 8 rounds", "stop"),
+        Node(
+            "KC",
+            "The checkpoint after the completeness check, with a comments file",
+            "stop",
+        ),
     )
     return _single(
         "academic/researcher/manuscript.svg",
         "The manuscript mode of the researcher skill",
-        graph(nodes, edges),
+        graph(nodes, edges, floating),
         note,
         (
             *SIMPLE_LEGEND,
@@ -1001,7 +1105,12 @@ def researcher_research() -> str:
         Node("RS", "A piece of code that does not pass its review", "stop"),
         Node("BA", "Baseline: its jobs through the scheduler, under the conditions of Frame", "script"),
         Node("EX", "Experiments: each campaign's jobs through the scheduler", "script"),
-        Node("C", "Compare: each result against the baseline, a diagnosis and a proposal for each that does not beat it", "choice"),
+        Node(
+            "C",
+            "Compare: each result against the baseline, a diagnosis and a proposal for each "
+            "that does not beat it",
+            "judge",
+        ),
         Node("M", "A result that does not beat the baseline, under the manual setting", "stop"),
         Node("MS", "A result short of what was set, in research: it beats the baseline, under the manual setting", "stop"),
         Node("I", "idea, reopened with the diagnosis: the rounds of the interview", "stop"),
@@ -1039,17 +1148,22 @@ def researcher_research() -> str:
     )
     floating = (
         Node("A", "A project underway: research adopt offered", "stop"),
+        Node("O", "A README in the old layout: /researcher readme offered", "stop"),
         Node("J", "The jobs submitted: the job ids in the README, and the run stops", "stop"),
         Node("JF", "A job that fails: its log and its script", "stop"),
         Node("K", "The count of methods reached with no result that beats the baseline, under the automatic setting", "stop"),
+        ENTRY_POINT,
+        RUN_FAILS,
     )
     note = (
         "The session writes each brief, starts each builder and each reviewer, submits the jobs "
         "and writes the README before each stage ends, so that a new session resumes from the "
         "README alone. Every job on a cluster runs from a script in code/hpc/, the small local "
         "test as a short job, and the session polls only when you ask. research adopt reads a "
-        "project underway against each stage, writes the README sections it lacks, moves nothing "
-        "and goes on from the first stage not done. full runs idea, shows the modes it will run "
+        "project underway against each stage, "
+        "drafts its README in the layout by the readme mode's rewrite and writes it after you "
+        "approve the draft, moves nothing and goes on from the first stage not done. full "
+        "runs idea, shows the modes it will run "
         "and leaves out for you to confirm, then runs research or research adopt and manuscript, "
         "and goes on to manuscript on a partial result, or one below what was set, only on your "
         "word."
@@ -1065,7 +1179,7 @@ def researcher_research() -> str:
             SIMPLE_LEGEND[3],
             Legend("loop", "Dotted loop on one box: a campaign again from its start, with its cap"),
             Legend("script", "Grey box: jobs the session submits through the scheduler"),
-            Legend("choice", "Rounded box: the session reads and judges"),
+            Legend("judge", "Rounded box: the session reads and judges"),
         ),
     )
 
@@ -1092,7 +1206,12 @@ def researcher_revision() -> str:
         Node("R", "Reviewer: the code against the brief, the test again, what makes a result false"),
         Node("RS", "A piece of code that does not pass its review", "stop"),
         Node("EX", "Experiments: one campaign per results comment, its jobs through the scheduler", "script"),
-        Node("C", "Compare: each result against the baseline, a diagnosis and a proposal for each that does not beat it", "choice"),
+        Node(
+            "C",
+            "Compare: each result against the baseline, a diagnosis and a proposal for each "
+            "that does not beat it",
+            "judge",
+        ),
         Node("M", "A result that does not beat the baseline, under the manual setting", "stop"),
         Node("MS", "A result short of what was set, in research: it beats the baseline, under the manual setting", "stop"),
         Node("CA", "A comment the results do not answer yet: what was tried, the cause and the next proposal", "stop"),
@@ -1103,7 +1222,13 @@ def researcher_revision() -> str:
         Node("CH", "The strategic coaching, at most 8 rounds, unless you say just fix it", "stop"),
         Node("PR", "/paper revision: the revision, Stage 4, on revision-comments.md with the result files", "paper"),
         Node("K4", "The checkpoint after Stage 4", "stop"),
-        Node("CC", "The completeness check of each comment's answer, Stage 3', in place of the re-review", "choice"),
+        Node("IR", INCOMPLETE_REVISION, "stop"),
+        Node(
+            "CC",
+            "The completeness check of each comment's answer, Stage 3', in place of the "
+            "re-review",
+            "judge",
+        ),
         Node("KC", "The checkpoint after the completeness check", "stop"),
         *final,
     )
@@ -1140,14 +1265,20 @@ def researcher_revision() -> str:
         Edge("K25", "CH"),
         Edge("CH", "PR"),
         Edge("PR", "K4"),
+        Edge("PR", "IR", "items left unaddressed"),
         Edge("K4", "CC"),
+        Edge("CC", "IR", "a comment left unanswered"),
         Edge("CC", "KC"),
         Edge("KC", "I45"),
         *final_edges,
     )
     floating = (
+        Node("O", "A README in the old layout: /researcher readme offered", "stop"),
         Node("J", "The jobs submitted: the job ids in the README, and the run stops", "stop"),
         Node("JF", "A job that fails: its log and its script", "stop"),
+        ENTRY_POINT,
+        UNFINISHED_RUN,
+        RUN_FAILS,
     )
     note = (
         "revision answers one comments file on a paper of a project that research started or "
@@ -1174,9 +1305,114 @@ def researcher_revision() -> str:
             SIMPLE_LEGEND[3],
             Legend("loop", "Dotted loop on one box: a campaign again from its start, with its cap"),
             Legend("script", "Grey box: jobs the session submits through the scheduler"),
-            Legend("choice", "Rounded box: the session reads and judges"),
+            Legend("judge", "Rounded box: the session reads and judges"),
             Legend("paper", "Teal box: a run of the paper skill"),
         ),
+    )
+
+
+RESEARCHER_LIFECYCLE_LEGEND = (
+    Legend("agent", "Solid box: a part of the mode, the stage or the README named above it"),
+    Legend("dotted", "Dotted arrow: Compare sends the work back to an earlier stage"),
+)
+
+
+def researcher_lifecycle() -> str:
+    """The modes of the researcher skill in the order a project goes through them."""
+    novelty = Lane(
+        "/researcher novelty",
+        parts("The closest prior work on each claim, a verdict per claim, a page in notes/"),
+    )
+    idea = Lane(
+        "/researcher idea",
+        parts(
+            "The research questions and claims, in rounds of the interview",
+            "novelty run between the rounds",
+        ),
+    )
+    stages = tuple(
+        Lane(stage, parts(part), node_width=210)
+        for stage, part in (
+            ("Frame", "The questions, the limits, the cluster's facts and the dataset"),
+            ("Build", "Each piece of code by a builder, checked by a reviewer"),
+            ("Baseline", "The baseline's jobs through the scheduler"),
+            ("Experiments", "Each campaign's jobs through the scheduler"),
+            ("Compare", "Each result against the baseline, with a diagnosis"),
+            ("Consolidate", "run_all.sh in a clean copy, the record of the experiments"),
+        )
+    )
+    manuscript = Lane(
+        "/researcher manuscript",
+        parts(
+            "Stage 2: the writing, /paper full",
+            "Stage 2.5: the first integrity check",
+            "Stage 3: the review, /paper-review-panel",
+            "Stage 4: the revision, /paper revision",
+            "Stages 3' and 4': the re-review and the re-revision",
+            "Stage 4.5: the final integrity check",
+        ),
+        columns=3,
+    )
+    revision = Lane(
+        "/researcher revision",
+        parts(
+            "The referee comments split into results and text comments",
+            "A campaign of the research stages for each results comment",
+            "/paper revision with the new results, then the checks of manuscript",
+        ),
+        columns=3,
+    )
+    readme = Lane(
+        "README.md: what each mode that reads or writes it keeps there",
+        parts(
+            "idea: the research questions and claims",
+            "research and research adopt: the working state a new session resumes from, "
+            "and the results",
+            "full: the modes it runs, in order, in ## Next",
+            "revision, and manuscript when the README holds ## Papers: each paper and the "
+            "results it reports",
+        ),
+        columns=3,
+        node_width=270,
+    )
+    readme_mode = Lane(
+        "/researcher readme, beside them",
+        parts(
+            "The README and the code README drafted for a newcomer, written after you "
+            "approve the drafts"
+        ),
+        node_width=280,
+    )
+    rows = (
+        Row("FROM A SKETCH TO RESEARCH QUESTIONS AND CLAIMS", (novelty, idea)),
+        Row(
+            "FROM THE QUESTIONS TO RESULTS: /researcher research, SIX STAGES",
+            stages,
+            returns=(
+                (4, 3, "a method cause"),
+                (4, 1, "an implementation cause"),
+                (4, 0, "a dataset cause"),
+            ),
+        ),
+        Row("FROM RESULTS TO A PAPER, AND THE REFEREES' COMMENTS", (manuscript, revision)),
+        Row("THE PROJECT'S README", (readme, readme_mode), arrows=False),
+    )
+    note = (
+        "full runs idea, then research and manuscript, each with its own stops. research "
+        "adopt continues a project underway from the first stage not done, and integrity "
+        "runs one integrity check alone. A research question cause in Compare reopens idea. "
+        "novelty reads no README and writes its page into notes/. The figure draws no run: a "
+        "frame is a mode, a stage of research or the project's README, and a box in it is a "
+        "part of it."
+    )
+    label = lanes_label("The modes of the researcher skill, in the order of a project", rows)
+    return lanes_figure(
+        "academic/researcher/lifecycle.svg",
+        label,
+        rows,
+        RESEARCHER_LIFECYCLE_LEGEND,
+        note,
+        FIGURE_KINDS,
     )
 
 
@@ -1213,10 +1449,14 @@ def submit() -> str:
         "several funder configs. The session never types a password and never presses the "
         "final submit."
     )
+    floating = (
+        Node("RF", "A run folder that exists: a run folder of the same date stands", "stop"),
+        Node("WC", "Which config, for a folder that holds several funder configs", "stop"),
+    )
     return _single(
         "academic/submit.svg",
         "The submit skill",
-        graph(nodes, edges),
+        graph(nodes, edges, floating),
         note,
     )
 
@@ -1270,10 +1510,14 @@ def grant() -> str:
         "the application and starts the criteria reviewer, which scores it per criterion "
         "and changes nothing. The check mode starts no agent: it compiles and runs the two scripts."
     )
+    floating = (
+        Node("MD", "The mode, for a plain request that fits no mode", "stop"),
+        Node("WC", "Which config, for a folder that holds several funder configs", "stop"),
+    )
     return _single(
         "academic/grant.svg",
         "The draft mode of the grant skill",
-        graph(nodes, edges),
+        graph(nodes, edges, floating),
         note,
     )
 
@@ -1299,13 +1543,21 @@ def code_comments() -> str:
     )
 
 
+USER_INTERFACE = (
+    "The user interface, unless a page holds a UI standard or the repository tracks a "
+    ".svelte file"
+)
+
+
 def codebase_design() -> str:
     """The standards mode and the review mode of the codebase-design skill, side by side."""
     standards = (
+        Node("U1", USER_INTERFACE, "stop"),
         Node("D", "The draft", "stop"),
         Node("W", "The end: the additions you approved, written"),
     )
     review = (
+        Node("U2", USER_INTERFACE, "stop"),
         Node("S", "Scan agent: the code against the standards pages"),
         Node("C", "The candidates", "stop"),
         Node(
@@ -1321,6 +1573,7 @@ def codebase_design() -> str:
         ),
     )
     review_edges = (
+        Edge("U2", "S"),
         Edge("S", "C", "the report of the candidates, opened"),
         Edge("C", "A", "you ask for other interfaces"),
         Edge("C", "E"),
@@ -1328,7 +1581,7 @@ def codebase_design() -> str:
         Edge("C", "O", "you reject a candidate"),
     )
     panels = [
-        Panel("THE STANDARDS MODE", graph(standards, (Edge("D", "W"),))),
+        Panel("THE STANDARDS MODE", graph(standards, (Edge("U1", "D"), Edge("D", "W")))),
         Panel("THE REVIEW MODE", graph(review, review_edges)),
     ]
     note = (
@@ -1347,6 +1600,168 @@ def codebase_design() -> str:
         note,
         FIGURE_KINDS,
     )
+
+
+def diagnose() -> str:
+    """The diagnose skill run by a person: its steps, its stops and its cycles."""
+    nodes = (
+        Node(
+            "R",
+            "The diagnosis record opened, the symptom quoted, the place of the probes named",
+            "step",
+        ),
+        Node(
+            "C",
+            "The red command: red on the exact symptom, three runs in a row, then tightened",
+            "step",
+        ),
+        Node("NR", "No red command", "stop"),
+        Node("PD", "A red command a person drives", "stop"),
+        Node("NE", "Not enough output after redaction", "stop"),
+        Node("S", "The case shrunk until each remaining part is needed for the red", "step"),
+        Node(
+            "H",
+            "Three to five ranked hypotheses, each with the result that would falsify it",
+            "step",
+        ),
+        Node("SH", "The hypotheses", "stop"),
+        Node(
+            "P",
+            "A probe: one change for one hypothesis, the red command run, the change undone",
+            "step",
+        ),
+        Node(
+            "CA",
+            "The cause at its operation, every place of the defect and the other inputs",
+            "step",
+        ),
+        Node("CN", "The cause not found", "stop"),
+        Node(
+            "T",
+            "The test red without the fix, then the fix at every place and every run green",
+            "step",
+        ),
+        Node(
+            "E",
+            "The record shown, the scratch copy removed, the cause in the commit message",
+            "step",
+        ),
+    )
+    edges = (
+        Edge("R", "C"),
+        Edge("C", "NR", "no way builds one"),
+        Edge("NR", "C", "what you give: the red command again", "back"),
+        Edge("C", "PD", "only a person can trigger the symptom"),
+        Edge("C", "NE", "the redacted output cannot show the cause"),
+        Edge("C", "S"),
+        Edge("S", "H"),
+        Edge("H", "SH"),
+        Edge("SH", "P", "your reply"),
+        Edge("P", "P", "one per hypothesis, in rank order", "back"),
+        Edge("P", "H", "every hypothesis falsified: a second list, once", "back"),
+        Edge("P", "CA"),
+        Edge("CA", "CN", "the second list falsified too, or no probe separates them"),
+        Edge("CA", "T"),
+        Edge("T", "E"),
+    )
+    note = (
+        "Inside a plan's loop, /diagnose <entry> <step> with a finding, red line, brief check "
+        "<n> or premise runs in a diagnosis agent that probes on a scratch copy, shows no "
+        "hypotheses, leaves the step's worktree unchanged and hands the fix over by where the "
+        "defect was found; a cause not found is an open item. The refusals are not drawn."
+    )
+    return _steps(
+        "code/diagnose.svg",
+        "The diagnose skill run by a person: /diagnose <symptom>",
+        graph(nodes, edges),
+        note,
+    )
+
+
+def wizard() -> str:
+    """The wizard skill: its steps from the procedure to the checked script, and its two stops."""
+    nodes = (
+        Node("S", "Scope the procedure: each action, command and value", "step"),
+        Node("L", "The stage list", "stop"),
+        Node("M", "Map each stage's journey", "step"),
+        Node("U", "An action not known", "stop"),
+        Node(
+            "W",
+            "The script from templates/template.sh, a stage function for each stage",
+            "step",
+        ),
+        Node("K", "The script checked, not run", "step"),
+        Node("H", "How to run it", "step"),
+    )
+    edges = (
+        Edge("S", "L"),
+        Edge("L", "M", "your confirmation"),
+        Edge("M", "U", "a UI or a command not known, and not in the documentation"),
+        Edge("U", "M", "your answer", "back"),
+        Edge("M", "W"),
+        Edge("W", "K"),
+        Edge("K", "H"),
+    )
+    note = (
+        "The skill has one mode, starts no agent and has no refusal. The session never runs "
+        "the script it writes."
+    )
+    return _steps("code/wizard.svg", "The wizard skill", graph(nodes, edges), note)
+
+
+def handbook() -> str:
+    """The handbook skill: its steps from the repository to the commit, and its stops."""
+    nodes = (
+        Node(
+            "R",
+            "The repository read: its parts, surfaces and capabilities, the tools and the copies",
+            "step",
+        ),
+        Node(
+            "K",
+            "The kinds chosen, each page with its path, each kind left out with its reason",
+            "step",
+        ),
+        Node("SK", "The kinds", "stop"),
+        Node(
+            "D",
+            "Each page drafted from the code and the documentation, each claim's source named",
+            "step",
+        ),
+        Node(
+            "G",
+            "The diagrams drafted and drawn by templates/figures.py in a scratch folder",
+            "script",
+        ),
+        Node("SD", "The drafts", "stop"),
+        Node("W", "The approved drafts written, the diagrams and manual.html built", "step"),
+        Node("SC", "A command that fails", "stop"),
+        Node("C", "One commit of every file written", "step"),
+        Node(
+            "E",
+            "The end: each file, the commit and the commands that rebuild them named",
+            "step",
+        ),
+    )
+    edges = (
+        Edge("R", "K"),
+        Edge("K", "SK"),
+        Edge("SK", "D", "your confirmation and answers"),
+        Edge("D", "G", "the diagrams kind confirmed"),
+        Edge("G", "G", "a diagram refused: corrected, at most 3 times", "back"),
+        Edge("D", "SD"),
+        Edge("G", "SD"),
+        Edge("SD", "W", "your approval of each draft"),
+        Edge("W", "SC", "a command exits non-zero"),
+        Edge("W", "C"),
+        Edge("C", "SC", "the commit exits non-zero"),
+        Edge("C", "E"),
+    )
+    note = (
+        "The skill has one mode, /handbook [<repository folder>], and starts no agent. The "
+        "refusals are not drawn."
+    )
+    return _steps("code/handbook.svg", "The handbook skill", graph(nodes, edges), note)
 
 
 def plan_loop() -> str:
@@ -1481,6 +1896,7 @@ def pipeline() -> str:
             Node("b", "A round", "stop"),
             Node("c", "The end", "stop"),
             Node("d", "A lookup agent served another model", "stop"),
+            Node("e", "Another entry's rulings file", "stop"),
         ),
     )
     plan = Lane(
@@ -1551,12 +1967,513 @@ def pipeline() -> str:
     )
 
 
+def land() -> str:
+    """The land skill: its steps from the stopped agents to the removed worktree, and its stops."""
+    nodes = (
+        Node("A", "The step's agents stopped", "step"),
+        Node("B", "landing: cherry-picking set, the verify list compared with the page", "step"),
+        Node(
+            "C",
+            "land.sh: the wip commit, the cherry-pick, the ledger restored, the verify list "
+            "on main",
+            "script",
+        ),
+        Node("LH", "A lock held", "stop"),
+        Node("RL", "A red line for the user", "stop"),
+        Node("RC", "A rule clash", "stop"),
+        Node("D", "The look and the A/B, where configured", "step"),
+        Node("E", "The booking, the state file, the landing report", "step"),
+        Node("F", "The commit by explicit path", "step"),
+        Node("G", "The worktree and branches removed", "step"),
+        Node("WR", "A worktree that cannot be removed", "stop"),
+    )
+    edges = (
+        Edge("A", "B"),
+        Edge("B", "C"),
+        Edge("C", "LH", "an index.lock still there after 60 s"),
+        Edge("C", "RL", "a red line no fix inside the brief closes"),
+        Edge("C", "RC", "a clash between two of your rulings"),
+        Edge("C", "D"),
+        Edge("D", "E"),
+        Edge("E", "F"),
+        Edge("F", "G"),
+        Edge("G", "WR", "a path outside the ledger root, or a removal that fails"),
+    )
+    note = (
+        "The skill has one mode, /land <entry> <step>, and starts no agent. A red line that a "
+        "fix inside the brief closes is fixed on main. The refusals are not drawn."
+    )
+    return _steps("orchestration/land.svg", "The land skill", graph(nodes, edges), note)
+
+
+def plan() -> str:
+    """The plan skill: its steps from the ledger folder to the opening commit, and its stops."""
+    nodes = (
+        Node("L", "The ledger folder named from the entry's slug", "step"),
+        Node(
+            "D",
+            "plan.md drafted: the goal, the gate, the rulings and the step list, each check "
+            "asked whether it could pass without the goal",
+            "step",
+        ),
+        Node("G", "A gate with no count", "stop"),
+        Node("S", "The drafted step list", "stop"),
+        Node("W", "orchestrator-state.md written, its configuration block filled", "step"),
+        Node("F", "agents/briefs/ and agents/reviews/ made, each with a .gitkeep", "step"),
+        Node("C", "The opening commit, naming its paths", "step"),
+    )
+    edges = (
+        Edge("L", "D"),
+        Edge("D", "G", "a gate met only by fixing and checking again"),
+        Edge("D", "S"),
+        Edge("S", "W", "your approval or correction"),
+        Edge("W", "F"),
+        Edge("F", "C"),
+    )
+    note = (
+        'Under --ruling <ledger file> "<name>" a step list that is the ruled one is written '
+        "without the stop, and under --self-rule the stop is Open item A for the orchestrator. "
+        "The other forms name a project or a folder. The refusals, The plan exists among "
+        "them, are not drawn."
+    )
+    return _steps("orchestration/plan.svg", "The plan skill", graph(nodes, edges), note)
+
+
+def plan_orchestration() -> str:
+    """The plan-orchestration skill: the loop over the steps of every open plan."""
+    nodes = (
+        Node("P", "The next unblocked step of the earliest plan, for each free slot", "step"),
+        Node("S", "/spec: the brief, the brief check of a full step, the worktree", "step"),
+        Node("WP", "A wrong premise", "stop"),
+        Node(
+            "B",
+            "Builder agent in the step's worktree, unless the executor is inline or "
+            "academic-paper",
+            "maybe",
+        ),
+        Node("MO", MODEL, "stop"),
+        Node(
+            "R",
+            "The report saved and the whole diff read, then /refute when review: calls for it",
+            "step",
+        ),
+        Node("F", "Builder, resumed: a repair round, each finding with its ruling", "maybe"),
+        Node("FU", "A finding that is the user's", "stop"),
+        Node("L", "/land: the step on main, booked", "step"),
+        Node("RC", "A red check", "stop"),
+        Node("RD", "The roadmap diff", "stop"),
+    )
+    edges = (
+        Edge("P", "S"),
+        Edge("S", "WP", "a premise the plan cannot absorb"),
+        Edge("S", "B"),
+        Edge("B", "MO", "served a model other than the configured one"),
+        Edge("B", "R"),
+        Edge("R", "F", "findings inside the step's part"),
+        Edge("F", "R", "a further round, at most repair_rounds", "back"),
+        Edge("R", "FU", "a finding that changes a public shape or a decision"),
+        Edge("R", "L"),
+        Edge("L", "RC", "a red check no fix within the plan covers"),
+        Edge("L", "RD", "the closing step's /roadmap done"),
+        Edge("L", "P", "the next step, until a pause or no unblocked step", "back"),
+    )
+    floating = (
+        Node("SN", "A shape nobody named", "stop"),
+        Node("CL", "A rule clash", "stop"),
+    )
+    note = (
+        "/plan-orchestration <entry> runs one plan alone, <entry> inline has the session "
+        "build every code step itself, and C<n> Agree or C<n> => <ruling> reviews a choice "
+        "taken under self-rule. Under self_rule: on and next_entry: on the loop goes on to "
+        "the next roadmap entry after a closing. The agents and stops of /spec, /refute and "
+        "/land are in plan-loop.svg, and the refusals are not drawn."
+    )
+    return _steps(
+        "orchestration/plan-orchestration.svg",
+        "The plan-orchestration skill: every open plan, step by step",
+        graph(nodes, edges, floating),
+        note,
+    )
+
+
+def plan_retro() -> str:
+    """The plan-retro skill: its steps from the refuter reports to the commit, and its stop."""
+    nodes = (
+        Node("R", "Each refuter report the previous retro did not list, read run by run", "step"),
+        Node(
+            "K",
+            "Each finding given one kind, each kind counted over steps and plans and quoted",
+            "step",
+        ),
+        Node("P", "The recurring kinds marked, a proposal drafted for each", "step"),
+        Node("W", "The retro written from templates/retro.md and shown", "step"),
+        Node("S", "The proposals", "stop"),
+        Node("E", "Each decision written beside its proposal, the approved edits made", "step"),
+        Node("C", "Each approved check's command run, its output shown", "step"),
+        Node("M", "One commit of the retro and the edited files", "step"),
+    )
+    edges = (
+        Edge("R", "K"),
+        Edge("K", "P"),
+        Edge("P", "W"),
+        Edge("W", "S", "a recurring kind"),
+        Edge("S", "E", "your decision on each: approved, corrected or declined"),
+        Edge("W", "M", "no recurring kind"),
+        Edge("E", "C"),
+        Edge("C", "M"),
+    )
+    note = (
+        "The other forms name a project or a folder. The skill starts no agent, and the "
+        "refusals are not drawn."
+    )
+    return _steps(
+        "orchestration/plan-retro.svg", "The plan-retro skill", graph(nodes, edges), note
+    )
+
+
+def refute() -> str:
+    """The first run of the refute skill, with the run over a repair round as its cycle."""
+    nodes = (
+        Node(
+            "A",
+            "Reviewer: the diff against the brief, the checks and the quoted commands rerun",
+        ),
+        Node("MO", MODEL, "stop"),
+        Node("S", "The report saved, its usage filled", "step"),
+        Node("F", "Each finding closed or raised", "step"),
+        Node("O", "Reviewer over a repair round: the delta", "maybe"),
+    )
+    edges = (
+        Edge("A", "MO", "served a model other than the configured one"),
+        Edge("A", "S"),
+        Edge("S", "F"),
+        Edge("F", "O", "refute_after_repair: yes, after a repair round"),
+        Edge("O", "F", "its findings, at most repair_rounds", "back"),
+    )
+    note = (
+        "/refute <folder>/<entry> <step> reads the plan.yaml in <folder>. A small text step "
+        "gets the first run and no run over a repair round. The refusals are not drawn."
+    )
+    return _steps(
+        "orchestration/refute.svg",
+        "The refute skill: the first run and the run over a repair round",
+        graph(nodes, edges),
+        note,
+    )
+
+
+def roadmap() -> str:
+    """The add mode of the roadmap skill: its steps and its stops."""
+    nodes = (
+        Node("F", "The file's format read", "step"),
+        Node(
+            "D",
+            "The draft: title, goal, gate and its answer, what it waits on, its place",
+            "step",
+        ),
+        Node("NG", "No gate", "stop"),
+        Node("LV", "The level", "stop"),
+        Node("IF", "The insertion form", "stop"),
+        Node("MD", "A missing dependency", "stop"),
+        Node("C", "The change", "stop"),
+        Node("W", "Written and committed", "step"),
+    )
+    edges = (
+        Edge("F", "D"),
+        Edge("D", "NG", "the gate cannot be named"),
+        Edge("D", "LV", "entries at two levels"),
+        Edge("D", "IF", "no insertion form yet"),
+        Edge("D", "MD", "a dependency the roadmap does not hold"),
+        Edge("D", "C", "the diff"),
+        Edge("C", "W", "your approval or correction"),
+    )
+    note = (
+        "/roadmap shows the open entries in order, then those not yet specified. move, done "
+        "and drop draft their change and stop at The change too, and --ruling writes a "
+        "ruled change without it. The refusals are not drawn."
+    )
+    return _steps(
+        "orchestration/roadmap.svg",
+        "The add mode of the roadmap skill: /roadmap add <goal>",
+        graph(nodes, edges),
+        note,
+    )
+
+
+def spec() -> str:
+    """The spec skill: its steps from the preflight to the dispatch entry, its agents and stops."""
+    nodes = (
+        Node(
+            "P",
+            "The preflight on main, then each premise of the step's text checked against "
+            "the tree",
+            "step",
+        ),
+        Node("DA", "Diagnosis agent, for a part that asks for a cause", "maybe"),
+        Node("FP", "A false premise the plan cannot absorb", "stop"),
+        Node("AD", "A rule clash with an ADR", "stop"),
+        Node("CN", "A cause not found", "stop"),
+        Node("L", "Libraries looked for, as libraries: says", "step"),
+        Node("UC", "A user-visible choice", "stop"),
+        Node(
+            "B",
+            "The brief from templates/brief.md, its paths compared with the steps in flight",
+            "step",
+        ),
+        Node("BC", "Brief-check agent, for a full step", "maybe"),
+        Node("BF", "A brief check finding the brief cannot absorb", "stop"),
+        Node("MO", MODEL, "stop"),
+        Node(
+            "W",
+            "The preparation commit, the worktree at main's head, the base binaries staged, "
+            "the dispatch entry filled",
+            "step",
+        ),
+    )
+    edges = (
+        Edge("P", "DA", "a part that asks for a cause"),
+        Edge("P", "FP"),
+        Edge("P", "AD", "the step contradicts an ADR in force"),
+        Edge("DA", "CN"),
+        Edge("DA", "MO"),
+        Edge("P", "L"),
+        Edge("DA", "L"),
+        Edge("L", "UC", "a public shape to choose, or a library in place of new code"),
+        Edge("L", "B"),
+        Edge("B", "BC"),
+        Edge("BC", "BF"),
+        Edge("BC", "MO"),
+        Edge("BC", "W", "each finding closed by a change to the brief"),
+        Edge("B", "W", "a small text step"),
+    )
+    floating = (Node("NC", "A step that does not converge", "stop"),)
+    note = (
+        "Ruled: <the choice> books a ruling and /spec runs again. A step taken back out of "
+        "main is first saved as a patch, and a /spec taken over goes on where it was left. "
+        "The refusals are not drawn."
+    )
+    return _steps(
+        "orchestration/spec.svg", "The spec skill", graph(nodes, edges, floating), note
+    )
+
+
+def wait_what() -> str:
+    """The wait-what skill: its one step."""
+    nodes = (
+        Node(
+            "A",
+            "The last message explained again: a little context, ASD-STE100 Simplified "
+            "Technical English, the terms of the glossary",
+            "step",
+        ),
+    )
+    note = (
+        "The skill has one mode, writes no file, starts no agent and asks you nothing. Its "
+        "Stops row is No stop, so no box is orange, and it has no refusal."
+    )
+    return _steps("explain/wait-what.svg", "The wait-what skill", graph(nodes, ()), note)
+
+
+def tutor() -> str:
+    """The teaching mode of the tutor skill: its steps and its two stops."""
+    nodes = (
+        Node("M", "MISSION.md read, when it exists", "step"),
+        Node("I", "The mission interview", "stop"),
+        Node("C", "The confirmation before the mission is changed", "stop"),
+        Node(
+            "R",
+            "Resources found and recorded in RESOURCES.md, while it is not well populated",
+            "step",
+        ),
+        Node("T", "What the lesson teaches: one tightly scoped thing", "step"),
+        Node(
+            "D",
+            "The lesson designed around a skill: its knowledge, its task and the task's "
+            "feedback",
+            "step",
+        ),
+        Node(
+            "W",
+            "The lesson written from the components of assets/, with its reference documents",
+            "step",
+        ),
+        Node("O", "The lesson opened", "step"),
+    )
+    edges = (
+        Edge("M", "I", "missing, not populated, or the mission unclear"),
+        Edge("M", "C", "the mission to be changed"),
+        Edge("M", "R"),
+        Edge("I", "R"),
+        Edge("C", "R"),
+        Edge("R", "T"),
+        Edge("T", "D"),
+        Edge("D", "W"),
+        Edge("W", "O"),
+    )
+    note = (
+        "/tutor explain <concept> explains one concept in the conversation from sources "
+        "fetched in the run, with the stops No concept and The offer of a learning record, "
+        "and with --page also writes it as one HTML page, with the stop The page's path. "
+        "The refusal is not drawn."
+    )
+    return _steps(
+        "explain/tutor.svg",
+        "The teaching mode of the tutor skill: /tutor <topic>",
+        graph(nodes, edges),
+        note,
+    )
+
+
+def ordo_help() -> str:
+    """The ordo-help skill for one plan: its four steps."""
+    nodes = (
+        Node("S", "The sequence, printed", "step"),
+        Node("C", "The choices awaiting review", "step"),
+        Node("P", "The plan's position and open items", "step"),
+        Node("N", "The command that comes next", "step"),
+    )
+    edges = (Edge("S", "C"), Edge("C", "P"), Edge("P", "N"))
+    note = (
+        "/ordo-help skills prints every skill with its Quick start, and a sentence on what "
+        "you want to do gets the skills that fit, each with its command. The skill never "
+        "stops: its Stops row is No stop, and its refusal is not drawn."
+    )
+    return _steps(
+        "ordo/ordo-help.svg",
+        "The ordo-help skill for one plan: /ordo-help <entry>",
+        graph(nodes, edges),
+        note,
+    )
+
+
+def ordo_init() -> str:
+    """The ordo-init skill in an existing repository with no plan.yaml: its steps and stops."""
+    nodes = (
+        Node("F", "The form and the roadmap file drafted", "step"),
+        Node("SR", "Several roadmaps", "stop"),
+        Node(
+            "V",
+            "The verification page, the rules page and the roots drafted, each command run "
+            "once",
+            "step",
+        ),
+        Node("FC", "A failing command", "stop"),
+        Node("K", "Worker, reviewer and libraries", "stop"),
+        Node("Q", "The questions", "stop"),
+        Node(
+            "G",
+            "The glossary, the optional keys, the ignore rules and the shared rules drafted",
+            "step",
+        ),
+        Node("DC", "The draft of the configuration", "stop"),
+        Node("W", "The approved files written", "step"),
+        Node(
+            "X",
+            "templates/check_config.py, then templates/sync_rules.py over the two blocks",
+            "script",
+        ),
+        Node("FX", "A fix in the configuration check", "stop"),
+        Node("HR", "A hunk to rule on", "stop"),
+        Node("DS", "The drafted sync change", "stop"),
+        Node("FS", "A file sync cannot use", "stop"),
+        Node("SF", "The sync still fails", "stop"),
+        Node("C", "One commit of the files written", "step"),
+        Node("NC", "No commit allowed", "stop"),
+    )
+    edges = (
+        Edge("F", "SR", "more than one candidate"),
+        Edge("F", "V"),
+        Edge("V", "FC", "a command fails its one run"),
+        Edge("V", "K"),
+        Edge("V", "Q", "no CLAUDE.md"),
+        Edge("K", "G"),
+        Edge("Q", "G"),
+        Edge("G", "DC"),
+        Edge("DC", "W", "your approval"),
+        Edge("W", "X"),
+        Edge("X", "FX", "an error in the configuration"),
+        Edge("X", "HR", "a block differs"),
+        Edge("X", "DS", "no single block"),
+        Edge("X", "FS", "a file it cannot use"),
+        Edge("X", "SF", "not 0 on its second run"),
+        Edge("X", "C"),
+        Edge("C", "NC", "the commit rule does not allow it"),
+    )
+    note = (
+        "In an empty folder the skill sets up a new repository from the questions and the "
+        "draft of the tree; with a plan.yaml it checks the configuration and syncs the two "
+        "blocks; build writes utils/build.py from the verification page. --ruling writes a "
+        "ruled draft without its stop. The skill starts no agent, and the refusals are not "
+        "drawn."
+    )
+    return _steps(
+        "ordo/ordo-init.svg",
+        "The ordo-init skill in an existing repository with no plan.yaml",
+        graph(nodes, edges),
+        note,
+    )
+
+
+def session_retro() -> str:
+    """The session-retro skill for one plan: its steps, its script and its two stops."""
+    nodes = (
+        Node(
+            "W",
+            "The window: from the commit that added the plan's plan.md to its last commit",
+            "step",
+        ),
+        Node("T", "The transcript folders found", "step"),
+        Node(
+            "R",
+            "The reader, transcript_window.py: what was said and done, each secret redacted",
+            "script",
+        ),
+        Node("LO", "A large output", "stop"),
+        Node("O", "Each output read whole, in parts, into the sessions report", "step"),
+        Node(
+            "P",
+            "Each point's places and its proposal written, a point decided before left out",
+            "step",
+        ),
+        Node("PR", "The proposals", "stop"),
+        Node("C", "The report committed, the working folder removed", "step"),
+    )
+    edges = (
+        Edge("W", "T"),
+        Edge("T", "R"),
+        Edge("R", "LO", "more than 1,000,000 bytes"),
+        Edge("R", "O"),
+        Edge("LO", "O", "your word to read it all"),
+        Edge("O", "P"),
+        Edge("P", "PR"),
+        Edge("PR", "C", "your decision on each"),
+    )
+    note = (
+        "/session-retro session <session id> reviews one session with its subagents, and "
+        "/session-retro <start> <end> any window; the folder forms read the plan.yaml in "
+        "<folder>. The skill starts no agent, and the refusals are not drawn."
+    )
+    return _steps(
+        "ordo/session-retro.svg",
+        "The session-retro skill for one plan: /session-retro <entry>",
+        graph(nodes, edges),
+        note,
+    )
+
+
 def figures() -> tuple[tuple[str, str], ...]:
     """Every figure of this script, as its path under docs/figures and its body."""
     return (
         ("orchestration/pipeline.svg", pipeline()),
         ("orchestration/plan-loop.svg", plan_loop()),
         ("orchestration/grill.svg", grill()),
+        ("orchestration/land.svg", land()),
+        ("orchestration/plan.svg", plan()),
+        ("orchestration/plan-orchestration.svg", plan_orchestration()),
+        ("orchestration/plan-retro.svg", plan_retro()),
+        ("orchestration/refute.svg", refute()),
+        ("orchestration/roadmap.svg", roadmap()),
+        ("orchestration/spec.svg", spec()),
         ("academic/writing.svg", writing()),
         ("academic/paper-review-panel.svg", paper_review_panel()),
         ("academic/referee.svg", referee()),
@@ -1564,12 +2481,21 @@ def figures() -> tuple[tuple[str, str], ...]:
         ("academic/grant.svg", grant()),
         ("code/code-comments.svg", code_comments()),
         ("code/codebase-design.svg", codebase_design()),
+        ("code/diagnose.svg", diagnose()),
+        ("code/wizard.svg", wizard()),
+        ("code/handbook.svg", handbook()),
         ("academic/researcher/manuscript.svg", researcher()),
         ("academic/researcher/research.svg", researcher_research()),
         ("academic/researcher/revision.svg", researcher_revision()),
+        ("academic/researcher/lifecycle.svg", researcher_lifecycle()),
         *paper_figures(),
         ("academic/paper/lifecycle.svg", paper_lifecycle()),
         ("academic/paper/run-folder.svg", paper_run_folder()),
+        ("explain/wait-what.svg", wait_what()),
+        ("explain/tutor.svg", tutor()),
+        ("ordo/ordo-help.svg", ordo_help()),
+        ("ordo/ordo-init.svg", ordo_init()),
+        ("ordo/session-retro.svg", session_retro()),
     )
 
 
