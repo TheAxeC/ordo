@@ -3,7 +3,7 @@ stage: released
 tier: software
 lead: [axel-faes]
 status:
-  chips: [active-project]
+  chips: []
 eli5: "A set of agent skills for Claude Code that turn a multi-step change into a plan: each step gets a written brief, is built in its own git worktree, is reviewed by a fresh reviewer, and reaches the main branch only after its checks pass."
 next: "No roadmap entry is open; new work starts as a roadmap entry."
 results:
