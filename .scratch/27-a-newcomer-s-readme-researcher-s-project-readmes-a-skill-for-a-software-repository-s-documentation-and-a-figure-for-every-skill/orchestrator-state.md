@@ -66,6 +66,11 @@ None.
 - 2026-11-26: step 5's check, the user's reading of the figures against their skills, approved, ruled (a) by the user (Open item I).
 - 2026-11-26: step 6's check, the user's reading of the README, approved after the name paragraph and the academic skills paragraph were added to the introduction, ruled (a) by the user (Open item J).
 - 2026-11-26: step 10's check, the user's reading of the changed text, approved, ruled (a) by the user (Open item N).
+- 2026-11-26: step 8, every draft of the `/handbook` rerun on officium approved, ruled (a) by the user (Open item O).
+- 2026-11-26: step 8, every draft of the `/researcher readme` rerun on engram approved, ruled (a) by the user (Open item P).
+- 2026-11-26: step 8, every draft of the `/researcher readme` rerun on linfoot-estimator approved, ruled (a) by the user (Open item Q).
+- 2026-11-26: step 8, the engram write after the permission denial: the run writes again with the user approving the prompt, ruled (a) by the user (Open item R).
+- 2026-11-26: step 8, the engram files written by the user's own copy command, ruled (a) by the user (Open item S).
 
 ## The standing demands (from the user, in force)
 
@@ -92,7 +97,7 @@ None.
 
 ## Current position (rewritten before every step commit of this plan)
 
-- 2026-11-26. Steps 1, 2, 3, 4, 5, 6, 7 and 10 have landed. Nothing is in flight.
+- 2026-11-26. Steps 1, 2, 3, 4, 5, 6, 7 and 10 have landed and step 8 is done. Nothing is in flight.
 - Verified: `checks: 16 commands passed` on main at step 10's landing, after its fixes at landing.
-- Next step: step 8: v11.2.1 tagged and pinned, then the reruns of rulings L and M by fresh agents, the orchestrator answering their stops.
-- Open on the user's side: the reading of the reruns' drafts; the commit in officium of its four changes of ruling K.
+- Next step: step 9, the closing: the cost script's output as the closing report, `/roadmap done 27` with the gate's output, the folder moved to the archive.
+- Open on the user's side: committing in research-hub the README section of step 7 and the written files of engram and linfoot-estimator.

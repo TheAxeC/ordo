@@ -30,7 +30,7 @@ you read the rewritten `README.md` and approve it; each image path in `README.md
 - ✅ 6 Ordo's `README.md` rewritten as the goal says, with the skills table holding `handbook`, the three figures of "How to use", and "Working on Ordo" moved to `docs/dev/working-on-ordo.md`, which `docs/dev/change-standard.md`'s pin rule and the glossary entry pin cite; check: the user reads and approves the README; each image path in `README.md` exists, and there are three; `git grep -n 'Working on Ordo'` outside `.scratch/` prints no line that names the README (1 commit) (approved)
 - ✅ 7 The README section of `research-hub/README.md` names researcher's layout of ADR 0057, built by an agent in that repository and left uncommitted for the user; check: the user reads the changed section against ADR 0057 and approves (no commit in Ordo) (approved)
 - ✅ 10 `researcher`'s rule for `code/.depositignore` and two gaps of `handbook`, found by step 8's runs: `references/project_layout.md`, "The deposit", writes the folder lines of what a run makes or holds anchored (`/data/`, `/attic/`, `/results/`, `/figures/`), `secrets/` kept unanchored so a secret folder at any depth stays out of the deposit, and `readme` item 3 and `research`'s first writing of the file add a line of that list only when no line of the file already excludes that folder (`results/`, `/results/`, `results/*`), a `!` line or a line on a folder below it never counting, so that no added line overrides a re-include and no part of the folder reaches the deposit; `handbook`'s `references/kinds.md` gains the feature-map status `untested` (the code holds it and no test covers it); before its drafts stop `handbook` runs the repository's own format and lint commands, on a copy of its working tree in the scratch folder, on each file it writes and, where the check rejects one, drafts the line of the check's ignore file that leaves it out, for the user's approval; each skill's `metadata.version` left as this plan set it, since a plan raises a skill's version once (`docs/dev/skill-layout.md`), and every page and figure that states these rules following; check: the user reads the changed text against the two runs' findings and approves; `git grep -n -e '^data/$' -e '^results/$' -e '^figures/$' -e '^attic/$'` over `skills/academic/researcher/` prints nothing (1 commit) (ruling L) (ruling M)
-- 8 The installed skills pinned at a tag of main after steps 1 to 6 through `utils/pin.sh <tag>`, then one run of `/researcher readme` on each of two projects under `research-hub/projects/` the user names and one run of `/handbook` on one software repository the user names, each made by a separate agent that invokes the installed skill, its stops answered by the orchestrator and its drafts shown to the user and written on the user's approval; check: the user reads each old file beside its new one and approves (orchestrator, no agent) (approved)
+- ✅ 8 The installed skills pinned at a tag of main after steps 1 to 6 through `utils/pin.sh <tag>`, then one run of `/researcher readme` on each of two projects under `research-hub/projects/` the user names and one run of `/handbook` on one software repository the user names, each made by a separate agent that invokes the installed skill, its stops answered by the orchestrator and its drafts shown to the user and written on the user's approval; check: the user reads each old file beside its new one and approves (orchestrator, no agent) (approved)
 - 9 the closing: the closing report written (the cost script's output, or that the plan started no agent), the roadmap entry ticked with the gate's output, this folder moved to the archive (orchestrator, no agent) (approved)
 
 ### Step 4, the rulings file named by the entry's number (landed 2026-11-26)
@@ -117,6 +117,16 @@ you read the rewritten `README.md` and approve it; each image path in `README.md
 - The builder's first report did not pass its bar: one repair round of five rulings (`agents/briefs/10-round-1.md`); the run over the round found three findings, fixed at landing.
 - Usage: brief check 165475 tokens, 36 tool uses, 8 min 36 s; builder 203519 tokens, 51 tool uses, 10 min 41 s, and round 1: 235462 tokens, 20 tool uses, 3 min 7 s; reviewer 187333 tokens, 36 tool uses, 7 min 17 s; reviewer over round 1: 123000 tokens, 26 tool uses, 2 min 38 s.
 
+### Step 8, the runs of the installed skills (done 2026-11-26)
+
+- Pin: v11.2.1 at `a4c9fee` through `utils/pin.sh v11.2.1`, after step 10 landed; the reruns ran on it.
+- `/ordo-help skills` (agent a829b4222f644a0a3, `agents/runs/8-ordo-help/report.md`): lists `handbook` with its description line and its Quick start block; step 3's carried check passes.
+- `/handbook` on officium (rerun a026bf3a9b73b7a04, `agents/runs/8-officium-2/`): the README brought up to date, 5 manual pages, 5 reference pages, the feature map, `docs/README.md`, 3 diagrams, `manual.html` and a `.prettierignore` line; Steps 8 ran `prettier --check .` and `eslint .` on a copy before and after the drafts, the 11 pages prettier refused corrected in their drafts; the orchestrator answered the one question (the Rust tests named as a check, not run); approved by the user (Open item O) and committed in officium as `f17611b`, 21 paths, not pushed.
+- `/researcher readme` on engram (rerun aeee2784e4107041d, `agents/runs/8-engram/`): `README.md`, `notes/next.md`, `code/README.md`, `code/.depositignore` and `code/LICENSE`, with the orchestrator's answers to Q1 to Q15 (`answers.md`); the run corrected the old README's claim on instruction tuning at 8192 references from the cluster's result files; approved by the user (Open item P); the auto-mode classifier denied the run's write twice, and the user wrote the five files with the copy command (Open items R and S); `cmp` finds each equal to its draft; uncommitted in research-hub for the user.
+- `/researcher readme` on linfoot-estimator (rerun a1cce101135778708, `agents/runs/8-linfoot/`): `README.md`, `code/README.md`, `code/.depositignore`, `notes/next.md` and `notes/one-paper-not-two.md`, with the orchestrator's answers to questions 1 to 8 (`answers.md`) and the deadline question; approved by the user (Open item Q); written by the run, `cmp` finds each equal to its draft; uncommitted in research-hub for the user.
+- Found by the first runs and closed by step 10: `.depositignore` folder lines unanchored, and handbook's missing `untested` kind and format check.
+- The check: the user read each old file beside its new one and approved (Open items O, P and Q).
+
 ### Step 8, carried
 
 - Carried from step 3: after the pin, a separate agent runs `/ordo-help skills` on the installed skills and quotes the lines it prints for `handbook`, its description line and its Quick start block; this is step 3's check "`/ordo-help skills` lists `handbook` with its Quick start", which reads only the installed skills.
@@ -185,6 +195,11 @@ Independent of each other; the standing rule of one agent at a time still serial
 - Open item N (2026-11-26): step 10's check, the user's reading of the changed text, approved; v11.2.1 is tagged at main and pinned, and the reruns of rulings L and M start (the user).
 - The runs' questions (2026-11-26): the orchestrator answers the questions of the engram and linfoot runs of step 8 from the projects' files, read only, and passes the answers to the reruns, each answer with the file it rests on (the user).
 - Open item K (2026-11-26): officium ignored `/docs/` by accident, so `/docs/` is removed from its `.gitignore`, from `tests/privacy.test.ts` and from `.agents/building.md` and `.agents/plan.yaml`, left uncommitted in officium for the user; `handbook` keeps the paths of `references/kinds.md` and is not changed (the user).
+- Open item O (2026-11-26): every draft of the `/handbook` rerun on officium approved, with the cargo test section and the 21-path count; the run writes the files and makes one commit in officium (the user).
+- Open item P (2026-11-26): every draft of the `/researcher readme` rerun on engram approved; the run writes the five files, the user commits in research-hub (the user).
+- Open item Q (2026-11-26): every draft of the `/researcher readme` rerun on linfoot-estimator approved, the accented names kept; the run writes the five files, the user commits in research-hub (the user).
+- Open item R (2026-11-26): the write of the approved engram files, denied by Claude Code's permission classifier, is run again by the same run with the user approving the prompt (the user).
+- Open item S (2026-11-26): the classifier denied the engram write twice with no prompt; the user ran the copy command in the skill's order and the orchestrator checked each file with `cmp` (the user).
 
 ## Agents
 
@@ -226,7 +241,12 @@ Each agent a plan skill started for this plan has one bullet, with its agent id,
 - ad11c3888bf0dab20: builder of step 10, claude-opus-5-5
 - af1e418a616f06810: reviewer of step 10, claude-opus-5-5
 - ad6d31d762deb1ecf: reviewer of step 10 over round 1, claude-sonnet-5-5
+- ad3cfbb8d27ee411e: lookup agent of step 8, the answers to the engram run's questions from the project's files, claude-opus-5-5
+- a2550cd6357eca88f: lookup agent of step 8, the answers to the linfoot run's questions from the project's files, claude-opus-5-5
+- a026bf3a9b73b7a04: step 8 rerun of `/handbook` on officium on v11.2.1, claude-opus-5-5
+- aeee2784e4107041d: step 8 rerun of `/researcher readme` on engram on v11.2.1, claude-opus-5-5
+- a1cce101135778708: step 8 rerun of `/researcher readme` on linfoot-estimator on v11.2.1, claude-opus-5-5
 
 ## Blocked, and by what
 
-- 8: waits on the reruns and the user's reading of the drafts.
+None.
