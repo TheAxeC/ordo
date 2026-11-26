@@ -28,7 +28,7 @@ you read the rewritten `README.md` and approve it; each image path in `README.md
 - ✅ 4 The rulings file named `<ledger_root>/rulings/<number>.md` as ADR 0059 decides, in `grill`, `plan`, `plan-orchestration`'s `references/self-rule.md`, `ordo-init`'s `templates/plan-terms.md` and the glossary's block synced from it, each skill's `metadata.version` raised; check: `git grep -n 'rulings/<slug>'` over `skills/` and `docs/` prints nothing; the sync of the glossary block passes; the user reads the text of `grill` and `plan` on the rulings file and approves (1 commit) (approved)
 - 5 A figure for each of the fifteen skills the goal names, drawn by `gen_figures.py`, and researcher's lifecycle figure, with the script's head comment stating the folder rule of D5 and `docs/dev/building.md` naming the figures it writes; check: each of the fifteen skills has a figure file under `docs/figures/` (listed, one per skill); both scripts exit 0 and `git status --short docs/figures` prints nothing; the user reads each new figure against its skill's Steps and Stops and approves (1 commit) (approved)
 - 6 Ordo's `README.md` rewritten as the goal says, with the skills table holding `handbook`, the three figures of "How to use", and "Working on Ordo" moved to `docs/dev/working-on-ordo.md`, which `docs/dev/change-standard.md`'s pin rule and the glossary entry pin cite; check: the user reads and approves the README; each image path in `README.md` exists, and there are three; `git grep -n 'Working on Ordo'` outside `.scratch/` prints no line that names the README (1 commit) (approved)
-- 7 The README section of `research-hub/README.md` names researcher's layout of ADR 0057, built by an agent in that repository and left uncommitted for the user; check: the user reads the changed section against ADR 0057 and approves (no commit in Ordo) (approved)
+- ✅ 7 The README section of `research-hub/README.md` names researcher's layout of ADR 0057, built by an agent in that repository and left uncommitted for the user; check: the user reads the changed section against ADR 0057 and approves (no commit in Ordo) (approved)
 - 8 The installed skills pinned at a tag of main after steps 1 to 6 through `utils/pin.sh <tag>`, then one run of `/researcher readme` on each of two projects under `research-hub/projects/` the user names and one run of `/handbook` on one software repository the user names, each made by a separate agent that invokes the installed skill, its stops answered by the orchestrator and its drafts shown to the user and written on the user's approval; check: the user reads each old file beside its new one and approves (orchestrator, no agent) (approved)
 - 9 the closing: the closing report written (the cost script's output, or that the plan started no agent), the roadmap entry ticked with the gate's output, this folder moved to the archive (orchestrator, no agent) (approved)
 
@@ -61,6 +61,16 @@ you read the rewritten `README.md` and approve it; each image path in `README.md
 - Verification on main: `checks: 16 commands passed`, run again after the fixes at landing; the heading grep of the step's check prints 91 lines, each in a place the brief allows (`agents/reviews/2-refuter.md`, "Repair round 1, refuted").
 - The builder's first report did not pass its bar: one repair round of seven rulings, of which one needed no change, then three fixes at landing from the run over the round, each named under "Closed" in `agents/reviews/2-refuter.md`.
 - Usage: brief check 195898 tokens, 28 tool uses, 4.8 minutes; builder 308527 tokens, 121 tool uses, 16.5 minutes, and round 1: 362147 tokens, 39 tool uses, 4.4 minutes; reviewer 228033 tokens, 41 tool uses, 8.3 minutes; reviewer over round 1: 114905 tokens, 25 tool uses, 2.3 minutes.
+
+### Step 7, research-hub's README standard names researcher's layout (landed 2026-11-26)
+
+- Landed: research-hub's `README.md`, uncommitted there for the user to commit: `### The private README.md` names researcher's layout of ADR 0057 as the hub's standard with its source, lists the title line and the twelve sections in order with every `###`, keeps the hub's own rules and its per-section details (the private-only status note, the compute of a result, each dataset's cache recipe and registry key, the paths of each item of `## Next`), and states the 200-line rule with `notes/<slug>.md`, `None yet.`, novelty pages in `notes/` and the mode `/researcher readme`; the tree's `README.md` and `notes/` lines follow; `### The code/ folder` names `run_all.sh` beside `paper.py` (`run_all.sh` rebuilds every result from the raw inputs, then runs `paper.py`), leaves `data/` out of the deposit, and lists the code README's eight sections. Nothing of Ordo's tree changes but this ledger.
+- Premise corrections: the brief's premise that the hub's README names no `run_all.sh` was false (line 19 names it), corrected in the brief before the build; the brief check's findings are closed under "Closed" in `agents/reviews/7-brief-check.md`.
+- The plan's verify list is unchanged.
+- Raised: Open item G, the user's reading of the changed section against ADR 0057, the step's check, with the places outside the step's paths where the hub and the layout still differ.
+- Verification on main: `checks: 16 commands passed`; the range `ada4e20..` held no commit, the step's one file standing in research-hub.
+- The builder's first report did not pass its bar: one repair round of two rulings (`agents/briefs/7-round-1.md`); the run over the round found nothing.
+- Usage: brief check 128993 tokens, 25 tool uses, 4 min 22 s; builder 154376 tokens, 36 tool uses, 5 min 57 s, and round 1: 164398 tokens, 4 tool uses, 58 s; reviewer 143431 tokens, 19 tool uses, 3 min 8 s; reviewer over round 1: 97713 tokens, 9 tool uses, 46 s.
 
 ### Step 8, carried
 
@@ -136,6 +146,10 @@ Each agent a plan skill started for this plan has one bullet, with its agent id,
 - a08312753d0d93b46: builder of step 2, claude-opus-5-5
 - a0d3f8882c6d34f95: reviewer of step 2, claude-opus-5-5
 - a64f14efcb86d398c: reviewer of step 2 over round 1, claude-sonnet-5-5
+- a9a2fe5d909e6aec9: brief check of step 7, claude-opus-5-5
+- a657185e09bea583a: builder of step 7, claude-opus-5-5
+- aff4b9ac101cacafe: reviewer of step 7, claude-opus-5-5
+- aca6b0752431a7acd: reviewer of step 7 over round 1, claude-sonnet-5-5
 
 ## Blocked, and by what
 

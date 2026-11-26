@@ -119,3 +119,91 @@ none. The report gives each user-visible change with its before and after (lines
 - The user's approval of the section against ADR 0057 (item 6): the step's check, the user's.
 
 Reviewer usage: aff4b9ac101cacafe, claude-opus-5-5, 143431 tokens, 19 tool uses, 3 min 8 s.
+
+## Repair round 1, refuted
+
+```
+# Verify 1, from the Ordo step worktree root (the brief's command over 7-report.md)
+exit: 0
+
+# Verify 2, from /Users/axelfaes/workspace/research-hub
+$ git diff -U0 README.md | grep '^+' | LC_ALL=C grep -c '[^ -~]'
+0
+
+# Verify 3, from /Users/axelfaes/workspace/research-hub
+$ git diff --stat
+ .oculus/notes/session.md                           |  2 -
+ README.md                                          | 47 ++++++++++++++--------
+ projects/active/sandpile-operator/README.md        |  4 +-
+ projects/active/sandpile-operator/code/README.md   |  2 +
+ .../code/theory/check_learnability.py              | 29 ++++++-------
+ projects/active/sandpile-operator/project.yml      |  6 +--
+ .../conformal-tensor-factors/project.yml           |  8 ++--
+ 7 files changed, 57 insertions(+), 41 deletions(-)
+$ git status --short
+ M .oculus/notes/session.md
+ M README.md
+ M projects/active/sandpile-operator/README.md
+ M projects/active/sandpile-operator/code/README.md
+ M projects/active/sandpile-operator/code/theory/check_learnability.py
+ M projects/active/sandpile-operator/project.yml
+ M projects/manuscripts/conformal-tensor-factors/project.yml
+?? projects/active/sandpile-operator/code/theory/check_continuum.py
+?? projects/active/sandpile-operator/code/theory/check_proofs.py
+?? projects/active/sandpile-operator/notes/
+?? projects/manuscripts/conformal-tensor-factors/code/results/hpc/refit_ll1_K4L1_n30.json
+?? projects/manuscripts/hccnet-revision/code/hpc/wholecohort_tiny.slurm
+(the other six files keep their counts; only README.md is the step's)
+
+# Commands the round's report quotes, rerun
+$ git status --short README.md              -> " M README.md"
+$ git diff --numstat README.md              -> 31<tab>16<tab>README.md
+$ LC_ALL=C grep -n '[^ -~]' README.md       -> no output, exit 1
+$ grep -n '^## \|^### ' README.md           -> 8 headings (lines 5, 13, 25, 59, 87, 91, 121, 132), same as after the build
+$ grep -n 'run_all\|paper.py' README.md     -> lines 19, 101, 102, 112, 113, 124
+$ sed -n 30,39p README.md                   -> the project tree, no logs/ line, theory/ line still at 39, unchanged in the delta
+$ git status --short (Ordo step worktree)   -> ?? briefs/7-round-1.md and ?? reviews/7-report.md (the first is the orchestrator's round brief, the second the builder's report)
+$ the report's ~~~diff block extracted and compared with `git diff README.md` -> no difference (SAMEDIFF)
+$ diff -u <snapshot>/research-hub/README.md README.md -> two hunks only, line 101 and line 112
+```
+
+### Verdicts
+
+Items of the brief's "What to build", for the whole diff since the base:
+
+- 1: holds. Lines 61 to 85 are unchanged by the round and the first report's verdict stands; I re-read lines 63 to 75 against ADR 0057's first Decision bullet (twelve `##` sections and every `###`, `## Constraints and limits` right after `## Method`) and line 85 for the `readme` mode sentence.
+- 2: holds. Line 32 names the twelve sections in order; line 38 adds `notes/<slug>.md` sections and novelty pages. Neither line is in the delta.
+- 3: holds. Line 101 now says `run_all.sh` "rebuilds every result in results/ from the raw inputs, then runs paper.py (hpc/run_all.sh where the pipeline is a SLURM dependency graph)". Line 112 now says `run_all.sh` "rebuilds every result in `results/` from the raw inputs and then runs `paper.py`, so the one documented command rebuilds every number, table and figure; `paper.py` alone rebuilds every figure and table from `results/`". This matches `project_layout.md` "The tree" (`run_all.sh`: "the one command: every reported number, table and figure from the raw inputs, then paper.py"; `paper.py`: "every figure and table from results/"). Line 102, lines 93, 99, 108 and 113 are as the first round found them. The HPC sentence, the headline sentence and the `python -c` rule of line 112 are kept as they stood.
+- 4: holds. The report's list now holds `CLAUDE.md` line 88, `.oculus/config.yml` lines 41-44, README line 124, the projects' own READMEs and the project tree (lines 30 to 39), each with the words that would bring it in line. For the tree it gives a `logs/` line, `proofs` on the `notes/` line and the `theory/` line removed, and it says the tree is unchanged for the user to rule on. The `sed -n 30,39p` rerun and the round's delta confirm the tree is unchanged.
+- 5: holds. Verify 2 prints 0, and `LC_ALL=C grep -n '[^ -~]' README.md` prints nothing. Both changed lines are single lines with no dash aside, no history word and no hard wrap.
+- 6: holds as the brief has it. Nothing is committed in research-hub (`git status --short README.md` prints ` M README.md`). The user's approval is open for the landing.
+
+Cases of the brief's "Cases":
+
+- `git status --short README.md` empty before the change: not verifiable by rerun (the file is changed). The report quotes an empty first run, and the base text matches the brief.
+- Headings the same before and after: met. The eight headings I printed are the same as after the build, and the delta touches no heading.
+- The changed section against ADR 0057's first two Decision bullets: met, by reading lines 63 to 79.
+- Each rule of the old section kept or replaced, with a coverage list: met. The `paper.py` rows (report lines 111 to 114) are updated. The "runs everything" rule is replaced by line 112 with the repair wording, and each of the other three rules is carried by line 112.
+- Line 85 and line 93 of the base against ADR 0057's fourth bullet: met. Lines 99 and 108 name `data/`, `attic/`, `results/`, `figures/`, caches and secrets as left out.
+- Line 32 and line 38: met, by reading.
+- The bullet `code/README.md` against the third bullet: met, eight parts in order, every own rule kept (line 113, not in the delta).
+- The tree and the bullet `paper.py` against line 19 and ADR 0053: met. Line 101 and line 112 name `run_all.sh` as the one command that rebuilds every result from the raw inputs and then runs `paper.py`. Line 102 and line 112 name `paper.py` as rebuilding the figures and tables from `results/`. This is consistent with README line 19 and the hub's `CLAUDE.md` line 84, which say `run_all.sh` regenerates the results and `paper.py` the figures and tables, and with the `run_all.sh` named in ADR 0053.
+- The sentence on `/researcher readme <project folder>`: met, line 85.
+- `git diff --stat` and `git status --short`: met, the rerun equals the quote, with only ` M README.md` added to the user's list.
+- No non-ASCII line added: met.
+- Ordo worktree status shows only the report: met for the builder's writes. `briefs/7-round-1.md` is also untracked there, and it is the orchestrator's file.
+
+### Findings
+
+1. Spec: none. Ruling 1 is closed by the two lines it names, and the delta (`diff -u`) is those two lines and nothing else, so the fix does not reach beyond the finding. No check was removed. Ruling 2 is closed in the report's item-4 list and the tree is untouched, as the round asked.
+2. Proof: none. Every closure the report claims reproduces in my rerun, and the quoted diff is identical to `git diff README.md`.
+3. Standards: none. I grepped the key terms across the changed file (rule 19 of the change standard). The only other statement of what `run_all.sh` and `paper.py` rebuild is README line 19, which does not say otherwise. Line 124 (deposit check runs `paper.py`) is in the item-4 list, with the words that would bring it in line.
+4. Behaviour: none. The round's user-visible change is `run_all.sh` now also running `paper.py` in the hub's text. The report's "Repair round 1" section quotes both lines, and the whole diff in the report shows the before and after.
+
+### Declined to judge
+
+- Whether research-hub's HEAD is the commit the report names (e77501837) and whether no commit was made there: `git rev-parse` and `git log` are outside the three permitted git commands. The working-tree diff against HEAD holds the whole change, which is consistent with no commit.
+- Whether the hub's own tree (`theory/` for proofs, no `logs/`) should follow researcher's layout: the user's call, listed in the report.
+- The user's approval of the changed section against ADR 0057 (item 6), and the order of the hub's commit against step 8's pin: the user's.
+
+Reviewer usage: aca6b0752431a7acd, claude-sonnet-5-5, 97713 tokens, 9 tool uses, 46 s.
