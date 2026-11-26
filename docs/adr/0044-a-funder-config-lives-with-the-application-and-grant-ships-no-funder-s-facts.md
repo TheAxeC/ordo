@@ -4,7 +4,7 @@ Status: proposed
 
 ## Context
 
-Roadmap entry 8's goal has the `grant` skill work from a funder config: the funder's required sections, limits, layout rules and evaluation criteria. A funder changes these with each call: the folder `research-hub/funding/2026-fwo-senior-transplant/fwo-guidelines/` holds two versions of one scoring grid, marked "v. 2027" and v2025. Funders state their limits in different units, FWO in pages for the project outline and in characters for form fields (`research-hub/funding/2026-fwo-senior-transplant/admin/form-fields.md`), and each has its own criteria and scale. The skills of this repository carry no project name and no path (`README.md`, first paragraph), and the installed skills change only through a tagged release (`README.md`, "Working on Ordo").
+Roadmap entry 8's goal has the `grant` skill work from a funder config: the funder's required sections, limits, layout rules and evaluation criteria. A funder changes these with each call: the folder `research-hub/funding/2026-fwo-senior-transplant/fwo-guidelines/` holds two versions of one scoring grid, marked "v. 2027" and v2025. Funders state their limits in different units, FWO in pages for the project outline and in characters for form fields (`research-hub/funding/2026-fwo-senior-transplant/admin/form-fields.md`), and each has its own criteria and scale. The skills of this repository carry no project name and no path (`README.md`, first paragraph), and the installed skills change only through a tagged release (`docs/dev/working-on-ordo.md`).
 
 ## Decision
 

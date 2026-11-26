@@ -46,25 +46,15 @@ repair_reviewer: claude:sonnet  # the model the run of /refute over a repair rou
 ```
 
 ```yaml
-dispatch:                    # one entry per step in flight, written by /spec, since docs/plan.yaml's workers_at_once is 5.
-- step: 6
-  executor: agent
-  worker: claude:opus
-  worktree: .agents/worktrees/27-a-newcomer-s-readme-researcher-s-project-readmes-a-skill-for-a-software-repository-s-documentation-and-a-figure-for-every-skill-6
-  base: 1966241
-  session_id: aea116595a1666e4b (claude-opus-5-5)
-  launched: 2026-11-26 10:47
-  report: .scratch/27-a-newcomer-s-readme-researcher-s-project-readmes-a-skill-for-a-software-repository-s-documentation-and-a-figure-for-every-skill/agents/reviews/6-report.md
-  builder_usage: 256957 tokens, 58 tool uses, 11 min 39 s
-  reviewer_report: ".scratch/27-a-newcomer-s-readme-researcher-s-project-readmes-a-skill-for-a-software-repository-s-documentation-and-a-figure-for-every-skill/agents/reviews/6-refuter.md (a42e8ad1b4355625a, claude-opus-5-5, 218158 tokens, 34 tool uses, 6 min 18 s)"
-  round: 1
-  brief_check: .scratch/27-a-newcomer-s-readme-researcher-s-project-readmes-a-skill-for-a-software-repository-s-documentation-and-a-figure-for-every-skill/agents/reviews/6-brief-check.md (a155439c811cde7fc, claude-opus-5-5, 187448 tokens, 40 tool uses, 8 min 16 s)
-  landing: not-started
+dispatch: none                    # one entry per step in flight, written by /spec, since docs/plan.yaml's workers_at_once is 5.
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled or, under `self_rule: on`, until the orchestrator closes it as `plan-orchestration`'s `references/self-rule.md`, "Closing an open item", says)
 
-None.
+- Open item J (2026-11-26), step 6's check: your reading of the new `README.md`. Step 6 is booked and on main. Read `README.md` (151 lines) and `docs/dev/working-on-ordo.md`. One point to look at: the subsection `` #### `plan.yaml` `` is 1891 characters of text, against the brief's about 1500, since the review over the round asked for two facts back (the `.agents/plan.yaml` advice both ways, and when the cost script runs).
+  - (a) Approve the README as it stands. Pro: step 8's pin follows, and the pinned tag carries this README. Con: none known.
+  - (b) Name what is wrong; it is fixed on main before the pin. Pro: a sentence that misleads a newcomer is fixed before the tag. Con: step 8 waits for the fix.
+  - Recommendation: (a), in my judgment, since two reviewers read the README against the brief and every finding of the last review is fixed on main; the lazy option is (a) if you have not read it, since only your reading is the step's check.
 
 ## Closed items (the log of what was raised and how it ended; no report carries it)
 
@@ -103,7 +93,7 @@ None.
 
 ## Current position (rewritten before every step commit of this plan)
 
-- 2026-11-26. Steps 1, 2, 3, 4, 5 and 7 have landed. Step 6 is in flight: its builder runs.
+- 2026-11-26. Steps 1, 2, 3, 4, 5, 6 and 7 have landed. Nothing is in flight.
 - Verified: `checks: 16 commands passed` on main at step 5's landing, after its fixes at landing.
-- Next step: step 6's review and landing; step 8 waits on 6 and the user.
+- Next step: step 8, which waits on the user's ruling on Open item J and on the user naming the tag, the two projects and the software repository.
 - Open on the user's side: nothing.

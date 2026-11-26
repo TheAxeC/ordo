@@ -158,3 +158,161 @@ Cases of the brief's "Cases":
 - The sentence-length and paragraph-length departures the report names (lines 7, 11, 85, 97, 99, 101 and 143). Each follows a form the brief dictates (one sentence, one paragraph, or one or two sentences). Whether that justifies the length against the prose standard's "Sentence length" and "Paragraphs cover one idea" is a judgment for the user's reading.
 
 Reviewer usage: a42e8ad1b4355625a, claude-opus-5-5, 218158 tokens, 34 tool uses, 6 min 18 s.
+
+## Repair round 1, refuted
+
+```
+$ test -f (README.md, docs/dev/working-on-ordo.md, docs/dev/change-standard.md, docs/glossary.md, docs/adr/0044-...md, .scratch/27-.../agents/reviews/6-report.md)
+test -f 0 for each of the six
+$ printf '%s\0' <the six files> | xargs -0 perl -CSD -ne '<the brief's character-set command>'; echo "exit: $?"
+exit: 0
+$ LC_ALL=C grep -c '[^ -~]' README.md
+0
+$ env -u CLAUDE_CONFIG_DIR -u ORDO_SKILL_DIRS -u ORDO_STABLE python3 skills/ordo/ordo-init/templates/sync_rules.py . --only glossary
+ok: the plan-terms block equals the template
+$ grep -o '!\[[^]]*\]([^)]*)' README.md | sed 's/.*](//; s/)$//'   (each with test -f)
+docs/figures/orchestration/plan-loop.svg test-f:0
+docs/figures/academic/paper/lifecycle.svg test-f:0
+docs/figures/academic/researcher/lifecycle.svg test-f:0
+$ grep -o '!\[[^]]*\]([^)]*)' README.md | wc -l
+3
+$ git grep -ohE 'docs/figures/[A-Za-z0-9_/.-]*\.(svg|py)' -- README.md docs skills ':!docs/roadmap.md' | sort -u | while read -r f; do test -f "$f" || echo "MISSING $f"; done
+(nothing printed)
+$ git grep -n --untracked 'Working on Ordo' -- ':!.scratch'
+docs/dev/working-on-ordo.md:1:# Working on Ordo
+$ grep -n 'working-on-ordo.md' docs/dev/change-standard.md docs/glossary.md docs/adr/0044-*.md README.md
+docs/dev/change-standard.md:96, docs/glossary.md:181, README.md:147, docs/adr/0044-...md:7 (each line holds the new path)
+$ awk '/^```/{c=!c;next} !c && NF && !/^#/ && !/^\|/ && !/[.:)]$/' README.md docs/dev/working-on-ordo.md
+(nothing printed)
+$ git status --short --untracked-files=all
+ M README.md
+ M docs/adr/0044-a-funder-config-lives-with-the-application-and-grant-ships-no-funder-s-facts.md
+ M docs/dev/change-standard.md
+ M docs/glossary.md
+?? .scratch/27-.../agents/briefs/6-round-1.md   (the orchestrator's)
+?? .scratch/27-.../agents/reviews/6-report.md
+?? docs/dev/working-on-ordo.md
+$ wc -l -c README.md ; git show 1966241:README.md | wc -l -c
+     151   17542 README.md
+     270   76528
+$ grep -n 'By copying the folders\|for skill in orchestration/' README.md ; grep -n '^## Configuring a repository\|^## The landing script\|^## Working on Ordo' README.md
+(nothing printed, rc=1 each)
+$ grep -n '^#### `plan.yaml`$' README.md
+97:#### `plan.yaml`
+$ diff <(git show 1966241:README.md | sed -n 249,266p) <(sed -n 3,20p docs/dev/working-on-ordo.md) && echo IDENTICAL
+IDENTICAL
+$ python3 -I (each ![...] against the old alt text and html.unescape of the SVG aria-label; the five ### group headings; the rows)
+plan-loop.svg eq old alt True, eq aria False | paper/lifecycle.svg eq old True, eq aria True | researcher/lifecycle.svg eq old False, eq aria True
+orchestration, ordo, code, academic, explain; 25 rows, equal to the 25 folders of skills/*/*/ by name; longest row 25 words; no row holds ". "
+$ the plan.yaml subsection (README lines 99 to 105, awk from the #### heading to the next ###): wc -c
+1657 bytes with the three blank lines; the four paragraphs 327+683+365+273 = 1648 characters; 19 lines after fold -w 100 -s
+$ python3 -I chk.py (every `path:line`: "quote" pair of the report's 270 fact rows, the quote compared with the named line)
+270 rows, 442 quotes, 442 found at the named line
+$ grep -c -F (premises | standards pages | resumed agent | shared rules | plan terms | prices | runner | the tree) README.md
+0 for each
+```
+
+Delta: `diff -u` of the snapshot against the worktree shows the round changed only `README.md`. The other four files of `files.txt` are identical to the snapshot.
+
+### Verdicts
+
+Items of the brief's "What to build", for the whole diff since the base:
+
+- 1: partial, Spec 1 (the `.agents/plan.yaml` advice lost half), Spec 2 (the cost-script sentence), Standards 1 and Standards 2 (terms; semicolons and sentence length), Behaviour 1 (the copies sentence).
+- 2: holds. `IDENTICAL`; line 1 is `# Working on Ordo`; the two `utils/pin.sh` lines are in its code block; the last line is the sentence on `docs/dev/building.md`.
+- 3: holds. The round did not touch `docs/dev/change-standard.md`, and line 96 holds the new path.
+- 4: holds. The round did not touch `docs/glossary.md`, and line 181 holds the new path.
+- 5: holds. The round did not touch ADR 0044, and line 7 holds the new path.
+- 6: holds. The `git status` above lists only the paths of "Paths this step writes" and the orchestrator's round brief.
+
+Cases of the brief's "Cases":
+
+- The README's images: met, 3 images, each path `test -f` 0.
+- Every figure path: met, nothing printed.
+- "Working on Ordo": met, the one line `docs/dev/working-on-ordo.md:1:# Working on Ordo`.
+- The new page: met, `IDENTICAL`.
+- The citations: met, lines 96, 181 and 7, and the README sentence at line 147.
+- The skills tables: met, five tables, 25 rows, `handbook` in `code`.
+- Each row's text: met, read, at most 25 words each.
+- The first paragraph: met, README line 3 keeps the no-project-name, no-path and `plan.yaml` facts.
+- The other citations of the README: met. Line 3 holds the C++ engine, the TypeScript tool and the research project. Line 5 holds the fresh reviewer that changes nothing. Line 11 names the five group folders.
+- The loop: met, line 5 against the glossary entry **loop, in the README**.
+- The install: met, the grep prints nothing, and the CLI command and the four agent commands stand at lines 131 and 139 to 142.
+- The sections removed: met.
+- The facts kept: partial, Spec 1 (and the report's quote for that row, Proof 1).
+- A newcomer's reading: partial, Standards 1 and Behaviour 1; the user's own reading is under "Declined to judge".
+- The README's length: met, 151 lines and 17542 bytes against 270 and 76528.
+- The glossary: met, `ok: the plan-terms block equals the template`.
+
+The six rulings against the tree:
+
+- Ruling 1: the cost script and the `.agents/plan.yaml` note are each one sentence (lines 103 and 101). The head comment of `plan_cost.py` was read and states the settings files (its input list, `$HOME/.claude/settings.json` and the two repository files), so naming it is right. The subsection is 1648 characters, which reproduces the report's `1648` and `1580`. The report gives the count with its command. Two defects of what the cut left are under Spec 1 and Spec 2.
+- Ruling 2: closed. Line 101 says `templates/plan.projects.yaml` "holds the same keys for each of several projects, a plan then named `<project>/<entry>`", and line 2 of that file says "Each project takes the keys of plan.yaml, with the same required keys and the same defaults. A plan is then named <project>/<entry>."
+- Ruling 3: closed. The `spec` row and the `/spec` line match `spec`'s description ("run for a full step the brief check"). "close them" matches the glossary entry **repair round** and the entry **small text step**. Line 93 says `/ordo-help` prints the commands and where a plan stands. Line 7 makes no claim about where the skills work.
+- Ruling 4: closed. Line 105 keeps "runs `land.sh` from the `land` skill's folder, never copied into the ledger folder" and says nothing of which ledger files reach `main`.
+- Ruling 5: the six listed wordings no longer occur (the grep above prints 0 for each), and the report lists the others it reworded. A new term was left, Standards 1.
+- Ruling 6: partial, Proof 1 (the `/roadmap` and `/ordo-init` rows quote lines 27 and 29 of `self-rule.md`, under its section "A skill with its own approval stop", which is right; the row on `.agents/plan.yaml` is not).
+
+### Findings
+
+**Spec**
+
+1. README.md line 101 ("`.agents/plan.yaml`"): "so a root-relative path in `.agents/plan.yaml` needs `../` in front."
+   - What is wrong: the old text gave two ways out, "needs `../` in front of it, or the file moves to `docs/plan.yaml` with each path rewritten from `docs/`". The cut keeps the first. The brief's "What is on the tree" says the whole note is stated in no other page (`git grep -n -e '\.agents/plan.yaml'` over `skills docs utils` finds only the `plan` skill's `SKILL.md` line 213, the `projects:` form, and test files). The report's row "or the file moved to docs/plan.yaml with each path rewritten relative to docs/" quotes `plan` `SKILL.md` line 40, "Every path a key holds is read relative to the folder that holds the file", which does not state moving the file. The row above it quotes README line 101, which holds only `../`. The cut removed half of the advice and the list cites a place that does not state it.
+   - Failure scenario: a reader whose `plan.yaml` stands in `.agents/` with root-relative paths learns of one fix, and not that moving the file to `docs/` with paths rewritten from `docs/` is the other.
+   - Verdict: item 1 partial; the case "The facts kept" partial.
+
+2. README.md line 103 (the cost script): "...when its settings files set `CLAUDE_CODE_ENABLE_TELEMETRY=1` and `OTEL_LOG_RAW_API_BODIES=file:<folder>`, which the script reads there;"
+   - What is wrong: "which the script reads there" can be read as the script reading both variables from the settings files. `plan_cost.py` reads only `OTEL_LOG_RAW_API_BODIES` from them (`grep -n 'ENABLE_TELEMETRY' plan_cost.py` finds it only in a comment on lines 13 and 14, as a condition under which Claude Code writes the bodies). "its settings files" has "Claude Code" as its nearest antecedent only through a clause about a folder, and the ruling asked for "Claude Code's settings files". The sentence also no longer says when the script runs (the old "When a plan that started an agent closes"), which `plan` `SKILL.md` lines 149 to 152 state.
+   - Failure scenario: a reader sets `CLAUDE_CODE_ENABLE_TELEMETRY` and expects the script to read it, and cannot tell from the README when or from where the script runs.
+   - Verdict: item 1 partial.
+
+**Proof**
+
+1. The report's facts list, row "or the file moved to docs/plan.yaml with each path rewritten relative to docs/." (see Spec 1): the quoted line does not state the fact. Rule 18 asks that the named place state the rule whole. My check found every one of the 442 quotes at its named line (exact line, or a 60-character prefix where the quote is cut), so the list is otherwise honestly quoted. This row and the row for `.agents/plan.yaml` are the two that do not state the fact whole.
+   - Failure scenario: the orchestrator lands on a list that says this fact is stated, when it stands nowhere.
+   - Verdict: the case "The facts kept" partial.
+
+**Standards**
+
+1. README.md, terms a newcomer meets without an explanation:
+   - Lines 22, 78 and 81: "except for a small text change", "unless the step is a small text change", "a small text change has none". Nothing in the README says what a small text change is. The old README used the glossary's term "small text step", which `docs/glossary.md` defines as a step that changes no script, no test and no configuration file and fewer than 20 lines. The round replaced it with a term of its own, which breaks the prose standard's "No synonym cycling. One term per concept" against the glossary's entry.
+   - Line 101: "in the folder a call names". "A call" is not defined, and the old example (`/plan apps/web/12` reads `apps/web/plan.yaml`) that explained it is gone from the README.
+   - Line 13: `wait-what` is named and described by who may invoke it before its row at line 65 says what it is.
+   - Failure scenario: a reader of "close them" does not know which steps get no brief check or repair round, and cannot tell that "a call" is a command with a path in front of the entry.
+   - Verdict: the case "A newcomer's reading" partial; item 1 partial.
+
+2. README.md lines 101, 103, 105 and 121, against `skills/ordo/ordo-init/templates/docs/dev/prose-standard.md`, "B. Punctuation" (at most 2 semicolons per 1000 words of running prose) and "E. Sentence shapes" (under roughly 20 words):
+   - Running prose is 1186 words (code blocks, tables, headings and image lines left out) with 4 semicolons, 3.4 per 1000. Three are in the subsection the round rewrote: "...not the `plan.yaml`; the `plan` skill's...", "...which the script reads there; `plan-orchestration`'s...", "...through `checks.sh`; the `land` skill's...". Sentences of 46 words (line 103) and 43 words (line 105). The report's "Judgment calls" gives a reason for the length of lines 101 to 105 and lists the semicolons, with a reason only for the alt texts.
+   - Failure scenario: the subsection a newcomer reads for configuration is the densest part of the README, in sentences of 40 words or more with a pointer joined by a semicolon.
+   - Verdict: item 1 partial.
+
+**Behaviour**
+
+1. README.md line 48: "`paper` and `paper-review-panel` are copies of academic-paper and academic-paper-reviewer, two skills of Academic Research Skills. Their modes and roles are the source's, and each role's page is the source's page copied."
+   - What is wrong: `NOTICE.md` says "These parts were modified from the original", and ADR 0043 (title: "...copied, with the deviations the goal and the rulings keep"; its Decision lists "Removed from `paper`: the planner, ...") records deviations. "Their modes and roles are the source's" states the modes without those deviations and sits beside a notice that says the parts were modified. The old README had the same wording in its rows, so this is carried and not new, but the round now states it as a standing fact in a new sentence. Whether ruling 6 asks for this sentence: it allows "the README keeps [the fact] in short", so the sentence is within ruling 6. Its truth against the sources above is what is open. Line 13's sentence is within ruling 6 too and true: `grep -n 'disable-model-invocation' skills/*/*/SKILL.md` finds only `skills/explain/wait-what/SKILL.md:6`.
+   - Failure scenario: a reader takes `paper` to be the source skill unchanged, against the notice that says it is modified.
+   - Verdict: item 1 partial.
+
+### Declined to judge
+
+- The user's own reading and approval of the README, the step's check in `plan.md`.
+- Whether 1648 characters (19 lines at 100 columns) is "about 1500 characters" and "about 15 lines". It is 10 percent over by characters. The ruling's word "about" makes this the orchestrator's reading.
+- ADR 0044 line 7 still names private paths outside the three shipped folders `CLAUDE.md` covers; the brief check's Closed section rules `docs/adr/` outside the rule.
+- Whether ADRs 0036, 0037, 0039, 0040 and 0042 stay true now that the README shows none of `paper`'s mode figures; it reads what a record's Consequences assert.
+- `term used before it is explained` for "worktree", "`main`" and "mode": left to the user's reading as the brief check ruled.
+
+Reviewer usage: afae27d9fa1f4b23f, claude-sonnet-5-5, 178316 tokens, 35 tool uses, 4 min 20 s.
+
+## Closed
+
+The first run's findings went to the builder in repair round 1 (`agents/briefs/6-round-1.md`): Spec 1 by ruling 1, Spec 2 by ruling 2, Spec 3 by ruling 3, Spec 4 by ruling 4, Standards 1 by ruling 5 and Standards 2 by ruling 6. The findings of the run over round 1 were fixed on main at landing, in `README.md`:
+
+- Spec 1, the `.agents/plan.yaml` advice: the sentence gives both ways again, `../` in front of each path or the file moved to `docs/plan.yaml` with each path written from `docs/`.
+- Spec 2, the cost script: the sentence says when the script runs (when a plan that started an agent closes), that Claude Code writes the response bodies when it runs with the two variables, and that the script finds the folder in `OTEL_LOG_RAW_API_BODIES` of Claude Code's settings files, as `plan_cost.py`'s head comment states.
+- Proof 1, the facts list's row on `.agents/plan.yaml`: the builder's report stands as the builder wrote it; the fact is now stated whole in the README's `plan.yaml` subsection, so the row's place is the README.
+- Standards 1, the terms: "small text change" is replaced by the glossary's term "small text step", explained in the `spec` row as fewer than 20 lines and no script, test or configuration file; "the folder a call names" becomes "the folder named in front of the entry, such as `apps/web` in `/plan apps/web/12`"; the sentence on `wait-what` says what the skill does where it names it.
+- Standards 2, semicolons and sentence length: three of the four semicolons of running prose are full stops, and the 46- and 43-word sentences are split; one semicolon is left, in the Requirements bullet.
+- Behaviour 1, the copies sentence: `paper`, `paper-review-panel` and `researcher`'s `integrity` and `manuscript` are "adapted from" the source, as `NOTICE.md` says, each role's page is "the source's page with Ordo's changes", and the sentence names that `NOTICE.md` says the parts were modified.
+
+The `plan.yaml` subsection is 1891 characters of text after these fixes, against the brief's about 1500, since the two facts Spec 1 and Spec 2 restored add to it; the user's reading of the README, the step's check, decides whether it stands.

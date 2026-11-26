@@ -27,7 +27,7 @@ you read the rewritten `README.md` and approve it; each image path in `README.md
 - ✅ 3 The skill `skills/code/handbook` as ADRs 0058 and 0060 decide, with its kinds at the paths of D34, its `manual.html` script under `templates/` and that script's entry on `docs/dev/scripts.md`, the engine of step 1 copied into a documented repository's `utils/`, and its terms in the glossary; check: the user reads the text against ADRs 0058 and 0060 and approves; `/ordo-help skills` lists `handbook` with its Quick start; the description is at most 1,024 characters by the command of `docs/dev/skill-layout.md` (1 commit) (approved)
 - ✅ 4 The rulings file named `<ledger_root>/rulings/<number>.md` as ADR 0059 decides, in `grill`, `plan`, `plan-orchestration`'s `references/self-rule.md`, `ordo-init`'s `templates/plan-terms.md` and the glossary's block synced from it, each skill's `metadata.version` raised; check: `git grep -n 'rulings/<slug>'` over `skills/` and `docs/` prints nothing; the sync of the glossary block passes; the user reads the text of `grill` and `plan` on the rulings file and approves (1 commit) (approved)
 - ✅ 5 A figure for each of the fifteen skills the goal names, drawn by `gen_figures.py`, and researcher's lifecycle figure, with the script's head comment stating the folder rule of D5 and `docs/dev/building.md` naming the figures it writes; check: each of the fifteen skills has a figure file under `docs/figures/` (listed, one per skill); both scripts exit 0 and `git status --short docs/figures` prints nothing; the user reads each new figure against its skill's Steps and Stops and approves (1 commit) (approved)
-- 6 Ordo's `README.md` rewritten as the goal says, with the skills table holding `handbook`, the three figures of "How to use", and "Working on Ordo" moved to `docs/dev/working-on-ordo.md`, which `docs/dev/change-standard.md`'s pin rule and the glossary entry pin cite; check: the user reads and approves the README; each image path in `README.md` exists, and there are three; `git grep -n 'Working on Ordo'` outside `.scratch/` prints no line that names the README (1 commit) (approved)
+- ✅ 6 Ordo's `README.md` rewritten as the goal says, with the skills table holding `handbook`, the three figures of "How to use", and "Working on Ordo" moved to `docs/dev/working-on-ordo.md`, which `docs/dev/change-standard.md`'s pin rule and the glossary entry pin cite; check: the user reads and approves the README; each image path in `README.md` exists, and there are three; `git grep -n 'Working on Ordo'` outside `.scratch/` prints no line that names the README (1 commit) (approved)
 - ✅ 7 The README section of `research-hub/README.md` names researcher's layout of ADR 0057, built by an agent in that repository and left uncommitted for the user; check: the user reads the changed section against ADR 0057 and approves (no commit in Ordo) (approved)
 - 8 The installed skills pinned at a tag of main after steps 1 to 6 through `utils/pin.sh <tag>`, then one run of `/researcher readme` on each of two projects under `research-hub/projects/` the user names and one run of `/handbook` on one software repository the user names, each made by a separate agent that invokes the installed skill, its stops answered by the orchestrator and its drafts shown to the user and written on the user's approval; check: the user reads each old file beside its new one and approves (orchestrator, no agent) (approved)
 - 9 the closing: the closing report written (the cost script's output, or that the plan started no agent), the roadmap entry ticked with the gate's output, this folder moved to the archive (orchestrator, no agent) (approved)
@@ -93,6 +93,17 @@ you read the rewritten `README.md` and approve it; each image path in `README.md
 - Verification on main: `checks: 16 commands passed`, by `land.sh` after the cherry-pick and again after the fixes at landing; both figure scripts exit 0, and a second run of both left every figure byte-identical.
 - The builder's first report did not pass its bar: one repair round of five rulings (`agents/briefs/5-round-1.md`); the run over the round found ten findings, none against an item or a case, fixed or recorded at landing.
 - Usage: brief check 183573 tokens, 57 tool uses, 9 min 17 s; builder 117388 tokens, 105 tool uses, 18 min 50 s, and round 1: 173483 tokens, 32 tool uses, 5 min 21 s; reviewer 219604 tokens, 57 tool uses, 7 min 51 s; reviewer over round 1: 184702 tokens, 36 tool uses, 5 min 4 s.
+
+### Step 6, Ordo's README for a newcomer (landed 2026-11-26)
+
+- Landed: `README.md` rewritten for a newcomer, 151 lines and 17931 bytes against 270 and 76528: the introduction, five tables of the skills under `` ### `skills/<group>/` `` with `handbook` in the code table, "How to use" with the command block, `### The plan skills` and its subsection `` #### `plan.yaml` ``, `### A paper` and `### A research project`, exactly three images (`orchestration/plan-loop.svg`, `academic/paper/lifecycle.svg`, `academic/researcher/lifecycle.svg`), short Requirements and Install with no install by copying the folders, a sentence linking the new page, and License; "Working on Ordo" moved whole to `docs/dev/working-on-ordo.md`; the citations of `docs/dev/change-standard.md` line 96, the glossary entry pin and ADR 0044 line 7 name the new page.
+- Premise corrections: none beyond the brief check's, closed under "Closed" in `agents/reviews/6-brief-check.md`.
+- The plan's verify list is unchanged: the step did not change `docs/dev/building.md`.
+- Fixes at landing, the findings of the run over round 1 (`agents/reviews/6-refuter.md`, "Closed"): the `.agents/plan.yaml` advice given both ways; the cost script's sentence; "small text step" in place of "small text change", explained; "a call" explained by its example; the `wait-what` sentence; three semicolons and two long sentences; "adapted from" in the sentence on Academic Research Skills.
+- Raised: Open item J, the user's reading of the README, the step's check.
+- Verification on main: `checks: 16 commands passed`, by `land.sh` after the cherry-pick and again after the fixes at landing; `grep -o '!\[[^]]*\]([^)]*)' README.md | wc -l` prints 3, and each path exists; `git grep -n --untracked 'Working on Ordo' -- ':!.scratch'` prints only `docs/dev/working-on-ordo.md:1:# Working on Ordo`.
+- The builder's first report did not pass its bar: one repair round of six rulings (`agents/briefs/6-round-1.md`); the run over the round found six findings, fixed at landing.
+- Usage: brief check 187448 tokens, 40 tool uses, 8 min 16 s; builder 256957 tokens, 58 tool uses, 11 min 39 s, and round 1: 257053 tokens, 96 tool uses, 20 min 37 s; reviewer 218158 tokens, 34 tool uses, 6 min 18 s; reviewer over round 1: 178316 tokens, 35 tool uses, 4 min 20 s.
 
 ### Step 8, carried
 
@@ -183,8 +194,11 @@ Each agent a plan skill started for this plan has one bullet, with its agent id,
 - a88b86c8d82539450: builder of step 5, claude-opus-5-5
 - aa254c90a04682a8f: reviewer of step 5, claude-opus-5-5
 - a64a84c7d081865f5: reviewer of step 5 over round 1, claude-sonnet-5-5
+- a155439c811cde7fc: brief check of step 6, claude-opus-5-5
+- aea116595a1666e4b: builder of step 6, claude-opus-5-5
+- a42e8ad1b4355625a: reviewer of step 6, claude-opus-5-5
+- afae27d9fa1f4b23f: reviewer of step 6 over round 1, claude-sonnet-5-5
 
 ## Blocked, and by what
 
-- 6: nothing blocks it; steps 3 and 5 have landed.
-- 8: waits on 6 for the tag it pins (steps 1, 2, 3, 4 and 5 have landed), and on the user for the two projects and the software repository it runs on.
+- 8: waits on the user: the tag to pin (steps 1 to 7 have landed), the two projects under `research-hub/projects/` and the software repository it runs on.
