@@ -46,15 +46,15 @@ repair_reviewer: claude:sonnet  # the model the run of /refute over a repair rou
 ```
 
 ```yaml
-dispatch: none               # no step in flight; /spec writes the block (a list, since docs/plan.yaml's workers_at_once is 5).
+dispatch:                    # one entry per step in flight, written by /spec, since docs/plan.yaml's workers_at_once is 5.
+- step: 6
+  brief_check: "running: a155439c811cde7fc"
+  landing: preparing
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled or, under `self_rule: on`, until the orchestrator closes it as `plan-orchestration`'s `references/self-rule.md`, "Closing an open item", says)
 
-- Open item I (2026-11-26), step 5's check: your reading of the figures against their skills. Step 5 is booked and on main. The sixteen new figures: `docs/figures/code/diagnose.svg`, `code/wizard.svg`, `code/handbook.svg`, `explain/wait-what.svg`, `explain/tutor.svg`, `orchestration/land.svg`, `orchestration/plan.svg`, `orchestration/plan-orchestration.svg`, `orchestration/plan-retro.svg`, `orchestration/refute.svg`, `orchestration/roadmap.svg`, `orchestration/spec.svg`, `ordo/ordo-help.svg`, `ordo/ordo-init.svg`, `ordo/session-retro.svg` and `academic/researcher/lifecycle.svg`. The figures that changed: `orchestration/grill.svg` and `orchestration/pipeline.svg` (the stop "Another entry's rulings file"), `academic/referee.svg`, `academic/submit.svg`, `academic/grant.svg`, `code/codebase-design.svg`, `academic/researcher/manuscript.svg`, `research.svg` and `revision.svg` (a stop that waits on you, added to each), and `academic/paper/disclosure.svg` (its two stops apart, and the selector of the call). Read each figure against its skill's Steps and Stops: each box a step, an agent or a stop of the skill; each orange box a stop where the run waits on you; no refusal drawn. The choices the builder made: in `plan`, "The plan exists" is drawn as a refusal; `ordo-init` has 17 boxes to hold its eleven stops; in `plan-orchestration`, `/spec`, `/refute` and `/land` are steps the session does itself; in the lifecycle figure, a research question cause in Compare is named in the note, not drawn.
-  - (a) Approve the figures as they stand. Pro: step 6's README uses the figures as they are on main, and step 8's pin follows. Con: none known.
-  - (b) Name the figures and what is wrong in each; they are redrawn on main before step 6 lands. Pro: a figure that misstates its skill is fixed before the README shows it. Con: step 6 waits for the redraw.
-  - Recommendation: (a), since the first reviewer read each new figure against its skill's Steps and Stops and found no stop missing or misdrawn, and the run over the round read the twelve paper figures stop by stop; the figures' layout as a picture is read by no one but you; the lazy option is (a) taken without reading the figures.
+None.
 
 ## Closed items (the log of what was raised and how it ended; no report carries it)
 
@@ -66,6 +66,7 @@ dispatch: none               # no step in flight; /spec writes the block (a list
 - 2026-11-26: step 2's check, the user's reading of researcher's text against ADR 0057, approved, ruled (a) by the user (Open item F).
 - 2026-11-26: step 7's check, the user's reading of research-hub's `README.md` against ADR 0057, approved; the user commits it in research-hub after step 8's pin, ruled (a) by the user (Open item G).
 - 2026-11-26: step 3's check, the user's reading of `handbook` against ADRs 0058 and 0060, approved, ruled (a) by the user (Open item H).
+- 2026-11-26: step 5's check, the user's reading of the figures against their skills, approved, ruled (a) by the user (Open item I).
 
 ## The standing demands (from the user, in force)
 
@@ -94,5 +95,5 @@ dispatch: none               # no step in flight; /spec writes the block (a list
 
 - 2026-11-26. Steps 1, 2, 3, 4, 5 and 7 have landed.
 - Verified: `checks: 16 commands passed` on main at step 5's landing, after its fixes at landing.
-- Next step: step 6, the README rewrite; step 8 waits on 6 and the user.
-- Open on the user's side: Open item I, the reading of the figures of step 5 against their skills.
+- Next step: step 6, the README rewrite: its brief check runs; step 8 waits on 6 and the user.
+- Open on the user's side: nothing.
