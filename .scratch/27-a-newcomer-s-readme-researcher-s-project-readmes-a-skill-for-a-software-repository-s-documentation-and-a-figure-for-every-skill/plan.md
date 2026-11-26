@@ -78,7 +78,7 @@ you read the rewritten `README.md` and approve it; each image path in `README.md
 - Premise correction: ADR 0058's Decision says "diagrams as `.dot` with their `.svg`", which ruling D38 and ADR 0060 decide anew; corrected in the brief before the build by the Status line above, D24 left as ruled. The brief check's findings are closed under "Closed" in `agents/reviews/3-brief-check.md`.
 - The plan's verify list is unchanged.
 - Fixes at landing, the two findings of the run over round 1 (`agents/reviews/3-refuter.md`, "Closed"): an image whose address starts with `//` is written as a link, not as `<img>`; three bullets of `SKILL.md` that each held two rules are split.
-- Raised: Open item H, the user's reading of the text against ADRs 0058 and 0060, the step's check. The check "`/ordo-help skills` lists `handbook` with its Quick start" is carried to step 8 ("Step 8, carried").
+- Raised: Open item H, the user's reading of the text against ADRs 0058 and 0060, the step's check; approved by the user on 2026-11-26. The check "`/ordo-help skills` lists `handbook` with its Quick start" is carried to step 8 ("Step 8, carried").
 - Verification on main: `checks: 16 commands passed`, by `land.sh` after the cherry-pick and again after the fixes at landing.
 - The builder's first report did not pass its bar: one repair round of five rulings (`agents/briefs/3-round-1.md`); the run over the round found two findings, fixed at landing.
 - Usage: brief check 182732 tokens, 44 tool uses, 7 min 45 s; builder 231675 tokens, 51 tool uses, 12 min 36 s, and round 1: 273433 tokens, 19 tool uses, 4 min 58 s; reviewer 184814 tokens, 33 tool uses, 7 min 12 s; reviewer over round 1: 136257 tokens, 23 tool uses, 2 min 54 s.
@@ -141,6 +141,7 @@ Independent of each other; the standing rule of one agent at a time still serial
 - Open item E (2026-11-26): step 4's check passes: the user read `grill` and `plan` on the rulings file and approved the text as it stands (the user).
 - Open item F (2026-11-26): step 2's check passes: the user read researcher's text against ADR 0057 and approved it as it stands (the user).
 - Open item G (2026-11-26): step 7's check passes: the user read research-hub's `README.md` against ADR 0057 and approved it as it stands, to commit it in research-hub after step 8's pin (the user).
+- Open item H (2026-11-26): step 3's check passes: the user read the text of `handbook` against ADRs 0058 and 0060 and approved it as it stands (the user).
 
 ## Agents
 

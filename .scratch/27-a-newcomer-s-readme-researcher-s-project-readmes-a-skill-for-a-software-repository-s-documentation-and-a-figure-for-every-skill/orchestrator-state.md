@@ -46,15 +46,15 @@ repair_reviewer: claude:sonnet  # the model the run of /refute over a repair rou
 ```
 
 ```yaml
-dispatch: none               # no step in flight; /spec writes the block (a list, since docs/plan.yaml's workers_at_once is 5).
+dispatch:                    # one entry per step in flight, written by /spec, since docs/plan.yaml's workers_at_once is 5.
+- step: 5
+  brief_check: "running: a9a2c1a5a8e296d2c"
+  landing: preparing
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled or, under `self_rule: on`, until the orchestrator closes it as `plan-orchestration`'s `references/self-rule.md`, "Closing an open item", says)
 
-- Open item H (2026-11-26), step 3's check: your reading of the skill `handbook` against ADRs 0058 and 0060. Step 3 is booked and on main: `skills/code/handbook/SKILL.md`, `references/kinds.md`, `references/diagrams.md` and `templates/manual.py`. Read: which kinds the skill writes and when each is left out (`references/kinds.md`, against ADR 0058's kinds bullet and D34's paths); the diagram file `utils/diagrams.py` drawn by the engine copied into the documented repository's `utils/figures.py` (`references/diagrams.md`, against ADR 0060); the two stops before anything is written (The kinds, The drafts); and the one commit in the documented repository that names its paths (Steps 10, as ADR 0060's Decision has it: `handbook` "commits the `.svg` it draws"). ADR 0058's Status line now reads that 0060 supersedes it in the diagrams part; its Decision text is unchanged. The check "`/ordo-help skills` lists `handbook`" runs at step 8 after the pin.
-  - (a) Approve the text as it stands. Pro: the step's check passes, and step 8 runs `/handbook` on the repository you name. Con: what you would word differently waits for a later change.
-  - (b) Name what reads wrong. Pro: it is fixed before the pin at step 8. Con: step 3 is booked, so the fix enters the plan only as `plan-orchestration`'s "What earns a step of its own" allows.
-  - Recommendation: (a), my judgment after the reviews: the first review's four findings were fixed in the round, and the run over it found two, fixed at landing. The lazy option is (a) taken without reading the text, since the reading is the check.
+None.
 
 ## Closed items (the log of what was raised and how it ended; no report carries it)
 
@@ -65,6 +65,7 @@ dispatch: none               # no step in flight; /spec writes the block (a list
 - 2026-11-26: step 4's check, the user's reading of `grill` and `plan` on the rulings file, approved, ruled (a) by the user (Open item E).
 - 2026-11-26: step 2's check, the user's reading of researcher's text against ADR 0057, approved, ruled (a) by the user (Open item F).
 - 2026-11-26: step 7's check, the user's reading of research-hub's `README.md` against ADR 0057, approved; the user commits it in research-hub after step 8's pin, ruled (a) by the user (Open item G).
+- 2026-11-26: step 3's check, the user's reading of `handbook` against ADRs 0058 and 0060, approved, ruled (a) by the user (Open item H).
 
 ## The standing demands (from the user, in force)
 
@@ -94,4 +95,4 @@ dispatch: none               # no step in flight; /spec writes the block (a list
 - 2026-11-26. Steps 1, 2, 3, 4 and 7 have landed. No step is in flight.
 - Verified: `checks: 16 commands passed` on main at step 3's landing, after its fixes at landing.
 - Next step: step 5 (`/spec 27 5`), then step 6; step 8 waits on 5, 6 and the user.
-- Open on the user's side: Open item H, the reading of `handbook` against ADRs 0058 and 0060.
+- Open on the user's side: nothing.
