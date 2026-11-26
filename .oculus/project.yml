@@ -1,15 +1,15 @@
 title: "Ordo"
-stage: exploring
+stage: released
 tier: software
 lead: [axel-faes]
 status:
   chips: [active-project]
 eli5: "A set of agent skills for Claude Code that turn a multi-step change into a plan: each step gets a written brief, is built in its own git worktree, is reviewed by a fresh reviewer, and reaches the main branch only after its checks pass."
-next: "Continuing with 2.F"
+next: "No roadmap entry is open; new work starts as a roadmap entry."
 results:
-  - "25 skills in five groups: orchestration, ordo, code, academic and explain. Version 11.1.0 holds 24 of them."
+  - "25 skills in five groups: orchestration, ordo, code, academic and explain, all 25 in version 11.2.1."
   - "A roadmap entry runs as a plan: each step gets a brief, is built in its own git worktree, is reviewed by a fresh agent and is cherry-picked onto main once its checks pass."
-  - "29 plans have run to their closing, and 25 roadmap entries are done."
+  - "30 plans have run to their closing, and 26 roadmap entries are done."
   - "Every landing runs the 16 commands of the verify list on main, 14 of them test suites of the scripts the skills ship."
   - "One standard-library drawing engine draws all 44 figures of the skills and the diagrams that handbook writes into a repository."
   - "59 ADRs record the design decisions the skills are built on."
