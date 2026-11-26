@@ -71,6 +71,7 @@ None.
 - 2026-11-26: step 8, every draft of the `/researcher readme` rerun on linfoot-estimator approved, ruled (a) by the user (Open item Q).
 - 2026-11-26: step 8, the engram write after the permission denial: the run writes again with the user approving the prompt, ruled (a) by the user (Open item R).
 - 2026-11-26: step 8, the engram files written by the user's own copy command, ruled (a) by the user (Open item S).
+- 2026-11-26: step 9, `/roadmap done 27` with the gate's output, approved by the user (Open item T).
 
 ## The standing demands (from the user, in force)
 
@@ -97,7 +98,7 @@ None.
 
 ## Current position (rewritten before every step commit of this plan)
 
-- 2026-11-26. Steps 1, 2, 3, 4, 5, 6, 7 and 10 have landed and step 8 is done. Nothing is in flight.
+- 2026-11-26. The plan is closed: every step done, entry 27 marked done (a3a65c9), the folder moved to the archive.
 - Verified: `checks: 16 commands passed` on main at step 10's landing, after its fixes at landing.
-- Next step: step 9, the closing: the cost script's output as the closing report, `/roadmap done 27` with the gate's output, the folder moved to the archive.
+- Next step: none.
 - Open on the user's side: committing in research-hub the README section of step 7 and the written files of engram and linfoot-estimator.
