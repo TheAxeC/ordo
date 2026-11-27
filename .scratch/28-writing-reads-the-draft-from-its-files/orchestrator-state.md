@@ -64,11 +64,12 @@ dispatch:                    # one entry per step in flight, written by /spec, s
 
 A finding that is neither closed in the repair rounds nor fixed at landing is an open item here, and goes where `plan-orchestration`'s "What earns a step of its own" says; what is settled belongs in the closed list.
 
-- Open item C (step 1, kind 3 of `references/self-rule.md`, "The six kinds left open": it contradicts the words of Ruling A). The builder's first read of the cases (`agents/reviews/1-cases-handback.md`) found that the folder cannot be removed "after the report is shown". `skills/academic/writing/SKILL.md` makes the report and the token line the message that ends the turn (opening paragraph, Steps 7 and 8), and a session runs no command after that message, so an `rm -r` placed after the report never runs and the folder is left behind. Options: (a) remove the folder once the checking agent has ended and before the report is shown; every agent that reads the folder has ended by then, the report stays the message that ends the turn, and nothing is left behind; the cost is that Ruling A, the goal and the gate read "deleted after the report is shown", so the words of the goal and the gate in `docs/roadmap.md` entry 28 and in `plan.md` change to "after the last agent has ended and before the report is shown", and the brief's item 5 and its case follow; this ruling approves those text changes with no second stop. (b) keep the removal after the report, and show the report in a message that no longer ends the turn; the report then reaches the user only as a one-line summary, against Steps 7 and the shared rule that an answer is given in the message that ends the turn. (c) leave the removal to a later turn; no later turn is certain, so the folder can be left behind, and "leaves nothing" fails; this is the lazy option. Recommendation: (a), since it is the only order in which the folder is removed and the report is still the message that ends the turn, and it keeps what Ruling A decided: a temporary folder the agents read from, with nothing kept afterwards.
+- none.
 
 ## Closed items (the log of what was raised and how it ended; no report carries it)
 
 - 2026-11-27: the drafted step list of three steps: approved by the user.
+- 2026-11-27: Open item C, when the temporary folder is removed (the builder's cases hand-back of step 1): ruled (a) by the user, the folder removed once the last agent has ended and before the report is shown.
 
 ## The standing demands (from the user, in force)
 
@@ -94,5 +95,5 @@ A finding that is neither closed in the repair rounds nor fixed at landing is an
 
 - 2026-11-27. The plan is opened; nothing has landed. The working tree is clean.
 - Verified: nothing yet.
-- Next step: 1, blocked on Open item C; the builder waits in its worktree, unchanged, for the ruling.
-- Open on the user's side: Open item C, when the temporary folder is removed.
+- Next step: 1, the builder resumed with the ruling on Open item C.
+- Open on the user's side: none.
