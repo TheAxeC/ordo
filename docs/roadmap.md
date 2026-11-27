@@ -20,6 +20,13 @@ Status: `[ ]` open, `[~]` in progress, `[x]` done (its gate ran and passed, with
 - Waits on: <entry numbers with the reason, or nothing>
 -->
 
+## 28. writing reads the draft from its files
+
+- Status: [ ]
+- Goal: `/writing` gives each of its four agents the paths of the draft's files in place of their text, and each agent reads every file of the draft whole itself, so the session no longer copies the whole draft into four prompts. The paragraphs `docx_paragraphs.py` prints for a `.docx` and the output of `prose_facts.py` are written to a temporary folder that the agents read from and that is deleted after the report is shown.
+- Gate: the user reads the diff of `skills/academic/writing/` and approves it, having found in it that the prompts of "Agent prompts" give the paths of the draft's files and of the files in the temporary folder in place of their text, that every agent is told to read each of those files whole and no other file, that no agent prompt still holds the draft's text or the output of either script, and that the steps make the temporary folder before the first agent starts and delete it after the report is shown; each command of the verify list in `docs/dev/building.md`, run as written, exits 0.
+- Waits on: nothing; entry 3 built `/writing`, and no open entry changes it.
+
 # Not yet specified
 
 <!-- An entry:
