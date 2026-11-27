@@ -17,6 +17,7 @@ The user reads the diff of `skills/academic/writing/` and approves it, having fo
 ## Steps, in execution order
 
 - 1 `/writing` reads the draft from its files: in `skills/academic/writing/SKILL.md` the session makes the temporary folder with `mktemp -d` once the draft's file list is known and before the scripts run, writes the output of `prose_facts.py` and, for a `.docx`, of `docx_paragraphs.py` to files in it, and gives each of the four agents the absolute paths of the draft's files, of the paragraphs file for a `.docx`, and of the facts file in place of their text; every agent is told to read each of those files whole and no other file; the folder is removed after the report is shown, and on every refusal raised after it was made; "What it reads", Steps, "Agent prompts", the agents' bullets, Stops, Anti-patterns, Rules and the description say the same; `metadata.version` goes to 2.3.0; ADR 0061 records the decision, ADR 0013's status names the part 0061 supersedes, and `docs/adr/README.md` lists 0061; `docs/figures/gen_figures.py` and `docs/figures/academic/writing.svg` change only if a label or the note of `writing()` no longer holds. Check: the reviewer quotes, for each of the four parts of the gate, the lines of the diff that hold it; `grep -n -e 'read no file' -e 'cat -n' skills/academic/writing/SKILL.md` prints nothing; `python3 docs/figures/gen_figures.py` exits 0 and `git status --short docs/figures` prints nothing after it; the verify list exits 0 (1 commit) (approved)
+  - Step 0: Open item C, when the temporary folder is removed (the state file holds it in full): the builder's first read of the cases found that an `rm -r` placed after the report never runs, since the report is the message that ends the turn; options (a) remove it once the checking agent has ended and before the report is shown, (b) show the report in a message that no longer ends the turn, (c) leave it to a later turn; recommendation (a).
 - 2 the gate's reading: the user reads the diff of `skills/academic/writing/` and of ADR 0061 on main and approves it, or names what to change, which goes back to step 1 as a repair round. Check: the user's approval stands in this file's Rulings (orchestrator, no agent) (approved)
 - 3 the closing: the closing report written (the cost script's output, or that the plan started no agent), the roadmap entry ticked with the gate's output, this folder moved to the archive (orchestrator, no agent) (approved)
 
@@ -37,4 +38,5 @@ Each agent a plan skill started for this plan has one bullet, with its agent id,
 
 ## Blocked, and by what
 
+- 1: Open item C, the user's ruling on when the temporary folder is removed.
 - 2: the landing of step 1.
