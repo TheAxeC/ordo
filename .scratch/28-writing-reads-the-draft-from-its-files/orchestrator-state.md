@@ -45,7 +45,10 @@ next_entry: on               # copied from docs/plan.yaml; after the closing, ne
 repair_reviewer: claude:sonnet  # the model the run of /refute over a repair round runs on, at reviewer_effort.
 ```
 ```yaml
-dispatch: none               # one entry per step in flight, written by /spec, since docs/plan.yaml's workers_at_once is 5.
+dispatch:                    # one entry per step in flight, written by /spec, since docs/plan.yaml's workers_at_once is 5.
+- step: 1
+  landing: preparing
+  brief_check: "running: a92c188eb9f947915"
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled or, under `self_rule: on`, until the orchestrator closes it as `plan-orchestration`'s `references/self-rule.md`, "Closing an open item", says)
