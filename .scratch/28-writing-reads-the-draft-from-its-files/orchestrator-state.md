@@ -52,12 +52,13 @@ dispatch: none               # one entry per step in flight, written by /spec, s
 
 A finding that is neither closed in the repair rounds nor fixed at landing is an open item here, and goes where `plan-orchestration`'s "What earns a step of its own" says; what is settled belongs in the closed list.
 
-- Open item D (step 2, kind 5 of `references/self-rule.md`, "The six kinds left open": the user's reading of a page a step writes): the gate. Read the diff of `skills/academic/writing/` and ADR 0061 on main (`git show` of the landing commit of step 1) and approve it, or name what to change. The gate asks that you find in it: the prompts of "Agent prompts" give the paths of the draft's files and of the files in the temporary folder in place of their text; every agent is told to read each of those files whole and no other file; no agent prompt still holds the draft's text or the output of either script; the steps make the temporary folder before the first agent starts and delete it once the last agent has ended and before the report is shown. A change you name goes back to step 1 as a fix of the landed step.
+- none.
 
 ## Closed items (the log of what was raised and how it ended; no report carries it)
 
 - 2026-11-27: the drafted step list of three steps: approved by the user.
 - 2026-11-27: Open item C, when the temporary folder is removed (the builder's cases hand-back of step 1): ruled (a) by the user, the folder removed once the last agent has ended and before the report is shown.
+- 2026-11-28: Open item D, the gate's reading of the diff of step 1: approved by the user.
 
 ## The standing demands (from the user, in force)
 
@@ -83,5 +84,5 @@ A finding that is neither closed in the repair rounds nor fixed at landing is an
 
 - 2026-11-28. Step 1 landed on main: `skills/academic/writing/SKILL.md` 2.3.0, ADR 0061, ADR 0013's status line and the ADR index row. The working tree is clean.
 - Verified: `sh skills/orchestration/land/templates/land.sh .scratch/28-writing-reads-the-draft-from-its-files/orchestrator-state.md 28-writing-reads-the-draft-from-its-files-1 2d4005a docs/plan.yaml` exited 0 and printed `checks: 16 commands passed`.
-- Next step: 2, the user's reading of the diff (Open item D).
-- Open on the user's side: Open item D, the gate's reading.
+- Next step: 3, the closing.
+- Open on the user's side: none.
