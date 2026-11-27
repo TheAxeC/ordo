@@ -1,6 +1,6 @@
 # Step 1 report
 
-Everything in the brief is done.
+Everything in the brief and in repair round 1 is done.
 
 ## Open items of the state file, verbatim
 
@@ -46,6 +46,10 @@ The case the brief's rules got wrong:
 | Verify 4 | DONE | The description length check printed `779` |
 | Verify 5 | DONE | `python3 docs/figures/gen_figures.py` gave `exit=0`; then `git status --short docs/figures` printed nothing |
 | Verify 6 | DONE | See "Sentence length and list items" below |
+| Round 1, S1 | DONE | `grep -n -A2 '^10\. ' skills/academic/writing/SKILL.md` printed line 84, then `85-    - The checking agent's report above it stays whole and unchanged.` and `86-    - Done when the line follows the report.` |
+| Round 1, P1 | DONE | `sed -n 28p docs/adr/0061-*.md` begins `Each agent needs a read tool, which the runner's general-purpose agent, the agent ADRs 0030 and 0035 name, has.` |
+| Round 1, P2 | DONE | The grep and its output under "Judgment calls" |
+| Round 1, B1 | DONE | The bullet under "Host- or user-visible changes" |
 | Glossary sync | DONE | `python3 skills/ordo/ordo-init/templates/sync_rules.py . --only glossary` printed `ok: the plan-terms block equals the template` |
 
 Runs behind item 2 and the quoting, in a scratch folder under the session scratchpad:
@@ -75,7 +79,7 @@ Steps 8 and 9 each carry one action. Every new prohibition ("read no other file"
 
 ## Files
 
-- `skills/academic/writing/SKILL.md`: 313 lines, +42 -27 (`git diff --numstat`).
+- `skills/academic/writing/SKILL.md`: 313 lines, +44 -29 (`git diff --numstat`).
 - `docs/adr/0061-each-writing-agent-reads-the-draft-and-the-script-outputs-from-their-files.md`: new, 28 lines.
 - `docs/adr/0013-a-script-and-four-fresh-read-only-agents-review-a-draft.md`: 21 lines, +1 -1 (line 3).
 - `docs/adr/README.md`: 70 lines, +1.
@@ -83,7 +87,14 @@ Steps 8 and 9 each carry one action. Every new prohibition ("read no other file"
 
 ## Judgment calls
 
-- The folder is made in a new Steps 4, and removed in a new Steps 8. The later items are renumbered, 4 to 10, so each item holds one action. Every in-page reference was carried over: "What it reads" 3 and 4 (Steps 5), Steps 7 ("as Steps 6 starts"), the Stops intro, the No facts row (Steps 5), and Anti-patterns (Steps 6 and 7). `git grep` found only one reference to this skill's Steps outside it: `paper` "What it reads" 3, which cites Steps 3, and that item is unchanged.
+- The folder is made in a new Steps 4, and removed in a new Steps 8. The later items are renumbered, 4 to 10, so each item holds one action. Every in-page reference was carried over: "What it reads" 3 and 4 (Steps 5), Steps 7 ("as Steps 6 starts"), the Stops intro, the No facts row (Steps 5), and Anti-patterns (Steps 6 and 7). The only reference to this skill's Steps from outside it is `paper` "What it reads" 3, which cites Steps 3, and that item is unchanged. The command was `git grep -n -i -E "writing.{0,60}Steps [0-9]|Steps [0-9].{0,60}writing" -- skills docs README.md ':!docs/roadmap.md' ':!skills/academic/writing'`. It printed these hits, each cut here to its file, line and the words that settle it:
+  - `docs/glossary.md:21` and `:117`, `skills/ordo/ordo-init/templates/plan-terms.md:16` and `:112`: the entries **carried ruling** and **self-rule**, which cite `grill` and `plan-orchestration` Steps, not this skill's.
+  - `skills/academic/grant/SKILL.md:237` and `:323`: "before the writing review (Steps 10)", grant's own Steps 10.
+  - `skills/academic/grant/SKILL.md:380`: "a page of the `writing` skill's folder, is missing (Steps 5)", grant's own Steps 5.
+  - `skills/academic/paper/SKILL.md:78`: "of the `/writing` review of Steps 13", paper's own Steps 13.
+  - `skills/academic/paper/SKILL.md:80`: "found as the `writing` skill's Steps 3 lists them", this skill's Steps 3, unchanged.
+  - `skills/academic/paper/SKILL.md:298` and `:970`, `skills/academic/paper/references/revision_patch_protocol.md:92`: paper's own Steps 14 and 13.
+  - `skills/code/handbook/SKILL.md:204` and `skills/orchestration/spec/SKILL.md:264`: "writing" in its plain sense, with their own Steps.
 - The file names are `facts.txt` and `paragraphs.txt`, as the brief's examples give them.
 - Paths in a prompt stand in backticks, on a line of their own, since an agent passes them to its read tool and not to a shell.
 - The reading bullets in "Checking agent" say "Before the check" where the finding agents' bullets say "Before the review".
@@ -92,7 +103,17 @@ Steps 8 and 9 each carry one action. Every new prohibition ("read no other file"
 
 - Before: the session copied each draft file, as `cat -n` prints it, or the `.docx` paragraphs, and the facts into all four prompts, and the agents read no file.
 - After: the session makes a `mktemp -d` folder holding `facts.txt` and, for a `.docx`, `paragraphs.txt`. The agents get the paths and read the files whole themselves. The folder is removed once the checking agent ends, or before a "No facts" refusal. The report and the token line are unchanged.
+- Before: an agent made no read tool call, and its tool uses and tokens came from its prompt, which held the draft and the facts.
+- After: each of the four agents makes read tool calls, on each of the draft's files (or `paragraphs.txt` for a `.docx`) and on `facts.txt`, a long file in several consecutive reads. Its tool uses rise by those reads, and its tokens now include the text the reads return in place of the text the prompt held. The token line of Steps 10 shows these counts as the completion notices give them. Not measured: no run of `/writing` was made, as Open item B rules.
 
 ## Wrong or impossible in the brief
 
 - Item 5 as first written, with the removal "after the report and the token line are shown", could not be followed, as the hand-back above showed. It was ruled by Open item C, option (a), and the built text follows the ruling.
+
+## Repair round 1
+
+- S1 (Standards): the two bullets under Steps 10 stood 3 spaces in, so a render would end the ordered list at item 10. Both now stand 4 spaces in (`SKILL.md` lines 85 and 86), as `paper` indents the bullets of its two-digit items. Nothing else was indented.
+- P1 (Proof): ADR 0061's Consequences cited ADRs 0030 and 0035 for the read tool. They are now cited only for the agent type: "which the runner's general-purpose agent, the agent ADRs 0030 and 0035 name, has."
+- P2 (Proof): the grep behind the first judgment call is now quoted with its command and every hit, under "Judgment calls".
+- B1 (Behaviour): "Host- or user-visible changes" now states that each agent makes read tool calls on the draft's files and on the temporary folder's files, which changes its tool uses and tokens, with the before and after.
+- The checks of "Verify before you report", rerun after these changes, printed the same results as in the table above: character-set check `exit=0` with no line, Verify 2 no line and `exit=1`, the `mktemp -d` grep printing lines 60, 67 and 77 and the `rm -r` grep lines 67 and 77, description `779`, and `gen_figures.py` `exit=0` with `git status --short docs/figures` printing nothing.

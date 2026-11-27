@@ -153,3 +153,95 @@ No findings.
 - Whether main's history already tracks `agents/briefs/1.md` and `1-cases.md` in the form the worktree shows, so that the landing cherry-pick applies cleanly. What settles it is `git log --oneline -- .scratch/28-writing-reads-the-draft-from-its-files/agents/briefs/` on main.
 
 Reviewer usage: ad51bb4d543e67209, claude-opus-5-5, 148152 tokens, 32 tool uses, 4.8 minutes.
+
+## Repair round 1, refuted
+
+```
+$ printf '%s\0' <SKILL.md, ADR 0013, docs/adr/README.md, ADR 0061> | xargs -0 perl -CSD -ne '...'
+(no output)  exit=0
+
+$ grep -n -e 'read no file' -e 'cat -n' -e "^- The draft's text" -e 'facts in the prompt' -e '^- The output of' skills/academic/writing/SKILL.md
+(no output)  exit=1
+
+$ grep -n 'mktemp -d' skills/academic/writing/SKILL.md
+60:4. Make the temporary folder with `mktemp -d`, which holds the outputs of the scripts that the agents read.
+67:   - Before that refusal is shown, remove the temporary folder with `rm -r '<the folder>'`, naming only the path `mktemp -d` printed.
+77:8. When the runner reports that the checking agent ended, remove the temporary folder with `rm -r '<the folder>'`, naming only the path `mktemp -d` printed.
+
+$ grep -n 'rm -r' skills/academic/writing/SKILL.md
+67:   - Before that refusal is shown, remove the temporary folder with `rm -r '<the folder>'`, naming only the path `mktemp -d` printed.
+77:8. When the runner reports that the checking agent ended, remove the temporary folder with `rm -r '<the folder>'`, naming only the path `mktemp -d` printed.
+
+$ python3 -c 'import yaml; print(len(yaml.safe_load(open("skills/academic/writing/SKILL.md").read().split("---")[1])["description"]))'
+779
+
+$ python3 docs/figures/gen_figures.py   -> exit=0
+$ git status --short docs/figures       -> (no output)
+
+Commands the round's report quotes:
+$ git grep -n -i -E "writing.{0,60}Steps [0-9]|Steps [0-9].{0,60}writing" -- skills docs README.md ':!docs/roadmap.md' ':!skills/academic/writing'
+hits (line text cut at 200 chars): docs/glossary.md:21 and :117; skills/academic/grant/SKILL.md:237, :323, :380; skills/academic/paper/SKILL.md:78, :80, :298, :970; skills/academic/paper/references/revision_patch_protocol.md:92; skills/code/handbook/SKILL.md:204; skills/orchestration/spec/SKILL.md:264; skills/ordo/ordo-init/templates/plan-terms.md:16 and :112.
+These are the same 15 hits the report lists, each as the report classifies it. The only one citing this skill's Steps is paper SKILL.md:80, "the `writing` skill's Steps 3", and Steps 3 is unchanged.
+
+$ git diff --numstat 2d4005a -- skills/academic/writing/SKILL.md  -> 44<tab>29 (report: +44 -29)
+$ wc -l: SKILL.md 313, ADR 0061 28 (report: same)
+$ sed -n 28p docs/adr/0061-*.md
+Each agent needs a read tool, which the runner's general-purpose agent, the agent ADRs 0030 and 0035 name, has. The facts are computed once and read by every agent from one file. Nothing is left behind after the report or after a refusal.
+$ sed -n 80,87p SKILL.md | cut -c1-60 (indentation read)
+item 10 sits at column 0; its two bullets sit 4 spaces in; items 8 and 9 keep 3-space bullets.
+```
+
+The delta (`diff -u` of each `files.txt` path against its snapshot copy) holds two hunks and no other change. `SKILL.md` has the two Steps 10 bullets indented 3 to 4 spaces. ADR 0061 has the Consequences sentence for P1. ADR 0013 and `docs/adr/README.md` are identical to their snapshots. No path outside `.scratch/` changed that `files.txt` leaves out. `git status --short` lists only the four shipped paths, the report, and the brief and cases files that the orchestrator replaced.
+
+### Verdicts
+
+Items of "What to build":
+- 1 The temporary folder: holds. Steps 4 (`SKILL.md:60`) makes it after Steps 3 and before the scripts.
+- 2 The scripts write into it: holds. Steps 5 redirects to `facts.txt` and `paragraphs.txt`. The refusal is "No facts" with the script's standard-error line (`:66-67`).
+- 3 The prompts give paths: holds. Verify 2 prints nothing, so no prompt piece holds text.
+- 4 The agents read the files whole: holds, in "Finding agent prompt" and "Checking agent".
+- 5 The folder is removed: holds. Steps 8 (`:77`) removes it before the report at Steps 9, and `:67` removes it on a refusal. This follows the cases ruling, option (a).
+- 6 The rest of the page: holds. The description is 779 characters and none of its sentences became false.
+- 7 The version: holds. `version: "2.3.0"`.
+- ADR 0061 file: holds. P1 is closed (see below). It names nothing private.
+- ADR 0013 status line: holds, unchanged since round 0.
+- README row: holds.
+- The figures: not applicable. `gen_figures.py` exits 0 and leaves `docs/figures` unchanged.
+
+Cases:
+- A `.tex` main file with one `\input`: met.
+- A `.docx` draft: met.
+- A `.md` draft of one file: met.
+- A file longer than one read: met.
+- `prose_facts.py` exits non-zero: met.
+- `docx_paragraphs.py` exits non-zero after the folder is made: met.
+- A path with a space and a single quote: met.
+- `/writing a.pdf`: met.
+- A run that ends normally: met under the cases ruling.
+- The checking agent: met.
+
+Round findings:
+- S1 closed as ruled. Both Steps 10 bullets are indented 4 spaces, and nothing else was re-indented (the delta shows only those two lines).
+- P1 closed as ruled. The Consequences sentence now cites 0030 and 0035 only for the agent type.
+- P2 closed. The report quotes the command and the same 15 hits that I reproduced. I found no unreproduced claim.
+- B1 closed. The report's "Host- or user-visible changes" now has a before and after for each agent's read tool calls, its tool uses and its tokens, and says this was not measured because no run was made.
+
+No finding was closed by removing a check, and no fix reached beyond its finding.
+
+### Findings
+
+none.
+
+### Declined to judge
+
+nothing.
+
+Reviewer usage: ac6a4bc80c156981f, claude-sonnet-5-5, 76856 tokens, 8 tool uses, 0.6 minutes.
+
+## Closed (the orchestrator's disposition of every finding above, appended before /land)
+
+- S1, the bullets of Steps 10 indented 3 spaces: closed in round 1, `skills/academic/writing/SKILL.md` Steps 10, both bullets 4 spaces in (the round's `diff -u` against the snapshot, and the run over round 1).
+- P1, ADR 0061 citing ADRs 0030 and 0035 for the read tool: closed in round 1, ADR 0061, Consequences, which cites them only for the agent type (the run over round 1, `sed -n 28p`).
+- P2, the grep of the change standard's rule 14 not quoted: closed in round 1, the builder's report, "Judgment calls", which quotes the command and its 15 hits, reproduced by the run over round 1.
+- B1, the agents' read tool calls not stated: closed in round 1, the builder's report, "Host- or user-visible changes", with the before and after.
+- The run over round 1 found nothing.

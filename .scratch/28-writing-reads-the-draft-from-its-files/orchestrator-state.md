@@ -45,27 +45,14 @@ next_entry: on               # copied from docs/plan.yaml; after the closing, ne
 repair_reviewer: claude:sonnet  # the model the run of /refute over a repair round runs on, at reviewer_effort.
 ```
 ```yaml
-dispatch:                    # one entry per step in flight, written by /spec, since docs/plan.yaml's workers_at_once is 5.
-- step: 1
-  executor: agent
-  session_id: aa4686ded176983bc (claude-opus-5-5)
-  worker: claude:opus
-  worktree: .agents/worktrees/28-writing-reads-the-draft-from-its-files-1
-  base: 2d4005a
-  launched: 2026-11-27
-  report: .scratch/28-writing-reads-the-draft-from-its-files/agents/reviews/1-report.md
-  brief_check: ".scratch/28-writing-reads-the-draft-from-its-files/agents/reviews/1-brief-check.md (a92c188eb9f947915, claude-opus-5-5, 135741 tokens, 22 tool uses, 4.0 minutes)"
-  landing: not-started
-  round: 1
-  builder_usage: "308482 tokens, 44 tool uses, 5.5 minutes (135570, 13, 1.7 for the cases hand-back; 172912, 31, 3.8 for the build)"
-  reviewer_report: ".scratch/28-writing-reads-the-draft-from-its-files/agents/reviews/1-refuter.md (ad51bb4d543e67209, claude-opus-5-5, 148152 tokens, 32 tool uses, 4.8 minutes)"
+dispatch: none               # one entry per step in flight, written by /spec, since docs/plan.yaml's workers_at_once is 5.
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled or, under `self_rule: on`, until the orchestrator closes it as `plan-orchestration`'s `references/self-rule.md`, "Closing an open item", says)
 
 A finding that is neither closed in the repair rounds nor fixed at landing is an open item here, and goes where `plan-orchestration`'s "What earns a step of its own" says; what is settled belongs in the closed list.
 
-- none.
+- Open item D (step 2, kind 5 of `references/self-rule.md`, "The six kinds left open": the user's reading of a page a step writes): the gate. Read the diff of `skills/academic/writing/` and ADR 0061 on main (`git show` of the landing commit of step 1) and approve it, or name what to change. The gate asks that you find in it: the prompts of "Agent prompts" give the paths of the draft's files and of the files in the temporary folder in place of their text; every agent is told to read each of those files whole and no other file; no agent prompt still holds the draft's text or the output of either script; the steps make the temporary folder before the first agent starts and delete it once the last agent has ended and before the report is shown. A change you name goes back to step 1 as a fix of the landed step.
 
 ## Closed items (the log of what was raised and how it ended; no report carries it)
 
@@ -94,7 +81,7 @@ A finding that is neither closed in the repair rounds nor fixed at landing is an
 
 ## Current position (rewritten before every step commit of this plan)
 
-- 2026-11-27. The plan is opened; nothing has landed. The working tree is clean.
-- Verified: nothing yet.
-- Next step: 1, the builder resumed with the ruling on Open item C.
-- Open on the user's side: none.
+- 2026-11-28. Step 1 landed on main: `skills/academic/writing/SKILL.md` 2.3.0, ADR 0061, ADR 0013's status line and the ADR index row. The working tree is clean.
+- Verified: `sh skills/orchestration/land/templates/land.sh .scratch/28-writing-reads-the-draft-from-its-files/orchestrator-state.md 28-writing-reads-the-draft-from-its-files-1 2d4005a docs/plan.yaml` exited 0 and printed `checks: 16 commands passed`.
+- Next step: 2, the user's reading of the diff (Open item D).
+- Open on the user's side: Open item D, the gate's reading.

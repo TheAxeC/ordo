@@ -1,6 +1,6 @@
 # 0013. A script and four fresh read-only agents review a draft
 
-Status: proposed
+Status: proposed; superseded by 0061 in the part "each given in its prompt the draft's text, the script's facts", now each agent given the paths of the draft's files and of the script outputs, which it reads itself
 
 ## Context
 
