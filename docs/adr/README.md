@@ -68,3 +68,4 @@ A record is `NNNN-<decision-as-a-phrase>.md` from `template.md`, numbered in ord
 | [0059](0059-a-rulings-file-is-named-by-its-entry-s-number.md) | A rulings file is named by its entry's number |
 | [0060](0060-one-standard-library-drawing-engine-kept-in-handbook-draws-every-figure.md) | One standard-library drawing engine, kept in handbook, draws every figure |
 | [0061](0061-each-writing-agent-reads-the-draft-and-the-script-outputs-from-their-files.md) | Each writing agent reads the draft and the script outputs from their files |
+| [0062](0062-paper-s-edit-mode-fills-gaps-and-makes-stated-changes-by-a-patch-the-script-confines-to-the-blocks-the-session-finds.md) | Paper's edit mode fills gaps and makes stated changes by a patch the script confines to the blocks the session finds |
