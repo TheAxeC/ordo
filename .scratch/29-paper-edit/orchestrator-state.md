@@ -47,8 +47,16 @@ repair_reviewer: claude:sonnet  # the model the run of /refute over a repair rou
 ```yaml
 dispatch:                    # one entry per step in flight, written by /spec, since docs/plan.yaml's workers_at_once is 5.
 - step: 1
-  brief_check: "agents/reviews/1-brief-check.md"
-  landing: preparing
+  executor: agent
+  worker: claude:opus
+  worktree: .agents/worktrees/29-paper-edit-1
+  base: b602b0a
+  launched: 2026-11-28
+  session_id: a08152f8d9daf8063 (claude-opus-5-5)
+  report: .scratch/29-paper-edit/agents/reviews/1-report.md
+  brief_check: "agents/reviews/1-brief-check.md (a25ff50f02078653c, claude-opus-5-5, 242508 tokens, 56 tool uses, 9.6 minutes)"
+  landing: not-started
+  round: 0
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled or, under `self_rule: on`, until the orchestrator closes it as `plan-orchestration`'s `references/self-rule.md`, "Closing an open item", says)
@@ -84,7 +92,7 @@ A finding that is neither closed in the repair rounds nor fixed at landing is an
 
 ## Current position (rewritten before every step commit of this plan)
 
-- 2026-11-28. Nothing has landed. Step 1 stopped before its build: its brief check (`agents/reviews/1-brief-check.md`) found three cases ADR 0062 does not cover, raised as Open item G. No brief, worktree or dispatch entry stands for it.
-- Verified: `grep -n "^dispatch" .scratch/29-paper-edit/orchestrator-state.md` prints `dispatch: none`.
-- Next step: 1, `/spec 29 1`, Open item G being ruled.
+- 2026-11-28. Nothing has landed. Step 1 is built by its builder in `.agents/worktrees/29-paper-edit-1` from base b602b0a, Open item G ruled by the user.
+- Verified: `git worktree list` names `.agents/worktrees/29-paper-edit-1` at b602b0a.
+- Next step: 1, its report, then `/refute 29 1`.
 - Open on the user's side: none.
