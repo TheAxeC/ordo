@@ -240,11 +240,11 @@ Agent usage: a25ff50f02078653c, claude-opus-5-5, 242508 tokens, 56 tool uses, 9.
 
 ## Closed (the session's change to the brief for every finding above, and each dictated line added after the check, made before the preparation commit)
 
-The step stopped on three findings, which are Open item G of `orchestrator-state.md` and of step 1's Step 0 in `plan.md`. The brief was restored to main's copy (main has none) at the stop. Each other finding is closed in the brief that `/spec 29 1` writes after the ruling, by the change named here (the `spec` skill's "Steps / A ruling" 3).
+The step stopped on three findings, which are Open item G of `orchestrator-state.md` and of step 1's Step 0 in `plan.md`, ruled (1) (a), (2) (a), (3) (a) by the user. The brief was restored to main's copy (main has none) at the stop, and the brief `/spec 29 1` wrote after the ruling makes each change named here.
 
-- 6, a gap marker and a change's old text in one block: a stop, Open item G (1).
-- 6, one marker standing in several places: a stop, Open item G (2).
-- 6, a text wrapped across a line within a block: a stop, Open item G (3).
+- 6, a gap marker and a change's old text in one block: Open item G (1) (a): "What to build" 4, `### edit` items 3 and 6, and 6 (ADR 0062 Decision 6).
+- 6, one marker standing in several places: Open item G (2) (a): "What to build" 2 (`--marker`), 4 item 1 and 2, and 6 (ADR 0062 Decision 2).
+- 6, a text wrapped across a line within a block: Open item G (3) (a): "What to build" 2 (the whitespace rule) and 4 item 5 (the writer keeps the block's line breaks), and 6 (ADR 0062 Decision 3).
 - 7, the brief's "both kinds on a block that holds both" against ADR 0062 Decision 4: closed by the ruling on Open item G (1).
 - 1, `docs/dev/scripts.md:9`; `SKILL.md:10`, `:99`, `:154`, `:182`, `:205`, `:258`, `:284`, `:836`, `:975`, `:1052`; `revision_patch_protocol.md:62`, `:77`; `draft_writer_agent.md:578`, `:580`; `citation_compliance_agent.md:585`, `:862`; the two test head comments: each named in "What is on the tree" and given its requirement in "What to build".
 - 1, `intake_agent.md:262-263`: the file added to "Paths this step writes", with `edit` asking the rows Claims not to make and Earlier papers only for an op that adds a cite command.
@@ -272,3 +272,5 @@ The step stopped on three findings, which are Open item G of `orchestrator-state
 - 7, the instruction to edit ADR 0062 against its Consequences: the builder adds to ADR 0062 the details this brief decides and changes none of the shapes of items 2 to 5; a build that needs one is handed back.
 - 7, ADRs not named: 0017, 0024, 0026, 0029, 0033, 0034, 0036, 0043 Decision 3, 0049 and 0060 named with their sentences.
 - 8, `Faes`: replaced by the made-up `Example`.
+- Dictated lines added after the check, each a format line in code, read against the prose standard's section 0 (arrows only inside code) and held: `G2: memory improves with sleep [GAP: citation needed] => ...` (`grep -n 'G2: memory improves' .scratch/29-paper-edit/agents/briefs/1.md`), `<block id> <occurrence>` (`grep -n '<block id> <occurrence>'`), `B0012 fill_gap` and `B0008 replace_block` (unchanged), `O'Brien` and `Example`, made-up values (`grep -n "O'Brien\|such as \`Example\`"`).
+- The step line's check (`git status --short docs/figures` prints nothing after the run) is kept in verify 2 as a rerun showing no change beyond the first run's, beside the `git ls-files` count of 15 with `edit.svg`.
