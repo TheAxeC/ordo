@@ -54,9 +54,11 @@ dispatch:                    # one entry per step in flight, written by /spec, s
   launched: 2026-11-28
   session_id: a08152f8d9daf8063 (claude-opus-5-5)
   report: .scratch/29-paper-edit/agents/reviews/1-report.md
+  builder_usage: 316125 tokens, 88 tool uses, 17.9 minutes
   brief_check: "agents/reviews/1-brief-check.md (a25ff50f02078653c, claude-opus-5-5, 242508 tokens, 56 tool uses, 9.6 minutes)"
+  reviewer_report: ".scratch/29-paper-edit/agents/reviews/1-refuter.md (a4450f537e591f342, claude-opus-5-5, 236847 tokens, 40 tool uses, 7.5 minutes)"
   landing: not-started
-  round: 0
+  round: 1
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled or, under `self_rule: on`, until the orchestrator closes it as `plan-orchestration`'s `references/self-rule.md`, "Closing an open item", says)
@@ -94,5 +96,5 @@ A finding that is neither closed in the repair rounds nor fixed at landing is an
 
 - 2026-11-28. Nothing has landed. Step 1 is built by its builder in `.agents/worktrees/29-paper-edit-1` from base b602b0a, Open item G ruled by the user.
 - Verified: `git worktree list` names `.agents/worktrees/29-paper-edit-1` at b602b0a.
-- Next step: 1, its report, then `/refute 29 1`.
+- Next step: 1, repair round 1 (`agents/briefs/1-round-1.md`), then `/refute 29 1` over it.
 - Open on the user's side: none.
